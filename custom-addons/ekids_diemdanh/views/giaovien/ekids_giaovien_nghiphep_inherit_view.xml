@@ -1,0 +1,108 @@
+<odoo>
+  <data>
+
+        <record  id="ekids_diemdanh.giaovien_nghiphep_form_inherit" model="ir.ui.view">
+            <field name="name">giaovien_nghiphep form</field>
+            <field name="model">ekids.giaovien_nghiphep</field>
+            <field name="arch" type="xml">
+            <form  target="new" edit="false" create="false" delete="false">
+                <sheet>
+                    <h3>
+                       Giáo viên:
+                        <field name="giaovien_id" readonly="true"/> xin nghỉ thời gian
+                    </h3>
+                    <group col="2">
+                        <group>
+                            <field name="tu_ngay"/>
+                        </group>
+                         <group>
+                            <field name="den_ngay"/>
+                        </group>
+
+                    </group>
+                    <group>
+                        <field name="loai" />
+                        <field name="desc" />
+
+                    </group>
+                    <!-- Nút hành động -->
+                    <button name="action_xoa_giaovien_nghiphep"
+                            type="object"
+                            class="btn-sm btn-info"
+                            string="Hủy [Ngày nghỉ] này"
+                            confirm="Bạn chắc chắn muỗn hủy/xóa ngày đăng ký này của Giáo viên!"
+                            />
+                    <notebook>
+                        <page string="THÔNG TIN XÁC NHẬN CA/DỊCH VỤ TRONG NGÀY NGHỈ PHÉP" >
+                            <field name="ca2ngay_ids">
+                                <kanban create="1" delete="1">
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <field name="is_hoc" invisible="1"/>
+                                            <field name="is_nghi" invisible="1"/>
+                                            <div class="box">
+                                                <!-- Icon Section -->
+                                                 <h3>Học sinh:<field name="hocsinh_id"/></h3>
+                                                 <div class="item-list">
+                                                    <div class="item">
+                                                      <div class="item-text">Thời gian:</div>
+                                                      <div class="item-info">
+                                                        Từ: <field name="tu"/>
+                                                        -Đến: <field name="den"/>
+                                                    </div>
+                                                    </div>
+                                                    <div class="item">
+                                                      <div class="item-text">Ca</div>
+                                                      <div class="item-info">
+                                                        <field name="hocphi_dm_ca_id"/>
+                                                      </div>
+                                                    </div>
+                                                    <div class="item">
+                                                      <div class="item-text">Trạng thái đã xác nhận:</div>
+                                                      <div>
+
+                                                          <field name="trangthai" widget="selection" readonly="true"
+                                                                        decoration-success="trangthai == '1'"
+                                                                        decoration-warning="trangthai == '0'"
+                                                                        decoration-muted="trangthai == '2'"
+                                                                        decoration-danger="trangthai == '3'"
+                                                                        decoration-info="trangthai == '4'"
+                                                            />
+                                                      </div>
+                                                    </div>
+
+                                                     <div class="item">
+                                                      <div class="item-text">
+                                                           <button name="func_xacnhan_ca2ngay_hoc"
+                                                             class="btn-success"
+                                                             type="object" string="Học"  invisible="is_hoc == True"/>
+
+                                                            <button name="func_xacnhan_ca2ngay_nghi_khongbu"
+                                                             class="btn-danger"
+                                                             type="object" string="Nghỉ" invisible="is_nghi_khongbu == True"/>
+
+                                                             <button name="func_xacnhan_ca2ngay_nghi_hocbu"
+                                                             class="btn-warning"
+                                                             type="object" string="Nghỉ-Sẽ học bù" invisible="is_nghi_hocbu == True"/>
+
+                                                      </div>
+                                                     </div>
+                                                </div>
+
+                                            </div>
+
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+            </field>
+        </record>
+
+
+
+  </data>
+</odoo>

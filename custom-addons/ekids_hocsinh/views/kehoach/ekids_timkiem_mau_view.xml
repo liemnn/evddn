@@ -1,0 +1,110 @@
+<odoo>
+  <data>
+    <record id="ekids_hocsinh.kehoach_timkiem_mau_form" model="ir.ui.view">
+        <field name="name">Chọn mẫu cho kế hoạch</field>
+        <field name="model">ekids.kehoach_timkiem_mau</field>
+        <field name="arch" type="xml">
+            <form string="Chọn mẫu">
+                <group col="3">
+                    <group>
+                        <field name="chinh_dm_roiloan_id" readonly="true"/>
+
+                    </group>
+                    <group>
+                        <field name="dikem_dm_roiloan_ids" widget="many2many_tags"/>
+                    </group>
+                    <group>
+                        <field name="is_advanced_search"/>
+                    </group>
+               </group>
+                <group col="2" invisible="is_advanced_search== False">
+                    <group>
+                        <field name="gioitinh"/>
+                    </group>
+                    <group>
+                        <field name="dm_tuoi_id"/>
+                    </group>
+                </group>
+                <group>
+
+                </group>
+                <separator/>
+
+                 <field name="mau_kehoach_ids">
+                    <kanban create="0">
+                        <templates>
+                            <t t-name="kanban-box">
+                                <div class="box">
+                                    <!-- Icon Section -->
+                                    <table class="ekids_mau_review">
+                                        <tr>
+                                            <td><span class="tacgia"><field name="tacgia" readonly="1"/></span></td>
+                                            <td>Đánh giá trung bình:<span class="review">⭐<field name="rating_avg" readonly="1"/>
+                                            (Tổng:<field name="rating_count" readonly="1"/>)</span></td>
+                                        </tr>
+                                    </table>
+                                     <div class="item-list">
+                                        <div class="item">
+                                          <div class="item-text">Số tháng </div>
+                                          <div class="item-info">
+                                            <field name="sothang"/>
+                                          </div>
+                                        </div>
+                                        <div class="item">
+                                          <div class="item-text">Cho trẻ</div>
+                                          <div class="item-info">
+                                            <field name="gioitinh"/>
+                                          </div>
+                                        </div>
+                                        <div class="item">
+                                          <div class="item-text">Can thiếp ứng độ tuổi</div>
+                                          <div class="item-info">
+                                              <field name="dm_tuoi_id"/>
+                                          </div>
+                                        </div>
+                                        <div class="item">
+                                          <div class="item-text">Rối loạn chính</div>
+                                          <div class="item-info">
+                                              <field name="chinh_dm_roiloan_id"/>
+                                          </div>
+                                        </div>
+                                        <div class="item">
+                                          <div class="item-text">Chương trình</div>
+                                          <div class="item-info">
+                                              <field name="chinh_ct_chuongtrinh_id"/>
+                                          </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Button Section -->
+                                    <button type="object"
+                                        name="action_luachon_mau_kehoach"
+                                        string="Chọn"
+                                        class="btn-primary"
+                                        context="{'mau_kehoach_id': id,'kehoach_id': context.get('kehoach_id')}"/>
+                                </div>
+
+                            </t>
+                        </templates>
+                    </kanban>
+                </field>
+
+
+            </form>
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.action_luachon_mau_apdung_lap_kehoach" model="ir.actions.act_window">
+        <field name="name">Chọn mẫu</field>
+        <field name="res_model">ekids.kehoach_timkiem_mau</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+
+
+  </data>
+</odoo>

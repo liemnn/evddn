@@ -1,0 +1,248 @@
+<odoo>
+    <template id="template_phieuthu">
+
+        <!-- Gọi layout chuẩn của Odoo -->
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+               <div class="page">
+               <div style="text-align:right">
+                  <button  onclick="window.print()"
+                        style="width:30px; height:auto;border:0px"
+                        string="In phiếu thu [Học phí]" type="object">
+                    <i class="fa fa-print"></i>
+                </button>
+                  <button t-att-data-url="o.share_url"
+                          style="width:30px; height:auto;border:0px"
+                          onclick="navigator.clipboard.writeText(this.dataset.url); alert('Đã copy link chia sẻ Thu Học phí!')">
+                       <i class="fa fa-copy"></i>
+                  </button>
+              </div>
+               <span t-field="o.coso_id.header_thu_hocphi" class="box-header"/>
+               <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                                class="box-noborder">
+                   <tr>
+                       <td width="25%">
+                           <h3 style="font-size:14px;font-weight: bold;
+                                text-align:left;margin-top:0px;padding:0px;">
+                           Học sinh: <strong t-field="o.hocsinh_id.name"/>
+                           </h3>
+                       </td>
+                       <td width="15%">
+                           <h3 style="font-size:14px;font-weight: bold;
+                                text-align:left;margin-top:0px;padding:0px;">
+                           Số ngày đi học: <strong t-field="o.songay_dihoc"/>
+                           </h3>
+                       </td>
+                       <td width="60%">
+                           <h3 style="font-size:14px;font-weight: bold;
+                                text-align:right;margin-top:0px;padding:0px;text-transform: uppercase;">
+                            THÔNG BÁO HỌC PHÍ <span t-field="o.thang_id.name"/>
+                            /<span t-field="o.thang_id.nam_id.name"/>
+                        </h3>
+                       </td>
+                   </tr>
+               </table>
+
+
+                        <table class="box-table" width="100%" border="1" cellspacing="0" cellpadding="0" style="font-size:13px;border-width:1px !important">
+
+
+
+                            <tr>
+                                <td style="text-align:center"><b>1</b></td>
+                                <td><b>DỊCH VỤ CA</b></td>
+                                <td>
+                                    <div colspan="2"
+                                       style="font-weight:bold;font-size:14px;text-align:right;vertical-align:top;"
+                                       t-field="o.tien_ca"/>
+                                </td>
+                            </tr>
+                            <t t-foreach="o.hocphi_ca_ids" t-as="ca_ids">
+                                 <tr>
+                                    <td style="text-align:center">-</td>
+                                     <td width="70%" style="text-align:left;padding:2px;">
+                                        <span t-field="ca_ids.dm_ca_id.name"/> - (<span t-field="ca_ids.soca"/> ca)
+                                     </td>
+                                     <td style="text-align:right;">
+                                        <span t-field="ca_ids.tien"/>
+                                     </td>
+                                 </tr>
+
+                            </t>
+
+                            <tr>
+                                <td width="5%" style="text-align:center"><b>2</b></td>
+                                <td width="70%"><b>CÁC KHOẢN THU KHÁC</b></td>
+                                <td width="25%">
+                                    <div colspan="2"
+                                       style="font-weight:bold;font-size:14px;text-align:right;vertical-align:top;"
+                                       t-field="o.tien_bantru"/>
+                                </td>
+                            </tr>
+
+                            <t t-foreach="o.hocphi_bantru_ids" t-as="bantru_ids">
+                                 <tr>
+                                     <td style="text-align:center">-</td>
+                                     <td style="text-align:left;padding:2px;">
+                                         <span t-field="bantru_ids.name"/>
+                                     </td>
+                                     <td style="text-align:right;padding:2px;">
+                                         <span t-field="bantru_ids.tien"/>
+                                     </td>
+                                 </tr>
+
+                            </t>
+
+                            <tr>
+                                <td style="text-align:center"><b>3</b></td>
+                                 <t t-if="o.coso_id.is_thu_hocphi_dauthang">
+                                    <td><b>CÁC KHOẢN ĐƯỢC TRỪ</b></td>
+                                 </t>
+                                <t t-else="">
+                                     <td><b>ĐƯỢC TRỪ DO (NGHỈ)</b></td>
+                                </t>
+                                <td>
+                                    <div colspan="2"
+                                       style="font-weight:bold;font-size:14px;text-align:right;vertical-align:top;"
+                                       t-field="o.tien_duoctru"/>
+                                </td>
+                            </tr>
+                            <t t-foreach="o.hocphi_duoctru_ids" t-as="hocphi_duoctru_ids">
+                                 <tr>
+                                     <td style="text-align:center">-</td>
+                                     <td>
+                                        <span t-field="hocphi_duoctru_ids.name"/>
+                                     </td>
+                                      <td style="text-align:right;">
+                                        <span t-field="hocphi_duoctru_ids.tien"/>
+                                     </td>
+                                 </tr>
+
+                            </t>
+                            <tr>
+                                <td style="text-align:center"><b></b></td>
+                                <td style="text-align:right">
+                                    <b>HỌC PHÍ = [1] +[2]-[3]</b>
+
+                                </td>
+
+                                <td>
+                                    <div colspan="2"
+                                       style="font-weight:bold;font-size:14px;text-align:right;vertical-align:top;"
+                                         t-field="o.hocphi"/>
+                                </td>
+                            </tr>
+
+                            <tr t-if="o.hocphi_giam > 0">
+                                <td style="text-align:center"></td>
+
+                                <td style="text-align:right">
+                                    <b>GIẢM HỌC PHÍ THEO CHÍNH SÁCH </b>
+
+                                    <t t-if="o.is_giamhocphi_dacthu">
+                                        (Đặc thù:
+                                        Lớp chung <strong t-field="o.tyle_giamhocphi_bantru"/>% |
+                                        Can thiệp <strong t-field="o.tyle_giamhocphi_ca"/>%)
+                                    </t>
+
+                                    <t t-else="">
+                                        <t t-if="o.dm_chinhsach_giam_id">
+                                            - <span t-field="o.dm_chinhsach_giam_id.name"/>
+                                        </t>
+                                        (<strong t-field="o.tyle_giamhocphi"/>%)
+                                    </t>
+                                </td>
+
+                                <td style="text-align:right; vertical-align:top;">
+                                    <div style="font-weight:bold; font-size:14px; color:#d9534f;">
+                                        - <span t-field="o.hocphi_giam" t-options='{"widget": "integer"}'/>
+                                    </div>
+                                </td>
+                            </tr>
+                             <tr>
+                                 <td style="text-align:center"><b></b></td>
+                                <td style="text-align:right">
+                                    <b>TỔNG HỌC PHÍ PHẢI ĐÓNG </b>
+                                </td>
+                                <td>
+                                    <div colspan="2"
+                                       style="font-weight:bold;font-size:15px;text-align:right;vertical-align:top;"
+                                         t-field="o.hocphi_phaidong"/>
+                                </td>
+                            </tr>
+
+
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                                class="box-noborder">
+                            <tr>
+                                <td width="80%">
+                                    <span t-field="o.coso_id.ghichu_thu_hocphi" style="font-size:13px;"/>
+                                </td>
+                                <td width="20%">
+                                    <t t-if="o.coso_id.qrcode_thu_hocphi">
+
+                                        <img t-if="o.coso_id.qrcode_thu_hocphi"
+                                             t-att-src="'data:image/png;base64,' + o.coso_id.qrcode_thu_hocphi.decode()"
+                                             alt="QR Code"
+                                             style="display:block; height:150px; overflow:auto;"/>
+
+
+                                    </t>
+                                </td>
+                            </tr>
+                        </table>
+
+
+
+
+
+                <style>
+
+                    * {
+                        font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                    }
+
+
+
+                    .box-table td,th{
+                        border-style: solid;
+                        border: 1px solid #ccc;
+                        font-size:14px;
+                        pading:0px;
+                    }
+                    .page {
+                        page-break-before: always;   /* Luôn bắt đầu trang mới */
+                        page-break-after: always;    /* Sau khi in xong, xuống trang */
+                        page-break-inside: avoid;
+
+                        padding:0px;
+                        margin:0px;
+                    }
+
+                    .box-header{
+                        text-align:center !important;
+                        border-style: solid;
+                        border: 0px solid #ccc;
+                        font-size:15px !important;
+
+                    }
+
+
+
+                     .box-noborder td,th{
+
+                        border-style: solid;
+                        border: 0px solid #ccc;
+                        font-size:14px;
+                        pading:0px;
+                    }
+
+                </style>
+
+               </div>
+            </t>
+
+        </t>
+    </template>
+</odoo>

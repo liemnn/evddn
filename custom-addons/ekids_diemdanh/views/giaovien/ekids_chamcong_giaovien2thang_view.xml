@@ -1,0 +1,112 @@
+<odoo>
+    <data>
+         <record id="ekids_diemdanh.chamcong_giaovien2thang_search" model="ir.ui.view">
+            <field name="name">chamcong_giaovien2thang.search</field>
+            <field name="model">ekids.chamcong_giaovien2thang</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="giaovien_id"/>
+                </search>
+            </field>
+         </record>
+
+         <record id="ekids_diemdanh.chamcong_giaovien2thang_list" model="ir.ui.view">
+            <field name="name">Diem Danh</field>
+            <field name="model">ekids.chamcong_giaovien2thang</field>
+            <field name="arch" type="xml">
+                <list  create="false" delete="true" limit="200" default_order="giaovien_id asc">
+                    <header>
+                        <button name="action_xoa_taolai_congviec2thang"
+                            type="object"
+                            string="Xóa làm lại"
+                            class="btn-primary"
+                            display="always"
+                             confirm="Bạn chắc chắn muốn xóa đi toàn bộ làm lại ?"
+                        />
+                    </header>
+                    <field name="sequence" width="25" />
+                    <field name="giaovien_id" width="150"  readonly="true"/>
+                    <button name="action_xem_thongtin_dilam" width="30"
+                            type="object"
+                            string=""
+                            class="fa fa-pencil-square-o"
+                            title="Thông tin chấm công/nghỉ của Giáo viên"
+
+                        />
+                    <field name="tong_dilam_chamcong"   width="45" string="Tổng"/>
+                    <field name="d1" widget="widget_giaovien_chamcong" invisible="is_d1_nghi" width="30" />
+                    <field name="d2" widget="widget_giaovien_chamcong" invisible="is_d2_nghi" width="30" />
+                    <field name="d3" widget="widget_giaovien_chamcong" invisible="is_d3_nghi" width="30" />
+                    <field name="d4" widget="widget_giaovien_chamcong" invisible="is_d4_nghi" width="30" />
+                    <field name="d5" widget="widget_giaovien_chamcong" invisible="is_d5_nghi" width="30" />
+                    <field name="d6" widget="widget_giaovien_chamcong" invisible="is_d6_nghi" width="30" />
+                    <field name="d7" widget="widget_giaovien_chamcong" invisible="is_d7_nghi" width="30" />
+                    <field name="d8" widget="widget_giaovien_chamcong" invisible="is_d8_nghi" width="30" />
+                    <field name="d9" widget="widget_giaovien_chamcong" invisible="is_d9_nghi" width="30" />
+
+                    <field name="d10" widget="widget_giaovien_chamcong" invisible="is_d10_nghi" width="30" />
+
+                    <field name="d11" widget="widget_giaovien_chamcong" invisible="is_d11_nghi" width="30" />
+                    <field name="d12" widget="widget_giaovien_chamcong" invisible="is_d12_nghi" width="30" />
+                    <field name="d13" widget="widget_giaovien_chamcong" invisible="is_d13_nghi" width="30" />
+                    <field name="d14" widget="widget_giaovien_chamcong" invisible="is_d14_nghi" width="30" />
+                    <field name="d15" widget="widget_giaovien_chamcong" invisible="is_d15_nghi" width="30" />
+                    <field name="d16" widget="widget_giaovien_chamcong" invisible="is_d16_nghi" width="30" />
+                    <field name="d17" widget="widget_giaovien_chamcong" invisible="is_d17_nghi" width="30" />
+                    <field name="d18" widget="widget_giaovien_chamcong" invisible="is_d18_nghi" width="30" />
+                    <field name="d19" widget="widget_giaovien_chamcong" invisible="is_d19_nghi" width="30" />
+                    <field name="d20" widget="widget_giaovien_chamcong" invisible="is_d20_nghi" width="30" />
+
+                    <field name="d21" widget="widget_giaovien_chamcong" invisible="is_d21_nghi" width="30" />
+                    <field name="d22" widget="widget_giaovien_chamcong" invisible="is_d22_nghi" width="30" />
+                    <field name="d23" widget="widget_giaovien_chamcong" invisible="is_d23_nghi" width="30" />
+                    <field name="d24" widget="widget_giaovien_chamcong" invisible="is_d24_nghi" width="30" />
+                    <field name="d25" widget="widget_giaovien_chamcong" invisible="is_d25_nghi" width="30" />
+                    <field name="d26" widget="widget_giaovien_chamcong" invisible="is_d26_nghi" width="30" />
+                    <field name="d27" widget="widget_giaovien_chamcong" invisible="is_d27_nghi" width="30" />
+                    <field name="d28" widget="widget_giaovien_chamcong" invisible="is_d28_nghi" width="30" />
+                    <field name="d29" widget="widget_giaovien_chamcong" invisible="is_d29_nghi" width="30" />
+                    <field name="d30" widget="widget_giaovien_chamcong" invisible="is_d30_nghi" width="30" />
+                    <field name="d31" widget="widget_giaovien_chamcong" invisible="is_d31_nghi" width="30" />
+
+                </list>
+            </field>
+        </record>
+        <record id="ekids_diemdanh.chamcong_giaovien2thang_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.chamcong_giaovien2thang</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <h3><field name="giaovien_id" readonly="true"/></h3>
+                        </group>
+
+                        <group col="2">
+
+                            <group>
+                                <separator string="THÔNG TIN CHẤM CÔNG TRONG THÁNG" />
+                                <field name="tong_dilam_kehoach" readonly="true" string="Số ngay đi làm theo quy định"/>
+                                <field name="tong_dilam_chamcong" readonly="true" string="Số ngay đi làm thực tế"/>
+                                 <field name="tong_dilam_muon" readonly="true" string="Số ngay đi muộn"/>
+                                <field name="tong_nghi_cangay" readonly="true" string="Số ngay nghỉ làm cả ngày"/>
+                                <field name="tong_dilam_nuabuoi" readonly="true" string="Số ngay đi làm nửa ngày"/>
+                                <field name="tong_nghiphep" readonly="true" string="Ngày phép xin nghỉ"/>
+
+                            </group>
+                            <group>
+                                <separator string="NGÀY PHÉP GIÁO VIÊN" />
+                                <field name="phep_duocphep" readonly="true" />
+                                <field name="phep_da_sudung" readonly="true" />
+                                <field name="phep_con_trongnam" readonly="true" />
+
+
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

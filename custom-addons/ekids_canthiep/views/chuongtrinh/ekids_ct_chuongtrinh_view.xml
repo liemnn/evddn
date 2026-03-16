@@ -1,0 +1,147 @@
+<odoo>
+    <data>
+         <record id="ekids_canthiep.ct_chuongtrinh_list_view" model="ir.ui.view">
+            <field name="name">Chương trình</field>
+            <field name="model">ekids.ct_chuongtrinh</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="ma"/>
+                    <field name="ten" />
+                    <field name="desc" />
+
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_canthiep.ct_chuongtrinh_kanban_view" model="ir.ui.view">
+            <field name="name">CHƯƠNG TRÌNH</field>
+            <field name="model">ekids.ct_chuongtrinh</field>
+            <field name="type">kanban</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban>
+                    <t t-name="kanban-box">
+                        <div class="box">
+                            <nav class="box-navbar">
+                                <ul class="box-menu">
+                                  <li class="box-menu-item">
+                                    <a href="#" >
+                                       <span class="fa fa-ellipsis-v"></span>
+                                    </a>
+                                    <ul class="box-dropdown">
+                                       <li>
+
+                                          <button
+                                             name="action_view_ekid_canthiep_kanban_dm_capdo"
+                                             type="object" string="Cấp độ chương trình"/>
+
+                                      </li>
+
+                                    </ul>
+                                  </li>
+                                </ul>
+                            </nav>
+
+                            <!-- Title Section -->
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+                            <!-- Description Section -->
+                            <p class="slogan">
+                               <field name="desc"/>
+                            </p>
+                            <div class="item-list">
+                                <div class="item">
+                                  <div class="item-text">Tổng [cấp độ]</div>
+                                  <div class="item-badge">
+                                    <field name="tong_capdo"/>
+                                  </div>
+                                </div>
+                                <div class="item">
+                                  <div class="item-text"> Tổng [lĩnh vực]</div>
+                                  <div class="item-badge">
+                                      <field name="tong_linhvuc"/>
+                                  </div>
+                                </div>
+                                <div class="item">
+                                  <div class="item-text">Tổng [mục tiêu]</div>
+                                  <div class="item-badge">
+                                      <field name="tong_muctieu"/>
+                                  </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Button Section -->
+
+                            <button  class="function"
+                                 name="action_view_ekid_canthiep_kanban_linhvuc"
+                                 type="object" string="Lĩnh vực"/>
+
+                            <button  class="function"
+                                 name="action_view_ekid_canthiep_kanban_dm_capdo"
+                                 type="object" string="Cấp độ"/>
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="ekids_canthiep.ct_chuongtrinh_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.ct_chuongtrinh</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+
+                        <group>
+                             <div class="row">
+                                <div class="col-md-2">
+                                  <h3>
+                                      <field name="ma" placeholder="Mã" />
+                                  </h3>
+                                </div>
+                                <div class="col-md-10">
+                                  <h3>
+                                      <field name="ten" placeholder="Tên"/>
+                                  </h3>
+                                </div>
+                              </div>
+                        </group>
+                        <group>
+                            <field name="desc"/>
+                        </group>
+
+                         <group>
+                            <separator string="CÁC CƠ SỞ ÁP DỤNG CHO CHƯƠNG TRÌNH NÀY (để trống là toàn bộ a dụng)" />
+                            <field name="coso_ids" widget="many2many_tags"/>
+                        </group>
+
+                        <notebook invisible=" not id">
+                            <page name="linhvuc_ids " string="DANH SÁCH [LĨNH VỰC] CỦA CHƯƠNG TRÌNH">
+                                <field name="linhvuc_ids" context="{'default_chuongtrinh_id':id}"/>
+                            </page>
+                        </notebook>
+
+
+                       </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <!-- actions opening views on models -->
+
+        <record model="ir.actions.act_window" id="ekids_canthiep.ct_chuongtrinh_action_window">
+            <field name="name">CHƯƠNG TRÌNH</field>
+            <field name="res_model">ekids.ct_chuongtrinh</field>
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+
+
+
+
+
+    </data>
+</odoo>

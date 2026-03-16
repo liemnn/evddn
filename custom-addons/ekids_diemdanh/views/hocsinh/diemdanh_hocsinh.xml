@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <t t-name="ekids_diemdanh.AttendanceToggle" owl="1">
+    <t t-set="val" t-value="props.value or '0'"/>
+    <button type="button"
+            t-on-click="toggle"
+            t-att-class="{
+                'btn': true,
+                'btn-sm': true,
+                'btn-success': val === '1',
+                'btn-danger': val === '0',
+                'btn-warning': val === '0.5'
+            }">
+      <t t-esc="val === '1' ? 'X' : (val === '0' ? 'A' : 'O')"/>
+    </button>
+  </t>
+</templates>

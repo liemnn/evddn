@@ -1,0 +1,57 @@
+<odoo>
+    <data>
+       <record model="ir.ui.view" id="ekids_hocsinh.hocsinh_phuhuynh_list">
+            <field name="name">Danh sách</field>
+            <field name="model">ekids.hocsinh_phuhuynh</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="dienthoai"/>
+                    <field name="email"/>
+                    <field name="dm_xa_id"/>
+                    <field name="dm_tinh_id"/>
+                    <field name="loai"
+                        decoration-success="loai == '1'"
+                        decoration-info="loai == '0'"
+                    />
+                </list>
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="ekids_hocsinh.hocsinh_phuhuynh_form">
+            <field name="name">form</field>
+            <field name="model">ekids.hocsinh_phuhuynh</field>
+            <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group col="2">
+                        <group>
+                            <field name="dienthoai"/>
+                            <field name="nghenghiep"/>
+                            <field name="dm_tinh_id"/>
+                        </group>
+                        <group>
+                            <field name="email"/>
+                            <field name="trinhdo"/>
+                            <field name="dm_xa_id" domain="[('dm_tinh_id','=',dm_tinh_id)]"/>
+                        </group>
+                    </group>
+                    <group>
+                         <field name="diachi_chitiet"/>
+                         <field name="loai"/>
+                        <field name="desc"/>
+                    </group>
+
+                </sheet>
+            </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,21 @@
+<odoo>
+  <data>
+
+
+    <!-- Top menu item -->
+
+   <menuitem name="Thu chi"
+                  id="ekids_chitieu.menu_root"
+                  web_icon="ekids_chitieu,static/description/icon.png" sequence="7"/>
+
+    <menuitem name="Ghi nhận [Thu/Chi]" id="ekids_chitieu.chitieu" parent="ekids_chitieu.menu_root"
+              action="ekids_chitieu.coso_chitieu_action_window"
+               groups="ekids_core.quanlychitieu"  sequence="1"/>
+
+    <menuitem name="Cấu hình" id="ekids_chitieu.cauhinh" parent="ekids_chitieu.menu_root"
+              action="ekids_chitieu.cauhinh_action_window"
+               groups="ekids_core.quanlychitieu"  sequence="2"/>
+
+
+  </data>
+</odoo>

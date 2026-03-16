@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <record id="ekids_canthiep.ct_mau_kehoach_roiloan_dikem_list" model="ir.ui.view">
+            <field name="name">Rối loạn đi kèm</field>
+            <field name="model">ekids.mau_kehoach_roiloan_dikem</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="dm_roiloan_id"/>
+                    <field name="chuongtrinh_id" context="{'default_coso_id':context.get('default_coso_id')}"/>
+                    <field name="dm_capdo_id"  domain="[('chuongtrinh_id','=',chuongtrinh_id)]"/>
+                </list>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,91 @@
+<odoo>
+  <data>
+
+        <record id="ekids_hocsinh.kehoach_canthiep_kanban_view" model="ir.ui.view">
+            <field name="name">Kanban Kế hoạch</field>
+            <field name="model">ekids.kehoach</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                 <kanban default_group_by="trangthai"
+                    default_order="tu_ngay asc, id desc" create="0"
+                         action="action_xem_kehoach_hocsinh_thang_phucvu_canthiep" type="object">
+                    <t t-name="kanban-box">
+                        <div class="box">
+                            <!-- Vùng ảnh -->
+
+                            <div class="info">
+                                <h2 class="title">
+                                    <field name="hocsinh_id"/>
+                                </h2>
+                                <div class="item-list">
+                                    <div class="item">
+                                      <div class="item-text">Cơ sở</div>
+                                      <div class="item-info">
+                                         <field name="coso_id"/>
+                                      </div>
+                                    </div>
+
+                                    <div class="item">
+                                      <div class="item-text">Kế hoạch</div>
+                                      <div class="item-info">
+                                         <field name="sothang"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Từ ngày</div>
+                                      <div class="item-info">
+                                         <field name="tu_ngay"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Đến ngày</div>
+                                      <div class="item-info">
+                                         <field name="den_ngay"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text"><field name="ketluan_id"/></div>
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="function">
+                                <button
+                                    name="action_xem_kehoach_hocsinh_thang_phucvu_canthiep"
+                                    type="object" string="Vào [Kế hoạch] tháng"/>
+                            </div>
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+
+
+        <record id="ekids_hocsinh.kehoach_action_window" model="ir.actions.act_window">
+            <field name="name">Thực hiện [Can thiệp]</field>
+            <field name="res_model">ekids.kehoach</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="domain">[('ketluan_id.gv_canthiep_id.user_id', '=', uid), ('trangthai','=','3')]</field>
+            <field name="context">{'menu_canthiep_kehoach_filter': True,'allowed_trangthai':['3', '4']}</field>
+        </record>
+
+        <record id="ekids_hocsinh.kehoach_kanban_action_window_view"
+                model="ir.actions.act_window.view" >
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="ekids_hocsinh.kehoach_kanban_view"/>
+            <field name="act_window_id" ref="ekids_hocsinh.kehoach_action_window"/>
+        </record>
+
+
+
+
+  </data>
+</odoo>

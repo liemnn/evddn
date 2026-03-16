@@ -1,0 +1,139 @@
+<odoo>
+  <data>
+
+    <record id="ekids_giaovien.luong_dm_chitra_list" model="ir.ui.view">
+        <field name="name">Danh mục chi trả cho giáo viên</field>
+        <field name="model">ekids.luong_dm_chitra</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" width="35" string="TT"/>
+                <field name="name" width="300"/>
+                <field name="code" width="35"/>
+                <field name="luong_cocau"/>
+                <field name="luong_loai" string="Phần lương"/>
+                <field name="formula" widget="300"/>
+
+
+            </list>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ekids_giaovien.luong_dm_chitra_form">
+            <field name="name">Thiết lập cơ cấu lương cho giáo viên</field>
+            <field name="model">ekids.luong_dm_chitra</field>
+            <field name="arch" type="xml">
+                <form string="Cơ sở">
+                    <sheet>
+                        <group>
+                            <h3>
+                                <field name="coso_id" readonly="true"/>
+
+                            </h3>
+
+
+                        </group>
+                        <group>
+                            <table>
+                                <tr>
+                                     <td width="15%">
+                                         <h3>
+                                            <field name="sequence" placeholder="Thứ tự tính toán."/>
+                                         </h3>
+                                    </td>
+                                    <td width="70%">
+                                         <h3>
+                                            <field name="name" placeholder="Tên danh mục..."/>
+                                         </h3>
+                                    </td>
+                                    <td width="15%">
+                                        <h3>
+                                            <field name="code" placeholder="Mã được sử dụng trong công thức..."/>
+                                        </h3>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </group>
+                        <group col="2">
+                            <separator string="1. CƠ CẤU DANH MỤC CHI TRẢ [LƯƠNG]" />
+
+
+                            <group>
+                                 <field name="luong_cocau"/>
+                            </group>
+                            <group>
+                                 <field name="luong_loai"/>
+                            </group>
+                        </group>
+
+
+                         <group col="2" invisible="is_show_dieukien_loai == False">
+                             <separator string="2. ĐIỀU KIỆN ĐỂ ĐƯỢC TÍNH VÀO LƯƠNG" />
+                            <group>
+                                 <field name="dieukien_loai" />
+                            </group>
+                             <group>
+                                <field name="dm_chamcong_id"
+                                       domain="[('coso_id','=',coso_id),('loai','=',dieukien_loai)]"/>
+                            </group>
+                        </group>
+                         <group>
+                             <separator string="3. GIÁ TRỊ/CÔNG THỨC TÍNH" />
+                                <field name="formula"/>
+                                <field name="desc"/>
+                         </group>
+
+
+                        <group col="2" >
+                             <separator string="4. CÁC BIẾN CÓ THỂ SỬ DỤNG KHI ĐƯA VÀO CÔNG THỨC" />
+                            <group>
+                                <di>
+
+                                    <h6>Với bảng:Chấm công - Đi làm/ Giáo viên</h6>
+                                     <p>- <strong>$THAM_NIEN</strong>: Thâm niên của giáo viên(năm)</p>
+                                    <p>- <strong>$NGAY_CONG_QUYDINH</strong>: Ngày đi làm theo quy định/tháng</p>
+                                    <p>- <strong>$NGAY_DILAM</strong>: Ngày đi làm thực tế/tháng</p>
+                                    <p>- <strong>$NGAY_CONG_TINH_LUONG</strong>: Ngày công được tính lương</p>
+
+                                    <p>- <strong>$NGAY_DIMUON</strong>: Ngày đi làm muộn/tháng</p>
+                                    <p>- <strong>$TONG_NGAYNGHI</strong>:Là ngày nghỉ= Chấm công nghỉ + Giáo viên nghỉ phép + Nghỉ lễ + Nhà trường cho nghỉ</p>
+
+
+
+
+
+                                </di>
+                            </group>
+                            <group>
+                                <di>
+                                     <p>- <strong>$NGAY_NGHI</strong>: Ngày chấm công nghỉ/tháng</p>
+                                    <p>- <strong>$NGHILE</strong>: Nghỉ lễ theo quy định nhà nước</p>
+                                    <p>- <strong>$NHATRUONG_NGHI</strong>: Ngày nhà trường cho nghỉ/tháng</p>
+                                    <p>- <strong>$TONG_HS_TRONG_THANG</strong>: Tổng học sinh trong tháng</p>
+                                    <h6>Với bảng: [Chấm công - Công việc khác]</h6>
+                                    <p>- <strong>$KETQUA</strong>: Là [Số lượng] đạt được hoặc [% hoàn thành]</p>
+                                     <h6>Với giao nhiệm vụ (KPI) sử dụng các biến</h6>
+                                    <field name="parameters" readonly="true"/>
+
+
+                                </di>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="desc"/>
+                            <field name="is_apdung_rieng" widget="boolean_toggle"/>
+                        </group>
+                        <notebook invisible="is_apdung_rieng == False">
+                            <page name="giaovien_ids" string="DANH SÁCH GIÁO VIÊN ÁP DỤNG">
+                                <field name="giaovien_ids"
+                                       domain="[('coso_id', '=', coso_id),('trangthai', '=', '1')]"
+                                       context="{'default_coso_id': coso_id}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+    </record>
+
+  </data>
+</odoo>

@@ -1,0 +1,92 @@
+<odoo>
+  <data>
+
+
+        <record id="ekids_hocsinh.ketluan_list" model="ir.ui.view">
+            <field name="name">Học phí</field>
+            <field name="model">ekids.ketluan</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="sequence" widget="handle" />
+                    <field name="ngay_danhgia" />
+                    <field name="nguoi_danhgia"/>
+                    <field name="name"/>
+                    <field name="chinh_dm_roiloan_id"/>
+                    <field name="trangthai"
+                            decoration-success="trangthai == '0'"
+                            decoration-warning="trangthai == '1'"
+                    />
+
+                </list>
+            </field>
+        </record>
+
+
+
+        <!--        kanban view-->
+
+        <record id="ekids_hocsinh.ketluan_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.ketluan</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <h3><field name="coso_id" readonly="true"/></h3>
+                        <group col="2">
+                            <group>
+                                <field name="nguoi_danhgia"/>
+
+
+                            </group>
+                            <group>
+                                <field name="hocsinh_id" readonly="true"/>
+                                <field name="ngay_danhgia"/>
+
+                            </group>
+
+                        </group>
+                        <separator string="[1]. RỐI LOẠN CHÍNH" />
+                        <group col="3">
+                            <group>
+                                <field name="chinh_dm_roiloan_id"/>
+                            </group>
+                             <group>
+                                <field name="chinh_ct_chuongtrinh_id"/>
+                            </group>
+                             <group>
+                                <field name="chinh_dm_capdo_id" domain="[('chuongtrinh_id', '=', chinh_ct_chuongtrinh_id)]"/>
+                            </group>
+
+                        </group>
+                        <group>
+                            <field name="ketluan"/>
+                            <field name="trangthai"/>
+                        </group>
+
+                         <notebook invisible="not id">
+                            <page name="roiloan2dikem_ids " string="[2] CÁC RỐI LOẠN [ĐI KÈM]">
+                                <field name="roiloan2dikem_ids"/>
+                            </page>
+                             <page name="muctieu_ids " string="[3] PHÂN CÔNG GIÁO VIÊN CAN THIỆP">
+                                <group col="2">
+
+                                    <group>
+                                        <field name="gv_lapkehoach_id" domain="[('coso_id','=',coso_id)]" />
+                                    </group>
+                                     <group>
+                                        <field name="gv_canthiep_id" domain="[('coso_id','=',coso_id)]"/>
+                                    </group>
+
+                                </group>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+  </data>
+</odoo>

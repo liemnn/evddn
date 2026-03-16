@@ -1,0 +1,290 @@
+.o_list_view thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #fff; /* để không bị trong suốt */
+}
+.o_list_view thead th {
+    white-space: nowrap !important; /* cho phép xuống dòng */
+    word-break: break-word; /* cắt từ xuống dòng */
+    max-width:auto; /* tuỳ chỉnh độ rộng để text tự wrap */
+}
+
+.o_list_view th div {
+    min-width: max-content; /* độ rộng tối thiểu bằng chữ */
+}
+
+/* Desktop: có checkbox */
+@media (min-width: 768px) {
+  .o_list_view td:nth-child(3),
+  .o_list_view th:nth-child(3) {
+      position: sticky;
+      left: 0;
+      background: white;
+      z-index: 3;
+  }
+}
+
+/* Mobile: checkbox ẩn, cột cần dính thành số 2 */
+@media (max-width: 767px) {
+  .o_list_view td:nth-child(2),
+  .o_list_view th:nth-child(2) {
+      position: sticky;
+      left: 0;
+      background: white;
+      z-index: 3;
+  }
+}
+
+
+/* 1. Trả lại thanh Tab tổng thể về chuẩn Odoo (có đường kẻ ngang mờ ở dưới) */
+.o_form_view .o_notebook .nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 15px;
+}
+
+/* 2. Style bo viền góc trên cho tất cả các Tab chưa được chọn */
+.o_form_view .o_notebook .nav-tabs .nav-link {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #495057;
+    border: 1px solid transparent !important; /* Mặc định trong suốt để không bị giật khung */
+    border-radius: 6px 6px 0 0 !important; /* Bo tròn 2 góc trên */
+    padding: 8px 16px;
+    margin-right: 4px;
+}
+
+/* Hiệu ứng khi di chuột qua Tab chưa chọn */
+.o_form_view .o_notebook .nav-tabs .nav-link:hover {
+    border-color: #e9ecef #e9ecef #dee2e6 !important;
+    background-color: #f8f9fa;
+}
+
+/* ========================================================= */
+/* 3. HIỆU ỨNG BO VIỀN MÀU KHI ĐƯỢC CHỌN (ACTIVE)            */
+/* ========================================================= */
+
+/* TAB 1: 1. ĐƯỢC CỘNG (+) -> Viền Xanh lá cây */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(1) .nav-link.active {
+    color: #198754 !important;
+    background-color: #ffffff !important;
+    /* Viền Trái - Phải - Dưới (Dưới màu trắng để nối liền nội dung) */
+    border-color: #198754 #198754 #ffffff !important;
+    /* Viền trên cùng đậm hơn tạo điểm nhấn */
+    border-top: 3px solid #198754 !important;
+}
+
+/* TAB 2: 2. BỊ TRỪ (-) -> Viền Đỏ */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(2) .nav-link.active {
+    color: #dc3545 !important;
+    background-color: #ffffff !important;
+    border-color: #dc3545 #dc3545 #ffffff !important;
+    border-top: 3px solid #dc3545 !important;
+}
+
+/* TAB 3: 3. NHÀ TRƯỜNG CHI TRẢ -> Viền Xanh dương */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(3) .nav-link.active {
+    color: #0d6efd !important;
+    background-color: #ffffff !important;
+    border-color: #0d6efd #0d6efd #ffffff !important;
+    border-top: 3px solid #0d6efd !important;
+}
+
+/* TAB 4: 4. THÔNG TIN ĐÓNG GÓP -> Viền Xanh lơ */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(4) .nav-link.active {
+    color: #0dcaf0 !important;
+    background-color: #ffffff !important;
+    border-color: #0dcaf0 #0dcaf0 #ffffff !important;
+    border-top: 3px solid #0dcaf0 !important;
+}
+
+/* TAB 5: Màu Cam (Orange) - Thích hợp cho Cảnh báo, Lịch sử, Tạm ứng */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(5) .nav-link.active {
+    color: #fd7e14 !important;
+    background-color: #ffffff !important;
+    border-color: #fd7e14 #fd7e14 #ffffff !important;
+    border-top: 3px solid #fd7e14 !important;
+}
+
+/* TAB 6: Màu Tím (Purple) - Thích hợp cho Khen thưởng, Đánh giá, KPI */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(6) .nav-link.active {
+    color: #6f42c1 !important;
+    background-color: #ffffff !important;
+    border-color: #6f42c1 #6f42c1 #ffffff !important;
+    border-top: 3px solid #6f42c1 !important;
+}
+
+/* TAB 7: Màu Hồng (Pink) - Thích hợp cho Y Tế, Sức khỏe, Ghi chú đặc biệt */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(7) .nav-link.active {
+    color: #d63384 !important;
+    background-color: #ffffff !important;
+    border-color: #d63384 #d63384 #ffffff !important;
+    border-top: 3px solid #d63384 !important;
+}
+
+/* TAB 8: Màu Xanh ngọc (Teal) - Thích hợp cho Hoàn thành, Tài liệu, Hợp đồng */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(8) .nav-link.active {
+    color: #20c997 !important;
+    background-color: #ffffff !important;
+    border-color: #20c997 #20c997 #ffffff !important;
+    border-top: 3px solid #20c997 !important;
+}
+
+/* TAB 9: Màu Chàm (Indigo) - Thích hợp cho Phân quyền, Cài đặt, Cấu hình */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(9) .nav-link.active {
+    color: #6610f2 !important;
+    background-color: #ffffff !important;
+    border-color: #6610f2 #6610f2 #ffffff !important;
+    border-top: 3px solid #6610f2 !important;
+}
+
+/* TAB 10: Màu Than chì (Dark Slate) - Thích hợp cho Nhật ký hệ thống, Thông tin ẩn */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(10) .nav-link.active {
+    color: #343a40 !important;
+    background-color: #ffffff !important;
+    border-color: #343a40 #343a40 #ffffff !important;
+    border-top: 3px solid #343a40 !important;
+}
+
+/* ------------------------------------------------------------------------- */
+/* MẸO DỰ PHÒNG: Nếu có trên 10 Tab, tự động lặp lại màu Xám trung tính       */
+/* ------------------------------------------------------------------------- */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(n+11) .nav-link.active {
+    color: #6c757d !important;
+    background-color: #ffffff !important;
+    border-color: #6c757d #6c757d #ffffff !important;
+    border-top: 3px solid #6c757d !important;
+}
+
+/* --- KHUNG THẺ CHÍNH --- */
+.kh-premium-card {
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+    display: flex;
+    flex-direction: column;
+}
+
+.kh-premium-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* --- HEADER VÙNG MÀU NHẸ NHÀNG --- */
+.kh-premium-header {
+    background: linear-gradient(135deg, #f0f7ff 0%, #e0e7ff 100%);
+    padding: 25px 20px 45px 20px;
+    color: #1e3a8a;
+    text-align: center;
+    position: relative;
+}
+
+.kh-premium-header::before {
+    content: "";
+    position: absolute;
+    top: -15px; right: -15px;
+    width: 100px; height: 100px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+}
+
+/* --- AVATAR & TIÊU ĐỀ --- */
+.kh-premium-avatar {
+    width: 75px; height: 75px;
+    border-radius: 18px;
+    border: 3px solid #ffffff;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    margin: 0 auto 12px;
+    overflow: hidden;
+}
+
+.kh-premium-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.kh-premium-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0;
+    color: #1e3a8a;
+}
+
+.kh-premium-slogan {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+/* --- PHẦN THÂN XẾP LỚP --- */
+.kh-premium-body {
+    padding: 25px 20px 20px;
+    background: #ffffff;
+    border-radius: 24px 24px 0 0;
+    margin-top: -24px;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.kh-premium-desc {
+    font-size: 12px;
+    color: #94a3b8;
+    font-style: italic;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* --- CÁC NÚT BẤM --- */
+.kh-btn-action {
+    width: 100%;
+    border-radius: 12px;
+    padding: 12px 15px;
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+/* Nút chính (Xanh lam theme) */
+.kh-btn-main {
+    background: #3b82f6;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+}
+
+.kh-btn-main:hover {
+    background: #2563eb;
+    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Nút phụ (Xám nhẹ) */
+.kh-btn-sub {
+    background: #f8fafc;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0;
+}
+
+.kh-btn-sub:hover {
+    background: #f1f5f9;
+    color: #1e293b !important;
+    border-color: #cbd5e1;
+}
+
+/* Nút dạng List dùng icon nhỏ */
+.kh-btn-action i { font-size: 18px; }
+
+
+
+
+

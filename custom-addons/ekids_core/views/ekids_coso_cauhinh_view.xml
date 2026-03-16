@@ -1,0 +1,481 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="ekids_core.coso_cauhinh_list_view">
+            <field name="name">Quản lý Cơ sở</field>
+            <field name="model">ekids.coso</field>
+            <field name="arch" type="xml">
+                <list>
+
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="masothue"/>
+                    <field name="dm_tinh_id"/>
+                    <field name="dm_xa_id"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_core.coso_cauhinh_kanban_view" model="ir.ui.view">
+            <field name="name">Cơ sở - Premium Soft Light Configuration</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false" sample="1">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-premium-card">
+
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
+                                    </div>
+                                    <div class="kh-premium-title">
+                                        [<field name="ma"/>] - <field name="name"/>
+                                    </div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">
+                                        <field name="desc"/>
+                                    </div>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-main"
+                                            name="action_thietlap_cauhinh_bandau_cua_trungtam"
+                                            type="object">
+                                        <i class="fa fa-cogs"></i> Thiết lập [Thông tin] ban đầu
+                                    </button>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_quanly_nghile_nam_cua_trungtam"
+                                            type="object">
+                                        <i class="fa fa-calendar"></i> Quản lý [Nghỉ lễ/Sự kiện...]
+                                    </button>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_gui_thongbao_phuhuynh"
+                                            type="object">
+                                        <i class="fa fa-bullhorn"></i> Thông báo đến Phụ huynh
+                                    </button>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_core.coso_form_setting_view">
+            <field name="name">Thiết lập thông số - Premium Admin UI</field>
+            <field name="model">ekids.coso</field>
+            <field name="arch" type="xml">
+                <form string="Cơ sở">
+                    <sheet>
+                        <style>
+                            .o_form_view .o_form_sheet_bg { background-color: #f8fafc !important; padding-top: 0 !important;}
+                            .o_form_sheet { padding: 0 !important; max-width: 100% !important; border: none !important; background: transparent !important; }
+
+                            /* 1. Dải ảnh bìa Admin */
+                            .kh-hero-banner {
+                                height: 70px;
+                                background: linear-gradient(135deg, #6366f1 0%, #a5b4fc 100%);
+                                position: relative;
+                                margin-bottom: -35px;
+                                z-index: 1;
+                                border-bottom: 1px solid #e2e8f0;
+                            }
+
+                            .kh-content-wrapper { padding: 0 15px; position: relative; z-index: 2; }
+
+                            /* 2. Header Cơ sở */
+                            .kh-profile-header {
+                                display: flex; align-items: flex-end; gap: 15px;
+                                margin-bottom: 12px;
+                                background: rgba(255, 255, 255, 0.95);
+                                padding: 10px 15px;
+                                border-radius: 12px;
+                                box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+                                border: 1px solid #f1f5f9;
+                            }
+
+                            .kh-avatar-wrapper {
+                                width: 90px; height: 90px;
+                                border-radius: 15px; /* Logo để vuông bo góc nhẹ sẽ sang hơn tròn */
+                                border: 3px solid #ffffff; background: #ffffff;
+                                box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; flex-shrink: 0;
+                                margin-top: -30px;
+                            }
+                            .kh-avatar-wrapper img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
+
+                            .kh-name-section { padding-bottom: 0; flex-grow: 1; display: flex; flex-direction: column; justify-content: center;}
+                            .kh-ma-coso { font-size: 13px; font-weight: 700; color: #4f46e5; margin-bottom: 2px;}
+                            .kh-name-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 4px; }
+                            .kh-name { font-size: 24px; font-weight: 800; color: #1e293b; margin: 0; }
+                            .kh-slogan { font-size: 14px; color: #64748b; font-style: italic; margin: 0; }
+
+                            /* 3. Lưới thẻ thông tin 3 cột */
+                            .kh-admin-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+                            .kh-card {
+                                background: #ffffff; border-radius: 12px; padding: 12px 15px;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.02); border: 1px solid #f1f5f9;
+                            }
+                            .kh-card-title {
+                                font-size: 15px; font-weight: 800; color: #1e293b; margin-bottom: 10px;
+                                display: flex; align-items: center; gap: 8px;
+                                border-bottom: 1px solid #f1f5f9; padding-bottom: 6px;
+                            }
+                            .kh-card-title i { color: #6366f1; font-size: 16px; }
+
+                            .kh-data-row { display: flex; margin-bottom: 6px; align-items: center; }
+                            .kh-data-label { width: 110px; flex-shrink: 0; font-size: 13px; color: #64748b; font-weight: 600; }
+                            .kh-data-value { flex-grow: 1; width: 100%; font-size: 14px; color: #1e293b; font-weight: 700; }
+                            .kh-data-value > * { width: 100% !important; }
+
+                            /* Lịch hoạt động dàn hàng ngang chuẩn eKids */
+                            .kh-day-toggles {
+                                display: flex; justify-content: space-between; align-items: center;
+                                padding: 12px 20px; background: #f8fafc; border-radius: 10px; border: 1px dashed #cbd5e1;
+                            }
+                            .kh-day-item { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e3a8a; font-size: 13px; }
+                            .kh-day-item span { line-height: 1; transform: translateY(1px); }
+                            .kh-day-item .o_field_boolean { margin: 0 !important; display: flex !important; align-items: center !important; }
+
+                            @media (max-width: 1024px) { .kh-admin-grid { grid-template-columns: 1fr; } }
+                        </style>
+
+                        <div class="kh-hero-banner"></div>
+
+                        <div class="kh-content-wrapper">
+                            <div class="kh-profile-header">
+                                <div class="kh-avatar-wrapper">
+                                    <field name="logo" widget="image"/>
+                                </div>
+                                <div class="kh-name-section">
+                                    <div class="kh-ma-coso">MÃ CƠ SỞ: <field name="ma" readonly="1"/></div>
+                                    <div class="kh-name-row">
+                                        <h1 class="kh-name"><field name="fullname" placeholder="Tên đầy đủ của cơ sở"/></h1>
+                                        <field name="trangthai" widget="badge" decoration-success="trangthai == '1'" style="font-size: 13px;"/>
+                                    </div>
+                                    <p class="kh-slogan"><i class="fa fa-quote-left" style="font-size: 10px; margin-right: 5px;"/> <field name="slogan" placeholder="Slogan của bạn..."/> <i class="fa fa-quote-right" style="font-size: 10px; margin-left: 5px;"/></p>
+                                </div>
+                            </div>
+
+                            <div class="kh-admin-grid">
+                                <div class="kh-card">
+                                    <div class="kh-card-title"><i class="fa fa-university"/> THÔNG TIN PHÁP LÝ</div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label">Tên rút gọn</div>
+                                        <div class="kh-data-value"><field name="name"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label">Mã số thuế</div>
+                                        <div class="kh-data-value"><field name="masothue"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label">Email</div>
+                                        <div class="kh-data-value"><field name="email"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label">Điện thoại</div>
+                                        <div class="kh-data-value"><field name="dienthoai"/></div>
+                                    </div>
+                                </div>
+
+                                <div class="kh-card">
+                                    <div class="kh-card-title"><i class="fa fa-map-marker"/> ĐỊA CHỈ TRỤ SỞ</div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label">Tỉnh / Thành</div>
+                                        <div class="kh-data-value"><field name="dm_tinh_id" readonly="1"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label">Quận / Huyện</div>
+                                        <div class="kh-data-value"><field name="dm_xa_id" readonly="1"/></div>
+                                    </div>
+                                    <div class="kh-data-row" style="flex-direction: column; align-items: flex-start;">
+                                        <div class="kh-data-label" style="width: 100%; margin-bottom: 4px;">Số nhà / Đường phố:</div>
+                                        <div class="kh-data-value"><field name="diachi_chitiet" placeholder="Nhập địa chỉ chi tiết..."/></div>
+                                    </div>
+                                </div>
+
+                                <div class="kh-card">
+                                    <div class="kh-card-title"><i class="fa fa-cloud-download"/> DỊCH VỤ THUÊ PHẦN MỀM</div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label">Ngày bắt đầu</div>
+                                        <div class="kh-data-value"><field name="thue_tungay" readonly="1"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label">Ngày kết thúc</div>
+                                        <div class="kh-data-value" style="color: #e11d48;"><field name="thue_denngay" readonly="1"/></div>
+                                    </div>
+                                    <div class="kh-data-row" style="margin-top: 10px;">
+                                        <div class="kh-data-label" style="width: 100%;">
+                                            <i class="fa fa-info-circle text-info"/> Trạng thái thuê: <strong><field name="trangthai" readonly="1"/></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="kh-card kh-card-full">
+                                <div class="kh-card-title" style="margin-bottom: 4px; border:none; padding:0;"><i class="fa fa-calendar"></i> CẤU HÌNH CÁC NGÀY LÀM VIỆC TRONG TUẦN</div>
+
+
+                                <div class="kh-day-toggles">
+                                    <div class="kh-day-item"><span>T2</span><field name="hd_t2" widget="boolean_toggle"/></div>
+                                    <div class="kh-day-item"><span>T3</span><field name="hd_t3" widget="boolean_toggle"/></div>
+                                    <div class="kh-day-item"><span>T4</span><field name="hd_t4" widget="boolean_toggle"/></div>
+                                    <div class="kh-day-item"><span>T5</span><field name="hd_t5" widget="boolean_toggle"/></div>
+                                    <div class="kh-day-item"><span>T6</span><field name="hd_t6" widget="boolean_toggle"/></div>
+                                    <div class="kh-day-item"><span>T7</span><field name="hd_t7" widget="boolean_toggle"/></div>
+                                    <div class="kh-day-item"><span>CN</span><field name="hd_t8" widget="boolean_toggle"/></div>
+                                </div>
+                            </div>
+
+                            <notebook>
+
+
+                               <page string="TỶ LỆ HOÀN PHÍ" name="repayment_rate">
+                                    <style>
+                                        .kh-repay-container {
+                                            padding: 15px;
+                                            background: #ffffff;
+                                        }
+                                        .kh-repay-header {
+                                            display: flex;
+                                            align-items: center;
+                                            background: #f0f4ff;
+                                            padding: 15px 20px;
+                                            border-radius: 12px;
+                                            margin-bottom: 20px;
+                                            border: 1px solid #dbeafe;
+                                        }
+                                        .kh-repay-grid {
+                                            display: grid;
+                                            grid-template-columns: 1fr 1fr 1fr;
+                                            gap: 15px;
+                                        }
+                                        .kh-repay-item {
+                                            background: #ffffff;
+                                            border: 1px solid #f1f5f9;
+                                            border-radius: 12px;
+                                            padding: 15px;
+                                            text-align: center;
+                                            transition: all 0.3s;
+                                            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+                                        }
+                                        .kh-repay-item:hover {
+                                            border-color: #3b82f6;
+                                            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+                                        }
+                                        .kh-repay-icon {
+                                            font-size: 20px;
+                                            color: #3b82f6;
+                                            margin-bottom: 10px;
+                                        }
+                                        .kh-repay-label {
+                                            font-size: 13px;
+                                            color: #64748b;
+                                            font-weight: 600;
+                                            display: block;
+                                            margin-bottom: 8px;
+                                            min-height: 40px; /* Đảm bảo các box cao bằng nhau */
+                                        }
+                                        .kh-repay-input-group {
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            border-bottom: 2px solid #e2e8f0;
+                                            padding-bottom: 4px;
+                                            margin: 0 10px;
+                                        }
+                                        .kh-repay-input-group .o_field_widget {
+                                            font-size: 18px !important;
+                                            font-weight: 800 !important;
+                                            color: #1e3a8a !important;
+                                            text-align: center !important;
+                                            width: 100% !important;
+                                        }
+                                        .kh-repay-unit {
+                                            font-size: 16px;
+                                            font-weight: 700;
+                                            color: #94a3b8;
+                                            margin-left: 4px;
+                                        }
+                                        @media (max-width: 768px) {
+                                            .kh-repay-grid { grid-template-columns: 1fr; }
+                                        }
+                                    </style>
+
+                                    <div class="kh-repay-container">
+                                        <div class="kh-repay-header">
+                                            <div style="font-size: 24px; margin-right: 15px;">📅</div>
+                                            <div style="flex-grow: 1;">
+                                                <div style="font-weight: 800; color: #1e3a8a; font-size: 15px;">KỲ THU HỌC PHÍ</div>
+                                                <div style="font-size: 12px; color: #64748b;">Quy định thời điểm phát hành thông báo học phí hàng tháng [Bật: thu đầu tháng; Tắt: thu cuối tháng]</div>
+                                            </div>
+                                            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                                                <field name="is_thu_hocphi_dauthang" widget="boolean_toggle"/>
+                                                <span style="font-size: 11px; font-weight: 700; color: #3b82f6;">
+                                                    <t invisible="is_thu_hocphi_dauthang == False">THU ĐẦU THÁNG</t>
+                                                    <t invisible="is_thu_hocphi_dauthang == True">THU CUỐI THÁNG</t>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="kh-repay-grid">
+                                            <div class="kh-repay-item">
+                                                <div class="kh-repay-icon"><i class="fa fa-calendar-check-o"/></div>
+                                                <span class="kh-repay-label">Tỷ lệ hoàn trả khi<br/>HỌC SINH NGHỈ PHÉP</span>
+                                                <div class="kh-repay-input-group">
+                                                    <field name="tyle_tralai_hs_nghiphep"/>
+                                                    <span class="kh-repay-unit">%</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="kh-repay-item">
+                                                <div class="kh-repay-icon"><i class="fa fa-university"/></div>
+                                                <span class="kh-repay-label">Tỷ lệ hoàn trả khi<br/>TRƯỜNG CHO NGHỈ</span>
+                                                <div class="kh-repay-input-group">
+                                                    <field name="tyle_tralai_coso_chonghi"/>
+                                                    <span class="kh-repay-unit">%</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="kh-repay-item">
+                                                <div class="kh-repay-icon"><i class="fa fa-user-times"/></div>
+                                                <span class="kh-repay-label">Tỷ lệ hoàn trả khi<br/>HỌC SINH VẮNG MẶT</span>
+                                                <div class="kh-repay-input-group">
+                                                    <field name="tyle_tralai_hs_vangmat"/>
+                                                    <span class="kh-repay-unit">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-top: 15px; padding: 10px; background: #fffbeb; border-radius: 8px; border: 1px solid #fef3c7; display: flex; gap: 10px; align-items: center;">
+                                            <i class="fa fa-info-circle" style="color: #f59e0b;"/>
+                                            <span style="font-size: 12px; color: #92400e;">Lưu ý: Tỷ lệ này sẽ được hệ thống sử dụng để tự động tính toán số tiền hoàn lại khi kết chuyển lương/học phí sang tháng tiếp theo.</span>
+                                        </div>
+                                    </div>
+                                </page>
+
+                                <page string="THÔNG TIN TẠI PHIẾU LƯƠNG/HỌC PHÍ" name="receipt_config">
+                                    <style>
+                                        .kh-receipt-grid {
+                                            display: grid;
+                                            grid-template-columns: 2fr 1fr; /* Bên trái rộng hơn để nhập liệu, bên phải hẹp để QR */
+                                            gap: 20px;
+                                            padding-top: 10px;
+                                        }
+                                        .kh-qr-frame {
+                                            display: flex;
+                                            flex-direction: column;
+                                            align-items: center;
+                                            justify-content: center;
+
+                                            border: 2px dashed #cbd5e1;
+                                            border-radius: 16px;
+                                            padding: 20px;
+                                            text-align: center;
+                                        }
+                                        .kh-qr-frame .o_field_image img {
+                                            max-width: 180px !important;
+                                            height: auto !important;
+                                            border-radius: 8px;
+                                            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                                        }
+                                        @media (max-width: 768px) {
+                                            .kh-receipt-grid { grid-template-columns: 1fr; }
+                                        }
+                                    </style>
+
+                                    <div class="kh-receipt-grid">
+                                        <div class="kh-card">
+                                            <div class="kh-card-title">
+                                                <i class="fa fa-file-text-o"></i> NỘI DUNG HIỂN THỊ TRÊN PHIẾU THU HỌC PHÍ
+                                            </div>
+
+                                            <div class="kh-data-row" style="flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
+                                                <div class="kh-data-label" style="width: 100%; margin-bottom: 8px;">
+                                                    Tiêu đề phiếu thu / Lương:
+                                                </div>
+                                                <div class="kh-data-value" style="width: 100%;">
+                                                    <field name="header_thu_hocphi" placeholder="Ví dụ: PHIẾU THU HỌC PHÍ &amp; PHÍ BÁN TRÚ" style="font-size: 16px; font-weight: 800; color: #1e3a8a;"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="kh-data-row" style="flex-direction: column; align-items: flex-start;">
+                                                <div class="kh-data-label" style="width: 100%; margin-bottom: 8px;">
+                                                    <i class="fa fa-commenting-o text-primary"></i> Ghi chú chân trang (Lưu ý cho PH):
+                                                </div>
+                                                <div class="kh-data-value" style="width: 100%;">
+                                                    <field name="ghichu_thu_hocphi" placeholder="Ví dụ: Quý phụ huynh vui lòng thanh toán trước ngày mùng 5 hàng tháng..."/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="kh-card">
+                                            <div class="kh-card-title">
+                                                <i class="fa fa-qrcode"></i> QR THANH TOÁN
+                                            </div>
+                                            <div class="kh-qr-frame">
+                                                <field name="qrcode_thu_hocphi" widget="image" class="oe_avatar" options="{'size': [280, 280]}"/>
+                                                <div style="margin-top: 15px;">
+                                                    <span style="display: block; font-weight: 800; color: #1e293b; font-size: 14px;">MÃ QR CƠ SỞ</span>
+                                                    <span style="display: block; font-size: 12px; color: #64748b; margin-top: 4px;">Click để tải lên mã QR ngân hàng</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </page>
+
+                                <page name="coso_ids" string="HỆ THỐNG CHI NHÁNH">
+                                    <div class="kh-card" style="margin-top: 10px;">
+                                        <field name="coso_ids" readonly="1"/>
+                                    </div>
+                                </page>
+                            </notebook>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+
+
+
+        <!-- actions opening views on models -->
+
+       <record id="ekids_core.coso_cauhinh_action_window" model="ir.actions.act_window">
+            <field name="name">Cấu hình cơ sở</field>
+            <field name="res_model">ekids.coso</field>
+            <field name="view_mode">kanban,list</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Kanban View -->
+        <record id="ekids_core.coso_cauhinh_kanban_action_window_view" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="ekids_core.coso_cauhinh_kanban_view"/>
+            <field name="act_window_id" ref="ekids_core.coso_cauhinh_action_window"/>
+        </record>
+
+        <!-- List View -->
+        <record id="ekids_core.coso_cauhinh_list_action_window_view" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="ekids_core.coso_cauhinh_list_view"/>
+            <field name="act_window_id" ref="ekids_core.coso_cauhinh_action_window"/>
+        </record>
+
+
+
+
+
+
+    </data>
+</odoo>

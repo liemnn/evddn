@@ -1,0 +1,61 @@
+<odoo>
+    <template id="ekids_baocao.baocao_nguonluc_template">
+        <div style=" margin-bottom: 30px; ">
+                <button  onclick="window.print()"
+                        style="width:30px; height:auto"
+                        string="In báo cáo" type="object">
+                    <i class="fa fa-print"></i>
+                </button>
+        </div>
+        <!-- Gọi layout chuẩn của Odoo -->
+        <t t-call="web.html_container">
+
+           <div class="page">
+                 <h6><p>BÁO CÁO TỔNG [HỌC SINH/GIÁO VIÊN] HÀNG THÁNG</p></h6>
+                    <table width="100%" border="1">
+                        <tr>
+                            <t t-foreach="table_data[0]" t-as="header">
+                                <th align="center"  style="text-align:center;border:1px"><t t-esc="header"/></th>
+                            </t>
+                        </tr>
+
+                        <tbody>
+                            <t t-foreach="table_data[1:]" t-as="row">
+                                <tr>
+                                    <t t-foreach="row" t-as="cell">
+                                        <td align="right"  style="text-align:right;border:1px"><t t-esc="cell"/></td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+           </div>
+        </t>
+         <style>
+
+             table {
+                  border-collapse: collapse;
+                  width: 100%;
+                }
+
+                td {
+                  text-align: right;
+                  padding: 8px;
+                  widht:15%;
+                }
+                th{
+                    background-color: #f2f2f2;
+                    color:#212529
+                    font-size:20px;
+                    font-weight: bold;
+                    text-align: right;
+                    padding: 8px;
+                }
+
+                tr:nth-child(even) {background-color: #f2f2f2;}
+
+         </style>
+
+    </template>
+</odoo>

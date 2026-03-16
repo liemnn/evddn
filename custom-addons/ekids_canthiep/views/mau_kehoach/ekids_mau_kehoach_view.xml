@@ -1,0 +1,122 @@
+<odoo>
+    <data>
+
+         <record id="ekids_canthiep.mau_kehoach_kanban_view" model="ir.ui.view">
+            <field name="name">MẪU [KẾ HOẠCH]</field>
+            <field name="model">ekids.mau_kehoach</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban default_group_by="chinh_dm_roiloan_id">
+                    <field name="chinh_dm_roiloan_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="box">
+                                <!-- Icon Section -->
+                                <table class="ekids_mau_review">
+                                    <tr>
+                                        <td><span class="tacgia"><field name="tacgia" readonly="1"/></span></td>
+                                        <td>Đánh giá trung bình:<span class="review">⭐<field name="rating_avg" readonly="1"/>
+                                        (Tổng:<field name="rating_count" readonly="1"/>)</span></td>
+                                    </tr>
+                                </table>
+                                 <div class="item-list">
+                                    <div class="item">
+                                      <div class="item-text">Số tháng </div>
+                                      <div class="item-info">
+                                        <field name="sothang"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Cho trẻ</div>
+                                      <div class="item-info">
+                                        <field name="gioitinh"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Can thiếp ứng độ tuổi</div>
+                                      <div class="item-info">
+                                          <field name="dm_tuoi_id"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Rối loạn chính</div>
+                                      <div class="item-info">
+                                          <field name="chinh_dm_roiloan_id"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Chương trình</div>
+                                      <div class="item-info">
+                                          <field name="chinh_ct_chuongtrinh_id"/>
+                                      </div>
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Button Section -->
+                                <button class="function"
+                                    name="action_view_ekid_canthiep_kanban_mau_kehoach_thang"
+                                    type="object" string="Thiết kế mẫu [Kế hoạch]"/>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+         <record id="ekids_canthiep.mau_kehoach_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.mau_kehoach</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group col="2">
+                            <separator string="[1] THÔNG TIN KẾ HOẠCH" />
+                            <group>
+                                <field name="name" readonly="true"/>
+                            </group>
+                            <group>
+                                <field name="sothang"/>
+                            </group>
+                        </group>
+                        <group col="2">
+                            <separator string="[1] THÔNG TIN ÁP DỤNG CHO TRẺ" />
+                            <group>
+                                <field name="gioitinh"/>
+                            </group>
+                            <group>
+                                <field name="dm_tuoi_id"/>
+                            </group>
+                        </group>
+                        <group col="3">
+                            <separator string="[2] DẠNG RỐI LOẠN CHÍNH" />
+                            <group>
+                                <field name="chinh_dm_roiloan_id"/>
+                            </group>
+                            <group>
+                                <field name="chinh_ct_chuongtrinh_id"/>
+                            </group>
+                            <group>
+                                <field name="chinh_dm_capdo_id" domain="[('chuongtrinh_id', '=', chinh_ct_chuongtrinh_id)]"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="roiloan_dikem_ids " string="[2] CÁC RỐI LOẠN ĐI KÈM">
+                                <field name="roiloan_dikem_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="ekids_canthiep.mau_kehoach_action_window">
+            <field name="name">Mẫu [Kế hoạch]</field>
+            <field name="res_model">ekids.mau_kehoach</field>
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+
+    </data>
+</odoo>

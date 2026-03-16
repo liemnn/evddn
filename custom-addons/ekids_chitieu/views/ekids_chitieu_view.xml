@@ -1,0 +1,45 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="ekids_chitieu.chi_list">
+            <field name="name">Chi</field>
+            <field name="model">ekids.chitieu_chi</field>
+            <field name="arch" type="xml">
+                 <list editable="bottom" limit="300"  default_order="ngaychi asc">
+                    <field name="sequence" widget="handle"/>
+                    <field name="ngaychi" width="200"/>
+                    <field name="tien" sum="Total" width="100" widget="integer"/>
+                    <field name="dm_loaichi_id"
+                           domain="[('trangthai','=','1'),('loai','=','0')]"
+                           context="{'default_coso_id':context.get('default_coso_id')}"/>
+                    <field name="desc"/>
+                    <field name="create_uid" string="Người tạo"/>
+                    <field name="create_date" string="Ngày tạo"/>
+                 </list>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="ekids_chitieu.thu_list">
+            <field name="name">Chi</field>
+            <field name="model">ekids.chitieu_thu</field>
+            <field name="arch" type="xml">
+                 <list editable="bottom" limit="300" default_order="ngaychi asc">
+                    <field name="ngaychi" width="200"/>
+                    <field name="tien" sum="Total" width="100"/>
+                    <field name="tien" sum="Total" width="50"/>
+                    <field name="dm_loaichi_id"
+                          domain="[('trangthai','=','1'),('loai','=','1')]"
+                           context="{'default_coso_id':context.get('default_coso_id')}"/>
+                    <field name="desc"/>
+                    <field name="create_uid" string="Người tạo"/>
+                    <field name="create_date" string="Ngày tạo"/>
+                 </list>
+            </field>
+        </record>
+
+
+
+
+    </data>
+</odoo>

@@ -1,0 +1,56 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="ekids_core.dm_chinhsach_giam_hocphi_list">
+            <field name="name">hocphi_dm_chinhsach_giam</field>
+            <field name="model">ekids.hocphi_dm_chinhsach_giam</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="tyle_giam"/>
+                    <field name="desc"/>
+                    <field name="trangthai"
+                        decoration-success="trangthai == '1'"
+                        decoration-danger="trangthai == '0'"/>
+
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_core.hocphi_dm_thu_bantru_list_view">
+            <field name="name">Dm thu bán trú</field>
+            <field name="model">ekids.hocphi_dm_thu_bantru</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="tien"/>
+                    <field name="desc"/>
+                    <field name="loai"/>
+                    <field name="trangthai"
+                        decoration-success="trangthai == '1'"
+                        decoration-danger="trangthai == '0'"/>
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_core.hocphi_dm_ca_list_view">
+            <field name="name">Dm Ca</field>
+            <field name="model">ekids.hocphi_dm_ca</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="tien"/>
+                    <field name="tyle_giaovien_huong"/>
+                    <field name="sotien_giaovien_huong" readonly="true"/>
+                    <field name="trangthai"
+                            decoration-success="trangthai == '1'"
+                            decoration-danger="trangthai == '0'"/>
+                </list>
+            </field>
+        </record>
+
+    </data>
+</odoo>

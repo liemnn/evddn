@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <record id="ekids_giaovien.action_phieuluong" model="ir.actions.report">
+            <field name="name">In Luong</field>
+            <field name="model">ekids.luong</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_giaovien.template_phieuluong</field>
+            <field name="report_file">ekids_giaovien.template_phieuluong</field>
+
+        </record>
+    </data>
+</odoo>

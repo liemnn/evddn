@@ -1,0 +1,58 @@
+<odoo>
+    <data>
+        <record id="ekids_diemdanh.diemdanh_ca2ngay_wizard_form" model="ir.ui.view">
+            <field name="name">diemdanh_ca2ngay_wizard</field>
+            <field name="model">ekids.diemdanh_ca2ngay_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Chọn ngày điểm danh">
+                    <sheet>
+                        <field name="is_diemdanh_hocsinh" invisible="1"/>
+                        <separator string="THÔNG TIN CA DẠY BÙ CHO HỌC SINH"/>
+                        <group>
+                            <field name="loai"/>
+                            <field name="hocsinh_id" readonly="is_diemdanh_hocsinh == True"
+                               domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
+                                   context="{'default_coso_id':coso_id}"
+                            />
+                            <field name="hocphi_dm_ca_id"
+                                   domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
+                                   context="{'default_coso_id':coso_id}"
+                            />
+                            <field name="giaovien_id" readonly="is_diemdanh_hocsinh == False"
+                                   domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
+                                   context="{'default_coso_id':coso_id}"
+
+                            />
+                        </group>
+                        <group col="3">
+                            <group>
+                                <field name="ngay" readonly="true"/>
+                            </group>
+                             <group>
+                                <field name="tu" widget="flatpickr_time" />
+                            </group>
+                             <group>
+                                <field name="den" widget="flatpickr_time" />
+                            </group>
+
+                        </group>
+                        <group>
+                            <field name="desc"/>
+                        </group>
+
+
+                    </sheet>
+                    <footer>
+                        <button name="action_tao_diemdanh_ca2ngay_hocbu"
+                                type="object" string="Thực hiện"
+                                context="{'is_nguoitao':'0','is_diemdanh_hocsinh':is_diemdanh_hocsinh}"
+                                class="btn-primary"/>
+                        <button string="Hủy" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

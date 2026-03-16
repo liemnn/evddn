@@ -1,0 +1,52 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="ekids_core.dm_xa_list">
+      <field name="name">Quản lý nhom</field>
+      <field name="model">ekids.dm_xa</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="code"/>
+          <field name="name"/>
+         <field name="dm_tinh_id"/>
+
+        </list>
+      </field>
+    </record>
+
+     <record model="ir.ui.view" id="ekids_core.dm_xa_form" >
+      <field name="name">Form Nhom Danh mục</field>
+      <field name="model">ekids.dm_xa</field>
+      <field name="arch" type="xml">
+        <form string="Nhom">
+          <header>
+             <h2>Nhóm Danh mục</h2>
+          </header>
+          <sheet>
+            <group>
+              <field name="code"/>
+              <field name="name"/>
+              <field name="dm_tinh_id"/>
+              <field name="desc"/>
+            </group>
+
+
+          </sheet>
+
+        </form>
+      </field>
+    </record>
+
+
+     <record model="ir.actions.act_window" id="ekids_core.dm_xa_action_window">
+      <field name="name">Quản lý nhóm danh mục</field>
+      <field name="res_model">ekids.dm_xa</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+
+
+
+  </data>
+</odoo>

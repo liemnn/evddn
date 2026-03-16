@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+
+
+        <!-- Top menu item -->
+
+        <menuitem name="Báo cáo" id="ekids_baocao.menu_root"
+                  web_icon="ekids_baocao,static/description/icon.png" sequence="8"/>
+
+        <menuitem name="Báo cáo" id="ekids_baocao.baocao_loinhuan" parent="ekids_baocao.menu_root"
+               action="ekids_baocao.baocao_loinhuan_action_window"
+               groups="ekids_core.xembaocao"/>
+
+
+    </data>
+</odoo>

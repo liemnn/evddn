@@ -1,0 +1,92 @@
+<odoo>
+  <data>
+
+        <record id="ekids_hocsinh.kehoach_hocsinh_kanban_view" model="ir.ui.view">
+            <field name="name">Kanban Học sinh</field>
+            <field name="model">ekids.hocsinh</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban create="0">
+                    <t t-name="kanban-box">
+                        <nav class="box-navbar">
+                                <ul class="box-menu">
+                                  <li class="box-menu-item">
+                                    <a href="#" >
+                                       <span class="fa fa-ellipsis-v"></span>
+                                    </a>
+                                    <ul class="box-dropdown">
+                                       <li>
+
+                                          <button
+                                             name="action_view_kehoach_hocsinh"
+                                             type="object" string="Lập kế hoạch từ [Mẫu] đã có"/>
+
+                                      </li>
+
+                                      <li>
+                                          <button
+                                             name="action_view_kehoach_hocsinh"
+                                             type="object" string="Lập kế hoạch từ đầu"/>
+
+                                      </li>
+
+                                    </ul>
+                                  </li>
+                                </ul>
+                            </nav>
+
+                        <div class="box-user" >
+                            <!-- Vùng ảnh -->
+                            <div class="student-avatar">
+                                <field name="avatar" widget="image"/>
+                            </div>
+
+                            <!-- Vùng thông tin -->
+                            <div class="info">
+                                <h2 class="title">
+                                    <span>[<field name="ma"/>]- </span>
+                                    <field name="name"/>
+
+                                </h2>
+
+                                 <div class="item-list">
+                                   <div class="item">
+                                      <div class="item-text">Giới tính</div>
+                                      <div class="item-info">
+                                         <field name="gioitinh"/>
+                                      </div>
+                                    </div>
+
+                                     <div class="item">
+                                      <div class="item-text">Ngày sinh</div>
+                                      <div class="item-info">
+                                         <field name="ngaysinh"/>
+                                      </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+
+                                <button  class="function"
+                                     name="action_view_kehoach_hocsinh"
+                                     type="object" string="Danh sách [Kế hoạch]"/>
+
+
+
+                            </div>
+                        </div>
+
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+
+  </data>
+</odoo>

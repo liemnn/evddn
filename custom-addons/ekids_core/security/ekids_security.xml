@@ -1,0 +1,73 @@
+<odoo>
+    <data noupdate="0">
+        <record id="module_ekids_core" model="ir.module.category">
+            <field name="name">Vai trò người dùng</field>
+        </record>
+
+
+
+        <record id="module_ekids" model="ir.module.category">
+            <field name="name">Vai trò giáo viên</field>
+        </record>
+
+        <record id="ekids_core.ql_ct_canthiep" model="res.groups">
+            <field name="name">Quản lý các [Chương trình] can thiệp</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+
+
+
+        <record id="ekids_core.quanlycoso" model="res.groups">
+            <field name="name">Quản lý cơ sở</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+
+
+        <record id="ekids_core.quanlygiaovien" model="res.groups">
+            <field name="name">Quản lý giáo viên</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+
+        <record id="ekids_core.giaovien" model="res.groups">
+            <field name="name">Là Giáo viên</field>
+            <field name="category_id" ref="module_ekids_core"/>
+        </record>
+        <record id="ekids_core.phuhuynh" model="res.groups">
+            <field name="name">Là Phụ huynh học sinh</field>
+            <field name="category_id" ref="module_ekids_core"/>
+        </record>
+
+        <record id="ekids_core.tinhluong" model="res.groups">
+            <field name="name">Tính lương giáo viên</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+
+        <record id="ekids_core.quanlyhocsinh" model="res.groups">
+            <field name="name">Quản lý học sinh</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+        <record id="ekids_core.diemdanh" model="res.groups">
+            <field name="name">Điểm danh [Học sinh]</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+        <record id="ekids_core.chamcong" model="res.groups">
+            <field name="name">Chấm công [Giáo viên]</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+
+        <record id="ekids_core.tinhhocphi" model="res.groups">
+            <field name="name">Tính học phí</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+
+        <record id="ekids_core.quanlychitieu" model="res.groups">
+            <field name="name">Quản lý chi tiêu</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+
+        <record id="ekids_core.xembaocao" model="res.groups">
+            <field name="name">Xem báo cáo</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+    </data>
+</odoo>

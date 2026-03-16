@@ -1,0 +1,39 @@
+<odoo>
+  <data>
+
+
+    <!-- Top menu item -->
+
+    <menuitem name="Ngân hàng [Can thiệp]" id="ekids_canthiep.menu_root"
+             web_icon="ekids_canthiep,static/description/icon.png"/>
+
+    <menuitem name="Cấu hình" id="ekids_canthiep.menu_cauhinh"
+             parent="ekids_canthiep.menu_root"
+            groups="base.group_system"/>
+
+     <menuitem name="Chương trình [Can thiệp]" id="ekids_canthiep.ct_canthiep" parent="ekids_canthiep.menu_root"
+              action="ekids_canthiep.ct_chuongtrinh_action_window"
+               groups="base.group_system" sequence="1"/>
+
+
+      <menuitem name="Mẫu [Kế hoạch]" id="ekids_canthiep.mau_kehoach" parent="ekids_canthiep.menu_root"
+              action="ekids_canthiep.mau_kehoach_action_window"
+              groups="base.group_system" sequence="2"/>
+
+
+      <menuitem name="Danh mục dạng [Rỗi loạn]" id="ekids_canthiep.ct_dm_roiloan" parent="ekids_canthiep.menu_cauhinh"
+              action="ekids_canthiep.ct_dm_roiloan_action_window"
+              groups="base.group_system" sequence="3"/>
+       <menuitem name="Danh mục Tuổi[Tương ứng]" id="ekids_canthiep.ct_dm_tuoi" parent="ekids_canthiep.menu_cauhinh"
+              action="ekids_canthiep.ct_dm_tuoi_action_window"
+              groups="base.group_system" sequence="3"/>
+
+
+
+
+
+
+
+
+  </data>
+</odoo>

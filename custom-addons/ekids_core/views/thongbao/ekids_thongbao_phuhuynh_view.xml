@@ -1,0 +1,70 @@
+<odoo>
+    <data>
+      <record id="ekids_core.thongbao_phuhuynh_search" model="ir.ui.view">
+            <field name="name">thongbao_phuhuynh.search</field>
+            <field name="model">ekids.thongbao_phuhuynh</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="desc"/>
+                </search>
+            </field>
+      </record>
+
+      <record model="ir.ui.view" id="ekids_core.thongbao_phuhuynh_list">
+            <field name="name">thongbao_phuhuynh.list</field>
+            <field name="model">ekids.thongbao_phuhuynh</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="trangthai"
+                        decoration-success="trangthai == '1'"
+                        decoration-danger="trangthai == '0'"/>
+                    <field name="create_uid" string="Người gửi"/>
+                    <field name="create_date" string="Ngày gửi"/>
+                </list>
+            </field>
+        </record>
+
+         <record model="ir.ui.view" id="ekids_core.thongbao_phuhuynh_form">
+            <field name="name">Thông báo</field>
+            <field name="model">ekids.thongbao_phuhuynh</field>
+            <field name="arch" type="xml">
+                <form string="THÔNG BÁO">
+                    <header>
+                        <field name="trangthai"
+                             widget="statusbar"
+                             statusbar_visible="0,1"
+                             statusbar_colors='{"0":"red","1":"green"}'
+                             options="{'clickable': true}"/>
+                    </header>
+                    <sheet>
+                      <group>
+                             <field name="name"/>
+                        </group>
+                        <group>
+                             <field name="desc"/>
+
+                        </group>
+
+
+                         <notebook invisible="is_gui_phuhuynh == False">
+                            <page name="viewed_ids " string="DANH SÁCH CÁC [PHỤ HUYNH] ĐÃ XEM THÔNG BÁO">
+                                <field name="viewed_ids" context="{'default_coso_id':coso_id}">
+                                    <list create="0">
+                                        <field name="name"/></list>
+                                    </field>
+                            </page>
+                         </notebook>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

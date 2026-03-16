@@ -1,0 +1,98 @@
+<odoo>
+    <data>
+        <record id="ekids_chitieu.coso_kanban_view" model="ir.ui.view">
+            <field name="name">ekids_core.coso.kanban - Premium Soft Light</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+               <kanban sample="1" action="action_view_ekid_chitieu_kanban_chitieu_nam" type="object">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-premium-card">
+
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
+                                    </div>
+                                    <div class="kh-premium-title"><field name="name"/></div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">(Tính các khoản chi/tiêu hàng tháng của Cơ sở)</div>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-main"
+                                            name="action_view_chitieu_thang_nay"
+                                            type="object">
+                                        <i class="fa fa-credit-card"></i> CHI TIÊU [THÁNG NÀY]
+                                    </button>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_view_ekid_chitieu_kanban_chitieu_nam"
+                                            type="object">
+                                        <i class="fa fa-history"></i> Xem các [Tháng] khác
+                                    </button>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="ekids_chitieu.coso_chitieu_action_window">
+          <field name="name">Chi tiêu</field>
+          <field name="res_model">ekids.coso</field>
+          <field name="context">{ 'kanban_view_ref':'ekids_chitieu.coso_kanban_view'}</field>
+          <field name="view_mode">kanban</field>
+        </record>
+
+        <record id="ekids_chitieu.cauhinh_kanban_view" model="ir.ui.view">
+            <field name="name">ekids_core.coso.kanban</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+               <kanban>
+                    <t t-name="kanban-box">
+                        <div class="box">
+                            <!-- Icon Section -->
+                            <div class="avatar">
+                               <field name="logo" widget="image" />
+                            </div>
+                            <!-- Title Section -->
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+                            <!-- Description Section -->
+                            <p class="slogan">
+                               <field name="slogan"/>
+                            </p>
+                            <p class="description">
+                               (Cấu hình danh mục Thu/Chi của Trường)
+                            </p>
+                            <!-- Button Section -->
+                            <button  class="function"
+                                 name="action_view_ekid_chitieu_list_dm_loaichi"
+                                 type="object" string="Quản lý danh mục [Thu/Chi]"/>
+
+
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="ekids_chitieu.cauhinh_action_window">
+          <field name="name">Cấu hình</field>
+          <field name="res_model">ekids.coso</field>
+          <field name="context">{ 'kanban_view_ref':'ekids_chitieu.cauhinh_kanban_view'}</field>
+          <field name="view_mode">kanban</field>
+        </record>
+
+
+    </data>
+</odoo>

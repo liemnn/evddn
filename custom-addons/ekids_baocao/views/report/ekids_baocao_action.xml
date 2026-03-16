@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+        <record id="ekids_baocao.action_report_view_loinhuan" model="ir.actions.report">
+            <field name="name">Xem báo cáo lợi nhuận</field>
+            <field name="model">ekids.baocao_loinhuan</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_baocao.baocao_loinhuan_template</field>
+            <field name="report_file">ekids_baocao.baocao_loinhuan_template</field>
+
+        </record>
+
+        <record id="ekids_baocao.action_report_view_nguonluc" model="ir.actions.report">
+            <field name="name">Xem báo cáo nguồn lực</field>
+            <field name="model">ekids.baocao_nguonluc</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_baocao.baocao_nguonluc_template</field>
+            <field name="report_file">ekids_baocao.baocao_nguonluc_template</field>
+
+        </record>
+    </data>
+</odoo>

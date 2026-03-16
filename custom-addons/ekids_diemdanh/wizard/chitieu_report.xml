@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_chitieu_report_wizard_form" model="ir.ui.view">
+        <field name="name">chitieu.report.wizard.form</field>
+        <field name="model">chitieu.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Báo cáo chi tiêu hàng năm">
+                <group>
+                    <field name="coso_id" readonly="1"/>
+                    <field name="nam_id" readonly="1" widget="many2one_tags"/>
+                    <field name="tong_chitieu" readonly="1"/>
+                </group>
+                <footer>
+                    <button string="Xuất Báo Cáo" class="btn-primary"/>
+                    <button string="Đóng" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_chitieu_report_wizard" model="ir.actions.act_window">
+        <field name="name">Báo Cáo Chi Tiêu Năm</field>
+        <field name="res_model">chitieu.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'active_id': active_id}</field>
+    </record>
+</odoo>

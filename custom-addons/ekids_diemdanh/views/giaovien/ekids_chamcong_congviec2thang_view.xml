@@ -1,0 +1,158 @@
+<odoo>
+    <data>
+         <record id="ekids_diemdanh.chamcong_congviec2thang_search" model="ir.ui.view">
+            <field name="name">chamcong_congviec2thang.search</field>
+            <field name="model">ekids.chamcong_congviec2thang</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="giaovien_id"/>
+                </search>
+            </field>
+         </record>
+
+         <record id="ekids_diemdanh.chamcong_congviec2thang_list" model="ir.ui.view">
+            <field name="name">Diem Danh</field>
+            <field name="model">ekids.chamcong_congviec2thang</field>
+            <field name="arch" type="xml">
+                 <list  create="false" delete="true" limit="200"
+                        decoration-danger="is_ca_daythay"
+                        default_order="giaovien_id asc">
+                    <header>
+                        <button name="action_xoa_taolai_congviec2thang"
+                            type="object"
+                            string="Xóa làm lại"
+                            class="btn-primary"
+                            display="always"
+                                confirm="Bạn chắc chắn muốn xóa đi toàn bộ làm lại ?"
+                        />
+                    </header>
+                    <field name="sequence" width="25" />
+                    <field name="giaovien_id" width="150"  readonly="true"/>
+                    <button name="action_capnhat_ketqua_tong"
+                            type="object"
+                            string=""
+                            width="40"
+                            class="fa fa-pencil-square-o"
+                            title="Nhập lại kết quả (nếu là số lẻ)"
+                        />
+
+
+
+                    <field name="tong"  width="50"/>
+                    <field name="d1"  invisible="is_d1_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d2"  invisible="is_d2_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d3"  invisible="is_d3_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d4"  invisible="is_d4_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d5"  invisible="is_d5_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d6"  invisible="is_d6_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d7"  invisible="is_d7_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d8"  invisible="is_d8_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d9"  invisible="is_d9_nghi"
+                           widget="boolean_toggle" width="30" />
+
+                     <field name="d10"  invisible="is_d10_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d11"  invisible="is_d11_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d12"  invisible="is_d12_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d13"  invisible="is_d13_nghi"
+                           widget="boolean_toggle" width="30"/>
+                     <field name="d14"  invisible="is_d14_nghi"
+                           widget="boolean_toggle" width="30"/>
+                     <field name="d15"  invisible="is_d15_nghi"
+                           widget="boolean_toggle" width="30"/>
+                     <field name="d16"  invisible="is_d16_nghi"
+                           widget="boolean_toggle" width="30"/>
+                    <field name="d17"  invisible="is_d17_nghi"
+                           widget="boolean_toggle" width="30"/>
+                    <field name="d18"  invisible="is_d18_nghi"
+                           widget="boolean_toggle" width="30"/>
+                   <field name="d19"  invisible="is_d19_nghi"
+                           widget="boolean_toggle" width="30"/>
+
+                    <field name="d20"  invisible="is_d20_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d21"  invisible="is_d21_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d22"  invisible="is_d22_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d23"  invisible="is_d23_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d24"  invisible="is_d24_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d25"  invisible="is_d25_nghi"
+                           widget="boolean_toggle" width="30" />
+                     <field name="d26"  invisible="is_d26_nghi"
+                           widget="boolean_toggle" width="30" />
+                    <field name="d27"  invisible="is_d27_nghi"
+                           widget="boolean_toggle" width="30" />
+                    <field name="d28"  invisible="is_d28_nghi"
+                           widget="boolean_toggle" width="30" />
+
+                    <field name="d29"  invisible="is_d29_nghi"
+                           widget="boolean_toggle" width="30" />
+                    <field name="d30"  invisible="is_d30_nghi"
+                           widget="boolean_toggle" width="30" />
+                    <field name="d31"  invisible="is_d31_nghi"
+                           widget="boolean_toggle" width="30" />
+
+                </list>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="ekids_diemdanh.chamcong_congviec2thang_form">
+            <field name="name">chamcong_congviec2thang Form</field>
+            <field name="model">ekids.chamcong_congviec2thang</field>
+            <field name="arch" type="xml">
+                <form string="Cơ sở">
+                    <sheet>
+                        <group col="2">
+                            <group>
+                                <field name="coso_id" invisible="1"/>
+                                <field name="giaovien_id" readonly="true"/>
+                            </group>
+                            <group>
+                                <field name="tong_ca_daythay"/>
+                            </group>
+
+                        </group>
+                        <group>
+                            <h4>Nhập và xac thực khối lượng thực tế: <field name="tong_temps"/></h4>
+                        </group>
+
+
+                    </sheet>
+                    <notebook>
+                        <page name="ca2ngay_daythay_ids" string="THÔNG TIN DẠY THAY CỦA GIÁO VIÊN">
+                            <field name="ca2ngay_daythay_ids" context="{'default_coso_id':coso_id,'default_giaovien_id':giaovien_id}"/>
+                        </page>
+                    </notebook>
+
+
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_diemdanh.chamcong_ca2ngay_daythay_list">
+            <field name="name">chamcong_ca2ngay_daythay Form</field>
+            <field name="model">ekids.chamcong_ca2ngay_daythay</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="ngay"/>
+                    <field name="hocsinh_id" domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
+                    <field name="giaovien_nghi_id" domain="[('coso_id','=',coso_id)]"/>
+                    <field name="desc"/>
+                </list>
+            </field>
+        </record>
+    </data>
+</odoo>

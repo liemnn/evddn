@@ -1,0 +1,376 @@
+<odoo>
+  <data>
+
+    <record id="action_print_multi_hocphi" model="ir.actions.server">
+        <field name="name">In Học Phí</field>
+        <field name="model_id" ref="model_ekids_hocphi"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_hocphi"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = env.ref('ekids_hocsinh.action_phieuthus').report_action(records)
+        </field>
+    </record>
+    <record id="ekids_hocsinh.action_chuyen_trangthai_dangtinh" model="ir.actions.server">
+        <field name="name">Chuyển trạng thái [Đang tính]</field>
+        <field name="model_id" ref="model_ekids_hocphi"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_hocphi"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = records.action_chuyen_trangthai('-1')
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.action_chuyen_trangthai_da_kiemtra" model="ir.actions.server">
+        <field name="name">Chuyển trạng thái [Đã kiểm tra]</field>
+        <field name="model_id" ref="model_ekids_hocphi"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_hocphi"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = records.action_chuyen_trangthai('0')
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.action_chuyen_trangthai_da_tienmat" model="ir.actions.server">
+        <field name="name">Chuyển trạng thái [Đã đóng-Tiền mặt]</field>
+        <field name="model_id" ref="model_ekids_hocphi"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_hocphi"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = records.action_chuyen_trangthai('10')
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.action_chuyen_trangthai_da_chuyenkhoan" model="ir.actions.server">
+        <field name="name">Chuyển trạng thái [Đã đóng-Chuyển khoản]</field>
+        <field name="model_id" ref="model_ekids_hocphi"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_hocphi"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = records.action_chuyen_trangthai('11')
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.action_chuyen_trangthai_no_hocphi" model="ir.actions.server">
+        <field name="name">Chuyển trạng thái [Đang nợ học phí]</field>
+        <field name="model_id" ref="model_ekids_hocphi"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_hocphi"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = records.action_chuyen_trangthai('2')
+        </field>
+    </record>
+
+
+
+    <record id="ekids_hocsinh.hocphi_search" model="ir.ui.view">
+        <field name="name">hocphi.search</field>
+        <field name="model">ekids.hocphi</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter string="Đang tính" name="trangthai" domain="[('trangthai','=','-1')]"/>
+                <filter string="Đã kiểm tra" name="trangthai" domain="[('trangthai','=','0')]"/>
+                <filter string="Đã đóng[Tiền mặt]" name="trangthai" domain="[('trangthai','=','10')]"/>
+                <filter string="Đã đóng[Chuyển khoản]" name="trangthai" domain="[('trangthai','=','11')]"/>
+                <filter string="Đang nợ học phí" name="trangthai" domain="[('trangthai','=','2')]"/>
+
+                <field name="hocsinh_id"/>
+                <group expand="1" string="Group By">
+                    <filter name="group_by_tinh"
+                        string="Trạng thải tính học phí"
+                        context="{'group_by':'trangthai'}"/>
+
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.hocphi_list" model="ir.ui.view">
+        <field name="name">Học phí</field>
+        <field name="model">ekids.hocphi</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="true" limit="200" default_order="hocsinh_id asc">
+                <header>
+                    <button name="action_xacthuc_tinhlai_hocphi_theo_thang"
+                        type="object"
+                        string="Tính lại"
+                        class="btn-primary"
+                        confirm="Bạn chắc chắn muốn tính lại [Học phí] ?
+  Thao tác này chỉ áp dụng cho trạng thái [Đang tính].Khi tính lại dữ liệu sẽ bị xóa và tính toán lại !"
+                        display="always"/>
+                    <button name="action_in_ban_xacnhan"
+                        type="object"
+                        string="In"
+                        class="btn-primary"
+                        display="always"/>
+
+                </header>
+                <field name="sequence" width="25"/>
+                <field name="hocsinh_id" width="170"/>
+                <button name="action_in_hocphi"
+                            type="object"
+                            string=""
+                            width="15"
+                            class="fa fa-print"
+                            title="In học phí của học sinh tháng này"
+
+                        />
+
+                <field name="songay_dihoc" width="30"/>
+                <field name="tien_bantru" sum="Total" widget="integer"/>
+                <field name="tien_ca" sum="Total" widget="integer"/>
+                <field name="tien_duoctru" sum="Total" widget="integer"/>
+                <field name="hocphi" sum="Total" widget="integer"/>
+                <field name="tyle_giamhocphi" />
+                <field name="hocphi_giam" sum="Total" widget="integer"/>
+                <field name="hocphi_phaidong" sum="Total" widget="integer"/>
+                <field name="trangthai" width="150"
+                       decoration-warning="trangthai == '-1'"
+                       decoration-info="trangthai == '0'"
+                       decoration-success="trangthai == '10'"
+                       decoration-primary="trangthai == '11'"
+                       decoration-danger="trangthai == '2'"
+                />
+
+
+
+
+            </list>
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.hocphi_kanban_view" model="ir.ui.view">
+        <field name="name">Kanban Học Phi</field>
+        <field name="model">ekids.hocphi</field>
+        <field name="priority" eval="100"/>
+        <field name="arch" type="xml">
+            <kanban default_group_by="trangthai" create="false" delete="false" limit="200" default_order="hocsinh_id asc">
+                <field name="trangthai" />
+                <field name="hocsinh_id"/>
+                <header>
+                    <button name="action_xacthuc_tinhlai_hocphi_theo_thang"
+                        type="object"
+                        string="Tính lại"
+                        class="btn-primary"
+                        confirm="Bạn chắc chắn muốn tính lại học phí ? nếu xác nhận hệ dữ liệu sẽ mất và hoc phí quay trở lại mặc định !"
+                        display="always"/>
+                </header>
+
+
+                <t t-name="kanban-box">
+                    <div class="box-user" t-attf-class="oe_kanban_card oe_kanban_global_click">
+                    <!-- Vùng ảnh -->
+                        <div class="user-avatar">
+                            <img t-att-src="kanban_image('ekids.hocsinh', 'avatar', record.hocsinh_id.raw_value)" class="oe_kanban_avatar"/>
+                        </div>
+
+                        <!-- Vùng thông tin -->
+                        <div class="info">
+                            <h2>
+                                <field name="hocsinh_id"/>
+                                <span class="fee">
+                                    <field name="hocphi_phaidong"/> vnđ
+                                </span>
+                            </h2>
+
+                        </div>
+                        </div>
+
+                </t>
+            </kanban>
+        </field>
+    </record>
+
+        <!--        kanban view-->
+
+    <record id="ekids_hocsinh.hocphi_form" model="ir.ui.view">
+        <field name="name">Thông tin Học phí (Fix Height)</field>
+        <field name="model">ekids.hocphi</field>
+        <field name="arch" type="xml">
+            <form string="Quản lý Học phí học sinh">
+                <header>
+                    <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary" string="In phiếu thu"/>
+                    <button name="action_xacthuc_tinhlai_hocphi_hocsinh" invisible="is_show_tinhtoan_lai == False" type="object" confirm="Bạn chắc chắn muốn tính toán lại chứ?" class="btn btn-secondary" string="Tính lại [Học phí]"/>
+                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,2" options="{'clickable': true}"/>
+                </header>
+
+                <sheet>
+                    <div class="row align-items-center mb-3 pb-2 border-bottom w-100 mx-0">
+                        <div class="col-4 d-flex align-items-baseline ps-0">
+                            <span class="fw-bold text-muted me-2 small">Học sinh:</span>
+                            <field name="hocsinh_id"
+                                   readonly="1"
+                                   class="fw-bolder fs-4 text-primary mb-0"
+                                   options="{'no_open': True}"
+                                   style="font-weight: 800;"/>
+                        </div>
+                        <div class="col-4 text-center">
+                            <h4 class="text-uppercase fw-bold mb-0" style="letter-spacing: 0.5px; font-size: 1.1rem; color: #444;">
+                                HỌC PHÍ THÁNG <field name="thang_id" readonly="1" class="oe_inline"/>
+                            </h4>
+                        </div>
+                        <div class="col-4 text-end pe-0 d-flex align-items-baseline justify-content-end">
+                            <span class="fw-bold text-dark me-2" style="font-size: 1.1rem;">Số ngày đi học:</span>
+
+                            <span class="badge bg-light border border-secondary-subtle px-3 py-1 shadow-sm d-flex align-items-baseline">
+                                <field name="songay_dihoc"
+                                       readonly="1"
+                                       class="fw-bolder text-info oe_inline mb-0"
+                                       style="font-size: 1.1rem; font-weight: 800;"/>
+                                <span class="ms-1 fw-bold text-dark" style="font-size: 0.95rem;">ngày</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row d-flex align-items-stretch mb-4 mx-0" style="min-height: 280px;">
+
+                        <div class="col-md-7 px-0 pe-md-3 d-flex flex-column">
+                            <div class="border rounded shadow-sm bg-white overflow-hidden d-flex flex-column flex-grow-1">
+                                <div class="border-bottom p-2 px-3" style="background-color: #e9ecef;">
+                                    <span class="fw-bold text-dark" style="font-size: 0.9rem;">
+                                        <i class="fa fa-list-alt me-2 text-secondary"/> THÔNG TIN VỀ HỌC PHÍ THÁNG <field name="thang_id" readonly="1" class="oe_inline"/>
+                                    </span>
+                                </div>
+
+                                <div class="p-3 d-flex flex-column flex-grow-1">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                                            <div class="flex-shrink-0">
+                                                <span class="badge bg-secondary me-2" style="font-size: 0.7rem;">1</span>
+                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Tiền Lớp Chung</span>
+                                            </div>
+                                            <div class="d-flex align-items-baseline justify-content-end">
+                                                <field name="tien_bantru" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
+                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                                            <div class="flex-shrink-0">
+                                                <span class="badge bg-secondary me-2" style="font-size: 0.7rem;">2</span>
+                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Tiền Ca/Dịch Vụ</span>
+                                            </div>
+                                            <div class="d-flex align-items-baseline justify-content-end">
+                                                <field name="tien_ca" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
+                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2 text-dark">
+                                            <div class="flex-shrink-0">
+                                                <span class="badge bg-secondary me-2" style="font-size: 0.7rem;">3</span>
+                                                <span class="fw-bold" style="font-size: 0.95rem;">Được trừ tiền (nghỉ tháng trước)</span>
+                                            </div>
+                                            <div class="d-flex align-items-baseline justify-content-end">
+                                                <span class="me-1 fw-bold">-</span>
+                                                <field name="tien_duoctru" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
+                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2 text-dark">
+                                            <div class="flex-shrink-0">
+                                                <span class="badge bg-secondary me-2" style="font-size: 0.7rem;">4</span>
+                                                <span class="fw-bold" style="font-size: 0.95rem;">Được giảm theo chính sách (nếu có)</span>
+                                            </div>
+                                            <div class="d-flex align-items-baseline justify-content-end text-dark">
+                                                <span class="me-1 fw-bold">-</span>
+                                                <field name="hocphi_giam" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
+                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center bg-success text-white rounded p-2 shadow-sm mt-2">
+                                        <span class="fw-bold ps-2" style="font-size: 0.85rem;">TỔNG PHẢI ĐÓNG = [1]+[2]-[3]-[4]</span>
+                                        <div class="d-flex align-items-baseline justify-content-end pe-2">
+                                            <field name="hocphi_phaidong" class="fw-black mb-0 oe_inline text-end" style="font-size: 1.3rem; font-weight: 900; line-height: 1;" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 fw-bold opacity-75" style="font-size: 0.8rem;">VNĐ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 px-0 d-flex flex-column">
+                            <div class="border rounded shadow-sm bg-white overflow-hidden d-flex flex-column flex-grow-1">
+                                <div class="border-bottom p-2 px-3" style="background-color: #e9ecef;">
+                                    <span class="fw-bold text-dark" style="font-size: 0.9rem;">
+                                        <i class="fa fa-sliders me-2 text-secondary"/> CHÍNH GIẢM HỌC PHÍ (nếu có)
+                                    </span>
+                                </div>
+
+                                <div class="p-3 flex-grow-1 bg-white">
+                                    <group class="mb-0 mt-0">
+                                        <field name="dm_chinhsach_giam_id" string="Diện chính sách giảm học phí" readonly="1"/>
+                                        <field name="is_giamhocphi_dacthu" string="Thiết lập giảm đặc thù cho học sinh" widget="boolean_toggle"/>
+                                        <field name="tyle_giamhocphi" string="% Giảm học phí/tổng " widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == True"/>
+                                        <field name="tyle_giamhocphi_bantru" string="% Giảm [Lớp chung]" widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == False"/>
+                                        <field name="tyle_giamhocphi_ca" string="% Giảm [Can thiệp]" widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == False"/>
+                                    </group>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page name="hocphi_bantru_ids" string="CHI TIẾT: LỚP CHUNG [+]">
+                            <field name="hocphi_bantru_ids" context="{'default_coso_id': coso_id}"/>
+                        </page>
+                        <page name="hocphi_ca_ids" string="CHI TIẾT: CA CAN THIỆP [+]">
+                            <field name="hocphi_ca_ids" context="{'default_coso_id': coso_id}"/>
+                        </page>
+                        <page name="hocphi_duoctru_ids" string="CHI TIẾT: ĐƯỢC TRỪ [-]">
+                            <field name="hocphi_duoctru_ids" context="{'default_coso_id': coso_id}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.hocphi_bantru" model="ir.ui.view">
+        <field name="name">Tiền bán trú</field>
+        <field name="model">ekids.hocphi_bantru</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="tien" sum="Total" widget="integer"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.hocphi_ca" model="ir.ui.view">
+        <field name="name">Tiền can thiệp theo ca</field>
+        <field name="model">ekids.hocphi_ca</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="dm_ca_id" context="{'default_coso_id':context.get('default_coso_id')}"/>
+                <field name="soca"/>
+                <field name="tien" sum="Total" widget="integer"/>
+            </list>
+        </field>
+    </record>
+
+
+
+    <record id="ekids_hocsinh.hocphi_duoctru" model="ir.ui.view">
+        <field name="name">Tiền Được giảm khi nghỉ</field>
+        <field name="model">ekids.hocphi_duoctru</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="tien" sum="Total" widget="integer"/>
+
+            </list>
+        </field>
+    </record>
+
+  </data>
+</odoo>

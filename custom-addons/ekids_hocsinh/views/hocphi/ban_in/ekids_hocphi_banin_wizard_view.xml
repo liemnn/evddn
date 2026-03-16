@@ -1,0 +1,33 @@
+<odoo>
+    <data>
+        <record id="ekids_hocsinh.hocphi_banin_wizard_form" model="ir.ui.view">
+            <field name="name">Bản in học phí</field>
+            <field name="model">ekids.hocphi_banin</field>
+            <field name="arch" type="xml">
+                <form string="Xem báo cáo lợi nhuận của năm">
+                    <group>
+                       <h3><field name="coso_id" readonly="true"/></h3>
+                    </group>
+                    <group col="2">
+                        <group>
+                            <separator string="Lưa chọn tháng In học ph" />
+
+                                <h5>
+                                    <field name="thang" placeholder="Tháng" readonly="true"/>/
+                                    <field name="nam" placeholder="Năm" readonly="true"/>
+                                </h5>
+
+                        </group>
+
+
+                    </group>
+                    <footer>
+                        <button name="action_xem_banin" type="object" string="In bản ký" class="btn-primary"/>
+                        <button string="Đóng lại" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

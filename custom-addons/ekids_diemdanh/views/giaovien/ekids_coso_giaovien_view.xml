@@ -1,0 +1,138 @@
+<odoo>
+    <data>
+        <record id="ekids_diemdanh.coso_giaovien_chamcong_kanban_view" model="ir.ui.view">
+            <field name="name">coso_giaovien_chamcong_kanban_view</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban create="0" action="action_giaovien_chamcong" sample="1" type="object">
+                    <field name="chamcong_kanban_buttons"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-premium-card">
+
+                                <style>
+
+
+                                    /* Phân cách vùng */
+                                    .kh-divider { display: flex; align-items: center; margin: 10px 0; }
+                                    .kh-divider::before, .kh-divider::after { content: ""; flex: 1; border-bottom: 1px solid #f1f5f9; }
+                                    .kh-divider span { padding: 0 10px; font-size: 13px; font-weight: 700; color: #1e293b; text-transform: uppercase; }
+
+                                    /* Grid cho các nút động */
+                                    .kh-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+
+                                    .kh-grid-btn {
+                                        border: none;
+                                        border-radius: 10px;
+                                        padding: 10px 8px;
+                                        display: flex;
+                                        flex-direction: row;
+                                        align-items: center;
+                                        justify-content: flex-start;
+                                        gap: 8px;
+                                        font-weight: 700;
+                                        color: #ffffff;
+                                        font-size: 12px;
+                                        cursor: pointer;
+                                        transition: transform 0.2s, opacity 0.2s;
+                                        box-sizing: border-box;
+                                    }
+                                    .kh-grid-btn:hover { opacity: 0.9; transform: scale(1.02); }
+
+                                    /* Màu sắc nút động theo thứ tự */
+                                    .kh-grid-btn:nth-child(1) { background-color: #c09473; }
+                                    .kh-grid-btn:nth-child(2) { background-color: #6bb2e3; }
+                                    .kh-grid-btn:nth-child(3) { background-color: #84c5f0; }
+                                    .kh-grid-btn:nth-child(4) { background-color: #ef7070; }
+
+                                    .kh-grid-btn i { font-size: 18px; flex-shrink: 0; }
+                                    .kh-grid-btn span { white-space: normal; word-wrap: break-word; line-height: 1.2; }
+
+                                    /* Danh sách nút tra cứu phía dưới */
+                                    .kh-list { display: flex; flex-direction: column; gap: 8px; }
+                                    .kh-list-btn {
+                                        background-color: #f8fafc;
+                                        border: 1px solid #e2e8f0;
+                                        border-radius: 12px;
+                                        padding: 10px 15px;
+                                        font-weight: 700;
+                                        color: #475569;
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 10px;
+                                        cursor: pointer;
+                                        font-size: 13px;
+                                        transition: all 0.2s;
+                                    }
+                                    .kh-list-btn:hover { background-color: #f1f5f9; border-color: #cbd5e1; color: #1e293b; }
+                                    .kh-list-btn i { font-size: 18px; color: #64748b; }
+                                </style>
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
+                                    </div>
+                                    <div class="kh-premium-title"><field name="name"/></div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">(Thực hiện công tác chấm công cho Giáo viên để tính Lương)</div>
+
+                                    <div class="kh-divider"><span>Thực hiện [Tháng này]</span></div>
+
+                                    <div class="kh-grid">
+                                        <t t-if="record.chamcong_kanban_buttons.raw_value and record.chamcong_kanban_buttons.raw_value.length">
+                                            <t t-foreach="record.chamcong_kanban_buttons.raw_value" t-as="dm_chamcong">
+                                                <t t-set="icon_class" t-value="'fa-cog'"/>
+                                                <t t-if="dm_chamcong.loai == 0 or dm_chamcong.loai == '0'"><t t-set="icon_class" t-value="'fa-clock-o'"/></t>
+                                                <t t-elif="dm_chamcong.loai == 2 or dm_chamcong.loai == '2'"><t t-set="icon_class" t-value="'fa-plus-circle'"/></t>
+                                                <t t-elif="dm_chamcong.loai == 3 or dm_chamcong.loai == '3'"><t t-set="icon_class" t-value="'fa-hourglass-half'"/></t>
+                                                <t t-elif="dm_chamcong.loai == 1 or dm_chamcong.loai == '1'"><t t-set="icon_class" t-value="'fa-bullseye'"/></t>
+
+                                                <button type="object" name="action_vao_dm_chamcong_thangnay"
+                                                        t-att-context="{'dm_chamcong_id': dm_chamcong.id}"
+                                                        class="oe_kanban_action kh-grid-btn">
+                                                    <i t-attf-class="fa #{icon_class}"></i>
+                                                    <span><t t-esc="dm_chamcong.name"/></span>
+                                                </button>
+                                            </t>
+                                        </t>
+                                    </div>
+
+                                    <div class="kh-divider"><span>Xem các [Tháng trước]</span></div>
+
+                                    <div class="kh-list">
+                                        <button class="kh-list-btn" name="action_giaovien_chamcong" type="object">
+                                            <i class="fa fa-calendar-check-o"></i>
+                                            <span>Xem [CHẤM CÔNG/ĐÁNH GIÁ] các tháng trước</span>
+                                        </button>
+                                        <button class="kh-list-btn" name="action_quanly_lichnghi_giaovien" type="object">
+                                            <i class="fa fa-calendar-times-o"></i>
+                                            <span>Quản lý [Lịch nghỉ] Giáo viên</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+        <record model="ir.actions.act_window" id="ekids_diemdanh.giaovien_chamcong_action_window">
+          <field name="name">Chấm công [Giáo viên]</field>
+          <field name="res_model">ekids.coso</field>
+          <field name="context">{ 'kanban_view_ref':'ekids_diemdanh.coso_giaovien_chamcong_kanban_view'}</field>
+          <field name="view_mode">kanban</field>
+        </record>
+
+
+
+    </data>
+</odoo>

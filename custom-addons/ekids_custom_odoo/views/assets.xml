@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+   <!-- Chèn manifest và icon PWA cho frontend -->
+    <template id="assets_frontend" inherit_id="web.assets_frontend" name="Custom PWA Assets">
+        <xpath expr="." position="inside">
+            <link rel="manifest" href="/ekids_custom_odoo/static/src/manifest.json"/>
+            <link rel="apple-touch-icon" href="/ekids_custom_odoo/static/src/icons/180.png"/>
+            <meta name="theme-color" content="#714B67"/>
+        </xpath>
+    </template>
+
+</odoo>

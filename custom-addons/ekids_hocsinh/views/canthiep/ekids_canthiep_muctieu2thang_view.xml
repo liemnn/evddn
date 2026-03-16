@@ -1,0 +1,74 @@
+<odoo>
+    <data>
+
+        <record id="ekids_hocsinh.kehoach_muctieu2thang_canthiep_kanban_view" model="ir.ui.view">
+            <field name="name">MỤC TIÊU TỪNG THÁNG</field>
+            <field name="model">ekids.kehoach_muctieu2thang</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                 <kanban default_group_by="trangthai"
+                    default_order="sequence asc"
+                         create="false">
+                     <field name="trangthai"/>
+                    <t t-name="kanban-box">
+                        <div class="box">
+
+                            <table class="ekids-muctieu">
+                                <tr>
+                                    <td class="linhvuc">
+
+                                        <b>(<field name="sequence"/>).Lĩnh vực:</b>:
+                                        <field name="linhvuc_id"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="muctieu">
+                                        <b>Mục tiêu:</b>:
+                                        <field name="muctieu_id"/>
+                                        <field name="is_button_ketqua" invisible="1"/>
+                                         <field name="ketqua_canthiep" invisible="1"/>
+                                        <button  class="function"  invisible="is_button_ketqua == False"
+                                             name="action_capnhat_ketqua_canthiep_muctieu2thang"
+                                             type="object" string="Kết quả"
+                                                 t-att-title="record.ketqua_canthiep.raw_value"
+
+                                            />
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="hoatdong" colspan="2">
+                                        <div class="text-block">
+                                            <p>
+                                                <b>Mục đích</b>:
+                                                 <field name="hdct_mucdich"/>
+
+                                            </p>
+                                            <p>
+                                                <b>Giáo cụ, đồ dùng:</b>
+                                                <field name="hdct_giaocu"/>
+                                            </p>
+                                            <p>
+                                                <b>Cách tiến hành:</b>
+                                                 <field name="hdct_cach_tienhanh"/>
+                                            </p>
+                                        </div>
+
+
+                                    </td>
+                                </tr>
+                            </table>
+
+
+
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

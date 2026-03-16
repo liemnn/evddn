@@ -1,0 +1,458 @@
+<odoo>
+  <data>
+
+        <record id="ekids_hocsinh.coso_kanban_hocsinh_view" model="ir.ui.view">
+            <field name="name">Quản lý học sinh các cơ sở - Premium Soft Light</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false" sample="1">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-premium-card">
+
+                                <style>
+                                    /* 1. Khung thẻ chính - Hiệu ứng 3D Layering */
+                                    .kh-premium-card {
+                                        border-radius: 20px;
+                                        background: #ffffff;
+                                        box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+                                        overflow: hidden;
+                                        border: 1px solid #f1f5f9;
+                                        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+                                        display: flex;
+                                        flex-direction: column;
+                                    }
+                                    .kh-premium-card:hover {
+                                        transform: translateY(-5px);
+                                        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+                                    }
+
+                                    /* 2. Header VÙNG MÀU NHẸ NHÀNG (Xanh mây pastel) */
+                                    .kh-premium-header {
+                                        background: linear-gradient(135deg, #f0f7ff 0%, #e0e7ff 100%);
+                                        padding: 25px 20px 45px 20px;
+                                        color: #1e3a8a;
+                                        text-align: center;
+                                        position: relative;
+                                    }
+
+                                    .kh-premium-header::before {
+                                        content: "";
+                                        position: absolute;
+                                        top: -15px; right: -15px;
+                                        width: 100px; height: 100px;
+                                        background: rgba(255, 255, 255, 0.5);
+                                        border-radius: 50%;
+                                    }
+
+                                    .kh-premium-avatar {
+                                        width: 75px; height: 75px;
+                                        border-radius: 18px;
+                                        border: 3px solid #ffffff;
+                                        background: #fff;
+                                        box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+                                        margin: 0 auto 12px;
+                                        overflow: hidden;
+                                    }
+                                    .kh-premium-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+                                    .kh-premium-title {
+                                        font-size: 18px;
+                                        font-weight: 800;
+                                        margin: 0;
+                                        color: #1e3a8a;
+                                    }
+                                    .kh-premium-slogan {
+                                        font-size: 13px;
+                                        color: #64748b;
+                                        margin-top: 5px;
+                                        font-weight: 500;
+                                    }
+
+                                    /* 3. Phần thân đè lên Header (Layering) */
+                                    .kh-premium-body {
+                                        padding: 25px 20px 20px;
+                                        background: #ffffff;
+                                        border-radius: 24px 24px 0 0;
+                                        margin-top: -24px;
+                                        position: relative;
+                                        z-index: 2;
+                                        text-align: center;
+                                    }
+
+                                    .kh-premium-desc {
+                                        font-size: 12px;
+                                        color: #94a3b8;
+                                        font-style: italic;
+                                        margin-bottom: 20px;
+                                        line-height: 1.5;
+                                        padding: 0 10px;
+                                    }
+
+                                    /* 4. Nút bấm chính Xanh lam */
+                                    .kh-btn-main {
+                                        width: 100%;
+                                        border-radius: 12px;
+                                        padding: 13px 15px;
+                                        font-size: 15px;
+                                        font-weight: 800;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 10px;
+                                        border: none;
+                                        cursor: pointer;
+                                        transition: all 0.3s ease;
+                                        background: #3b82f6;
+                                        color: #ffffff;
+                                        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+                                    }
+                                    .kh-btn-main:hover {
+                                        background: #2563eb;
+                                        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+                                        transform: translateY(-2px);
+                                        color: #ffffff;
+                                    }
+                                </style>
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
+                                    </div>
+                                    <div class="kh-premium-title"><field name="name"/></div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">
+                                        (Quản lý hồ sơ học sinh đang và đã can thiệp tại Cơ sở)
+                                    </div>
+
+                                    <button class="oe_kanban_action kh-btn-main"
+                                            name="action_view_ekids_hocsinh_kanban_action_window"
+                                            type="object">
+                                        <i class="fa fa-graduation-cap"></i> HỌC SINH
+                                    </button>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="ekids_hocsinh.coso_kanban_hocphi_view" model="ir.ui.view">
+             <field name="name">Tính học phí các cơ sở --&gt; Lựa chọn cơ sở để tính</field>
+             <field name="model">ekids.coso</field>
+             <field name="priority" eval="100"/>
+             <field name="arch" type="xml">
+                 <kanban action="action_xem_toanbo_hocphi_nam" type="object">
+
+                     <field name="is_thu_hocphi_dauthang"/>
+
+                     <templates>
+                         <t t-name="kanban-box">
+                             <div class="oe_kanban_global_click kh-premium-card">
+
+                                 <style>
+                                    /* 1. Khung thẻ chính - Hiệu ứng 3D Layering */
+                                    .kh-premium-card {
+                                        border-radius: 20px;
+                                        background: #ffffff;
+                                        box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+                                        overflow: hidden;
+                                        border: 1px solid #f1f5f9;
+                                        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+                                        display: flex;
+                                        flex-direction: column;
+                                    }
+                                    .kh-premium-card:hover {
+                                        transform: translateY(-5px);
+                                        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+                                    }
+
+                                    /* 2. Header VÙNG MÀU NHẸ NHÀNG (Xanh mây pastel) */
+                                    .kh-premium-header {
+                                        background: linear-gradient(135deg, #f0f7ff 0%, #e0e7ff 100%);
+                                        padding: 25px 20px 45px 20px;
+                                        color: #1e3a8a; /* Chữ màu Navy đậm cực rõ */
+                                        text-align: center;
+                                        position: relative;
+                                    }
+
+                                    /* Họa tiết trang trí mờ */
+                                    .kh-premium-header::before {
+                                        content: "";
+                                        position: absolute;
+                                        top: -15px; right: -15px;
+                                        width: 100px; height: 100px;
+                                        background: rgba(255, 255, 255, 0.5);
+                                        border-radius: 50%;
+                                    }
+
+                                    /* Avatar khung trắng nổi bật */
+                                    .kh-premium-avatar {
+                                        width: 75px; height: 75px;
+                                        border-radius: 18px;
+                                        border: 3px solid #ffffff;
+                                        background: #fff;
+                                        box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+                                        margin: 0 auto 12px;
+                                        overflow: hidden;
+                                    }
+                                    .kh-premium-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+                                    /* Chữ tiêu đề Header */
+                                    .kh-premium-title {
+                                        font-size: 18px;
+                                        font-weight: 800;
+                                        margin: 0;
+                                        letter-spacing: 0.3px;
+                                        color: #1e3a8a;
+                                    }
+                                    .kh-premium-slogan {
+                                        font-size: 13px;
+                                        color: #64748b;
+                                        margin-top: 5px;
+                                        font-weight: 500;
+                                    }
+
+                                    /* 3. Phần thân đè lên Header (Layering) */
+                                    .kh-premium-body {
+                                        padding: 25px 20px 20px;
+                                        background: #ffffff;
+                                        border-radius: 24px 24px 0 0;
+                                        margin-top: -24px;
+                                        position: relative;
+                                        z-index: 2;
+                                        text-align: center;
+                                    }
+
+                                    .kh-premium-desc {
+                                        font-size: 13px;
+                                        color: #94a3b8;
+                                        font-style: italic;
+                                        margin-bottom: 20px;
+                                        line-height: 1.4;
+                                    }
+
+                                    /* 4. Các nút bấm chuẩn Theme Odoo */
+                                    .kh-btn-action {
+                                        width: 100%;
+                                        border-radius: 12px;
+                                        padding: 13px 15px;
+                                        font-size: 14px;
+                                        font-weight: 800;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 10px;
+                                        border: none;
+                                        cursor: pointer;
+                                        transition: all 0.3s ease;
+                                        margin-bottom: 12px;
+                                    }
+
+                                    /* Nút chính Xanh lam - Chữ trắng nổi bật */
+                                    .kh-btn-main {
+                                        background: #3b82f6;
+                                        color: #ffffff;
+                                        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+                                    }
+                                    .kh-btn-main:hover {
+                                        background: #2563eb;
+                                        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+                                        transform: translateY(-2px);
+                                        color: #ffffff;
+                                    }
+
+                                    /* Nút phụ xám sáng */
+                                    .kh-btn-sub {
+                                        background: #f8fafc;
+                                        color: #475569;
+                                        border: 1px solid #e2e8f0;
+                                    }
+                                    .kh-btn-sub:hover {
+                                        background: #f1f5f9;
+                                        border-color: #cbd5e1;
+                                        color: #1e293b;
+                                    }
+                                 </style>
+
+                                 <div class="kh-premium-header">
+                                     <div class="kh-premium-avatar">
+                                         <field name="logo" widget="image"/>
+                                     </div>
+                                     <div class="kh-premium-title"><field name="name"/></div>
+                                     <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                 </div>
+
+                                 <div class="kh-premium-body">
+                                     <div class="kh-description">(Tính học phí hàng tháng cho Học sinh đang can thiệp tại Cơ sở)</div>
+
+                                     <button class="oe_kanban_action kh-btn-action kh-btn-main"
+                                             name="action_tinh_hocphi_thang_nay"
+                                             invisible="is_thu_hocphi_dauthang == False"
+                                             type="object">
+                                         <i class="fa fa-calculator"></i>
+                                         <span>TÍNH [HỌC PHÍ] THÁNG NÀY</span>
+                                     </button>
+
+                                     <button class="oe_kanban_action kh-btn-action kh-btn-main"
+                                             name="action_tinh_hocphi_thang_nay"
+                                             invisible="is_thu_hocphi_dauthang == True"
+                                             type="object">
+                                         <i class="fa fa-calculator"></i>
+                                         <span>TÍNH [HỌC PHÍ] THÁNG TRƯỚC</span>
+                                     </button>
+
+                                     <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                             name="action_xem_toanbo_hocphi_nam"
+                                             type="object">
+                                         <i class="fa fa-history"></i>
+                                         <span>Xem [Học phí] các tháng trước</span>
+                                     </button>
+
+                                     <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                             name="action_quanly_khoan_thungoai"
+                                             type="object">
+                                         <i class="fa fa-money"></i>
+                                         <span>Quản lý [Thu ngoài] không định kỳ</span>
+                                     </button>
+                                 </div>
+
+                             </div>
+                         </t>
+                     </templates>
+                 </kanban>
+             </field>
+         </record>
+
+
+     <record id="ekids_hocsinh.coso_kanban_kehoachcanthiep_view" model="ir.ui.view">
+            <field name="name">Quản lý học sinh các cơ sở --> Lựa chọn cơ sở để quản lý</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban  archivable="false" >
+                    <t t-name="kanban-box">
+                        <div class="box">
+                            <!-- Icon Section -->
+                            <div class="avatar">
+                               <field name="logo" widget="image" />
+                            </div>
+                            <!-- Title Section -->
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+                            <!-- Description Section -->
+                            <p class="slogan">
+                               <field name="slogan"/>
+                            </p>
+                            <p class="description">
+                               (Quản lý hồ sơ học sinh đang và đã can thiệp tại Cơ sở)
+                            </p>
+                            <!-- Button Section -->
+
+                            <button  class="function"
+                                 name="action_view_ekid_hocsinh_canthiep_kehoach_hocsinh"
+                                 type="object" string="Lập kế hoạch [Can thiệp]"/>
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+
+    <record model="ir.actions.act_window" id="ekids_hocsinh.coso_hocsinh_action_window">
+      <field name="name"> Quản lý cơ sở</field>
+      <field name="res_model">ekids.coso</field>
+      <field name="context">{ 'kanban_view_ref':'ekids_hocsinh.coso_kanban_hocsinh_view'}</field>
+      <field name="view_mode">kanban</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ekids_hocsinh.coso_hocphi_action_window">
+      <field name="name"> Quản lý cơ sở</field>
+      <field name="res_model">ekids.coso</field>
+      <field name="context">{ 'kanban_view_ref':'ekids_hocsinh.coso_kanban_hocphi_view'}</field>
+      <field name="view_mode">kanban</field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="ekids_hocsinh.coso_kanban_ketluandanhgia_action_window">
+      <field name="name"> Kết luận [Đánh giá/Đánh giá lại]</field>
+      <field name="res_model">ekids.coso</field>
+      <field name="context">{ 'kanban_view_ref':'ekids_hocsinh.coso_kanban_ketluandanhgia_view'}</field>
+      <field name="view_mode">kanban</field>
+    </record>
+
+     <record model="ir.actions.act_window" id="ekids_hocsinh.coso_kehoachcanthiep_action_window">
+      <field name="name"> Kế hoạch [Can thiệp]</field>
+      <field name="res_model">ekids.coso</field>
+      <field name="context">{ 'kanban_view_ref':'ekids_hocsinh.coso_kanban_kehoachcanthiep_view'}</field>
+      <field name="view_mode">kanban</field>
+    </record>
+
+      <record id="ekids_hocsinh.coso_kanban_cauhinh_view" model="ir.ui.view">
+            <field name="name">Thiết lập thông tin phục vụ lương - Premium Soft Light</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false" sample="1">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-premium-card">
+
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
+                                    </div>
+                                    <div class="kh-premium-title"><field name="name"/></div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">
+                                        (Thiết lập thông tin phục vụ quản lý học phí/học sinh của trung tâm)
+                                    </div>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-main"
+                                            name="action_cauhinh_hocphi_dm_thu_bantru"
+                                            type="object">
+                                        <i class="fa fa-list-ol"></i> Danh mục các khoản thu của [Học sinh]
+                                    </button>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_cauhinh_hocphi_dm_ca"
+                                            type="object">
+                                        <i class="fa fa-university"></i> Danh mục [Ca/Lớp/Dịch vụ] can thiệp
+                                    </button>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_cauhinh_hocphi_dm_chinhsach_giam"
+                                            type="object">
+                                        <i class="fa fa-gift"></i> Đối tượng chính sách giảm [Học phí]
+                                    </button>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="ekids_hocsinh.coso_cauhinh_action_window">
+            <field name="name">CẤU HÌNH -CƠ SỞ</field>
+            <field name="res_model">ekids.coso</field>
+            <field name="context">{ 'kanban_view_ref':'ekids_hocsinh.coso_kanban_cauhinh_view'}</field>
+            <field name="view_mode">kanban</field>
+        </record>
+
+
+
+
+
+  </data>
+</odoo>

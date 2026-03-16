@@ -1,0 +1,120 @@
+<odoo>
+  <data>
+    <record id="ekids_giaovien.coso_kanban_view_luong_nam" model="ir.ui.view">
+        <field name="name">ekids_core.coso.kanban</field>
+        <field name="model">ekids.coso</field>
+        <field name="priority" eval="100"/>
+        <field name="arch" type="xml">
+            <kanban  archivable="false"  sample="1"
+                    action="action_ekid_giaovien_luong_nam" type="object" create="0">
+                <t t-name="kanban-box">
+                    <div t-attf-class="ekids_kanban">
+                        <div class="ekids_kanban_logo">
+                            <field name="logo" widget="image" />
+                        </div>
+                        <div class="ekids_kanban_detail">
+                            <strong class="ekids_kanban_header">
+                                <span>
+                                    <field name="name"/>
+                                </span>
+                            </strong>
+                            <field name="slogan"/>
+                        </div>
+
+                    </div>
+                </t>
+            </kanban>
+        </field>
+    </record>
+
+      <!--kanban lương năm-->
+
+    <record id="ekids_giaovien.luong_nam_list" model="ir.ui.view">
+        <field name="name">Thông tin năm</field>
+        <field name="model">ekids.luong_nam</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="tong_luong"/>
+
+            </list>
+        </field>
+    </record>
+
+      <!--        kanban view-->
+    <record id="ekids_giaovien.luong_nam_kanban" model="ir.ui.view">
+        <field name="name">LƯƠNG</field>
+        <field name="model">ekids.luong_nam</field>
+        <field name="arch" type="xml">
+            <kanban  sample="1"  action="action_view_kanban_luong_thang" type="object">
+
+                <t t-name="kanban-box">
+                    <div class="box">
+                       <nav class="box-navbar">
+                            <ul class="box-menu">
+                              <li class="box-menu-item">
+                                <a href="#" >
+                                   <span class="fa fa-ellipsis-v"/>
+                                </a>
+                                <ul class="box-dropdown">
+                                  <li>
+                                      <button
+                                         name="action_delete_luong_nam"
+                                         type="object" string="Xóa bản ghi"/>
+                                   </li>
+
+                                </ul>
+                              </li>
+                            </ul>
+                       </nav>
+                      <h2 class="title">
+                        <field name="name"/>
+                      </h2>
+
+                      <div class="item-list">
+                           <div class="item">
+                              <div class="item-text">Tổng [Giáo viên]</div>
+                              <div class="item-badge">
+                                  <field name="tong_giaovien"/>
+                              </div>
+                            </div>
+                            <div class="item">
+                              <div class="item-text">Tổng [Lương] chi trả</div>
+                              <div class="item-info">
+                                  <field name="tong_luong" widget="integer"/>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+
+                </t>
+
+            </kanban>
+        </field>
+    </record>
+
+    <record id="ekids_giaovien.luong_nam_form" model="ir.ui.view">
+        <field name="name">Thông tin năm học</field>
+        <field name="model">ekids.luong_nam</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group col="4">
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+      <!--action -->
+    <record model="ir.actions.act_window" id="ekids_giaovien.luong_nam_action_window">
+        <field name="name">Cơ sở</field>
+        <field name="res_model">ekids.coso</field>
+        <field name="domain">[('user_id.id','=',uid)]</field>
+        <field name="context">{'kanban_view_ref':'ekids_giaovien.coso_kanban_view_luong_nam'}</field>
+        <field name="view_mode">kanban</field>
+    </record>
+
+  </data>
+</odoo>

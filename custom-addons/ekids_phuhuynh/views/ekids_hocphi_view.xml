@@ -1,0 +1,36 @@
+<odoo>
+  <data>
+
+
+    <record id="ekids_phuhuynh.hocphi_list" model="ir.ui.view">
+        <field name="name">Học phí</field>
+        <field name="model">ekids.hocphi</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="thang_id" />
+                <field name="nam_id" />
+                <field name="tien_bantru" sum="Total"/>
+                <field name="tien_ca" sum="Total"/>
+                <field name="tien_duoctru" sum="Total"/>
+                <field name="hocphi" sum="Total"/>
+                <field name="tyle_giamhocphi" />
+                <field name="hocphi_giam" sum="Total"/>
+                <field name="hocphi_phaidong" sum="Total"/>
+
+            </list>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ekids_phuhuynh.hocphi_action_window">
+        <field name="name">THÔNG BÁO HỌC PHÍ</field>
+        <field name="res_model">ekids.hocphi</field>
+        <field name="domain">[('hocsinh_id.user_id','=',uid)]</field>
+        <field name="context">{ 'list_view_ref':'ekids_phuhuynh.hocphi_list'}</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+
+  </data>
+</odoo>

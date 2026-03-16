@@ -1,0 +1,61 @@
+<odoo>
+    <data>
+        <record id="ekids_diemdanh.chamcong_congviec2thang_giatri_search" model="ir.ui.view">
+            <field name="name">chamcong_congviec2thang_giatri.search</field>
+            <field name="model">ekids.chamcong_congviec2thang_giatri</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="giaovien_id"/>
+                </search>
+            </field>
+         </record>
+         <record id="ekids_diemdanh.chamcong_congviec2thang_giatri_list" model="ir.ui.view">
+            <field name="name">Diem Danh</field>
+            <field name="model">ekids.chamcong_congviec2thang_giatri</field>
+            <field name="arch" type="xml">
+                 <list  create="false" delete="true" limit="200" default_order="giaovien_id asc">
+
+                    <field name="sequence" width="25" />
+                    <field name="giaovien_id" width="150"  readonly="true"/>
+                    <field name="tong" widget="widget_giaovien_giaoviec" width="50"/>
+                    <field name="d1" widget="widget_giaovien_giaoviec" invisible="is_d1_nghi" width="30" />
+                    <field name="d2" widget="widget_giaovien_giaoviec" invisible="is_d2_nghi" width="30" />
+                    <field name="d3" widget="widget_giaovien_giaoviec" invisible="is_d3_nghi" width="30" />
+                    <field name="d4" widget="widget_giaovien_giaoviec" invisible="is_d4_nghi" width="30" />
+                    <field name="d5" widget="widget_giaovien_giaoviec" invisible="is_d5_nghi" width="30" />
+                    <field name="d6" widget="widget_giaovien_giaoviec" invisible="is_d6_nghi" width="30" />
+                    <field name="d7" widget="widget_giaovien_giaoviec" invisible="is_d7_nghi" width="30" />
+                    <field name="d8" widget="widget_giaovien_giaoviec" invisible="is_d8_nghi" width="30" />
+                    <field name="d9" widget="widget_giaovien_giaoviec" invisible="is_d9_nghi" width="30" />
+
+                    <field name="d10" widget="widget_giaovien_giaoviec" invisible="is_d10_nghi" width="30" />
+
+                    <field name="d11" widget="widget_giaovien_giaoviec" invisible="is_d11_nghi" width="30" />
+                    <field name="d12" widget="widget_giaovien_giaoviec" invisible="is_d12_nghi" width="30" />
+                    <field name="d13" widget="widget_giaovien_giaoviec" invisible="is_d13_nghi" width="30" />
+                    <field name="d14" widget="widget_giaovien_giaoviec" invisible="is_d14_nghi" width="30" />
+                    <field name="d15" widget="widget_giaovien_giaoviec" invisible="is_d15_nghi" width="30" />
+                    <field name="d16" widget="widget_giaovien_giaoviec" invisible="is_d16_nghi" width="30" />
+                    <field name="d17" widget="widget_giaovien_giaoviec" invisible="is_d17_nghi" width="30" />
+                    <field name="d18" widget="widget_giaovien_giaoviec" invisible="is_d18_nghi" width="30" />
+                    <field name="d19" widget="widget_giaovien_giaoviec" invisible="is_d19_nghi" width="30" />
+                    <field name="d20" widget="widget_giaovien_giaoviec" invisible="is_d20_nghi" width="30" />
+
+                    <field name="d21" widget="widget_giaovien_giaoviec" invisible="is_d21_nghi" width="30" />
+                    <field name="d22" widget="widget_giaovien_giaoviec" invisible="is_d22_nghi" width="30" />
+                    <field name="d23" widget="widget_giaovien_giaoviec" invisible="is_d23_nghi" width="30" />
+                    <field name="d24" widget="widget_giaovien_giaoviec" invisible="is_d24_nghi" width="30" />
+                    <field name="d25" widget="widget_giaovien_giaoviec" invisible="is_d25_nghi" width="30" />
+                    <field name="d26" widget="widget_giaovien_giaoviec" invisible="is_d26_nghi" width="30" />
+                    <field name="d27" widget="widget_giaovien_giaoviec" invisible="is_d27_nghi" width="30" />
+                    <field name="d28" widget="widget_giaovien_giaoviec" invisible="is_d28_nghi" width="30" />
+                    <field name="d29" widget="widget_giaovien_giaoviec" invisible="is_d29_nghi" width="30" />
+                    <field name="d30" widget="widget_giaovien_giaoviec" invisible="is_d30_nghi" width="30" />
+                    <field name="d31" widget="widget_giaovien_giaoviec" invisible="is_d31_nghi" width="30" />
+
+                </list>
+            </field>
+        </record>
+
+    </data>
+</odoo>

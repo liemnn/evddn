@@ -1,0 +1,71 @@
+<odoo>
+  <data>
+     <record id="ekids_giaovien.luong_sukien_search" model="ir.ui.view">
+        <field name="name">luong_sukien.search</field>
+        <field name="model">ekids.luong_sukien</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="thang"/>
+                <field name="nam"/>
+                <field name="name"/>
+                <field name="loai"/>
+                <field name="desc"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="ekids_giaovien.luong_sukien_list" model="ir.ui.view">
+        <field name="name">ekids.luong_sukien.tree</field>
+        <field name="model">ekids.luong_sukien</field>
+        <field name="arch" type="xml">
+            <list limit="200" default_order="nam asc,thang asc">
+                <field name="sequence" widget="handle"/>
+                <field name="thang"/>
+                <field name="nam"/>
+                <field name="name"/>
+                <field name="tien" sum="Total"/>
+                <field name="loai"/>
+                <field name="desc"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ekids_giaovien.luong_sukien_form" model="ir.ui.view">
+        <field name="name">Thông tin Lương thu ngoài</field>
+        <field name="model">ekids.luong_sukien</field>
+        <field name="arch" type="xml">
+            <form string="Quản lý Học phí thu ngoài">
+                <sheet>
+                    <group>
+                         <field name="coso_id" readonly="true"/>
+                         <field name="name"/>
+                         <field name="loai"/>
+                    </group>
+                    <group col="3">
+                        <group>
+                            <field name="tien"/>
+                        </group>
+                        <group>
+                            <field name="thang"/>
+                        </group>
+                        <group>
+                            <field name="nam"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="desc"/>
+                    </group>
+                    <notebook>
+                        <page name="giaovien_ids" string="DANH SÁCH GIÁO VIÊN ÁP DỤNG">
+                            <field name="giaovien_ids"
+                                   domain="[('coso_id', '=', coso_id),('trangthai', '=', '1')]"
+                                   context="{'default_coso_id': coso_id}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+  </data>
+</odoo>

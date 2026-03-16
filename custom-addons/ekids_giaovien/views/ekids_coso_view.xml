@@ -1,0 +1,115 @@
+<odoo>
+  <data>
+
+
+ <record id="ekids_giaovien.coso_kanban_luong_view" model="ir.ui.view">
+    <field name="name">LƯƠNG - Premium Soft Light</field>
+    <field name="model">ekids.coso</field>
+    <field name="priority" eval="100"/>
+    <field name="arch" type="xml">
+        <kanban action="action_xem_toanbo_luong_nam" type="object">
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click kh-premium-card">
+
+
+
+                        <div class="kh-premium-header">
+                            <div class="kh-premium-avatar">
+                                <field name="logo" widget="image"/>
+                            </div>
+                            <div class="kh-premium-title"><field name="name"/></div>
+                            <div class="kh-premium-slogan"><field name="slogan"/></div>
+                        </div>
+
+                        <div class="kh-premium-body">
+                            <div class="kh-premium-desc">(Công tác tính lương cho giáo viên)</div>
+
+                            <button class="oe_kanban_action kh-btn-action kh-btn-main"
+                                    name="action_tinh_luong_thang_qua"
+                                    type="object">
+                                <i class="fa fa-money"></i>
+                                <span>TÍNH [LƯƠNG] THÁNG VỪA QUA</span>
+                            </button>
+
+                            <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                    name="action_xem_toanbo_luong_nam"
+                                    type="object">
+                                <i class="fa fa-history"></i>
+                                <span>Xem [LƯƠNG] các tháng khác</span>
+                            </button>
+
+                            <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                    name="action_quanly_luong_sukien"
+                                    type="object">
+                                <i class="fa fa-credit-card"></i>
+                                <span>Quản lý [Khoản Lương] theo sự kiện</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+ <record id="ekids_giaovien.coso_kanban_giaovien_view" model="ir.ui.view">
+    <field name="name">ekids_core.coso.kanban - Premium Soft Light</field>
+    <field name="model">ekids.coso</field>
+    <field name="priority" eval="100"/>
+    <field name="arch" type="xml">
+        <kanban archivable="false" sample="1">
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click kh-premium-card">
+
+
+
+                        <div class="kh-premium-header">
+                            <div class="kh-premium-avatar">
+                                <field name="logo" widget="image"/>
+                            </div>
+                            <div class="kh-premium-title"><field name="name"/></div>
+                            <div class="kh-premium-slogan"><field name="slogan"/></div>
+                        </div>
+
+                        <div class="kh-premium-body">
+                            <div class="kh-premium-desc">
+                                (Quản lý giáo viên làm việc, công tác tại Cơ sở: Tạo hồ sơ, phân công nhiệm vụ, cấp tài khoản)
+                            </div>
+
+                            <button class="oe_kanban_action kh-btn-main"
+                                    name="action_xem_toanbo_giaovien"
+                                    type="object">
+                                <i class="fa fa-users"></i> GIÁO VIÊN
+                            </button>
+                        </div>
+
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+
+
+    <record model="ir.actions.act_window" id="ekids_giaovien.coso_giaovien_action_window">
+      <field name="name"> Quản lý cơ sở</field>
+      <field name="res_model">ekids.coso</field>
+      <field name="context">{ 'kanban_view_ref':'ekids_giaovien.coso_kanban_giaovien_view'}</field>
+      <field name="view_mode">kanban</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ekids_giaovien.coso_luong_action_window">
+      <field name="name"> Quản lý cơ sở</field>
+      <field name="res_model">ekids.coso</field>
+      <field name="context">{ 'kanban_view_ref':'ekids_giaovien.coso_kanban_luong_view'}</field>
+      <field name="view_mode">kanban</field>
+    </record>
+
+
+
+  </data>
+</odoo>

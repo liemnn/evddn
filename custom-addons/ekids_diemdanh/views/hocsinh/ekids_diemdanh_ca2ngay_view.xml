@@ -1,0 +1,62 @@
+<odoo>
+    <data>
+         <record id="ekids_diemdanh.diemdanh_ca2ngay_list" model="ir.ui.view">
+            <field name="name"> Xác thực Ca can thiệp </field>
+            <field name="model">ekids.diemdanh_ca2ngay</field>
+            <field name="arch" type="xml">
+                <list editable="bottom" create="true" delete="true" limit="20" >
+                    <field name="sequence" widget="handle" />
+                    <field name="ngay" readonly="true"/>
+                    <field name="hocphi_dm_ca_id"
+                           domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
+                           context="{'default_coso_id':coso_id}"/>
+                    <field name="giaovien_id" domain="[('coso_id','=',coso_id)]"/>
+                    <field name="trangthai" readonly="true"
+                                decoration-success="trangthai == '1'"
+                                decoration-warning="trangthai == '0'"
+                                decoration-muted="trangthai == '2'"
+                                decoration-danger="trangthai == '3'"
+                                decoration-info="trangthai == '4'"
+                    />
+                    <field name="desc"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_diemdanh.diemdanh_ca2ngay_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.diemdanh_ca2ngay</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+
+                    <sheet>
+                        <group>
+
+                            <field name="hocsinh_id" readonly="true"
+                               domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
+                            />
+                            <field name="hocphi_dm_ca_id"
+                                   domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
+                                   context="{'default_coso_id':coso_id}"
+                            />
+                            <field name="giaovien_id"/>
+                            <field name="desc"/>
+                            <field name="trangthai"
+                                decoration-success="trangthai == '1'"
+                                decoration-warning="trangthai == '0'"
+                                decoration-danger="trangthai == '-1'"/>
+
+
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+
+    </data>
+</odoo>

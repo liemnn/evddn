@@ -1,0 +1,67 @@
+<odoo>
+  <data>
+    <!--kanban lương thang-->
+
+    <record id="ekids_giaovien.luong_thang_list" model="ir.ui.view">
+        <field name="name">Thông tin lương tháng</field>
+        <field name="model">ekids.luong_thang</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="tong_luong"/>
+
+            </list>
+        </field>
+    </record>
+
+     <record id="ekids_giaovien.luong_thang_kanban" model="ir.ui.view">
+        <field name="name">Thang</field>
+        <field name="model">ekids.luong_thang</field>
+        <field name="arch" type="xml">
+            <kanban  archivable="false" action="action_view_khoitao_luong_giaovien" sample="1" type="object">
+
+                   <t t-name="kanban-box">
+                        <div class="box">
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+
+                            <div class="item-list">
+                               <div class="item">
+                                  <div class="item-text">Tổng [Giáo viên]</div>
+                                  <div class="item-badge">
+                                      <field name="tong_giaovien"/>
+                                  </div>
+                                </div>
+                                <div class="item">
+                                  <div class="item-text">Tổng [Lương] chi trả</div>
+                                  <div class="item-info">
+                                      <field name="tong_luong" widget="integer"/>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+
+            </kanban>
+        </field>
+    </record>
+
+    <record id="ekids_giaovien.luong_thang_form" model="ir.ui.view">
+        <field name="name">Thông tin lương tháng</field>
+        <field name="model">ekids.luong_thang</field>
+        <field name="arch" type="xml">
+            <form string="Lựa chọn tháng để lập lương">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+  </data>
+</odoo>

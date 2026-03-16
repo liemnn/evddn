@@ -1,0 +1,125 @@
+<odoo>
+    <data>
+      <record id="ekids_core.nghile_nam_kanban_view" model="ir.ui.view">
+            <field name="name">Quản lý Năm Sự Kiện - Premium Kanban</field>
+            <field name="model">ekids.nghile_nam</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban sample="1" action="action_xem_toanbo_nghile_nam" type="object" class="o_kanban_mobile">
+                    <field name="name"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <style>
+                                    .kh-year-card {
+                                        background: #ffffff;
+                                        border-radius: 12px;
+                                        border: 1px solid #e2e8f0;
+                                        padding: 20px;
+                                        text-align: center;
+                                        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: center;
+                                        justify-content: center;
+                                        min-height: 100px;
+                                        position: relative;
+                                        overflow: hidden;
+                                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                                    }
+
+                                    .kh-year-card:hover {
+                                        transform: translateY(-5px);
+                                        border-color: #4f46e5;
+                                        box-shadow: 0 15px 30px rgba(79, 70, 229, 0.15);
+                                        background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%);
+                                    }
+
+                                    /* Điểm nhấn dải màu phía trên thẻ */
+                                    .kh-year-card::before {
+                                        content: "";
+                                        position: absolute;
+                                        top: 0; left: 0; right: 0;
+                                        height: 4px;
+                                        background: linear-gradient(90deg, #4f46e5, #06b6d4);
+                                    }
+
+                                    .kh-year-label {
+                                        font-size: 14px;
+                                        font-weight: 700;
+                                        color: #64748b;
+                                        text-transform: uppercase;
+                                        margin-bottom: 5px;
+                                        letter-spacing: 1px;
+                                    }
+
+                                    .kh-year-number {
+                                        font-size: 32px;
+                                        font-weight: 900;
+                                        color: #1e293b;
+                                        margin: 0;
+                                        line-height: 1;
+                                        font-family: 'Inter', sans-serif;
+                                    }
+
+                                    /* Hiệu ứng bóng đổ mờ phía sau con số */
+                                    .kh-year-bg {
+                                        position: absolute;
+                                        bottom: -10px;
+                                        right: -10px;
+                                        font-size: 60px;
+                                        font-weight: 900;
+                                        color: #f1f5f9;
+                                        z-index: 0;
+                                        opacity: 0.5;
+                                        pointer-events: none;
+                                    }
+                                </style>
+
+                                <div class="kh-year-card">
+                                    <div class="kh-year-label">Năm</div>
+                                    <h2 class="kh-year-number">
+                                        <field name="name"/>
+                                    </h2>
+                                    <div class="kh-year-bg">
+                                        <t t-esc="record.name.raw_value"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_core.nghile_nam_list_view">
+            <field name="name">Ngày nghỉ</field>
+            <field name="model">ekids.nghile_nam</field>
+            <field name="arch" type="xml">
+                <list>
+
+                    <field name="name"/>
+                    <field name="desc"/>
+
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_core.nghile_nam_form_view">
+            <field name="name">Ngày nghỉ</field>
+            <field name="model">ekids.nghile_nam</field>
+            <field name="arch" type="xml">
+                <form string="Nghỉ lễ">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="desc"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

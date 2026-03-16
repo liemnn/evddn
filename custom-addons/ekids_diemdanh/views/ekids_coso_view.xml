@@ -1,0 +1,118 @@
+<odoo>
+    <data>
+       <record id="ekids_diemdanh.coso_kanban_view" model="ir.ui.view">
+            <field name="name">ekids_core.coso.kanban - Premium Soft Light</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+               <kanban sample="1" action="action_xem_toanbo_diemdanh_thang" type="object">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-premium-card">
+
+
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
+                                    </div>
+                                    <div class="kh-premium-title"><field name="name"/></div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">(Thực hiện công tác điểm danh học sinh đến học tại cơ sở)</div>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-main"
+                                            name="action_diemdanh_thang_nay"
+                                            type="object">
+                                        <i class="fa fa-calendar-check-o"></i> ĐIỂM DANH [THÁNG] NÀY
+                                    </button>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_xem_toanbo_diemdanh_thang"
+                                            type="object">
+                                        <i class="fa fa-history"></i> Xem điểm danh [Các tháng] khác
+                                    </button>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_quanly_nghiphep_hocsinh"
+                                            type="object">
+                                        <i class="fa fa-user-times"></i> Quản lý [Lịch nghỉ] học sinh
+                                    </button>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+        <record model="ir.actions.act_window" id="ekids_diemdanh.diemdanh_action_window">
+          <field name="name">Điểm danh [Học sinh]</field>
+          <field name="res_model">ekids.coso</field>
+          <field name="context">{ 'kanban_view_ref':'ekids_diemdanh.coso_kanban_view'}</field>
+          <field name="view_mode">kanban</field>
+        </record>
+
+
+         <record id="ekids_diemdanh.coso_giaovien_kanban_view" model="ir.ui.view">
+            <field name="name">ekids_core.coso.giaovien.kanban</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban sample="1"  action="action_xem_diemdanh_toanbo_thang_kanban" type="object">
+                    <t t-name="kanban-box">
+                        <div class="box">
+
+                            <!-- Icon Section -->
+                            <div class="avatar">
+                               <field name="logo" widget="image" />
+                            </div>
+                            <!-- Title Section -->
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+                            <!-- Description Section -->
+                            <p class="slogan">
+                               <field name="slogan"/>
+                            </p>
+                            <p class="description">
+                               (Thực hiện công tác điểm danh học sinh đến học tại cơ sở)
+                            </p>
+                            <!-- Button Section -->
+                            <button  class="function"
+                                 name="action_quanly_nghiphep_hocsinh"
+                                 type="object" string="Quản lý [Lịch nghỉ] học sinh"/>
+
+                            <button  class="function"
+                                 name="action_diemdanh_thang_nay"
+                                 type="object" string="Đểm danh [Tháng] này"/>
+
+                             <button  class="function"
+                                 name="action_diemdanh_ngay_homnay"
+                                 type="object" string="Điểm danh [Hôm nay]"/>
+
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+        <record model="ir.actions.act_window" id="ekids_diemdanh.diemdanh_action_window">
+          <field name="name">Điểm danh [Học sinh]</field>
+          <field name="res_model">ekids.coso</field>
+          <field name="context">{ 'kanban_view_ref':'ekids_diemdanh.coso_kanban_view'}</field>
+          <field name="view_mode">kanban</field>
+        </record>
+
+
+    </data>
+</odoo>

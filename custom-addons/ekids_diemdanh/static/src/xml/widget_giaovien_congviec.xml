@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <t t-name="ekids_diemdanh.GiaoViecWidget" owl="1">
+    <t t-set="val" t-value="getValue()"/>
+    <span t-on-click="openPopup"
+          t-att-data-record_id="props.record.resId"
+          t-att-name="props.name"
+          style="cursor:pointer;">
+      <t t-if="val === 0">
+        <i class="fa fa-ban text-muted" title="Không có giá trị"/>
+      </t>
+      <t t-else="">
+        <span class="fa text-success fw-bold fs-4" t-esc="val"/>
+      </t>
+    </span>
+  </t>
+</templates>
+
+

@@ -1,0 +1,65 @@
+<odoo>
+    <data>
+
+        <record id="ekids_hocsinh.hocphi_dm_chinhsach_giam_search" model="ir.ui.view">
+            <field name="name">hocphi_dm_chinhsach_giam.search</field>
+            <field name="model">ekids.hocphi_dm_chinhsach_giam</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter string="Đang hoạt động" name="trangthai" domain="[('trangthai','=','1')]"/>
+                    <field name="name"/>
+
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_hocsinh.dm_chinhsach_giam_hocphi_list">
+            <field name="name">hocphi_dm_chinhsach_giam</field>
+            <field name="model">ekids.hocphi_dm_chinhsach_giam</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="tyle_giam"/>
+                    <field name="desc"/>
+                    <field name="trangthai"
+                        decoration-success="trangthai == '1'"
+                        decoration-danger="trangthai == '0'"/>
+
+                </list>
+            </field>
+        </record>
+
+        <record  id="ekids_hocsinh.hocphi_dm_chinhsach_giam_form" model="ir.ui.view">
+            <field name="name">Danh mục Giảm học phí</field>
+            <field name="model">ekids.hocphi_dm_chinhsach_giam</field>
+            <field name="arch" type="xml">
+                <form string="Cơ sở">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="tyle_giam"/>
+                            <field name="desc"/>
+                            <field name="trangthai"/>
+                        </group>
+
+                        <notebook>
+                            <page name="hocsinh_ids" string="DANH SÁCH HỌC SINH ÁP DỤNG">
+                                <field name="hocsinh_ids"
+                                       domain="[('coso_id', '=', coso_id),('trangthai', '=', '1')]"
+                                       context="{'default_coso_id': coso_id}"/>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+
+
+    </data>
+</odoo>

@@ -1,0 +1,64 @@
+<odoo>
+    <data>
+
+
+        <!-- explicit list view definition -->
+        <record id="ekids_diemdanh.chamcong_loai_kanban" model="ir.ui.view">
+            <field name="name">chamcong_loai Kanban</field>
+            <field name="model">ekids.chamcong_loai</field>
+            <field name="arch" type="xml">
+               <kanban create="0" sample="1"
+                        action="action_giaovien_chamcong_loai2thang" type="object"
+               default_order="loai asc" >
+
+                   <t t-name="kanban-box">
+                        <div class="box">
+                            <field name="loai" invisible="1"/>
+                            <templates>
+                                 <t t-if="record.loai.raw_value == '1'">
+                                    <div class="avatar">
+                                        <img t-att-src="'/ekids_diemdanh/static/src/images/kpi.png'"/>
+
+                                    </div>
+                                 </t>
+                                 <t t-if="record.loai.raw_value == '0'">
+                                    <div class="avatar">
+                                        <img t-att-src="'/ekids_diemdanh/static/src/images/chamcong.png'"/>
+
+                                    </div>
+                                 </t>
+                                 <t t-if="record.loai.raw_value == '2'">
+                                    <div class="avatar">
+                                        <img t-att-src="'/ekids_diemdanh/static/src/images/congviec.png'"/>
+
+                                    </div>
+                                 </t>
+                                  <t t-if="record.loai.raw_value == '3'">
+                                    <div class="avatar">
+                                        <img t-att-src="'/ekids_diemdanh/static/src/images/congviec_giatri.png'"/>
+
+                                    </div>
+                                 </t>
+                             </templates>
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+
+                            <button  class="function"
+                                 name="action_giaovien_chamcong_thang_nay"
+                                 type="object" string="THỰC HIỆN [THÁNG NÀY]"/>
+                             <button  class="function"
+                                 name="action_giaovien_chamcong_thang_truoc"
+                                 type="object" string="Thực hiện [Tháng trước]"/>
+                            <button  class="function"
+                                 name="action_giaovien_chamcong_loai2thang"
+                                 type="object" string="Xem các [Tháng khác]"/>
+
+                        </div>
+                    </t>
+
+                </kanban>
+            </field>
+        </record>
+    </data>
+</odoo>

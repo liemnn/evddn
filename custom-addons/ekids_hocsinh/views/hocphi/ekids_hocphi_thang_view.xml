@@ -1,0 +1,120 @@
+<odoo>
+  <data>
+    <!--kanban lương thang-->
+
+    <record id="ekids_hocsinh.hocphi_thang_list" model="ir.ui.view">
+        <field name="name">Thông tin Học phí tháng</field>
+        <field name="model">ekids.hocphi_thang</field>
+        <field name="arch" type="xml">
+            <list default_order="name desc">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+        <!--        kanban view-->
+    <record id="ekids_hocsinh.hocphi_thang_kanban" model="ir.ui.view">
+        <field name="name">Thông tin Học phí tháng</field>
+        <field name="model">ekids.hocphi_thang</field>
+        <field name="arch" type="xml">
+            <kanban default_order="name desc"  archivable="false" action="action_view_khoitao_hocphi_hocsinh" sample="1" type="object">
+
+                   <t t-name="kanban-box">
+                        <div class="box">
+                            <nav class="box-navbar">
+                                <ul class="box-menu">
+                                  <li class="box-menu-item">
+                                    <a href="#" >
+                                       <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <ul class="box-dropdown">
+
+                                        <li>
+                                          <button
+                                             name="action_delete_hocphi_thang"
+                                             type="object" string="Xóa bản ghi"/>
+                                       </li>
+
+                                    </ul>
+                                  </li>
+                                </ul>
+                            </nav>
+
+                            <h2>
+                                <field name="name"/>
+                            </h2>
+
+                            <div class="item-list">
+                               <div class="item">
+                                  <div class="item-text">Tổng học sinh</div>
+                                  <div class="item-info">
+                                     <field name="tong_hocsinh"/>
+                                  </div>
+                                </div>
+
+                                 <div class="item">
+                                  <div class="item-text">Tổng học phí</div>
+                                  <div class="item-info">
+                                     <field name="tong_hocphi" widget="integer"/>
+                                  </div>
+                                </div>
+
+                                <div class="item">
+                                  <div class="item-text">Số tiền đã giảm</div>
+                                  <div class="item-info">
+                                     <field name="tong_hocphi_giam" widget="integer"/>
+                                  </div>
+                                </div>
+                                <div class="item">
+                                  <div class="item-text">Thực thu</div>
+                                  <div class="item-info">
+                                     <field name="tong_hocphi_thucthu" widget="integer"/>
+                                  </div>
+                                </div>
+                                <div class="item">
+                                  <div class="item-text">Đã đóng [Tiền mặt]</div>
+                                  <div class="item-info">
+                                     <field name="tong_dong_tm"/>
+                                  </div>
+                                </div>
+                                <div class="item">
+                                  <div class="item-text">Đã đóng [Chuyển khoản]</div>
+                                  <div class="item-info">
+                                     <field name="tong_dong_ck"/>
+                                  </div>
+                                </div>
+                                 <div class="item">
+                                  <div class="item-text">Tổng [còn nợ]</div>
+                                  <div class="item-info">
+                                     <field name="tong_no"/>
+                                  </div>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+                    </t>
+                
+            </kanban>
+        </field>
+    </record>
+    <record id="ekids_hocsinh.hocphi_thang_form" model="ir.ui.view">
+        <field name="name">Thông tin Học phí tháng</field>
+        <field name="model">ekids.hocphi_thang</field>
+        <field name="arch" type="xml">
+            <form string="Lựa chọn tháng để lập học phí">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+  </data>
+</odoo>

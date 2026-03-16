@@ -1,0 +1,67 @@
+<odoo>
+    <data>
+
+
+        <!-- explicit list view definition -->
+        <record id="ekids_chitieu.chitieu_thang_kanban" model="ir.ui.view">
+            <field name="name">Thang</field>
+            <field name="model">ekids.chitieu_thang</field>
+            <field name="arch" type="xml">
+                <kanban >
+
+                    <t t-name="kanban-box">
+                       <div class="box">
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+
+                            <div class="item-list">
+                               <div class="item">
+                                  <div class="item-text">Tổng thu khác</div>
+                                  <div class="item-info">
+                                      <field name="tong_thu" widget="integer"/>
+                                  </div>
+                                </div>
+                                <div class="item">
+                                  <div class="item-text">Tổng chi</div>
+                                  <div class="item-info">
+                                      <field name="tong_chi" widget="integer"/>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+
+                </kanban>
+            </field>
+        </record>
+
+
+
+        <record id="ekids_chitieu.chitieu_thang_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.chitieu_thang</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <h2>
+                                <field name="name" readonly="id"/>
+                            </h2>
+                        </group>
+                         <notebook>
+                            <page name="chi_ids " string="CÁC KHOẢN [CHI]">
+                                <field name="chi_ids" context="{'default_coso_id':coso_id}"/>
+                            </page>
+                             <page name="thu_ids " string="CÁC KHOẢN [THU KHÁC] NGOÀI HỌC PHÍ">
+                                <field name="thu_ids" context="{'default_coso_id':coso_id}"/>
+                            </page>
+                         </notebook>
+
+                       </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

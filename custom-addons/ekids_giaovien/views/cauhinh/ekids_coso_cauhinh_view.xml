@@ -1,0 +1,54 @@
+<odoo>
+    <data>
+        <record id="ekids_giaovien.coso_kanban_cauhinh_view" model="ir.ui.view">
+            <field name="name">CẤU HÌNH-CỚ SỞ - Premium Soft Light</field>
+            <field name="model" >ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false" sample="1">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-premium-card">
+
+
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
+                                    </div>
+                                    <div class="kh-premium-title"><field name="name"/></div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">
+                                        (Thiết lập thông tin phục vụ quản lý Giáo viên/Tiền lương)
+                                    </div>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-main"
+                                            name="action_view_giaovien_luong_dm_chamcong"
+                                            type="object">
+                                        <i class="fa fa-tasks"></i> Danh mục [Chấm công/KPI]
+                                    </button>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_view_giaovien_luong_dm_chitra"
+                                            type="object">
+                                        <i class="fa fa-money"></i> Thiết lập Danh mục [Lương]
+                                    </button>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="ekids_giaovien.coso_cauhinh_action_window">
+            <field name="name">CẤU HÌNH -CƠ SỞ</field>
+            <field name="res_model">ekids.coso</field>
+            <field name="context">{ 'kanban_view_ref':'ekids_giaovien.coso_kanban_cauhinh_view'}</field>
+            <field name="view_mode">kanban</field>
+        </record>
+    </data>
+</odoo>

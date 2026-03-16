@@ -1,0 +1,90 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="ekids_canthiep.capdo_list">
+            <field name="name">Danh mục cấp độ</field>
+            <field name="model">ekids.ct_dm_capdo</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="ma"/>
+                    <field name="ten"/>
+                    <field name="desc"/>
+
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_canthiep.ct_dm_capdo_kanban_view" model="ir.ui.view">
+            <field name="name">Danh mục cấp độ</field>
+            <field name="model">ekids.ct_dm_capdo</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false">
+                     <t t-name="kanban-box">
+                        <div class="box">
+                            <!-- Icon Section -->
+
+                            <!-- Title Section -->
+                            <h2 class="title">
+
+                                <field name="name"/>
+                            </h2>
+                            <!-- Description Section -->
+
+                            <p class="description">
+                               <field name="desc"/>
+                            </p>
+                             <div class="item-list">
+                               <div class="item">
+                                  <div class="item-text">Tổng [mục tiêu]</div>
+                                  <div class="item-badge">
+                                      <field name="tong_muctieu"/>
+                                  </div>
+                                </div>
+                            </div>
+                            <!-- Button Section -->
+                            <button  class="function"
+                                 name="action_view_ekid_canthiep_kanban_muctieu"
+                                 type="object" string="Mục tiêu"/>
+
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+         <record id="ekids_canthiep.ct_dm_capdo_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.ct_dm_capdo</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="chuongtrinh_id" invisible="1"/>
+                        <group>
+                             <div class="row">
+                                <div class="col-md-2">
+                                  <h3>
+                                      <field name="ma" placeholder="Mã" />
+                                  </h3>
+                                </div>
+                                <div class="col-md-10">
+                                  <h3>
+                                      <field name="ten" placeholder="Tên"/>
+                                  </h3>
+                                </div>
+                              </div>
+                        </group>
+                        <group>
+                            <field name="desc"/>
+                        </group>
+                        <notebook invisible=" not id">
+                            <page name="muctieu_ids " string="DANH SÁCH [MỤC TIÊU] CỦA CẤP ĐỘ">
+                                <field name="muctieu_ids" context="{'default_chuongtrinh_id':chuongtrinh_id}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,61 @@
+<odoo>
+  <data>
+
+
+    <!-- Top menu item -->
+
+    <menuitem name="Học sinh" id="ekids_hocsinh.menu_root"
+              web_icon="ekids_hocsinh,static/description/icon.png" sequence="1"/>
+
+    <menuitem name="Học phí" id="ekids_hocsinh.hocphi_menu_root"
+              web_icon="ekids_hocsinh,static/description/hocphi.png" sequence="3"/>
+
+      <!--Hiển thị menu -->
+     <menuitem name="Hồ sơ [Học sinh]" id="ekids_hocsinh.hocsinh" parent="ekids_hocsinh.menu_root"
+              action="ekids_hocsinh.coso_hocsinh_action_window"
+              groups="ekids_core.quanlyhocsinh,ekids_core.tinhhocphi" sequence="1"/>
+
+     <menuitem name="Hồ sơ [Học sinh]" id="ekids_hocsinh.hocsinh2" parent="ekids_hocsinh.hocphi_menu_root"
+              action="ekids_hocsinh.coso_hocsinh_action_window"
+              groups="ekids_core.quanlyhocsinh,ekids_core.tinhhocphi" sequence="2"/>
+
+
+     <menuitem name="Học phí" id="ekids_hocsinh.hocphi" parent="ekids_hocsinh.menu_root"
+              action="ekids_hocsinh.coso_hocphi_action_window"
+               groups="ekids_core.tinhhocphi" sequence="2"/>
+
+     <menuitem name="Học phí" id="ekids_hocsinh.hocphi2" parent="ekids_hocsinh.hocphi_menu_root"
+              action="ekids_hocsinh.coso_hocphi_action_window"
+               groups="ekids_core.tinhhocphi" sequence="1"/>
+
+      <menuitem name="Kế hoạch [Can thiệp]" id="ekids_hocsinh.kehoach_canthiep"
+              parent="ekids_hocsinh.menu_root"   sequence="4"
+                groups="ekids_core.ql_ct_canthiep"/>
+
+       <menuitem name="Lập kế hoạch [Can thiệp]" id="ekids_hocsinh.lapkehoach_canthiep"
+                parent="ekids_hocsinh.kehoach_canthiep"
+                action="ekids_hocsinh.coso_kehoachcanthiep_action_window"
+                groups="ekids_core.ql_ct_canthiep" sequence="1"/>
+
+       <menuitem name="Phê duyệt kế hoạch [Can thiệp]" id="ekids_hocsinh.pheduyetkehoach_canthiep"
+                parent="ekids_hocsinh.kehoach_canthiep"
+                action="ekids_hocsinh.kehoach_pheduyet_action_window"
+                groups="ekids_core.giaovien" sequence="2"/>
+
+      <menuitem name="Thực hiện [Can thiệp]" id="ekids_hocsinh.thuchiencanthiep_canthiep"
+                parent="ekids_hocsinh.kehoach_canthiep"
+                action="ekids_hocsinh.kehoach_action_window"
+                groups="ekids_core.giaovien" sequence="3"/>
+
+      <menuitem name="Cấu hình" id="ekids_hocsinh.cauhinh"
+                action="ekids_hocsinh.coso_cauhinh_action_window"
+                parent="ekids_hocsinh.menu_root"   sequence="5"
+                groups="ekids_core.tinhhocphi"/>
+
+      <menuitem name="Cấu hình" id="ekids_hocsinh.cauhinh2"
+                action="ekids_hocsinh.coso_cauhinh_action_window"
+                parent="ekids_hocsinh.hocphi_menu_root"   sequence="5"
+                groups="ekids_core.tinhhocphi"/>
+
+  </data>
+</odoo>

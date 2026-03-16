@@ -1,0 +1,256 @@
+<odoo>
+    <data>
+
+
+
+       <record id="ekids_core.coso_search_view" model="ir.ui.view">
+          <field name="name">ekids.search.coso</field>
+          <field name="model">ekids.coso</field>
+          <field name="arch" type="xml">
+            <search string="Tìm kiếm Cơ sở">
+              <!-- Bộ lọc mặc định -->
+              <filter string="Đang thuê" name="trangthai" domain="[('trangthai','=','1')]"/>
+              <group expand="1" string="Group By">
+                <filter name="group_by_tinh"
+                    string="Tỉnh thành"
+                    context="{'group_by':'dm_tinh_id'}"/>
+                <filter name="group_by_xa"
+                    string="Xã"
+                    context="{'group_by':'dm_xa_id'}"/>
+                <filter name="group_by_trangthai"
+                    string="Trạng thái"
+                    context="{'group_by':'trangthai'}"/>
+              </group>
+
+              <!-- Cho phép search theo các field -->
+              <field name="name"/>
+              <field name="fullname"/>
+              <field name="masothue"/>
+              <field name="dm_tinh_id" string="Tình thành"/>
+              <field name="dienthoai" string="Số điện thoại"/>
+            </search>
+          </field>
+        </record>
+
+        <record id="ekids_core.coso_kanban_view" model="ir.ui.view">
+            <field name="name">Cơ sở</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban  default_group_by="trangthai">
+
+                    <t t-name="kanban-box">
+                        <div class="box-user">
+                            <!-- Vùng ảnh -->
+                            <div class="student-avatar">
+                                <field name="logo" widget="image"/>
+                            </div>
+
+                            <!-- Vùng thông tin -->
+                            <div class="info">
+                                <h2>
+                                    <field name="name"/>
+                                </h2>
+                                <div class="item-list" >
+                                     <div class="item">
+                                      <div class="item-text">Thuê từ ngày</div>
+                                      <div class="item-info">
+                                         <field name="thue_tungay"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Đến ngày</div>
+                                      <div class="item-info">
+                                         <field name="thue_denngay"/>
+                                      </div>
+                                    </div>
+                                     <div class="item">
+                                      <div class="item-text">Tỉnh</div>
+                                      <div class="item-info">
+                                         <field name="dm_tinh_id"/>
+                                      </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="ekids_core.coso_list_view">
+            <field name="name">Quản lý Cơ sở</field>
+            <field name="model">ekids.coso</field>
+            <field name="arch" type="xml">
+                <list>
+
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="masothue"/>
+                    <field name="dm_tinh_id"/>
+                    <field name="dm_xa_id"/>
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_core.coso_form_view">
+            <field name="name">Form Cớ sở</field>
+            <field name="model">ekids.coso</field>
+            <field name="arch" type="xml">
+                <form string="Cơ sở">
+                    <sheet>
+                        <group col="4">
+                            <group>
+                                <field name='logo' widget="image" class="oe_avatar"/>
+                                <field name="slogan"/>
+                            </group>
+                            <group colspan="3" col="1">
+
+                                 <div class="row">
+                                    <div class="col-md-2">
+                                      <h3>
+                                          <field name="ma" placeholder="Mã" readonly="is_admin ==False" />
+                                      </h3>
+                                    </div>
+                                    <div class="col-md-10">
+                                      <h3>
+                                          <field name="name" placeholder="Tên" readonly="is_admin ==False"/>
+                                      </h3>
+                                    </div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-12">
+                                      <h3>
+                                          <field name="fullname" placeholder="Tên đầy đủ" />
+                                      </h3>
+                                    </div>
+                                 </div>
+                            </group>
+                        </group>
+                        <group col="3">
+                            <separator string="1. THÔNG TIN CƠ SỞ"/>
+                            <group>
+                                <field name="masothue"/>
+                            </group>
+
+                            <group>
+                                <field name="email"/>
+                            </group>
+
+                            <group>
+                                <field name="dienthoai"/>
+                            </group>
+                        </group>
+                        <group col="3">
+                            <separator string="2. ĐỊA CHỈ CHI TIẾT"/>
+                            <group>
+                                <field name="diachi_chitiet"/>
+                            </group>
+
+                            <group>
+                                <field name="dm_tinh_id" readonly="is_admin ==False"/>
+                            </group>
+
+                            <group>
+                                <field name="dm_xa_id"/>
+                            </group>
+                        </group>
+                        <group col="3">
+                            <separator string="3. THÔNG TIN THUÊ DỊCH VỤ [PHẦN MỀM]"/>
+                            <group>
+                                <field name="thue_tungay" readonly="is_admin ==False"/>
+                            </group>
+
+                            <group>
+                                <field name="thue_denngay" readonly="is_admin ==False"/>
+                            </group>
+
+
+                            <group>
+                                <field name="trangthai" readonly="true"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <separator string="4. THÔNG TIN KHÁC"/>
+                            <field name="desc"/>
+                            <field name="user_id" readonly="is_admin ==False"/>
+
+                        </group>
+                        <notebook>
+                            <page name="coso_ids" string="THỜI GIAN HOẠT ĐỘNG">
+
+                                <group col="7">
+                                    <group>
+                                        <field name="hd_t2" widget="boolean_toggle"/>
+                                    </group>
+                                     <group>
+                                        <field name="hd_t3" widget="boolean_toggle"/>
+                                    </group>
+                                     <group>
+                                        <field name="hd_t4" widget="boolean_toggle"/>
+                                    </group>
+                                     <group>
+                                        <field name="hd_t5" widget="boolean_toggle"/>
+                                    </group>
+                                     <group>
+                                        <field name="hd_t6" widget="boolean_toggle"/>
+                                    </group>
+                                     <group>
+                                        <field name="hd_t7" widget="boolean_toggle"/>
+                                    </group>
+                                     <group>
+                                        <field name="hd_t8" widget="boolean_toggle"/>
+                                    </group>
+                                </group>
+
+                            </page>
+                            <page string="CƠ SỞ THÀNH VIÊN">
+                                <field name="coso_ids" widget="many2many_tags" string="Các cơ sở thành viên"/>
+
+                            </page>
+
+
+
+
+
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+        <!-- actions opening views on models -->
+
+        <record  id="ekids_core.coso_action_window" model="ir.actions.act_window">
+            <field name="name">Quản lý Cơ sở</field>
+            <field name="res_model">ekids.coso</field>
+            <field name="view_mode">kanban,list,form</field>
+             <field name="context">{'search_default_trangthai': '1',}</field>
+        </record>
+
+
+        <!-- Kanban View -->
+        <record id="ekids_core.coso_kanban_action_window_view" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="ekids_core.coso_kanban_view"/>
+            <field name="act_window_id" ref="ekids_core.coso_action_window"/>
+        </record>
+
+
+
+
+
+
+    </data>
+</odoo>

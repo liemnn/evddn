@@ -1,0 +1,181 @@
+<odoo>
+  <data>
+
+    <record id="ekids_baocao.coso_kanban_baocao_view" model="ir.ui.view">
+        <field name="name">Báo cáo thống kê theo cơ sở - Premium Soft Light</field>
+        <field name="model">ekids.coso</field>
+        <field name="priority" eval="100"/>
+        <field name="arch" type="xml">
+            <kanban archivable="false" sample="1">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click kh-premium-card">
+
+                            <style>
+                                /* 1. Khung thẻ chính - Hiệu ứng 3D Layering */
+                                .kh-premium-card {
+                                    border-radius: 20px;
+                                    background: #ffffff;
+                                    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+                                    overflow: hidden;
+                                    border: 1px solid #f1f5f9;
+                                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+                                    display: flex;
+                                    flex-direction: column;
+                                }
+                                .kh-premium-card:hover {
+                                    transform: translateY(-5px);
+                                    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+                                }
+
+                                /* 2. Header VÙNG MÀU NHẸ NHÀNG (Xanh mây pastel) */
+                                .kh-premium-header {
+                                    background: linear-gradient(135deg, #f0f7ff 0%, #e0e7ff 100%);
+                                    padding: 25px 20px 45px 20px;
+                                    color: #1e3a8a;
+                                    text-align: center;
+                                    position: relative;
+                                }
+
+                                .kh-premium-header::before {
+                                    content: "";
+                                    position: absolute;
+                                    top: -15px; right: -15px;
+                                    width: 100px; height: 100px;
+                                    background: rgba(255, 255, 255, 0.5);
+                                    border-radius: 50%;
+                                }
+
+                                .kh-premium-avatar {
+                                    width: 75px; height: 75px;
+                                    border-radius: 18px;
+                                    border: 3px solid #ffffff;
+                                    background: #fff;
+                                    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+                                    margin: 0 auto 12px;
+                                    overflow: hidden;
+                                }
+                                .kh-premium-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+                                .kh-premium-title {
+                                    font-size: 18px;
+                                    font-weight: 800;
+                                    margin: 0;
+                                    color: #1e3a8a;
+                                }
+                                .kh-premium-slogan {
+                                    font-size: 13px;
+                                    color: #64748b;
+                                    margin-top: 5px;
+                                    font-weight: 500;
+                                }
+
+                                /* 3. Phần thân đè lên Header (Layering) */
+                                .kh-premium-body {
+                                    padding: 25px 20px 20px;
+                                    background: #ffffff;
+                                    border-radius: 24px 24px 0 0;
+                                    margin-top: -24px;
+                                    position: relative;
+                                    z-index: 2;
+                                    text-align: center;
+                                }
+
+                                .kh-premium-desc {
+                                    font-size: 12px;
+                                    color: #94a3b8;
+                                    font-style: italic;
+                                    margin-bottom: 20px;
+                                    line-height: 1.5;
+                                    padding: 0 10px;
+                                }
+
+                                /* 4. Các nút bấm chuẩn Theme Odoo */
+                                .kh-btn-action {
+                                    width: 100%;
+                                    border-radius: 12px;
+                                    padding: 13px 15px;
+                                    font-size: 14px;
+                                    font-weight: 800;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: flex-start;
+                                    gap: 12px;
+                                    border: none;
+                                    cursor: pointer;
+                                    transition: all 0.3s ease;
+                                    margin-bottom: 12px;
+                                }
+
+                                /* Nút chính Xanh lam - Chữ trắng nổi bật */
+                                .kh-btn-main {
+                                    background: #3b82f6;
+                                    color: #ffffff;
+                                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+                                }
+                                .kh-btn-main:hover {
+                                    background: #2563eb;
+                                    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+                                    transform: translateY(-2px);
+                                    color: #ffffff;
+                                }
+                                .kh-btn-main i { color: #ffffff; font-size: 20px; }
+
+                                /* Nút phụ xám sáng */
+                                .kh-btn-sub {
+                                    background: #f8fafc;
+                                    color: #475569;
+                                    border: 1px solid #e2e8f0;
+                                }
+                                .kh-btn-sub:hover {
+                                    background: #f1f5f9;
+                                    border-color: #cbd5e1;
+                                    color: #1e293b;
+                                }
+                                .kh-btn-sub i { color: #64748b; font-size: 20px; }
+                            </style>
+
+                            <div class="kh-premium-header">
+                                <div class="kh-premium-avatar">
+                                    <field name="logo" widget="image"/>
+                                </div>
+                                <div class="kh-premium-title"><field name="name"/></div>
+                                <div class="kh-premium-slogan"><field name="slogan"/></div>
+                            </div>
+
+                            <div class="kh-premium-body">
+                                <div class="kh-premium-desc">
+                                    (Xem báo cáo lợi nhuận [Lỗ lãi] từng tháng và cả Năm tài chính)
+                                </div>
+
+                                <button class="oe_kanban_action kh-btn-action kh-btn-main"
+                                        name="action_view_ekids_baocao_loinhuan_action_window"
+                                        type="object">
+                                    <i class="fa fa-bar-chart"></i> Báo cáo [Thu/Chi] hàng tháng
+                                </button>
+
+                                <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                        name="action_view_ekids_baocao_nguonluc_action_window"
+                                        type="object">
+                                    <i class="fa fa-pie-chart"></i> Báo cáo Số lượng [Học sinh/Giáo viên]
+                                </button>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="ekids_baocao.baocao_loinhuan_action_window">
+      <field name="name">Báo cáo lợi nhuận</field>
+      <field name="res_model">ekids.coso</field>
+      <field name="context">{ 'kanban_view_ref':'ekids_baocao.coso_kanban_baocao_view'}</field>
+      <field name="view_mode">kanban</field>
+    </record>
+
+
+
+  </data>
+</odoo>

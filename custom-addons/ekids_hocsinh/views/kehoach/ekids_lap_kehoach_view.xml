@@ -1,0 +1,190 @@
+<odoo>
+  <data>
+
+        <record id="ekids_hocsinh.kehoach_kanban_view" model="ir.ui.view">
+            <field name="name">Kanban Kế hoạch</field>
+            <field name="model">ekids.kehoach</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                 <kanban default_group_by="trangthai"
+                    default_order="tu_ngay asc, id desc" kanban_group_editable="false">
+                    <field name="trangthai" readonly="true" create="0"/>
+                    <t t-name="kanban-box">
+
+                       <div class="box">
+                            <!-- Vùng ảnh -->
+
+                            <div class="info">
+                                <h2 class="title">
+                                    <field name="hocsinh_id"/>
+                                </h2>
+                                <div class="item-list">
+
+                                    <div class="item">
+                                      <div class="item-text">Kế hoạch</div>
+                                      <div class="item-info">
+                                         <field name="sothang"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Từ ngày</div>
+                                      <div class="item-info">
+                                         <field name="tu_ngay"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Đến ngày</div>
+                                      <div class="item-info">
+                                         <field name="den_ngay"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text"><field name="ketluan_id"/></div>
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="function">
+                                <button
+                                    name="action_tao_kehoach_hocsinh"
+                                    type="object" string="Kế hoạch theo tháng"/>
+
+                            </div>
+
+                        </div>
+
+                    </t>
+
+                </kanban>
+            </field>
+        </record>
+
+        <record id="ekids_hocsinh.kehoach_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.kehoach</field>
+            <field name="arch" type="xml">
+                <form>
+                     <header>
+                        <!-- Đặt trong group ẩn để đảm bảo field được load -->
+
+                         <group invisible="1">
+                            <field name="is_gui_pheduyet"/>
+                            <field name="is_keolai_lap_kehoach"/>
+                            <field name="is_lapkehoach"/>
+                            <field name="is_ketthuc"/>
+
+                             <field name="is_co_ketluan"/>
+
+
+                        </group>
+
+                         <button name="action_tao_kehoach_hocsinh_gui_pheduyet"
+                                    string="Gửi [Kế hoạch khung] cho Giáo viên can thiệp"
+                                    type="object"
+
+                                    invisible="is_gui_pheduyet == False"/>
+
+                         <button name="action_tao_kehoach_hocsinh_dualai_lapkehoach"
+                                    string="Đưa lại về [Lập kế hoạch khung]"
+                                    type="object"
+
+                                    invisible="is_keolai_lap_kehoach == False"/>
+
+
+
+
+
+                         <button name="action_tao_kehoach_hocsinh_ketthuc_canthiep"
+                                    string="Kết thúc, hoàn thành [Can thiệp]"
+                                    type="object"
+
+                                    invisible="is_ketthuc == False"/>
+
+                        <field name="trangthai" widget="statusbar"
+                               statusbar_visible="0,1,2,3,4"
+                               statusbar_colors='{"0":"blue","1":"orange","2":"green","3":"black","4":"red"}'/>
+                    </header>
+                    <sheet>
+
+
+                        <group col="1">
+                            <h3><field name="hocsinh_id" readonly="true"/></h3>
+                        </group>
+                         <button name="action_tao_kehoach_hocsinh"
+                                    string="Thực hiện tạo [Kế hoạch khung] từ Thông tin đã lựa chọn"
+                                    type="object"
+                                    class="btn-primary"
+                                    invisible="is_lapkehoach == False"/>
+
+                         <group>
+                            <separator string="[1].LỰA CHỌN [KẾT QUẢ ĐÁNH GIÁ]" />
+                            <field name="ketluan_id" domain="[('hocsinh_id','=',hocsinh_id),('trangthai','=','0')]"/>
+
+                        </group>
+                         <group col="2" invisible="is_co_ketluan == False">
+                                <group>
+                                    <field name="gv_lapkehoach_id" readonly="true"/>
+                                </group>
+
+                                <group>
+                                    <field name="gv_canthiep_id" readonly="true"/>
+                                </group>
+
+                         </group>
+                        <div invisible="is_co_ketluan == False">
+                            <group  col="2"  invisible=" not ketluan_id">
+                                <separator string="[2].LỰA CHỌN PHƯƠNG ÁN LẬP KẾ HOẠCH" />
+                                 <group>
+                                     <field name="is_sudung_mau"/>
+                                 </group>
+                                <group invisible=" not is_sudung_mau">
+                                    <field name="mau_kehoach_id" readonly="true" />
+                                <button name="action_luachon_mau_kehoach"
+                                        string="Lựa chọn [Mẫu] áp dụng cho[Kế hoạch]"
+                                        type="object"
+                                        invisible="mau_kehoach_id"/>
+                                        />
+                                <button name="action_xoabo_mau_kehoach"
+                                        string="Xóa [Mẫu] đã chọn"
+                                        type="object"
+                                        invisible="not mau_kehoach_id"/>
+                                        />
+
+                                </group>
+                            </group>
+                        </div>
+
+
+                        <group col="3" invisible="is_co_ketluan == False">
+                            <separator string="[3].THÔNG TIN VỀ KẾ HOẠCH (*)" />
+                             <group>
+                                <field name="sothang" readonly="is_sudung_mau"/>
+                            </group>
+                            <group>
+                                <field name="tu_ngay"/>
+                            </group>
+                            <group>
+                                <field name="den_ngay" readonly="True"/>
+                            </group>
+
+                        </group>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+
+
+
+
+
+  </data>
+</odoo>

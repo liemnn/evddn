@@ -1,0 +1,3 @@
+insert into
+ekids_giaovien2luong_dm_chitra_rel(giaovien_id,dm_chitra_id)
+select giaovien_id,dm_chitra_id from ekids_giaovien_cautruc_luong

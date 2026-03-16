@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ekids_diemdanh.DiemDanhWidget" owl="1">
+        <span t-on-click="openPopup"
+              t-att-data-record_id="props.record.resId"
+              t-att-name="props.name"
+              style="cursor:pointer;">
+            <i t-att-class="getIconClass()" t-att-title="getLabel()" style="font-size:18px;"/>
+        </span>
+    </t>
+</templates>

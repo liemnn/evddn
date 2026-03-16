@@ -1,0 +1,44 @@
+<odoo>
+  <data>
+
+
+    <!-- Top menu item -->
+
+    <menuitem name="Giáo viên" id="ekids_giaovien.menu_root"
+     web_icon="ekids_giaovien,static/description/icon.png" sequence="4"/>
+
+     <menuitem name="Lương" id="ekids_giaovien.luong_menu_root"
+     web_icon="ekids_giaovien,static/description/luong.png" sequence="6"/>
+
+     <menuitem name="Hồ sơ [Giáo viên]" id="ekids_giaovien.giaovien" parent="ekids_giaovien.menu_root"
+                  action="ekids_giaovien.coso_giaovien_action_window"
+                  groups="base.group_system,ekids_core.tinhluong,ekids_core.quanlygiaovien" sequence="1"/>
+
+     <menuitem name="Hồ sơ [Giáo viên]" id="ekids_giaovien.giaovien2" parent="ekids_giaovien.luong_menu_root"
+                  action="ekids_giaovien.coso_giaovien_action_window"
+                  groups="base.group_system,ekids_core.tinhluong,ekids_core.quanlygiaovien" sequence="2"/>
+
+    <menuitem name="Lương" id="ekids_giaovien.tinhluong" parent="ekids_giaovien.menu_root"
+              action="ekids_giaovien.coso_luong_action_window"
+               groups="ekids_core.tinhluong"  sequence="2"/>
+
+    <menuitem name="Lương" id="ekids_giaovien.tinhluong2" parent="ekids_giaovien.luong_menu_root"
+              action="ekids_giaovien.coso_luong_action_window"
+               groups="ekids_core.tinhluong"  sequence="1"/>
+
+
+
+
+    <menuitem name="Cấu hình" id="ekids_giaovien.cauhinh" parent="ekids_giaovien.menu_root"
+              action="ekids_giaovien.coso_cauhinh_action_window"
+               groups="ekids_core.tinhluong"  sequence="4"/>
+
+     <menuitem name="Cấu hình" id="ekids_giaovien.cauhinh2" parent="ekids_giaovien.luong_menu_root"
+              action="ekids_giaovien.coso_cauhinh_action_window"
+               groups="ekids_core.tinhluong"  sequence="4"/>
+
+     <!--Hiển thị menu -->
+
+
+  </data>
+</odoo>

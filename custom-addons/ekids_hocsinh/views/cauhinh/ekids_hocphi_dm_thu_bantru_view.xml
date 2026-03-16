@@ -1,0 +1,106 @@
+<odoo>
+    <data>
+
+        <record id="ekids_hocsinh.hocphi_dm_thu_bantru_search" model="ir.ui.view">
+            <field name="name">hocphi_dm_thu_bantru.search</field>
+            <field name="model">ekids.hocphi_dm_thu_bantru</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter string="Đang hoạt động" name="trangthai" domain="[('trangthai','=',1)]"/>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <record  id="ekids_hocsinh.hocphi_dm_thu_bantru_list_view" model="ir.ui.view">
+            <field name="name">Dm thu bán trú</field>
+            <field name="model">ekids.hocphi_dm_thu_bantru</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="loai"/>
+                    <field name="tien"/>
+                    <field name="desc"/>
+                    <field name="is_hoantien_khi_nghi"  width="35" widget="boolean_toggle"/>
+                    <field name="is_giam_hocphi"  width="35" widget="boolean_toggle"/>
+                    <field name="trangthai"
+                           decoration-success="trangthai == '1'"
+                           decoration-danger="trangthai == '0'"/>
+                </list>
+            </field>
+        </record>
+
+        <record  id="ekids_hocsinh.hocphi_dm_thu_bantru_form" model="ir.ui.view">
+            <field name="name">Danh mục thu bán trú</field>
+            <field name="model">ekids.hocphi_dm_thu_bantru</field>
+            <field name="arch" type="xml">
+                <form string="Cơ sở">
+                    <sheet>
+                        <group>
+                            <field name="coso_id" readonly="1" class="oe_inline"/>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                            <field name="loai"/>
+                        </group>
+                        <group col="3">
+                            <group>
+                                 <field name="tien"/>
+                            </group>
+                            <group>
+                                 <field name="is_hoantien_khi_nghi" widget="boolean_toggle"/>
+                            </group>
+
+                             <group>
+                                 <field name="is_giam_hocphi" widget="boolean_toggle"/>
+                            </group>
+
+                        </group>
+                        <group invisible="is_formula==False" col="2">
+                             <separator string="CÁC BIẾN SỬ DỤNG TRONG TÍNH TOÁN SỐ TIỀN" />
+                            <group>
+                                <di>
+
+                                    <p>- <strong>$NGAY_DIHOC_QUYDINH</strong>: Ngày đi học quy định tháng</p>
+                                    <p>- <strong>$NGAY_HOC</strong>: Số ngày [Học] thực tế tháng trước</p>
+                                    <p>- <strong>$VANG_MAT</strong>: Số ngày [Vắng mặt] thực tế không báo trước của tháng trước</p>
+
+
+                                </di>
+
+                            </group>
+                            <group>
+                                 <di>
+
+
+                                    <p>- <strong>$NGHI_CO_PHEP</strong>: Số ngày [Nghỉ có phép] thực tế tháng trước</p>
+                                    <p>- <strong>$NHATRUONG_NGHI</strong>: Số ngày [Nhà trường cho nghỉ] thực tế tháng trước</p>
+
+
+                                </di>
+                            </group>
+
+                        </group>
+
+                        <group>
+                             <field name="desc"/>
+                            <field name="trangthai"/>
+                            <field name="is_apdung_rieng" widget="boolean_toggle"/>
+                        </group>
+
+                        <notebook invisible="is_apdung_rieng == False">
+                            <page name="hocsinh_ids" string="DANH SÁCH HỌC SINH ÁP DỤNG">
+                                <field name="hocsinh_ids"
+                                       domain="[('coso_id', '=', coso_id),('trangthai', '=', '1')]"
+                                       context="{'default_coso_id': coso_id}"/>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

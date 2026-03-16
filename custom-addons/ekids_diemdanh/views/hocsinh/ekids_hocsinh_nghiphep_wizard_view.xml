@@ -1,0 +1,47 @@
+<odoo>
+    <data>
+        <record id="ekids_diemdanh.diemdanh_hocsinh_nghiphep_wizard_form" model="ir.ui.view">
+            <field name="name">diemdanh_hocsinh_nghiphep_wizard</field>
+            <field name="model">ekids.diemdanh_hocsinh_nghiphep_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Chọn ngày điểm danh">
+                    <sheet>
+                        <h4>
+                            <field name="coso_id" readonly="true"/>/
+                            <field name="hocsinh_id" readonly="true"/>
+                        </h4>
+                        <group col="2">
+                            <group>
+                                <field name="tu_ngay"/>
+                            </group>
+                             <group>
+                                <field name="den_ngay"/>
+                            </group>
+                        </group>
+                        <group col="2">
+                             <group>
+                                <field name="is_hoantra_hocphi" widget="boolean_toggle"/>
+                            </group>
+                            <group>
+                                <field name="tyle_hoantra_hocphi" invisible="is_hoantra_hocphi == False" />
+                            </group>
+
+                        </group>
+                        <group>
+
+                            <field name="desc" />
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_tao_diemdanh_hocsinh_nghiphep"
+                                type="object" string="Tạo nghỉ phép"
+                                class="btn-primary"/>
+                        <button string="Hủy" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,102 @@
+<odoo>
+    <data>
+        <record id="ekids_diemdanh.nghile_form_inherit_view" model="ir.ui.view">
+            <field name="name">Ngày nghỉ</field>
+            <field name="model">ekids.nghile</field>
+            <field name="arch" type="xml">
+                <form string="Nghỉ lễ" edit="false" create="false" delete="false">
+                    <sheet>
+                        <group>
+                            <h3><field name="name" placeholder="Đặt tên ngày nghỉ/lễ" readonly="true"/></h3>
+                        </group>
+                        <group col="3">
+                            <group>
+                                 <field name="tu_ngay" eadonly="true"/>
+                            </group>
+                            <group>
+                                 <field name="den_ngay" eadonly="true"/>
+                            </group>
+                             <group>
+                                 <field name="songay" readonly="true"/>
+                            </group>
+
+                        </group>
+                        <group>
+                            <field name="loai" readonly="true"/>
+                       </group>
+                        <group>
+                            <field name="desc" readonly="true"/>
+                        </group>
+
+                        <notebook>
+                            <page string="THÔNG TIN XÁC NHẬN CA/DỊCH VỤ TRONG NGÀY NGHỈ" >
+                                <field name="ca2ngay_ids">
+                                    <kanban create="1" delete="1">
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <field name="is_hoc" invisible="1"/>
+                                                <field name="is_nghi" invisible="1"/>
+                                                <div class="box">
+                                                    <!-- Icon Section -->
+                                                     <h3>Giáo viên:<field name="giaovien_id"/></h3>
+                                                     <div class="item-list">
+                                                        <div class="item">
+                                                          <div class="item-text">Thời gian:</div>
+                                                          <div class="item-info">
+                                                            Từ: <field name="tu"/>
+                                                            -Đến: <field name="den"/>
+                                                        </div>
+                                                        </div>
+                                                        <div class="item">
+                                                          <div class="item-text">Ca</div>
+                                                          <div class="item-info">
+                                                            <field name="hocphi_dm_ca_id"/>
+                                                          </div>
+                                                        </div>
+                                                        <div class="item">
+                                                          <div class="item-text">Trạng thái đã xác nhận:</div>
+                                                          <div>
+
+                                                              <field name="trangthai" widget="selection" readonly="true"
+                                                                            decoration-success="trangthai == '1'"
+                                                                            decoration-warning="trangthai == '0'"
+                                                                            decoration-muted="trangthai == '2'"
+                                                                            decoration-danger="trangthai == '3'"
+                                                                            decoration-info="trangthai == '4'"
+                                                                />
+                                                          </div>
+                                                        </div>
+
+                                                         <div class="item">
+                                                          <div class="item-text">
+                                                               <button name="func_xacnhan_ca2ngay_hoc"
+                                                                 class="btn-success"
+                                                                 type="object" string="Học"  invisible="is_hoc == True"/>
+
+                                                                <button name="func_xacnhan_ca2ngay_nghi_khongbu"
+                                                                 class="btn-danger"
+                                                                 type="object" string="Nghỉ" invisible="is_nghi_khongbu == True"/>
+
+                                                                 <button name="func_xacnhan_ca2ngay_nghi_hocbu"
+                                                                 class="btn-warning"
+                                                                 type="object" string="Nghỉ-Sẽ học bù" invisible="is_nghi_hocbu == True"/>
+
+                                                          </div>
+                                                         </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

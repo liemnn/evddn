@@ -1,0 +1,71 @@
+<odoo>
+    <data>
+      <record id="ekids_core.nghile_search" model="ir.ui.view">
+            <field name="name">nghile.search</field>
+            <field name="model">ekids.nghile</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter string="Đang hoạt động" name="trangthai" domain="[('trangthai','=','1')]"/>
+                    <field name="name"/>
+                    <field name="loai"/>
+                </search>
+            </field>
+      </record>
+
+      <record model="ir.ui.view" id="ekids_core.nghile_list_view">
+            <field name="name">Quản lý nghỉ lễ</field>
+            <field name="model">ekids.nghile</field>
+            <field name="arch" type="xml">
+                <list default_order="tu_ngay asc">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name" width="300"/>
+                    <field name="nam_id"/>
+                    <field name="tu_ngay"/>
+                    <field name="den_ngay"/>
+                    <field name="songay"/>
+                    <field name="loai"/>
+                    <field name="desc"/>
+                    <field name="trangthai"
+                        decoration-success="trangthai == '1'"
+                        decoration-danger="trangthai == '0'"/>
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_core.nghile_form_view">
+            <field name="name">Ngày nghỉ</field>
+            <field name="model">ekids.nghile</field>
+            <field name="arch" type="xml">
+                <form string="Nghỉ lễ">
+                    <sheet>
+                        <group>
+                            <h1><field name="name" placeholder="Đặt tên ngày nghỉ/lễ" /></h1>
+                        </group>
+                        <group col="3">
+                            <group>
+                                 <field name="tu_ngay"/>
+                            </group>
+                            <group>
+                                 <field name="den_ngay"/>
+                            </group>
+                             <group>
+                                 <field name="songay" readonly="true"/>
+                            </group>
+
+                        </group>
+                        <group>
+                            <field name="loai"/>
+                       </group>
+                        <group>
+                            <field name="desc"/>
+                            <field name="trangthai"/>
+                        </group>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

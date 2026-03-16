@@ -1,0 +1,36 @@
+<odoo>
+    <record id="action_my_model_a" model="ir.actions.act_window">
+        <field name="name">Model A</field>
+        <field name="res_model">model.a</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_my_model_a_root" name="My Demo" sequence="1000"/>
+    <menuitem id="menu_my_model_a" name="Model A" parent="menu_my_model_a_root" action="action_my_model_a"/>
+
+    <record id="view_my_model_a_tree" model="ir.ui.view">
+        <field name="name">my.model.a.tree</field>
+        <field name="model">model.a</field>
+        <field name="arch" type="xml">
+            <list string="Model A">
+                <field name="name" />
+                <field name="stage" widget="diemdanh" />
+            </list>
+        </field>
+    </record>
+
+    <record id="view_my_model_a_form" model="ir.ui.view">
+        <field name="name">my.model.a.form</field>
+        <field name="model">model.a</field>
+        <field name="arch" type="xml">
+            <form string="Model A">
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="stage" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,67 @@
+<odoo>
+  <data>
+
+        <record id="ekids_hocsinh.kehoach_pheduyet_kanban_view" model="ir.ui.view">
+            <field name="name">Kanban Kế hoạch</field>
+            <field name="model">ekids.kehoach</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                 <kanban default_group_by="trangthai"
+                    default_order="tu_ngay asc, id desc" create="0">
+                       <t t-name="kanban-box">
+
+                           <div class="box">
+                                <!-- Vùng ảnh -->
+
+                                <div class="info">
+                                    <h2 class="title">
+
+                                        <field name="hocsinh_id"/>
+                                    </h2>
+                                    <p class="description">
+                                        <field name="name"/>
+                                    </p>
+                                    <p class="slogan">
+                                        <field name="ketluan_id"/>
+                                    </p>
+
+
+                                </div>
+                                <div class="function">
+                                    <button
+                                        name="action_tao_kehoach_hocsinh"
+                                        type="object" string="Xem [Kế hoạch] tháng"/>
+                                </div>
+                            </div>
+
+                        </t>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+
+
+        <record id="ekids_hocsinh.kehoach_pheduyet_action_window" model="ir.actions.act_window">
+            <field name="name">Phê duyệt [Kế hoạch] can thiệp</field>
+            <field name="res_model">ekids.kehoach</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="domain">[('ketluan_id.gv_pheduyet_id.user_id', '=', uid), ('trangthai','=','1')]</field>
+            <field name="context">{'menu_pheduyet_kehoach_filter': True,'allowed_trangthai':['2', '3']}</field>
+        </record>
+
+        <record id="ekids_hocsinh.kehoach_pheduyet_kanban_action_window_view"
+                model="ir.actions.act_window.view" >
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="ekids_hocsinh.kehoach_pheduyet_kanban_view"/>
+            <field name="act_window_id" ref="ekids_hocsinh.kehoach_pheduyet_action_window"/>
+        </record>
+
+
+
+
+  </data>
+</odoo>

@@ -1,0 +1,60 @@
+<odoo>
+    <data>
+
+
+        <record id="ekids_canthiep.ct_mau_kehoach_thang_kanban_view" model="ir.ui.view">
+            <field name="name">MỤC TIÊU TỪNG THÁNG</field>
+            <field name="model">ekids.mau_kehoach_thang</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban >
+                    <t t-name="kanban-box">
+                        <div class="box">
+
+                            <!-- Icon Section -->
+
+                            <!-- Title Section -->
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+                            <div class="item-list">
+
+                                <div class="item">
+                                  <div class="item-text">Tổng mục tiêu trong tháng</div>
+                                  <div class="item-badge">
+                                     <field name="tong_muctieu"/>
+                                  </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+         <record id="ekids_canthiep.mau_kehoach_thang_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.mau_kehoach_thang</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <h3><field name="name" readonly="true"/></h3>
+                        </group>
+
+                        <notebook>
+                            <page name="muctieu_ids " string="MỤC TIÊU CAN THIỆP CỦA THÁNG">
+                                <field name="muctieu_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

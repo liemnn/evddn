@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_chitieu_thang_report_wizard_form" model="ir.ui.view">
+        <field name="name">chitieu.thang.report.wizard.form</field>
+        <field name="model">chitieu.thang.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Báo Cáo Chi Tiêu Tháng">
+                <div class="custom_report_layout">
+                    <div class="left_section">
+                        <group>
+                            <field name="coso_id"/>
+                            <field name="chon_thang_nam"/>
+                            <field name="tong_chitieu"/>
+                        </group>
+                    </div>
+                    <div class="right_section">
+                        <h3>Các loại chi tiêu :</h3>
+                        <field name="loaichitieu_html" widget="html"/>
+                    </div>
+                </div>
+                <hr/>
+                <div>
+                    <h3>Chi Tiêu Hàng Ngày:</h3>
+                    <field name="chitieu_hangngay_ids">
+                        <list string="Chi Tiêu Hàng Ngày">
+
+                            <!--<field name="loaichitieu" widget="many2many_tags"/>-->
+                            <!--<field name="price"/>
+                            <field name="user_id"/>
+                            <field name="ngaynhaplieu"/>
+                            <field name="desc"/>-->
+                        </list>
+                    </field>
+                </div>
+                <footer>
+                    <button string="Xuất Báo Cáo (Excel)" type="object" name="action_export_report" class="btn-primary"/>
+                    <button string="Xuất Báo Cáo (PDF)" type="object" name="action_export_report_pdf" class="btn-primary"/>
+                    <button string="Đóng" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_chitieu_thang_report_wizard" model="ir.actions.act_window">
+        <field name="name">Báo Cáo Chi Tiêu Tháng</field>
+        <field name="res_model">chitieu.thang.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_chitieu_thang_report_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

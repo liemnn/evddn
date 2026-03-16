@@ -1,0 +1,342 @@
+<odoo>
+  <data>
+
+     <record id="ekids_giaovien.action_phieuluongs" model="ir.actions.server">
+        <field name="name">In Phiếu Lương</field>
+        <field name="model_id" ref="model_ekids_luong"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_luong"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = env.ref('ekids_giaovien.action_phieuluong').report_action(records)
+        </field>
+    </record>
+    <record id="ekids_giaovien.action_chuyen_trangthai_dang_tinh" model="ir.actions.server">
+        <field name="name">Chuyển trạng thái [Đang tính]</field>
+        <field name="model_id" ref="model_ekids_luong"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_luong"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = records.action_chuyen_trangthai('-1')
+        </field>
+    </record>
+
+    <record id="ekids_giaovien.action_chuyen_trangthai_da_rasoat" model="ir.actions.server">
+        <field name="name">Chuyển trạng thái [Đã rà soát]</field>
+        <field name="model_id" ref="model_ekids_luong"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_luong"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = records.action_chuyen_trangthai('0')
+        </field>
+    </record>
+
+     <record id="ekids_giaovien.action_chuyen_trangthai_da_nhanluong" model="ir.actions.server">
+        <field name="name">Chuyển trạng thái [Giáo viên đã nhận lương]</field>
+        <field name="model_id" ref="model_ekids_luong"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_luong"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = records.action_chuyen_trangthai('1')
+        </field>
+    </record>
+
+
+
+     <record id="ekids_giaovien.luong_search" model="ir.ui.view">
+        <field name="name">luong.search</field>
+        <field name="model">ekids.luong</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter string="Đang tính" name="trangthai" domain="[('trangthai','=','-1')]"/>
+                <filter string="Đã rà soát" name="trangthai" domain="[('trangthai','=','0')]"/>
+                <filter string="Đã nhận lương" name="trangthai" domain="[('trangthai','=','1')]"/>
+                <field name="giaovien_id"/>
+                <field name="nam_id"/>
+                <field name="thang_id"/>
+                <group expand="1" string="Group By">
+                    <filter name="group_by_trangthai"
+                        string="Trạng thái tính lương"
+                        context="{'group_by':'trangthai'}"/>
+                </group>
+            </search>
+        </field>
+     </record>
+
+    <!--kanban lương thang-->
+
+    <record id="ekids_giaovien.luong_list" model="ir.ui.view">
+        <field name="name">Lương giáo viên</field>
+        <field name="model">ekids.luong</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="true" limit="200" default_order="giaovien_id asc">
+                <header>
+                    <button name="action_xacthuc_tinhlai_luong_theo_thang"
+                        type="object"
+                        string="Tính lại"
+                        class="btn-primary"
+                            confirm="Bạn chắc chắn muốn tính lại [Lương] ?
+  Thao tác này chỉ áp dụng cho trạng thái [Đang tính].Khi tính lại dữ liệu sẽ bị xóa và tính toán lại !"
+                         display="always"/>
+                </header>
+                <field name="sequence" width="25"/>
+                <field name="giaovien_id" width="200"/>
+                <button name="action_in_luong"
+                            type="object"
+                            string=""
+                            width="15"
+                            class="fa fa-print"
+                            title="In Lương của Giáo viên tháng này"
+
+                        />
+                <field name="tham_nien" width="70" />
+                <field name="ngaycong" width="70" string="Công" />
+                <field name="so_ngaynghi" width="40" />
+                <field name="tong_cong" sum="Total" string="1.Được cộng(+)" widget="integer"/>
+                <field name="tong_tru" sum="Total" string="2.Bị trừ(-)" widget="integer"/>
+                <field name="nhatruong_thuho" sum="Total" widget="integer" string="3.Giáo viên đóng" width="100"/>
+                <field name="tong_thongtin" sum="Total" widget="integer" string="4. Nhà trường đóng" width="100"/>
+                <field name="luong" sum="Total" widget="integer" string="5.Lương=1-2" width="100"/>
+                <field name="tong_nhatruong_chi" sum="Total" widget="integer" string="6.Tổng chi=4+5" width="100"/>
+
+
+                <field name="trangthai" width="150"
+                       decoration-warning="trangthai == '-1'"
+                       decoration-info="trangthai == '0'"
+                       decoration-success="trangthai == '1'"
+
+                />
+                <field name="tong_thongtin_2" sum="Total" widget="integer" string="6.Thông tin" width="100" optional="hide"/>
+
+            </list>
+        </field>
+    </record>
+        <!--        kanban view-->
+
+    <record id="ekids_giaovien.luong_form" model="ir.ui.view">
+        <field name="name">Thông tin lương giáo viên (Hoàn thiện)</field>
+        <field name="model">ekids.luong</field>
+        <field name="arch" type="xml">
+            <form string="Quản lý lương giáo viên">
+                <header>
+                     <button name="%(ekids_giaovien.action_phieuluong)d" type="action" string="In Phiếu Lương" class="btn btn-primary"/>
+                     <button name="action_xacthuc_tinhlai_luong_giaovien" type="object" invisible="is_show_tinhtoan_lai==False" string="Tính lại Lương" confirm="Khi tính lại Lương dữ liệu cũ sẽ bị xóa. Bạn muốn tính lại chứ?" class="btn btn-secondary"/>
+
+                     <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,1" statusbar_colors='{"-1":"blue","0":"green","1":"red"}' options="{'clickable': true}" groups="ekids_core.tinhluong"/>
+                </header>
+
+                <sheet>
+                    <div class="row align-items-center mb-3 pb-2 border-bottom w-100 mx-0">
+                        <div class="col-4 d-flex align-items-baseline ps-0">
+                            <span class="fw-bold text-dark me-2" style="font-size: 1.1rem;">Giáo viên:</span>
+                            <field name="giaovien_id" readonly="1" class="fw-bolder fs-4 text-primary mb-0" options="{'no_open': True}" style="font-weight: 800;"/>
+                        </div>
+
+                        <div class="col-4 text-center">
+                            <h4 class="text-uppercase fw-bold mb-0" style="letter-spacing: 0.5px; font-size: 1.1rem; color: #444;">
+                                LƯƠNG THÁNG <field name="thang_id" readonly="1" class="oe_inline"/>
+                            </h4>
+                        </div>
+
+                        <div class="col-4 text-end pe-0 d-flex align-items-baseline justify-content-end">
+                            <span class="fw-bold text-dark me-2" style="font-size: 1.1rem;">Số ngày công đi làm:</span>
+                            <span class="badge bg-light border border-secondary-subtle px-3 py-1 shadow-sm d-flex align-items-baseline">
+                                <field name="so_ngaycong" readonly="1" class="fw-bolder text-info oe_inline mb-0" style="font-size: 1.1rem; font-weight: 800;"/>
+                                <span class="ms-1 fw-bold text-dark" style="font-size: 0.95rem;">ngày</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row d-flex align-items-stretch mb-4 mx-0">
+
+                        <div class="col-md-7 px-0 pe-md-3 d-flex flex-column">
+                            <div class="border rounded shadow-sm bg-white overflow-hidden d-flex flex-column flex-grow-1">
+                                <div class="border-bottom p-2 px-3" style="background-color: #e9ecef;">
+                                    <span class="fw-bold text-dark" style="font-size: 0.95rem;">
+                                        <i class="fa fa-money me-2 text-secondary"/> I.LƯƠNG GIÁO VIÊN
+                                    </span>
+                                </div>
+
+                                <div class="p-3 d-flex flex-column flex-grow-1">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                                            <div class="flex-shrink-0">
+                                                <span class="badge bg-secondary me-2" style="font-size: 0.75rem;">1</span>
+                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Các khoảng được cộng [+]</span>
+                                            </div>
+                                            <div class="d-flex align-items-baseline justify-content-end">
+                                                <field name="tong_cong" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
+                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                                            <div class="flex-shrink-0">
+                                                <span class="badge bg-secondary me-2" style="font-size: 0.75rem;">2</span>
+                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Các khoản bị trừ [-]
+                                                    - trong đó nhà trường thu hộ <field name="nhatruong_thuho" readonly="1" class="oe_inline"/> vnđ
+                                                </span>
+                                            </div>
+                                            <div class="d-flex align-items-baseline justify-content-end text-dark">
+                                                <span class="me-1 fw-bold">-</span>
+                                                <field name="tong_tru" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
+                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center bg-success text-white rounded p-2 shadow-sm mt-2">
+                                        <span class="fw-bold ps-2 flex-shrink-1" style="font-size: 0.8rem;">LƯƠNG GIÁO VIÊN THỰC LĨNH = [1] - [2]</span>
+                                        <div class="d-flex align-items-baseline justify-content-end pe-2 flex-shrink-0">
+                                            <field name="luong" class="fw-black mb-0 oe_inline text-end" style="font-size: 1.15rem; font-weight: 900; line-height: 1;" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 fw-bold opacity-75" style="font-size: 0.75rem;">VNĐ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 px-0 d-flex flex-column">
+                            <div class="border rounded shadow-sm bg-white overflow-hidden d-flex flex-column flex-grow-1">
+                                <div class="border-bottom p-2 px-3" style="background-color: #e9ecef;">
+                                    <span class="fw-bold text-dark" style="font-size: 0.95rem;">
+                                        <i class="fa fa-building me-2 text-secondary"/> II. THÔNG TIN KHÁC
+                                    </span>
+                                </div>
+
+                                <div class="p-3 d-flex flex-column flex-grow-1">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
+                                            <div class="flex-shrink-0">
+                                                <span class="badge bg-secondary me-2" style="font-size: 0.75rem;">3</span>
+                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Nhà trường chi cho giáo viên</span>
+                                            </div>
+                                            <div class="d-flex align-items-baseline justify-content-end">
+                                                <field name="tong_thongtin" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
+                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
+                                            <div class="flex-shrink-0">
+                                                <span class="badge bg-secondary me-2" style="font-size: 0.75rem;">4</span>
+                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Thông tin khác</span>
+                                            </div>
+                                            <div class="d-flex align-items-baseline justify-content-end">
+                                                <field name="tong_thongtin_2" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
+                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center bg-primary text-white rounded p-2 shadow-sm mt-2">
+                                        <span class="fw-bold ps-2 flex-shrink-1" style="font-size: 0.8rem;">NHÀ TRƯỜNG THỰC CHI  = [I] + [3]</span>
+                                        <div class="d-flex align-items-baseline justify-content-end pe-2 flex-shrink-0">
+                                            <field name="tong_nhatruong_chi" class="fw-black mb-0 oe_inline text-end" style="font-size: 1.15rem; font-weight: 900; line-height: 1;" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 fw-bold opacity-75" style="font-size: 0.75rem;">VNĐ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page name="luong_cong_ids" string="1. ĐƯỢC CỘNG (+)">
+                            <field name="luong_cong_ids" context="{'default_luong_id':id ,'default_loai':'1'}" domain="[('luong_id','=',id),('loai','=','1')]"/>
+                        </page>
+                        <page name="luong_tru_ids" string="2. BỊ TRỪ (-)">
+                            <field name="luong_tru_ids"  context="{'default_luong_id': id, 'default_loai': '-1'}"  domain="[('luong_id', '=', id), ('loai', 'in', ['-1', '-2'])]"/>
+                        </page>
+                        <page name="nhatruong_chitra_ids" string="3. NHÀ TRƯỜNG CHI">
+                            <field name="nhatruong_chitra_ids" context="{'default_luong_id':id ,'default_loai':'0'}" domain="[('luong_id','=',id),('loai','=','0')]"/>
+                        </page>
+                        <page name="luong_thongtin_ids" string="4. THÔNG TIN KHÁC">
+                            <field name="luong_thongtin_ids" context="{'default_luong_id':id ,'default_loai':'0'}" domain="[('luong_id','=',id),('loai','=','2')]"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="ekids_giaovien.luong_hangmuc_list" model="ir.ui.view">
+        <field name="name">Lương cộng</field>
+        <field name="model">ekids.luong_hangmuc</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="desc" width="200"/>
+                <field name="tien" sum="Total" widget="integer"/>
+            </list>
+        </field>
+    </record>
+
+
+
+    <record id="ekids_giaovien.luong_kanban_view" model="ir.ui.view">
+        <field name="name">Kanban Lương</field>
+        <field name="model">ekids.luong</field>
+        <field name="priority" eval="100"/>
+        <field name="arch" type="xml">
+            <kanban default_group_by="trangthai" create="false" delete="false" limit="200">
+                <field name="trangthai" />
+                <field name="giaovien_id"/>
+                 <header>
+                    <button name="action_xacthuc_tinhlai_luong_theo_thang"
+                        type="object"
+                        string="Tính lại"
+                        class="btn-primary"
+                        confirm="Bạn chắc chắn muốn tính lại Lương? nếu xác nhận hệ dữ liệu sẽ mất và Lương quay trở lại mặc định !"
+                        display="always"/>
+                </header>
+
+                <t t-name="kanban-box">
+                    <div class="box-user" t-attf-class="oe_kanban_card oe_kanban_global_click">
+                    <!-- Vùng ảnh -->
+                        <div class="user-avatar">
+                            <img t-att-src="kanban_image('ekids.giaovien', 'avatar', record.giaovien_id.raw_value)" class="oe_kanban_avatar"/>
+                        </div>
+
+                        <!-- Vùng thông tin -->
+                        <div class="info">
+                            <h2>
+                                <field name="giaovien_id"/>
+                                <span class="fee">
+                                    <field name="luong"/> vnđ
+                                </span>
+                            </h2>
+
+                        </div>
+                        </div>
+
+                </t>
+            </kanban>
+        </field>
+    </record>
+
+     <record id="action_force_recompute_thuho" model="ir.actions.server">
+        <field name="name">Tinh lai nha truong chi</field>
+        <field name="model_id" ref="ekids_giaovien.model_ekids_luong"/>
+        <field name="binding_model_id" ref="ekids_giaovien.model_ekids_luong"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+    for record in records:
+        record.compute_tong_thongtin()
+        </field>
+     </record>
+
+
+
+
+
+
+  </data>
+</odoo>

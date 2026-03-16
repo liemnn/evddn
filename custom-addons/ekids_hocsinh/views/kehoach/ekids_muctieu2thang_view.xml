@@ -1,0 +1,107 @@
+<odoo>
+    <data>
+
+        <record id="ekids_hocsinh.kehoach_muctieu2thang_list" model="ir.ui.view">
+            <field name="name">MỤC TIÊU</field>
+            <field name="model">ekids.kehoach_muctieu2thang</field>
+            <field name="arch" type="xml">
+                <list default_order="sequence">
+                    <field name="sequence" widget="handle"/>
+                     <field name="sequence"/>
+                    <field name="muctieu_id"/>
+                    <field name="name" readonly="true" />
+                </list>
+            </field>
+        </record>
+
+
+
+        <record id="ekids_hocsinh.kehoach_muctieu2thang_kanban_view" model="ir.ui.view">
+            <field name="name">MỤC TIÊU TỪNG THÁNG</field>
+            <field name="model">ekids.kehoach_muctieu2thang</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban
+                        default_group_by="mau_kehoach_thang_id"
+                        class="o_kanban_small_column"
+                        on_create="quick_create"
+                        quick_create_view="ekids_hocsinh.canthiep_muctieu2thang_quick_form_view"
+                    >
+
+                    <field name="kehoach_thang_id" context="{'group_by': 'kehoach_thang_id'}"/>
+                    <t t-name="kanban-box">
+                        <div class="box">
+
+                            <!-- Icon Section -->
+
+                            <!-- Title Section -->
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+                            <!-- Description Section -->
+
+                            <p class="description">
+                               <field name="muctieu_id"/>
+                            </p>
+                            <!-- Button Section -->
+
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="ekids_hocsinh.kehoach_muctieu2thang_form_view" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.kehoach_muctieu2thang</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="kehoach_thang_id" invisible="1"/>
+                        </group>
+                        <separator   string="[1].LỰA CHỌN MỤC TIÊU"/>
+                        <group col="2">
+                            <group>
+                                <field name="chuongtrinh_id"/>
+                            </group>
+                            <group>
+                                <field name="linhvuc_id" domain="[('chuongtrinh_id','=',chuongtrinh_id)]"/>
+                            </group>
+
+                        </group>
+                         <group col="1">
+
+                             <field name="muctieu_id"
+                                       domain="[('linhvuc_id','=',linhvuc_id)]"/>
+
+
+                        </group>
+
+
+                        <group>
+                            <separator   string="[2].HOẠT ĐỘNG TRONG [CAN THIỆP]"/>
+                            <field name="hdct_mucdich" />
+                            <field name="hdct_giaocu"/>
+                            <field name="hdct_cach_tienhanh"/>
+                        </group>
+                         <group>
+                            <separator  string="[13].XEM HƯỚNG DẪN/CHỈ DẪN KHI[CAN THIỆP]"/>
+                            <field name="kythuat" />
+                            <field name="tieuchi"/>
+                            <field name="cach_danhgia"/>
+                         </group>
+
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+
+    </data>
+</odoo>

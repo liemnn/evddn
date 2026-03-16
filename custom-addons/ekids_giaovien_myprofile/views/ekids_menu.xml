@@ -1,0 +1,26 @@
+<odoo>
+    <data>
+
+
+        <!-- Top menu item -->
+
+        <menuitem name="Cá nhân" id="ekids_giaovien_myprofile.menu_root"
+              web_icon="ekids_giaovien_myprofile,static/description/icon.png" sequence="10"/>
+
+        <menuitem name="Tự chấm công" id="ekids_giaovien_myprofile.giaovien_chamcong_menu" parent="ekids_giaovien_myprofile.menu_root"
+              action="ekids_giaovien_myprofile.action_giaovien_chamcong_action"
+              groups="ekids_core.giaovien"  sequence="1"/>
+
+        <menuitem name="Bảng Lương" id="ekids_giaovien_myprofile.giaovien_luong_menu" parent="ekids_giaovien_myprofile.menu_root"
+              action="ekids_giaovien_myprofile.action_bangluong_action"
+              groups="ekids_core.giaovien"  sequence="2"/>
+
+        <menuitem name="Hồ sơ của tôi" id="ekids_giaovien_myprofile.hoso_giaovien_menu" parent="ekids_giaovien_myprofile.menu_root"
+              action="ekids_giaovien_myprofile.action_hoso_canhan_action"
+              groups="ekids_core.giaovien"  sequence="3"/>
+
+
+
+
+    </data>
+</odoo>

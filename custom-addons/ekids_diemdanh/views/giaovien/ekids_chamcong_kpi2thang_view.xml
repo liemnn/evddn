@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+        <record id="ekids_diemdanh.chamcong_kpi2thang_search" model="ir.ui.view">
+            <field name="name">chamcong_kpi2thang.search</field>
+            <field name="model">ekids.chamcong_kpi2thang</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="giaovien_id"/>
+                </search>
+            </field>
+         </record>
+         <record id="ekids_diemdanh.chamcong_kpi2thang_list" model="ir.ui.view">
+            <field name="name"> chamcong_kpi2thang </field>
+            <field name="model">ekids.chamcong_kpi2thang</field>
+            <field name="arch" type="xml">
+                 <list  create="false" delete="true" limit="200" default_order="giaovien_id asc">
+                    <field name="sequence" width="25" />
+
+                    <field name="giaovien_id" width="200" readonly="true"/>
+
+                    <button name="action_nhap_ketqua_kpi"
+                            type="object"
+                            string=""
+                            width="40"
+                            class="fa fa-pencil-square-o"
+                            title="Nhập kết quả KPI"
+                        />
+
+                    <field name="desc"/>
+
+
+                </list>
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="ekids_diemdanh.chamcong_kpi2thang_form">
+            <field name="name">chamcong_kpi2thang Form</field>
+            <field name="model">ekids.chamcong_kpi2thang</field>
+            <field name="arch" type="xml">
+                <form string="Cơ sở">
+                    <sheet>
+                       <field name="kpi2thang_ketqua_ids"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

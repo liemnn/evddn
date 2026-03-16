@@ -1,0 +1,91 @@
+<odoo>
+  <data>
+
+        <record id="ekids_hocsinh.hocsinh_ca_canthiep_list" model="ir.ui.view">
+            <field name="name">hocsinh_ca_canthiep</field>
+            <field name="model">ekids.hocsinh_ca_canthiep</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="tu" />
+                    <field name="den" />
+                    <field name="dm_ca_id" />
+                    <field name="giaovien_id" />
+
+                </list>
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="ekids_hocsinh.hocsinh_ca_canthiep_form">
+            <field name="name">hocsinh_ca_canthiep.form</field>
+            <field name="model">ekids.hocsinh_ca_canthiep</field>
+            <field name="arch" type="xml">
+            <form  target="new">
+                <sheet>
+                     <h3><field name="coso_id" readonly="true"/>
+                     /<field name="hocsinh_id" readonly="true"/></h3>
+                     <group col="3">
+                        <group>
+                            <field name="tu" widget="flatpickr_time" placeholder="HH:MM"/>
+                        </group>
+                         <group>
+                            <field name="den" widget="flatpickr_time" placeholder="HH:MM"/>
+                        </group>
+                        <group>
+                             <field name="giaovien_id" domain="[('coso_id','=',coso_id)]"
+                                 context="{'default_coso_id':coso_id}"/>
+                        </group>
+
+                     </group>
+                     <group col="2">
+                        <group>
+                             <field name="dm_ca_id"
+                                    domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
+                                    context="{'default_coso_id':coso_id}"/>
+                        </group>
+                         <group>
+                              <field name="tien"/>
+                         </group>
+
+                     </group>
+                     <group>
+                          <field name="desc"/>
+                     </group>
+                     <group col="1">
+                         <separator string="ÁP DỤNG CHO CÁC NGÀY TRONG TUẦN"/>
+                         <group col="7">
+                             <group>
+                                 <field name="t2" widget="boolean_toggle"/>
+                             </group>
+                             <group>
+                                 <field name="t3" widget="boolean_toggle"/>
+                             </group>
+                             <group>
+                                 <field name="t4" widget="boolean_toggle"/>
+                             </group>
+                             <group>
+                                 <field name="t5" widget="boolean_toggle"/>
+                             </group>
+                             <group>
+                                 <field name="t6" widget="boolean_toggle"/>
+                             </group>
+                             <group>
+                                 <field name="t7" widget="boolean_toggle"/>
+                             </group>
+                             <group>
+                                 <field name="t8" widget="boolean_toggle"/>
+                             </group>
+
+                         </group>
+                     </group>
+
+
+                </sheet>
+            </form>
+            </field>
+        </record>
+  </data>
+</odoo>

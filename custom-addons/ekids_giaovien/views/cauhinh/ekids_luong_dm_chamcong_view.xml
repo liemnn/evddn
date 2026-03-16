@@ -1,0 +1,58 @@
+<odoo>
+  <data>
+    <!--kanban lương thang-->
+
+    <record id="ekids_giaovien.luong_dm_chamcong_list" model="ir.ui.view">
+        <field name="name">Danh mục chi trả cho giáo viên</field>
+        <field name="model">ekids.luong_dm_chamcong</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name" />
+                <field name="loai"/>
+                <field name="trangthai"/>
+            </list>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ekids_giaovien.luong_dm_chamcong_form">
+            <field name="name">luong_dm_chamcong Form</field>
+            <field name="model">ekids.luong_dm_chamcong</field>
+            <field name="arch" type="xml">
+                <form string="Cơ sở">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="loai"/>
+                            <field name="trangthai"/>
+                            <field name="donvi" invisible="is_kpi == True"/>
+                            <field name="is_default_ok"/>
+
+                        </group>
+                        <notebook invisible="is_kpi == False">
+                            <page string="DANH SÁCH MỤC TIÊU CẦN THỰC HIỆN">
+                                <field name="kpi_ids"/>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+    </record>
+
+     <record id="ekids_giaovien.luong_dm_chamcong_kpi_list" model="ir.ui.view">
+        <field name="name">Danh mục chi trả cho giáo viên</field>
+        <field name="model">ekids.luong_dm_chamcong_kpi</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name" />
+                <field name="donvi"/>
+                <field name="code"/>
+
+            </list>
+        </field>
+    </record>
+
+
+  </data>
+</odoo>

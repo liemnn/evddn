@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <record id="ekids_hocsinh.action_phieuthus" model="ir.actions.report">
+            <field name="name">In Học phí</field>
+            <field name="model">ekids.hocphi</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_hocsinh.template_phieuthu</field>
+            <field name="report_file">ekids_hocsinh.template_phieuthu</field>
+
+        </record>
+    </data>
+</odoo>

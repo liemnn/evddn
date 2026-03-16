@@ -1,0 +1,88 @@
+<odoo>
+  <data>
+
+    <record id="ekids_hocsinh.hocphi_nam_list" model="ir.ui.view">
+        <field name="name">Thông tin học phí năm</field>
+        <field name="model">ekids.hocphi_nam</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+
+            </list>
+        </field>
+    </record>
+        <!--        kanban view-->
+    <record id="ekids_hocsinh.hocphi_nam_kanban" model="ir.ui.view">
+        <field name="name">Thông tin học phí năm</field>
+        <field name="model">ekids.hocphi_nam</field>
+        <field name="arch" type="xml">
+            <kanban  sample="1"  action="action_view_kanban_hocphi_thang" type="object">
+
+                <t t-name="kanban-box">
+                    <div class="box">
+                      <h2 class="title">
+                        <field name="name"/>
+                      </h2>
+
+                    <div class="item-list">
+                       <div class="item">
+                          <div class="item-text">Tổng học sinh</div>
+                          <div class="item-info">
+                             <field name="tong_hocsinh"/>
+                          </div>
+                        </div>
+
+                         <div class="item">
+                          <div class="item-text">Tổng học phí</div>
+                          <div class="item-info">
+                             <field name="tong_hocphi" widget="integer"/>
+                          </div>
+                        </div>
+
+                        <div class="item">
+                          <div class="item-text">Tổng giảm [Học phí]</div>
+                          <div class="item-info">
+                             <field name="tong_hocphi_giam" widget="integer"/>
+                          </div>
+                        </div>
+                        <div class="item">
+                          <div class="item-text">Tổng thực thu</div>
+                          <div class="item-info">
+                             <field name="tong_hocphi_thucthu" widget="integer"/>
+                          </div>
+                        </div>
+
+                    </div>
+
+
+                    </div>
+                </t>
+
+            </kanban>
+        </field>
+    </record>
+    <record id="ekids_hocsinh.hocphi_nam_form" model="ir.ui.view">
+        <field name="name">Thông tin Học phi</field>
+        <field name="model">ekids.hocphi_nam</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group col="4">
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+      <!--action -->
+    <record model="ir.actions.act_window" id="ekids_hocsinh.hocphi_nam_action_window">
+        <field name="name">Cơ sở</field>
+        <field name="res_model">ekids.coso</field>
+        <field name="domain">[('user_id.id','=',uid)]</field>
+        <field name="context">{'kanban_view_ref':'ekids_hocsinh.coso_kanban_view_hocphi_nam'}</field>
+        <field name="view_mode">kanban</field>
+    </record>
+
+  </data>
+</odoo>

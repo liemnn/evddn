@@ -1,0 +1,457 @@
+<odoo>
+    <data>
+         <record id="ekids_giaovien.giaovien_search" model="ir.ui.view">
+            <field name="name">giaovien.search</field>
+            <field name="model">ekids.giaovien</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter string="Đang làm việc" name="trangthai" domain="[('trangthai','=','1')]"/>
+                    <filter string="Đã nghỉ làm" name="trangthai-nghi" domain="[('trangthai','=','0')]"/>
+                    <filter string="Tạm nghỉ hưởng BHXH (Ốm, Đẻ..." name="trangthai-tamnghi" domain="[('trangthai','=','2')]"/>
+                    <field name="name"/>
+                    <field name="gioitinh"/>
+                    <field name="cccd"/>
+                    <field name="dienthoai"/>
+                    <field name="dilam_tungay"/>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="ekids_giaovien.giaovien_list">
+            <field name="name">Danh sách Giáo viên</field>
+            <field name="model">ekids.giaovien</field>
+            <field name="arch" type="xml">
+                <list default_order="dilam_tungay asc ,create_date asc,id asc">
+                    <field name="sequence" width="25"/>
+                    <field name="name" width="200"/>
+                    <field name="gioitinh"/>
+                    <field name="ngaysinh"/>
+                    <field name="cccd" string="CCCD"/>
+                    <field name="dienthoai" string="Điện thoại"/>
+                    <field name="tinhtrang_honnhan" string="Tình trạng"/>
+                    <field name="dilam_tungay"/>
+                    <field name="tham_nien"/>
+                    <field name="is_hoanthien_hoso" width="70"
+                           widget="boolean_toggle" readonly="true"/>
+                    <field name="trangthai"
+                        decoration-success="trangthai == '1'"
+                        decoration-danger="trangthai == '0'"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="ekids_giaovien.giaovien_kanban_view" model="ir.ui.view">
+            <field name="name">Kanban Giáo viên</field>
+            <field name="model">ekids.giaovien</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban default_group_by="trangthai"
+                    default_order="id desc"
+                >
+                    <t t-name="kanban-box">
+                        <div class="box-user" t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <!-- Vùng ảnh -->
+                            <div class="student-avatar">
+                                <field name="avatar" widget="image"/>
+                            </div>
+
+                            <!-- Vùng thông tin -->
+                            <div class="info">
+                                <h2>
+                                    <field name="name"/>
+                                </h2>
+                                <div class="item-list" >
+                                     <div class="item">
+                                      <div class="item-text">Giới tính</div>
+                                      <div class="item-info">
+                                         <field name="gioitinh"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Điện thoại</div>
+                                      <div class="item-info">
+                                         <field name="dienthoai"/>
+                                      </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_giaovien.giaovien_form">
+            <field name="name">Thêm mới giáo viên - Premium Super Compact UI</field>
+            <field name="model">ekids.giaovien</field>
+            <field name="arch" type="xml">
+                <form target="new">
+                    <header>
+                        <button string="Cấp quyền cho tài khoản"
+                                type="object" class="btn btn-primary"
+                                name="action_mo_popup_taikhoan_giaovien"
+                                invisible="is_taikhoan == False"
+                                groups="base.group_system,ekids_core.quanlygiaovien" />
+
+                        <button string="Cấp tài khoản"
+                                type="object" class="btn btn-primary"
+                                name="action_mo_popup_taikhoan_giaovien"
+                                invisible="is_taikhoan == True"
+                                groups="base.group_system,ekids_core.quanlygiaovien" />
+
+                        <button string="Xóa tài khoản"
+                                type="object" class="btn-secondary"
+                                name="action_xoa_taikhoan_giaovien"
+                                invisible="is_taikhoan == False"
+                                groups="base.group_system,ekids_core.quanlygiaovien" />
+                    </header>
+
+                    <sheet>
+                        <style>
+                            .o_form_view .o_form_sheet_bg { background-color: #f8fafc !important; padding-top: 0 !important;}
+                            .o_form_sheet { padding: 0 !important; max-width: 100% !important; border: none !important; background: transparent !important; }
+
+                            /* 1. Dải ảnh bìa - ÉP MỎNG */
+                            .kh-hero-banner {
+                                height: 70px;
+                                background: linear-gradient(135deg, #c7d2fe 0%, #e0f2fe 100%);
+                                position: relative;
+                                margin-bottom: -35px;
+                                z-index: 1;
+                                border-bottom: 1px solid #e2e8f0;
+                            }
+
+                            .kh-content-wrapper { padding: 0 15px; position: relative; z-index: 2; }
+
+                            /* 2. Header Profile */
+                            .kh-profile-header {
+                                display: flex; align-items: flex-end; gap: 15px;
+                                margin-bottom: 12px;
+                                background: rgba(255, 255, 255, 0.95);
+                                padding: 10px 15px;
+                                border-radius: 12px;
+                                box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+                                border: 1px solid #f1f5f9;
+                            }
+
+                            .kh-avatar-wrapper {
+                                width: 90px; height: 90px;
+                                border-radius: 50%;
+                                border: 3px solid #ffffff; background: #ffffff;
+                                box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; flex-shrink: 0;
+                                margin-top: -30px;
+                            }
+                            .kh-avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+                            .kh-name-section { padding-bottom: 0; flex-grow: 1; display: flex; flex-direction: column; justify-content: center;}
+                            .kh-coso { font-size: 13px; font-weight: 700; color: #4f46e5; margin-bottom: 2px; text-transform: uppercase;}
+
+                            .kh-name-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; margin-bottom: 4px; }
+                            .kh-name-title-group { display: flex; align-items: center; gap: 15px; margin-top: 5px; }
+                            .kh-name { font-size: 26px; font-weight: 800; color: #1e293b; margin: 0; }
+
+                            /* KHU VỰC TRẠNG THÁI XẾP DỌC ẤN TƯỢNG */
+                            .kh-quick-actions {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: flex-end;
+                                gap: 8px;
+                                margin-top: -25px;
+                                z-index: 10;
+                            }
+
+                            .kh-status-pill {
+                                display: flex; align-items: center; gap: 8px;
+                                background: #ffffff; padding: 6px 14px;
+                                border-radius: 50px; border: 1px solid #e2e8f0;
+                                box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+                            }
+                            .kh-status-pill span { font-weight: 600; font-size: 14px; color: #1e3a8a; }
+
+                            .kh-title { font-size: 15px; color: #475569; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 6px;}
+
+                            /* 3. Floating Cards */
+                            .kh-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+                            .kh-card {
+                                background: #ffffff; border-radius: 12px; padding: 12px 15px;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.02); border: 1px solid #f1f5f9;
+                            }
+                            .kh-card-full { grid-column: 1 / -1; }
+
+                            .kh-card-title {
+                                font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 8px;
+                                display: flex; align-items: center; gap: 8px;
+                                border-bottom: 1px solid #f1f5f9; padding-bottom: 6px;
+                            }
+                            .kh-card-title i { color: #3b82f6; font-size: 16px; }
+
+                            .kh-data-row { display: flex; margin-bottom: 6px; align-items: center; }
+
+                            /* ĐIỀU CHỈNH ĐỂ ÉP Ô INPUT FULL WIDTH */
+                            .kh-data-label { width: 150px; flex-shrink: 0; font-size: 14px; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 6px;}
+                            .kh-data-value { flex-grow: 1; width: 100%; font-size: 15px; color: #1e293b; font-weight: 700; }
+                            .kh-data-value > * { width: 100% !important; }
+
+                            /* Cài đặt ngày làm việc - DÀN ĐỀU VÀ CĂN THẲNG HÀNG TÂM */
+                           .kh-day-toggles {
+                               display: flex;
+                               justify-content: space-between;
+                               align-items: center;
+                               width: 100%;
+                               margin-top: 12px;
+                               padding: 15px 25px;
+                               background: #f8fafc;
+                               border-radius: 10px;
+                               border: 1px dashed #cbd5e1;
+                               box-sizing: border-box;
+                               flex-wrap: wrap; /* Cho phép rớt dòng trên màn hình nhỏ */
+                           }
+
+                           .kh-day-item {
+                               display: flex;
+                               align-items: center;
+                               gap: 8px;
+                               font-weight: 700;
+                               color: #1e3a8a;
+                               font-size: 14px;
+                           }
+
+                           .kh-day-item .o_field_boolean,
+                           .kh-day-item .form-switch,
+                           .kh-day-item .custom-control {
+                               margin-bottom: 0 !important;
+                               margin-top: 0 !important;
+                               min-height: auto !important;
+                               display: flex !important;
+                               align-items: center !important;
+                           }
+
+                           .kh-day-item span {
+                               line-height: 1;
+                               transform: translateY(1px);
+                           }
+
+                           /* ========================================= */
+                           /* BẢN VÁ CHO ĐIỆN THOẠI (RESPONSIVE MOBILE) */
+                           /* ========================================= */
+                           @media (max-width: 768px) {
+                               .kh-profile-header {
+                                   flex-direction: column; /* Trục dọc */
+                                   align-items: center;
+                                   text-align: center;
+                                   padding-top: 15px;
+                               }
+                               .kh-avatar-wrapper {
+                                   margin-top: -50px; /* Đẩy Avatar trồi lên giữa */
+                                   margin-bottom: 5px;
+                               }
+                               .kh-name-row {
+                                   flex-direction: column; /* Đẩy tên và Trạng thái thành 2 dòng */
+                                   align-items: center;
+                                   gap: 15px;
+                               }
+                               .kh-quick-actions {
+                                   align-items: center; /* Ra giữa */
+                                   margin-top: 5px; /* Hủy lệnh vút lên đè banner trên Mobile */
+                                   position: static;
+                               }
+                               .kh-title {
+                                   justify-content: center; /* Ra giữa */
+                                   margin-top: 8px;
+                               }
+                               .kh-grid {
+                                   grid-template-columns: 1fr; /* Gập 2 cột thành 1 cột duy nhất */
+                               }
+                               .kh-data-row {
+                                   flex-direction: column; /* Nhãn nằm trên, Giá trị nằm dưới */
+                                   align-items: flex-start;
+                                   margin-bottom: 12px;
+                               }
+                               .kh-data-label {
+                                   width: 100%; /* Nhãn dàn hết chiều ngang */
+                                   margin-bottom: 4px;
+                                   font-size: 13px;
+                               }
+                               .kh-day-toggles {
+                                   justify-content: flex-start;
+                                   gap: 15px;
+                                   padding: 10px;
+                               }
+                           }
+                        </style>
+
+                        <div class="kh-hero-banner"></div>
+
+                        <div class="kh-content-wrapper">
+                            <div class="kh-profile-header">
+                                <div class="kh-avatar-wrapper">
+                                    <field name="avatar" widget="image" options="{'size': [90, 90]}"/>
+                                </div>
+                                <div class="kh-name-section">
+                                    <div class="kh-coso"><field name="coso_id" readonly="1"/></div>
+
+                                    <div class="kh-name-row">
+                                        <div class="kh-name-title-group">
+                                            <h1 class="kh-name"><field name="name" placeholder="Họ và tên" required="1"/></h1>
+                                        </div>
+
+                                        <div class="kh-quick-actions">
+                                            <field name="trangthai" widget="badge" decoration-success="trangthai == '1'" decoration-danger="trangthai != '1'" style="font-size: 15px; padding: 5px 10px;"/>
+                                            <div class="kh-status-pill">
+                                                <span>Đánh dấu [Hồ sơ] rà soát xong:</span>
+                                                <field name="is_hoanthien_hoso" widget="boolean_toggle"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p class="kh-title"><i class="fa fa-graduation-cap"></i>
+                                       Chuyên môn: <field name="chuyennganh" placeholder="Chuyên ngành"/>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="kh-grid">
+
+                                <div class="kh-card">
+                                    <div class="kh-card-title"><i class="fa fa-id-card-o"></i> THÔNG TIN GIÁO VIÊN</div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-birthday-cake text-muted"></i> Ngày sinh</div>
+                                        <div class="kh-data-value"><field name="ngaysinh"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-venus-mars text-muted"></i> Giới tính</div>
+                                        <div class="kh-data-value"><field name="gioitinh"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-phone text-muted"></i>Điện thoại(sử dụng làm tài khoản)</div>
+                                        <div class="kh-data-value"><field name="dienthoai"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-address-card text-muted"></i> Số CCCD</div>
+                                        <div class="kh-data-value"><field name="cccd"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-map-marker text-muted"></i> Quê quán</div>
+                                        <div class="kh-data-value"><field name="diachi_quequan"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-home text-muted"></i> Nơi cư trú</div>
+                                        <div class="kh-data-value"><field name="diachi_cutru"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-heart-o text-muted"></i> Hôn nhân</div>
+                                        <div class="kh-data-value"><field name="tinhtrang_honnhan"/></div>
+                                    </div>
+                                </div>
+
+                                <div class="kh-card">
+                                    <div class="kh-card-title"><i class="fa fa-briefcase"></i> THÔNG TIN CÔNG TÁC TẠI NHÀ TRƯỜNG</div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-calendar-check-o text-muted"></i> Đi làm từ ngày</div>
+                                        <div class="kh-data-value"><field name="dilam_tungay"/></div>
+                                    </div>
+
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-calendar-times-o text-muted"></i> Nghỉ làm(làm hết ngày)</div>
+                                        <div class="kh-data-value"><field name="dilam_denngay"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-check-circle-o text-muted"></i> Trạng thái</div>
+                                        <div class="kh-data-value"><field name="trangthai"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                       <div class="kh-data-label"><i class="fa fa-star text-muted"></i> Thâm niên</div>
+                                       <div class="kh-data-value" style="color: #4f46e5; display: flex; align-items: center;">
+                                           <field name="tham_nien" style="width: auto !important; min-width: 30px;"/>
+                                           <span style="margin-left: 5px;">năm</span>
+                                       </div>
+                                   </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-file-text-o text-muted"></i> Số Hợp đồng</div>
+                                        <div class="kh-data-value"><field name="so_hopdong_laodong"/></div>
+                                    </div>
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-certificate text-muted"></i> Trình độ</div>
+                                        <div class="kh-data-value"><field name="trinhdo"/></div>
+                                    </div>
+                                    <div class="kh-data-row" style="align-items: flex-start; flex-direction: column; margin-top: 8px;">
+                                        <div class="kh-data-label" style="width: 100%; margin-bottom: 2px;"><i class="fa fa-info-circle text-muted"></i> Ghi chú / Kinh nghiệm:</div>
+                                        <div class="kh-data-value" style="width: 100%;"><field name="desc" placeholder="Nhập ghi chú..."/></div>
+                                    </div>
+                                </div>
+
+                                <div class="kh-card kh-card-full">
+                                    <div class="kh-card-title" style="margin-bottom: 4px; border:none; padding:0;"><i class="fa fa-calendar"></i> THIẾT LẬP LỊCH LÀM VIỆC ĐẶC THÙ (nếu có)</div>
+                                    <div class="kh-data-row" style="margin-bottom: 0;">
+                                        <div class="kh-data-label" style="width: auto; margin-right: 10px;">Bật để thiết lập ngày đi làm đặc thù cho giáo viên:</div>
+                                        <div class="kh-data-value"><field name="is_ngaydilam_rieng" widget="boolean_toggle"/></div>
+                                    </div>
+
+                                    <div class="kh-day-toggles" invisible="is_ngaydilam_rieng == False">
+                                        <div class="kh-day-item"><span>T2</span><field name="hd_t2" widget="boolean_toggle"/></div>
+                                        <div class="kh-day-item"><span>T3</span><field name="hd_t3" widget="boolean_toggle"/></div>
+                                        <div class="kh-day-item"><span>T4</span><field name="hd_t4" widget="boolean_toggle"/></div>
+                                        <div class="kh-day-item"><span>T5</span><field name="hd_t5" widget="boolean_toggle"/></div>
+                                        <div class="kh-day-item"><span>T6</span><field name="hd_t6" widget="boolean_toggle"/></div>
+                                        <div class="kh-day-item"><span>T7</span><field name="hd_t7" widget="boolean_toggle"/></div>
+                                        <div class="kh-day-item"><span>CN</span><field name="hd_t8" widget="boolean_toggle"/></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <notebook>
+                                <page string="HỒ SƠ[SCAN]">
+                                    <field name="attachment_ids" widget="many2many_binary"/>
+                                </page>
+                                <page name="nguoithan_ids" string="NGƯỜI THÂN">
+                                    <field name="nguoithan_ids" context="{'default_coso_id':coso_id}"/>
+                                </page>
+                                 <page name="hoctapcongtac_ids" string="QÚA TRÌNH [HỌC TẬP/CÔNG TÁC]">
+                                    <field name="hoctapcongtac_ids" context="{'default_coso_id':coso_id}"/>
+                                </page>
+                                <page name="khenthuong_ids" string="KHEN THƯỞNG/KỶ LUẬT">
+                                    <field name="khenthuong_ids" context="{'default_coso_id':coso_id}"/>
+                                </page>
+                                 <page name="nghiphep_ids" string="NGHỈ PHÉP">
+                                     <group col="3">
+                                         <group><field name="phep_duocphep"/></group>
+                                         <group><field name="phep_da_sudung" readonly="true"/></group>
+                                         <group><field name="phep_con_trongnam" readonly="true"/></group>
+                                     </group>
+                                     <separator string="QUẢN LÝ NGÀY NGHỈ CỦA GIÁO VIÊN" />
+                                    <field name="nghiphep_ids" context="{'default_coso_id':coso_id}"/>
+                                </page>
+                                <page name="dm_chitra_ids" string="CẤU TRÚC [LƯƠNG]">
+                                    <field name="dm_chitra_ids" context="{'default_coso_id':coso_id}"/>
+                                </page>
+                                <page name="luong_ids" string="LƯƠNG HÀNG THÁNG">
+                                    <field name="luong_ids" domain="[('giaovien_id','=',id)]" context="{'default_coso_id':coso_id}" mode="list,form">
+                                        <list create="0" delete="0" default_order="id desc">
+                                            <field name="thang_id"/>
+                                            <field name="nam_id"/>
+                                            <field name="tong_cong" sum="Total"/>
+                                            <field name="tong_tru" sum="Total"/>
+                                            <field name="tong_thongtin" sum="Total"/>
+                                            <field name="luong" sum="Total"/>
+                                            <field name="trangthai" decoration-success="trangthai == '1'" decoration-danger="trangthai == '0'"/>
+                                        </list>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+
+</data>
+</odoo>

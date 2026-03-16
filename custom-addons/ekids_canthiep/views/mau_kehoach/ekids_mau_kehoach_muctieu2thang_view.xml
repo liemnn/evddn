@@ -1,0 +1,80 @@
+<odoo>
+    <data>
+
+        <record id="ekids_canthiep.mau_kehoach_thang_muctieu_list" model="ir.ui.view">
+            <field name="name">MỤC TIÊU</field>
+            <field name="model">ekids.mau_kehoach_muctieu2thang</field>
+            <field name="arch" type="xml">
+                <list default_order="sequence">
+                    <field name="sequence" widget="handle"/>
+                    <field name="muctieu_id"/>
+                    <field name="chuongtrinh_id"/>
+                    <field name="linhvuc_id"/>
+                   
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_canthiep.ct_mau_kehoach_thang_muctieu_kanban_view" model="ir.ui.view">
+            <field name="name">MỤC TIÊU TỪNG THÁNG</field>
+            <field name="model">ekids.mau_kehoach_muctieu2thang</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_example" default_group_by="mau_kehoach_thang_id">
+                    <field name="mau_kehoach_thang_id" context="{'group_by': 'mau_kehoach_thang_id'}"/>
+                    <t t-name="kanban-box">
+                        <div class="box">
+
+                            <!-- Icon Section -->
+
+                            <!-- Title Section -->
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+                            <!-- Description Section -->
+
+                            <p class="description">
+                               <field name="muctieu_id"/>
+                            </p>
+                            <!-- Button Section -->
+
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="ekids_canthiep.ct_mau_kehoach_thang_muctieu_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.mau_kehoach_muctieu2thang</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+
+                        <group col="3">
+                            <group>
+                                <field name="chuongtrinh_id"/>
+                            </group>
+                            <group>
+                                <field name="linhvuc_id" domain="[('chuongtrinh_id','=',chuongtrinh_id)]"/>
+                            </group>
+                            <group>
+                                <field name="capdo_id" domain="[('chuongtrinh_id','=',chuongtrinh_id)]"/>
+                            </group>
+
+                        </group>
+                        <group>
+                            <field name="domain_muctieu_ids" invisible="1"/>
+                            <field name="muctieu_id" domain="[('id', 'in', domain_muctieu_ids)]"/>
+
+
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

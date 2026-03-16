@@ -1,0 +1,116 @@
+<odoo>
+    <data>
+
+        <record id="ekids_hocsinh.hocphi_dm_ca_search" model="ir.ui.view">
+            <field name="name">hocphi_dm_ca.search</field>
+            <field name="model">ekids.hocphi_dm_ca</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter string="Đang hoạt động" name="trangthai" domain="[('trangthai','=','1')]"/>
+                    <field name="name"/>
+
+                </search>
+            </field>
+        </record>s
+
+        <record model="ir.ui.view" id="ekids_hocsinh.hocphi_dm_ca_list_view">
+            <field name="name">Dm Ca</field>
+            <field name="model">ekids.hocphi_dm_ca</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="tien"/>
+                    <field name="desc"/>
+                    <field name="is_hoantien_khi_nghi"  width="35" widget="boolean_toggle"/>
+                    <field name="is_giam_hocphi"  width="35" widget="boolean_toggle"/>
+                    <field name="trangthai"
+                            decoration-success="trangthai == '1'"
+                            decoration-danger="trangthai == '0'"/>
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_hocsinh.hocphi_dm_ca_form">
+            <field name="name">Danh mục ca</field>
+            <field name="model">ekids.hocphi_dm_ca</field>
+            <field name="arch" type="xml">
+                <form string="Cơ sở">
+                    <sheet>
+
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group col="3">
+                            <group>
+                                <field name="tien"/>
+                            </group>
+                            <group>
+                                <field name="is_hoantien_khi_nghi" widget="boolean_toggle"/>
+                            </group>
+                            <group>
+                                 <field name="is_giam_hocphi" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="desc"/>
+                            <field name="trangthai"/>
+                            <field name="is_apdung_rieng" widget="boolean_toggle"/>
+                        </group>
+
+                        <group col="3" invisible="is_apdung_rieng ==False">
+                            <separator string="1.GIÁO VIÊN và THỜI GIAN (nếu có)"/>
+                             <group>
+                                 <field name="giaovien_id" domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
+                            </group>
+                            <group>
+                                 <field name="tu" widget="flatpickr_time" placeholder="HH:MM"/>
+                            </group>
+                            <group>
+                                 <field name="den" widget="flatpickr_time" placeholder="HH:MM"/>
+                            </group>
+                        </group>
+                         <group col="1" invisible="is_apdung_rieng ==False">
+                             <separator string="2.ÁP DỤNG CHO CÁC NGÀY TRONG TUẦN"/>
+                             <group col="7">
+                                 <group>
+                                     <field name="t2" widget="boolean_toggle"/>
+                                 </group>
+                                 <group>
+                                     <field name="t3" widget="boolean_toggle"/>
+                                 </group>
+                                 <group>
+                                     <field name="t4" widget="boolean_toggle"/>
+                                 </group>
+                                 <group>
+                                     <field name="t5" widget="boolean_toggle"/>
+                                 </group>
+                                 <group>
+                                     <field name="t6" widget="boolean_toggle"/>
+                                 </group>
+                                 <group>
+                                     <field name="t7" widget="boolean_toggle"/>
+                                 </group>
+                                 <group>
+                                     <field name="t8" widget="boolean_toggle"/>
+                                 </group>
+
+                             </group>
+                         </group>
+
+
+                        <notebook invisible="is_apdung_rieng ==False">
+                            <page name="hocsinh_ids" string="DANH SÁCH HỌC SINH ÁP DỤNG">
+                                <field name="hocsinh_ids"
+                                       domain="[('coso_id', '=', coso_id),('trangthai', '=', '1')]"
+                                       context="{'default_coso_id': coso_id}"/>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

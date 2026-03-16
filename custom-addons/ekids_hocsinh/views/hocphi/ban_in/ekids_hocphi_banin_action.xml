@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <record id="ekids_hocsinh.action_hocphi_banin_report" model="ir.actions.report">
+            <field name="name">bản in học phí</field>
+            <field name="model">ekids.hocphi_banin</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_hocsinh.action_hocphi_banin_template</field>
+            <field name="report_file">ekids_hocsinh.action_hocphi_banin_template</field>
+
+        </record>
+
+    </data>
+</odoo>

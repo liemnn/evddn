@@ -1,0 +1,65 @@
+<odoo>
+  <data>
+
+        <record id="ekids_hocsinh.canthiep_kehoach_thang_canthiep_kanban_view" model="ir.ui.view">
+            <field name="name">Kanban Kế hoạch [Tháng]</field>
+            <field name="model">ekids.kehoach_thang</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                 <kanban default_group_by="trangthai"
+                    default_order="id asc" create="0"
+                         action="action_xem_kehoach_hocsinh_muctieu_theo_thang_phucvu_canthiep" type="object">
+
+                          <t t-name="kanban-box">
+                            <div class="box-user" >
+                                <!-- Vùng ảnh -->
+                                <field name="trangthai" invisible="1"/>
+                                <div class="info">
+                                    <h1>
+                                        <field name="name"/>
+                                    </h1>
+
+                                    <separator string="KẾ HOACH CAN THIỆP" />
+                                    <div class="item-list">
+
+                                   <div class="item">
+                                      <div class="item-text">Từ ngày</div>
+                                      <div class="item-info">
+                                         <field name="tu_ngay"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Đến ngày</div>
+                                      <div class="item-info">
+                                         <field name="den_ngay"/>
+                                      </div>
+                                    </div>
+                                    <div class="item">
+                                      <div class="item-text">Tổng mục tiêu trong tháng</div>
+                                      <div class="item-info">
+                                         <field name="tong_muctieu"/>
+                                      </div>
+                                    </div>
+                                    </div>
+                                    <div class="function" invisible="trangthai==0">
+                                        <button
+                                            name="action_sua_kehoach_thang"
+                                            type="object" string="Sửa kế hoạch tháng"/>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                          </t>
+
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+
+  </data>
+</odoo>

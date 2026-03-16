@@ -1,0 +1,329 @@
+<odoo>
+    <data>
+         <record id="ekids_diemdanh.diemdanh_hocsinh2ngay_list" model="ir.ui.view">
+            <field name="name"> Diem Danh </field>
+            <field name="model">ekids.diemdanh_hocsinh2ngay</field>
+            <field name="arch" type="xml">
+                <list>
+
+                    <field name="trangthai"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_diemdanh.diemdanh_hocsinh2ngay_form" model="ir.ui.view">
+            <field name="name">Form Diem Danh - Premium Tag UI</field>
+            <field name="model">ekids.diemdanh_hocsinh2ngay</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <style>
+                            .o_form_view .o_form_sheet_bg { background-color: #f4f7f9 !important; padding-top: 15px !important;}
+                            .o_form_sheet { border: none !important; padding: 0 !important; background: transparent !important; max-width: 1200px !important; margin: auto !important;}
+
+                            /* KHỐI HEADER TRUNG TÂM */
+                            .ek-super-card {
+                                background: #ffffff; border-radius: 20px; padding: 20px 25px;
+                                display: flex; justify-content: space-between; align-items: center;
+                                box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #e2e8f0;
+                                margin-bottom: 25px; flex-wrap: wrap; gap: 20px;
+                            }
+
+                            .ek-left-col { display: flex; flex-direction: column; gap: 15px; align-items: flex-start; }
+                            .ek-user-box { display: flex; align-items: center; gap: 15px; }
+                            .ek-avatar { width: 55px; height: 55px; background: #e0e7ff; color: #4f46e5; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 26px; }
+                            .ek-info { display: flex; flex-direction: column; gap: 4px; justify-content: center;}
+                            .ek-name { font-size: 22px; font-weight: 900; color: #0f172a; margin: 0; line-height: 1; }
+                            .ek-date { font-size: 14px; font-weight: 700; color: #64748b; display: flex; align-items: center; gap: 6px; }
+
+                            .ek-btn-absent-sm {
+                                background: transparent !important; color: #ef4444 !important; border: 1px dashed #fca5a5 !important;
+                                font-weight: 700 !important; padding: 6px 16px !important; border-radius: 8px !important; font-size: 13px !important;
+                                display: inline-flex !important; align-items: center !important; gap: 6px !important; transition: 0.2s !important;
+                            }
+                            .ek-btn-absent-sm:hover { background: #fef2f2 !important; border-color: #ef4444 !important;}
+
+                            /* KHAY CHỌN TRẠNG THÁI NGÀY */
+                            .ek-right-col { display: flex; align-items: flex-start; }
+                            .ek-radio-tray { display: inline-flex; background: #f8fafc; border-radius: 50px; padding: 4px; border: 1px solid #e2e8f0; }
+                            .ek-radio-tray .o_field_radio { display: flex; gap: 2px; margin: 0; }
+                            .ek-radio-tray .o_radio_item { margin: 0 !important; }
+                            .ek-radio-tray input[type="radio"] { display: none !important; }
+                            .ek-radio-tray label, .ek-radio-tray .form-check-label {
+                                display: flex !important; align-items: center; gap: 6px;
+                                padding: 10px 20px; border-radius: 50px; font-size: 14px; font-weight: 700; color: #64748b;
+                                background: transparent; border: none; cursor: pointer; transition: all 0.2s; margin: 0;
+                            }
+                            .ek-radio-tray label:hover { color: #1e293b; background: #f1f5f9; }
+
+                            .ek-radio-tray .o_radio_item:nth-child(1) input:checked + label { background: #10b981 !important; color: #ffffff !important; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+                            .ek-radio-tray .o_radio_item:nth-child(2) input:checked + label { background: #f59e0b !important; color: #ffffff !important; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
+                            .ek-radio-tray .o_radio_item:nth-child(3) input:checked + label { background: #ef4444 !important; color: #ffffff !important; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
+
+                            .ek-radio-tray .o_radio_item:nth-child(1) label::before { content: "\f058"; font-family: FontAwesome; }
+                            .ek-radio-tray .o_radio_item:nth-child(2) label::before { content: "\f042"; font-family: FontAwesome; }
+                            .ek-radio-tray .o_radio_item:nth-child(3) label::before { content: "\f057"; font-family: FontAwesome; }
+
+                            /* TABS NOTEBOOK */
+                            .neo-notebook .nav-tabs { border-bottom: 2px solid #e2e8f0; padding-bottom: 0; gap: 8px; margin-bottom: 20px; }
+                            .neo-notebook .nav-link {
+                                border: none !important; border-bottom: 3px solid transparent !important;
+                                color: #64748b; font-weight: 800; font-size: 15px; padding: 12px 24px;
+                                background: transparent; border-radius: 12px 12px 0 0; transition: all 0.3s;
+                            }
+                            .neo-notebook .nav-link:hover { background: #e2e8f0; color: #1e293b; }
+                            .neo-notebook .nav-link.active { color: #3b82f6 !important; border-bottom-color: #3b82f6 !important; background: transparent; }
+
+                            /* KANBAN ROWS SIÊU GỌN */
+                            .neo-list-container .o_kanban_record { width: 100% !important; margin-bottom: 12px !important; border: none !important; background: transparent !important; padding: 0 !important;}
+
+                            .neo-row {
+                                background: #ffffff; border-radius: 20px; padding: 12px 16px;
+                                display: flex; align-items: center; justify-content: space-between;
+                                box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #f1f5f9;
+                                transition: transform 0.2s, box-shadow 0.2s; position: relative;
+                                gap: 25px; flex-wrap: wrap; /* BỔ SUNG FLEX-WRAP CHO MOBILE */
+                            }
+                            .neo-row:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); border-color: #e2e8f0; }
+
+                            /* KHỐI THỜI GIAN NHÃN TREO */
+                            .neo-time-box-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; min-width: 160px;}
+                            .neo-time-pro {
+                                background: #f8fafc; border: 1px solid #e2e8f0; color: #0f172a;
+                                padding: 8px 16px; border-radius: 12px; display: flex; align-items: center; gap: 10px;
+                                width: 100%; justify-content: center; margin-bottom: 6px;
+                            }
+                            .neo-time-pro i { font-size: 24px; color: #64748b; }
+                            .neo-time-pro-text { display: flex; flex-direction: column; align-items: flex-start; }
+                            .neo-time-pro-label { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #64748b; margin-bottom: 2px; line-height: 1;}
+                            .neo-time-pro-val { font-size: 15px; font-weight: 900; line-height: 1; letter-spacing: 0.5px; color: #0f172a;}
+
+                            .neo-floating-badge {
+                                position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+                                background: #e11d48; color: #ffffff; font-size: 10px; font-weight: 800;
+                                padding: 2px 10px; border-radius: 50px; white-space: nowrap;
+                                box-shadow: 0 2px 6px rgba(225, 29, 72, 0.3); z-index: 2;
+                            }
+                            .neo-badge-green { background: #10b981; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3); }
+
+                            /* CỘT THÔNG TIN GIÁO VIÊN */
+                            .neo-teacher-col {
+                                display: flex; flex-direction: column; gap: 8px; flex-grow: 1;
+                                padding-left: 20px; min-width: 250px;
+                            }
+                            .neo-teacher-header { display: flex; align-items: center; gap: 10px; }
+                            .neo-teacher-name { font-size: 17px; font-weight: 900; color: #0f172a; }
+
+                            .neo-icon-btn {
+                                background: #ffffff; border: 1px solid #cbd5e1; color: #475569;
+                                padding: 2px 8px; border-radius: 6px; cursor: pointer; transition: 0.2s;
+                                font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;
+                            }
+                            .neo-icon-btn:hover { color: #3b82f6; border-color: #94a3b8; background: #f8fafc;}
+
+                            .neo-sub-info { display: flex; align-items: center; gap: 12px; }
+
+                            /* THẺ HIỂN THỊ LOẠI CA VÀ TIỀN NỔI BẬT (PREMIUM TAG) */
+                            .neo-premium-tag {
+                                font-size: 15px; font-weight: 900; color: #1e293b;
+                                background: #f1f5f9; padding: 4px 12px; border-radius: 8px;
+                                border: 1px solid #e2e8f0; display: inline-flex; align-items: center; gap: 6px;
+                            }
+                            .neo-premium-tag i { color: #64748b; font-size: 13px; }
+
+                            .ek-price-vnd::after {
+                                content: " vnđ";
+                                font-size: 12px; font-weight: 700; color: #64748b;
+                                margin-left: 2px;
+                            }
+
+                            /* KHAY BUTTON XÁC NHẬN MÀU PASTEL */
+                            .neo-action-container { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 240px;}
+                            .neo-action-title { font-size: 12px; font-weight: 600; color: #0f172a; letter-spacing: 0.2px; margin-bottom: 2px;}
+
+                            .neo-action-tray { display: flex; gap: 6px; }
+                            .neo-action-tray button {
+                                display: flex; justify-content: center; align-items: center; gap: 4px;
+                                padding: 6px 14px; border-radius: 10px; font-size: 12px; font-weight: 800;
+                                border: 1px solid transparent; transition: 0.2s; cursor: pointer; white-space: nowrap; outline: none;
+                            }
+
+                            .neo-action-tray .btn-hoc { background: #dcfce7; color: #10b981; border-color: #a7f3d0 !important; }
+                            .neo-action-tray .btn-hoc:hover { background: #10b981; color: #ffffff; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+
+                            .neo-action-tray .btn-hoan { background: #fee2e2; color: #ef4444; border-color: #fecaca !important; }
+                            .neo-action-tray .btn-hoan:hover { background: #ef4444; color: #ffffff; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2); }
+
+                            .neo-action-tray .btn-bu { background: #fffbeb; color: #d97706; border-color: #fde68a !important; }
+                            .neo-action-tray .btn-bu:hover { background: #f59e0b; color: #ffffff; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2); }
+
+                            /* THIẾT KẾ CA BÙ */
+                            .neo-row-bu { border-left: 6px solid #f59e0b; }
+                            .neo-time-pro-bu { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+                            .neo-time-pro-bu i { color: #d97706; }
+                            .neo-time-pro-bu .neo-time-pro-label { color: #b45309; }
+                            .neo-time-pro-bu .neo-time-pro-val { color: #92400e; }
+
+                            /* MOBILE RESPONSIVE CHỐT: GIỮ NGUYÊN CSS NHƯNG ÉP RỚT DÒNG KHI CẦN */
+                            @media (max-width: 850px) {
+                                .ek-super-card { flex-direction: column !important; align-items: stretch !important; }
+                                .ek-right-col { width: 100% !important; margin-top: 15px; }
+                                .ek-radio-tray { width: 100% !important; display: flex !important; }
+                                .ek-radio-tray label { flex: 1; justify-content: center; font-size: 12px !important; }
+
+                                .neo-row { flex-direction: column !important; align-items: stretch !important; padding: 20px !important; }
+                                .neo-teacher-col { padding-left: 0 !important; width: 100% !important; border-top: 1px dashed #eee; padding-top: 15px; text-align: center; }
+                                .neo-teacher-header { justify-content: center !important; }
+                                .neo-sub-info { justify-content: center !important; }
+                                .neo-action-container { width: 100% !important; border-top: 1px dashed #eee; padding-top: 15px; }
+                                .neo-action-tray { width: 100% !important; justify-content: center; }
+                                .neo-action-tray button { flex: 1; }
+                            }
+                        </style>
+
+                        <div class="ek-super-card">
+                            <div class="ek-left-col">
+                                <div class="ek-user-box">
+                                    <div class="ek-avatar"><i class="fa fa-child"></i></div>
+                                    <div class="ek-info">
+                                        <h1 class="ek-name"><field name="hocsinh_id" readonly="1" options="{'no_open': True}"/></h1>
+                                        <div class="ek-date"><i class="fa fa-calendar-o"></i> Ngày điểm danh:<field name="ngay" readonly="1"/></div>
+                                    </div>
+                                </div>
+                                <button name="action_quanly_nghiphep_hocsinh"
+                                        string="Báo nghỉ phép dài hạn. Học sinh nghỉ phép từ ngày này (-)" type="object"
+                                        context="{'default_hocsinh_id':hocsinh_id,'default_ngay':ngay}"
+                                        class="ek-btn-absent-sm" icon="fa-plane"/>
+                            </div>
+
+                            <div class="ek-right-col">
+                                <div class="ek-radio-tray">
+                                    <field name="trangthai" widget="radio" options="{'horizontal': true}"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <notebook class="neo-notebook">
+                            <page string="XÁC NHẬN CÁC [CA/DỊCH VỤ HỌC TRONG NGÀY]">
+                                <div class="neo-list-container" style="padding-top: 5px;">
+                                    <field name="ca2ngay_ids">
+                                        <kanban create="0" delete="0">
+                                            <templates>
+                                                <t t-name="kanban-box">
+                                                    <field name="is_hoc" invisible="1"/>
+                                                    <field name="is_nghi" invisible="1"/>
+                                                    <field name="is_nghi_khongbu" invisible="1"/>
+                                                    <field name="is_nghi_hocbu" invisible="1"/>
+                                                    <div class="neo-row">
+                                                        <div class="neo-time-box-wrapper">
+                                                            <div class="neo-time-pro">
+                                                                <i class="fa fa-clock-o"></i>
+                                                                <div class="neo-time-pro-text">
+                                                                    <span class="neo-time-pro-label">THỜI GIAN</span>
+                                                                    <span class="neo-time-pro-val"><field name="tu"/> - <field name="den"/></span>
+                                                                </div>
+                                                            </div>
+                                                            <field name="trangthai" widget="badge"
+                                                                       decoration-success="trangthai == '1'" decoration-warning="trangthai == '0'"
+                                                                       decoration-muted="trangthai == '2'" decoration-danger="trangthai == '3'"
+                                                                       decoration-info="trangthai == '4'"/>
+                                                        </div>
+                                                        <div class="neo-teacher-col">
+                                                            <div class="neo-teacher-header">
+                                                                <i class="fa fa-user-circle-o" style="color:#64748b; font-size:18px;"></i>
+                                                                <span class="neo-teacher-name"><field name="giaovien_id"/></span>
+                                                                <button name="action_doi_giaovien" class="neo-icon-btn" type="object" title="Đổi giáo viên" invisible="is_nghi_khongbu == True"><i class="fa fa-exchange"></i> Đổi GV</button>
+                                                            </div>
+                                                            <div class="neo-sub-info">
+                                                                <div class="neo-premium-tag">
+                                                                    <i class="fa fa-tag"></i>
+                                                                    <span class="ek-price-vnd"><field name="hocphi_dm_ca_id"/></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="neo-action-container">
+                                                            <div class="neo-action-title">Xác thực ca học với học sinh</div>
+                                                            <div class="neo-action-tray">
+                                                                <button name="func_xacnhan_ca2ngay_hoc" class="btn-hoc" type="object" invisible="is_hoc == True">
+                                                                    <i class="fa fa-check-circle"></i> Đi học
+                                                                </button>
+                                                                <button name="func_xacnhan_ca2ngay_nghi_khongbu" class="btn-hoan" type="object" invisible="is_nghi_khongbu == True">
+                                                                    <i class="fa fa-times-circle"></i> Hoàn phí
+                                                                </button>
+                                                                <button name="func_xacnhan_ca2ngay_nghi_hocbu" class="btn-bu" type="object" invisible="is_nghi_hocbu == True">
+                                                                    <i class="fa fa-history"></i> Học bù
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </t>
+                                            </templates>
+                                        </kanban>
+                                    </field>
+                                </div>
+                            </page>
+
+                            <page string="XÁC NHẬN CÁC CA HỌC BÙ/TĂNG CƯỜNG THÊM">
+                                <div style="margin-bottom: 20px; text-align: right; padding-right: 5px;">
+                                    <button name="action_open_popup_tao_hocsinh2ngay_hocbu" string="Tạo ca học bù mới" type="object" class="btn btn-primary" style="border-radius: 12px; font-weight: 800; padding: 10px 24px; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);"/>
+                                </div>
+                                <div class="neo-list-container">
+                                    <field name="ca2ngay_hocbu_ids">
+                                        <kanban create="0" delete="0">
+                                            <templates>
+                                                <t t-name="kanban-box">
+                                                    <field name="is_hoc" invisible="1"/>
+                                                    <field name="is_nghi" invisible="1"/>
+                                                    <div class="neo-row neo-row-bu">
+                                                        <div class="neo-time-box-wrapper">
+                                                            <div class="neo-time-pro neo-time-pro-bu">
+                                                                <i class="fa fa-history"></i>
+                                                                <div class="neo-time-pro-text">
+                                                                    <span class="neo-time-pro-label">THỜI GIAN</span>
+                                                                    <span class="neo-time-pro-val"><field name="tu"/> - <field name="den"/></span>
+                                                                </div>
+                                                            </div>
+                                                            <field name="trangthai" widget="badge" decoration-success="trangthai == '4'" decoration-danger="trangthai == '5'"/>
+                                                        </div>
+                                                        <div class="neo-teacher-col">
+                                                            <div class="neo-teacher-header">
+                                                                <i class="fa fa-user-circle-o" style="color:#64748b; font-size:18px;"></i>
+                                                                <span class="neo-teacher-name"><field name="giaovien_id"/></span>
+                                                                <span style="font-size: 11px; color: #d97706; background: #fef3c7; padding: 2px 8px; border-radius: 6px; font-weight: 800;">Lớp bù</span>
+                                                            </div>
+                                                            <div class="neo-sub-info">
+                                                                <div class="neo-premium-tag" style="background: #fffbeb; border-color: #fde68a;">
+                                                                    <i class="fa fa-tag" style="color: #d97706;"></i>
+                                                                    <span class="ek-price-vnd"><field name="hocphi_dm_ca_id"/></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="neo-action-container">
+                                                            <div class="neo-action-title">Thao tác ca bù</div>
+                                                            <div class="neo-action-tray">
+                                                                <button name="action_xoa_diemdanh_ca2ngay" class="btn-hoan" type="object" confirm="Hủy bỏ ca học bù này?" style="border-radius:50px; width:45px; padding:10px 0;"><i class="fa fa-trash"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </templates>
+                                        </kanban>
+                                    </field>
+                                </div>
+                            </page>
+                        </notebook>
+
+                        <footer style="margin-top: 20px; background: transparent; padding: 15px 0; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 15px;">
+                            <button string="Đóng lại" special="cancel" class="btn btn-secondary" style="padding: 10px 30px; font-weight: 800; border-radius: 12px; font-size: 14px; background: #ffffff; border: 1px solid #cbd5e1; color: #475569;"/>
+                            <button name="action_xac_nhan" string="Lưu và xác nhận" type="object" class="btn btn-primary" style="padding: 10px 40px; font-weight: 900; border-radius: 12px; font-size: 14px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

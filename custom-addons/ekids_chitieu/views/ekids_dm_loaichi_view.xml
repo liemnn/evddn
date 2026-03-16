@@ -1,0 +1,47 @@
+<odoo>
+    <data>
+
+        <record id="ekids_chitieu.chitieu_dm_loaichi_search" model="ir.ui.view">
+            <field name="name">chitieu.dm.loaichi.search</field>
+            <field name="model">ekids.chitieu_dm_loaichi</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter string="Đang hoạt động" name="trangthai" domain="[('trangthai','=','1')]"/>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="ekids_chitieu.chitieu_dm_loaichi_list">
+            <field name="name">Loại chi tiêu</field>
+            <field name="model">ekids.chitieu_dm_loaichi</field>
+            <field name="arch" type="xml">
+               <list editable="bottom" default_order="sequence">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="loai"/>
+                    <field name="desc"/>
+                    <field name="trangthai"
+                        decoration-success="trangthai == '1'"
+                        decoration-danger="trangthai == '0'"/>
+                </list>
+            </field>
+        </record>
+
+
+
+        <record model="ir.actions.act_window" id="ekids_chitieu.chitieu_dm_loaichi_action_window">
+            <field name="name">Định nghĩa loại chi tiêu</field>
+            <field name="res_model">ekids.chitieu_dm_loaichi</field>
+            <field name="view_mode">list</field>
+            <!--            <field name="view_id" ref="ekids_chitieu.chitieuloai_form"/>-->
+            <field name="target">current</field>
+        </record>
+
+
+
+
+
+    </data>
+</odoo>

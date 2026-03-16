@@ -1,0 +1,81 @@
+<odoo>
+  <data>
+       <!-- Search view -->
+        <record id="ekids_diemdanh.giaovien_nghiphep_search" model="ir.ui.view">
+          <field name="name">ekids.giaovien_nghiphep.search</field>
+          <field name="model">ekids.giaovien_nghiphep</field>
+          <field name="arch" type="xml">
+            <search string="Tìm kiếm Nghỉ phép">
+              <!-- Bộ lọc mặc định -->
+              <filter name="filter_dang_ap_dung"
+                      string="Đang áp dụng"
+                      domain="[('tu_ngay','>=', context_today())]"/>
+
+              <!-- Group By -->
+              <group expand="1" string="Group By">
+                <filter name="group_by_giaovien"
+                        string="Giáo viên"
+                        context="{'group_by':'giaovien_id'}"/>
+              </group>
+
+              <!-- Cho phép search theo các field -->
+              <field name="tu_ngay"/>
+              <field name="den_ngay"/>
+              <field name="giaovien_id" string="Tên giáo viên"/>
+              <field name="loai" string="Loại nghỉ phép"/>
+            </search>
+          </field>
+        </record>
+
+        <record id="ekids_diemdanh.giaovien_nghiphep_list" model="ir.ui.view">
+            <field name="name">giaovien_nghiphep</field>
+            <field name="model">ekids.giaovien_nghiphep</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="giaovien_id" width="200"/>
+                    <field name="tu_ngay"/>
+                    <field name="den_ngay" />
+                    <field name="loai" />
+                    <field name="desc" width="300"/>
+
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_diemdanh.giaovien_nghiphep_form">
+            <field name="name">giaovien_nghiphep_form</field>
+            <field name="model">ekids.giaovien_nghiphep</field>
+            <field name="arch" type="xml">
+            <form  target="new">
+                <sheet>
+                    <field name="coso_id" readonly="true"/>
+                    <group>
+                        <h3>
+                            <field name="giaovien_id" placeholder="Lựa chọn Giáo viên"
+                                    domain="[('coso_id','=',coso_id)]"/>
+                        </h3>
+                    </group>
+
+                    <group col="2">
+                        <group>
+                            <field name="tu_ngay"/>
+                        </group>
+                         <group>
+                            <field name="den_ngay"/>
+                        </group>
+
+                    </group>
+                    <group>
+                        <field name="loai"/>
+
+                        <field name="desc" />
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+
+
+
+  </data>
+</odoo>

@@ -1,0 +1,94 @@
+<odoo>
+    <data>
+
+        <record id="ekids_canthiep.ct_muctieu_list" model="ir.ui.view">
+            <field name="name">MỤC TIÊU</field>
+            <field name="model">ekids.ct_muctieu</field>
+            <field name="arch" type="xml">
+                <list default_order="sequence">
+                    <field name="sequence" widget="handle"/>
+                    <field name="dm_capdo_id"/>
+                    <field name="muctieu"  width="40%"/>
+                    <field name="trichyeu"/>
+                    <field name="kythuat" />
+                    <field name="tieuchi"/>
+                    <field name="cach_danhgia"/>
+
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_canthiep.ct_muctieu_kanban_view" model="ir.ui.view">
+            <field name="name">Chương trình</field>
+            <field name="model">ekids.ct_muctieu</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false">
+                    <t t-name="kanban-box">
+                        <div class="box">
+                              <nav class="box-navbar">
+                                <ul class="box-menu">
+                                  <li class="box-menu-item">
+                                    <a href="#" >
+                                       <span class="fa fa-ellipsis-v"></span>
+                                    </a>
+                                    <ul class="box-dropdown">
+                                       <li>
+
+                                      </li>
+
+                                    </ul>
+                                  </li>
+                                </ul>
+                            </nav>
+
+
+                            <!-- Icon Section -->
+
+                            <!-- Title Section -->
+                            <p class="slogan">
+                                <field name="name"/>
+                            </p>
+                            <!-- Description Section -->
+
+                            <p class="description">
+                               <field name="trichyeu"/>
+                            </p>
+                            <!-- Button Section -->
+
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+         <record id="ekids_canthiep.ct_muctieu_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.ct_muctieu</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+
+                        <group>
+                            <field name="linhvuc_id"/>
+                            <field name="dm_capdo_id"
+                                   domain="[('chuongtrinh_id','=',context.get('default_chuongtrinh_id'))]"
+                                   />
+                            <field name="muctieu" placeholder="Tên" />
+                            <field name="trichyeu"/>
+                        </group>
+                        <group>
+                            <separator string="HƯỚNG DẪN/CHỈ DẪN KHI[CAN THIỆP]" />
+                            <field name="kythuat" />
+                            <field name="tieuchi"/>
+                            <field name="cach_danhgia"/>
+                        </group>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

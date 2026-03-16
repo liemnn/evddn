@@ -1,0 +1,45 @@
+<odoo>
+  <data>
+    <menuitem name="Thiết lập chung"
+              id="ekids_core.menu_root"
+              web_icon="ekids_core,static/description/icon.png"
+              sequence="9"
+    />
+
+    <!-- menu categories -->
+
+    <menuitem name="Cơ sở"
+              id="ekids_core.quanly_coso"
+              parent="ekids_core.menu_root"
+              action="ekids_core.coso_action_window"
+              sequence="1"
+              groups="base.group_system"/>
+
+    <menuitem name="Thiết lập chung [Cơ sở]"
+              id="ekids_core.coso_cauhinh_menu"
+              parent="ekids_core.menu_root"
+              action="ekids_core.coso_cauhinh_action_window"
+              sequence="2"
+              groups="base.group_system,ekids_core.quanlycoso"/> <!-- tạm dùng group hệ thống -->
+
+    <!-- menu categories -->
+
+    <menuitem name="Cấu hình"
+              id="ekids_core.cauhinh"
+              parent="ekids_core.menu_root"
+              sequence="3"
+              groups="base.group_system"/>
+
+    <menuitem name="Đơn vị hành chính - Tỉnh"
+              id="ekids_core.dm_tinh_menu"
+              parent="ekids_core.cauhinh"
+              action="ekids_core.dm_tinh_action_window"
+              groups="base.group_system"/>
+
+    <menuitem name="Đơn vị hành chính - Xã/Phường"
+              id="ekids_core.dm_xa_menu"
+              parent="ekids_core.cauhinh"
+              action="ekids_core.dm_xa_action_window"
+              groups="base.group_system"/>
+  </data>
+</odoo>

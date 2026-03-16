@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+         <record id="ekids_diemdanh.chamcong_kpi2thang_ketqua_list" model="ir.ui.view">
+            <field name="name"> chamcong_kpi2thang_ketqua </field>
+            <field name="model">ekids.chamcong_kpi2thang_ketqua</field>
+            <field name="arch" type="xml">
+                <list editable="bottom" create="false" delete="false">
+                    <field name="name" width="400" readonly="true"/>
+                    <field name="tong" width="100"/>
+                    <field name="donvi" readonly="true"/>
+                    <field name="desc"/>
+                </list>
+            </field>
+        </record>
+    </data>
+</odoo>

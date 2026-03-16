@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="ekids_diemdanh.chamcong_congviec2ngay_giatri_wizard_form">
+            <field name="name">chamcong_congviec2ngay_giatri_wizard Form</field>
+            <field name="model">ekids.chamcong_congviec2ngay_giatri_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Cơ sở">
+                    <sheet>
+                        <group>
+                            <field name="congviec2thang_giatri_id" invisible="1"/>
+                            <field name="ngay" readonly="true"/>
+                            <h2>Nhập và xac thực khối lượng thực tế: <field name="giatri"/></h2>
+                        </group>
+
+                    </sheet>
+                     <footer>
+                        <button name="action_capnhat_ketqua_congviec2ngay_giatri"
+                                type="object" string="Cập nhật kết quả"
+                                class="btn-primary"/>
+                        <button string="Hủy" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

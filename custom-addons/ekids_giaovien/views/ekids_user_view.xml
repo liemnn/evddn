@@ -1,0 +1,31 @@
+<odoo>
+    <record id="view_ekids_giaovien_user_form" model="ir.ui.view">
+        <field name="name">ekids.giaovien.res.users.form</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <form string="Cơ sở">
+                <sheet>
+                    <group>
+                        <field name="name" string="Họ và tên giáo viên" readonly="true"/>
+                        <field name="login" string="Số điện thoại (Sử dụng làm tài khoản đăng nhập" readonly="true"/>
+                        <field name="password" password="True"/>
+                    </group>
+                    <group>
+                        <field name="coso_ids" widget="many2many_tags" string="Các cơ sở phụ trách quản lý"/>
+                    </group>
+                    <notebook>
+                        <page string="Phân quyền">
+                            <field name="groups_id"
+                                   widget="many2many_checkboxes"
+                                   domain="[('category_id', '=', 'Vai trò giáo viên')]" />
+                         </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    
+
+</odoo>

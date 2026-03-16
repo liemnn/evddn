@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="ekids_custom_odoo.login_inherit" inherit_id="web.login" name="Custom Login">
+        <xpath expr="//label[@for='login']" position="replace">
+            <label for="login" class="form-label">Tài khoản(thường là số điện thoại)</label>
+        </xpath>
+    </template>
+</odoo>

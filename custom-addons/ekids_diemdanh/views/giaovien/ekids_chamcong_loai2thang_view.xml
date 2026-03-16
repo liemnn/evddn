@@ -1,0 +1,148 @@
+<odoo>
+    <data>
+         <record id="ekids_diemdanh.chamcong_loai2thang_list" model="ir.ui.view">
+            <field name="name"> chamcong_loai2thang </field>
+            <field name="model">ekids.chamcong_loai2thang</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="chamcong_loai_id"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- explicit list view definition -->
+        <record id="ekids_diemdanh.chamcong_loai2thang_kanban" model="ir.ui.view">
+            <field name="name">chamcong_loai2thang Kanban</field>
+            <field name="model">ekids.chamcong_loai2thang</field>
+            <field name="arch" type="xml">
+               <kanban action="action_vao_chamcong_theoloai" default_order="id desc, nam desc" sample="1" type="object">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-modern-card">
+
+                                <style>
+                                    /* Khung thẻ chính */
+                                    .kh-modern-card {
+                                        background: #ffffff;
+                                        border-radius: 16px; /* Bo góc lớn hiện đại */
+                                        padding: 16px;
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 16px;
+                                        border: 1px solid #f3f4f6;
+                                        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+                                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                                        cursor: pointer;
+                                    }
+
+                                    /* Hiệu ứng nổi bổng khi Hover (Tone Xanh lam cho Chấm công) */
+                                    .kh-modern-card:hover {
+                                        transform: translateY(-4px); /* Nhấc thẻ lên */
+                                        box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.15); /* Bóng đổ màu xanh */
+                                        border-color: #bfdbfe; /* Viền sáng lên màu xanh pastel */
+                                    }
+
+                                    /* Khối chứa Icon */
+                                    .kh-icon-wrapper {
+                                        width: 48px;
+                                        height: 48px;
+                                        border-radius: 14px;
+                                        background: #eff6ff; /* Nền xanh lam nhạt */
+                                        color: #2563eb;      /* Icon xanh lam đậm */
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        font-size: 24px; /* Icon to rõ ràng */
+                                        transition: all 0.3s ease;
+                                        flex-shrink: 0;
+                                    }
+
+                                    /* Hiệu ứng xoay Icon khi Hover thẻ */
+                                    .kh-modern-card:hover .kh-icon-wrapper {
+                                        background: #2563eb; /* Đảo màu nền */
+                                        color: #ffffff;      /* Đảo màu icon */
+                                        transform: scale(1.05) rotate(-5deg); /* Phóng to và nghiêng nhẹ */
+                                    }
+
+                                    /* Khối chứa chữ */
+                                    .kh-info-wrapper {
+                                        flex: 1;
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: center;
+                                    }
+
+                                    /* Chữ tháng năm (ví dụ: 10/2025) */
+                                    .kh-month-text {
+                                        font-size: 17px;
+                                        font-weight: 800;
+                                        color: #1f2937; /* Xám đen mạnh mẽ */
+                                        letter-spacing: 0.5px;
+                                    }
+
+                                    /* Phụ đề */
+                                    .kh-sub-text {
+                                        font-size: 12px;
+                                        color: #6b7280;
+                                        margin-top: 4px;
+                                        font-weight: 500;
+                                    }
+
+                                    /* Mũi tên điều hướng */
+                                    .kh-action-arrow {
+                                        color: #d1d5db;
+                                        font-size: 20px;
+                                        transition: transform 0.3s ease, color 0.3s;
+                                    }
+
+                                    /* Hiệu ứng mũi tên bay sang phải */
+                                    .kh-modern-card:hover .kh-action-arrow {
+                                        transform: translateX(4px);
+                                        color: #2563eb; /* Chuyển màu xanh theo tone chung */
+                                    }
+                                </style>
+
+                                <div class="kh-icon-wrapper">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+
+                                <div class="kh-info-wrapper">
+                                    <span class="kh-month-text"><field name="name"/></span>
+                                    <span class="kh-sub-text">Kỳ chấm công</span>
+                                </div>
+
+                                <div class="kh-action-arrow">
+                                    <i class="fa fa-angle-right"></i>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="ekids_diemdanh.chamcong_loai2thang_form" model="ir.ui.view">
+            <field name="name"> chamcong_loai2thang Form</field>
+            <field name="model">ekids.chamcong_loai2thang</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group col="2">
+                            <group>
+                                <field name="thang"/>
+                            </group>
+                            <group>
+                                <field name="nam"/>
+                            </group>
+                        </group>
+
+
+                     </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

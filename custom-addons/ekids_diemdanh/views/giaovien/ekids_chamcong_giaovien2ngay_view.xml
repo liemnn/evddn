@@ -1,0 +1,211 @@
+<odoo>
+    <data>
+         <record id="ekids_diemdanh.chamcong_giaovien2ngay_list" model="ir.ui.view">
+            <field name="name"> Diem Danh </field>
+            <field name="model">ekids.chamcong_giaovien2ngay</field>
+            <field name="arch" type="xml">
+                <list>
+
+                    <field name="trangthai"/>
+                </list>
+            </field>
+        </record>
+
+
+
+        <record id="ekids_diemdanh.chamcong_giaovien2ngay_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.chamcong_giaovien2ngay</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+
+                    <sheet>
+                        <separator string="1.THÔNG TIN VỀ NGÀY HỌC" />
+                        <group col="2">
+                            <group>
+                                <field name="giaovien_id" readonly="true"/>
+                            </group>
+                            <group>
+                                <field name="ngay" readonly="true"/>
+                            </group>
+
+                        </group>
+                         <group>
+
+                            <h3>
+                                <field name="trangthai" widget="selection"
+                                    decoration-success="trangthai == '1'"
+                                    decoration-warning="trangthai == '0'"
+                                    decoration-danger="trangthai == '-1'"/>
+                            </h3>
+                        </group>
+
+                         <group>
+                            <button name="action_quanly_nghiphep_giaovien"
+                                        string="Nghỉ phép từ ngày này(-)"
+                                        type="object"
+                                        context="{'default_giaovien_id':giaovien_id,'default_ngay':ngay}"
+                                        class="btn-secondary"
+                                />
+                        </group>
+
+                        <notebook>
+                            <page string="1.XÁC NHẬN CA HỌC/NGÀY" >
+                                <field name="ca2ngay_ids">
+                                    <kanban create="1" delete="1">
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <field name="is_hoc" invisible="1"/>
+                                                <field name="is_nghi" invisible="1"/>
+                                                <div class="box">
+                                                    <!-- Icon Section -->
+
+                                                     <div class="item-list">
+                                                          <div class="item">
+                                                              <div class="item-text">Học sinh:</div>
+                                                              <div class="item-info">
+                                                                <field name="hocsinh_id"/>
+                                                              </div>
+                                                          </div>
+                                                        <div class="item">
+                                                          <div class="item-text">Thời gian:</div>
+                                                          <div class="item-info">
+                                                            Từ: <field name="tu"/>
+                                                            -Đến: <field name="den"/>
+                                                        </div>
+                                                        </div>
+                                                        <div class="item">
+                                                          <div class="item-text">Ca</div>
+                                                          <div class="item-info">
+                                                            <field name="hocphi_dm_ca_id"/>
+                                                          </div>
+                                                        </div>
+                                                        <div class="item">
+                                                          <div class="item-text">Trạng thái đã xác nhận:</div>
+                                                          <div>
+
+                                                              <field name="trangthai" widget="selection" readonly="true"
+                                                                            decoration-success="trangthai == '1'"
+                                                                            decoration-warning="trangthai == '0'"
+                                                                            decoration-muted="trangthai == '2'"
+                                                                            decoration-danger="trangthai == '3'"
+                                                                            decoration-info="trangthai == '4'"
+                                                                />
+                                                          </div>
+                                                        </div>
+
+                                                         <div class="item">
+                                                          <div class="item-text">
+                                                               <button name="func_xacnhan_ca2ngay_hoc_chamcong"
+                                                                 class="btn-success"
+                                                                 type="object" string="Học"  invisible="is_hoc == True"/>
+
+                                                                <button name="func_xacnhan_ca2ngay_nghi_khongbu_chamcong"
+                                                                 class="btn-danger"
+                                                                 type="object" string="Nghỉ" invisible="is_nghi_khongbu == True"/>
+
+                                                                 <button name="func_xacnhan_ca2ngay_nghi_hocbu_chamcong"
+                                                                 class="btn-warning"
+                                                                 type="object" string="Nghỉ-Sẽ học bù" invisible="is_nghi_hocbu == True"/>
+
+                                                          </div>
+                                                         </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </page>
+                            <page string="2. CA HOC BÙ/TĂNG CƯỜNG THÊM" >
+                                 <button name="action_open_popup_tao_hocsinh2ngay_hocbu_tu_giaovien"
+                                        string="Thêm (+)"
+                                        type="object"
+                                        class="btn-primary"
+                                />
+                                <field name="ca2ngay_hocbu_ids">
+                                    <kanban create="1" delete="1">
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <field name="is_hoc" invisible="1"/>
+                                                <field name="is_nghi" invisible="1"/>
+                                                <div class="box">
+                                                    <!-- Icon Section -->
+
+                                                     <div class="item-list">
+                                                          <div class="item">
+                                                              <div class="item-text">Học sinh:</div>
+                                                              <div class="item-info">
+                                                                <field name="hocsinh_id"/>
+                                                              </div>
+                                                          </div>
+                                                        <div class="item">
+                                                          <div class="item-text">Thời gian:</div>
+                                                          <div class="item-info">
+                                                            Từ: <field name="tu"/>
+                                                            Đến: <field name="den"/>
+                                                        </div>
+                                                        </div>
+                                                        <div class="item">
+                                                          <div class="item-text">Ca</div>
+                                                          <div class="item-info">
+                                                            <field name="hocphi_dm_ca_id"/>
+                                                          </div>
+                                                        </div>
+                                                        <div class="item">
+                                                          <div class="item-text">Trạng thái đã xác nhận:</div>
+                                                          <div>
+
+                                                              <field name="trangthai" widget="selection" readonly="true"
+                                                                            decoration-success="trangthai == '4'"
+                                                                            decoration-danger="trangthai == '5'"
+
+                                                                />
+                                                          </div>
+                                                        </div>
+                                                         <div class="item">
+                                                          <div class="item-text">
+                                                               <button name="action_xacnhan_xoa_hocbu_tu_chamcong"
+                                                                 class="btn-danger"
+                                                                 type="object" string="Xóa"
+                                                                       confirm="Bạn chắc chắn muốn xóa ca [Dạy bù] này ?"
+                                                               />
+
+                                                          </div>
+                                                         </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </page>
+                        </notebook>
+
+
+
+
+                        <footer>
+                            <button name="action_xac_nhan"
+                                    string="Xác nhận"
+                                    type="object"
+                                    class="btn-primary"
+                            />
+                            <button string="Hủy" special="cancel"
+                                    class="btn-secondary"/>
+                        </footer>
+
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

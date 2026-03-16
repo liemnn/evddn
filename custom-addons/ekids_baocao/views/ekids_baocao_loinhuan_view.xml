@@ -1,0 +1,47 @@
+<odoo>
+    <data>
+        <record id="ekids_baocao.baocao_loinhuan_wizard_form" model="ir.ui.view">
+            <field name="name">Báo cáo Thu/Chi  của Cơ sở</field>
+            <field name="model">ekids.baocao_loinhuan</field>
+            <field name="arch" type="xml">
+                <form string="Xem báo cáo lợi nhuận của năm">
+                    <group>
+                       <h3><field name="coso_id" readonly="true"/></h3>
+                    </group>
+                    <group col="2">
+                        <group>
+                            <separator string="THỜI GIAN TỪ" />
+
+                                <h5>
+                                    <field name="tu_thang" placeholder="Từ Tháng"/>/
+                                    <field name="tu_nam" placeholder="của Năm"/>
+                                </h5>
+
+                        </group>
+                          <group>
+                            <separator string="THỜI GIAN ĐẾN" />
+
+                                <h5>
+                                    <field name="den_thang" placeholder="Đến Tháng"/>/
+                                    <field name="den_nam" placeholder="của Năm"/>
+                                </h5>
+
+                        </group>
+
+                    </group>
+                    <footer>
+                        <button name="action_xem_baocao" type="object" string="Xem báo cáo" class="btn-primary"/>
+                        <button string="Đóng lại" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="ekids_baocao.baocao_loinhuan_wizard_action_window" model="ir.actions.act_window">
+            <field name="name">Tạo báo cáo</field>
+            <field name="res_model">ekids.baocao_loinhuan</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

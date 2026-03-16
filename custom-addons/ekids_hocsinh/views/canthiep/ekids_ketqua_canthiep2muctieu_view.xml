@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+
+        <record id="ekids_hocsinh.ekids_ketqua_canthiep2muctieu_list" model="ir.ui.view">
+            <field name="name">Kết quả can thiêp</field>
+            <field name="model">ekids.kehoach_ketqua2muctieu</field>
+            <field name="arch" type="xml">
+                <list editable="bottom" create="false">
+                    <field name="name" width="150"/>
+                    <field name="ketqua" width="200"
+                       decoration-success="ketqua == '+'"
+                       decoration-warning="ketqua == '+/-'"
+                       decoration-danger="ketqua == '-'"/>
+                    <field name="desc"/>
+
+                </list>
+            </field>
+        </record>
+  </data>
+</odoo>

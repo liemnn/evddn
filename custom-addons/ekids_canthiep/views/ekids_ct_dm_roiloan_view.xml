@@ -1,0 +1,84 @@
+<odoo>
+    <data>
+
+        <record id="ekids_canthiep.ct_dm_roiloan_kanban_view" model="ir.ui.view">
+            <field name="name">Danh mục loại rối loạn</field>
+            <field name="model">ekids.ct_dm_roiloan</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false">
+                    <t t-name="kanban-box">
+                        <div class="box">
+                              <nav class="box-navbar">
+                                <ul class="box-menu">
+                                  <li class="box-menu-item">
+                                    <a href="#" >
+                                       <span class="fa fa-ellipsis-v"></span>
+                                    </a>
+                                    <ul class="box-dropdown">
+                                       <li>
+
+                                      </li>
+
+                                    </ul>
+                                  </li>
+                                </ul>
+                            </nav>
+                            <!-- Icon Section -->
+
+                            <!-- Title Section -->
+                            <h2 class="title">
+                                <field name="name"/>
+                            </h2>
+                            <!-- Description Section -->
+
+                            <p class="description">
+                               <field name="desc"/>
+                            </p>
+                            <!-- Button Section -->
+
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+         <record id="ekids_canthiep.ct_dm_roiloan_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.ct_dm_roiloan</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                             <div class="row">
+                                <div class="col-md-2">
+                                  <h3>
+                                      <field name="ma" placeholder="Mã" />
+                                  </h3>
+                                </div>
+                                <div class="col-md-10">
+                                  <h3>
+                                      <field name="ten" placeholder="Tên"/>
+                                  </h3>
+                                </div>
+                              </div>
+                        </group>
+                        <group>
+                            <field name="desc"/>
+                            <field name="coso_ids" widget="many2many_tags"/>
+                        </group>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+          <record model="ir.actions.act_window" id="ekids_canthiep.ct_dm_roiloan_action_window">
+            <field name="name">Phân loại rối loạn</field>
+            <field name="res_model">ekids.ct_dm_roiloan</field>
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+
+    </data>
+</odoo>

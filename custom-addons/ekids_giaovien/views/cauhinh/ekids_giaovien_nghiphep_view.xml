@@ -1,0 +1,49 @@
+<odoo>
+  <data>
+
+        <record id="ekids_giaovien.giaovien_nghiphep_list" model="ir.ui.view">
+            <field name="name">giaovien_nghiphep</field>
+            <field name="model">ekids.giaovien_nghiphep</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="tu_ngay"/>
+                    <field name="den_ngay" />
+                    <field name="loai" />
+                     <field name="desc" />
+
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_giaovien.giaovien_nghiphep_form">
+            <field name="name">giaovien_nghiphep Form</field>
+            <field name="model">ekids.giaovien_nghiphep</field>
+            <field name="arch" type="xml">
+            <form  target="new">
+                <sheet>
+                    <h4>
+                        <field name="coso_id" readonly="true"/>/
+                        <field name="giaovien_id" readonly="true"/>
+                    </h4>
+                    <group col="2">
+                        <group>
+                            <field name="tu_ngay"/>
+                        </group>
+                         <group>
+                            <field name="den_ngay"/>
+                        </group>
+
+                    </group>
+                    <group>
+                        <field name="loai"/>
+                        <field name="desc" />
+                    </group>
+                </sheet>
+            </form>
+            </field>
+        </record>
+
+
+
+  </data>
+</odoo>

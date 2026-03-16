@@ -1,0 +1,91 @@
+<odoo>
+    <data>
+        <record id="ekids_canthiep.ct_linhvuc_list" model="ir.ui.view">
+            <field name="name">MỤC TIÊU</field>
+            <field name="model">ekids.ct_linhvuc</field>
+            <field name="arch" type="xml">
+                <list default_order="sequence">
+                    <field name="sequence" widget="handle"/>
+                    <field name="ma"/>
+                    <field name="ten"/>
+                    <field name="desc" />
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_canthiep.ct_linhvuc_kanban_view" model="ir.ui.view">
+            <field name="name">Chương trình</field>
+            <field name="model">ekids.ct_linhvuc</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false">
+                    <t t-name="kanban-box">
+                        <div class="box">
+                            <!-- Icon Section -->
+
+                            <!-- Title Section -->
+                            <h2 class="title">
+
+                                <field name="name"/>
+                            </h2>
+                            <!-- Description Section -->
+
+                            <p class="description">
+                               <field name="desc"/>
+                            </p>
+                             <div class="item-list">
+                               <div class="item">
+                                  <div class="item-text">Tổng [mục tiêu]</div>
+                                  <div class="item-badge">
+                                      <field name="tong_muctieu"/>
+                                  </div>
+                                </div>
+                            </div>
+                            <!-- Button Section -->
+                            <button  class="function"
+                                 name="action_view_ekid_canthiep_kanban_muctieu"
+                                 type="object" string="Mục tiêu"/>
+
+                        </div>
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+         <record id="ekids_canthiep.ct_linhvuc_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.ct_linhvuc</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                         <field name="chuongtrinh_id" invisible="1"/>
+                        <group>
+                             <div class="row">
+                                <div class="col-md-2">
+                                  <h3>
+                                      <field name="ma" placeholder="Mã lĩnh vực" />
+                                  </h3>
+                                </div>
+                                <div class="col-md-10">
+                                  <h3>
+                                      <field name="ten" placeholder="Tên lĩnh vực"/>
+                                  </h3>
+                                </div>
+                              </div>
+                        </group>
+                        <group>
+                            <field name="desc"/>
+                        </group>
+                        <notebook invisible=" not id">
+                            <page name="muctieu_ids " string="DANH SÁCH [MỤC TIÊU] CỦA LĨNH VƯC">
+                                <field name="muctieu_ids" context="{'default_chuongtrinh_id':chuongtrinh_id}"/>
+                            </page>
+                        </notebook>
+
+                       </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

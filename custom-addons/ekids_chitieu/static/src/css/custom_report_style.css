@@ -1,0 +1,16 @@
+.custom_report_layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.custom_report_layout .left_section {
+    flex: 1;
+    padding: 20px;
+    border-right: 1px solid #e9ecef;
+}
+
+.custom_report_layout .right_section {
+    flex: 1;
+    padding: 20px;
+}
