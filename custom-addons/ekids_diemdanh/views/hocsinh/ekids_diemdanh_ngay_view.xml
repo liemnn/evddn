@@ -1,0 +1,63 @@
+<odoo>
+    <data>
+         <record id="ekids_diemdanh.diemdanh_ngay_list" model="ir.ui.view">
+            <field name="name"> Diem Danh </field>
+            <field name="model">ekids.diemdanh_ngay</field>
+            <field name="arch" type="xml">
+                <list create="0" editable="bottom">
+                    <field name="ngay"/>
+                    <field name="hocsinh_id"/>
+                    <field name="desc"/>
+                    <field name="trangthai"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="ekids_diemdanh.diemdanh_ngay_kanban" model="ir.ui.view">
+            <field name="name">Kanban Điểm danh</field>
+            <field name="model">ekids.diemdanh_ngay</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban default_group_by="trangthai" create="0">
+                   <field name="trangthai" group_expand="_group_expand_trangthai"/>
+                   <field name="hocsinh_id"/>
+
+                    <t t-name="kanban-box" t-attf-class="oe_kanban_card oe_kanban_global_click">
+                        <div class="box-user" >
+                        <!-- Vùng ảnh -->
+                            <div class="user-avatar">
+                                <img t-att-src="kanban_image('ekids.hocsinh', 'avatar', record.hocsinh_id.raw_value)" class="oe_kanban_avatar"/>
+                            </div>
+
+                            <!-- Vùng thông tin -->
+                            <div class="info">
+                                <h2>
+                                    <field name="hocsinh_id"/>
+                                </h2>
+
+                               <!-- Button chuyển trạng thái -->
+                                <div t-if="record.trangthai.raw_value == '0'">
+                                    <button type="object" name="action_diemdanh_ngay_chuyen_trangthai"
+                                        class="btn btn-sm btn-primary mt-2">
+                                        Nghỉ học
+                                    </button>
+                                </div>
+                                <div t-if="record.trangthai.raw_value == '1'">
+                                    <button type="object" name="action_diemdanh_ngay_chuyen_trangthai"
+                                        class="btn btn-sm btn-success mt-2">
+                                        Đi học
+                                    </button>
+                                </div>
+
+                            </div>
+                            </div>
+
+                    </t>
+                </kanban>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
