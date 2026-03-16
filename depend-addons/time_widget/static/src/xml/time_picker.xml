@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="FieldFlatpickrTime">
+        <!-- FieldFlatpickrTime template to add input field-->
+        <div class="input-group flatpickr-time-component">
+            <input type="text"
+                   readonly="readonly"
+                   t-ref="input_time"
+                   t-att-id="props.id"
+                   t-on-click="(ev) => this._onClickTimeField(ev)"
+                   class="flatpickr-time-input form-control o_input"
+            />
+            <span class="input-group-addon" style="display:none;">
+                <i class="fa fa-clock-o me-1"/>
+            </span>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,34 @@
+.ekids-diemdanh {
+    display: inline-block;
+    padding: 0px;
+    border-radius: 2px;
+
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* hiệu ứng hover */
+.ekids-diemdanh:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+}
+
+/* tuỳ biến từng trạng thái */
+.dihoc{
+    background-color: #28a745;
+    color: #fff;
+    border: 1px solid #1e7e34;
+}
+
+.vangmat{
+    background-color: #dc3545;
+    color: #fff;
+    border: 1px solid #bd2130;
+}
+
+.nuabuoi {
+    background-color: #ffc107;
+    color: #212529;
+    border: 1px solid #e0a800;
+}

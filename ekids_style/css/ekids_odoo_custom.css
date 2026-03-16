@@ -1,0 +1,162 @@
+.o_list_view thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #fff; /* để không bị trong suốt */
+}
+.o_list_view thead th {
+    white-space: nowrap !important; /* cho phép xuống dòng */
+    word-break: break-word; /* cắt từ xuống dòng */
+    max-width:auto; /* tuỳ chỉnh độ rộng để text tự wrap */
+}
+
+.o_list_view th div {
+    min-width: max-content; /* độ rộng tối thiểu bằng chữ */
+}
+
+/* Desktop: có checkbox */
+@media (min-width: 768px) {
+  .o_list_view td:nth-child(3),
+  .o_list_view th:nth-child(3) {
+      position: sticky;
+      left: 0;
+      background: white;
+      z-index: 3;
+  }
+}
+
+/* Mobile: checkbox ẩn, cột cần dính thành số 2 */
+@media (max-width: 767px) {
+  .o_list_view td:nth-child(2),
+  .o_list_view th:nth-child(2) {
+      position: sticky;
+      left: 0;
+      background: white;
+      z-index: 3;
+  }
+}
+
+
+/* 1. Trả lại thanh Tab tổng thể về chuẩn Odoo (có đường kẻ ngang mờ ở dưới) */
+.o_form_view .o_notebook .nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 15px;
+}
+
+/* 2. Style bo viền góc trên cho tất cả các Tab chưa được chọn */
+.o_form_view .o_notebook .nav-tabs .nav-link {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #495057;
+    border: 1px solid transparent !important; /* Mặc định trong suốt để không bị giật khung */
+    border-radius: 6px 6px 0 0 !important; /* Bo tròn 2 góc trên */
+    padding: 8px 16px;
+    margin-right: 4px;
+}
+
+/* Hiệu ứng khi di chuột qua Tab chưa chọn */
+.o_form_view .o_notebook .nav-tabs .nav-link:hover {
+    border-color: #e9ecef #e9ecef #dee2e6 !important;
+    background-color: #f8f9fa;
+}
+
+/* ========================================================= */
+/* 3. HIỆU ỨNG BO VIỀN MÀU KHI ĐƯỢC CHỌN (ACTIVE)            */
+/* ========================================================= */
+
+/* TAB 1: 1. ĐƯỢC CỘNG (+) -> Viền Xanh lá cây */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(1) .nav-link.active {
+    color: #198754 !important;
+    background-color: #ffffff !important;
+    /* Viền Trái - Phải - Dưới (Dưới màu trắng để nối liền nội dung) */
+    border-color: #198754 #198754 #ffffff !important;
+    /* Viền trên cùng đậm hơn tạo điểm nhấn */
+    border-top: 3px solid #198754 !important;
+}
+
+/* TAB 2: 2. BỊ TRỪ (-) -> Viền Đỏ */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(2) .nav-link.active {
+    color: #dc3545 !important;
+    background-color: #ffffff !important;
+    border-color: #dc3545 #dc3545 #ffffff !important;
+    border-top: 3px solid #dc3545 !important;
+}
+
+/* TAB 3: 3. NHÀ TRƯỜNG CHI TRẢ -> Viền Xanh dương */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(3) .nav-link.active {
+    color: #0d6efd !important;
+    background-color: #ffffff !important;
+    border-color: #0d6efd #0d6efd #ffffff !important;
+    border-top: 3px solid #0d6efd !important;
+}
+
+/* TAB 4: 4. THÔNG TIN ĐÓNG GÓP -> Viền Xanh lơ */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(4) .nav-link.active {
+    color: #0dcaf0 !important;
+    background-color: #ffffff !important;
+    border-color: #0dcaf0 #0dcaf0 #ffffff !important;
+    border-top: 3px solid #0dcaf0 !important;
+}
+
+/* TAB 5: Màu Cam (Orange) - Thích hợp cho Cảnh báo, Lịch sử, Tạm ứng */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(5) .nav-link.active {
+    color: #fd7e14 !important;
+    background-color: #ffffff !important;
+    border-color: #fd7e14 #fd7e14 #ffffff !important;
+    border-top: 3px solid #fd7e14 !important;
+}
+
+/* TAB 6: Màu Tím (Purple) - Thích hợp cho Khen thưởng, Đánh giá, KPI */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(6) .nav-link.active {
+    color: #6f42c1 !important;
+    background-color: #ffffff !important;
+    border-color: #6f42c1 #6f42c1 #ffffff !important;
+    border-top: 3px solid #6f42c1 !important;
+}
+
+/* TAB 7: Màu Hồng (Pink) - Thích hợp cho Y Tế, Sức khỏe, Ghi chú đặc biệt */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(7) .nav-link.active {
+    color: #d63384 !important;
+    background-color: #ffffff !important;
+    border-color: #d63384 #d63384 #ffffff !important;
+    border-top: 3px solid #d63384 !important;
+}
+
+/* TAB 8: Màu Xanh ngọc (Teal) - Thích hợp cho Hoàn thành, Tài liệu, Hợp đồng */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(8) .nav-link.active {
+    color: #20c997 !important;
+    background-color: #ffffff !important;
+    border-color: #20c997 #20c997 #ffffff !important;
+    border-top: 3px solid #20c997 !important;
+}
+
+/* TAB 9: Màu Chàm (Indigo) - Thích hợp cho Phân quyền, Cài đặt, Cấu hình */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(9) .nav-link.active {
+    color: #6610f2 !important;
+    background-color: #ffffff !important;
+    border-color: #6610f2 #6610f2 #ffffff !important;
+    border-top: 3px solid #6610f2 !important;
+}
+
+/* TAB 10: Màu Than chì (Dark Slate) - Thích hợp cho Nhật ký hệ thống, Thông tin ẩn */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(10) .nav-link.active {
+    color: #343a40 !important;
+    background-color: #ffffff !important;
+    border-color: #343a40 #343a40 #ffffff !important;
+    border-top: 3px solid #343a40 !important;
+}
+
+/* ------------------------------------------------------------------------- */
+/* MẸO DỰ PHÒNG: Nếu có trên 10 Tab, tự động lặp lại màu Xám trung tính       */
+/* ------------------------------------------------------------------------- */
+.o_form_view .o_notebook .nav-tabs .nav-item:nth-child(n+11) .nav-link.active {
+    color: #6c757d !important;
+    background-color: #ffffff !important;
+    border-color: #6c757d #6c757d #ffffff !important;
+    border-top: 3px solid #6c757d !important;
+}
+
+
+
+
+

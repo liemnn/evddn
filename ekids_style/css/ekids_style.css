@@ -1,0 +1,424 @@
+/* Style chinh sua cho odoo */
+.o_kanban_renderer .o_legacy_kanban_record {
+    position: relative;
+    min-width: 150px;
+    margin: 0 0 5px;
+}
+
+
+/* Box Styling */
+.box {
+    background-color:#f9fbfc;
+    border-radius: 7px;
+    border:1px solid #dee2e6;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 30px 20px;
+    width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    radius:50px;
+}
+
+.box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon Section */
+.avatar {
+   margin:0px;
+   padding:0px;
+}
+.avatar img{
+     width: 120px;
+    margin-bottom: 5px;
+    /* border-radius: 50%; */
+    /* border: 2px solid #dee2e6; */
+    height: auto;
+    padding: 5px;
+}
+
+/* Title Section */
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0px;
+}
+
+.slogan {
+    font-size: 1rem;
+    color: #999;
+
+
+}
+
+/* Description Section */
+.description {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+/* Button Styling */
+.function {
+    background-color:rgb(217,217,217);
+    color: #333;
+    font-weight: bold;
+    border: 1px solid #999;
+    padding: 0px 10px 0px 10px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    width:80%;
+    margin:auto;
+    margin-bottom:5px;
+}
+
+.function:hover {
+    background-color: #385667;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+
+
+.box-navbar {
+
+  padding: 5px 10px;
+  position: absolute; /* Hoặc dùng fixed nếu muốn cố định khi cuộn */
+  right:0px;
+  top:0px;
+
+
+}
+
+.box-menu {
+  list-style: none;
+
+}
+
+.box-menu-item {
+  position: relative;
+  margin-right: 0px;
+}
+
+.box-menu-item a {
+  color: #000;
+  text-decoration: none;
+  padding: 5px 10px;
+  display: block;
+}
+
+.box-menu-item a:hover {
+  background-color:#385667;
+  border-radius: 5px;
+}
+
+.box-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right:7px;
+  background-color: #f9fbfc;
+  border-radius: 5px;
+  list-style: none;
+  padding: 10px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.box-dropdown li {
+  margin: 0;
+}
+
+.box-dropdown button {
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block;
+  white-space: nowrap;
+  border:0px;
+  width:100%;
+  text-align: left;
+}
+
+.box-dropdown button:hover {
+  background-color: #385667;
+  color:#fff;
+}
+
+/* Show dropdown on hover */
+.box-menu-item:hover .box-dropdown {
+  display: block;
+}
+
+
+/* Print hoc phi va luong */
+
+.box-print {
+    background-color:#f9fbfc;
+    font-size: 13px;
+
+    text-align: center;
+    padding: 30px 20px;
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+/* Box học phí và nhân sự*/
+.box-user {
+
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    border: 1px dashed #ccc;
+}
+
+/* Vùng bên trái - Ảnh */
+.box-user img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin:5px;
+
+}
+
+/* Vùng bên phải - Thông tin */
+.box-user .info {
+    flex: 1;
+}
+
+.box-user .info  h2 {
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+    margin-top:15px;
+    padding:0px;
+
+}
+
+.box-user .info  ul {
+    list-style-type: disc;
+
+
+}
+
+..box-user .info  ul li {
+    font-size: 12px;
+    color: #333;
+    margin:0px;
+     padding:0px
+
+}
+
+/* Học phí */
+.box-user .info .fee {
+    font-size: 16px;
+    font-weight: bold;
+    color: green;
+    float: left;
+    margin: 6px;
+}
+
+/* Nút trạng thái */
+.box-user .info .status{
+    display: inline-block;
+    background: #d9534f;
+    color: white;
+    font-weight:bold;
+    padding: 3px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size:12px;
+    float: right;
+    margin-right:5px;
+    margin-bottom:5px;
+}
+
+/* class phu vu hiển thị mục tiêu can thiêp */
+
+table.ekids-muctieu {
+    border: 1px solid #f1f1f1;
+    width:100%;
+}
+
+table.ekids-muctieu td,tr,th{
+    border: 1px solid #f1f1f1;
+    padding:5px 10px 5px 10px;
+    text-align: justify;
+    text-justify: inter-word;
+    vertical-align: top;
+}
+
+td.linhvuc{
+    font-weight: bold;
+    text-align: left;
+
+}
+.ketqua_ok{
+     background-color: rgb(55,125,34);
+     width: 30px;
+     height: 30px;
+     }
+
+.ketqua_fail{
+     background-color:#f8d7da;
+     width: 30px;
+     height: 30px;
+  }
+.ketqua_pending{
+     background-color:rgb(255,253,85);
+     width: 30px;
+     height: 30px;
+
+}
+/** hiển thị 2 dòng rồi mở rộng*/
+
+.text-block {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* 👈 Số dòng muốn hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Hover để hiển thị đầy đủ */
+.text-block:hover {
+  -webkit-line-clamp: unset;
+  white-space: normal;
+}
+
+p.circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%; /* Tạo hình tròn */
+      color: white;       /* Màu chữ */
+      text-align: center;
+      line-height: 100px; /* Canh giữa chữ theo chiều dọc */
+      font-weight: bold;
+      margin: 10px;
+    }
+
+.red {
+      background-color: red;
+    }
+
+.blue {
+      background-color: blue;
+    }
+
+/********list có số************/
+ .item-list {
+      background: #fff;
+      border-radius: 0px;
+      box-shadow: 0 0px 0px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 5px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .item:last-child {
+      border-bottom: none;
+    }
+
+    .item-text {
+      font-size: 16px;
+      color: #333;
+      text-align: left;
+    }
+
+    .item-badge {
+      background-color: #7b1fa2; /* Tím đậm */
+      color: white;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+      .item-info {
+
+          color: #7b1fa2;;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          font-size: 14px;
+           text-align: right;
+    }
+
+  /********diem danh************/
+
+   .table_diemdanh .oe_list_header {
+    background-color: #e8f4ff !important;
+    font-weight: bold;
+    text-align: center;
+    height: 35px;
+}
+
+.table_diemdanh .cell_day {
+    background-color: #f9f9f9;
+    text-align: center;
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    padding: 4px;
+}
+
+.table_diemdanh td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+  /********mau đánh giá************/
+
+
+table.ekids_mau_review{
+    border: 0px solid #f1f1f1;
+    width:100%;
+}
+
+table.ekids_mau_review td,tr,th{
+    border: 0px solid #f1f1f1;
+    padding:5px 10px 5px 10px;
+    text-align: justify;
+    text-justify: inter-word;
+    vertical-align: top;
+}
+
+table.ekids_mau_review span.tacgia{
+    font-weight: bold;
+    font-size: 12px;
+    BACKGROUND: #7b1fa2;
+    COLOR: WHEAT;
+    border-radius: 50%;
+    padding: 2px 5px 2px 6px
+
+}
+
+table.ekids_mau_review span.review{
+    font-style: italic;
+    font-size:14px;
+
+}
+
+
