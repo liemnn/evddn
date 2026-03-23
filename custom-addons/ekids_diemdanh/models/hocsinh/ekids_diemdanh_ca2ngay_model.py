@@ -31,12 +31,12 @@ class DiemDanhCa2Ngay(models.Model):
     giaovien_id = fields.Many2one("ekids.giaovien", string="Giáo viên thực hiện", ondelete="restrict",index=True)
 
     trangthai = fields.Selection([
-        ("0", "Đợi xác thực"),
+        ("0", "Đã được học"),
         ("1", "Đã được học"),
         ("-1","Không học"),
         ("2", "Nghỉ - Hoàn trả học phí"),
         ("3", "Nghỉ - Sẽ sắp lịch dạy bù"),
-        ("4", "Đã dạy bù"),
+        ("4", "Học bù"),
         ("5", "Tăng cường"),
     ], string="Xác nhận", required=True, default="1")
 
@@ -65,7 +65,7 @@ class DiemDanhCa2Ngay(models.Model):
 
     def _compute_is_hoc(self):
         for rec in self:
-            if rec.trangthai == '1':
+            if rec.trangthai == '1' or rec.trangthai == '0':
                 rec.is_hoc = True
             else:
                 rec.is_hoc = False
