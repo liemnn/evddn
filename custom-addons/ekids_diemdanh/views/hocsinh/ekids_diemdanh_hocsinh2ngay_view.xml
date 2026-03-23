@@ -143,27 +143,27 @@
                                                           </div>
                                                         </div>
 
-                                                         <div class="item">
-                                                            <div class="item-text">
+                                                         <div class="item mt-2">
+                                                            <div class="item-text" style="display: flex; gap: 4px; flex-wrap: wrap;">
                                                                 <button name="func_xacnhan_ca2ngay_hoc"
-                                                                        class="btn-success"
+                                                                        class="btn-success btn-sm"
                                                                         type="object"
                                                                         string="Học"
-                                                                        icon="fa-check-circle"
+                                                                        icon="fa-check"
                                                                         invisible="is_hoc == True"/>
 
                                                                 <button name="func_xacnhan_ca2ngay_nghi_khongbu"
-                                                                        class="btn-danger"
+                                                                        class="btn-danger btn-sm"
                                                                         type="object"
                                                                         string="Nghỉ (Hoàn trả học phí)"
-                                                                        icon="fa-times-circle"
+                                                                        icon="fa-times"
                                                                         invisible="is_nghi_khongbu == True"/>
 
                                                                 <button name="func_xacnhan_ca2ngay_nghi_hocbu"
-                                                                        class="btn-warning"
+                                                                        class="btn-warning btn-sm"
                                                                         type="object"
                                                                         string="Nghỉ (Sẽ học bù)"
-                                                                        icon="fa-calendar-plus-o"
+                                                                        icon="fa-history"
                                                                         invisible="is_nghi_hocbu == True"/>
                                                             </div>
                                                         </div>

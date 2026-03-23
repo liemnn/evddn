@@ -11,44 +11,88 @@
             </field>
         </record>
 
-
-
         <record id="ekids_diemdanh.chamcong_giaovien2ngay_form" model="ir.ui.view">
-            <field name="name">Form</field>
+            <field name="name">Form Chấm Công Giáo Viên - Final Optimized</field>
             <field name="model">ekids.chamcong_giaovien2ngay</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form>
-
                     <sheet>
-                        <separator string="1.THÔNG TIN VỀ NGÀY HỌC" />
-                        <group col="2">
-                            <group>
-                                <field name="giaovien_id" readonly="true"/>
-                            </group>
-                            <group>
-                                <field name="ngay" readonly="true"/>
-                            </group>
+                        <style>
+                            /* HEADER CARD */
+                            .ek-header-card {
+                                background: #ffffff; border-radius: 20px; padding: 15px 20px;
+                                display: flex; justify-content: space-between; align-items: center;
+                                box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #e2e8f0;
+                                margin-bottom: 25px; flex-wrap: nowrap; gap: 10px;
+                            }
+                            .ek-left-zone { display: flex; align-items: center; gap: 12px; min-width: 220px; }
+                            .ek-avatar {
+                                width: 48px; height: 48px; background: #fef3c7; color: #d97706;
+                                border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 24px;
+                            }
+                            .ek-info h2 { font-size: 18px; font-weight: 800; color: #0f172a; margin: 0; line-height: 1.2; }
+                            .ek-date { font-size: 12px; font-weight: 700; color: #64748b; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
 
-                        </group>
-                         <group>
+                            /* NÚT ĐĂNG KÝ NGHỈ PHÉP DASHED */
+                            .ek-btn-ghost-red {
+                                background: transparent !important; color: #ef4444 !important; border: 1.2px dashed #fca5a5 !important;
+                                font-weight: 700 !important; padding: 4px 10px !important; border-radius: 10px !important; font-size: 11px !important;
+                                margin-top: 6px; display: inline-flex; align-items: center; gap: 4px; transition: 0.2s !important;
+                            }
+                            .ek-btn-ghost-red:hover { background: #fef2f2 !important; border-color: #ef4444 !important; }
 
-                            <h3>
-                                <field name="trangthai" widget="selection"
-                                    decoration-success="trangthai == '1'"
-                                    decoration-warning="trangthai == '0'"
-                                    decoration-danger="trangthai == '-1'"/>
-                            </h3>
-                        </group>
+                            /* KHAY CHỌN TRẠNG THÁI - ÉP CHẶT TRÊN 1 DÒNG */
+                            .ek-right-zone { flex: 1; display: flex; justify-content: flex-end; min-width: 0; }
+                            .ek-status-tray {
+                                display: inline-flex; background: #f8fafc; border-radius: 50px; padding: 4px;
+                                border: 1px solid #e2e8f0; flex-wrap: nowrap; overflow: hidden;
+                            }
+                            .ek-status-tray .o_field_radio { display: flex; gap: 2px; margin: 0; flex-wrap: nowrap; }
+                            .ek-status-tray .o_radio_item { margin: 0 !important; }
+                            .ek-status-tray input[type="radio"] { display: none !important; }
+                            .ek-status-tray label {
+                                display: flex !important; align-items: center; justify-content: center;
+                                padding: 8px 14px; border-radius: 50px; font-size: 12px; font-weight: 700; color: #64748b;
+                                cursor: pointer; transition: all 0.2s; margin: 0; white-space: nowrap;
+                            }
 
-                         <group>
-                            <button name="action_quanly_nghiphep_giaovien"
-                                        string="Nghỉ phép từ ngày này(-)"
-                                        type="object"
-                                        context="{'default_giaovien_id':giaovien_id,'default_ngay':ngay}"
-                                        class="btn-secondary"
-                                />
-                        </group>
+                            /* MÀU TRẠNG THÁI ACTIVE */
+                            .ek-status-tray .o_radio_item:nth-child(1) input:checked + label { background: #10b981 !important; color: #ffffff !important; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+                            .ek-status-tray .o_radio_item:nth-child(2) input:checked + label { background: #6366f1 !important; color: #ffffff !important; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2); }
+                            .ek-status-tray .o_radio_item:nth-child(3) input:checked + label { background: #f59e0b !important; color: #ffffff !important; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2); }
+                            .ek-status-tray .o_radio_item:nth-child(4) input:checked + label { background: #ef4444 !important; color: #ffffff !important; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2); }
+
+                            @media (max-width: 992px) {
+                                .ek-header-card { flex-direction: column; align-items: center; text-align: center; }
+                                .ek-left-zone { flex-direction: column; min-width: 100%; margin-bottom: 10px; }
+                                .ek-right-zone { width: 100%; justify-content: center; }
+                                .ek-status-tray { width: 100%; overflow-x: auto; }
+                                .ek-status-tray label { flex: 1; padding: 10px 5px; font-size: 11px; }
+                            }
+                        </style>
+
+                        <div class="ek-header-card">
+                            <div class="ek-left-zone">
+                                <div class="ek-avatar"><i class="fa fa-graduation-cap"></i></div>
+                                <div class="ek-info">
+                                    <h2><field name="giaovien_id" readonly="1" options="{'no_open': True}"/></h2>
+                                    <div class="ek-date"><i class="fa fa-calendar-check-o"></i> <field name="ngay" readonly="1"/></div>
+                                    <button name="action_quanly_nghiphep_giaovien"
+                                            string="Đăng ký nghỉ phép từ ngày này (-)"
+                                            type="object"
+                                            context="{'default_giaovien_id':giaovien_id,'default_ngay':ngay}"
+                                            class="ek-btn-ghost-red"
+                                            icon="fa-plane"/>
+                                </div>
+                            </div>
+
+                            <div class="ek-right-zone">
+                                <div class="ek-status-tray">
+                                    <field name="trangthai" widget="radio" options="{'horizontal': true}"/>
+                                </div>
+                            </div>
+                        </div>
 
                         <notebook>
                             <page string="1.XÁC NHẬN CA HỌC/NGÀY" >
@@ -58,128 +102,91 @@
                                             <t t-name="kanban-box">
                                                 <field name="is_hoc" invisible="1"/>
                                                 <field name="is_nghi" invisible="1"/>
-                                                <div class="box">
-                                                    <!-- Icon Section -->
-
+                                                <div class="box border-primary">
                                                      <div class="item-list">
                                                           <div class="item">
-                                                              <div class="item-text">Học sinh:</div>
-                                                              <div class="item-info">
-                                                                <field name="hocsinh_id"/>
-                                                              </div>
+                                                              <div class="item-text"><strong>Học sinh:</strong></div>
+                                                              <div class="item-info"><field name="hocsinh_id"/></div>
                                                           </div>
                                                         <div class="item">
                                                           <div class="item-text">Thời gian:</div>
-                                                          <div class="item-info">
-                                                            Từ: <field name="tu"/>
-                                                            -Đến: <field name="den"/>
-                                                        </div>
+                                                          <div class="item-info"><i class="fa fa-clock-o"/> <field name="tu"/> - <field name="den"/></div>
                                                         </div>
                                                         <div class="item">
-                                                          <div class="item-text">Ca</div>
-                                                          <div class="item-info">
-                                                            <field name="hocphi_dm_ca_id"/>
-                                                          </div>
+                                                          <div class="item-text">Ca:</div>
+                                                          <div class="item-info"><field name="hocphi_dm_ca_id"/></div>
                                                         </div>
                                                         <div class="item">
-                                                          <div class="item-text">Trạng thái đã xác nhận:</div>
+                                                          <div class="item-text">Trạng thái:</div>
                                                           <div>
-
                                                               <field name="trangthai" widget="selection" readonly="true"
-                                                                            decoration-success="trangthai == '1'"
-                                                                            decoration-warning="trangthai == '0'"
+                                                                            decoration-success="trangthai in ['1', '0']"
                                                                             decoration-muted="trangthai == '2'"
                                                                             decoration-danger="trangthai == '3'"
-                                                                            decoration-info="trangthai == '4'"
-                                                                />
+                                                                            decoration-info="trangthai == '4'"/>
                                                           </div>
                                                         </div>
 
-                                                         <div class="item">
-                                                          <div class="item-text">
-                                                               <button name="func_xacnhan_ca2ngay_hoc_chamcong"
-                                                                 class="btn-success"
-                                                                 type="object" string="Học"  invisible="is_hoc == True"/>
+                                                         <div class="item mt-2">
+                                                            <div class="item-text" style="display: flex; gap: 4px; flex-wrap: wrap;">
+                                                                <button name="func_xacnhan_ca2ngay_hoc_chamcong"
+                                                                        class="btn-success btn-sm"
+                                                                        type="object"
+                                                                        string="Học"
+                                                                        icon="fa-check"
+                                                                        invisible="is_hoc == True"/>
 
                                                                 <button name="func_xacnhan_ca2ngay_nghi_khongbu_chamcong"
-                                                                 class="btn-danger"
-                                                                 type="object" string="Nghỉ" invisible="is_nghi_khongbu == True"/>
+                                                                        class="btn-danger btn-sm"
+                                                                        type="object"
+                                                                        string="Nghỉ (Hoàn trả học phí)"
+                                                                        icon="fa-times"
+                                                                        invisible="is_nghi_khongbu == True"/>
 
-                                                                 <button name="func_xacnhan_ca2ngay_nghi_hocbu_chamcong"
-                                                                 class="btn-warning"
-                                                                 type="object" string="Nghỉ-Sẽ học bù" invisible="is_nghi_hocbu == True"/>
-
-                                                          </div>
-                                                         </div>
+                                                                <button name="func_xacnhan_ca2ngay_nghi_hocbu_chamcong"
+                                                                        class="btn-warning btn-sm"
+                                                                        type="object"
+                                                                        string="Nghỉ (Sẽ học bù)"
+                                                                        icon="fa-history"
+                                                                        invisible="is_nghi_hocbu == True"/>
+                                                            </div>
+                                                        </div>
                                                     </div>
-
                                                 </div>
-
                                             </t>
                                         </templates>
                                     </kanban>
                                 </field>
                             </page>
-                            <page string="2. CA HOC BÙ/TĂNG CƯỜNG THÊM" >
+
+                            <page string="2. CA HỌC BÙ/PHÁT SINH" >
                                  <button name="action_open_popup_tao_hocsinh2ngay_hocbu_tu_giaovien"
-                                        string="Thêm (+)"
+                                        string="Thêm ca (+)"
                                         type="object"
                                         class="btn-primary"
-                                />
+                                        icon="fa-plus"/>
                                 <field name="ca2ngay_hocbu_ids">
                                     <kanban create="1" delete="1">
                                         <templates>
                                             <t t-name="kanban-box">
-                                                <field name="is_hoc" invisible="1"/>
-                                                <field name="is_nghi" invisible="1"/>
-                                                <div class="box">
-                                                    <!-- Icon Section -->
-
+                                                <div class="box border-info">
                                                      <div class="item-list">
                                                           <div class="item">
-                                                              <div class="item-text">Học sinh:</div>
-                                                              <div class="item-info">
-                                                                <field name="hocsinh_id"/>
-                                                              </div>
+                                                              <div class="item-text"><strong>Học sinh:</strong></div>
+                                                              <div class="item-info"><field name="hocsinh_id"/></div>
                                                           </div>
                                                         <div class="item">
                                                           <div class="item-text">Thời gian:</div>
-                                                          <div class="item-info">
-                                                            Từ: <field name="tu"/>
-                                                            Đến: <field name="den"/>
+                                                          <div class="item-info"><field name="tu"/> - <field name="den"/></div>
                                                         </div>
-                                                        </div>
-                                                        <div class="item">
-                                                          <div class="item-text">Ca</div>
-                                                          <div class="item-info">
-                                                            <field name="hocphi_dm_ca_id"/>
-                                                          </div>
-                                                        </div>
-                                                        <div class="item">
-                                                          <div class="item-text">Trạng thái đã xác nhận:</div>
-                                                          <div>
-
-                                                              <field name="trangthai" widget="selection" readonly="true"
-                                                                            decoration-success="trangthai == '4'"
-                                                                            decoration-danger="trangthai == '5'"
-
-                                                                />
-                                                          </div>
-                                                        </div>
-                                                         <div class="item">
-                                                          <div class="item-text">
+                                                        <div class="item text-right mt-2">
                                                                <button name="action_xacnhan_xoa_hocbu_tu_chamcong"
-                                                                 class="btn-danger"
-                                                                 type="object" string="Xóa"
-                                                                       confirm="Bạn chắc chắn muốn xóa ca [Dạy bù] này ?"
-                                                               />
-
-                                                          </div>
+                                                                 class="btn-link text-danger font-weight-bold"
+                                                                 type="object" string="Xóa ca"
+                                                                 confirm="Bạn chắc chắn muốn xóa ca này?" icon="fa-trash"/>
                                                          </div>
                                                     </div>
-
                                                 </div>
-
                                             </t>
                                         </templates>
                                     </kanban>
@@ -187,21 +194,10 @@
                             </page>
                         </notebook>
 
-
-
-
                         <footer>
-                            <button name="action_xac_nhan"
-                                    string="Xác nhận"
-                                    type="object"
-                                    class="btn-primary"
-                            />
-                            <button string="Hủy" special="cancel"
-                                    class="btn-secondary"/>
+                            <button name="action_xac_nhan" string="Chốt công" type="object" class="btn-primary" icon="fa-save"/>
+                            <button string="Hủy" special="cancel" class="btn-secondary"/>
                         </footer>
-
-
-
                     </sheet>
                 </form>
             </field>
