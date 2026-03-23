@@ -114,15 +114,19 @@ class LuongSuKien(models.Model):
             ('nam_id.name', '=', nam),
             ('thang_id.name', '=', thang)
         ], limit=1)
-        if luong:
-            data = {
-                'luong_id': luong.id,
-                'sukien_id': self.id,
-                'name': self.name,
-                'tien': self.tien,
-                'loai':self.loai
-            }
-            self.env['ekids.luong_hangmuc'].create(data)
+        if luong and luong.trangthai =='-1':
+            count = self.env["ekids.luong_hangmuc"].search_count([
+                ('luong_id', '=', luong.id),
+                ('sukien_id', '=', self.id)])
+            if count<=0:
+                data = {
+                    'luong_id': luong.id,
+                    'sukien_id': self.id,
+                    'name': self.name,
+                    'tien': self.tien,
+                    'loai':self.loai
+                }
+                self.env['ekids.luong_hangmuc'].create(data)
 
 
 
