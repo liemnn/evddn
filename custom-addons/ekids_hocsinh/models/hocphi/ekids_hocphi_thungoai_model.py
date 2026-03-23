@@ -94,16 +94,19 @@ class HocPhiThuNgoai(models.Model):
             ('nam_id.name', '=', nam),
             ('thang_id.name', '=', thang)
         ], limit=1)
-        if hocphi:
+        if hocphi and hocphi.trangthai=='-1':
+            count = self.env["ekids.hocphi_bantru"].search_count([
+                ('hocphi_id', '=', hocphi.id),
+                ('thungoai_id', '=',  self.id)])
+            if count<=0:
+                data = {
+                    'hocphi_id': hocphi.id,
+                    'thungoai_id': self.id,
+                    'name': self.name,
+                    'tien': self.tien,
 
-            data = {
-                'hocphi_id': hocphi.id,
-                'thungoai_id': self.id,
-                'name': self.name,
-                'tien': self.tien,
-
-            }
-            self.env['ekids.hocphi_bantru'].create(data)
+                }
+                self.env['ekids.hocphi_bantru'].create(data)
 
 
 
