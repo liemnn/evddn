@@ -1,0 +1,1 @@
+from . import  ekids_hocphi_inherit_model

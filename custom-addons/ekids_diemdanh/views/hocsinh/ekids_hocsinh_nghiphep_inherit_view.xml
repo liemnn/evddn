@@ -179,11 +179,6 @@
                               </field>
                           </page>
                       </notebook>
-
-                      <footer style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px; display: flex; justify-content: flex-end; gap: 10px;">
-                          <button string="Đóng" special="cancel" class="btn btn-secondary" style="border-radius: 12px; padding: 10px 30px; font-weight: 800;"/>
-                          <button name="action_xac_nhan" string="Xác nhận lưu" type="object" class="btn btn-primary" style="border-radius: 12px; padding: 10px 40px; font-weight: 900; background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important; border: none; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);"/>
-                      </footer>
                   </sheet>
               </form>
           </field>
