@@ -29,7 +29,7 @@ Long description of module's purpose
         'views/nghile/ekids_nghile_nam_view.xml',
         'views/nghile/ekids_nghile_view.xml',
 
-        'views/thongbao/ekids_thongbao_phuhuynh_view.xml',
+        'views/thongbao/ekids_thongbao_view.xml',
 
 
 

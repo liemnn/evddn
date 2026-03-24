@@ -1,54 +1,39 @@
-from odoo import models, fields, api, _
-from odoo.api import ValuesType
-from odoo.exceptions import ValidationError
-
+from odoo import api, fields, models
+from datetime import datetime
 class ThongBaoPhuHuynh(models.Model):
-    _name = "ekids.thongbao_phuhuynh"
-    _description = "Mô tả thông báo đến phụ huynh "
+    _name = 'ekids.thongbao_phuhuynh'
+    _description = 'Hộp thư Phụ huynh'
+    _order = 'is_read asc, id desc'  # Tin chưa đọc luôn nổi lên trên
 
+    # Các trường vật lý (Chiếm dung lượng siêu nhỏ)
+    thongbao_id = fields.Many2one('ekids.thongbao', required=True, ondelete='cascade', index=True)
+    user_id = fields.Many2one('res.users', required=True, index=True)  # Index để truy vấn hộp thư cực nhanh
+    is_read = fields.Boolean(string="Đã xem", default=False, index=True)  # Index để lọc tin chưa đọc
+    ngay_xem = fields.Datetime(string="Thời gian xem")
 
-    sequence = fields.Integer(string="STT", default=1)
-    coso_id = fields.Many2one("ekids.coso", string="Cơ sở", required=True,
-                              ondelete="restrict")
+    # TỐI ƯU LƯU TRỮ: Dùng store=False để móc dữ liệu từ bảng gốc ra xem mà không tốn ổ cứng
+    name = fields.Char(related='thongbao_id.name', string="Tiêu đề", store=False)
+    noidung = fields.Html(related='thongbao_id.noidung', string="Nội dung", store=False)
+    loai_thongbao = fields.Selection(related='thongbao_id.loai', store=False)
+    ngay_gui = fields.Datetime(related='thongbao_id.ngay_gui', store=False)
 
-    name = fields.Char(string="Tiêu đề")
-    desc = fields.Html(string="Nội dung gửi")
-    trangthai = fields.Selection([("0", "Đang soạn thảo")
-                                , ("1", "Đã gửi đến toàn bộ [Phụ huynh]")
-                                ],
-                            string="Trạng thái",default='0',required=True)
+    def action_doc_thongbao(self):
+        """Hàm mở thư và đánh dấu đã đọc an toàn"""
+        self.ensure_one()
+        if not self.is_read:
+            # Dùng sudo() để Phụ huynh có quyền update trạng thái của chính mình
+            self.sudo().write({
+                'is_read': True,
+                'ngay_xem': fields.Datetime.now()
+            })
 
-    is_gui_phuhuynh =fields.Boolean(string="Đã gửi phụ huynh",compute="_compute_is_gui_phuhuynh")
-
-    is_viewed = fields.Boolean(string="Đã xem",compute="_compute_is_viewed")
-
-    viewed_ids = fields.Many2many('res.users', string="Người đã xem",readonly=True)
-
-    @api.depends("trangthai")
-    def _compute_is_gui_phuhuynh(self):
-        uid = self.env.uid
-        for rec in self:
-            if rec.trangthai =='1':
-                rec.is_gui_phuhuynh = True
-            else:
-                rec.is_gui_phuhuynh = False
-
-
-    def _compute_is_viewed(self):
-        uid = self.env.uid
-        for rec in self:
-            rec.is_viewed = uid in rec.viewed_ids.ids
-
-    def action_gui_thongbao_phuhuynh(self):
-        for rec in self:
-            rec.trangthai = '1'
-
-    def read(self, fields=None, load='_classic_read'):
-        res = super().read(fields=fields, load=load)
-
-        # Chỉ xử lý khi mở form view
-        if self.env.context.get("from_form_view"):
-            liem=3
-        return res
-
-
+        return {
+            'name': 'Chi tiết Thông báo',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.thongbao_phuhuynh',
+            'view_mode': 'form',
+            'res_id': self.id,
+            'target': 'new',
+            'flags': {'mode': 'readonly'},
+            'context': {'create': False, 'edit': False}
+        }

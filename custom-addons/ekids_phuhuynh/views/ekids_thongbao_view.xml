@@ -7,9 +7,9 @@
         <field name="model">ekids.thongbao_phuhuynh</field>
         <field name="arch" type="xml">
             <list>
-                <field name="sequence"  />
+
                 <field name="name" />
-                <field name="is_viewed"/>
+
 
 
             </list>
@@ -26,10 +26,7 @@
                              <field name="name"/>
 
                         </group>
-                        <group>
-                             <field name="desc"/>
 
-                        </group>
 
                     </sheet>
                 </form>
