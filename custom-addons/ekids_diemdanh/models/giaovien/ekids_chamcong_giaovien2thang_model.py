@@ -227,6 +227,7 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
                 is_giaovien_hoc = getattr(giaovien, field_gv)
                 if (coso_hoatdongs.get(ngay) == False
                         or giatri_old == '0'
+                        or giatri_old == '10'
                         or giatri_old == '00'
                         or giatri_old =='-1'
                         or giatri_old =='-2'):
