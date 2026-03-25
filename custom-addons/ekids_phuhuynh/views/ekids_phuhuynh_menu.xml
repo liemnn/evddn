@@ -7,13 +7,17 @@
         <menuitem name="Phụ huynh" id="ekids_phuhuynh.menu_root"
               web_icon="ekids_phuhuynh,static/description/icon.png"/>
 
+
+        <menuitem name="Thông báo [Học phí]" id="ekids_phuhuynh.menu_hocphi_root"
+              web_icon="ekids_phuhuynh,static/description/hocphi.png"/>
+
         <menuitem name="Thông báo từ [Nhà trường]" id="ekids_phuhuynh.thongbao_menu" parent="ekids_phuhuynh.menu_root"
-              action="ekids_phuhuynh.thongbao_phuhuynh_action_window"
+              action="ekids_phuhuynh.thongbao_action_server"
               groups="ekids_core.phuhuynh" sequence="1"/>
 
-        <menuitem name="Thông báo [Học phí]" id="ekids_phuhuynh.hocphi_menu" parent="ekids_phuhuynh.menu_root"
-              action="ekids_phuhuynh.hocphi_action_window"
-              groups="ekids_core.phuhuynh" sequence="2"/>
+        <menuitem name="Học phí" id="ekids_phuhuynh.hocphi_menu" parent="ekids_phuhuynh.menu_hocphi_root"
+              action="ekids_phuhuynh.hocphi_action_server"
+              groups="ekids_core.phuhuynh" sequence="1"/>
 
 
     </data>

@@ -81,7 +81,7 @@ def func_get_dulieu_chamcong_thucte_giaovien(self,coso_dilam_kehoachs,giaovien,n
     duoc_chamcongs_dunggio =  func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['1'],
                                                                                         nghiles, nghipheps,
                                                                                         coso_dilam_kehoachs)
-    duoc_chamcongs_dimuon = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['10'],
+    duoc_chamcongs_dimuon = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['10','00'],
                                                                                        nghiles, nghipheps,
                                                                                        coso_dilam_kehoachs)
     duoc_chamcongs_nuabuoi = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['0'],

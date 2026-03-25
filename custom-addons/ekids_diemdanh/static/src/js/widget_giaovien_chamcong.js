@@ -16,10 +16,11 @@ class DiemDanhWidget extends Component {
         const value = this.props.record.data[this.props.name];
         switch (value) {
             case "1": return "fa fa-check-circle text-success";   // đi học
-            case "10": return "fa fa-check-circle text-info";   // đi làm muộn
+            case "10": return "fa fa-check-circle text-warning";   // đi làm muộn
             case "11": return "fa fa-times-circle text-muted";   // không đăng ký đi lam
             case "-1": return "fa fa-times-circle text-danger";   // nghỉ
-            case "0": return "fa fa-adjust text-warning";        // nửa buổi
+            case "0": return "fa fa-adjust text-info";        // nửa buổi
+            case "00": return "fa fa-adjust text-warning";        // nửa buổi
             case "2": return "fa fa-circle";        // nửa buổi
             case "3": return "fa fa-calendar-minus-o text-danger";        // nửa buổi
             case "4": return "fa fa-calendar-minus-o";        // nửa buổi

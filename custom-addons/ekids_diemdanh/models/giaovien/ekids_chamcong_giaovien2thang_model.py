@@ -33,9 +33,10 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
     giaovien_id = fields.Many2one('ekids.giaovien', string="Họ và tên",
                                  domain="[('coso_id','=',coso_id)]",required=True,ondelete="cascade")
     options = [("-1", "Nghỉ làm"),
-               ("0", "Đi làm nửa buổi"),
+               ("0", "Đi nửa buổi"),
+               ("00", "Đi nửa buổi(muộn)"),
                ('1', "Đi làm"),
-               ('10', "Đi làm(đi muộn)"),
+               ('10', "Đi làm(muộn)"),
                ('11', "Không đăng ký đi làm"),
                ('2', "Nghỉ lễ"),
                ('3', "Nhà trường cho nghỉ"),
@@ -117,10 +118,10 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
             if giatri == '-1':
                 # nghi
                 tong_nghi_cangay += 1
-            elif giatri == '0':
+            elif giatri == '0' or giatri == '00':
                 # di lam nua buoi
                 tong_dilam_nuabuoi += 1
-            elif giatri == '10':
+            elif giatri == '10' or giatri == '00':
                 # di lam muon
                 tong_dilam_muon += 1
             elif giatri == '4':
@@ -226,6 +227,8 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
                 is_giaovien_hoc = getattr(giaovien, field_gv)
                 if (coso_hoatdongs.get(ngay) == False
                         or giatri_old == '0'
+                        or giatri_old == '10'
+                        or giatri_old == '00'
                         or giatri_old =='-1'
                         or giatri_old =='-2'):
 
