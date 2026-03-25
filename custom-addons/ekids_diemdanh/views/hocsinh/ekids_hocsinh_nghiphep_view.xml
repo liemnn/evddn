@@ -34,8 +34,8 @@
                     <field name="hocsinh_id" width="200"/>
                     <field name="tu_ngay"/>
                     <field name="den_ngay" />
-                     <field name="is_hoantra_hocphi" widget="boolean_toggle" width="25"/>
-                    <field name="tyle_hoantra_hocphi" />
+                     <field name="is_hoantra_hocphi" widget="boolean_toggle" width="25" string="Được hoàn học phí"/>
+                    <field name="tyle_hoantra_hocphi"  string="% hoàn"/>
                      <field name="desc" width="300"/>
 
                 </list>

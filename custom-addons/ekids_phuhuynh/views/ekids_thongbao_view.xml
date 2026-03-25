@@ -7,7 +7,6 @@
         <field name="model">ekids.thongbao_phuhuynh</field>
         <field name="arch" type="xml">
             <list>
-
                 <field name="name" />
 
 
@@ -33,15 +32,14 @@
             </field>
         </record>
 
-    <record model="ir.actions.act_window" id="ekids_phuhuynh.thongbao_phuhuynh_action_window">
-        <field name="name">THÔNG BÁO HỌC PHÍ</field>
-        <field name="res_model">ekids.thongbao_phuhuynh</field>
-        <field name="domain">[('coso_id','=', context.get('coso_id'))]</field>
-        <field name="context">
-            {'list_view_ref':'ekids_phuhuynh.thongbao_phuhuynh_list'
-            ,'form_view_ref':'ekids_phuhuynh.thongbao_phuhuynh_form'}
+
+    <record id="ekids_phuhuynh.thongbao_action_server" model="ir.actions.server">
+        <field name="name">Học phí</field>
+        <field name="model_id" ref="model_ekids_thongbao_phuhuynh"/>
+        <field name="state">code</field>
+        <field name="code">
+             action = env['ekids.thongbao_phuhuynh'].action_danhsach_thongbao_phuhuynh()
         </field>
-        <field name="view_mode">list,form</field>
     </record>
 
 
