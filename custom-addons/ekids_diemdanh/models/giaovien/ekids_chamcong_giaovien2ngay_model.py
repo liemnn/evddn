@@ -16,8 +16,9 @@ class ChamCongGiaoVien2Ngay(models.Model):
     ngay =fields.Date(string="Ngày")
     trangthai = fields.Selection([
         ('1', "Đi Làm"),
-        ('10', "Đi Làm (đi muộn)"),
-        ("0", "Đi Làm nửa buổi"),
+        ('10', "Đi Làm(muộn)"),
+        ("0", "Đi nửa buổi"),
+        ("00", "Đi nửa buổi(muộn)"),
         ("-1", "Nghỉ làm")
 
     ], string="Xác nhận", required=True, default="1")

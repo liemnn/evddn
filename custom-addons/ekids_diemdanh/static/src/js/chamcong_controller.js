@@ -18,13 +18,16 @@ actionRegistry.add("reload_chamcong_jsless", async (env, action) => {
                 html = "<span><i style='font-size:20px;' class='fa fa-check-circle text-success'></i></span>"; // đi học
                 break;
              case "10":
-                html = "<span><i style='font-size:20px;' class='fa fa-check-circle text-info'></i></span>"; // đi học
+                html = "<span><i style='font-size:20px;' class='fa fa-check-circle text-warning'></i></span>"; // đi học
                 break;
 
             case "-1":
                 html = "<span><i style='font-size:20px;' class='fa fa-times-circle text-danger'></i></span>"; // vắng
                 break;
             case "0":
+                html = "<span><i style='font-size:20px;' class='fa fa-adjust text-info'></i></span>"; // nửa buổi
+                break;
+            case "00":
                 html = "<span><i style='font-size:20px;' class='fa fa-adjust text-warning'></i></span>"; // nửa buổi
                 break;
 
