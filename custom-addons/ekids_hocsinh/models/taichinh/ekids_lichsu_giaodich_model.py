@@ -14,7 +14,7 @@ class LichSuGiaoDich(models.Model):
     hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh")
     name = fields.Char(string="Giao dịch")
     desc = fields.Text(string="Mô tả")
-    ngay = fields.Date(string="Ngày")
+    ngay = fields.Datetime(string="Thời gian", default=fields.Datetime.now)
     hanhdong = fields.Selection([("0", "Nạp tiền")
                                      ,("1", "Rút tiền")
                                     ], string="Hành động"

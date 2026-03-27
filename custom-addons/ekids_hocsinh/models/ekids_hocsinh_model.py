@@ -300,6 +300,7 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
             'res_model': 'ekids.taichinh_lichsu_giaodich',
             'view_mode': 'list',
             'target': 'new',
+            'domain': [('hocsinh_id', '=', self.id)],  # BỘ LỌC: Chỉ lấy giao dịch của học sinh này
             'context': {
                 'default_hocsinh_id': self.id,  # Truyền ID học sinh hiện tại
             }

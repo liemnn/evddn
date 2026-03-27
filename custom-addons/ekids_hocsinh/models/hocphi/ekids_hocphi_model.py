@@ -91,12 +91,36 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
     is_dong_hocphi_theoky = fields.Boolean(compute="_compute_is_dong_hocphi_theoky")
 
+    sotien_vi = fields.Float(string='Số tiền trong ví(vnđ)'
+                        , digits=(10, 0), compute="_compute_sotien_vi")
+
+    is_show_vi_thanhtoan = fields.Boolean(compute="_compute_is_show_vi_thanhtoan")
+
+
+    def _compute_is_show_vi_thanhtoan(self):
+        for record in self:
+            is_show_vi_thanhtoan = False
+            if record.trangthai in ['1','0','2']:
+                is_show_vi_thanhtoan =True
+            if record.is_dong_hocphi_theoky == False:
+                is_show_vi_thanhtoan = False
+            record.is_show_vi_thanhtoan =is_show_vi_thanhtoan
+
+    def _compute_sotien_vi(self):
+        for record in self:
+            record.sotien_vi = record.hocsinh_id.tien
+
     def _compute_is_dong_hocphi_theoky(self):
         for record in self:
+            is_dong_hocphi_theoky = False
             if record.coso_id.is_dong_hocphi_theoky == True:
-                record.is_dong_hocphi_theoky = True
+                is_dong_hocphi_theoky = True
             else:
-                record.is_dong_hocphi_theoky = False
+                is_dong_hocphi_theoky = False
+            if record.hocsinh_id.tien <=0:
+                #het tien
+                is_dong_hocphi_theoky = False
+            record.is_dong_hocphi_theoky =is_dong_hocphi_theoky
 
 
     def _compute_sequence(self):
@@ -338,18 +362,70 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
             record.write({'trangthai': trangthai})
 
 
-    def action_dong_hocphi_qua_tien_hocsinh(self):
+    def action_nop_hocphi_qua_vi(self):
         #B1: lấy ve danh sach lich su giao dich thang nay
         giaodich_cuoi = self.env['ekids.taichinh_lichsu_giaodich'].search([
             ('hocsinh_id', '=', self.hocsinh_id.id),
-            ('name', '=', str(self.nam_id.id)),
-            ('thang', '=', str(self.thang_id.id))
+            ('hocphi_nam', '=', str(self.nam_id.id)),
+            ('hocphi_thang', '=', str(self.thang_id.id))
         ],order='id desc',limit=1)
-        is_dagiaodich= False
+
+        if self.hocphi_phaidong > self.hocsinh_id.tien:
+            raise UserError("Số tiền trong ví không đủ đống học phí tháng này !")
+
+
         if giaodich_cuoi:
-            if giaodich_cuoi.hanhdong =='0':
-                #giao dich hoan tiền  học phí
-                liem=3
+            if giaodich_cuoi.hanhdong =='1':
+                # đã có giao dịch đóng tiền ở tháng này. cần rút lại trước khi thanh toán
+                name = "Hoàn lại học phí đã đóng."
+                desc = "Thuộc tháng "+ self.thang_id.name +"/"+self.nam_id.name
+                data ={
+                    "hocsinh_id":self.hocsinh_id.id,
+                    "name": name,
+                    "desc": desc,
+                    "ngay": datetime.today(),
+                    "hanhdong":"0",
+                    "tien": giaodich_cuoi.tien,
+                    "hocphi_thang":str(self.thang_id.id),
+                    "hocphi_nam": str(self.nam_id.id)
+                }
+                # B1: Công tác tính toán đảm bảo hiệu năng
+                lichsu = self.env['ekids.taichinh_lichsu_giaodich'].create(data)
+
+        #B2 thực hiện giao dịch đóng mới
+        name = "Đóng học phí"
+        desc = "Thuộc tháng "+ self.thang_id.name +"/"+self.nam_id.name
+        data = {
+            "hocsinh_id": self.hocsinh_id.id,
+            "name": name,
+            "desc": desc,
+            "ngay": datetime.today(),
+            "hanhdong": "1",
+            "tien": self.hocphi_phaidong,
+            "hocphi_thang": str(self.thang_id.id),
+            "hocphi_nam": str(self.nam_id.id)
+        }
+        # B1: Công tác tính toán đảm bảo hiệu năng
+        lichsu = self.env['ekids.taichinh_lichsu_giaodich'].create(data)
+        setattr(self,"trangthai",'12')
+
+
+    def action_xem_lichsu_giaodich(self):
+        self.ensure_one()  # Đảm bảo đang đứng ở 1 bản ghi học sinh cụ thể
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Tạo/Nạp tiền vào tài khoản Học sinh',
+            'res_model': 'ekids.taichinh_lichsu_giaodich',
+            'view_mode': 'list',
+            'target': 'new',
+            'domain': [('hocsinh_id', '=', self.hocsinh_id.id)],  # BỘ LỌC: Chỉ lấy giao dịch của học sinh này
+            'context': {
+                'default_hocsinh_id': self.hocsinh_id.id,  # Truyền ID học sinh hiện tại
+            }
+        }
+
+
+
 
 
 
