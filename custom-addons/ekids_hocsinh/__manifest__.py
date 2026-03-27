@@ -59,6 +59,9 @@
         'views/canthiep/ekids_ketqua_canthiep2muctieu_view.xml',
 
 
+        'views/taichinh/ekids_lichsu_giaodich_view.xml',
+
+
 
 
 

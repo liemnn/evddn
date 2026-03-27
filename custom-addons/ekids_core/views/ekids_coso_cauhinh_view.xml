@@ -309,7 +309,9 @@
 
                                     <div class="kh-repay-container">
                                         <div class="kh-repay-header">
-                                            <div style="font-size: 24px; margin-right: 15px;">📅</div>
+                                            <div style="font-size: 24px; margin-right: 15px;">
+                                                <i class="fa fa-calendar fa-fw"/>
+                                            </div>
                                             <div style="flex-grow: 1;">
                                                 <div style="font-weight: 800; color: #1e3a8a; font-size: 15px;">KỲ THU HỌC PHÍ</div>
                                                 <div style="font-size: 12px; color: #64748b;">Quy định thời điểm phát hành thông báo học phí hàng tháng [Bật: thu đầu tháng; Tắt: thu cuối tháng]</div>
@@ -319,6 +321,23 @@
                                                 <span style="font-size: 11px; font-weight: 700; color: #3b82f6;">
                                                     <t invisible="is_thu_hocphi_dauthang == False">THU ĐẦU THÁNG</t>
                                                     <t invisible="is_thu_hocphi_dauthang == True">THU CUỐI THÁNG</t>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="kh-repay-header">
+                                            <div style="font-size: 24px; margin-right: 15px;">
+                                              <i class="fa fa-money fa-fw"/>
+                                            </div>
+                                            <div style="flex-grow: 1;">
+                                                <div style="font-weight: 800; color: #1e3a8a; font-size: 15px;">CHO PHÉP PHỤ HUYNH ĐÓNG HỌC PHÍ THEO KỲ/GỘP KỲ</div>
+                                                <div style="font-size: 12px; color: #64748b;">Nhà trường thu học phí theo kỳ đóng trước ví dụ: nộp 6 tháng, 1 năm... [Bật: Thu hàng tháng phát sinh; Tắt: thu theo kỳ/theo số tiền]</div>
+                                            </div>
+                                            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                                                <field name="is_dong_hocphi_theoky" widget="boolean_toggle"/>
+                                                <span style="font-size: 11px; font-weight: 700; color: #3b82f6;">
+                                                    <t invisible="is_dong_hocphi_theoky == False">THU TRƯỚC THEO KỲ/THEO SỐ TIỀN PHỤ HUYNH NỘP TRƯỚC</t>
+                                                    <t invisible="is_dong_hocphi_theoky == True">THU HÀNG THÁNG</t>
                                                 </span>
                                             </div>
                                         </div>

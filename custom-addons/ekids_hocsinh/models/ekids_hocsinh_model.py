@@ -57,6 +57,18 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
 
     user_id = fields.Many2one("res.users",string="Tài khoản")
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở",required=True,ondelete="restrict")
+    #số tiền trong ví điện tử nộp của phụ huynh cho hoc sinh
+    tien = fields.Float(string='Số tiền(vnđ)'
+                        , digits=(10, 0), default=0)
+
+    is_dong_hocphi_theoky = fields.Char(string="Tuổi", compute="_compute_is_dong_hocphi_theoky")
+
+    def _compute_is_dong_hocphi_theoky(self):
+        for record in self:
+            if record.coso_id.is_dong_hocphi_theoky == True:
+                record.is_dong_hocphi_theoky=True
+            else:
+                record.is_dong_hocphi_theoky = False
 
     @api.constrains('trangthai', 'ngaynghi')
     def _check_ngaynghi_required(self):
@@ -264,9 +276,35 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
             self.is_taikhoan = False
             user.unlink()
 
+    def action_nap_rut_tien(self):
+        self.ensure_one()  # Đảm bảo đang đứng ở 1 bản ghi học sinh cụ thể
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Tạo/Nạp tiền vào tài khoản Học sinh',
+            'res_model': 'ekids.taichinh_lichsu_giaodich',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_hocsinh_id': self.id,  # Truyền ID học sinh hiện tại
+                'default_ngay': fields.Date.context_today(self),  # Truyền ngày hôm nay chuẩn múi giờ
+                # Bổ sung cờ lênh reload cho Web Client Odoo 18
+                'flags': {'mode': 'form', 'action_buttons': True, 'on_close': 'reload'},
+            }
+        }
 
+    def action_xem_lichsu_giaodich(self):
+        self.ensure_one()  # Đảm bảo đang đứng ở 1 bản ghi học sinh cụ thể
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Tạo/Nạp tiền vào tài khoản Học sinh',
+            'res_model': 'ekids.taichinh_lichsu_giaodich',
+            'view_mode': 'list',
+            'target': 'new',
+            'context': {
+                'default_hocsinh_id': self.id,  # Truyền ID học sinh hiện tại
+            }
+        }
 
-        
 
 
 

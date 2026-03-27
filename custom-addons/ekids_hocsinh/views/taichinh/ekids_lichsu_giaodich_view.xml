@@ -1,0 +1,177 @@
+<odoo>
+  <data>
+    <record id="ekids_hocsinh.taichinh_lichsu_giaodich_search" model="ir.ui.view">
+        <field name="name">ekids.taichinh_lichsu_giaodich.search</field>
+        <field name="model">ekids.taichinh_lichsu_giaodich</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm giao dịch">
+
+                <field name="name" string="Giao dịch / Mô tả"
+                       filter_domain="['|', ('name', 'ilike', self), ('desc', 'ilike', self)]"/>
+
+                <field name="ngay" string="Thời gian giao dịch"/>
+                <field name="hanhdong" string="Phân loại (Nạp/Rút)"/>
+
+                <separator/>
+                <filter string="Chỉ xem: Nạp tiền" name="filter_naptien" domain="[('hanhdong', '=', '0')]"/>
+                <filter string="Chỉ xem: Rút tiền" name="filter_ruttien" domain="[('hanhdong', '=', '1')]"/>
+
+                <separator/>
+                <filter string="Giao dịch Hôm nay" name="filter_homnay"
+                        domain="[('ngay', '=', context_today().strftime('%Y-%m-%d'))]"/>
+
+                <group expand="0" string="Gom nhóm theo...">
+                    <filter string="Theo Phân loại (Nạp/Rút)" name="group_hanhdong" context="{'group_by': 'hanhdong'}"/>
+                    <filter string="Theo Tháng" name="group_thang" context="{'group_by': 'ngay:month'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.taichinh_lichsu_giaodich_list" model="ir.ui.view">
+        <field name="name">ekids.taichinh_lichsu_giaodich.list</field>
+        <field name="model">ekids.taichinh_lichsu_giaodich</field>
+        <field name="arch" type="xml">
+            <list default_order="id desc" create="0" edit="0" delete="0" limit="200">
+                <field name="ngay" string="Thời gian" readonly="1"/>
+                <field name="hanhdong"
+                       widget="badge"
+                       decoration-success="hanhdong == '0'"
+                       decoration-danger="hanhdong == '1'"
+                       string="Phân loại"/>
+
+                <field name="name" string="Giao dịch" readonly="1"/>
+                <field name="desc" string="Mô tả " readonly="1"/>
+
+
+                <field name="tien"
+                       string="Số tiền(vnđ)"
+                       decoration-bf="1"
+                       widget="integer"
+                       readonly="1"/>
+
+                <field name="sodu"
+                       string="Số dư(vnđ)"
+                       decoration-bf="1"
+                       readonly="1"/>
+                <field name="create_uid" string="Người thực hiện"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ekids_hocsinh.taichinh_lichsu_giaodich_form" model="ir.ui.view">
+        <field name="name">ekids.taichinh_lichsu_giaodich.form.compact</field>
+        <field name="model">ekids.taichinh_lichsu_giaodich</field>
+        <field name="arch" type="xml">
+            <form string="Chi tiết giao dịch">
+                <sheet>
+                    <style>
+                        /* Style cho cụm nút bấm Nạp/Rút */
+                        .pill-action-wrapper .o_horizontal {
+                            background-color: #f1f5f9 !important;
+                            border-radius: 50px !important;
+                            padding: 4px !important;
+                            border: 1px solid #e2e8f0 !important;
+                            display: inline-flex !important;
+                            align-items: center !important;
+                        }
+                        .pill-action-wrapper input[type="radio"] { display: none !important; }
+                        .pill-action-wrapper .form-check { margin: 0 !important; padding: 0 !important; }
+                        .pill-action-wrapper label {
+                            padding: 8px 25px !important;
+                            border-radius: 40px !important;
+                            font-weight: 700 !important;
+                            cursor: pointer !important;
+                            transition: 0.3s !important;
+                            margin: 0 !important;
+                            color: #64748b !important;
+                        }
+                        .pill-action-wrapper input[type="radio"]:checked + label {
+                            background-color: #52b788 !important;
+                            color: white !important;
+                            box-shadow: 0 4px 10px rgba(82, 183, 136, 0.3) !important;
+                        }
+
+                        .info-card-compact {
+                            background: #ffffff;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 16px;
+                            padding: 15px 20px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 20px;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+                        }
+
+                        /* Ép các field text giãn hết box */
+                        .full-width-field {
+                            width: 100% !important;
+                            display: block !important;
+                        }
+                    </style>
+
+                    <div class="info-card-compact">
+                        <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                            <div style="display: flex; flex-direction: column;">
+                                <span style="font-weight: 900; font-size: 1.1em; color: #0f172a;">
+                                    <field name="hocsinh_id" invisible="true"/>
+                                    <field name="hocsinh_id" readonly="true" nolabel="1" />
+                                </span>
+                                <span style="color: #64748b; font-size: 1.1em;">
+                                    <i class="fa fa-calendar-alt" style="margin-right: 4px;"/>
+                                    Ngày giao dịch: <field name="ngay" readonly="true" nolabel="1"/>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="pill-action-wrapper" style="flex: 1; display: flex; justify-content: center;">
+                            <field name="hanhdong" widget="radio" options="{'horizontal': True}" nolabel="1"/>
+                        </div>
+
+                        <div style="flex: 1; display: flex; justify-content: flex-end;">
+                            <div style="border: 1px dashed #3b82f6; border-radius: 10px; padding: 6px 15px; color: #1e3a8a; background: #eff6ff; text-align: right;">
+                                <div style="font-size: 0.75em; font-weight: bold; text-transform: uppercase; color: #3b82f6;">Số dư</div>
+                                <div style="font-weight: 800; font-size: 2.1em;">
+                                    <field name="sodu" readonly="true" nolabel="1" widget="integer"/> <small>vnđ</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 25px;">
+                        <div class="row">
+                            <div class="col-md-8" style="border-right: 1px solid #e2e8f0; padding-right: 25px;">
+                                <label for="name" style="font-weight: 700; color: #475569; font-size: 0.85em;"/>
+                                <div style="margin-top: 5px;">
+                                    <field name="name" placeholder="Nhập nội dung giao dịch tại đây..." class="full-width-field" style="font-size: 1.8em; font-weight: 700;"/>
+                                </div>
+
+                                <div style="margin-top: 20px;">
+                                    <label for="desc" style="font-weight: 700; color: #475569; font-size: 0.85em;"/>
+                                    <div style="margin-top: 5px;">
+                                        <field name="desc" placeholder="Ghi chú chi tiết cho giao dịch này..." class="full-width-field" style="min-height: 80px;"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4" style="padding-left: 30px; display: flex; flex-direction: column; justify-content: center;">
+                                <label for="tien" style="font-weight: 700; color: #475569; font-size: 0.85em;"/>
+                                <div style="margin-top: 10px;">
+                                    <field name="tien" style="font-size: 1.5em; font-weight: 900; color: #10b981;"/>
+
+                                    <span style="font-size: 1.2em; color:red;font-weight: bold; color: #94a3b8; margin-left: 5px;">
+                                        <field name="sotien_bang_chu" readonly="true"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+  </data>
+</odoo>
