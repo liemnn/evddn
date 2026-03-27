@@ -296,7 +296,7 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
         self.ensure_one()  # Đảm bảo đang đứng ở 1 bản ghi học sinh cụ thể
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Tạo/Nạp tiền vào tài khoản Học sinh',
+            'name': 'Lịch sử giao dịch tài khoản tại ví học sinh',
             'res_model': 'ekids.taichinh_lichsu_giaodich',
             'view_mode': 'list',
             'target': 'new',
