@@ -44,6 +44,7 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
+                        <field name="coso_id" invisible="1"/>
                         <group>
                             <h2>
                                 <field name="name" readonly="id"/>
