@@ -27,9 +27,8 @@ class LichSuGiaoDich(models.Model):
     sodu = fields.Float(string='Số dư(vnđ)',compute="_compute_sodu"
                         , digits=(10, 0), default=0,store=True)
 
-
-
-
+    hocphi_thang = fields.Char(string="Học phí Tháng")
+    hocphi_nam = fields.Char(string="Học phí Năm")
     # Bắt sự kiện: Cứ hễ ô 'sotien' thay đổi là hàm này chạy ngay lập tức
     @api.onchange('tien')
     def _onchange_sotien(self):

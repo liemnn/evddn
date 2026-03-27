@@ -197,7 +197,10 @@
                 <header>
                     <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary" string="In phiếu thu"/>
                     <button name="action_xacthuc_tinhlai_hocphi_hocsinh" invisible="is_show_tinhtoan_lai == False" type="object" confirm="Bạn chắc chắn muốn tính toán lại chứ?" class="btn btn-secondary" string="Tính lại [Học phí]"/>
-                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,2" options="{'clickable': true}"/>
+                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,2" options="{'clickable': true}"
+                           invisible="is_dong_hocphi_theoky == True" />
+                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,12,2" options="{'clickable': true}"
+                           invisible="is_dong_hocphi_theoky == False"/>
                 </header>
 
                 <sheet>

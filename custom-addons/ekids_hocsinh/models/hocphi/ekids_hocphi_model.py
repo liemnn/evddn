@@ -25,7 +25,8 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                                   ,("0", "Đã kiểm tra")
                                   ,("10", "Đã đóng[Tiền mặt]")
                                   ,("11", "Đã đóng[Chuyển khoản]")
-                                  ,("2", "Đang nợ học phí")],default='-1')
+                                  ,("12", "Đã đóng[Ví học sinh]")
+                                  ,("2", "Nợ học phí")],default='-1')
 
     is_show_tinhtoan_lai = fields.Boolean(compute="_compute_is_show_tinhtoan_lai")
 
@@ -87,6 +88,15 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
     # làm access token  để chia sẻ
     access_token = fields.Char(string="Thẻ truy cập nhanh")
     share_url = fields.Char("Chi sẻ phiếu thu Học phí(URL)", compute="_compute_share_url",store=True)
+
+    is_dong_hocphi_theoky = fields.Boolean(compute="_compute_is_dong_hocphi_theoky")
+
+    def _compute_is_dong_hocphi_theoky(self):
+        for record in self:
+            if record.coso_id.is_dong_hocphi_theoky == True:
+                record.is_dong_hocphi_theoky = True
+            else:
+                record.is_dong_hocphi_theoky = False
 
 
     def _compute_sequence(self):
@@ -326,4 +336,21 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
     def action_chuyen_trangthai(self, trangthai):
         for record in self:
             record.write({'trangthai': trangthai})
+
+
+    def action_dong_hocphi_qua_tien_hocsinh(self):
+        #B1: lấy ve danh sach lich su giao dich thang nay
+        giaodich_cuoi = self.env['ekids.taichinh_lichsu_giaodich'].search([
+            ('hocsinh_id', '=', self.hocsinh_id.id),
+            ('name', '=', str(self.nam_id.id)),
+            ('thang', '=', str(self.thang_id.id))
+        ],order='id desc',limit=1)
+        is_dagiaodich= False
+        if giaodich_cuoi:
+            if giaodich_cuoi.hanhdong =='0':
+                #giao dich hoan tiền  học phí
+                liem=3
+
+
+
 

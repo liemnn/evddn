@@ -61,12 +61,12 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
     tien = fields.Float(string='Số tiền(vnđ)'
                         , digits=(10, 0), default=0)
 
-    is_dong_hocphi_theoky = fields.Char(string="Tuổi", compute="_compute_is_dong_hocphi_theoky")
+    is_dong_hocphi_theoky = fields.Boolean(compute="_compute_is_dong_hocphi_theoky")
 
     def _compute_is_dong_hocphi_theoky(self):
         for record in self:
             if record.coso_id.is_dong_hocphi_theoky == True:
-                record.is_dong_hocphi_theoky=True
+                record.is_dong_hocphi_theoky = True
             else:
                 record.is_dong_hocphi_theoky = False
 
