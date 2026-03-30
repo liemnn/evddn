@@ -46,7 +46,7 @@ class HocPhiThang(models.Model,HocPhiThangAbstractModel):
     def _compute_tong_dong_ck(self):
         for thang in self:
             result = self.env['ekids.hocphi'].read_group(
-                domain=[('thang_id', '=', thang.id),('trangthai', '=', '11')],  # điều kiện lọc (nếu cần)
+                domain=[('thang_id', '=', thang.id),('trangthai', 'in', ['11','12'])],  # điều kiện lọc (nếu cần)
                 fields=['hocphi_phaidong'],  # tên trường cần tính tổng
                 groupby=[]  # không cần group theo trường nào cả
             )

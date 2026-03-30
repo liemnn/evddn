@@ -128,18 +128,74 @@
                             .kh-name-section { padding-bottom: 0; flex-grow: 1; display: flex; flex-direction: column; justify-content: center;}
                             .kh-coso { font-size: 13px; font-weight: 700; color: #4f46e5; margin-bottom: 2px; text-transform: uppercase;}
 
-                            .kh-name-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; margin-bottom: 4px; }
+                            /* Đã đổi align-items thành center để Căn giữa Tên - Ví - Nút gạt */
+                            .kh-name-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 4px; }
                             .kh-name-title-group { display: flex; align-items: center; gap: 15px; margin-top: 5px; }
                             .kh-name { font-size: 26px; font-weight: 800; color: #1e293b; margin: 0; }
 
-                            /* KHU VỰC TRẠNG THÁI XẾP DỌC ẤN TƯỢNG */
-                            .kh-quick-actions {
+                            /* ========================================= */
+                            /* CỤM VÍ ĐIỆN TỬ VÀ NÚT BẤM ĐỒNG NHẤT KHỐI  */
+                            /* ========================================= */
+                            .kh-wallet-container {
                                 display: flex;
                                 flex-direction: column;
-                                align-items: flex-end;
-                                gap: 8px;
-                                margin-top: -25px;
-                                z-index: 10;
+                                align-items: center;
+                                gap: 8px; /* Khoảng cách giữa ví và nút */
+                                margin: 0 auto;
+                            }
+
+                            /* Khối hiển thị số tiền (Chữ nhật bo góc 12px giống thẻ Card) */
+                            .kh-wallet-card {
+                                display: flex; align-items: center;
+                                background: #ffffff;
+                                border: 1px solid #10b981;
+                                border-radius: 12px; /* ĐỒNG NHẤT BO GÓC */
+                                padding: 8px 16px;
+                                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+                                transition: all 0.2s ease;
+                                min-width: 170px;
+                            }
+                            .kh-wallet-card:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(16, 185, 129, 0.2); }
+
+                            /* Hộp icon cũng làm vuông bo góc cho đồng bộ */
+                            .kh-wallet-icon-box {
+                                width: 36px; height: 36px;
+                                background: #ecfdf5; /* Nền xanh nhạt */
+                                color: #10b981; /* Chữ xanh đậm */
+                                border-radius: 8px;
+                                display: flex; justify-content: center; align-items: center;
+                                font-size: 16px; margin-right: 12px;
+                            }
+
+                            .kh-wallet-info { display: flex; flex-direction: column; justify-content: center; }
+                            .kh-wallet-label { font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;}
+                            .kh-wallet-amount { font-size: 16px; color: #10b981; font-weight: 900; line-height: 1.2;}
+                            .kh-wallet-amount .o_field_widget { font-weight: 900 !important; color: #10b981 !important; }
+
+                            /* NÚT NẠP/RÚT TÁCH RỜI BÊN NGOÀI */
+                            .kh-wallet-btn {
+                                background: #10b981 !important;
+                                color: #ffffff !important;
+                                border: none !important;
+                                border-radius: 8px !important;
+                                padding: 6px 15px !important;
+                                font-size: 11px !important;
+                                font-weight: 700 !important;
+                                text-transform: uppercase !important;
+                                transition: all 0.2s ease !important;
+                                box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3) !important;
+                                width: 100%; /* Ép nút rộng bằng thẻ ví */
+                                display: flex !important; justify-content: center; align-items: center; gap: 6px;
+                            }
+                            .kh-wallet-btn:hover {
+                                background: #059669 !important;
+                                box-shadow: 0 4px 8px rgba(16, 185, 129, 0.4) !important;
+                            }
+                            /* ========================================= */
+                            /* KHU VỰC TRẠNG THÁI XẾP DỌC ẤN TƯỢNG */
+                            .kh-quick-actions {
+                                display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+                                margin-top: -25px; z-index: 10;
                             }
 
                             .kh-status-pill {
@@ -169,98 +225,60 @@
 
                             .kh-data-row { display: flex; margin-bottom: 6px; align-items: center; }
 
-                            /* ĐIỀU CHỈNH ĐỂ ÉP Ô INPUT FULL WIDTH */
                             .kh-data-label { width: 170px; flex-shrink: 0; font-size: 14px; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 6px;}
                             .kh-data-value { flex-grow: 1; width: 100%; font-size: 15px; color: #1e293b; font-weight: 700; }
                             .kh-data-value > * { width: 100% !important; }
 
-                            /* Cài đặt ngày làm việc - DÀN ĐỀU VÀ CĂN THẲNG HÀNG TÂM */
+                            /* Cài đặt ngày làm việc */
                             .kh-day-toggles {
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                                width: 100%;
-                                margin-top: 12px;
-                                padding: 15px 25px;
-                                background: #f8fafc;
-                                border-radius: 10px;
-                                border: 1px dashed #cbd5e1;
-                                box-sizing: border-box;
-                                flex-wrap: wrap; /* Cho phép rớt dòng trên màn hình nhỏ */
+                                display: flex; justify-content: space-between; align-items: center; width: 100%;
+                                margin-top: 12px; padding: 15px 25px; background: #f8fafc;
+                                border-radius: 10px; border: 1px dashed #cbd5e1; box-sizing: border-box; flex-wrap: wrap;
                             }
 
-                            .kh-day-item {
-                                display: flex;
-                                align-items: center; /* Ép căn giữa trục dọc */
-                                gap: 8px;
-                                font-weight: 700;
-                                color: #1e3a8a;
-                                font-size: 14px;
+                            .kh-day-item { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e3a8a; font-size: 14px; }
+                            .kh-day-item .o_field_boolean, .kh-day-item .form-switch, .kh-day-item .custom-control {
+                                margin-bottom: 0 !important; margin-top: 0 !important; min-height: auto !important;
+                                display: flex !important; align-items: center !important;
                             }
+                            .kh-day-item span { line-height: 1; transform: translateY(1px); }
 
-                            /* Ép Odoo bỏ các khoảng trống thừa làm lệch tâm nút gạt */
-                            .kh-day-item .o_field_boolean,
-                            .kh-day-item .form-switch,
-                            .kh-day-item .custom-control {
-                                margin-bottom: 0 !important;
-                                margin-top: 0 !important;
-                                min-height: auto !important;
-                                display: flex !important;
-                                align-items: center !important;
-                            }
-
-                            /* Tinh chỉnh riêng cho chữ (Text) để khớp hoàn hảo với tâm nút */
-                            .kh-day-item span {
-                                line-height: 1;
-                                transform: translateY(1px); /* Nắn nhẹ chữ xuống 1px để đạt độ cân bằng thị giác tuyệt đối */
-                            }
-
-                            /* ========================================= */
-                            /* BẢN VÁ CHO ĐIỆN THOẠI (RESPONSIVE MOBILE) */
-                            /* ========================================= */
                             @media (max-width: 768px) {
-                                .kh-profile-header {
-                                    flex-direction: column; /* Trục dọc */
-                                    align-items: center;
-                                    text-align: center;
-                                    padding-top: 15px;
-                                }
-                                .kh-avatar-wrapper {
-                                    margin-top: -50px; /* Đẩy Avatar trồi lên giữa */
-                                    margin-bottom: 5px;
-                                }
-                                .kh-name-row {
-                                    flex-direction: column; /* Đẩy tên và Trạng thái thành 2 dòng */
-                                    align-items: center;
-                                    gap: 15px;
-                                }
-                                .kh-quick-actions {
-                                    align-items: center; /* Ra giữa */
-                                    margin-top: 5px; /* Hủy lệnh vút lên đè banner trên Mobile */
-                                    position: static;
-                                }
-                                .kh-title {
-                                    justify-content: center; /* Ra giữa */
-                                    margin-top: 8px;
-                                }
-                                .kh-grid {
-                                    grid-template-columns: 1fr; /* Gập 2 cột thành 1 cột duy nhất */
-                                }
-                                .kh-data-row {
-                                    flex-direction: column; /* Nhãn nằm trên, Giá trị nằm dưới */
-                                    align-items: flex-start;
-                                    margin-bottom: 12px;
-                                }
-                                .kh-data-label {
-                                    width: 100%; /* Nhãn dàn hết chiều ngang */
-                                    margin-bottom: 4px;
-                                    font-size: 13px;
-                                }
-                                .kh-day-toggles {
-                                    justify-content: flex-start;
-                                    gap: 15px;
-                                    padding: 10px;
-                                }
+                                .kh-profile-header { flex-direction: column; align-items: center; text-align: center; padding-top: 15px; }
+                                .kh-avatar-wrapper { margin-top: -50px; margin-bottom: 5px; }
+                                .kh-name-row { flex-direction: column; align-items: center; gap: 15px; }
+                                .kh-wallet-card { margin: 10px 0; } /* Cách đều trên Mobile */
+                                .kh-quick-actions { align-items: center; margin-top: 5px; position: static; }
+                                .kh-title { justify-content: center; margin-top: 8px; }
+                                .kh-grid { grid-template-columns: 1fr; }
+                                .kh-data-row { flex-direction: column; align-items: flex-start; margin-bottom: 12px; }
+                                .kh-data-label { width: 100%; margin-bottom: 4px; font-size: 13px; }
+                                .kh-day-toggles { justify-content: flex-start; gap: 15px; padding: 10px; }
+                            }
+
+                            /* Nút Nạp/Rút mini siêu đẹp */
+                            .kh-wallet-action-btn {
+                                background: #ecfdf5 !important; /* Xanh lá cực nhạt */
+                                color: #059669 !important; /* Xanh đậm chữ */
+                                border: 1px solid #a7f3d0 !important; /* Viền mỏng */
+                                border-radius: 6px !important;
+                                padding: 2px 8px !important;
+                                font-size: 10px !important;
+                                font-weight: 700 !important;
+                                text-transform: uppercase !important;
+                                margin-top: 5px !important;
+                                transition: all 0.2s ease !important;
+                                line-height: 1.5 !important;
+                            }
+                            .kh-wallet-action-btn:hover {
+                                background: #10b981 !important;
+                                color: #ffffff !important;
+                                box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3) !important;
+                            }
+                            /* Điều chỉnh Info để căn trái cho nút bấm thẳng hàng với số tiền */
+                            .kh-wallet-info {
+                                display: flex; flex-direction: column;
+                                justify-content: center; align-items: flex-start;
                             }
                         </style>
 
@@ -277,6 +295,31 @@
                                     <div class="kh-name-row">
                                         <div class="kh-name-title-group">
                                             <h1 class="kh-name"><field name="name" placeholder="Họ và tên học sinh"/></h1>
+                                        </div>
+
+                                        <div class="kh-wallet-container" invisible="is_dong_hocphi_theoky==False">
+
+                                           <button name="action_xem_lichsu_giaodich"
+                                                    type="object"
+                                                    class="kh-wallet-card"
+                                                    title="Nhấn vào đây để xem Lịch sử giao dịch của học sinh"
+                                                    style="padding: 8px 16px; text-align: left; background: #fff;"> <div class="kh-wallet-icon-box">
+                                                    <i class="fa fa-money"></i>
+                                                </div>
+                                                <div class="kh-wallet-info">
+                                                    <span class="kh-wallet-label">Số tiền còn</span>
+                                                    <span class="kh-wallet-amount">
+                                                        <field name="tien" readonly="1" widget="integer" /> vnđ
+                                                    </span>
+                                                </div>
+                                            </button>
+
+                                            <button name="action_nap_rut_tien"
+                                                    type="object"
+                                                    class="kh-wallet-btn"
+                                                    icon="fa-exchange"
+                                                    string="Nạp / Rút tiền"
+                                                    options='{"reload_on_close": True}'/>
                                         </div>
 
                                         <div class="kh-quick-actions">
@@ -300,7 +343,6 @@
                             </div>
 
                             <div class="kh-grid">
-
                                 <div class="kh-card">
                                     <div class="kh-card-title"><i class="fa fa-id-card-o"></i> THÔNG TIN VỀ TRẺ</div>
                                     <div class="kh-data-row">
@@ -410,7 +452,6 @@
                                                 <div class="kh-data-label">Tình trạng kinh tế</div>
                                                 <div class="kh-data-value"><field name="giadinh" placeholder="VD: Hộ nghèo, trung bình..."/></div>
                                             </div>
-
                                         </div>
 
                                         <div class="kh-card">

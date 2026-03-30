@@ -197,37 +197,74 @@
                 <header>
                     <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary" string="In phiếu thu"/>
                     <button name="action_xacthuc_tinhlai_hocphi_hocsinh" invisible="is_show_tinhtoan_lai == False" type="object" confirm="Bạn chắc chắn muốn tính toán lại chứ?" class="btn btn-secondary" string="Tính lại [Học phí]"/>
-                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,2" options="{'clickable': true}"/>
+                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,2" options="{'clickable': true}"
+                           invisible="is_dong_hocphi_theoky == True" />
+                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,12,2" options="{'clickable': true}"
+                           invisible="is_dong_hocphi_theoky == False"/>
                 </header>
 
                 <sheet>
-                    <div class="row align-items-center mb-3 pb-2 border-bottom w-100 mx-0">
-                        <div class="col-4 d-flex align-items-baseline ps-0">
-                            <span class="fw-bold text-muted me-2 small">Học sinh:</span>
-                            <field name="hocsinh_id"
-                                   readonly="1"
-                                   class="fw-bolder fs-4 text-primary mb-0"
-                                   options="{'no_open': True}"
-                                   style="font-weight: 800;"/>
-                        </div>
-                        <div class="col-4 text-center">
-                            <h4 class="text-uppercase fw-bold mb-0" style="letter-spacing: 0.5px; font-size: 1.1rem; color: #444;">
-                                HỌC PHÍ THÁNG <field name="thang_id" readonly="1" class="oe_inline"/>
-                            </h4>
-                        </div>
-                        <div class="col-4 text-end pe-0 d-flex align-items-baseline justify-content-end">
-                            <span class="fw-bold text-dark me-2" style="font-size: 1.1rem;">Số ngày đi học:</span>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom w-100 mx-0" style="gap: 15px;">
 
-                            <span class="badge bg-light border border-secondary-subtle px-3 py-1 shadow-sm d-flex align-items-baseline">
-                                <field name="songay_dihoc"
+                        <div class="d-flex align-items-center flex-wrap" style="gap: 20px;">
+                            <div class="d-flex align-items-baseline">
+                                <span class="fw-bold text-muted me-2 small">Học sinh:</span>
+                                <field name="hocsinh_id"
                                        readonly="1"
-                                       class="fw-bolder text-info oe_inline mb-0"
-                                       style="font-size: 1.1rem; font-weight: 800;"/>
-                                <span class="ms-1 fw-bold text-dark" style="font-size: 0.95rem;">ngày</span>
-                            </span>
-                        </div>
-                    </div>
+                                       class="fw-bolder fs-4 text-primary mb-0"
+                                       options="{'no_open': True}"
+                                       style="font-weight: 800;"/>
+                            </div>
 
+                            <div class="d-flex align-items-center bg-white border rounded-pill px-2 py-1 shadow-sm" style="border-color: #10b981 !important;">
+
+                                <button name="action_xem_lichsu_giaodich"
+                                        type="object"
+                                        class="btn btn-link p-0 m-0 text-start text-decoration-none d-flex align-items-center"
+                                        style="color: inherit; box-shadow: none;"
+                                        title="Nhấn để xem Lịch sử giao dịch">
+
+                                    <div class="text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 34px; height: 34px; background-color: #10b981;">
+                                        <i class="fa fa-google-wallet fs-6"/>
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-center me-3">
+                                        <span class="fw-bold text-muted" style="font-size: 0.65rem; text-transform: uppercase; line-height: 1;">Số dư tài khoản</span>
+                                        <span class="fw-black text-success" style="font-size: 1.1rem; line-height: 1;">
+                                            <field name="sotien_vi" readonly="1" widget="integer" nolabel="1"/> <small style="font-size: 0.75rem;">vnđ</small>
+                                        </span>
+                                    </div>
+                                </button>
+
+                                <button name="action_nop_hocphi_qua_vi"
+                                        invisible="is_show_vi_thanhtoan == False"
+                                        type="object"
+                                        class="btn btn-success btn-sm rounded-pill fw-bold px-3 py-1 m-0"
+                                        style="font-size: 0.8rem; text-transform: uppercase; background-color: #10b981; border: none; box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3);"
+                                        icon="fa-check-circle"
+                                        string="Thanh toán"
+                                        confirm="Xác nhận trừ tiền từ Ví của học sinh để đóng học phí tháng này?"/>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center flex-wrap" style="gap: 25px;">
+                            <div class="text-end">
+                                <h5 class="text-uppercase fw-bold mb-0" style="letter-spacing: 0.5px; color: #444;">
+                                    HỌC PHÍ THÁNG <field name="thang_id" readonly="1" class="oe_inline"/>
+                                </h5>
+                            </div>
+                            <div class="d-flex align-items-baseline border-start ps-4">
+                                <span class="fw-bold text-dark me-2" style="font-size: 1.05rem;">Số ngày đi học:</span>
+                                <span class="badge bg-light border border-secondary-subtle px-3 py-1 shadow-sm d-flex align-items-baseline">
+                                    <field name="songay_dihoc"
+                                           readonly="1"
+                                           class="fw-bolder text-info oe_inline mb-0"
+                                           style="font-size: 1.15rem; font-weight: 800;"/>
+                                    <span class="ms-1 fw-bold text-dark" style="font-size: 0.95rem;">ngày</span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
                     <div class="row d-flex align-items-stretch mb-4 mx-0" style="min-height: 280px;">
 
                         <div class="col-md-7 px-0 pe-md-3 d-flex flex-column">
@@ -299,14 +336,14 @@
                         </div>
 
                         <div class="col-md-5 px-0 d-flex flex-column">
-                            <div class="border rounded shadow-sm bg-white overflow-hidden d-flex flex-column flex-grow-1">
+                            <div class="border rounded shadow-sm bg-white overflow-hidden d-flex flex-column">
                                 <div class="border-bottom p-2 px-3" style="background-color: #e9ecef;">
                                     <span class="fw-bold text-dark" style="font-size: 0.9rem;">
-                                        <i class="fa fa-sliders me-2 text-secondary"/> CHÍNH GIẢM HỌC PHÍ (nếu có)
+                                        <i class="fa fa-sliders me-2 text-secondary"/> CHÍNH SÁCH GIẢM (nếu có)
                                     </span>
                                 </div>
 
-                                <div class="p-3 flex-grow-1 bg-white">
+                                <div class="p-3 bg-white">
                                     <group class="mb-0 mt-0">
                                         <field name="dm_chinhsach_giam_id" string="Diện chính sách giảm học phí" readonly="1"/>
                                         <field name="is_giamhocphi_dacthu" string="Thiết lập giảm đặc thù cho học sinh" widget="boolean_toggle"/>
@@ -317,6 +354,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <notebook>

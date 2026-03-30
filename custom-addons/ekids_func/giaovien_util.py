@@ -78,27 +78,29 @@ def func_get_ngay_dilam_theo_kehoach(self, coso,nghiles,tu_ngay, den_ngay):
 
 def func_get_dulieu_chamcong_thucte_giaovien(self,coso_dilam_kehoachs,giaovien,nghiles,nghipheps,nam,thang):
     giaovien2thang = func_get_chamcong_giaovien2thang(self,giaovien, nam, thang)
-    duoc_chamcongs_dunggio =  func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['1'],
+    #TH1: đi lam ca ngay = di lam dung gio + di lam muon ( di ca ngay)
+    dilam_cangay =  func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['1','10'],
                                                                                         nghiles, nghipheps,
                                                                                         coso_dilam_kehoachs)
-    duoc_chamcongs_dimuon = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['10','00'],
+    dilam_nuabuoi = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['0', '00'],
+                                                                          nghiles, nghipheps,
+                                                                          coso_dilam_kehoachs)
+
+    dilam_muon = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['10','00'],
                                                                                        nghiles, nghipheps,
                                                                                        coso_dilam_kehoachs)
-    duoc_chamcongs_nuabuoi = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['0'],
-                                                                                        nghiles, nghipheps,
-                                                                                        coso_dilam_kehoachs)
-    duoc_chamcong_nghi = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['-1'],
+
+    chamcong_nghi = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['-1'],
                                                                                     nghiles, nghipheps,
                                                                                     coso_dilam_kehoachs)
     dilam_nghi_giua_thang = func_get_songay_dilam_hoac_nghi_giua_thang(giaovien2thang.giaovien_id,coso_dilam_kehoachs)
 
 
-    duoc_chamcong = len(duoc_chamcongs_dunggio) + len(duoc_chamcongs_dimuon) + (len(duoc_chamcongs_nuabuoi) * 0.5)
-    nghi = len(duoc_chamcong_nghi) + int(dilam_nghi_giua_thang)
+    duoc_chamcong = len(dilam_cangay)  + (len(dilam_nuabuoi) * 0.5)
+    nghi = len(chamcong_nghi) + int(dilam_nghi_giua_thang)
     data ={
-        'dilam_dunggio': len(duoc_chamcongs_dunggio),
-        'dilam_muon':len(duoc_chamcongs_dimuon),
-        'dilam_nuabuoi':len(duoc_chamcongs_nuabuoi),
+        'dilam_muon':len(dilam_muon),
+        'dilam_nuabuoi':len(dilam_nuabuoi),
         'dilam_nghi':nghi,
         'dilam_chamcong':duoc_chamcong
     }

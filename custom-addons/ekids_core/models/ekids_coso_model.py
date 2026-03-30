@@ -55,6 +55,7 @@ class CoSo(models.Model):
     qrcode_thu_hocphi = fields.Binary(string="QR-Code [Chuyển khoản] thu Học phí")
 
     is_thu_hocphi_dauthang =fields.Boolean(string="Thiết lập thu [Học phí] đầu tháng",default=True)
+    is_dong_hocphi_theoky= fields.Boolean(string="Đóng học phí theo kỳ/Gộp kỳ", default=False)
 
     @api.depends('thue_tungay', 'thue_denngay')
     def _compute_trangthai(self):
