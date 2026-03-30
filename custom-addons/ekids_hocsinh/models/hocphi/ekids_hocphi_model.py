@@ -42,7 +42,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
     ngay_dihoc = fields.Integer(string="Số ngày đi học", default=0)
     ngay_dihoc_coso = fields.Integer(string="Số ngày đi học", default=0)
-    songay_dihoc = fields.Char(string="Ngày đi học", compute="_compute_songay_dihoc")
+    songay_dihoc = fields.Char(string="Đi học", compute="_compute_songay_dihoc")
 
     tien_bantru = fields.Float(string='(1).Lớp chung'
                             ,digits=(10, 0)
