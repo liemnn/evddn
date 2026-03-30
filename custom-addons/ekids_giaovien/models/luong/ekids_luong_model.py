@@ -22,7 +22,7 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
                                    , ("1", "Đã nhận lương")],default="-1")
     is_show_tinhtoan_lai = fields.Boolean(compute="_compute_is_show_tinhtoan_lai")
 
-    tham_nien = fields.Float(string="Thâm niên(năm)", default=0, digits=(10, 1))
+    tham_nien = fields.Float(string="Thâm niên", default=0, digits=(10, 1))
     ngaycong =fields.Char(string="Ngày công",compute="_compute_ngaycong")
     so_ngaycong_quydinh = fields.Integer(string="Ngày làm/tháng", default=0)
     so_ngaycong = fields.Float(string="Đi làm", default=0, digits=(10, 1))
