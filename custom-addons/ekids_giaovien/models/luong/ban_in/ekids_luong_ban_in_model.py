@@ -85,8 +85,8 @@ class LuongBanIn(models.TransientModel):
         tong_tru = string_util.number2string(luong.tong_tru)
         nhatruong_thuho =string_util.number2string(luong.nhatruong_thuho)
         tong_thongtin =string_util.number2string(luong.tong_thongtin)
-        luong = string_util.number2string(luong.luong)
-        tong_nhatruong_chi = luong.tong_nhatruong_chi
+        tien_luong = string_util.number2string(luong.luong)
+        tong_nhatruong_chi = string_util.number2string(luong.tong_nhatruong_chi)
 
         table_data.append([
             str(index),
@@ -98,7 +98,7 @@ class LuongBanIn(models.TransientModel):
             tong_tru,
             nhatruong_thuho,
             tong_thongtin,
-            luong,
+            tien_luong,
             tong_nhatruong_chi
 
         ])

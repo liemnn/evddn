@@ -5,19 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ban_in/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ban_in/ekids_luong_ban_in_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/luong/ban_in/ekids_luong_banin_action.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/luong/ban_in/ekids_luong_banin_template.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/luong/ban_in/ekids_luong_banin_wizard_view.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose/AI_ollama/Llama3-Fast" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose/AI_ollama/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/security/ir.model.access.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/luong/ekids_luong_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/luong/ekids_luong_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ban_in/ekids_luong_ban_in_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ban_in/ekids_luong_ban_in_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/luong/ban_in/ekids_luong_banin_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/luong/ban_in/ekids_luong_banin_template.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +41,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.evddn.executor": "Debug",
+    "Python.evddn.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
@@ -327,7 +317,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774844254988</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1775400077449</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1775400077449</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -357,6 +355,16 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ban_in/ekids_luong_ban_in_model.py</url>
           <line>80</line>
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ban_in/ekids_luong_ban_in_model.py</url>
+          <line>68</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ban_in/ekids_luong_ban_in_model.py</url>
+          <line>90</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
