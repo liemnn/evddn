@@ -58,9 +58,20 @@ class HocPhiBanIn(models.TransientModel):
              ])
         if hocphis:
             index =1
+            tien =0
             for hocphi in hocphis:
                 table_data = self.get_table_data_by_hocphi(table_data,index,hocphi)
                 index =index +1
+                tien+= hocphi.hocphi_phaidong
+            #tong
+            table_data.append([
+                '',
+                'Tổng',
+                string_util.number2string(tien),
+                " ",
+                " "
+            ])
+
         return table_data
 
 

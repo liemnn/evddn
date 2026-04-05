@@ -68,9 +68,35 @@ class LuongBanIn(models.TransientModel):
              ])
         if luongs:
             index =1
+            nhatruong_thuho=0
+            tong_thongtin=0
+            tien_luong=0
+            tong_nhatruong_chi=0
+
             for luong in luongs:
                 table_data = self.get_table_data_by_luong(table_data,index,luong)
                 index =index +1
+                #tinh tong
+                nhatruong_thuho += luong.nhatruong_thuho
+                tong_thongtin += luong.tong_thongtin
+                tien_luong += luong.luong
+                tong_nhatruong_chi += luong.tong_nhatruong_chi
+            #bang tong
+            table_data.append([
+                '',
+                'Tổng',
+                '',
+                '',
+                '',
+                '',
+                '',
+                string_util.number2string(nhatruong_thuho),
+                string_util.number2string(tong_thongtin),
+                string_util.number2string(tien_luong),
+                string_util.number2string(tong_nhatruong_chi)
+
+            ])
+
         return table_data
 
 
