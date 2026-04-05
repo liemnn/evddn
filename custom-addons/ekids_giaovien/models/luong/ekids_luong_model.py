@@ -249,3 +249,25 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
 
 
         self.func_tinhtoan_lai_luong_cho_mot_giaovien()
+
+
+    def action_in_ban_xacnhan(self):
+        """Gọi report đã khai báo"""
+        context = self.env.context
+        coso_id = context.get("default_coso_id")
+        thang = context.get("default_thang")
+        nam = context.get("default_nam")
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'In bản xác nhận',
+            'res_model': 'ekids.luong_banin',
+            'view_mode': 'form',
+            'target': 'new',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': coso_id,
+                'default_thang': thang,
+                'default_nam': nam
+
+            }
+        }

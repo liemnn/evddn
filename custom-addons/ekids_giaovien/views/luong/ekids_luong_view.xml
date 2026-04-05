@@ -81,6 +81,11 @@
                             confirm="Bạn chắc chắn muốn tính lại [Lương] ?
   Thao tác này chỉ áp dụng cho trạng thái [Đang tính].Khi tính lại dữ liệu sẽ bị xóa và tính toán lại !"
                          display="always"/>
+                    <button name="action_in_ban_xacnhan"
+                        type="object"
+                        string="In"
+                        class="btn-primary"
+                        display="always"/>
                 </header>
                 <field name="sequence" width="25"/>
                 <field name="giaovien_id" width="200"/>

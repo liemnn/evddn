@@ -1,0 +1,105 @@
+<odoo>
+    <template id="ekids_giaovien.action_luong_banin_template">
+        <div style=" margin-bottom: 30px; ">
+                <button  onclick="window.print()"
+                        style="width:30px; height:auto"
+                        string="In báo cáo" type="object">
+                    <i class="fa fa-print"></i>
+                </button>
+        </div>
+        <!-- Gọi layout chuẩn của Odoo -->
+        <t t-call="web.html_container">
+
+           <div class="page">
+
+                    <table>
+
+                        <tr>
+                            <td>
+                                <h5>BẢN LƯƠNG THÁNG <t t-esc="thang"/>/<t t-esc="nam"/></h5>
+                            </td>
+
+                        </tr>
+                    </table>
+                    <table width="100%" border="1" class="box-table">
+                        <thead>
+                            <tr>
+                                <t t-foreach="table_data[0]" t-as="header">
+                                    <th><t t-esc="header"/></th>
+                                </t>
+                            </tr>
+
+                        </thead>
+
+                      <tbody>
+                        <t t-foreach="table_data[1:]" t-as="row">
+                            <tr>
+                                <t t-foreach="enumerate(row)" t-as="item">
+                                    <td t-attf-class="col-#{item[0]}">
+                                        <t t-esc="item[1]"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                    </table>
+
+           </div>
+        </t>
+
+                <style>
+
+
+                    * {
+                        font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+                    }
+
+                    .box-table th{
+                        background-color: #f2f2f2;
+                        color:#212529
+                        border-style: solid;
+                        border: 1px solid #ccc;
+                        font-size:16px;
+                        height:35px;
+                        padding:5px;
+                    }
+
+                    .box-table td{
+                        border-style: solid;
+                        border: 1px solid #ccc;
+                        font-size:14px;
+                        padding:5px;
+                    }
+                    td.col-0{
+                        width:5%;
+                        text-align:center !important;
+                          padding: 5px !important
+                    }
+                     td.col-1{
+                           width: 28%;
+                            text-align: left !important;
+                            padding: 5px !important
+                    }
+                     td.col-2{
+                        width:15%;
+                        text-align:right !important;
+                        padding: 5px !important
+                    }
+                     td.col-3{
+                        width:25%;
+                         padding: 5px !important
+                    }
+                    td.col-4{
+                        width:27%;
+                         padding: 5px !important
+                    }
+
+                     thead {
+                        display: table-header-group;
+                    }
+
+
+                </style>
+
+    </template>
+</odoo>
