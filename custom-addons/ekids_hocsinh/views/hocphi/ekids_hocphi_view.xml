@@ -216,7 +216,9 @@
                                        style="font-weight: 800;"/>
                             </div>
 
-                            <div class="d-flex align-items-center bg-white border rounded-pill px-2 py-1 shadow-sm" style="border-color: #10b981 !important;">
+                            <div class="d-flex align-items-center bg-white border rounded-pill px-2 py-1 shadow-sm"
+                                 invisible="is_dong_hocphi_theoky == False"
+                                 style="border-color: #10b981 !important;">
 
                                 <button name="action_xem_lichsu_giaodich"
                                         type="object"
