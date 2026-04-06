@@ -300,8 +300,8 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
 
 
     def action_open_popup_thongtin_diemdanh_hocsinh(self):
-        self.func_tinhtoan_tong()
         self.ensure_one()
+        self.func_tinhtoan_tong()
         form_view_id = self.env.ref('ekids_diemdanh.diemdanh_hocsinh2thang_form').id  # chú ý id chính xác
 
         return {
