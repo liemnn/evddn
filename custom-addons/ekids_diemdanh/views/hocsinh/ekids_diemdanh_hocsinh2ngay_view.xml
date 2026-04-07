@@ -165,6 +165,14 @@
                                                                         string="Nghỉ (Sẽ học bù)"
                                                                         icon="fa-history"
                                                                         invisible="is_nghi_hocbu == True"/>
+
+                                                                <button name="func_xacnhan_ca2ngay_xoa"
+                                                                        class="btn-danger btn-sm"
+                                                                        confirm="Ca này không tồn tại trong thiêt lập hồ sơ học sinh. Bạn chắc chắn muốn xóa chứ ?"
+                                                                        type="object"
+                                                                        string="Xóa"
+                                                                        icon="fa-trash"
+                                                                        invisible="is_xoa == False"/>
                                                             </div>
                                                         </div>
                                                     </div>

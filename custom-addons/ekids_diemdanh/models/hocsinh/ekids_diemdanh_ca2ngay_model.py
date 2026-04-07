@@ -46,12 +46,25 @@ class DiemDanhCa2Ngay(models.Model):
     is_nghi = fields.Boolean(compute="_compute_is_nghi")
     is_nghi_khongbu = fields.Boolean(compute="_compute_is_nghi_khongbu")
     is_nghi_hocbu= fields.Boolean(compute="_compute_is_nghi_hocbu")
-
+    is_xoa = fields.Boolean(compute="_compute_is_xoa")
     _sql_constraints = [
         ('unique_diemdanh_ca2ngay',
          'UNIQUE(hocphi_dm_ca_id,hocsinh_id,giaovien_id,ngay)',
          'Đã tồn tại [Ca can thiệp trong ngày]  của học sinh, vui lòng kiểm tra lại !')
     ]
+
+    def _compute_is_xoa(self):
+        today =date.today()
+        for rec in self:
+            is_xoa=False
+            if rec.ngay:
+                if today.month > rec.ngay.month:
+                    is_xoa =False
+                else:
+                    if not rec.hocsinh_ca_canthiep_id:
+                        is_xoa = True
+            rec.is_xoa =is_xoa
+
 
 
     @api.onchange('trangthai')
@@ -102,6 +115,11 @@ class DiemDanhCa2Ngay(models.Model):
     def func_xacnhan_ca2ngay_nghi_hocbu(self):
         self.trangthai = '3'
         return self.func_diemdanh_hocsinh_get_url_back()
+
+    def func_xacnhan_ca2ngay_xoa(self):
+        url= self.func_diemdanh_hocsinh_get_url_back()
+        self.unlink()
+        return url
 
 
     def func_xacnhan_ca2ngay_hoc_chamcong(self):
