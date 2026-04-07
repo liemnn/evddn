@@ -125,8 +125,6 @@ class DiemDanh(models.Model):
                      if hocsinh2thangs:
                          for hocsinh2thang in hocsinh2thangs:
                              if hocsinh2thang.hocsinh_id.id == hs.id:
-                                 if hocsinh2thang.hocbu_thangtruoc<=0:
-                                    hocsinh2thang.func_tinhtoan_hocbu_cho_hocsinh2thang_khoitao(diemdanh_thangtruoc)
                                  hocsinh2thang.func_tinhtoan_giatri_hocsinh2ngay(nghiles, coso_hoatdongs, nghipheps,ca_tangcuongs,False)
 
 

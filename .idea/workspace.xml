@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ban_in/ekids_hocphi_ban_in_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ban_in/ekids_hocphi_ban_in_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_giaovien2thang_abstractmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_giaovien2thang_abstractmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_abstractmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_abstractmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,16 +40,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.evddn.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/odoo/evddn/custom-addons/ekids_giaovien/views/luong&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.evddn.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_giaovien/views/luong",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_giaovien\views\luong" />
@@ -356,7 +358,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775471011765</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1775568163019</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1775568163019</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -406,6 +416,16 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ban_in/ekids_hocphi_ban_in_model.py</url>
           <line>109</line>
           <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_abstractmodel.py</url>
+          <line>117</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_abstractmodel.py</url>
+          <line>121</line>
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

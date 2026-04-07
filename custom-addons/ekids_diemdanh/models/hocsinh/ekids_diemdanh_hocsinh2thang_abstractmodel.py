@@ -120,6 +120,7 @@ class DiemDanhHocSinh2ThangAbstractModel(models.AbstractModel):
             if hocsinh2thangs:
                 for hocsinh2thang in hocsinh2thangs:
                     if (self.hocsinh_id.id == hocsinh2thang.hocsinh_id.id):
+                        hocsinh2thang._compute_hocbu_conlai()
                         self.hocbu_thangtruoc = hocsinh2thang.hocbu_conlai
 
 
