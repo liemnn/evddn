@@ -6,8 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_ca2ngay_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_ca2ngay_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/views/hocsinh/ekids_diemdanh_hocsinh2ngay_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/views/hocsinh/ekids_diemdanh_hocsinh2ngay_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/cauhinh/ekids_hocphi_dm_thu_bantru_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/cauhinh/ekids_hocphi_dm_thu_bantru_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ban_in/ekids_hocphi_ban_in_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ban_in/ekids_hocphi_ban_in_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/cauhinh/ekids_hocphi_dm_thu_bantru_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/cauhinh/ekids_hocphi_dm_thu_bantru_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/ban_in/ekids_hocphi_banin_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/ban_in/ekids_hocphi_banin_template.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/ban_in/ekids_hocphi_banin_wizard_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/ban_in/ekids_hocphi_banin_wizard_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +44,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.evddn.executor": "Debug",
+    "Python.evddn.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
@@ -402,6 +405,11 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_ca2ngay_model.py</url>
           <line>118</line>
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ban_in/ekids_hocphi_ban_in_model.py</url>
+          <line>109</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
