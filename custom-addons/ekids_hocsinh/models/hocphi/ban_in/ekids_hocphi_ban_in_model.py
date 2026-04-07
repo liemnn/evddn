@@ -146,18 +146,20 @@ class HocPhiBanIn(models.TransientModel):
                     if hocphi_bantru_ids:
                         for hocphi_bantru in hocphi_bantru_ids:
                             if hocphi_bantru.dm_thu_bantru_id.id == dm_bantru.id:
+                                dm_tien =0
                                 if hocphi.is_giamhocphi_dacthu == True:
                                     if dm_bantru.is_giam_hocphi ==True:
-                                        other_tien += hocphi_bantru.tien - ((hocphi_bantru.tien / 100) * hocphi.tyle_giamhocphi_bantru)
+                                        dm_tien= hocphi_bantru.tien - ((hocphi_bantru.tien / 100) * hocphi.tyle_giamhocphi_bantru)
                                     else:
-                                        other_tien += hocphi_bantru.tien
+                                        dm_tien += hocphi_bantru.tien
                                 else:
                                     if dm_bantru.is_giam_hocphi ==True:
-                                        other_tien += hocphi_bantru.tien - ((hocphi_bantru.tien / 100) * hocphi.tyle_giamhocphi)
+                                        dm_tien += hocphi_bantru.tien - ((hocphi_bantru.tien / 100) * hocphi.tyle_giamhocphi)
                                     else:
-                                        other_tien += hocphi_bantru.tien
+                                        dm_tien += hocphi_bantru.tien
                                 other_desc += "-" + str(dm_bantru.name) + "=" + string_util.number2string(
-                                            other_tien) + " vnđ \n"
+                                            dm_tien) + " vnđ \n"
+                                other_tien += dm_tien
 
 
                                 # them vao tien ban tru
