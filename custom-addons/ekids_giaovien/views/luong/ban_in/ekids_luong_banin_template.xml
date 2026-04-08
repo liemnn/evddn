@@ -1,130 +1,114 @@
 <odoo>
     <template id="ekids_giaovien.action_luong_banin_template">
-        <div style=" margin-bottom: 30px; ">
-                <button  onclick="window.print()"
-                        style="width:30px; height:auto"
-                        string="In báo cáo" type="object">
-                    <i class="fa fa-print"></i>
-                </button>
-        </div>
-        <!-- Gọi layout chuẩn của Odoo -->
         <t t-call="web.html_container">
 
-           <div class="page">
+            <t t-call="web.basic_layout">
 
-                    <table>
+                <div class="page" style="font-family: Arial, sans-serif;">
 
+                    <div class="btn-print-container" style="text-align:right; margin-bottom: 20px;">
+                        <button onclick="window.print()"
+                                style="width:30px; height:auto; border:0px; background:transparent;"
+                                title="In báo cáo" type="button">
+                            <i class="fa fa-print" style="font-size: 18px; color: #555;"></i>
+                        </button>
+                    </div>
+
+                    <table width="100%" border="0">
                         <tr>
-                            <td>
-                                <h5>BẢN LƯƠNG THÁNG <t t-esc="thang"/>/<t t-esc="nam"/></h5>
+                            <td style="text-align:center;">
+                                <h3 style="font-size:18px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px;">
+                                    BẢN LƯƠNG THÁNG <t t-esc="thang"/>/<t t-esc="nam"/>
+                                </h3>
                             </td>
-
                         </tr>
                     </table>
-                    <table width="100%" border="1" class="box-table">
+
+                    <table width="100%" border="1" cellspacing="0" cellpadding="0" class="box-table">
                         <thead>
                             <tr>
                                 <t t-foreach="table_data[0]" t-as="header">
                                     <th><t t-esc="header"/></th>
                                 </t>
                             </tr>
-
                         </thead>
-
-                      <tbody>
-                        <t t-foreach="table_data[1:]" t-as="row">
-                            <tr>
-                                <t t-foreach="enumerate(row)" t-as="item">
-                                    <td t-attf-class="col-#{item[0]}">
-                                        <t t-esc="item[1]"/>
-                                    </td>
-                                </t>
-                            </tr>
-                        </t>
-                    </tbody>
+                        <tbody>
+                            <t t-foreach="table_data[1:]" t-as="row">
+                                <tr>
+                                    <t t-foreach="enumerate(row)" t-as="item">
+                                        <td t-attf-class="col-#{item[0]}">
+                                            <t t-esc="item[1]"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
                     </table>
 
-           </div>
+                    <style>
+                        /* --- 1. ÉP KHỔ GIẤY A4 VÀ LỀ CHUẨN KHI IN --- */
+                        @page {
+                            size: A4 landscape; /* Lương nhiều cột (11 cột) nên tôi gán landscape (khổ ngang) cho an toàn, nếu anh muốn in dọc thì xóa chữ landscape đi nhé */
+                            margin: 10mm 10mm 10mm 10mm !important;
+                        }
+
+                        /* --- 2. CÁC THIẾT LẬP KHI MÁY IN CHẠY (Ẩn nút, ép sát lề) --- */
+                        @media print {
+                            .btn-print-container {
+                                display: none !important;
+                            }
+                            body, .page {
+                                margin-top: 0px !important;
+                                padding-top: 0px !important;
+                            }
+                        }
+
+                        /* --- 3. FIX LỖI FONT VÀ ICON --- */
+                        *:not(i) {
+                            font-family: Arial, sans-serif !important;
+                        }
+
+                        /* --- 4. CSS BẢNG BIỂU --- */
+                        .box-table {
+                            border-collapse: collapse;
+                        }
+
+                        .box-table th {
+                            background-color: #f2f2f2;
+                            color: #212529; /* Đã fix lỗi thiếu dấu chấm phẩy */
+                            border: 1px solid #ccc;
+                            font-size: 14px; /* Chỉnh nhỏ lại 1 chút vì bảng lương có tận 11 cột */
+                            height: 35px;
+                            padding: 5px;
+                            text-align: center;
+                        }
+
+                        .box-table td {
+                            border: 1px solid #ccc;
+                            font-size: 13px;
+                            padding: 3px;
+                        }
+
+                        /* --- 5. ĐỘ RỘNG CÁC CỘT (Giữ nguyên của anh) --- */
+                        td.col-0 { width: 5%; text-align: center !important; padding: 5px !important; }
+                        td.col-1 { width: 18%; text-align: left !important; padding: 5px !important; }
+                        td.col-2 { width: 5%; text-align: center !important; padding: 5px !important; }
+                        td.col-3 { width: 5%; text-align: center !important;padding: 5px !important; }
+                        td.col-4 { width: 5%; text-align: right !important;padding: 5px !important; }
+                        td.col-5 { width: 10%; text-align: right !important;padding: 5px !important; }
+                        td.col-6 { width: 10%; text-align: right !important;padding: 5px !important; }
+                        td.col-7 { width: 10%; text-align: right !important;padding: 5px !important; }
+                        td.col-8 { width: 10%; text-align: right !important;padding: 5px !important; }
+                        td.col-9 { width: 10%; text-align: right !important;padding: 5px !important; font-weight: bold;}
+                        td.col-10{ width: 10%; text-align: right !important;padding: 5px !important; }
+
+                        thead {
+                            display: table-header-group;
+                        }
+                    </style>
+
+                </div>
+            </t>
         </t>
-
-                <style>
-
-
-                    * {
-                        font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-                    }
-
-                    .box-table th{
-                        background-color: #f2f2f2;
-                        color:#212529
-                        border-style: solid;
-                        border: 1px solid #ccc;
-                        font-size:16px;
-                        height:35px;
-                        padding:5px;
-                    }
-
-                    .box-table td{
-                        border-style: solid;
-                        border: 1px solid #ccc;
-                        font-size:14px;
-                        padding:3px;
-                    }
-                    td.col-0{
-                        width:5%;
-                        text-align:center !important;
-                          padding: 5px !important
-                    }
-                     td.col-1{
-                           width: 18%;
-                            text-align: left !important;
-                            padding: 5px !important
-                    }
-                     td.col-2{
-                        width:5%;
-                        text-align:right !important;
-                        padding: 5px !important
-                    }
-                     td.col-3{
-                        width:5%;
-                         padding: 5px !important
-                    }
-                    td.col-4{
-                        width:5%;
-                         padding: 5px !important
-                    }
-                    td.col-5{
-                        width:10%;
-                         padding: 5px !important
-                    }
-                     td.col-6{
-                        width:10%;
-                         padding: 5px !important
-                    }
-                     td.col-7{
-                        width:10%;
-                         padding: 5px !important
-                    }
-                     td.col-8{
-                        width:10%;
-                         padding: 5px !important
-                    }
-                    td.col-9{
-                        width:10%;
-                         padding: 5px !important
-                    }
-                    td.col-10{
-                        width:10%;
-                         padding: 5px !important
-                    }
-
-
-                     thead {
-                        display: table-header-group;
-                    }
-
-
-                </style>
-
     </template>
 </odoo>

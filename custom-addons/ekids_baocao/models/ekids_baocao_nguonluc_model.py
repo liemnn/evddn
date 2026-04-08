@@ -128,7 +128,9 @@ class BaoCaoNguonLucWizard(models.TransientModel):
                                     ('coso_id','=',self.coso_id.id)
                                     ,('nam_id.name', '=', str(nam))
                                     ,('thang_id.name', '=', str(thang))
+                                    , ('hocphi_phaidong', '>', 0)
                                     ])
+
         return  count
     def sum_tong_hocsinh_nghỉ_trong_thang(self,nam,thang):
         days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
