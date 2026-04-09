@@ -26,6 +26,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                                   ,("10", "Đã đóng[Tiền mặt]")
                                   ,("11", "Đã đóng[Chuyển khoản]")
                                   ,("12", "Đã đóng[Ví học sinh]")
+                                  ,("3", "Đã xuất[Hóa đơn]")
                                   ,("2", "Nợ học phí")],default='-1')
 
     is_show_tinhtoan_lai = fields.Boolean(compute="_compute_is_show_tinhtoan_lai")
@@ -423,6 +424,29 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 'default_hocsinh_id': self.hocsinh_id.id,  # Truyền ID học sinh hiện tại
             }
         }
+
+    #kiểm tra các trạng thái chuyển qua
+    def write(self, vals):
+        # 1. Kiểm tra xem người dùng có đang cố gắng thay đổi trường 'state' hay không
+        if 'trangthai' in vals:
+            new_state = vals.get('trangthai')
+
+            # Quét qua từng bản ghi đang được cập nhật
+            for rec in self:
+                # 2. Nếu trạng thái ĐÍCH ĐẾN là "Đã xuất hóa đơn"
+                if new_state == '3':
+
+                    # 3. Kiểm tra trạng thái HIỆN TẠI (trước khi lưu)
+                    if rec.trangthai not in ['10', '11','12']:
+                        raise UserError("CẢNH BÁO: Học sinh chưa đóng tiền, không thể xuất hóa đơn!")
+
+                # (Anh có thể viết thêm các luật elif khác ở đây cho các trạng thái khác)
+                # elif new_state == 'da_dong_tm':
+                #     if rec.state != 'da_kiem_tra':
+                #         raise UserError("Phải kiểm tra xong mới được thu tiền!")
+
+        # 4. Nếu vượt qua mọi bài kiểm tra, gọi hàm super() để Odoo thực hiện lưu vào Database
+        return super().write(vals)
 
 
 

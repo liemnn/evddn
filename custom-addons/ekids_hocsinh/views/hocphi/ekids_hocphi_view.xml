@@ -55,6 +55,17 @@
         </field>
     </record>
 
+    <record id="ekids_hocsinh.action_chuyen_trangthai_da_xuat_hoadon" model="ir.actions.server">
+        <field name="name">Chuyển trạng thái [Đã xuất Hóa đơn]</field>
+        <field name="model_id" ref="model_ekids_hocphi"/>
+        <field name="state">code</field>
+        <field name="binding_model_id" ref="model_ekids_hocphi"/>
+        <field name="binding_type">action</field>
+        <field name="code">
+            action = records.action_chuyen_trangthai('3')
+        </field>
+    </record>
+
     <record id="ekids_hocsinh.action_chuyen_trangthai_no_hocphi" model="ir.actions.server">
         <field name="name">Chuyển trạng thái [Đang nợ học phí]</field>
         <field name="model_id" ref="model_ekids_hocphi"/>
@@ -77,6 +88,7 @@
                 <filter string="Đã kiểm tra" name="trangthai" domain="[('trangthai','=','0')]"/>
                 <filter string="Đã đóng[Tiền mặt]" name="trangthai" domain="[('trangthai','=','10')]"/>
                 <filter string="Đã đóng[Chuyển khoản]" name="trangthai" domain="[('trangthai','=','11')]"/>
+                <filter string="Đã xuất [Hóa đơn]" name="trangthai" domain="[('trangthai','=','3')]"/>
                 <filter string="Đang nợ học phí" name="trangthai" domain="[('trangthai','=','2')]"/>
 
                 <field name="hocsinh_id"/>
@@ -133,8 +145,9 @@
                 <field name="trangthai" width="150"
                        decoration-warning="trangthai == '-1'"
                        decoration-info="trangthai == '0'"
-                       decoration-success="trangthai == '10'"
+                       decoration-muted="trangthai == '10'"
                        decoration-primary="trangthai == '11'"
+                       decoration-success="trangthai == '3'"
                        decoration-danger="trangthai == '2'"
                 />
 
@@ -197,9 +210,9 @@
                 <header>
                     <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary" string="In phiếu thu"/>
                     <button name="action_xacthuc_tinhlai_hocphi_hocsinh" invisible="is_show_tinhtoan_lai == False" type="object" confirm="Bạn chắc chắn muốn tính toán lại chứ?" class="btn btn-secondary" string="Tính lại [Học phí]"/>
-                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,2" options="{'clickable': true}"
+                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,3,2" options="{'clickable': true}"
                            invisible="is_dong_hocphi_theoky == True" />
-                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,12,2" options="{'clickable': true}"
+                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,12,3,2" options="{'clickable': true}"
                            invisible="is_dong_hocphi_theoky == False"/>
                 </header>
 
