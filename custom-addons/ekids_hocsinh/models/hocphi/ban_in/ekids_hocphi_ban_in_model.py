@@ -64,7 +64,7 @@ class HocPhiBanIn(models.TransientModel):
             header = ['TT', 'Học sinh', '1.Học phí (vnđ)','Phụ huynh ký xác nhận', 'Ghi chú']
         else:
             header =['TT','Học sinh','1.Học phí (vnđ)','2.Thu khác(vnđ)','Tổng phải đóng =[1]+[2] (vnđ)','Ghi chú'
-                ,'Địa chỉ']
+                ,'Địa chỉ','Ngày đóng']
         table_data = [header]  # Header
         thang =self.thang
         nam =self.nam
@@ -104,6 +104,7 @@ class HocPhiBanIn(models.TransientModel):
                     string_util.number2string(tong_hocphi),
                     string_util.number2string(tong_khac),
                     string_util.number2string(tong_dong),
+                    " ",
                     " ",
                     " "
                 ])
@@ -179,6 +180,7 @@ class HocPhiBanIn(models.TransientModel):
             data.append(string_util.number2string(hocphi.hocphi_phaidong))
             data.append(other_desc)
             data.append(diachi)
+            data.append(string_util.date2string(hocphi.ngay_dong_hocphi))
         else:
             data.append(string_util.number2string(hocphi.hocphi_phaidong))
             data.append("")

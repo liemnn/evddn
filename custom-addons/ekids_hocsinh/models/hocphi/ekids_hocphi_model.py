@@ -29,6 +29,8 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                                   ,("3", "Đã xuất[Hóa đơn]")
                                   ,("2", "Nợ học phí")],default='-1')
 
+    ngay_dong_hocphi = fields.Date(string="Ngày đóng [Học phí]")
+
     is_show_tinhtoan_lai = fields.Boolean(compute="_compute_is_show_tinhtoan_lai")
 
 
@@ -439,6 +441,12 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                     # 3. Kiểm tra trạng thái HIỆN TẠI (trước khi lưu)
                     if rec.trangthai not in ['10', '11','12']:
                         raise UserError("CẢNH BÁO: Học sinh chưa đóng tiền, không thể xuất hóa đơn!")
+                if new_state in ['10', '11','12']:
+                    # cập nhật đã đóng tiền:
+                    vals['ngay_dong_hocphi'] = datetime.today()
+                elif new_state in ['-1','0','2']:
+                    vals['ngay_dong_hocphi'] = False
+
 
                 # (Anh có thể viết thêm các luật elif khác ở đây cho các trạng thái khác)
                 # elif new_state == 'da_dong_tm':
