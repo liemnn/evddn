@@ -63,7 +63,8 @@ class HocPhiBanIn(models.TransientModel):
         if self.loai =='0':
             header = ['TT', 'Học sinh', '1.Học phí (vnđ)','Phụ huynh ký xác nhận', 'Ghi chú']
         else:
-            header =['TT','Học sinh','1.Học phí (vnđ)','2.Thu khác(vnđ)','Tổng phải đóng =[1]+[2] (vnđ)','Ghi chú','Phụ huynh ký xác nhận',]
+            header =['TT','Học sinh','1.Học phí (vnđ)','2.Thu khác(vnđ)','Tổng phải đóng =[1]+[2] (vnđ)','Ghi chú'
+                ,'Địa chỉ']
         table_data = [header]  # Header
         thang =self.thang
         nam =self.nam
@@ -137,6 +138,15 @@ class HocPhiBanIn(models.TransientModel):
         data.append(hocphi.hocsinh_id.name)
         if self.loai == '1':
             #tính toán thu khác
+            hs =hocphi.hocsinh_id
+            diachi =""
+            if hs.diachi_chitiet:
+                diachi+= str(hs.diachi_chitiet)+", "
+            if hs.dm_xa_id:
+                diachi+= str(hs.dm_xa_id.name)+", "
+            if hs.dm_tinh_id:
+                diachi += str(hs.dm_tinh_id.name)
+
             other_desc =""
             other_tien =0
             hocphi_tien=0
@@ -168,7 +178,7 @@ class HocPhiBanIn(models.TransientModel):
             data.append(string_util.number2string(other_tien))
             data.append(string_util.number2string(hocphi.hocphi_phaidong))
             data.append(other_desc)
-            data.append("")
+            data.append(diachi)
         else:
             data.append(string_util.number2string(hocphi.hocphi_phaidong))
             data.append("")
