@@ -35,6 +35,8 @@ class DanhMucThuBanTru(models.Model):
                                       , column2="hocsinh_id"
                                       , string="Khoản thu bán trú của học sinh")
 
+    is_hocphi = fields.Boolean(string="Là khoản thu phục vụ học tập", default=False)
+
     @api.depends("loai")
     def _compute_is_formula(self):
 

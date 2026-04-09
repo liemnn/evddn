@@ -8,6 +8,7 @@ from . import  ekids_luong_hangmuc_model
 from . import  ekids_luong_sukien_model
 from . import  ekids_luong_func_abstractmodel
 from . import  ekids_luong_formula_abstractmodel
+from .  import  ban_in
 
 
 

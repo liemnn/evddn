@@ -37,6 +37,9 @@
         'views/luong/ekids_luong_view.xml',
         'views/luong/ekids_luong_sukien_view.xml',
         'views/luong/phieuluong/ekids_phieuluong_template.xml',
+        'views/luong/ban_in/ekids_luong_banin_action.xml',
+        'views/luong/ban_in/ekids_luong_banin_template.xml',
+        'views/luong/ban_in/ekids_luong_banin_wizard_view.xml',
 
 
         'views/ekids_menu.xml',

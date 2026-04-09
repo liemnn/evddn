@@ -1,41 +1,38 @@
 <odoo>
     <template id="template_phieuluong">
-        <!-- Gọi layout chuẩn của Odoo -->
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-              <div class="page">
-              <div style="text-align:right">
-                  <button  onclick="window.print()"
-                        style="width:30px; height:auto;border:0px"
-                        string="In Phiếu Lương" type="object">
-                    <i class="fa fa-print"></i>
-                </button>
-                  <button t-att-data-url="o.share_url"
-                          style="width:30px; height:auto;border:0px"
-                          onclick="navigator.clipboard.writeText(this.dataset.url); alert('Đã copy link chia sẻ Phiếu lương!')">
-                       <i class="fa fa-copy"></i>
-                  </button>
-              </div>
 
+                <t t-call="web.basic_layout">
 
-                         <span t-field="o.coso_id.header_thu_hocphi" class="box-header"/>
+                    <div class="page" style="font-family: Arial, sans-serif;">
+                        <div style="text-align:right">
+                            <button onclick="window.print()"
+                                    style="width:30px; height:auto;border:0px"
+                                    string="In Phiếu Lương" type="object">
+                                <i class="fa fa-print"></i>
+                            </button>
+                            <button t-att-data-url="o.share_url"
+                                    style="width:30px; height:auto;border:0px"
+                                    onclick="navigator.clipboard.writeText(this.dataset.url); alert('Đã copy link chia sẻ Phiếu lương!')">
+                                <i class="fa fa-copy"></i>
+                            </button>
+                        </div>
 
+                        <span t-field="o.coso_id.header_thu_hocphi" class="box-header"/>
 
                         <table width="100%" border="0" style="font-size:14px;">
                             <tr>
                                 <td>Giáo viên: <strong t-field="o.giaovien_id.name"/></td>
                                 <td>Đi làm:<strong t-field="o.so_ngaycong"/>/<strong t-field="o.so_ngaycong_quydinh"/> ngày</td>
                                 <td>
-                                     <h2 style="font-size:16px;font-weight: bold;
+                                    <h2 style="font-size:16px;font-weight: bold;
                                             text-align:center;margin:0px;padding:0px;text-transform: uppercase;">
-                                        THÔNG BÁO LƯƠNG THANG  <span t-field="o.thang_id.name"/>
+                                        THÔNG BÁO LƯƠNG THÁNG <span t-field="o.thang_id.name"/>
                                         /<span t-field="o.thang_id.nam_id.name"/>
                                     </h2>
                                 </td>
-
-
                             </tr>
-
                         </table>
 
                         <table class="box-table" width="100%" border="1" cellspacing="0" cellpadding="0" style="font-size:13px;border-width:1px !important">
@@ -44,150 +41,133 @@
                                 <td width="50%"><b>KHOẢN ĐƯỢC TÍNH LƯƠNG (+)</b></td>
                                 <td width="30%"><b>LÀM RÕ</b></td>
                                 <td width="15%">
-                                    <div
-                                       style="font-weight:bold;font-size:13px;text-align:right;vertical-align:top;"
-                                       t-field="o.tong_cong"/>
+                                    <div style="font-weight:bold;font-size:13px;text-align:right;vertical-align:top;"
+                                         t-field="o.tong_cong"/>
                                 </td>
                             </tr>
                             <t t-foreach="o.luong_cong_ids" t-as="luong_cong_id">
-                                 <tr>
-                                     <td style="text-align:center">-</td>
-                                     <td style="text-align:left;padding:2px;">
-                                         <span t-field="luong_cong_id.name"/>
-                                     </td>
-                                     <td style="text-align:left;padding:2px;">
-                                         <span t-field="luong_cong_id.desc"/>
-                                     </td>
-                                     <td style="text-align:right;padding:2px;">
-                                         <span t-field="luong_cong_id.tien"/>
-                                     </td>
-                                 </tr>
-
+                                <tr>
+                                    <td style="text-align:center">-</td>
+                                    <td style="text-align:left;padding:2px;">
+                                        <span t-field="luong_cong_id.name"/>
+                                    </td>
+                                    <td style="text-align:left;padding:2px;">
+                                        <span t-field="luong_cong_id.desc"/>
+                                    </td>
+                                    <td style="text-align:right;padding:2px;">
+                                        <span t-field="luong_cong_id.tien"/>
+                                    </td>
+                                </tr>
                             </t>
+
                             <tr>
                                 <td style="text-align:center"><b>2</b></td>
-                                <td ><b>KHOẢN BỊ TRỪ(-)</b></td>
-                                 <td ></td>
-                                <td >
+                                <td><b>KHOẢN BỊ TRỪ(-)</b></td>
+                                <td></td>
+                                <td>
                                     <div colspan="2"
-                                       style="font-weight:bold;font-size:13px;text-align:right;vertical-align:top;"
-                                       t-field="o.tong_tru"/>
+                                         style="font-weight:bold;font-size:13px;text-align:right;vertical-align:top;"
+                                         t-field="o.tong_tru"/>
                                 </td>
                             </tr>
                             <t t-foreach="o.luong_tru_ids" t-as="luong_tru_id">
-                                 <tr>
+                                <tr>
                                     <td style="text-align:center">-</td>
                                     <td style="text-align:left;">
-                                         <span t-field="luong_tru_id.name"/>
-                                     </td>
-                                      <td style="text-align:left;">
-                                         <span t-field="luong_tru_id.desc"/>
-                                     </td>
-                                     <td style="text-align:right;">
-                                         <span t-field="luong_tru_id.tien"/>
-                                     </td>
-                                 </tr>
-
+                                        <span t-field="luong_tru_id.name"/>
+                                    </td>
+                                    <td style="text-align:left;">
+                                        <span t-field="luong_tru_id.desc"/>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <span t-field="luong_tru_id.tien"/>
+                                    </td>
+                                </tr>
                             </t>
+
                             <tr t-if="o.tong_thongtin">
                                 <td style="text-align:center"><b>3</b></td>
                                 <td><b>THÔNG TIN </b></td>
-                                 <td></td>
+                                <td></td>
                                 <td>
                                     <div colspan="2"
-                                       style="font-weight:bold;font-size:13px;text-align:right;vertical-align:top;"
-                                       t-field="o.tong_thongtin"/>
+                                         style="font-weight:bold;font-size:13px;text-align:right;vertical-align:top;"
+                                         t-field="o.tong_thongtin"/>
                                 </td>
                             </tr>
-                             <t t-foreach="o.nhatruong_chitra_ids" t-as="nhatruong_chitra_id">
-                                 <tr>
+                            <t t-foreach="o.nhatruong_chitra_ids" t-as="nhatruong_chitra_id">
+                                <tr>
                                     <td style="text-align:center">-</td>
                                     <td style="text-align:left;">
-                                         <span t-field="nhatruong_chitra_id.name"/>
-                                     </td>
-                                      <td style="text-align:left;">
-                                         <span t-field="nhatruong_chitra_id.desc"/>
-                                     </td>
-                                     <td style="text-align:right;">
-                                         <span t-field="nhatruong_chitra_id.tien"/>
-                                     </td>
-                                 </tr>
-
-                             </t>
-                             <t t-foreach="o.luong_thongtin_ids" t-as="luong_thongtin_id">
-                                 <tr>
+                                        <span t-field="nhatruong_chitra_id.name"/>
+                                    </td>
+                                    <td style="text-align:left;">
+                                        <span t-field="nhatruong_chitra_id.desc"/>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <span t-field="nhatruong_chitra_id.tien"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-foreach="o.luong_thongtin_ids" t-as="luong_thongtin_id">
+                                <tr>
                                     <td style="text-align:center">-</td>
                                     <td style="text-align:left;">
-                                         <span t-field="luong_thongtin_id.name"/>
-                                     </td>
-                                      <td style="text-align:left;">
-                                         <span t-field="luong_thongtin_id.desc"/>
-                                     </td>
-                                     <td style="text-align:right;">
-                                         <span t-field="luong_thongtin_id.tien"/>
-                                     </td>
-                                 </tr>
+                                        <span t-field="luong_thongtin_id.name"/>
+                                    </td>
+                                    <td style="text-align:left;">
+                                        <span t-field="luong_thongtin_id.desc"/>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <span t-field="luong_thongtin_id.tien"/>
+                                    </td>
+                                </tr>
+                            </t>
 
-                             </t>
                             <tr>
                                 <td style="text-align:center"></td>
                                 <td style="text-align:right;"><b>LƯƠNG GIÁO VIÊN THỰC LĨNH</b></td>
-                                 <td style="text-align:right;"><b>ĐƯỢC TÍNH =[1]-[2]</b></td>
+                                <td style="text-align:right;"><b>ĐƯỢC TÍNH =[1]-[2]</b></td>
                                 <td>
-
                                     <div colspan="2"
-                                       style="font-weight:bold;font-size:16px;text-align:right;vertical-align:top;"
+                                         style="font-weight:bold;font-size:16px;text-align:right;vertical-align:top;"
                                          t-field="o.luong"/>
-
-
-
-
                                 </td>
                             </tr>
                         </table>
 
+                        <style>
+                            /* BƯỚC 3: Dùng !important để ép mọi thành phần dùng font Arial */
+                            *:not(i) {
+                                    font-family: Arial, sans-serif !important;
+                                }
 
+                            .box-table td {
+                                border-color: inherit;
+                                border-style: solid;
+                                border: 1px solid #ccc;
+                                font-size:13px;
+                                padding:5px;
+                            }
 
+                            .page {
+                                page-break-before: always;
+                                page-break-after: always;
+                                page-break-inside: avoid;
+                                padding:0px;
+                                margin:0px;
+                            }
 
-                <style>
+                            .box-header {
+                                text-align:center !important;
+                                border-style: solid;
+                                border: 0px solid #ccc;
+                                font-size:13px !important;
+                            }
+                        </style>
 
-                    * {
-                       font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-                    }
-
-
-                    .box-table td{
-                        border-color: inherit;
-                        border-style: solid;
-                        border: 1px solid #ccc;
-                        font-size:13px;
-                        padding:5px;
-                    }
-
-                     .page {
-                        page-break-before: always;   /* Luôn bắt đầu trang mới */
-                        page-break-after: always;    /* Sau khi in xong, xuống trang */
-                        page-break-inside: avoid;
-
-                        padding:0px;
-                        margin:0px;
-                    }
-                     .box-header{
-                        text-align:center !important;
-                        border-style: solid;
-                        border: 0px solid #ccc;
-                        font-size:13px !important;
-
-                    }
-
-
-
-
-                </style>
-
-                 </div>
-            </t>
-
+                    </div>
+                </t> </t>
         </t>
     </template>
 </odoo>

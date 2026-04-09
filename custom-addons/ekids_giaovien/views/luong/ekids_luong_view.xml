@@ -81,6 +81,11 @@
                             confirm="Bạn chắc chắn muốn tính lại [Lương] ?
   Thao tác này chỉ áp dụng cho trạng thái [Đang tính].Khi tính lại dữ liệu sẽ bị xóa và tính toán lại !"
                          display="always"/>
+                    <button name="action_in_ban_xacnhan"
+                        type="object"
+                        string="In"
+                        class="btn-primary"
+                        display="always"/>
                 </header>
                 <field name="sequence" width="25"/>
                 <field name="giaovien_id" width="200"/>
@@ -95,8 +100,8 @@
                 <field name="tham_nien" width="70" />
                 <field name="ngaycong" width="70" string="Công" />
                 <field name="so_ngaynghi" width="40" />
-                <field name="tong_cong" sum="Total" string="1.Được cộng(+)" widget="integer"/>
-                <field name="tong_tru" sum="Total" string="2.Bị trừ(-)" widget="integer"/>
+                <field name="tong_cong" sum="Total" string="1.Được(+)" widget="integer"/>
+                <field name="tong_tru" sum="Total" string="2.Bị(-)" widget="integer"/>
                 <field name="nhatruong_thuho" sum="Total" widget="integer" string="3.Giáo viên đóng" width="100"/>
                 <field name="tong_thongtin" sum="Total" widget="integer" string="4. Nhà trường đóng" width="100"/>
                 <field name="luong" sum="Total" widget="integer" string="5.Lương=1-2" width="100"/>

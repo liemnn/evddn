@@ -105,7 +105,7 @@ class DiemDanh(models.Model):
             nghiles = nghile_util.func_get_nghiles_trong_khoang_thoigian(self,self.coso_id,None, ngay_dauthang,ngay_cuoithang)
             coso_hoatdongs = coso_util.func_get_ngay_hoatdongs(self.coso_id, nam, thang)
             nghipheps = hocsinh_util.func_get_nghipheps_tatca_hocsinh(self,self.coso_id, nam, thang)
-            diemdanh_thangtruoc =self.func_get_diemdanh_theo_thang()
+            diemdanh_thangtruoc =self.func_get_diemdanh_theo_thang_truoc()
             ca_tangcuongs = hocsinh_util.func_get_cas_tangcuong_tatca_hocsinh(self, self.coso_id,nam,thang)
             for hs in hocsinhs:
                  if hs.id not in hocsinh2_ids:
@@ -120,10 +120,12 @@ class DiemDanh(models.Model):
                     #job queue để tính toán ngay nghi le thang truoc
                     hocsinh2thang.func_tinhtoan_hocbu_cho_hocsinh2thang_khoitao(diemdanh_thangtruoc)
                  else:
+
                      # tinh toan lại các du lieu đã có chấp nhận for lai
-                     for hocsinh2thang in hocsinh2thangs:
-                         if hocsinh2thang.hocsinh_id.id == hs.id:
-                             hocsinh2thang.func_tinhtoan_giatri_hocsinh2ngay(nghiles, coso_hoatdongs, nghipheps,ca_tangcuongs,False)
+                     if hocsinh2thangs:
+                         for hocsinh2thang in hocsinh2thangs:
+                             if hocsinh2thang.hocsinh_id.id == hs.id:
+                                 hocsinh2thang.func_tinhtoan_giatri_hocsinh2ngay(nghiles, coso_hoatdongs, nghipheps,ca_tangcuongs,False)
 
 
 
@@ -145,7 +147,7 @@ class DiemDanh(models.Model):
                 else:
                     setattr(hs_diemdanh, field_name, True)
 
-    def func_get_diemdanh_theo_thang(self):
+    def func_get_diemdanh_theo_thang_truoc(self):
         nam = self.nam
         thang = self.thang
         ngay_dauthang = date(int(nam), int(thang), 1)

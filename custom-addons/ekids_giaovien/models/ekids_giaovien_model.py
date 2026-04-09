@@ -56,7 +56,7 @@ class GiaoVien(models.Model):
 
     dilam_tungay = fields.Date(string="*Ngày đi làm",required=True)
     dilam_denngay = fields.Date(string="Ngày nghỉ làm")
-    tham_nien = fields.Float(string="Thâm niên(năm)", digits=(10, 1),compute="_compute_tham_nien")
+    tham_nien = fields.Float(string="Thâm niên", digits=(10, 1),compute="_compute_tham_nien")
 
     so_hopdong_laodong= fields.Char(string="Số hợp đồng lao động")
     trangthai = fields.Selection([

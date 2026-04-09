@@ -6,6 +6,7 @@ from datetime import datetime
 class ChiTieuNam(models.Model):
     _name = "ekids.chitieu_nam"
     _description = "Mô tả về chi tiêu hàng năm"
+    _order = "id desc"
 
 
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở",required=True,ondelete="restrict")

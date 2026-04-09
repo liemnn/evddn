@@ -4,6 +4,7 @@ from odoo import models, fields, api, _
 class Chi(models.Model):
     _name = "ekids.chitieu_thu"
     _description = "Mô tả về chi tiêu của tổ chức"
+    _order = "ngaychi asc"
 
     sequence = fields.Integer(string="STT", default=1)
     coso_id = fields.Many2one(

@@ -11,15 +11,15 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
 
     sequence = fields.Integer(string="TT", compute="_compute_sequence")
     ma =fields.Char(string="Mã")
-    name = fields.Char(string="*Họ và tên",required=True,index=True)
+    name = fields.Char(string="Họ và tên",required=True,index=True)
 
     ten = fields.Char(string="ten", compute="_compute_ten",store=True,index=True)
     bietdanh = fields.Char(string="Tên gọi ở nhà (Biệt danh)")
     cccd = fields.Char(string="Số định danh cá nhân(nếu có)")
     avatar = fields.Binary(string="Ảnh đại diện")
-    ngaysinh = fields.Date(string="*Ngày sinh",required=True)
+    ngaysinh = fields.Date(string="Ngày sinh",required=True)
     tuoi = fields.Char(string="Tuổi", compute="_compute_hocsinh_tuoi",store=True)
-    gioitinh  = fields.Selection([("0","Nữ"),("1","Nam")],string="*Giới tính",required=True)
+    gioitinh  = fields.Selection([("0","Nữ"),("1","Nam")],string="Giới tính",required=True)
     chieucao = fields.Integer(string="Chiều cao(cm)")
     cannang = fields.Integer(string="Cân nặng(kg)")
 
@@ -30,7 +30,7 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
     desc = fields.Html(string="Đặc điểm cần chú ý về trẻ")
 
 
-    ngay_nhaphoc = fields.Date(string="*Ngày bắt đầu(đi học, đánh giá..)",required=True)
+    ngay_nhaphoc = fields.Date(string="Ngày bắt đầu(đi học, đánh giá..)",required=True)
     ngay_nghihoc = fields.Date(string="Ngày nghỉ học")
 
     dm_chinhsach_giam_id = fields.Many2one("ekids.hocphi_dm_chinhsach_giam",

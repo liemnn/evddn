@@ -22,8 +22,8 @@
                     <field name="loai"/>
                     <field name="tien"/>
                     <field name="desc"/>
-                    <field name="is_hoantien_khi_nghi"  width="35" widget="boolean_toggle"/>
-                    <field name="is_giam_hocphi"  width="35" widget="boolean_toggle"/>
+                    <field name="is_hoantien_khi_nghi"  width="100" widget="boolean_toggle" string="Hoàn tiền"/>
+                    <field name="is_giam_hocphi"  width="100" widget="boolean_toggle" string="Giảm học phí"/>
                     <field name="trangthai"
                            decoration-success="trangthai == '1'"
                            decoration-danger="trangthai == '0'"/>
@@ -44,7 +44,7 @@
                             <field name="name"/>
                             <field name="loai"/>
                         </group>
-                        <group col="3">
+                        <group col="4">
                             <group>
                                  <field name="tien"/>
                             </group>
@@ -54,6 +54,9 @@
 
                              <group>
                                  <field name="is_giam_hocphi" widget="boolean_toggle"/>
+                            </group>
+                             <group>
+                                 <field name="is_hocphi" widget="boolean_toggle"/>
                             </group>
 
                         </group>

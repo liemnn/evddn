@@ -1,0 +1,33 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: always
+    environment:
+      - OLLAMA_NUM_PARALLEL=1 # Cho phép xử lý đồng thời 4 yêu cầu (thay vì 1)
+      - OLLAMA_MAX_LOADED_MODELS=1 # Có thể giữ 2 mô hình trong RAM (ví dụ:
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama_data:/root/.ollama
+    deploy:
+      resources:
+        limits:
+          memory: 12G # Dành phần lớn RAM cho AI
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: always
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    volumes:
+      - ./webui_data:/app/backend/data
+    depends_on:
+      - ollama
+    deploy:
+      resources:
+        limits:
+          memory: 4G # Tăng RAM cho WebUI để xử lý file PDF/Word lớn [cite: 148]

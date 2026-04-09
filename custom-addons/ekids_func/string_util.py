@@ -9,3 +9,10 @@ def string2number(s):
     # bỏ dấu phẩy ngăn cách hàng nghìn
     s = s.replace(",", "").strip()
     return float(s)
+
+
+def date2string(date):
+    if date:
+        return date.strftime("%d/%m/%Y")
+    else:
+        return ""

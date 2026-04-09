@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <record id="ekids_giaovien.action_luong_banin_report" model="ir.actions.report">
+            <field name="name">bản in Lương</field>
+            <field name="model">ekids.luong_banin</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_giaovien.action_luong_banin_template</field>
+            <field name="report_file">ekids_giaovien.action_luong_banin_template</field>
+
+        </record>
+
+    </data>
+</odoo>

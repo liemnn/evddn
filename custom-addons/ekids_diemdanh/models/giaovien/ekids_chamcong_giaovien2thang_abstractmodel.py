@@ -117,13 +117,7 @@ class ChamCongGiaoVien2ThangAbstractModel(models.AbstractModel):
                     'default_ngay': ngay,
                 }
             }
-    def func_tinhtoan_hocbu_cho_hocsinh2thang_khoitao(self,diemdanh_thangtruoc):
-        if diemdanh_thangtruoc:
-            hocsinh2thangs = diemdanh_thangtruoc.hocsinh2thang_ids
-            if hocsinh2thangs:
-                for hocsinh2thang in hocsinh2thangs:
-                    if (self.hocsinh_id.id == hocsinh2thang.hocsinh_id.id):
-                        self.hocbu_thangtruoc = hocsinh2thang.hocbu_conlai
+
 
 
     def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,giaovien_id,ngay):

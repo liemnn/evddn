@@ -36,12 +36,25 @@ class HocPhiThang(models.Model,HocPhiThangAbstractModel):
 
     tong_dong_ck=fields.Float(string="Tổng đã [Chuyển khoản]", digits=(10, 0),compute="_compute_tong_dong_ck")
     tong_dong_tm = fields.Float(string="Tổng đã [Tiền mặt]", digits=(10, 0),compute="_compute_tong_dong_tm")
+    tong_xuat_hoadon = fields.Float(string="Tổng đã [Chuyển khoản]", digits=(10, 0), compute="_compute_tong_xuat_hoadon")
     tong_no = fields.Float(string="Tổng chưa thu", digits=(10, 0), compute="_compute_tong_no")
     _sql_constraints = [
         ('unique_hocphi_thang',
          'UNIQUE(coso_id,nam_id,name)',
          'Đã tồn tại học phí "Tháng này của Năm"  của cơ sở, vui lòng kiểm tra lại !')
     ]
+
+
+    def _compute_tong_xuat_hoadon(self):
+        for thang in self:
+            result = self.env['ekids.hocphi'].read_group(
+                domain=[('thang_id', '=', thang.id),('trangthai', '=', '3')],  # điều kiện lọc (nếu cần)
+                fields=['hocphi_phaidong'],  # tên trường cần tính tổng
+                groupby=[]  # không cần group theo trường nào cả
+            )
+
+            total = result[0]['hocphi_phaidong'] if result else 0.0
+            thang.tong_xuat_hoadon = total
 
     def _compute_tong_dong_ck(self):
         for thang in self:

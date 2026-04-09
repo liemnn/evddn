@@ -128,17 +128,19 @@ class BaoCaoNguonLucWizard(models.TransientModel):
                                     ('coso_id','=',self.coso_id.id)
                                     ,('nam_id.name', '=', str(nam))
                                     ,('thang_id.name', '=', str(thang))
+                                    , ('hocphi_phaidong', '>', 0)
                                     ])
+
         return  count
     def sum_tong_hocsinh_nghỉ_trong_thang(self,nam,thang):
         days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
         ngay_dauthang = days[0]
         ngay_cuoithang = days[len(days) - 1]
 
-        count = self.env['ekids.hocphi'].search_count([
+        count = self.env['ekids.hocsinh'].search_count([
                                     ('coso_id','=',self.coso_id.id)
-                                    ,('hocsinh_id.ngay_nghihoc', '>=', ngay_dauthang)
-                                    ,('hocsinh_id.ngay_nghihoc', '<=', ngay_cuoithang)
+                                    ,('ngay_nghihoc', '>=', ngay_dauthang)
+                                    ,('ngay_nghihoc', '<=', ngay_cuoithang)
                                     ]
                                     )
         return count
@@ -147,10 +149,10 @@ class BaoCaoNguonLucWizard(models.TransientModel):
         days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
         ngay_dauthang = days[0]
         ngay_cuoithang = days[len(days) - 1]
-        count = self.env['ekids.hocphi'].search_count([
+        count = self.env['ekids.hocsinh'].search_count([
             ('coso_id', '=', self.coso_id.id)
-            , ('hocsinh_id.ngay_nhaphoc', '>=', ngay_dauthang)
-            , ('hocsinh_id.ngay_nhaphoc', '<=', ngay_cuoithang)
+            , ('ngay_nhaphoc', '>=', ngay_dauthang)
+            , ('ngay_nhaphoc', '<=', ngay_cuoithang)
         ])
         return count
 

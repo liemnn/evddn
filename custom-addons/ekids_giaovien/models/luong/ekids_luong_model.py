@@ -22,7 +22,7 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
                                    , ("1", "Đã nhận lương")],default="-1")
     is_show_tinhtoan_lai = fields.Boolean(compute="_compute_is_show_tinhtoan_lai")
 
-    tham_nien = fields.Float(string="Thâm niên(năm)", default=0, digits=(10, 1))
+    tham_nien = fields.Float(string="Thâm niên", default=0, digits=(10, 1))
     ngaycong =fields.Char(string="Ngày công",compute="_compute_ngaycong")
     so_ngaycong_quydinh = fields.Integer(string="Ngày làm/tháng", default=0)
     so_ngaycong = fields.Float(string="Đi làm", default=0, digits=(10, 1))
@@ -249,3 +249,25 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
 
 
         self.func_tinhtoan_lai_luong_cho_mot_giaovien()
+
+
+    def action_in_ban_xacnhan(self):
+        """Gọi report đã khai báo"""
+        context = self.env.context
+        coso_id = context.get("default_coso_id")
+        thang = context.get("default_thang")
+        nam = context.get("default_nam")
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'In bản xác nhận',
+            'res_model': 'ekids.luong_banin',
+            'view_mode': 'form',
+            'target': 'new',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': coso_id,
+                'default_thang': thang,
+                'default_nam': nam
+
+            }
+        }
