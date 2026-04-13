@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ekids_phuhuynh.page_app_phuhuynh" name="Trang App Phụ Huynh">
+        &lt;!DOCTYPE html&gt;
+        <html lang="vi">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>App Phụ Huynh - Chuyên biệt Từ Sơn</title>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+            <style>
+                /* Đã đổi  thành &amp; để XML không báo lỗi */
+                @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap');
+
+                :root {
+                    --primary-color: #4a90e2;
+                    --secondary-color: #f39c12;
+                    --bg-color: #f4f7f6;
+                    --text-color: #333;
+                    --card-bg: #ffffff;
+                    --border-radius: 16px;
+                }
+
+                * {
+                    box-sizing: border-box;
+                    margin: 0;
+                    padding: 0;
+                    font-family: 'Nunito', sans-serif;
+                }
+
+                body {
+                    background-color: #e0e5ec;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                }
+
+                .mobile-container {
+                    width: 100%;
+                    height: 100vh;
+                    max-height: 896px;
+                    background-color: var(--bg-color);
+                    position: relative;
+                    overflow-y: auto;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                }
+
+                @media (max-width: 414px) {
+                    .mobile-container {
+                        height: 100vh;
+                        max-height: none;
+                    }
+                }
+
+                .header {
+                    background: linear-gradient(135deg, var(--primary-color), #357abd);
+                    color: white;
+                    padding: 30px 20px 20px;
+                    border-bottom-left-radius: 25px;
+                    border-bottom-right-radius: 25px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
+                }
+
+                .user-info h2 {
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    margin-bottom: 4px;
+                }
+
+                .user-info p {
+                    font-size: 0.9rem;
+                    opacity: 0.9;
+                }
+
+                .header-icons i {
+                    font-size: 1.4rem;
+                    margin-left: 15px;
+                    position: relative;
+                }
+
+                .notification-badge {
+                    position: absolute;
+                    top: -5px;
+                    right: -5px;
+                    background-color: #e74c3c;
+                    color: white;
+                    font-size: 0.6rem;
+                    font-weight: bold;
+                    border-radius: 50%;
+                    padding: 2px 5px;
+                }
+
+                .content {
+                    padding: 20px;
+                    padding-bottom: 80px;
+                }
+
+                .highlight-card {
+                    background-color: var(--card-bg);
+                    border-radius: var(--border-radius);
+                    padding: 15px;
+                    margin-bottom: 20px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                    border-left: 5px solid var(--secondary-color);
+                    display: flex;
+                    align-items: center;
+                }
+
+                .highlight-icon {
+                    font-size: 2rem;
+                    color: var(--secondary-color);
+                    margin-right: 15px;
+                }
+
+                .highlight-text h3 {
+                    font-size: 1rem;
+                    color: var(--text-color);
+                    margin-bottom: 5px;
+                }
+
+                .highlight-text p {
+                    font-size: 0.85rem;
+                    color: #666;
+                    line-height: 1.4;
+                }
+
+                .menu-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 15px;
+                    margin-bottom: 25px;
+                }
+
+                .menu-item {
+                    background-color: var(--card-bg);
+                    border-radius: 12px;
+                    padding: 15px 10px;
+                    text-align: center;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+                    text-decoration: none;
+                    color: var(--text-color);
+                    transition: transform 0.2s ease;
+                    cursor: pointer;
+                }
+
+                .menu-item:active {
+                    transform: scale(0.95);
+                }
+
+                .menu-icon {
+                    width: 45px;
+                    height: 45px;
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin: 0 auto 10px;
+                    font-size: 1.2rem;
+                    color: white;
+                }
+
+                .bg-1 { background-color: #ff7675; }
+                .bg-2 { background-color: #74b9ff; }
+                .bg-3 { background-color: #55efc4; }
+                .bg-4 { background-color: #a29bfe; }
+                .bg-5 { background-color: #ffeaa7; color: #d63031 !important; }
+                .bg-6 { background-color: #fab1a0; }
+
+                .menu-item span {
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                }
+
+                .section-title {
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: var(--text-color);
+                    margin-bottom: 12px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .section-title a {
+                    font-size: 0.8rem;
+                    color: var(--primary-color);
+                    text-decoration: none;
+                }
+
+                .list-card {
+                    background-color: var(--card-bg);
+                    border-radius: var(--border-radius);
+                    padding: 0 15px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                }
+
+                .list-item {
+                    padding: 15px 0;
+                    border-bottom: 1px solid #f0f0f0;
+                    display: flex;
+                    align-items: flex-start;
+                }
+
+                .list-item:last-child {
+                    border-bottom: none;
+                }
+
+                .list-icon {
+                    background-color: #e3f2fd;
+                    color: var(--primary-color);
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 10px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-right: 15px;
+                    font-size: 1.1rem;
+                }
+
+                .list-info h4 {
+                    font-size: 0.9rem;
+                    margin-bottom: 4px;
+                    color: var(--text-color);
+                }
+
+                .list-info p {
+                    font-size: 0.75rem;
+                    color: #888;
+                }
+
+                .bottom-nav {
+                    position: absolute;
+                    bottom: 0;
+                    width: 100%;
+                    background-color: white;
+                    display: flex;
+                    justify-content: space-around;
+                    padding: 12px 0;
+                    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+                    border-top-left-radius: 20px;
+                    border-top-right-radius: 20px;
+                }
+
+                .nav-item {
+                    text-align: center;
+                    color: #a0a0a0;
+                    text-decoration: none;
+                    font-size: 0.7rem;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .nav-item i {
+                    font-size: 1.3rem;
+                    margin-bottom: 4px;
+                }
+
+                .nav-item.active {
+                    color: var(--primary-color);
+                    font-weight: 700;
+                }
+            </style>
+        </head>
+        <body>
+
+        <div class="mobile-container">
+            <div class="header">
+                <div class="user-info">
+                    <h2>Chào bố/mẹ bé <t t-esc="ten_hoc_sinh"/></h2>
+                    <p><t t-esc="ten_lop"/> - Hệ thống Chuyên biệt Từ Sơn</p>
+                </div>
+                <div class="header-icons">
+                    <i class="fas fa-bell"><span class="notification-badge"><t t-esc="so_thong_bao"/></span></i>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="highlight-card">
+                    <div class="highlight-icon">
+                        <i class="fas fa-smile-beam"></i>
+                    </div>
+                    <div class="highlight-text">
+                        <h3>Nhật ký hôm nay</h3>
+                        <p><t t-esc="nhat_ky_hom_nay"/></p>
+                    </div>
+                </div>
+
+                <div class="menu-grid">
+                    <div class="menu-item">
+                        <div class="menu-icon bg-1"><i class="fas fa-book-medical"></i></div>
+                        <span>Sổ Can Thiệp</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon bg-2"><i class="fas fa-calendar-alt"></i></div>
+                        <span>Lịch Học 1:1</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon bg-3"><i class="fas fa-file-invoice-dollar"></i></div>
+                        <span>Học Phí</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon bg-4"><i class="fas fa-pills"></i></div>
+                        <span>Gửi Thuốc</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon bg-5"><i class="fas fa-tasks"></i></div>
+                        <span>Bài Tập Nhà</span>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon bg-6"><i class="fas fa-calendar-minus"></i></div>
+                        <span>Xin Nghỉ</span>
+                    </div>
+                </div>
+
+                <div class="section-title">
+                    <span>Thông báo mới</span>
+                    <a href="#">Xem tất cả</a>
+                </div>
+
+                <div class="list-card">
+                    <t t-foreach="danh_sach_thong_bao" t-as="thong_bao">
+                        <div class="list-item">
+                            <div class="list-icon">
+                                <i t-att-class="thong_bao.get('icon', 'fas fa-bullhorn')"></i>
+                            </div>
+                            <div class="list-info">
+                                <h4><t t-esc="thong_bao.get('tieu_de')"/></h4>
+                                <p><t t-esc="thong_bao.get('nguoi_gui')"/> • <t t-esc="thong_bao.get('ngay_tao')"/></p>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+
+            <div class="bottom-nav">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Trang chủ</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Tiến độ</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Tin nhắn</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-bars"></i>
+                    <span>Mở rộng</span>
+                </a>
+            </div>
+        </div>
+
+        </body>
+        </html>
+    </template>
+</odoo>

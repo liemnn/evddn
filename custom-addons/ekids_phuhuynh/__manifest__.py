@@ -7,6 +7,7 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'views/ekids_app_template_view.xml',
 
         'views/ekids_hocphi_view.xml',
         'views/ekids_thongbao_view.xml',
