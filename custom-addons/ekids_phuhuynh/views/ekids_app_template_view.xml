@@ -9,7 +9,6 @@
             <title>App Phụ Huynh - Chuyên biệt Từ Sơn</title>
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
             <style>
-                /* Đã đổi  thành &amp; để XML không báo lỗi */
                 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap');
 
                 :root {
@@ -19,6 +18,13 @@
                     --text-color: #333;
                     --card-bg: #ffffff;
                     --border-radius: 16px;
+
+                    /* ========================================= */
+                    /* THÊM MỚI: Màu cho thông báo nhà trường    */
+                    /* ========================================= */
+                    --alert-bg: #fff3cd;
+                    --alert-border: #ffc107;
+                    --alert-text: #856404;
                 }
 
                 * {
@@ -98,6 +104,41 @@
                     padding: 20px;
                     padding-bottom: 80px;
                 }
+
+                /* ================================================= */
+                /* THÊM MỚI: CSS CHO THÔNG BÁO TỪ NHÀ TRƯỜNG         */
+                /* ================================================= */
+                .school-alert-card {
+                    background-color: var(--alert-bg);
+                    border-left: 5px solid var(--alert-border);
+                    border-radius: var(--border-radius);
+                    padding: 15px;
+                    margin-bottom: 20px;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                    display: flex;
+                    align-items: flex-start;
+                }
+
+                .school-alert-icon {
+                    font-size: 1.5rem;
+                    color: var(--alert-border);
+                    margin-right: 15px;
+                    margin-top: 2px;
+                }
+
+                .school-alert-text h3 {
+                    font-size: 0.95rem;
+                    color: var(--alert-text);
+                    margin-bottom: 4px;
+                    font-weight: 700;
+                }
+
+                .school-alert-text p {
+                    font-size: 0.85rem;
+                    color: #666;
+                    line-height: 1.4;
+                }
+                /* ================================================= */
 
                 .highlight-card {
                     background-color: var(--card-bg);
@@ -272,8 +313,8 @@
         <div class="mobile-container">
             <div class="header">
                 <div class="user-info">
-                    <h2>Chào bố/mẹ bé <t t-esc="ten_hoc_sinh"/></h2>
-                    <p><t t-esc="ten_lop"/> - Hệ thống Chuyên biệt Từ Sơn</p>
+                    <h2>Chào bố/mẹ bé <t t-esc="hocsinh"/></h2>
+                    <p><t t-esc="bietdanh"/> - <t t-esc="coso"/> </p>
                 </div>
                 <div class="header-icons">
                     <i class="fas fa-bell"><span class="notification-badge"><t t-esc="so_thong_bao"/></span></i>
@@ -282,39 +323,56 @@
             </div>
 
             <div class="content">
-                <div class="highlight-card">
-                    <div class="highlight-icon">
-                        <i class="fas fa-smile-beam"></i>
+
+                <t t-if="thong_bao_nha_truong">
+                    <div class="school-alert-card">
+                        <div class="school-alert-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div class="school-alert-text">
+                            <h3>Thông báo từ Nhà trường</h3>
+                            <p><t t-esc="thong_bao_nha_truong"/></p>
+                        </div>
                     </div>
-                    <div class="highlight-text">
-                        <h3>Nhật ký hôm nay</h3>
-                        <p><t t-esc="nhat_ky_hom_nay"/></p>
-                    </div>
-                </div>
+                </t>
+
 
                 <div class="menu-grid">
                     <div class="menu-item">
-                        <div class="menu-icon bg-1"><i class="fas fa-book-medical"></i></div>
+                        <div class="menu-icon bg-1">
+                            <i class="fas fa-book-medical"></i>
+                        </div>
                         <span>Sổ Can Thiệp</span>
                     </div>
                     <div class="menu-item">
-                        <div class="menu-icon bg-2"><i class="fas fa-calendar-alt"></i></div>
+                        <div class="menu-icon bg-2">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
                         <span>Lịch Học 1:1</span>
                     </div>
                     <div class="menu-item">
-                        <div class="menu-icon bg-3"><i class="fas fa-file-invoice-dollar"></i></div>
+                        <div class="menu-icon bg-3">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+
                         <span>Học Phí</span>
                     </div>
                     <div class="menu-item">
-                        <div class="menu-icon bg-4"><i class="fas fa-pills"></i></div>
+                        <div class="menu-icon bg-4">
+                            <i class="fas fa-pills"></i>
+                        </div>
                         <span>Gửi Thuốc</span>
                     </div>
                     <div class="menu-item">
-                        <div class="menu-icon bg-5"><i class="fas fa-tasks"></i></div>
+                        <div class="menu-icon bg-5">
+                            <i class="fas fa-tasks"></i>
+                        </div>
                         <span>Bài Tập Nhà</span>
                     </div>
                     <div class="menu-item">
-                        <div class="menu-icon bg-6"><i class="fas fa-calendar-minus"></i></div>
+                        <div class="menu-icon bg-6">
+                            <i class="fas fa-calendar-minus"></i>
+                        </div>
                         <span>Xin Nghỉ</span>
                     </div>
                 </div>
@@ -342,7 +400,7 @@
             <div class="bottom-nav">
                 <a href="#" class="nav-item active">
                     <i class="fas fa-home"></i>
-                    <span>Trang chủ</span>
+                    <span>Trang chủ1</span>
                 </a>
                 <a href="#" class="nav-item">
                     <i class="fas fa-chart-line"></i>
