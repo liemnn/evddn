@@ -2,6 +2,18 @@ from odoo import models, fields, api
 from datetime import datetime,date,timedelta
 from dateutil.relativedelta import relativedelta
 
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import hocsinh_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
+
 class BaoCaoLoiNhuanWizard(models.TransientModel):
     _name = 'ekids.baocao_loinhuan'
     _description = 'Báo cáo lợi nhuận của cơ sở'
@@ -84,12 +96,12 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
         table_data.append([
             'Tháng:'+thang,
             nam,
-            self.number2string(hocphi),
-            self.number2string(thukhac),
-            self.number2string(luong),
-            self.number2string(thuho),
-            self.number2string(chikhac),
-            self.number2string(loinhuan)
+            string_util.number2string(hocphi),
+            string_util.number2string(thukhac),
+            string_util.number2string(luong),
+            string_util.number2string(thuho),
+            string_util.number2string(chikhac),
+            string_util.number2string(loinhuan)
         ])
         return table_data
 
@@ -164,11 +176,12 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
     #Tinh toán tổng của năm
 
     def get_table_data_by_nam(self,table_data):
-        hocphi = 0.0
-        thukhac = 0.0
-        luong = 0.0
-        thuho = 0.0
-        chikhac = 0.0
+        hocphi = 0
+        thukhac = 0
+        luong = 0
+        thuho = 0
+        chikhac = 0
+        loinhuan=0
 
         if table_data:
             i=0
@@ -176,23 +189,24 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
                 if i == 0:
                     i =i+1
                     continue
-                hocphi = hocphi + self.string2number(data[2])
-                thukhac = thukhac + self.string2number(data[3])
-                luong = luong + self.string2number(data[4])
-                thuho = thuho + self.string2number(data[5])
-                chikhac = chikhac + self.string2number(data[6])
+                hocphi += string_util.string2number(data[2])
+                thukhac +=  string_util.string2number(data[3])
+                luong += string_util.string2number(data[4])
+                thuho += string_util.string2number(data[5])
+                chikhac +=  string_util.string2number(data[6])
+                loinhuan += string_util.string2number(data[7])
                 i = i+1
 
 
-        loinhuan = (hocphi + thukhac) - (luong +chikhac)
+
         table_data.append([
             'TỔNG THEO NĂM TÀI CHÍNH','',
-            self.number2string(hocphi),
-            self.number2string(thukhac),
-            self.number2string(luong),
-            self.number2string(thuho),
-            self.number2string(chikhac),
-            self.number2string(loinhuan)
+            string_util.number2string(hocphi),
+            string_util.number2string(thukhac),
+            string_util.number2string(luong),
+            string_util.number2string(thuho),
+            string_util.number2string(chikhac),
+            string_util.number2string(loinhuan)
         ])
         return table_data
 
@@ -213,13 +227,3 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
                 .report_action(self, data=data))
 
 
-    def number2string(self,total):
-        total = "{:,.0f}".format(total)
-        return total
-
-    def string2number(self, s):
-        if not s:
-            return 0
-        # bỏ dấu phẩy ngăn cách hàng nghìn
-        s = s.replace(",", "").strip()
-        return float(s)

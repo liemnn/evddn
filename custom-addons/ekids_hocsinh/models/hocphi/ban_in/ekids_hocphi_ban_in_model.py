@@ -97,7 +97,7 @@ class HocPhiBanIn(models.TransientModel):
                            tong_khac += string_util.string2number(data[3])
                            tong_dong += string_util.string2number(data[4])
                         index = index + 1
-
+                    #inh toan ham tong
                     table_data.append([
                     '',
                     'Tổng',
