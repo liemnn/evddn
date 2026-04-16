@@ -52,7 +52,11 @@ class GiaoVien(models.Model):
 
                                 ], string="Chuyên ngành")
 
-    tinhtrang_honnhan = fields.Selection([("1", "Đã có gia đình"), ("0", "Chưa có gia đình")],'Tình trạng hôn nhân',required=True)
+    tinhtrang_honnhan = fields.Selection([("1", "Đã có gia đình")
+                                             , ("0", "Chưa có gia đình")
+                                             , ("1", "Khác")
+                                          ]
+                                         ,'Tình trạng hôn nhân',required=True)
 
     dilam_tungay = fields.Date(string="*Ngày đi làm",required=True)
     dilam_denngay = fields.Date(string="Ngày nghỉ làm")

@@ -33,6 +33,13 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
     ngay_nhaphoc = fields.Date(string="Ngày bắt đầu(đi học, đánh giá..)",required=True)
     ngay_nghihoc = fields.Date(string="Ngày nghỉ học")
 
+    hinhthuc_theohoc = fields.Selection([
+        ("0", "Bán trú"),
+        ("1", "Cá nhân"),
+        ("2", "Khác")
+    ]
+        , string="Hình thức theo học", default="1", required=True)
+
     dm_chinhsach_giam_id = fields.Many2one("ekids.hocphi_dm_chinhsach_giam",
                                            string="Học sinh thuộc chính sách giảm học phí (nếu có)")
 
