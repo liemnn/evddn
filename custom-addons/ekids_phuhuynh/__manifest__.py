@@ -2,12 +2,14 @@
 {
     'name': "E-kids Phụ huynh",
      # any module necessary for this one to work correctly
-    'depends': ['base','ekids_core','ekids_hocsinh'],
+    'depends': ['base','ekids_core','ekids_hocsinh','ekids_func'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
         'views/ekids_app_template_view.xml',
+        'views/ekids_lichhoc_template_view.xml',
+
 
         'views/ekids_hocphi_view.xml',
         'views/ekids_thongbao_view.xml',

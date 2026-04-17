@@ -5,416 +5,364 @@
         <html lang="vi">
         <head>
             <meta charset="UTF-8"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-            <title>App Phụ Huynh - Chuyên biệt Từ Sơn</title>
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <title>eKids - Home with Pay Button</title>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
             <style>
-                @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
 
                 :root {
-                    --primary-color: #4a90e2;
-                    --secondary-color: #f39c12;
-                    --bg-color: #f4f7f6;
-                    --text-color: #333;
-                    --card-bg: #ffffff;
-                    --border-radius: 16px;
+                    --primary: #2563EB;
+                    --primary-light: #3B82F6;
+                    --primary-hover: #1D4ED8;
+                    --bg-color: #E0F2FE;
+                    --card-glass: rgba(255, 255, 255, 0.9);
+                    --text-main: #1F2937;
 
-                    /* ========================================= */
-                    /* THÊM MỚI: Màu cho thông báo nhà trường    */
-                    /* ========================================= */
-                    --alert-bg: #fff3cd;
-                    --alert-border: #ffc107;
-                    --alert-text: #856404;
+                    --c-red: #EF4444;
+                    --c-orange: #FF9800;
+                    --c-yellow: #FFC107;
+                    --c-green: #4CAF50;
+                    --c-teal: #00BCD4;
+                    --c-purple: #9C27B0;
                 }
 
-                * {
-                    box-sizing: border-box;
-                    margin: 0;
-                    padding: 0;
-                    font-family: 'Nunito', sans-serif;
-                }
+                * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
                 body {
-                    background-color: #e0e5ec;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    min-height: 100vh;
-                }
-
-                .mobile-container {
-                    width: 100%;
-                    height: 100vh;
-                    max-height: 896px;
                     background-color: var(--bg-color);
-                    position: relative;
-                    overflow-y: auto;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                    width: 100vw; height: 100vh;
+                    overflow: hidden;
                 }
 
-                @media (max-width: 414px) {
-                    .mobile-container {
-                        height: 100vh;
-                        max-height: none;
-                    }
+                .app-container {
+                    width: 100%; height: 100vh;
+                    position: relative; display: flex; flex-direction: column;
+                    overflow: hidden;
                 }
 
-                .header {
-                    background: linear-gradient(135deg, var(--primary-color), #357abd);
-                    color: white;
-                    padding: 30px 20px 20px;
-                    border-bottom-left-radius: 25px;
-                    border-bottom-right-radius: 25px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
+                .cartoon-bg {
+                    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                    background-image: url('https://i.pinimg.com/736x/aa/23/9f/aa239fc6a494439899c8c119127fd51a.jpg');
+                    background-size: cover;
+                    background-position: center;
+                    opacity: 1;
+                    pointer-events: none; z-index: 0;
                 }
 
-                .user-info h2 {
-                    font-size: 1.2rem;
-                    font-weight: 700;
-                    margin-bottom: 4px;
+                .integrated-header {
+                    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                    padding: 12px 15px 12px;
+                    color: white; flex-shrink: 0;
+                    position: relative; z-index: 10;
+                    border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
                 }
 
-                .user-info p {
-                    font-size: 0.9rem;
-                    opacity: 0.9;
+                .top-nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+                .header-title { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.9rem; }
+
+                .top-right-actions { display: flex; gap: 8px; }
+                .action-btn-glass {
+                    width: 30px; height: 30px; border-radius: 50%;
+                    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+                    color: white; display: flex; justify-content: center; align-items: center;
+                    font-size: 0.8rem; cursor: pointer; backdrop-filter: blur(4px);
+                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 }
+                .action-btn-glass:hover { transform: translateY(-3px) scale(1.1); background: rgba(255,255,255,0.4); }
 
-                .header-icons i {
-                    font-size: 1.4rem;
-                    margin-left: 15px;
-                    position: relative;
+                .user-profile-integrated { display: flex; align-items: center; gap: 12px; }
+                .avatar-wrap {
+                    width: 50px; height: 50px; border-radius: 50%; padding: 2px;
+                    background: linear-gradient(135deg, var(--c-yellow), var(--c-orange));
+                    flex-shrink: 0;
                 }
+                .avatar-wrap img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
 
-                .notification-badge {
-                    position: absolute;
-                    top: -5px;
-                    right: -5px;
-                    background-color: #e74c3c;
-                    color: white;
-                    font-size: 0.6rem;
-                    font-weight: bold;
-                    border-radius: 50%;
-                    padding: 2px 5px;
+                .profile-info-white { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+                .profile-info-white h2 { font-size: 1rem; font-weight: 800; color: white; margin-bottom: 2px; }
+                .profile-info-white p { font-size: 0.7rem; color: rgba(255,255,255,0.9); font-weight: 500; margin-bottom: 4px; }
+
+                .badge-row {
+                    display: flex; gap: 6px; flex-wrap: wrap;
                 }
-
-                .content {
-                    padding: 20px;
-                    padding-bottom: 80px;
+                .info-badge {
+                    display: inline-flex; align-items: center; gap: 4px;
+                    background: rgba(255, 255, 255, 0.2);
+                    backdrop-filter: blur(4px);
+                    padding: 3px 8px; border-radius: 8px;
+                    font-size: 0.65rem; font-weight: 700;
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    color: white; width: fit-content;
                 }
+                .badge-bantru i { color: #FFD54F; }
+                .badge-hocca i { color: #81D4FA; }
+                .badge-boy i { color: #60A5FA; }
+                .badge-girl i { color: #F48FB1; }
 
-                /* ================================================= */
-                /* THÊM MỚI: CSS CHO THÔNG BÁO TỪ NHÀ TRƯỜNG         */
-                /* ================================================= */
-                .school-alert-card {
-                    background-color: var(--alert-bg);
-                    border-left: 5px solid var(--alert-border);
-                    border-radius: var(--border-radius);
-                    padding: 15px;
-                    margin-bottom: 20px;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-                    display: flex;
-                    align-items: flex-start;
+                /* --- MAIN SCROLL --- */
+                .main-scroll {
+                    flex: 1; overflow-y: auto;
+                    padding: 15px 15px 85px;
+                    z-index: 2; position: relative;
+                    scrollbar-width: none;
                 }
+                .main-scroll::-webkit-scrollbar { display: none; }
 
-                .school-alert-icon {
-                    font-size: 1.5rem;
-                    color: var(--alert-border);
-                    margin-right: 15px;
-                    margin-top: 2px;
+                .announcement-banner {
+                    background: var(--card-glass); backdrop-filter: blur(10px);
+                    border-radius: 12px; padding: 10px 12px;
+                    margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                    border-left: 4px solid var(--c-yellow);
                 }
+                .speaker-icon { color: #D97706; font-size: 0.9rem; background: #FEF3C7; width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+                .announce-text marquee { font-size: 0.8rem; font-weight: 700; color: #92400E; }
 
-                .school-alert-text h3 {
-                    font-size: 0.95rem;
-                    color: var(--alert-text);
-                    margin-bottom: 4px;
-                    font-weight: 700;
-                }
+                /* --- LƯỚI 3 CỘT --- */
+                .menu-grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 15px; }
 
-                .school-alert-text p {
-                    font-size: 0.85rem;
-                    color: #666;
-                    line-height: 1.4;
-                }
-                /* ================================================= */
-
-                .highlight-card {
-                    background-color: var(--card-bg);
-                    border-radius: var(--border-radius);
-                    padding: 15px;
-                    margin-bottom: 20px;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-                    border-left: 5px solid var(--secondary-color);
-                    display: flex;
-                    align-items: center;
-                }
-
-                .highlight-icon {
-                    font-size: 2rem;
-                    color: var(--secondary-color);
-                    margin-right: 15px;
-                }
-
-                .highlight-text h3 {
-                    font-size: 1rem;
-                    color: var(--text-color);
-                    margin-bottom: 5px;
-                }
-
-                .highlight-text p {
-                    font-size: 0.85rem;
-                    color: #666;
-                    line-height: 1.4;
-                }
-
-                .menu-grid {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 15px;
-                    margin-bottom: 25px;
-                }
-
-                .menu-item {
-                    background-color: var(--card-bg);
-                    border-radius: 12px;
-                    padding: 15px 10px;
-                    text-align: center;
-                    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-                    text-decoration: none;
-                    color: var(--text-color);
-                    transition: transform 0.2s ease;
-                    cursor: pointer;
-                }
-
-                .menu-item:active {
-                    transform: scale(0.95);
-                }
-
-                .menu-icon {
-                    width: 45px;
-                    height: 45px;
-                    border-radius: 50%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    margin: 0 auto 10px;
-                    font-size: 1.2rem;
-                    color: white;
-                }
-
-                .bg-1 { background-color: #ff7675; }
-                .bg-2 { background-color: #74b9ff; }
-                .bg-3 { background-color: #55efc4; }
-                .bg-4 { background-color: #a29bfe; }
-                .bg-5 { background-color: #ffeaa7; color: #d63031 !important; }
-                .bg-6 { background-color: #fab1a0; }
-
-                .menu-item span {
-                    font-size: 0.75rem;
-                    font-weight: 600;
-                }
-
-                .section-title {
-                    font-size: 1.1rem;
-                    font-weight: 700;
-                    color: var(--text-color);
-                    margin-bottom: 12px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                }
-
-                .section-title a {
-                    font-size: 0.8rem;
-                    color: var(--primary-color);
+                .app-card {
+                    background: var(--card-glass); backdrop-filter: blur(10px);
+                    border-radius: 16px; padding: 18px 5px;
+                    display: flex; flex-direction: column; align-items: center; justify-content: center;
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.6);
+                    cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
                     text-decoration: none;
                 }
+                .app-card:hover { transform: translateY(-8px) scale(1.03); border-color: var(--primary-light); background: #FFFFFF; }
 
-                .list-card {
-                    background-color: var(--card-bg);
-                    border-radius: var(--border-radius);
-                    padding: 0 15px;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                .illus-wrap {
+                    width: 46px; height: 46px; margin-bottom: 10px;
+                    display: flex; justify-content: center; align-items: center;
+                    border-radius: 14px; position: relative;
+                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                .app-card:hover .illus-wrap { transform: scale(1.2) rotate(8deg); }
+                .icon-main { font-size: 1.4rem; position: relative; z-index: 2; }
+
+                /* --- NOTIFICATION BADGE --- */
+                .notif-badge {
+                    position: absolute; top: -6px; right: -8px;
+                    background-color: var(--c-red); color: white;
+                    font-size: 0.65rem; font-weight: 800;
+                    padding: 2px 6px; border-radius: 12px;
+                    border: 2px solid #FFFFFF; z-index: 5;
+                    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.4);
+                    animation: bounce-badge 2s infinite cubic-bezier(0.280, 0.840, 0.420, 1);
                 }
 
-                .list-item {
-                    padding: 15px 0;
-                    border-bottom: 1px solid #f0f0f0;
-                    display: flex;
-                    align-items: flex-start;
+                @keyframes bounce-badge {
+                    0%, 20%, 50%, 80%, 100% { transform: scale(1) translateY(0); }
+                    40% { transform: scale(1.1) translateY(-4px); }
+                    60% { transform: scale(1.05) translateY(-2px); }
                 }
 
-                .list-item:last-child {
-                    border-bottom: none;
+                .bg-teal { background: #E0F2FE; color: var(--c-teal); }
+                .bg-orange { background: #FFF7ED; color: var(--c-orange); }
+                .bg-yellow { background: #FEF3C7; color: #D97706; }
+                .bg-green { background: #ECFDF5; color: var(--c-green); }
+                .bg-blue { background: #EFF6FF; color: var(--primary); }
+                .bg-purple { background: #F5F3FF; color: var(--c-purple); }
+
+                .app-card span { font-size: 0.75rem; font-weight: 800; color: var(--text-main); text-align: center; }
+
+                /* --- BANNER ĐÓNG HỌC PHÍ NHANH --- */
+                .quick-pay-banner {
+                    background: var(--card-glass); backdrop-filter: blur(10px);
+                    border-radius: 16px; padding: 15px;
+                    display: flex; justify-content: space-between; align-items: center;
+                    border: 1px solid rgba(255,255,255,0.6);
+                    border-left: 5px solid var(--c-red);
+                    animation: pulse-shadow 2s infinite;
+                    margin-bottom: 20px;
                 }
 
-                .list-icon {
-                    background-color: #e3f2fd;
-                    color: var(--primary-color);
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 10px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    margin-right: 15px;
-                    font-size: 1.1rem;
+                @keyframes pulse-shadow {
+                    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+                    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+                    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
                 }
 
-                .list-info h4 {
-                    font-size: 0.9rem;
-                    margin-bottom: 4px;
-                    color: var(--text-color);
+                .fee-details { display: flex; align-items: center; gap: 12px; }
+                .fee-icon {
+                    width: 38px; height: 38px; background: #FEE2E2; color: var(--c-red);
+                    border-radius: 12px; display: flex; justify-content: center; align-items: center;
+                    font-size: 1.2rem; flex-shrink: 0;
                 }
+                .fee-text h4 { font-size: 0.9rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px; }
+                .fee-text p { font-size: 0.75rem; color: var(--c-red); font-weight: 700; margin: 0; }
 
-                .list-info p {
-                    font-size: 0.75rem;
-                    color: #888;
+                .pay-btn {
+                    background: var(--c-red); color: white; border: none;
+                    padding: 10px 16px; border-radius: 12px; font-weight: 800; font-size: 0.8rem;
+                    cursor: pointer; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+                    transition: all 0.3s; white-space: nowrap; text-decoration: none; display: inline-block;
                 }
+                .pay-btn:hover { background: #DC2626; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4); }
+                .pay-btn:active { transform: translateY(0) scale(0.95); color: white; }
 
+                /* --- VÙNG 2: BOTTOM NAV --- */
                 .bottom-nav {
-                    position: absolute;
-                    bottom: 0;
-                    width: 100%;
-                    background-color: white;
-                    display: flex;
-                    justify-content: space-around;
-                    padding: 12px 0;
-                    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-                    border-top-left-radius: 20px;
-                    border-top-right-radius: 20px;
+                    position: absolute; bottom: 0; left: 0; right: 0;
+                    background: #FFFFFF;
+                    display: flex; justify-content: space-between; align-items: center;
+                    padding: 8px 10px 12px;
+                    box-shadow: 0 -4px 20px rgba(0,0,0,0.15); z-index: 1000;
                 }
 
                 .nav-item {
-                    text-align: center;
-                    color: #a0a0a0;
-                    text-decoration: none;
-                    font-size: 0.7rem;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
+                    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+                    color: #9CA3AF; text-decoration: none; gap: 3px;
+                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                .nav-item i { font-size: 1.1rem; transition: all 0.3s ease; }
+                .nav-item span { font-size: 0.6rem; font-weight: 700; white-space: nowrap; }
+
+                .nav-item:hover { color: var(--primary); }
+                .nav-item:hover i { transform: translateY(-5px) scale(1.2); }
+                .nav-item.active { color: var(--primary); }
+
+                .center-btn-wrapper { position: relative; flex-shrink: 0; width: 60px; display: flex; justify-content: center; }
+                .nav-center-btn {
+                    width: 50px; height: 50px; background: var(--primary);
+                    border-radius: 50%; display: flex; justify-content: center; align-items: center;
+                    color: white; font-size: 1.3rem; transform: translateY(-18px);
+                    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); border: 4px solid #FFFFFF;
                 }
 
-                .nav-item i {
-                    font-size: 1.3rem;
-                    margin-bottom: 4px;
-                }
-
-                .nav-item.active {
-                    color: var(--primary-color);
-                    font-weight: 700;
-                }
             </style>
         </head>
         <body>
 
-        <div class="mobile-container">
-            <div class="header">
-                <div class="user-info">
-                    <h2>Chào bố/mẹ bé <t t-esc="hocsinh"/></h2>
-                    <p><t t-esc="bietdanh"/> - <t t-esc="coso"/> </p>
+        <div class="app-container">
+
+            <div class="cartoon-bg"></div>
+
+            <div class="integrated-header">
+                <div class="top-nav-bar">
+                    <div class="header-title"><i class="fas fa-chevron-left"></i> Hệ thống Chuyên biệt</div>
+                    <div class="top-right-actions">
+                        <div class="action-btn-glass"><i class="fas fa-user-cog"></i></div>
+                        <a href="/web/session/logout" class="action-btn-glass logout-btn" style="text-decoration: none;"><i class="fas fa-power-off"></i></a>
+                    </div>
                 </div>
-                <div class="header-icons">
-                    <i class="fas fa-bell"><span class="notification-badge"><t t-esc="so_thong_bao"/></span></i>
-                    <i class="fas fa-user-circle"></i>
+
+                <div class="user-profile-integrated">
+                    <div class="avatar-wrap"><img src="https://i.pravatar.cc/150?img=11" alt="Avatar"/></div>
+                    <div class="profile-info-white">
+                        <h2>Bé <t t-esc="hocsinh"/></h2>
+                        <p><t t-esc="bietdanh"/> • <t t-esc="coso"/></p>
+
+                        <div class="badge-row">
+                            <span class="info-badge badge-bantru"><i class="fas fa-sun"></i> Bán trú</span>
+                            <span class="info-badge badge-boy"><i class="fas fa-mars"></i> Nam</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="content">
+            <div class="main-scroll">
 
-                <t t-if="thong_bao_nha_truong">
-                    <div class="school-alert-card">
-                        <div class="school-alert-icon">
-                            <i class="fas fa-bullhorn"></i>
-                        </div>
-                        <div class="school-alert-text">
-                            <h3>Thông báo từ Nhà trường</h3>
-                            <p><t t-esc="thong_bao_nha_truong"/></p>
-                        </div>
-                    </div>
-                </t>
-
-
-                <div class="menu-grid">
-                    <div class="menu-item">
-                        <div class="menu-icon bg-1">
-                            <i class="fas fa-book-medical"></i>
-                        </div>
-                        <span>Sổ Can Thiệp</span>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-icon bg-2">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <span>Lịch Học 1:1</span>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-icon bg-3">
-                            <i class="fas fa-file-invoice-dollar"></i>
-                        </div>
-
-                        <span>Học Phí</span>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-icon bg-4">
-                            <i class="fas fa-pills"></i>
-                        </div>
-                        <span>Gửi Thuốc</span>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-icon bg-5">
-                            <i class="fas fa-tasks"></i>
-                        </div>
-                        <span>Bài Tập Nhà</span>
-                    </div>
-                    <div class="menu-item">
-                        <div class="menu-icon bg-6">
-                            <i class="fas fa-calendar-minus"></i>
-                        </div>
-                        <span>Xin Nghỉ</span>
+                <div class="announcement-banner">
+                    <div class="speaker-icon"><i class="fas fa-bullhorn"></i></div>
+                    <div class="announce-text">
+                        <marquee scrollamount="4">
+                            <t t-if="thong_bao_nha_truong">
+                                <t t-esc="thong_bao_nha_truong"/>
+                            </t>
+                            <t t-else="">
+                                Chào mừng bố mẹ đến với eKids! Chúc bé một ngày học tập thật vui vẻ!
+                            </t>
+                        </marquee>
                     </div>
                 </div>
 
-                <div class="section-title">
-                    <span>Thông báo mới</span>
-                    <a href="#">Xem tất cả</a>
+                <div class="menu-grid-3col">
+                    <div class="app-card">
+                        <div class="illus-wrap bg-teal">
+                            <t t-if="notif_tien_do">
+                                <div class="notif-badge"><t t-esc="notif_tien_do"/></div>
+                            </t>
+                            <i class="fas fa-chart-pie icon-main"></i>
+                        </div>
+                        <span>Tiến độ</span>
+                    </div>
+
+                    <a href="/ph/lichhoc" class="app-card">
+                        <div class="illus-wrap bg-orange">
+                            <t t-if="notif_lich_hoc">
+                                <div class="notif-badge"><t t-esc="notif_lich_hoc"/></div>
+                            </t>
+                            <i class="fas fa-calendar-check icon-main"></i>
+                        </div>
+                        <span>Lịch học</span>
+                    </a>
+
+                    <a href="/app/phuhuynh/hoc-phi" class="app-card">
+                        <div class="illus-wrap bg-yellow">
+                            <t t-if="notif_hoc_phi">
+                                <div class="notif-badge"><t t-esc="notif_hoc_phi"/></div>
+                            </t>
+                            <i class="fas fa-file-invoice-dollar icon-main"></i>
+                        </div>
+                        <span>Học phí</span>
+                    </a>
+
+                    <div class="app-card">
+                        <div class="illus-wrap bg-green">
+                            <i class="fas fa-procedures icon-main"></i>
+                        </div>
+                        <span>Xin nghỉ</span>
+                    </div>
+
+                    <div class="app-card">
+                        <div class="illus-wrap bg-blue">
+                            <t t-if="notif_trao_doi">
+                                <div class="notif-badge"><t t-esc="notif_trao_doi"/></div>
+                            </t>
+                            <i class="fas fa-comments icon-main"></i>
+                        </div>
+                        <span>Trao đổi</span>
+                    </div>
+
+                    <div class="app-card">
+                        <div class="illus-wrap bg-purple">
+                            <t t-if="notif_so_ll">
+                                <div class="notif-badge"><t t-esc="notif_so_ll"/></div>
+                            </t>
+                            <i class="fas fa-book-open icon-main"></i>
+                        </div>
+                        <span>Sổ liên lạc</span>
+                    </div>
                 </div>
 
-                <div class="list-card">
-                    <t t-foreach="danh_sach_thong_bao" t-as="thong_bao">
-                        <div class="list-item">
-                            <div class="list-icon">
-                                <i t-att-class="thong_bao.get('icon', 'fas fa-bullhorn')"></i>
-                            </div>
-                            <div class="list-info">
-                                <h4><t t-esc="thong_bao.get('tieu_de')"/></h4>
-                                <p><t t-esc="thong_bao.get('nguoi_gui')"/> • <t t-esc="thong_bao.get('ngay_tao')"/></p>
-                            </div>
+                <div class="quick-pay-banner">
+                    <div class="fee-details">
+                        <div class="fee-icon"><i class="fas fa-exclamation-circle"></i></div>
+                        <div class="fee-text">
+                            <h4>Nộp học phí tháng 4</h4>
+                            <p>3.500.000 VNĐ</p>
                         </div>
-                    </t>
+                    </div>
+                    <a href="/app/phuhuynh/hoc-phi" class="pay-btn">Nộp ngay</a>
                 </div>
+
             </div>
 
             <div class="bottom-nav">
-                <a href="#" class="nav-item active">
-                    <i class="fas fa-home"></i>
-                    <span>Trang chủ1</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Tiến độ</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-comment-dots"></i>
-                    <span>Tin nhắn</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-bars"></i>
-                    <span>Mở rộng</span>
-                </a>
+                <a href="/app/phuhuynh" class="nav-item active"><i class="fas fa-home"></i><span>Trang chủ</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-user-graduate"></i><span>Học viên</span></a>
+
+                <div class="center-btn-wrapper">
+                    <div class="nav-center-btn"><i class="fas fa-qrcode"></i></div>
+                </div>
+
+                <a href="#" class="nav-item"><i class="fas fa-headset"></i><span>Hỗ trợ</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-bell"></i><span>Thông báo</span></a>
             </div>
+
         </div>
 
         </body>

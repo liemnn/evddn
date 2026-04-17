@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ekids_phuhuynh.lichhoc" name="Lịch học của bé">
+        &lt;!DOCTYPE html&gt;
+        <html lang="vi">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <title>eKids - Lịch học (Kèm Bottom Nav)</title>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+
+                :root {
+                    --primary: #2563EB;
+                    --primary-light: #3B82F6;
+                    --primary-hover: #1D4ED8;
+                    --bg-color: #E0F2FE;
+                    --card-glass: rgba(255, 255, 255, 0.95);
+                    --text-main: #1F2937;
+                    --text-sub: #6B7280;
+
+                    --c-red: #EF4444;
+                    --c-green: #10B981;
+                    --c-yellow: #F59E0B;
+                    --c-orange: #FF9800;
+                    --c-purple: #8B5CF6;
+                }
+
+                * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+                body {
+                    background-color: var(--bg-color);
+                    width: 100vw; height: 100vh;
+                    overflow: hidden;
+                }
+
+                .app-container {
+                    width: 100%; height: 100vh;
+                    position: relative; display: flex; flex-direction: column;
+                    overflow: hidden;
+                }
+
+                /* --- ẢNH NỀN --- */
+                .cartoon-bg {
+                    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                    background-image: url('https://i.pinimg.com/736x/aa/23/9f/aa239fc6a494439899c8c119127fd51a.jpg');
+                    background-size: cover; background-position: center;
+                    opacity: 1; pointer-events: none; z-index: 0;
+                }
+
+                /* --- HEADER TRANG PHỤ --- */
+                .sub-header {
+                    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                    padding: 15px 20px;
+                    color: white; flex-shrink: 0;
+                    position: relative; z-index: 10;
+                    display: flex; align-items: center; justify-content: space-between;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+                }
+
+                .back-btn {
+                    width: 36px; height: 36px; border-radius: 50%;
+                    background: rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center;
+                    font-size: 1.1rem; cursor: pointer; backdrop-filter: blur(5px);
+                    color: white; text-decoration: none;
+                }
+
+                .page-title { font-size: 1.1rem; font-weight: 700; }
+                .dummy-space { width: 36px; }
+
+                /* --- MAIN SCROLL --- */
+                .main-scroll {
+                    flex: 1; overflow-y: auto;
+                    padding: 15px 15px 90px;
+                    z-index: 2; position: relative;
+                    scrollbar-width: none;
+                }
+                .main-scroll::-webkit-scrollbar { display: none; }
+
+                /* --- CHỌN TUẦN --- */
+                .week-picker {
+                    background: var(--card-glass); backdrop-filter: blur(10px);
+                    border-radius: 20px; padding: 12px 20px;
+                    display: flex; justify-content: space-between; align-items: center;
+                    margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                    border: 1px solid rgba(255,255,255,0.8);
+                }
+                .week-picker i { color: var(--primary); font-size: 1.2rem; cursor: pointer; padding: 5px; }
+                .week-info { text-align: center; }
+                .week-info h3 { font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px; }
+                .week-info p { font-size: 0.7rem; color: var(--text-sub); font-weight: 600; margin: 0; }
+
+                /* --- THẺ NGÀY --- */
+                .day-card {
+                    background: var(--card-glass); backdrop-filter: blur(10px);
+                    border-radius: 16px; padding: 18px 15px; margin-bottom: 15px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                    border: 1px solid rgba(255,255,255,0.8);
+                    position: relative; overflow: hidden;
+                }
+
+                .day-card.today {
+                    border: 2px solid var(--primary-light);
+                    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+                }
+                .today-badge {
+                    position: absolute; top: 16px; right: 15px;
+                    background: #DBEAFE; color: var(--primary);
+                    padding: 4px 10px; border-radius: 12px; font-size: 0.65rem; font-weight: 800;
+                }
+
+                .day-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 15px; border-bottom: 1px dashed #E5E7EB; padding-bottom: 12px; }
+                .day-name { font-size: 1.1rem; font-weight: 800; color: var(--text-main); }
+                .day-date { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; }
+
+                /* --- TIMELINE --- */
+                .timeline { display: flex; flex-direction: column; }
+                .timeline-item { display: flex; gap: 12px; margin-bottom: 12px; }
+                .timeline-item:last-child { margin-bottom: 0; }
+
+                .time-col { width: 45px; text-align: right; flex-shrink: 0; padding-top: 2px; }
+                .time-start { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
+                .time-end { font-size: 0.65rem; font-weight: 600; color: var(--text-sub); }
+
+                .line-col { display: flex; flex-direction: column; align-items: center; width: 14px; }
+                .dot { width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex-shrink: 0; z-index: 2; }
+                .line { width: 2px; background: #E5E7EB; flex: 1; margin-top: 4px; margin-bottom: -16px; z-index: 1; }
+                .timeline-item:last-child .line { display: none; }
+
+                .content-col { flex: 1; border-radius: 12px; padding: 12px; border-left: 4px solid transparent; }
+                .content-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+                .content-title-row h4 { font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.2; }
+
+                .price-badge {
+                    font-size: 0.75rem; font-weight: 800; color: var(--c-red);
+                    background: rgba(255, 255, 255, 0.7);
+                    padding: 2px 8px; border-radius: 8px;
+                    border: 1px solid rgba(239, 68, 68, 0.2);
+                    white-space: nowrap; flex-shrink: 0; margin-left: 10px;
+                }
+
+                .content-col p { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; margin: 0 0 4px 0; display: flex; align-items: center; gap: 6px; }
+                .content-col p:last-child { margin-bottom: 0; }
+
+                .bg-orange { background: #FFF7ED; border-left-color: var(--c-orange); }
+                .dot.c-orange { background: var(--c-orange); }
+                .bg-blue { background: #EFF6FF; border-left-color: var(--primary); }
+                .dot.c-blue { background: var(--primary); }
+                .bg-green { background: #ECFDF5; border-left-color: var(--c-green); }
+                .dot.c-green { background: var(--c-green); }
+
+                .off-day-box {
+                    background: #F8FAFC; border-radius: 12px; padding: 20px;
+                    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+                    border: 1px dashed #CBD5E1; text-align: center;
+                }
+                .off-day-box i { font-size: 1.8rem; color: #94A3B8; }
+                .off-day-box span { font-size: 0.85rem; font-weight: 600; color: #64748B; }
+
+                /* --- BOTTOM NAV SIÊU MỎNG TỪ TRANG CHỦ --- */
+                .bottom-nav {
+                    position: absolute; bottom: 0; left: 0; right: 0;
+                    background: #FFFFFF;
+                    display: flex; justify-content: space-between; align-items: center;
+                    padding: 8px 10px 12px;
+                    box-shadow: 0 -4px 20px rgba(0,0,0,0.15); z-index: 1000;
+                }
+
+                .nav-item {
+                    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+                    color: #9CA3AF; text-decoration: none; gap: 3px;
+                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                .nav-item i { font-size: 1.1rem; transition: all 0.3s ease; }
+                .nav-item span { font-size: 0.6rem; font-weight: 700; white-space: nowrap; }
+
+                .nav-item:hover { color: var(--primary); }
+                .nav-item:hover i { transform: translateY(-5px) scale(1.2); }
+
+                .nav-item.active { color: var(--primary); }
+
+                .center-btn-wrapper { position: relative; flex-shrink: 0; width: 60px; display: flex; justify-content: center; }
+                .nav-center-btn {
+                    width: 50px; height: 50px; background: var(--primary);
+                    border-radius: 50%; display: flex; justify-content: center; align-items: center;
+                    color: white; font-size: 1.3rem; transform: translateY(-18px);
+                    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); border: 4px solid #FFFFFF;
+                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                .nav-center-btn:hover {
+                    transform: translateY(-28px) scale(1.15);
+                    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.6);
+                    background: linear-gradient(135deg, #60A5FA, #2563EB);
+                }
+
+            </style>
+        </head>
+        <body>
+
+        <div class="app-container">
+
+            <div class="cartoon-bg"></div>
+
+            <div class="sub-header">
+                <a href="/app/phuhuynh" class="back-btn" title="Quay lại"><i class="fas fa-chevron-left"></i></a>
+                <div class="page-title">Lịch học tuần này</div>
+                <div class="dummy-space"></div>
+            </div>
+
+            <div class="main-scroll">
+
+                <div class="week-picker">
+                    <i class="fas fa-chevron-left" title="Tuần trước"></i>
+                    <div class="week-info">
+                        <h3>Lịch học cá nhân</h3>
+                        <p>Dữ liệu đồng bộ trực tiếp</p>
+                    </div>
+                    <i class="fas fa-chevron-right" title="Tuần sau"></i>
+                </div>
+
+                <t t-foreach="danh_sach_ngay" t-as="ngay">
+
+                    <div t-attf-class="day-card {{ 'today' if ngay['date'] == 'Hôm nay' else '' }}">
+
+                        <t t-if="ngay['date'] == 'Hôm nay'">
+                            <div class="today-badge">Hôm nay</div>
+                        </t>
+
+                        <div class="day-header">
+                            <span class="day-name">
+                                <t t-if="'T' in ngay['week']">Thứ <t t-esc="ngay['week'].replace('T', '')"/></t>
+                                <t t-else=""><t t-esc="ngay['week']"/></t>
+                            </span>
+                            <span class="day-date"><t t-esc="ngay['date']"/></span>
+                        </div>
+
+                        <t t-if="ngay.get('cas')">
+                            <div class="timeline">
+
+                                <t t-foreach="ngay['cas']" t-as="ca">
+
+                                    <t t-set="mau_ca" t-value="'orange' if ca_index % 3 == 0 else ('blue' if ca_index % 3 == 1 else 'green')"/>
+
+                                    <div class="timeline-item">
+                                        <div class="time-col">
+                                            <div class="time-start"><t t-esc="ca['tu']"/></div>
+                                            <div class="time-end"><t t-esc="ca['den']"/></div>
+                                        </div>
+
+                                        <div class="line-col">
+                                            <div t-attf-class="dot c-{{ mau_ca }}"></div>
+                                            <div class="line"></div>
+                                        </div>
+
+                                        <div t-attf-class="content-col bg-{{ mau_ca }}">
+                                            <div class="content-title-row">
+                                                <h4><t t-esc="ca['ca']"/></h4>
+                                                <t t-if="ca.get('gia')">
+                                                    <span class="price-badge"><t t-esc="ca['gia']"/> đ</span>
+                                                </t>
+                                            </div>
+
+                                            <t t-if="ca.get('giaovien')">
+                                                <p><i class="fas fa-chalkboard-teacher"></i> GV: <t t-esc="ca['giaovien']"/></p>
+                                            </t>
+                                        </div>
+                                    </div>
+
+                                </t>
+                            </div>
+                        </t>
+
+                        <t t-else="">
+                            <div class="off-day-box">
+                                <i class="fas fa-home"></i>
+                                <span>Bé không có lịch ca học hôm nay</span>
+                            </div>
+                        </t>
+
+                    </div>
+                </t>
+            </div>
+
+            <div class="bottom-nav">
+                <a href="/app/phuhuynh" class="nav-item"><i class="fas fa-home"></i><span>Trang chủ</span></a>
+
+                <a href="/ph/lichhoc" class="nav-item active"><i class="fas fa-calendar-check"></i><span>Lịch học</span></a>
+
+                <div class="center-btn-wrapper">
+                    <div class="nav-center-btn"><i class="fas fa-qrcode"></i></div>
+                </div>
+
+                <a href="#" class="nav-item"><i class="fas fa-headset"></i><span>Hỗ trợ</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-bell"></i><span>Thông báo</span></a>
+            </div>
+
+        </div>
+
+        </body>
+        </html>
+    </template>
+</odoo>

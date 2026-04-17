@@ -1,5 +1,20 @@
 from odoo import http
 from odoo.http import request
+from datetime import date,datetime,timedelta
+
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import hocsinh_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
 
 
 class AppPhuHuynhController(http.Controller):
@@ -18,8 +33,10 @@ class AppPhuHuynhController(http.Controller):
                     'hocsinh': hocsinh.name,
                     'bietdanh': hocsinh.bietdanh,
                     'coso': hocsinh.coso_id.name,
-                    'thong_bao_nha_truong': 'tra mẹ chú ý'
+                    'thong_bao_nha_truong': 'tra mẹ chú ý con đã den lop'
                 }
 
         # Bắn dữ liệu vào template XML mà ta đã tạo ở Bước 3
         return request.render('ekids_phuhuynh.page_app_phuhuynh', data)
+
+
