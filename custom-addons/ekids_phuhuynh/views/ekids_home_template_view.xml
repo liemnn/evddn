@@ -298,11 +298,11 @@
                     <div class="speaker-icon"><i class="fas fa-bullhorn"></i></div>
                     <div class="announce-text">
                         <marquee scrollamount="4">
-                            <t t-if="thong_bao_nha_truong">
-                                <t t-esc="thong_bao_nha_truong"/>
+                            <t t-if="thongbao">
+                                <t t-esc="thongbao"/>
                             </t>
                             <t t-else="">
-                                Chào mừng bố mẹ đến với eKids! Chúc bé một ngày học tập thật vui vẻ!
+                                Chào mừng Bố/Mẹ đến với  <t t-esc="coso"/>! Chúc bé một ngày học tập thật vui vẻ!
                             </t>
                         </marquee>
                     </div>

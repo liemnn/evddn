@@ -220,7 +220,7 @@
             <div class="cartoon-bg"></div>
 
             <div class="sub-header">
-                <a href="/app/phuhuynh" class="back-btn"><i class="fas fa-chevron-left"></i></a>
+                <a href="/ph/home" class="back-btn"><i class="fas fa-chevron-left"></i></a>
                 <div class="page-title">Học phí &amp; Thanh toán</div>
                 <div class="dummy-space"></div>
             </div>
@@ -322,7 +322,7 @@
                             </div>
 
                             <t t-if="is_wait">
-                                <a href="/ph/hocphi/thanhtoan/#{hocphi_id}" style="text-decoration: none;">
+                               <a t-attf-href="/ph/hocphi/thanhtoan/{{ hp.id }}" style="text-decoration: none;">
                                     <button class="pay-action-btn">
                                         <i class="fas fa-qrcode"></i> Thanh toán ngay
                                     </button>

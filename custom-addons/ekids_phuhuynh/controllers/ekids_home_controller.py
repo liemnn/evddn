@@ -36,12 +36,12 @@ class HomeController(http.Controller):
                     ('nam_id.name', '=', str(today.year)),
                     ('trangthai', 'in', ['0','2']),
                 ], limit=1)
-
+                thongbaos = self.func_get_thongbaos(hocsinh,hocphi_thang_nay)
                 data = {
                     'hocsinh': hocsinh.name,
                     'bietdanh': hocsinh.bietdanh,
                     'coso': hocsinh.coso_id.name,
-                    'thong_bao_nha_truong': 'tra mẹ chú ý con đã den lop',
+                    'thongbao': thongbaos,
                     # Khai báo mặc định để chống lỗi QWeb
                     'hocphi_id': False,
                     'hocphi_phaidong': 0,
@@ -57,5 +57,19 @@ class HomeController(http.Controller):
 
         # Bắn dữ liệu vào template XML mà ta đã tạo ở Bước 3
         return request.render('ekids_phuhuynh.page_app_phuhuynh', data)
+
+
+    def func_get_thongbaos(self,hocsinh,hocphi):
+        thongbao=""
+        #Thông báo 1:  học phí
+        if hocphi:
+            thongbao += ("Phụ huynh hãy hoàn thành nộp học phí tháng "
+                         + hocphi.thang_id.name
+                         + " năm "
+                         + hocphi.nam_id.name)
+        return  thongbao
+
+
+
 
 
