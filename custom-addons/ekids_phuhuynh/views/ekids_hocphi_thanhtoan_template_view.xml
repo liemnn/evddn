@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ekids_phuhuynh.payment_page" name="Xác nhận Thanh toán">
+        &lt;!DOCTYPE html&gt;
+        <html lang="vi">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <title>eKids - Thanh toán học phí</title>
+
+            <meta name="theme-color" content="#2563EB"/>
+            <link rel="manifest" href="/ph/manifest.json" />
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+            <meta name="apple-mobile-web-app-title" content="eVDDN"/>
+            <link rel="apple-touch-icon" href="/ekids_phuhuynh/static/src/img/icon_192.png"/>
+
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+
+                :root {
+                    --primary: #2563EB;
+                    --primary-light: #3B82F6;
+                    --bg-color: #0F172A;
+                    --card-glass: rgba(255, 255, 255, 0.95);
+                    --text-main: #1F2937;
+                    --text-sub: #6B7280;
+                    --c-red: #EF4444;
+                    --c-green: #10B981;
+                    --c-yellow: #F59E0B;
+                }
+
+                * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+                body { background-color: var(--bg-color); width: 100vw; height: 100dvh; overflow: hidden; }
+                .app-container { width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+
+                .cartoon-bg {
+                    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                    background-image: url('https://i.pinimg.com/736x/aa/23/9f/aa239fc6a494439899c8c119127fd51a.jpg');
+                    background-size: cover; background-position: center; opacity: 1; z-index: 0;
+                }
+
+                .sub-header {
+                    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                    padding: 15px 20px; color: white; flex-shrink: 0; position: relative; z-index: 10;
+                    display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+                }
+
+                .back-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; font-size: 1.1rem; cursor: pointer; transition: 0.2s; text-decoration: none; color: white;}
+                .page-title { font-size: 1.1rem; font-weight: 700; }
+                .dummy-space { width: 36px; }
+
+                /* Tăng padding-bottom lên 170px để cuộn không bị che bởi 2 thanh công cụ */
+                .main-scroll { flex: 1; overflow-y: auto; padding: 20px 15px 170px; z-index: 2; position: relative; scrollbar-width: none; }
+                .main-scroll::-webkit-scrollbar { display: none; }
+
+                .glass-card {
+                    background: var(--card-glass); backdrop-filter: blur(12px);
+                    border-radius: 16px; padding: 20px; margin-bottom: 15px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid rgba(255,255,255,0.8);
+                }
+
+                .invoice-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #E5E7EB; }
+                .invoice-title { display: flex; align-items: center; gap: 10px; }
+                .invoice-title i { color: var(--primary); font-size: 1.4rem; background: #DBEAFE; padding: 8px; border-radius: 10px; }
+                .invoice-title h3 { font-size: 1rem; font-weight: 800; color: var(--text-main); }
+                .invoice-title p { font-size: 0.75rem; color: var(--text-sub); margin-top: 2px; }
+                .status-badge { background: #FEF3C7; color: var(--c-yellow); padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; border: 1px solid #FDE68A; }
+
+                .fee-list { list-style: none; }
+                .fee-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.85rem; color: var(--text-main); font-weight: 500; }
+                .fee-item.deduction { color: var(--c-green); }
+                .fee-item span:last-child { font-weight: 700; }
+
+                .total-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 15px; border-top: 2px solid #E5E7EB; }
+                .total-row span:first-child { font-size: 0.9rem; font-weight: 800; color: var(--text-main); }
+                .total-row span:last-child { font-size: 1.4rem; font-weight: 900; color: var(--c-red); }
+
+                /* THẺ QR */
+                .qr-section { text-align: center; }
+                .qr-section h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 15px; color: var(--text-main); }
+                .qr-box { background: white; width: 200px; height: 200px; margin: 0 auto 20px; border-radius: 16px; padding: 10px; border: 2px solid var(--primary-light); box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2); position: relative; }
+                .qr-box img { width: 100%; height: 100%; object-fit: contain; }
+
+                /* CSS XỬ LÝ HTML BACKEND ODOO */
+                .bank-details-wrapper { background: #F8FAFC; border-radius: 12px; padding: 15px; border: 1px solid #E2E8F0; margin-bottom: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+                .bank-details-wrapper table, .bank-details-wrapper tbody, .bank-details-wrapper tr, .bank-details-wrapper td, .bank-details-wrapper th { display: block !important; width: 100% !important; box-sizing: border-box !important; height: auto !important; }
+                .bank-details-wrapper td { padding: 8px 0 !important; }
+                .bank-details-wrapper td:not(:last-child) { border-bottom: 1px dashed #CBD5E1 !important; margin-bottom: 8px !important; }
+                .bank-details-wrapper * { font-size: 0.85rem !important; line-height: 1.6 !important; color: #334155 !important; font-family: 'Inter', sans-serif !important; text-align: left !important; }
+                .bank-details-wrapper strong, .bank-details-wrapper b { color: var(--primary) !important; font-weight: 800 !important; }
+                .bank-details-wrapper ul, .bank-details-wrapper ol { padding-left: 20px !important; margin: 8px 0 !important; }
+                .bank-details-wrapper p { margin-bottom: 8px !important; }
+
+                .note-text { font-size: 0.75rem; color: var(--c-yellow); background: #FEF3C7; padding: 10px; border-radius: 8px; margin-top: 15px; text-align: left; font-weight: 600; display: flex; gap: 8px; align-items: flex-start; }
+
+                /* KHỐI NÚT XÁC NHẬN (Nằm trên Menu) */
+                .fixed-bottom-bar {
+                    position: fixed;
+                    bottom: 75px; /* Cân đối chiều cao với thanh menu bên dưới */
+                    left: 0; right: 0;
+                    background: transparent; /* Nền trong suốt để hiện background mây */
+                    padding: 0 15px 15px;
+                    z-index: 999;
+                }
+                .btn-submit {
+                    width: 100%; background: linear-gradient(135deg, var(--primary) 0%, #1E3A8A 100%);
+                    color: white; border: none; padding: 16px; border-radius: 16px;
+                    font-size: 1rem; font-weight: 800; cursor: pointer;
+                    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4); transition: 0.2s;
+                    display: flex; justify-content: center; align-items: center; gap: 10px;
+                }
+                .btn-submit:active { transform: scale(0.98); box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
+                .btn-submit:disabled { background: #94A3B8; box-shadow: none; cursor: not-allowed; }
+
+                /* THANH MENU BOTTOM NAV (Cố định đáy) */
+                .bottom-nav {
+                    position: fixed; bottom: 0; left: 0; right: 0;
+                    background: #FFFFFF; display: flex; justify-content: space-between; align-items: center;
+                    padding: 8px 10px 15px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 1000;
+                    border-top-left-radius: 20px; border-top-right-radius: 20px;
+                }
+                .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #9CA3AF; text-decoration: none; gap: 4px; transition: all 0.3s ease; }
+                .nav-item i { font-size: 1.1rem; }
+                .nav-item span { font-size: 0.6rem; font-weight: 700; white-space: nowrap; }
+                .nav-item.active { color: var(--primary); }
+                .center-btn-wrapper { position: relative; flex-shrink: 0; width: 60px; display: flex; justify-content: center; }
+                .nav-center-btn { width: 52px; height: 52px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.4rem; transform: translateY(-22px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); border: 4px solid #FFFFFF; }
+
+            </style>
+        </head>
+        <body>
+
+        <div class="app-container">
+            <div class="cartoon-bg"></div>
+
+            <div class="sub-header">
+                <a href="#" onclick="history.back(); return false;" class="back-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <div class="page-title">Thanh toán học phí</div>
+                <div class="dummy-space"></div>
+            </div>
+
+            <div class="main-scroll">
+
+                <div class="glass-card">
+                    <div class="invoice-header">
+                        <div class="invoice-title">
+                            <i class="fas fa-receipt"></i>
+                            <div>
+                                <h3>Tháng <t t-esc="hp.thang_id.name"/>/<t t-esc="hp.nam_id.name"/></h3>
+                                <p>Bé: <t t-esc="hocsinh.name"/></p>
+                            </div>
+                        </div>
+                        <div class="status-badge">Đợi thanh toán</div>
+                    </div>
+
+                    <ul class="fee-list">
+                        <t t-foreach="hp.hocphi_bantru_ids" t-as="bt">
+                            <li class="fee-item">
+                                <span><t t-esc="bt.display_name or 'Học phí chính khóa'"/></span>
+                                <span><t t-esc="'{:0,.0f}'.format(bt.tien).replace(',', '.')"/> đ</span>
+                            </li>
+                        </t>
+                        <t t-foreach="hp.hocphi_ca_ids" t-as="ca">
+                            <li class="fee-item">
+                                <span><t t-esc="ca.display_name or 'Ca can thiệp'"/></span>
+                                <span><t t-esc="'{:0,.0f}'.format(ca.tien).replace(',', '.')"/> đ</span>
+                            </li>
+                        </t>
+                        <t t-foreach="hp.hocphi_duoctru_ids" t-as="dt">
+                            <li class="fee-item deduction">
+                                <span><t t-esc="dt.display_name or 'Trừ phí'"/></span>
+                                <span>- <t t-esc="'{:0,.0f}'.format(dt.tien).replace(',', '.')"/> đ</span>
+                            </li>
+                        </t>
+                        <t t-if="hp.hocphi_giam > 0">
+                            <li class="fee-item deduction">
+                                <span>Giảm giá (<t t-esc="hp.tyle_giamhocphi"/>%)</span>
+                                <span>- <t t-esc="'{:0,.0f}'.format(hp.hocphi_giam).replace(',', '.')"/> đ</span>
+                            </li>
+                        </t>
+                    </ul>
+
+                    <div class="total-row">
+                        <span>TỔNG CẦN ĐÓNG:</span>
+                        <span><t t-esc="'{:0,.0f}'.format(hp.hocphi_phaidong).replace(',', '.')"/> đ</span>
+                    </div>
+                </div>
+
+                <div class="glass-card qr-section">
+                    <h3>Quét mã QR để thanh toán</h3>
+
+                    <div class="qr-box">
+                        <t t-if="coso.qrcode_thu_hocphi">
+                            <img t-attf-src="/web/image/ekids.coso/#{coso.id}/qrcode_thu_hocphi" alt="QR Code"/>
+                        </t>
+                        <t t-else="">
+                            <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#94A3B8; font-size:0.75rem; background:#F1F5F9; border-radius:12px;">Chưa cập nhật QR</div>
+                        </t>
+                    </div>
+
+                    <div class="bank-details-wrapper">
+                        <t t-if="coso.ghichu_thu_hocphi">
+                            <t t-out="coso.ghichu_thu_hocphi"/>
+                        </t>
+                        <t t-else="">
+                            <div style="text-align: center; color: #64748B;">
+                                Vui lòng thanh toán theo nội dung và tài khoản mà nhà trường đã thông báo.
+                            </div>
+                        </t>
+                    </div>
+
+                    <div class="note-text">
+                        <i class="fas fa-exclamation-triangle" style="margin-top: 2px;"></i>
+                        Vui lòng chuyển đúng số tiền và nội dung. Bấm "Xác nhận" sau khi chuyển khoản thành công.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="fixed-bottom-bar">
+                <input type="hidden" id="current_hocphi_id" t-att-value="hp.id"/>
+                <button class="btn-submit" id="btnConfirmPay">
+                    <i class="fas fa-check-circle"></i> Tôi đã chuyển khoản xong
+                </button>
+            </div>
+
+            <div class="bottom-nav">
+                <a href="/ph/home" class="nav-item"><i class="fas fa-home"></i><span>Trang chủ</span></a>
+                <a href="/ph/lichhoc" class="nav-item"><i class="fas fa-calendar-check"></i><span>Lịch học</span></a>
+
+                <div class="center-btn-wrapper">
+                    <div class="nav-center-btn" style="background: linear-gradient(135deg, #F59E0B, #D97706);"><i class="fas fa-file-invoice-dollar"></i></div>
+                </div>
+
+                <a href="/ph/chat" class="nav-item"><i class="fas fa-comments"></i><span>Trao đổi</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-bell"></i><span>Thông báo</span></a>
+            </div>
+
+        </div>
+
+        <script>
+            // <![CDATA[
+            document.addEventListener("DOMContentLoaded", function() {
+                const btn = document.getElementById('btnConfirmPay');
+                const hpInput = document.getElementById('current_hocphi_id');
+
+                if (btn && hpInput) {
+                    btn.addEventListener('click', function() {
+                        if(!confirm("Xác nhận bạn đã chuyển khoản số tiền này?")) {
+                            return;
+                        }
+
+                        btn.disabled = true;
+                        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+
+                        fetch('/ph/hocphi/confirm_pay', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                jsonrpc: "2.0",
+                                params: { hocphi_id: hpInput.value }
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Viết && thoải mái không sợ lỗi
+                            if(data.result && data.result.success) {
+                                alert("Bạn đã xác nhận thanh toán thành công ! Bạn đợi nhà trường đối soát lại");
+                                window.location.href = '/ph/hocphi';
+                            } else {
+                                alert("Có lỗi xảy ra: " + (data.result ? data.result.error : "Lỗi kết nối"));
+                                btn.disabled = false;
+                                btn.innerHTML = '<i class="fas fa-check-circle"></i> Tôi đã chuyển khoản xong';
+                            }
+                        })
+                        .catch(err => {
+                            alert("Lỗi mạng, vui lòng kiểm tra lại kết nối.");
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fas fa-check-circle"></i> Tôi đã chuyển khoản xong';
+                        });
+                    });
+                }
+            });
+            // ]]>
+        </script>
+        </body>
+        </html>
+    </template>
+</odoo>

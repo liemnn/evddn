@@ -134,6 +134,7 @@
                 .badge { padding: 3px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; }
                 .badge-unpaid { background: var(--c-red); color: white; }
                 .badge-paid { background: #ECFDF5; color: var(--c-green); border: 1px solid #A7F3D0; }
+                .badge-confirm { background: #FFC90E; color: #000C7B; border: 1px solid #A7F3D0; }
 
                 .chevron-icon { font-size: 0.8rem; color: #9CA3AF; transition: transform 0.3s ease; margin-left: 8px; }
                 details[open] .chevron-icon { transform: rotate(180deg); }
@@ -239,6 +240,8 @@
                 <t t-foreach="data" t-as="hp">
 
                     <t t-set="is_paid" t-value="hp.trangthai in ['10', '11', '12', '3']"/>
+                    <t t-set="is_wait" t-value="hp.trangthai in ['0','2']"/>
+                    <t t-set="is_confirm" t-value="hp.trangthai in ['01']"/>
 
                     <details t-attf-class="fee-month-card #{'status-paid' if is_paid else 'status-unpaid'}" t-att-open="'open' if hp_index == 0 else None">
 
@@ -269,9 +272,15 @@
                                 <t t-if="is_paid">
                                     <span class="badge badge-paid">Đã hoàn thành</span>
                                 </t>
-                                <t t-else="">
+                                <t t-if="is_confirm">
+                                    <span class="badge badge-confirm">Đã hoàn thành - Đợi xác nhận</span>
+                                </t>
+
+                                 <t t-if="is_wait">
                                     <span class="badge badge-unpaid">Đợi thanh toán</span>
                                 </t>
+
+
                             </div>
                         </summary>
 
@@ -312,8 +321,8 @@
                                 </span>
                             </div>
 
-                            <t t-if="not is_paid">
-                                <a href="#" style="text-decoration: none;">
+                            <t t-if="is_wait">
+                                <a href="/ph/hocphi/thanhtoan/#{hocphi_id}" style="text-decoration: none;">
                                     <button class="pay-action-btn">
                                         <i class="fas fa-qrcode"></i> Thanh toán ngay
                                     </button>
@@ -327,7 +336,7 @@
             </div>
 
             <div class="bottom-nav">
-                <a href="/app/phuhuynh" class="nav-item"><i class="fas fa-home"></i><span>Trang chủ</span></a>
+                <a href="/ph/home" class="nav-item"><i class="fas fa-home"></i><span>Trang chủ</span></a>
                 <a href="/ph/lichhoc" class="nav-item"><i class="fas fa-calendar-check"></i><span>Lịch học</span></a>
 
                 <div class="center-btn-wrapper">

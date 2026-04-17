@@ -14,7 +14,7 @@ class PhuHuynhLogin(Home):
         # 'ekids_app_phuhuynh' là tên thư mục module của anh
         if user.has_group('ekids_core.phuhuynh'):
             # Ép họ nhảy thẳng vào đường link App tĩnh của anh
-            return '/app/phuhuynh'
+            return '/ph/home'
 
         # 2. LỐI ĐI CHUẨN: Nếu không phải phụ huynh (là nhân viên, admin...)
         # Trả lại cho Odoo tự xử lý nhảy vào màn hình làm việc /web như bình thường

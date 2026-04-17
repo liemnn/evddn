@@ -5,12 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_chat_controller.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_chat_template_view.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_thanhtoan_hocphi_controller.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_hocphi_thanhtoan_template_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/ekids_hocphi_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/ekids_hocphi_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/__manifest__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_app_template_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_app_template_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_app_phuhuynh_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_home_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_phuhuynh_login.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_phuhuynh_login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_app_template_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_home_template_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_chat_template_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_chat_template_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_hocphi_template_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_hocphi_template_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_lichhoc_template_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_lichhoc_template_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,16 +49,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.evddn.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_phuhuynh/views",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.evddn.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/odoo/evddn/custom-addons/ekids_phuhuynh/views&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_phuhuynh\views" />
@@ -456,7 +463,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776412972907</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1776415149170</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1776415149170</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -516,6 +531,11 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_abstractmodel.py</url>
           <line>121</line>
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_thanhtoan_hocphi_controller.py</url>
+          <line>49</line>
+          <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="ekids_phuhuynh.page_app_phuhuynh" name="Trang App Phụ Huynh">
+    <template id="ekids_phuhuynh.page_app_phuhuynh" name="Phụ huynh">
         &lt;!DOCTYPE html&gt;
         <html lang="vi">
         <head>
@@ -368,29 +368,31 @@
                     </div>
                 </div>
 
-                <div class="quick-pay-banner">
-                    <div class="fee-details">
-                        <div class="fee-icon"><i class="fas fa-exclamation-circle"></i></div>
-                        <div class="fee-text">
-                            <t t-if="tong_no">
-                                <h4>Nộp học phí <t t-esc="ky_thu_no"/></h4>
-                                <p><t t-esc="tong_no"/> VNĐ</p>
-                            </t>
-                            <t t-else="">
-                                <h4>Nộp học phí Tháng 4</h4>
-                                <p>3.500.000 VNĐ</p>
-                            </t>
+                <t t-if="hocphi_id">
+                    <div class="quick-pay-banner">
+                        <div class="fee-details">
+                            <div class="fee-icon"><i class="fas fa-exclamation-circle"></i></div>
+                            <div class="fee-text">
+                                <t t-if="tong_no">
+                                    <h4>Nộp học phí <t t-esc="ky_thu_no"/></h4>
+                                    <p><t t-esc="'{:0,.0f}'.format(tong_no).replace(',', '.')"/> VNĐ</p>
+                                </t>
+                                <t t-else="">
+                                    <h4>Nộp học phí Tháng <t t-esc="hocphi_thang"/></h4>
+                                    <p><t t-esc="'{:0,.0f}'.format(hocphi_phaidong).replace(',', '.')"/> VNĐ</p>
+                                </t>
+                            </div>
                         </div>
+                        <a t-attf-href="/ph/hocphi/thanhtoan/#{hocphi_id}" style="text-decoration: none;">
+                            <button class="pay-btn">Nộp ngay</button>
+                        </a>
                     </div>
-                    <a href="/app/phuhuynh/hoc-phi" style="text-decoration: none;">
-                        <button class="pay-btn">Nộp ngay</button>
-                    </a>
-                </div>
+                </t>
 
             </div>
 
             <div class="bottom-nav">
-                <a href="/app/phuhuynh" class="nav-item active"><i class="fas fa-home"></i><span>Trang chủ</span></a>
+                <a href="/ph/home" class="nav-item active"><i class="fas fa-home"></i><span>Trang chủ</span></a>
                 <a href="#" class="nav-item"><i class="fas fa-user-graduate"></i><span>Học viên</span></a>
 
                 <div class="center-btn-wrapper">

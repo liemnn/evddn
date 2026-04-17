@@ -19,10 +19,12 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/ekids_app_template_view.xml',
+        'views/ekids_home_template_view.xml',
         'views/ekids_lichhoc_template_view.xml',
         'views/ekids_hocphi_template_view.xml',
         'views/ekids_chat_template_view.xml',
+        'views/ekids_hocphi_thanhtoan_template_view.xml',
+
 
 
         'views/ekids_hocphi_view.xml',
