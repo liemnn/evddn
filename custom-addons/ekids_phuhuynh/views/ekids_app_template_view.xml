@@ -345,16 +345,17 @@
                         </div>
                         <span>Xin nghỉ</span>
                     </div>
-
-                    <div class="app-card">
-                        <div class="illus-wrap bg-blue">
-                            <t t-if="notif_trao_doi">
-                                <div class="notif-badge"><t t-esc="notif_trao_doi"/></div>
-                            </t>
-                            <i class="fas fa-comments icon-main"></i>
+                     <a href="/ph/chat" class="app-card">
+                        <div class="app-card">
+                            <div class="illus-wrap bg-blue">
+                                <t t-if="notif_trao_doi">
+                                    <div class="notif-badge"><t t-esc="notif_trao_doi"/></div>
+                                </t>
+                                <i class="fas fa-comments icon-main"></i>
+                            </div>
+                            <span>Trao đổi với nhà trường</span>
                         </div>
-                        <span>Trao đổi</span>
-                    </div>
+                     </a>
 
                     <div class="app-card">
                         <div class="illus-wrap bg-purple">
