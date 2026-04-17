@@ -21,6 +21,7 @@
         'security/ir.model.access.csv',
         'views/ekids_app_template_view.xml',
         'views/ekids_lichhoc_template_view.xml',
+        'views/ekids_hocphi_template_view.xml',
 
 
         'views/ekids_hocphi_view.xml',

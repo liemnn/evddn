@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ekids_phuhuynh.hocphis" name="Lịch sử Học Phí">
+        &lt;!DOCTYPE html&gt;
+        <html lang="vi">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <title>eKids - Lịch sử Học phí</title>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+
+            <meta name="theme-color" content="#2563EB"/>
+            <link rel="manifest" href="/ph/manifest.json" />
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+            <meta name="apple-mobile-web-app-title" content="eVDDN"/>
+            <link rel="apple-touch-icon" href="/ekids_phuhuynh/static/src/img/icon_192.png"/>
+
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+
+                :root {
+                    --primary: #2563EB;
+                    --primary-light: #3B82F6;
+                    --bg-color: #E0F2FE;
+                    --card-glass: rgba(255, 255, 255, 0.95);
+                    --text-main: #1F2937;
+                    --text-sub: #6B7280;
+
+                    --c-red: #EF4444;
+                    --c-green: #10B981;
+                    --c-yellow: #F59E0B;
+                    --c-orange: #FF9800;
+                }
+
+                * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+                html, body {
+                    background-color: var(--bg-color);
+                    width: 100vw;
+                    height: 100vh; /* Fallback */
+                    height: 100dvh;
+                    overflow: hidden;
+                }
+
+                .app-container {
+                    width: 100%; height: 100%;
+                    position: relative; display: flex; flex-direction: column;
+                    overflow: hidden;
+                }
+
+                /* --- ẢNH NỀN --- */
+                .cartoon-bg {
+                    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                    background-image: url('https://i.pinimg.com/736x/aa/23/9f/aa239fc6a494439899c8c119127fd51a.jpg');
+                    background-size: cover; background-position: center;
+                    opacity: 1; pointer-events: none; z-index: 0;
+                }
+
+                /* --- HEADER TRANG PHỤ --- */
+                .sub-header {
+                    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                    padding: 15px 20px;
+                    color: white; flex-shrink: 0;
+                    position: relative; z-index: 10;
+                    display: flex; align-items: center; justify-content: space-between;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+                }
+
+                .back-btn {
+                    width: 36px; height: 36px; border-radius: 50%;
+                    background: rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center;
+                    font-size: 1.1rem; cursor: pointer; backdrop-filter: blur(5px);
+                    transition: 0.2s; color: white; text-decoration: none;
+                }
+                .back-btn:active { transform: scale(0.9); }
+
+                .page-title { font-size: 1.1rem; font-weight: 700; }
+                .dummy-space { width: 36px; }
+
+                /* --- MAIN SCROLL --- */
+                .main-scroll {
+                    flex: 1; overflow-y: auto;
+                    padding: 15px 15px 100px;
+                    z-index: 2; position: relative;
+                    scrollbar-width: none;
+                }
+                .main-scroll::-webkit-scrollbar { display: none; }
+
+                /* --- BANNER TỔNG NỢ CƯỚC --- */
+                .balance-card {
+                    background: linear-gradient(135deg, var(--c-red) 0%, #B91C1C 100%);
+                    border-radius: 16px; padding: 20px; color: white;
+                    margin-bottom: 20px; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+                    display: flex; justify-content: space-between; align-items: center;
+                }
+                .balance-info h3 { font-size: 0.8rem; font-weight: 600; opacity: 0.9; margin-bottom: 4px; }
+                .balance-info .amount { font-size: 1.6rem; font-weight: 900; letter-spacing: 0.5px; }
+                .balance-icon { font-size: 2.5rem; opacity: 0.2; }
+
+                /* --- THẺ THÁNG (ACCORDION) --- */
+                .fee-month-card {
+                    background: var(--card-glass); backdrop-filter: blur(10px);
+                    border-radius: 16px; margin-bottom: 15px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                    border: 1px solid rgba(255,255,255,0.8);
+                    overflow: hidden;
+                    transition: all 0.3s ease;
+                }
+
+                .fee-month-card summary::-webkit-details-marker { display: none; }
+                .fee-month-card summary { list-style: none; outline: none; }
+
+                .fee-summary {
+                    padding: 16px 15px; cursor: pointer;
+                    display: flex; justify-content: space-between; align-items: center;
+                    user-select: none;
+                }
+
+                .fee-month-left { display: flex; align-items: center; gap: 12px; }
+                .month-icon {
+                    width: 40px; height: 40px; border-radius: 12px;
+                    display: flex; justify-content: center; align-items: center; font-size: 1.1rem;
+                }
+                .status-unpaid .month-icon { background: #FEE2E2; color: var(--c-red); }
+                .status-paid .month-icon { background: #D1FAE5; color: var(--c-green); }
+
+                .month-text h4 { font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px; }
+                .month-text p { font-size: 0.75rem; font-weight: 600; color: var(--text-sub); margin: 0; }
+
+                .fee-month-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+                .fee-amount { font-size: 0.95rem; font-weight: 800; color: var(--text-main); }
+
+                .badge { padding: 3px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; }
+                .badge-unpaid { background: var(--c-red); color: white; }
+                .badge-paid { background: #ECFDF5; color: var(--c-green); border: 1px solid #A7F3D0; }
+
+                .chevron-icon { font-size: 0.8rem; color: #9CA3AF; transition: transform 0.3s ease; margin-left: 8px; }
+                details[open] .chevron-icon { transform: rotate(180deg); }
+
+                /* --- CHI TIẾT KHOẢN THU BÊN TRONG --- */
+                .fee-details-box {
+                    padding: 0 15px 15px;
+                    border-top: 1px dashed #E5E7EB;
+                    margin-top: 5px;
+                    animation: fadeInDown 0.3s ease-out;
+                }
+
+                @keyframes fadeInDown {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                .fee-item {
+                    display: flex; justify-content: space-between;
+                    padding: 8px 0; font-size: 0.8rem; color: var(--text-main);
+                    border-bottom: 1px solid #F3F4F6;
+                }
+                .fee-item:last-child { border-bottom: none; }
+                .fee-item span:first-child { color: var(--text-sub); font-weight: 500; }
+                .fee-item span:last-child { font-weight: 700; }
+
+                .fee-item.deduction span { color: var(--c-green); }
+
+                .total-row {
+                    display: flex; justify-content: space-between; align-items: center;
+                    margin-top: 10px; padding-top: 10px; border-top: 2px solid #E5E7EB;
+                }
+                .total-row span:first-child { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
+                .total-row span:last-child { font-size: 1.1rem; font-weight: 900; color: var(--c-red); }
+
+                .pay-action-btn {
+                    width: 100%; background: var(--c-red); color: white;
+                    border: none; padding: 12px; border-radius: 12px;
+                    font-size: 0.9rem; font-weight: 800; margin-top: 15px;
+                    cursor: pointer; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+                    transition: 0.2s; text-decoration: none; display: block; text-align: center;
+                }
+                .pay-action-btn:active { transform: scale(0.98); }
+
+                /* --- BOTTOM NAV CỐ ĐỊNH --- */
+                .bottom-nav {
+                    position: fixed;
+                    bottom: 0; left: 0; right: 0;
+                    background: #FFFFFF;
+                    display: flex; justify-content: space-between; align-items: center;
+                    padding: 8px 10px 15px;
+                    box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 1000;
+                    border-top-left-radius: 20px; border-top-right-radius: 20px;
+                }
+
+                .nav-item {
+                    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+                    color: #9CA3AF; text-decoration: none; gap: 4px;
+                    transition: all 0.3s ease;
+                }
+                .nav-item i { font-size: 1.1rem; transition: transform 0.3s ease; }
+                .nav-item span { font-size: 0.6rem; font-weight: 700; white-space: nowrap; }
+
+                .nav-item:hover { color: var(--primary); }
+                .nav-item:hover i { transform: translateY(-4px) scale(1.1); }
+                .nav-item.active { color: var(--primary); }
+
+                .center-btn-wrapper { position: relative; flex-shrink: 0; width: 60px; display: flex; justify-content: center; }
+                .nav-center-btn {
+                    width: 52px; height: 52px; background: var(--primary);
+                    border-radius: 50%; display: flex; justify-content: center; align-items: center;
+                    color: white; font-size: 1.4rem;
+                    transform: translateY(-22px);
+                    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); border: 4px solid #FFFFFF;
+                    transition: all 0.3s ease;
+                }
+            </style>
+        </head>
+        <body>
+
+        <div class="app-container">
+
+            <div class="cartoon-bg"></div>
+
+            <div class="sub-header">
+                <a href="/app/phuhuynh" class="back-btn"><i class="fas fa-chevron-left"></i></a>
+                <div class="page-title">Học phí &amp; Thanh toán</div>
+                <div class="dummy-space"></div>
+            </div>
+
+            <div class="main-scroll">
+
+                <t t-set="tong_no" t-value="sum(hp.hocphi_phaidong for hp in data if hp.trangthai in ['-1', '0', '2'])"/>
+
+                <div class="balance-card">
+                    <div class="balance-info">
+                        <h3>TỔNG CẦN THANH TOÁN</h3>
+                        <div class="amount"><t t-esc="'{:0,.0f}'.format(tong_no).replace(',', '.')"/> đ</div>
+                    </div>
+                    <i class="fas fa-wallet balance-icon"></i>
+                </div>
+
+                <t t-foreach="data" t-as="hp">
+
+                    <t t-set="is_paid" t-value="hp.trangthai in ['10', '11', '12', '3']"/>
+
+                    <details t-attf-class="fee-month-card #{'status-paid' if is_paid else 'status-unpaid'}" t-att-open="'open' if hp_index == 0 else None">
+
+                        <summary class="fee-summary">
+                            <div class="fee-month-left">
+                                <div class="month-icon">
+                                    <t t-if="is_paid"><i class="fas fa-check-circle"></i></t>
+                                    <t t-else=""><i class="fas fa-file-invoice-dollar"></i></t>
+                                </div>
+                                <div class="month-text">
+                                    <h4>Tháng <t t-esc="hp.thang_id.name"/>/<t t-esc="hp.nam_id.name"/></h4>
+                                    <p>
+                                        <t t-if="is_paid">
+                                            Đã nộp: <t t-esc="hp.ngay_dong_hocphi and hp.ngay_dong_hocphi.strftime('%d/%m/%Y') or ''"/>
+                                        </t>
+                                        <t t-else="">
+                                            Hạn nộp: 5/<t t-esc="hp.thang_id.name"/>/<t t-esc="hp.nam_id.name"/>
+                                        </t>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="fee-month-right">
+                                <div style="display: flex; align-items: center;">
+                                    <span class="fee-amount"><t t-esc="'{:0,.0f}'.format(hp.hocphi_phaidong).replace(',', '.')"/> vnđ</span>
+                                    <i class="fas fa-chevron-down chevron-icon"></i>
+                                </div>
+
+                                <t t-if="is_paid">
+                                    <span class="badge badge-paid">Đã hoàn thành</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge badge-unpaid">Đợi thanh toán</span>
+                                </t>
+                            </div>
+                        </summary>
+
+                        <div class="fee-details-box">
+
+                            <t t-foreach="hp.hocphi_bantru_ids" t-as="bt">
+                                <div class="fee-item">
+                                    <span><t t-esc="bt.display_name or 'Lớp chung'"/></span>
+                                    <span><t t-esc="'{:0,.0f}'.format(bt.tien).replace(',', '.')"/> đ</span>
+                                </div>
+                            </t>
+
+                            <t t-foreach="hp.hocphi_ca_ids" t-as="ca">
+                                <div class="fee-item">
+                                    <span><t t-esc="ca.dm_ca_id.name or 'Ca can thiệp'"/></span>
+                                    <span><t t-esc="'{:0,.0f}'.format(ca.tien).replace(',', '.')"/> đ</span>
+                                </div>
+                            </t>
+
+                            <t t-foreach="hp.hocphi_duoctru_ids" t-as="dt">
+                                <div class="fee-item deduction">
+                                    <span><t t-esc="dt.display_name or 'Trừ phép'"/></span>
+                                    <span>- <t t-esc="'{:0,.0f}'.format(dt.tien).replace(',', '.')"/> đ</span>
+                                </div>
+                            </t>
+
+                            <t t-if="hp.hocphi_giam > 0">
+                                <div class="fee-item deduction">
+                                    <span>Được giảm (<t t-esc="hp.tyle_giamhocphi"/>%)</span>
+                                    <span>- <t t-esc="'{:0,.0f}'.format(hp.hocphi_giam).replace(',', '.')"/> đ</span>
+                                </div>
+                            </t>
+
+                            <div class="total-row">
+                                <span><t t-esc="'Đã thu:' if is_paid else 'Tổng cộng:'"/></span>
+                                <span t-attf-style="#{ 'color: var(--c-green);' if is_paid else '' }">
+                                    <t t-esc="'{:0,.0f}'.format(hp.hocphi_phaidong).replace(',', '.')"/> đ
+                                </span>
+                            </div>
+
+                            <t t-if="not is_paid">
+                                <a href="#" style="text-decoration: none;">
+                                    <button class="pay-action-btn">
+                                        <i class="fas fa-qrcode"></i> Thanh toán ngay
+                                    </button>
+                                </a>
+                            </t>
+
+                        </div>
+                    </details>
+                </t>
+
+            </div>
+
+            <div class="bottom-nav">
+                <a href="/app/phuhuynh" class="nav-item"><i class="fas fa-home"></i><span>Trang chủ</span></a>
+                <a href="/ph/lichhoc" class="nav-item"><i class="fas fa-calendar-check"></i><span>Lịch học</span></a>
+
+                <div class="center-btn-wrapper">
+                    <div class="nav-center-btn" style="box-shadow: 0 10px 30px rgba(59, 130, 246, 0.6); background: linear-gradient(135deg, #60A5FA, #2563EB);">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                </div>
+
+                <a href="#" class="nav-item"><i class="fas fa-headset"></i><span>Hỗ trợ</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-bell"></i><span>Thông báo</span></a>
+            </div>
+
+        </div>
+
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/ph/sw.js', { scope: '/' })
+                        .then(function(registration) {
+                            console.log('SW registered, scope: ', registration.scope);
+                        })
+                        .catch(function(err) {
+                            console.log('SW register failed: ', err);
+                        });
+                });
+            }
+        </script>
+
+        </body>
+        </html>
+    </template>
+</odoo>
