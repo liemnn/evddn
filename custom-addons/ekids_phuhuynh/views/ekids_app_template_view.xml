@@ -6,7 +6,17 @@
         <head>
             <meta charset="UTF-8"/>
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-            <title>eKids - Home with Pay Button</title>
+
+            <meta name="theme-color" content="#2563EB"/>
+
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+            <meta name="apple-mobile-web-app-title" content="eVDDN-Phụ huynh"/>
+
+            <link rel="apple-touch-icon" href="/ekids_phuhuynh/static/src/img/icon_192.png"/>
+
+            <link rel="manifest" href="/ph/manifest.json" />
+            <title>eVDDN - Hệ thống quản lý trường mầm non chuyên biệt</title>
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
@@ -16,34 +26,36 @@
                     --primary-light: #3B82F6;
                     --primary-hover: #1D4ED8;
                     --bg-color: #E0F2FE;
-                    --card-glass: rgba(255, 255, 255, 0.9);
+                    --card-glass: rgba(255, 255, 255, 0.95);
                     --text-main: #1F2937;
 
                     --c-red: #EF4444;
                     --c-orange: #FF9800;
                     --c-yellow: #FFC107;
-                    --c-green: #4CAF50;
+                    --c-green: #10B981;
                     --c-teal: #00BCD4;
-                    --c-purple: #9C27B0;
+                    --c-purple: #8B5CF6;
                 }
 
                 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
-                body {
+                html, body {
                     background-color: var(--bg-color);
-                    width: 100vw; height: 100vh;
+                    width: 100vw;
+                    height: 100vh; /* Fallback */
+                    height: 100dvh; /* Co giãn chuẩn trên Mobile */
                     overflow: hidden;
                 }
 
                 .app-container {
-                    width: 100%; height: 100vh;
+                    width: 100%; height: 100%;
                     position: relative; display: flex; flex-direction: column;
                     overflow: hidden;
                 }
 
                 .cartoon-bg {
                     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-                    background-image: url('https://i.pinimg.com/736x/aa/23/9f/aa239fc6a494439899c8c119127fd51a.jpg');
+                    background-image: url('/ekids_phuhuynh/static/src/img/backgroud.jpg');
                     background-size: cover;
                     background-position: center;
                     opacity: 1;
@@ -60,21 +72,25 @@
                 }
 
                 .top-nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-                .header-title { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.9rem; }
+                .header-title { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem; }
 
                 .top-right-actions { display: flex; gap: 8px; }
                 .action-btn-glass {
-                    width: 30px; height: 30px; border-radius: 50%;
+                    width: 32px; height: 32px; border-radius: 50%;
                     background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
                     color: white; display: flex; justify-content: center; align-items: center;
-                    font-size: 0.8rem; cursor: pointer; backdrop-filter: blur(4px);
-                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    font-size: 0.85rem; cursor: pointer; backdrop-filter: blur(4px);
+                    transition: all 0.3s ease;
                 }
-                .action-btn-glass:hover { transform: translateY(-3px) scale(1.1); background: rgba(255,255,255,0.4); }
+                .action-btn-glass:hover {
+                    background: rgba(255,255,255,0.4);
+                    transform: translateY(-3px) scale(1.1);
+                }
+                .action-btn-glass.logout-btn:hover { background: #EF4444; border-color: #EF4444; }
 
                 .user-profile-integrated { display: flex; align-items: center; gap: 12px; }
                 .avatar-wrap {
-                    width: 50px; height: 50px; border-radius: 50%; padding: 2px;
+                    width: 48px; height: 48px; border-radius: 50%; padding: 2px;
                     background: linear-gradient(135deg, var(--c-yellow), var(--c-orange));
                     flex-shrink: 0;
                 }
@@ -82,11 +98,9 @@
 
                 .profile-info-white { flex: 1; display: flex; flex-direction: column; justify-content: center; }
                 .profile-info-white h2 { font-size: 1rem; font-weight: 800; color: white; margin-bottom: 2px; }
-                .profile-info-white p { font-size: 0.7rem; color: rgba(255,255,255,0.9); font-weight: 500; margin-bottom: 4px; }
+                .profile-info-white p { font-size: 0.7rem; color: rgba(255,255,255,0.9); font-weight: 500; margin-bottom: 5px; }
 
-                .badge-row {
-                    display: flex; gap: 6px; flex-wrap: wrap;
-                }
+                .badge-row { display: flex; gap: 6px; flex-wrap: wrap; }
                 .info-badge {
                     display: inline-flex; align-items: center; gap: 4px;
                     background: rgba(255, 255, 255, 0.2);
@@ -97,14 +111,12 @@
                     color: white; width: fit-content;
                 }
                 .badge-bantru i { color: #FFD54F; }
-                .badge-hocca i { color: #81D4FA; }
                 .badge-boy i { color: #60A5FA; }
                 .badge-girl i { color: #F48FB1; }
 
-                /* --- MAIN SCROLL --- */
                 .main-scroll {
                     flex: 1; overflow-y: auto;
-                    padding: 15px 15px 85px;
+                    padding: 15px 15px 100px;
                     z-index: 2; position: relative;
                     scrollbar-width: none;
                 }
@@ -114,35 +126,37 @@
                     background: var(--card-glass); backdrop-filter: blur(10px);
                     border-radius: 12px; padding: 10px 12px;
                     margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
-                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
                     border-left: 4px solid var(--c-yellow);
+                    transition: all 0.3s ease; cursor: pointer;
                 }
-                .speaker-icon { color: #D97706; font-size: 0.9rem; background: #FEF3C7; width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+                .announcement-banner:hover { transform: translateY(-4px); background: #FEF9C3; }
+                .speaker-icon { color: #D97706; font-size: 0.9rem; background: #FEF3C7; width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0;}
+                .announce-text { flex: 1; overflow: hidden; }
                 .announce-text marquee { font-size: 0.8rem; font-weight: 700; color: #92400E; }
 
-                /* --- LƯỚI 3 CỘT --- */
                 .menu-grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 15px; }
 
                 .app-card {
                     background: var(--card-glass); backdrop-filter: blur(10px);
                     border-radius: 16px; padding: 18px 5px;
                     display: flex; flex-direction: column; align-items: center; justify-content: center;
-                    box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.6);
-                    cursor: pointer; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.6);
+                    cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
                     text-decoration: none;
                 }
-                .app-card:hover { transform: translateY(-8px) scale(1.03); border-color: var(--primary-light); background: #FFFFFF; }
+                .app-card:hover { transform: translateY(-6px) scale(1.02); border-color: var(--primary-light); background: #FFFFFF; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15); }
+                .app-card:active { transform: translateY(0) scale(0.95); }
 
                 .illus-wrap {
                     width: 46px; height: 46px; margin-bottom: 10px;
                     display: flex; justify-content: center; align-items: center;
                     border-radius: 14px; position: relative;
-                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    transition: all 0.3s ease;
                 }
-                .app-card:hover .illus-wrap { transform: scale(1.2) rotate(8deg); }
+                .app-card:hover .illus-wrap { transform: scale(1.15) rotate(5deg); }
                 .icon-main { font-size: 1.4rem; position: relative; z-index: 2; }
 
-                /* --- NOTIFICATION BADGE --- */
                 .notif-badge {
                     position: absolute; top: -6px; right: -8px;
                     background-color: var(--c-red); color: white;
@@ -152,7 +166,6 @@
                     box-shadow: 0 3px 8px rgba(239, 68, 68, 0.4);
                     animation: bounce-badge 2s infinite cubic-bezier(0.280, 0.840, 0.420, 1);
                 }
-
                 @keyframes bounce-badge {
                     0%, 20%, 50%, 80%, 100% { transform: scale(1) translateY(0); }
                     40% { transform: scale(1.1) translateY(-4px); }
@@ -168,7 +181,6 @@
 
                 .app-card span { font-size: 0.75rem; font-weight: 800; color: var(--text-main); text-align: center; }
 
-                /* --- BANNER ĐÓNG HỌC PHÍ NHANH --- */
                 .quick-pay-banner {
                     background: var(--card-glass); backdrop-filter: blur(10px);
                     border-radius: 16px; padding: 15px;
@@ -178,7 +190,6 @@
                     animation: pulse-shadow 2s infinite;
                     margin-bottom: 20px;
                 }
-
                 @keyframes pulse-shadow {
                     0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
                     70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
@@ -198,38 +209,46 @@
                     background: var(--c-red); color: white; border: none;
                     padding: 10px 16px; border-radius: 12px; font-weight: 800; font-size: 0.8rem;
                     cursor: pointer; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
-                    transition: all 0.3s; white-space: nowrap; text-decoration: none; display: inline-block;
+                    transition: all 0.3s; white-space: nowrap;
                 }
                 .pay-btn:hover { background: #DC2626; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4); }
-                .pay-btn:active { transform: translateY(0) scale(0.95); color: white; }
+                .pay-btn:active { transform: translateY(0) scale(0.95); }
 
-                /* --- VÙNG 2: BOTTOM NAV --- */
+                /* --- VÙNG 2: BOTTOM NAV CỐ ĐỊNH --- */
                 .bottom-nav {
-                    position: absolute; bottom: 0; left: 0; right: 0;
+                    position: fixed; /* Bám chặt đáy màn hình */
+                    bottom: 0; left: 0; right: 0;
                     background: #FFFFFF;
                     display: flex; justify-content: space-between; align-items: center;
-                    padding: 8px 10px 12px;
-                    box-shadow: 0 -4px 20px rgba(0,0,0,0.15); z-index: 1000;
+                    padding: 8px 10px 15px;
+                    box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 1000;
+                    border-top-left-radius: 20px; border-top-right-radius: 20px;
                 }
 
                 .nav-item {
                     flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-                    color: #9CA3AF; text-decoration: none; gap: 3px;
-                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    color: #9CA3AF; text-decoration: none; gap: 4px;
+                    transition: all 0.3s ease;
                 }
-                .nav-item i { font-size: 1.1rem; transition: all 0.3s ease; }
+                .nav-item i { font-size: 1.1rem; transition: transform 0.3s ease; }
                 .nav-item span { font-size: 0.6rem; font-weight: 700; white-space: nowrap; }
 
                 .nav-item:hover { color: var(--primary); }
-                .nav-item:hover i { transform: translateY(-5px) scale(1.2); }
+                .nav-item:hover i { transform: translateY(-4px) scale(1.1); }
                 .nav-item.active { color: var(--primary); }
 
                 .center-btn-wrapper { position: relative; flex-shrink: 0; width: 60px; display: flex; justify-content: center; }
                 .nav-center-btn {
-                    width: 50px; height: 50px; background: var(--primary);
+                    width: 52px; height: 52px; background: var(--primary);
                     border-radius: 50%; display: flex; justify-content: center; align-items: center;
-                    color: white; font-size: 1.3rem; transform: translateY(-18px);
+                    color: white; font-size: 1.4rem;
+                    transform: translateY(-22px);
                     box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); border: 4px solid #FFFFFF;
+                    transition: all 0.3s ease;
+                }
+                .nav-center-btn:hover {
+                    transform: translateY(-26px) scale(1.1);
+                    background: linear-gradient(135deg, #60A5FA, #2563EB);
                 }
 
             </style>
@@ -242,10 +261,12 @@
 
             <div class="integrated-header">
                 <div class="top-nav-bar">
-                    <div class="header-title"><i class="fas fa-chevron-left"></i> Hệ thống Chuyên biệt</div>
+                    <div class="header-title">
+                        <i class="fas fa-chevron-left"></i> Hệ thống Chuyên biệt
+                    </div>
                     <div class="top-right-actions">
-                        <div class="action-btn-glass"><i class="fas fa-user-cog"></i></div>
-                        <a href="/web/session/logout" class="action-btn-glass logout-btn" style="text-decoration: none;"><i class="fas fa-power-off"></i></a>
+                        <div class="action-btn-glass" title="Hồ sơ"><i class="fas fa-user-cog"></i></div>
+                        <a href="/web/session/logout" class="action-btn-glass logout-btn" title="Thoát" style="text-decoration: none;"><i class="fas fa-power-off"></i></a>
                     </div>
                 </div>
 
@@ -257,7 +278,15 @@
 
                         <div class="badge-row">
                             <span class="info-badge badge-bantru"><i class="fas fa-sun"></i> Bán trú</span>
-                            <span class="info-badge badge-boy"><i class="fas fa-mars"></i> Nam</span>
+                            <t t-if="gioi_tinh == 'nam'">
+                                <span class="info-badge badge-boy"><i class="fas fa-mars"></i> Nam</span>
+                            </t>
+                            <t t-if="gioi_tinh == 'nu'">
+                                <span class="info-badge badge-girl"><i class="fas fa-venus"></i> Nữ</span>
+                            </t>
+                            <t t-if="not gioi_tinh">
+                                <span class="info-badge badge-boy"><i class="fas fa-mars"></i> Nam</span>
+                            </t>
                         </div>
                     </div>
                 </div>
@@ -342,11 +371,19 @@
                     <div class="fee-details">
                         <div class="fee-icon"><i class="fas fa-exclamation-circle"></i></div>
                         <div class="fee-text">
-                            <h4>Nộp học phí tháng 4</h4>
-                            <p>3.500.000 VNĐ</p>
+                            <t t-if="tong_no">
+                                <h4>Nộp học phí <t t-esc="ky_thu_no"/></h4>
+                                <p><t t-esc="tong_no"/> VNĐ</p>
+                            </t>
+                            <t t-else="">
+                                <h4>Nộp học phí Tháng 4</h4>
+                                <p>3.500.000 VNĐ</p>
+                            </t>
                         </div>
                     </div>
-                    <a href="/app/phuhuynh/hoc-phi" class="pay-btn">Nộp ngay</a>
+                    <a href="/app/phuhuynh/hoc-phi" style="text-decoration: none;">
+                        <button class="pay-btn">Nộp ngay</button>
+                    </a>
                 </div>
 
             </div>
@@ -366,6 +403,20 @@
         </div>
 
         </body>
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    // Gọi đường link /ph/sw.js thay vì file static
+                    navigator.serviceWorker.register('/ph/sw.js', { scope: '/' })
+                        .then(function(registration) {
+                            console.log('SW đăng ký thành công với scope: ', registration.scope);
+                        })
+                        .catch(function(err) {
+                            console.log('SW đăng ký thất bại: ', err);
+                        });
+                });
+            }
+        </script>
         </html>
     </template>
 </odoo>

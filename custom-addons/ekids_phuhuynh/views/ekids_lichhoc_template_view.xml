@@ -6,7 +6,10 @@
         <head>
             <meta charset="UTF-8"/>
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-            <title>eKids - Lịch học (Kèm Bottom Nav)</title>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+            <meta name="apple-mobile-web-app-title" content="eVDDN"/>
+            <title>eVDDN - Hệ thống quản lý trường mầm non chuyên biệt</title>
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
@@ -29,14 +32,17 @@
 
                 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
-                body {
+                /* FIX 1: Dùng 100dvh để chuẩn trên mobile */
+                html, body {
                     background-color: var(--bg-color);
-                    width: 100vw; height: 100vh;
+                    width: 100vw;
+                    height: 100vh; /* Fallback */
+                    height: 100dvh;
                     overflow: hidden;
                 }
 
                 .app-container {
-                    width: 100%; height: 100vh;
+                    width: 100%; height: 100%;
                     position: relative; display: flex; flex-direction: column;
                     overflow: hidden;
                 }
@@ -44,7 +50,7 @@
                 /* --- ẢNH NỀN --- */
                 .cartoon-bg {
                     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-                    background-image: url('https://i.pinimg.com/736x/aa/23/9f/aa239fc6a494439899c8c119127fd51a.jpg');
+                    background-image: url('/ekids_phuhuynh/static/src/img/backgroud.jpg');
                     background-size: cover; background-position: center;
                     opacity: 1; pointer-events: none; z-index: 0;
                 }
@@ -70,9 +76,10 @@
                 .dummy-space { width: 36px; }
 
                 /* --- MAIN SCROLL --- */
+                /* FIX 2: Tăng padding đáy để chừa chỗ cho thanh Menu cố định */
                 .main-scroll {
                     flex: 1; overflow-y: auto;
-                    padding: 15px 15px 90px;
+                    padding: 15px 15px 110px;
                     z-index: 2; position: relative;
                     scrollbar-width: none;
                 }
@@ -121,7 +128,7 @@
 
                 .time-col { width: 45px; text-align: right; flex-shrink: 0; padding-top: 2px; }
                 .time-start { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
-                .time-end { font-size: 0.65rem; font-weight: 600; color: var(--text-sub); }
+                .time-end { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
 
                 .line-col { display: flex; flex-direction: column; align-items: center; width: 14px; }
                 .dot { width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex-shrink: 0; z-index: 2; }
@@ -158,39 +165,40 @@
                 .off-day-box i { font-size: 1.8rem; color: #94A3B8; }
                 .off-day-box span { font-size: 0.85rem; font-weight: 600; color: #64748B; }
 
-                /* --- BOTTOM NAV SIÊU MỎNG TỪ TRANG CHỦ --- */
+                /* --- FIX 3: BOTTOM NAV CỐ ĐỊNH NHƯ TRANG CHỦ --- */
                 .bottom-nav {
-                    position: absolute; bottom: 0; left: 0; right: 0;
+                    position: fixed;
+                    bottom: 0; left: 0; right: 0;
                     background: #FFFFFF;
                     display: flex; justify-content: space-between; align-items: center;
-                    padding: 8px 10px 12px;
-                    box-shadow: 0 -4px 20px rgba(0,0,0,0.15); z-index: 1000;
+                    padding: 8px 10px 15px;
+                    box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 1000;
+                    border-top-left-radius: 20px; border-top-right-radius: 20px;
                 }
 
                 .nav-item {
                     flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-                    color: #9CA3AF; text-decoration: none; gap: 3px;
-                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    color: #9CA3AF; text-decoration: none; gap: 4px;
+                    transition: all 0.3s ease;
                 }
-                .nav-item i { font-size: 1.1rem; transition: all 0.3s ease; }
+                .nav-item i { font-size: 1.1rem; transition: transform 0.3s ease; }
                 .nav-item span { font-size: 0.6rem; font-weight: 700; white-space: nowrap; }
 
                 .nav-item:hover { color: var(--primary); }
-                .nav-item:hover i { transform: translateY(-5px) scale(1.2); }
+                .nav-item:hover i { transform: translateY(-4px) scale(1.1); }
 
                 .nav-item.active { color: var(--primary); }
 
                 .center-btn-wrapper { position: relative; flex-shrink: 0; width: 60px; display: flex; justify-content: center; }
                 .nav-center-btn {
-                    width: 50px; height: 50px; background: var(--primary);
+                    width: 52px; height: 52px; background: var(--primary);
                     border-radius: 50%; display: flex; justify-content: center; align-items: center;
-                    color: white; font-size: 1.3rem; transform: translateY(-18px);
+                    color: white; font-size: 1.4rem; transform: translateY(-22px);
                     box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); border: 4px solid #FFFFFF;
-                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    transition: all 0.3s ease;
                 }
                 .nav-center-btn:hover {
-                    transform: translateY(-28px) scale(1.15);
-                    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.6);
+                    transform: translateY(-26px) scale(1.1);
                     background: linear-gradient(135deg, #60A5FA, #2563EB);
                 }
 
@@ -262,7 +270,7 @@
                                             </div>
 
                                             <t t-if="ca.get('giaovien')">
-                                                <p><i class="fas fa-chalkboard-teacher"></i> GV: <t t-esc="ca['giaovien']"/></p>
+                                                <p><i class="fas fa-chalkboard-teacher"></i> Giáo viên: <t t-esc="ca['giaovien']"/></p>
                                             </t>
                                         </div>
                                     </div>

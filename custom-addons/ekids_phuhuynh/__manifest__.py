@@ -3,6 +3,18 @@
     'name': "E-kids Phụ huynh",
      # any module necessary for this one to work correctly
     'depends': ['base','ekids_core','ekids_hocsinh','ekids_func'],
+    "icons": [
+        {
+          "src": "/ekids_phuhuynh/static/src/img/icon_192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "/ekids_phuhuynh/static/src/img/icon_512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ],
 
     # always loaded
     'data': [
