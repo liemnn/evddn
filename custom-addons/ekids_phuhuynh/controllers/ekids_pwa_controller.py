@@ -12,7 +12,7 @@ class EkidsPWAController(http.Controller):
             "short_name": "eVDDN-Phụ huynh",
             "description": "Ứng dụng theo dõi học tập cho phụ huynh",
             "scope": "/",
-            "start_url": "/app/phuhuynh", # Hoặc link trang chủ của anh
+            "start_url": "/ph/home", # Hoặc link trang chủ của anh
             "display": "standalone",
             "background_color": "#E0F2FE",
             "theme_color": "#2563EB",
