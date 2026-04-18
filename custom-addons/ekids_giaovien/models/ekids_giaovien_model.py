@@ -129,10 +129,16 @@ class GiaoVien(models.Model):
             record.sequence = index
             index +=1
 
-    @api.depends('dilam_tungay')
+    @api.depends('dilam_tungay','hoctapcongtac_ids')
     def _compute_tham_nien(self):
         for record in self:
-            record.tham_nien =giaovien_util.func_get_thamnien(record)
+            thamnien =giaovien_util.func_get_thamnien(record)
+            htcts= record.hoctapcongtac_ids
+            if htcts:
+                for htct in htcts:
+                    if htct.is_tham_nien_duoccong == True:
+                        thamnien+= htct.tham_nien
+            record.tham_nien =thamnien
     @api.depends('name')
     def _compute_ten(self):
         for record in self:

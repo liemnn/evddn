@@ -14,5 +14,7 @@ class GiaoVienHocTapCongTac(models.Model):
     name = fields.Char(string="Nơi học tập/làm việc",required=True)
     chucvu = fields.Char(string="Bằng cấp/Chức vụ", required=True)
     thanhtich = fields.Char(string="Thành tích đạt được (nếu có)")
+    is_tham_nien_duoccong = fields.Boolean(string="Thâm niên được tính",default=False)
+    tham_nien = fields.Float(string="Thâm niên làm việc", digits=(10, 1),default=0.0)
 
 
