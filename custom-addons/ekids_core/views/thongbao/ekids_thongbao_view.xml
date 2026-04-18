@@ -1,271 +1,132 @@
 <odoo>
     <data>
-      <record id="ekids_core.thongbao_phuhuynh_search" model="ir.ui.view">
-            <field name="name">thongbao_phuhuynh.search</field>
-            <field name="model">ekids.thongbao_phuhuynh</field>
-            <field name="arch" type="xml">
-                <search>
-                    <field name="name"/>
-                    <field name="noidung"/>
-                </search>
-            </field>
-      </record>
 
-    <record id="ekids_core.ekids_thongbao_kanban" model="ir.ui.view">
-        <field name="name">ekids.thongbao.kanban.truong.inbox</field>
+    <record id="ekids_core.view_ekids_thongbao_list" model="ir.ui.view">
+        <field name="name">ekids.thongbao.list</field>
         <field name="model">ekids.thongbao</field>
         <field name="arch" type="xml">
-            <kanban default_order="create_date desc" class="o_kanban_mobile" sample="1">
-                <field name="name"/>
-                <field name="loai"/>
-                <field name="trangthai"/>
-                <field name="ngay_gui"/>
-                <field name="create_date"/> <field name="tong_dagui"/>
-                <field name="tong_daxem"/>
+            <list string="Danh sách Thông báo" default_order="tu_ngay desc, create_date desc" sample="1">
 
+                <field name="create_uid" string="Người gửi" widget="many2one_avatar_user" readonly="1"/>
+
+                <field name="name" string="Tiêu đề thông báo" class="fw-bold"/>
+
+                <field name="tu_ngay" string="Bắt đầu"/>
+                <field name="den_ngay" string="Kết thúc"/>
+
+                <field name="trangthai" string="Trạng thái"
+                       widget="badge"
+                       decoration-info="trangthai == '0'"
+                       decoration-success="trangthai == '1'"/>
+
+                <field name="coso_id" optional="hide" string="Cơ sở"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ekids_core.ekids_thongbao_kanban" model="ir.ui.view">
+        <field name="name">ekids.thongbao.kanban</field>
+        <field name="model">ekids.thongbao</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1" default_order="tu_ngay desc, id desc">
+                <field name="name"/>
+                <field name="coso_id"/>
+                <field name="tu_ngay"/>
+                <field name="den_ngay"/>
+                <field name="trangthai"/>
                 <templates>
                     <t t-name="kanban-box">
-                        <style>
-                            /* BƯỚC 1: Xóa bỏ hoàn toàn định dạng "Thẻ" mặc định của Odoo */
-                            .o_kanban_record { width: 100% !important; border: none !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
+                        <div t-attf-class="oe_kanban_global_click d-flex align-items-start p-3 border-bottom #{record.trangthai.raw_value == '0' ? 'bg-light' : 'bg-white'}">
 
-                            /* BƯỚC 2: Thiết kế Dòng thư (Row) kiểu Google Inbox */
-                            .ek-inbox-row {
-                                display: flex; align-items: center; background: #ffffff;
-                                padding: 12px 16px; border-bottom: 1px solid #e2e8f0;
-                                cursor: pointer; transition: all 0.15s ease;
-                            }
-
-                            /* Hiệu ứng Hover: Nổi viền xanh nhạt bên trái giống Gmail khi trỏ chuột */
-                            .ek-inbox-row:hover { background: #f8fafc; box-shadow: inset 3px 0 0 #3b82f6; }
-
-                            /* CỘT 1: Avatar / Icon tròn bên trái */
-                            .ek-avatar {
-                                width: 42px; height: 42px; border-radius: 50%;
-                                display: flex; align-items: center; justify-content: center;
-                                font-size: 18px; color: #fff; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                            }
-                            .bg-fee { background: #f59e0b; } /* Vàng cam */
-                            .bg-health { background: #ef4444; } /* Đỏ */
-                            .bg-general { background: #3b82f6; } /* Xanh dương */
-                            .bg-draft { background: #cbd5e1; box-shadow: none;} /* Xám nhạt cho thư nháp */
-
-                            /* CỘT 2: Nội dung chính ở giữa (Tiêu đề nổi bật) */
-                            .ek-content {
-                                flex: 1; min-width: 0; padding: 0 15px;
-                                display: flex; flex-direction: column; justify-content: center; gap: 4px;
-                            }
-                            /* Đẩy Tiêu đề lên làm dòng chính */
-                            .ek-main-title {
-                                font-size: 15px; font-weight: 800; color: #1e293b;
-                                white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-                            }
-
-                            /* Dòng phụ hiển thị loại thông báo */
-                            .ek-subject-line {
-                                display: flex; align-items: baseline; gap: 8px;
-                                white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-                            }
-                            .ek-snippet { font-size: 13px; font-weight: 500; color: #64748b; }
-
-                            /* CỘT 3: Thời gian và Thống kê (Bên phải) */
-                            .ek-meta {
-                                display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
-                                flex-shrink: 0; min-width: 100px; gap: 6px;
-                            }
-                            .ek-time { font-size: 12px; font-weight: 600; color: #64748b; }
-
-                            /* Huy hiệu thống kê Đã xem/Chưa xem thu gọn */
-                            .ek-stats-pill {
-                                background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;
-                                font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 50px;
-                                display: flex; align-items: center; gap: 4px;
-                            }
-                            .ek-draft-pill { color: #dc2626; font-size: 11px; font-weight: 700; font-style: italic;}
-
-                            /* Fix cho điện thoại di động */
-                            @media (max-width: 480px) {
-                                .ek-inbox-row { padding: 10px 12px; }
-                                .ek-content { padding: 0 10px; }
-                                .ek-snippet { display: none; } /* Ẩn đoạn text phụ để tránh vỡ khung */
-                            }
-                        </style>
-
-                        <div class="oe_kanban_global_click ek-inbox-row">
-
-                            <t t-set="ava_class" t-value="'bg-draft'"/>
-                            <t t-if="record.trangthai.raw_value == '1'">
-                                <t t-if="record.loai.raw_value == '0'"><t t-set="ava_class" t-value="'bg-fee'"/></t>
-                                <t t-if="record.loai.raw_value == '1'"><t t-set="ava_class" t-value="'bg-health'"/></t>
-                                <t t-if="record.loai.raw_value == '2'"><t t-set="ava_class" t-value="'bg-general'"/></t>
-                            </t>
-
-                            <div t-attf-class="ek-avatar #{ava_class}">
-                                <i t-if="record.loai.raw_value == '0'" class="fa fa-usd"/>
-                                <i t-if="record.loai.raw_value == '1'" class="fa fa-heartbeat"/>
-                                <i t-if="record.loai.raw_value == '2'" class="fa fa-bullhorn"/>
+                            <div class="me-3 mt-1">
+                                <t t-if="record.trangthai.raw_value == '0'">
+                                    <span class="badge rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; background-color: #E2E8F0; color: #64748B;">
+                                        <i class="fa fa-pencil fa-lg"/>
+                                    </span>
+                                </t>
+                                <t t-if="record.trangthai.raw_value == '1'">
+                                    <span class="badge rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; background-color: #DBEAFE; color: #2563EB;">
+                                        <i class="fa fa-bullhorn fa-lg"/>
+                                    </span>
+                                </t>
                             </div>
 
-                            <div class="ek-content">
-                                <div class="ek-main-title">
+                            <div class="flex-grow-1 min-vw-0">
+
+                                <div class="d-flex justify-content-between align-items-baseline mb-1">
+                                    <strong class="text-truncate text-secondary" style="font-size: 0.85rem; max-width: 70%;">
+                                        <field name="coso_id"/>
+                                    </strong>
+                                    <small t-attf-class="#{record.trangthai.raw_value == '0' ? 'fw-bold text-primary' : 'text-muted'}">
+                                        <field name="tu_ngay"/>
+                                    </small>
+                                </div>
+
+                                <div t-attf-class="mb-1 text-truncate #{record.trangthai.raw_value == '0' ? 'fw-bolder text-dark' : 'text-dark'}" style="font-size: 1rem;">
                                     <field name="name"/>
                                 </div>
-                                <div class="ek-subject-line">
-                                    <span class="ek-snippet">
-                                        <t t-if="record.loai.raw_value == '0'">Thông báo Học phí</t>
-                                        <t t-if="record.loai.raw_value == '1'">Thông báo Sức khỏe</t>
-                                        <t t-if="record.loai.raw_value == '2'">Thông báo Chung</t>
-                                    </span>
-                                </div>
-                            </div>
 
-                            <div class="ek-meta">
-                                <t t-if="record.trangthai.raw_value == '1'">
-                                    <div class="ek-time"><field name="ngay_gui" widget="datetime" options="{'format': 'dd/MM/yyyy HH:mm'}"/></div>
-                                    <div class="ek-stats-pill">
-                                        <i class="fa fa-eye"/> <field name="tong_daxem"/> / <field name="tong_dagui"/>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <div class="text-muted" style="font-size: 0.75rem;">
+                                        <i class="fa fa-clock-o me-1"/> Đến: <field name="den_ngay"/>
                                     </div>
-                                </t>
+                                    <div>
+                                        <field name="trangthai" widget="label_selection" options="{'classes': {'0': 'secondary', '1': 'success'}}"/>
+                                    </div>
+                                </div>
 
-                                <t t-if="record.trangthai.raw_value == '0'">
-                                    <div class="ek-time"><field name="create_date" widget="datetime" options="{'format': 'dd/MM/yyyy HH:mm'}"/></div>
-                                    <div class="ek-draft-pill">Chưa gửi</div>
-                                </t>
                             </div>
-
                         </div>
                     </t>
                 </templates>
             </kanban>
         </field>
     </record>
+
+
     <record id="ekids_core.thongbao_form" model="ir.ui.view">
-        <field name="name">ekids.thongbao.form.modern</field>
+        <field name="name">ekids.thongbao.form</field>
         <field name="model">ekids.thongbao</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Thông báo">
                 <header>
-                    <button name="action_gui_thongbao" type="object" string="Phát hành Thông báo" class="btn-primary" invisible="trangthai == '1'" confirm="Gửi thông báo này đến Phụ huynh?"/>
-                    <field name="trangthai" widget="statusbar"/>
+                    <button name="action_gui_thongbao"
+                            string="Gửi thông báo đến phụ huynh"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="trangthai == '1'"
+                           />
+                    <button name="action_thu_hoi_thongbao"
+                            string="Thu hồi thông báo"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="trangthai == '0'"
+                            confirm="Bạn có chắc chắn muốn thu hồi thông báo này? Trạng thái sẽ chuyển về 'Đang soạn thảo' và phụ huynh sẽ không thấy trên App nữa."/>
+
+                    <field name="trangthai" widget="statusbar" statusbar_visible="0,1" clickable="1"/>
                 </header>
                 <sheet>
-                    <style>
-                        /* 1. Thanh chọn Loại thông báo tinh tế (Nền xám) */
-                        .ek-modern-pill .o_field_radio {
-                            display: inline-flex !important;
-                            background: #f1f5f9 !important;
-                            border-radius: 8px !important;
-                            padding: 4px !important;
-                            border: 1px solid #e2e8f0 !important;
-                        }
-                        .ek-modern-pill .form-check {
-                            padding-left: 0 !important;
-                            margin-bottom: 0 !important;
-                            display: flex !important;
-                            align-items: center !important;
-                        }
-                        .ek-modern-pill input[type="radio"] { display: none !important; }
-                        .ek-modern-pill label {
-                            padding: 8px 30px !important;
-                            border-radius: 6px !important;
-                            color: #64748b !important;
-                            font-weight: 600 !important;
-                            font-size: 14px !important;
-                            cursor: pointer !important;
-                            margin: 0 !important;
-                            transition: all 0.2s ease !important;
-                        }
+                    <widget name="web_ribbon" title="Đã gửi" bg_color="text-bg-success" invisible="trangthai == '0'"/>
 
-                        /* ĐÃ SỬA CHỖ NÀY: Khi chọn -> Nền xanh lá, chữ đen đậm */
-                        .ek-modern-pill input[type="radio"]:checked + label {
-                            background: #4ade80 !important;
-                            color: #0f172a !important;
-                            box-shadow: 0 4px 10px rgba(74, 222, 128, 0.25) !important;
-                        }
-
-                        /* 2. Tiêu đề khổng lồ, bung rộng 100% màn hình */
-                        .ek-title-input {
-                            width: 100% !important;
-                            display: block !important;
-                        }
-                        .ek-title-input .o_field_widget {
-                            width: 100% !important;
-                        }
-                        .ek-title-input input {
-                            width: 100% !important; /* Ép độ rộng tối đa */
-                            font-size: 22px !important;
-                            font-weight: 900 !important;
-                            color: #0f172a !important;
-                            border: none !important;
-                            padding: 5px 0 !important;
-                            line-height: 0.9 !important;
-                            margin-bottom: 5px !important;
-                            background: transparent !important;
-                        }
-                        .ek-title-input input::placeholder { color: #cbd5e1 !important; font-weight: 800 !important;}
-                        .ek-title-input input:focus { outline: none !important; border-bottom: none !important; box-shadow: none !important;}
-                        /* 3. Ẩn toàn bộ Label mặc định để UI sạch sẽ */
-                        .ek-no-label .o_form_label { display: none !important; }
-
-                        /* 4. Vùng soạn thảo HTML trải rộng */
-                        .ek-editor-canvas { border-top: 1px solid #f1f5f9; padding-top: 20px; margin-top: 10px;}
-                    </style>
-
-                    <div class="oe_button_box" name="button_box" invisible="trangthai == '0'">
-                        <button class="oe_stat_button" icon="fa-eye">
-                            <div class="o_stat_info">
-                                <span class="o_stat_value"><field name="tong_daxem"/> / <field name="tong_dagui"/></span>
-                                <span class="o_stat_text">Đã xem</span>
-                            </div>
-                        </button>
+                    <div class="oe_title mb-4">
+                        <label for="name" string="Thông báo đến phụ huynh" class="oe_edit_only fw-bold"/>
+                        <h1>
+                            <field name="name" placeholder="VD: Thông báo nghỉ lễ 30/4..."/>
+                        </h1>
                     </div>
 
-
-
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-
-                        <div>
-                            <div class="ek-modern-pill" invisible="trangthai == '1'">
-                                <field name="loai" widget="radio" options="{'horizontal': true}"/>
-                            </div>
-
-                            <div invisible="trangthai == '0'">
-                                <span style="background: #e2e8f0; color: #334155; padding: 6px 16px; border-radius: 6px; font-weight: 700; font-size: 13px; text-transform: uppercase;">
-                                    <field name="loai" readonly="1" nolabel="1"/>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div invisible="trangthai == '0'" style="color: #64748b; font-size: 14px; text-align: right; font-weight: 600;">
-                            <i class="fa fa-paper-plane-o" style="margin-right: 4px;"/> Đã gửi lúc: <field name="ngay_gui" readonly="1" nolabel="1"/>
-                        </div>
-                    </div>
-
-                    <div class="ek-title-input ek-no-label">
-                        <field name="name" placeholder="Nhập tiêu đề thông báo..."/>
-                    </div>
-
-                    <div class="ek-editor-canvas ek-no-label">
-                        <field name="noidung" widget="html" placeholder="Nội dung chi tiết..." style="min-height: 100px; font-size: 16px;"/>
-                    </div>
-
-                    <notebook style="margin-top: 30px;" invisible="trangthai == '0'">
-                        <page string="LỊCH SỬ PHỤ HUYNH ĐÃ XEM">
-                            <field name="chitiet_ids" readonly="1">
-                                <list decoration-success="is_read == True" decoration-muted="is_read == False">
-                                    <field name="user_id" string="Phụ huynh"/>
-                                    <field name="is_read" widget="boolean_toggle"/>
-                                    <field name="ngay_xem"/>
-                                </list>
-                            </field>
-                        </page>
-                    </notebook>
-
+                    <group>
+                        <group>
+                            <field name="tu_ngay" string="Thời gian áp dụng" widget="daterange" options="{'end_date_field': 'den_ngay'}"/>
+                            <field name="den_ngay" invisible="1"/>
+                            <field name="coso_id" invisible="1"/>
+                        </group>
+                        <group></group>
+                    </group>
                 </sheet>
             </form>
         </field>
     </record>
-
 
     </data>
 </odoo>

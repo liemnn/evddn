@@ -5,12 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_info_controller.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_nghiphep_controller.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_info_template_view.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_nghiphep_template_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_core/models/ekids_coso_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_core/models/ekids_coso_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_core/models/thongbao/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_core/models/thongbao/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_core/models/thongbao/ekids_thongbao_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_core/models/thongbao/ekids_thongbao_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_core/models/thongbao/ekids_thongbao_phuhuynh_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_core/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_core/security/ir.model.access.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_core/views/thongbao/ekids_thongbao_phuhuynh_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_core/views/thongbao/ekids_thongbao_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_core/views/thongbao/ekids_thongbao_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_home_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_home_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/models/ekids_hocphi_inherit_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/models/ekids_thongbao_phuhuynh_inherit_model.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_chat_template_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_chat_template_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_hocphi_template_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_hocphi_template_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_hocphi_view.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_home_template_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_home_template_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_lichhoc_template_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_lichhoc_template_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_phuhuynh_menu.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/views/ekids_thongbao_view.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,16 +59,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.evddn.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/odoo/evddn/custom-addons/ekids_phuhuynh/views&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.evddn.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_phuhuynh/views",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_phuhuynh\views" />
@@ -472,7 +489,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776440587041</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1776442430722</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1776442430722</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -537,6 +562,16 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_thanhtoan_hocphi_controller.py</url>
           <line>49</line>
           <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_home_controller.py</url>
+          <line>62</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_home_controller.py</url>
+          <line>82</line>
+          <option name="timeStamp" value="27" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

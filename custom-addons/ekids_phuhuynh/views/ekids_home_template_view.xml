@@ -309,15 +309,18 @@
                 </div>
 
                 <div class="menu-grid-3col">
-                    <div class="app-card">
-                        <div class="illus-wrap bg-teal">
-                            <t t-if="notif_tien_do">
-                                <div class="notif-badge"><t t-esc="notif_tien_do"/></div>
-                            </t>
-                            <i class="fas fa-chart-pie icon-main"></i>
+                    <a href="/ph/chat" class="app-card">
+                        <div class="app-card">
+                            <div class="illus-wrap bg-blue">
+                                <t t-if="notif_trao_doi">
+                                    <div class="notif-badge"><t t-esc="notif_trao_doi"/></div>
+                                </t>
+                                <i class="fas fa-comments icon-main"></i>
+                            </div>
+                            <span>Trao đổi với nhà trường</span>
                         </div>
-                        <span>Tiến độ</span>
-                    </div>
+                     </a>
+
 
                     <a href="/ph/lichhoc" class="app-card">
                         <div class="illus-wrap bg-orange">
@@ -338,34 +341,36 @@
                         </div>
                         <span>Học phí</span>
                     </a>
-
-                    <div class="app-card">
-                        <div class="illus-wrap bg-green">
-                            <i class="fas fa-procedures icon-main"></i>
-                        </div>
-                        <span>Xin nghỉ</span>
-                    </div>
-                     <a href="/ph/chat" class="app-card">
+                     <a href="/ph/nghiphep" class="app-card">
                         <div class="app-card">
-                            <div class="illus-wrap bg-blue">
-                                <t t-if="notif_trao_doi">
-                                    <div class="notif-badge"><t t-esc="notif_trao_doi"/></div>
-                                </t>
-                                <i class="fas fa-comments icon-main"></i>
+                            <div class="illus-wrap bg-green">
+                                <i class="fas fa-procedures icon-main"></i>
                             </div>
-                            <span>Trao đổi với nhà trường</span>
+                            <span>Xin nghỉ</span>
                         </div>
                      </a>
-
-                    <div class="app-card">
-                        <div class="illus-wrap bg-purple">
-                            <t t-if="notif_so_ll">
-                                <div class="notif-badge"><t t-esc="notif_so_ll"/></div>
-                            </t>
-                            <i class="fas fa-book-open icon-main"></i>
+                     <a href="/ph/info" class="app-card">
+                        <div class="app-card">
+                            <div class="illus-wrap bg-teal">
+                                <t t-if="notif_tien_do">
+                                    <div class="notif-badge"><t t-esc="notif_tien_do"/></div>
+                                </t>
+                                <i class="fas fa-chart-pie icon-main"></i>
+                            </div>
+                            <span>Tiến độ và lịch trình can thiệp</span>
                         </div>
-                        <span>Sổ liên lạc</span>
-                    </div>
+                     </a>
+                     <a href="/ph/info" class="app-card">
+                        <div class="app-card">
+                            <div class="illus-wrap bg-purple">
+                                <t t-if="notif_so_ll">
+                                    <div class="notif-badge"><t t-esc="notif_so_ll"/></div>
+                                </t>
+                                <i class="fas fa-book-open icon-main"></i>
+                            </div>
+                            <span>Sổ liên lạc hàng ngày</span>
+                        </div>
+                     </a>
                 </div>
 
                 <t t-if="hocphi_id">

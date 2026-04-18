@@ -1,4 +1,4 @@
-from odoo import http
+from odoo import http,fields
 from odoo.http import request
 from datetime import date,datetime,timedelta
 
@@ -66,10 +66,37 @@ class HomeController(http.Controller):
             thongbao += ("Phụ huynh hãy hoàn thành nộp học phí tháng "
                          + hocphi.thang_id.name
                          + " năm "
-                         + hocphi.nam_id.name)
+                         + hocphi.nam_id.name)+"."
+        #TB từ nhà trường
+        tbs =self.func_get_thongbao_trongngay(hocsinh.coso_id.id)
+        if tbs:
+            for tb in tbs:
+                thongbao += "    "+tb.name+'.'
         return  thongbao
 
+    def func_get_thongbao_trongngay(self, coso_id=None):
+        """
+        Hàm lấy danh sách thông báo có hiệu lực trong ngày hôm nay.
+        Có thể truyền thêm coso_id để lọc riêng thông báo của cơ sở đó.
+        """
+        # Dùng context_today để lấy ngày chuẩn theo múi giờ của User (Tránh lỗi lệch giờ)
+        today = fields.Date.context_today(request.env.user)
 
+        # Xây dựng bộ lọc (Domain)
+        domain = [
+            ('trangthai', '=', '1'),  # Chỉ lấy thông báo đã gửi
+            ('tu_ngay', '<=', today),  # Ngày bắt đầu <= Hôm nay
+            ('den_ngay', '>=', today)  # Ngày kết thúc >= Hôm nay
+        ]
+
+        # Nếu có truyền ID cơ sở thì lọc thêm theo cơ sở
+        if coso_id:
+            domain.append(('coso_id', '=', coso_id))
+
+        # Thực hiện truy vấn và sắp xếp thông báo mới nhất lên đầu
+        thongbaos = request.env['ekids.thongbao'].sudo().search(domain)
+
+        return thongbaos
 
 
 
