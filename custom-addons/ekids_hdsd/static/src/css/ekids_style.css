@@ -1,0 +1,239 @@
+
+
+
+/* Box Styling */
+.box {
+    background-color:#f9fbfc;
+    border-radius: 7px;
+    border:1px solid #dee2e6;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 30px 20px;
+    width: 300px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    radius:50px;
+}
+
+.box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon Section */
+.avatar {
+   margin:0px;
+   padding:0px;
+}
+.avatar img{
+     width: 120px;
+    margin-bottom: 5px;
+    /* border-radius: 50%; */
+    /* border: 2px solid #dee2e6; */
+    height: auto;
+    padding: 5px;
+}
+
+/* Title Section */
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0px;
+}
+
+.slogan {
+    font-size: 1rem;
+    color: #999;
+
+
+}
+
+/* Description Section */
+.description {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+/* Button Styling */
+.function {
+    background-color: transparent;
+    color: #333;
+    font-weight: bold;
+    border: 1px solid #999;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    width:50%;
+    margin:auto;
+}
+
+.function:hover {
+    background-color: #385667;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+
+.box-navbar {
+
+  padding: 5px 10px;
+  position: absolute; /* Hoặc dùng fixed nếu muốn cố định khi cuộn */
+  right:0px;
+  top:0px;
+
+
+}
+
+.box-menu {
+  list-style: none;
+
+}
+
+.box-menu-item {
+  position: relative;
+  margin-right: 0px;
+}
+
+.box-menu-item a {
+  color: #000;
+  text-decoration: none;
+  padding: 5px 10px;
+  display: block;
+}
+
+.box-menu-item a:hover {
+  background-color:#385667;
+  border-radius: 5px;
+}
+
+.box-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right:7px;
+  background-color: #f9fbfc;
+  border-radius: 5px;
+  list-style: none;
+  padding: 10px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.box-dropdown li {
+  margin: 0;
+}
+
+.box-dropdown button {
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block;
+  white-space: nowrap;
+  border:0px;
+  width:100%;
+  text-align: left;
+}
+
+.box-dropdown button:hover {
+  background-color: #385667;
+  color:#fff;
+}
+
+/* Show dropdown on hover */
+.box-menu-item:hover .box-dropdown {
+  display: block;
+}
+
+
+/* Print hoc phi va luong */
+
+.box-print {
+    background-color:#f9fbfc;
+    font-size: 13px;
+
+    text-align: center;
+    padding: 30px 20px;
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+/* Box học phí và nhân sự*/
+.box-user {
+
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    border: 1px dashed #ccc;
+}
+
+/* Vùng bên trái - Ảnh */
+.box-user img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin:5px;
+
+}
+
+/* Vùng bên phải - Thông tin */
+.box-user .info {
+    flex: 1;
+}
+
+.box-user .info  h2 {
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+    margin-top:15px;
+    padding:0px;
+
+}
+
+.box-user .info  ul {
+    list-style-type: disc;
+
+
+}
+
+..box-user .info  ul li {
+    font-size: 12px;
+    color: #333;
+    margin:0px;
+     padding:0px
+
+}
+
+/* Học phí */
+.box-user .info .fee {
+    font-size: 14px;
+    font-weight: bold;
+    color: green;
+    padding-right:15px;
+    float: right;
+}
+
+/* Nút trạng thái */
+.box-user .info .status{
+    display: inline-block;
+    background: #d9534f;
+    color: white;
+    font-weight:bold;
+    padding: 3px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size:12px;
+    float: right;
+    margin-right:5px;
+    margin-bottom:5px;
+}
+
+
+
+
+

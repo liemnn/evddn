@@ -20,8 +20,8 @@ except ImportError as e:
 class LichHocController(http.Controller):
 
     # Định nghĩa đường link truy cập. Ví dụ: mydomain.com/app/phuhuynh
-    @http.route('/ph/lichhoc', type='http', auth='public', website=True)
-    def render_app_phu_huynh(self, **kwargs):
+    @http.route('/ph/lichhoc/<int:nam>/<int:thang>', type='http', auth='public', website=True)
+    def render_app_phu_huynh(self,nam,thang, **kwargs):
         # --- Ở đây anh có thể móc database Odoo để lấy dữ liệu thật ---
         # Ví dụ giả lập: (Sau này anh sẽ dùng request.env['ekids.hocphi'].search(...) để lấy)
         user = request.env.user
@@ -39,9 +39,64 @@ class LichHocController(http.Controller):
         # Bắn dữ liệu vào template XML mà ta đã tạo ở Bước 3
         return request.render('ekids_phuhuynh.lichhoc', qcontext)
 
+    def func_get_lichhoc(self, hocsinh):
+        today = date.today()
+        diemdanh = (request.env['ekids.diemdanh_hocsinh2thang']
+                    .sudo().search([('hocsinh_id', '=', hocsinh.id),
+                                    ('diemdanh_id.thang', '=', str(today.month)),
+                                    ('diemdanh_id.nam', '=', str(today.year)),
+                                    ]))
+        if diemdanh:
+           return self.func_get_lichhoc_trongthang(hocsinh)
+        else:
+           return self.func_get_ca2hocsinh(hocsinh)
+
+    def func_get_lichhoc_trongthang(self,hocsinh):
+        days = ngay_util.get_ngays_luive_mungmot()
+        data=[]
+        for day in days:
+            cas =self.func_get_thongtin_ca_trongthang(hocsinh,day)
+            data.append({
+                'week': str(day.weekday()),
+                'date': day,
+                'cas': cas,
+            })
+        return data
+
+    def func_get_ca_trongngay(self, hocsinh, ngay):
+        ca2ngays = request.env['ekids.diemdanh_ca2ngay'].search([
+            ('hocsinh_id', '=', hocsinh.id),
+            ('ngay', '=', ngay),
+        ])
+        data = []
+        if ca2ngays:
+            for ca2ngay in ca2ngays:
+                dm_ca = ca2ngay.hocphi_dm_ca_id
+                gia = string_util.number2string(dm_ca.tien)
+                values = {
+                    'tu': dm_ca.tu,
+                    'den': dm_ca.den,
+                    'ca': dm_ca.name,
+                    # Đổi chữ 'tien' thành 'gia' để khớp 100% với file XML
+                    'gia': gia,
+                    'trangthai': ca2ngay.trangthai
+                }
+                data.append(values)
+
+        else:
+            #không có ca trong ngay
+            ca2thus =hocsinh_util.func_get_tinhtoan_ca2thu_theo_thu(hocsinh,ngay)
+
+
+
+
+        return data
+
+
 
     def func_get_ca2hocsinh(self,hocsinh):
         today = date.today()
+
         ca2hocsinhs =  request.env['ekids.hocsinh_ca_canthiep'].sudo().search([('hocsinh_id', '=', hocsinh.id)])
         thus = self.func_get_ngay_trong_tuan()
         if thus:
@@ -70,6 +125,7 @@ class LichHocController(http.Controller):
                     'ca': ca.dm_ca_id.name,
                     # Đổi chữ 'tien' thành 'gia' để khớp 100% với file XML
                     'gia': tien_format,
+                    'trangthai':'Đã học'
                 }
 
                 if ca.giaovien_id:

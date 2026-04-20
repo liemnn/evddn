@@ -44,4 +44,17 @@ def func_get_ngays_cho_tinh_hocphi(nam, thang):
 
 
 
+def get_ngays_luive_mungmot(self):
+
+    today = date.today()
+
+    # today.day trả về số của ngày hôm nay (VD: 18)
+    # range(18) sẽ tạo ra chuỗi 0, 1, 2, ..., 17
+    # Lấy today trừ lùi đi i ngày sẽ ra được danh sách giảm dần từ 18 về 1
+    days = [today - timedelta(days=i) for i in range(today.day)]
+
+    return days
+
+
+
 

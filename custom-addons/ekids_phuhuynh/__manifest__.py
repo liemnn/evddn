@@ -2,7 +2,7 @@
 {
     'name': "E-kids Phụ huynh",
      # any module necessary for this one to work correctly
-    'depends': ['base','ekids_core','ekids_hocsinh','ekids_func'],
+    'depends': ['base','ekids_core','ekids_hocsinh','ekids_func','ekids_diemdanh'],
     "icons": [
         {
           "src": "/ekids_phuhuynh/static/src/img/icon_192.png",
