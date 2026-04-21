@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="coming_soon_page" name="Đang xây dựng">
+        &lt;!DOCTYPE html&gt;
+        <html lang="vi">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <title>eKids - Đang phát triển</title>
+
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap');
+
+                body {
+                    margin: 0;
+                    padding: 0;
+                    font-family: 'Nunito', sans-serif;
+                    background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+                    min-height: 100vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #1e293b;
+                }
+
+                .coming-soon-card {
+                    background: #ffffff;
+                    padding: 50px 30px;
+                    border-radius: 24px;
+                    box-shadow: 0 20px 50px rgba(37, 99, 235, 0.1);
+                    text-align: center;
+                    max-width: 90%;
+                    width: 420px;
+                    border: 1px solid #ffffff;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                /* Hiệu ứng mảng màu trang trí góc thẻ */
+                .coming-soon-card::before {
+                    content: '';
+                    position: absolute;
+                    top: -50px;
+                    right: -50px;
+                    width: 150px;
+                    height: 150px;
+                    background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, rgba(255,255,255,0) 70%);
+                    border-radius: 50%;
+                }
+
+                /* Vòng xoay bánh răng/Công trường */
+                .icon-wrapper {
+                    width: 100px;
+                    height: 100px;
+                    background: #eff6ff;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 30px;
+                    color: #2563eb;
+                    font-size: 2.8rem;
+                    position: relative;
+                }
+
+                /* Vòng tròn đứt nét xoay vòng (Animation) */
+                .icon-wrapper::after {
+                    content: '';
+                    position: absolute;
+                    inset: -12px;
+                    border-radius: 50%;
+                    border: 3px dashed #bfdbfe;
+                    animation: spin 15s linear infinite;
+                }
+
+                @keyframes spin {
+                    100% { transform: rotate(360deg); }
+                }
+
+                h2 {
+                    font-weight: 800;
+                    font-size: 1.6rem;
+                    margin-bottom: 15px;
+                    color: #0f172a;
+                    line-height: 1.3;
+                }
+
+                p {
+                    color: #64748b;
+                    line-height: 1.6;
+                    margin-bottom: 35px;
+                    font-size: 1.05rem;
+                    font-weight: 600;
+                }
+
+                /* Nút quay lại */
+                .btn-back {
+                    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+                    color: #ffffff !important;
+                    text-decoration: none;
+                    padding: 14px 30px;
+                    border-radius: 50px;
+                    font-weight: 700;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    transition: all 0.3s;
+                    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+                    font-size: 1.05rem;
+                }
+
+                .btn-back:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
+                }
+
+                .btn-back:active {
+                    transform: translateY(0);
+                }
+
+                /* Hiệu ứng rung nhẹ cho Icon */
+                .fa-hammer {
+                    animation: tilt 2s infinite;
+                }
+                @keyframes tilt {
+                    0%, 100% { transform: rotate(0deg); }
+                    25% { transform: rotate(-10deg); }
+                    75% { transform: rotate(10deg); }
+                }
+            </style>
+        </head>
+        <body>
+
+            <div class="coming-soon-card">
+
+                <div class="icon-wrapper">
+                    <i class="fas fa-hammer"></i>
+                </div>
+
+                <h2>Tính năng đang <br/> được phát triển!</h2>
+
+                <p>Chức năng này đang được chúng tôi xây dựng và sẽ ra mắt trong thời gian tới.</p>
+
+                <a href="javascript:history.back()" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Quay lại trang trước
+                </a>
+
+            </div>
+
+        </body>
+        </html>
+    </template>
+</odoo>

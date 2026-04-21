@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ekids_phuhuynh.chat_page" name="Trao đổi với trường">
+        &lt;!DOCTYPE html&gt;
+        <html lang="vi">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <title>eKids - Trao đổi</title>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+
+            <meta name="theme-color" content="#2563EB"/>
+            <link rel="manifest" href="/ph/manifest.json" />
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+            <meta name="apple-mobile-web-app-title" content="eVDDN"/>
+            <link rel="apple-touch-icon" href="/ekids_phuhuynh/static/src/img/icon_192.png"/>
+
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+                :root { --primary: #2563EB; --primary-light: #3B82F6; --bg-color: #E0F2FE; --card-glass: rgba(255, 255, 255, 0.95); --text-main: #1F2937; --text-sub: #6B7280; }
+                * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+                html, body { background-color: var(--bg-color); width: 100vw; height: 100dvh; overflow: hidden; }
+                .app-container { width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+                .cartoon-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.pinimg.com/736x/aa/23/9f/aa239fc6a494439899c8c119127fd51a.jpg'); background-size: cover; background-position: center; opacity: 1; pointer-events: none; z-index: 0; }
+
+                .sub-header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); padding: 15px 20px; color: white; flex-shrink: 0; position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); }
+                .back-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center; font-size: 1.1rem; cursor: pointer; backdrop-filter: blur(5px); color: white; text-decoration: none; }
+                .header-center { display: flex; flex-direction: column; align-items: center; }
+                .page-title { font-size: 1rem; font-weight: 700; margin-bottom: 2px; }
+                .page-subtitle { font-size: 0.65rem; color: rgba(255,255,255,0.8); }
+                .dummy-space { width: 36px; }
+
+                .chat-area { flex: 1; overflow-y: auto; padding: 15px 15px 140px; z-index: 2; position: relative; display: flex; flex-direction: column; gap: 15px; scrollbar-width: none; }
+                .chat-area::-webkit-scrollbar { display: none; }
+
+                .msg-row { display: flex; flex-direction: column; max-width: 80%; animation: slideUp 0.3s ease-out; }
+                @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+                .msg-row.me { align-self: flex-end; align-items: flex-end; }
+                .msg-row.other { align-self: flex-start; align-items: flex-start; }
+                .msg-author { font-size: 0.65rem; color: #64748B; margin-bottom: 4px; font-weight: 600; background: rgba(255,255,255,0.7); padding: 2px 6px; border-radius: 8px; backdrop-filter: blur(4px); }
+                .msg-bubble { padding: 10px 14px; border-radius: 16px; font-size: 0.9rem; line-height: 1.4; word-wrap: break-word; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+                .msg-row.me .msg-bubble { background: var(--primary); color: white; border-bottom-right-radius: 4px; }
+                .msg-row.other .msg-bubble { background: var(--card-glass); backdrop-filter: blur(10px); color: var(--text-main); border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.8); }
+                .msg-time { font-size: 0.6rem; color: #94A3B8; margin-top: 4px; }
+
+                .chat-input-container { position: fixed; bottom: 75px; left: 0; right: 0; background: white; padding: 10px 15px; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); display: flex; gap: 10px; align-items: center; z-index: 999; border-top-left-radius: 16px; border-top-right-radius: 16px; }
+                .chat-input-container input { flex: 1; background: #F1F5F9; border: none; border-radius: 20px; padding: 10px 15px; font-size: 0.9rem; color: var(--text-main); outline: none; }
+                .btn-send { background: var(--primary); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
+                .btn-send:active { transform: scale(0.9); }
+                .btn-send:disabled { background: #94A3B8; cursor: not-allowed; }
+
+                .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #FFFFFF; display: flex; justify-content: space-between; align-items: center; padding: 8px 10px 15px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 1000; }
+                .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #9CA3AF; text-decoration: none; gap: 4px; }
+                .nav-item i { font-size: 1.1rem; }
+                .nav-item span { font-size: 0.6rem; font-weight: 700; }
+                .nav-item.active { color: var(--primary); }
+                .center-btn-wrapper { position: relative; flex-shrink: 0; width: 60px; display: flex; justify-content: center; }
+                .nav-center-btn { width: 52px; height: 52px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.4rem; transform: translateY(-22px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); border: 4px solid #FFFFFF; }
+            </style>
+        </head>
+        <body>
+
+        <div class="app-container">
+            <div class="cartoon-bg"></div>
+
+            <div class="sub-header">
+                <a href="/ph/home" class="back-btn"><i class="fas fa-chevron-left"></i></a>
+                <div class="header-center">
+                    <div class="page-title">Trao đổi với nhà trường</div>
+                    <div class="page-subtitle"><t t-esc="ten_nguoi_nhan"/></div>
+                </div>
+                <div class="dummy-space"></div>
+            </div>
+
+            <div class="chat-area" id="chatBox">
+                <div class="text-center" style="font-size: 0.8rem; color: #64748B; margin-top: 40px; text-align: center;">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i><br/><br/>
+                    Đang đồng bộ dữ liệu...
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <input type="text" id="chatInput" placeholder="Nhắn tin cho trường..." autocomplete="off"/>
+                <button class="btn-send" id="btnSendChat"><i class="fas fa-paper-plane"></i></button>
+            </div>
+
+            <input type="hidden" id="target_partner_id" t-att-value="target_partner_id"/>
+
+            <div class="bottom-nav">
+                <a href="/ph/home" class="nav-item"><i class="fas fa-home"></i><span>Trang chủ</span></a>
+                <a href="/ph/lichhoc" class="nav-item"><i class="fas fa-calendar-check"></i><span>Lịch học</span></a>
+                <div class="center-btn-wrapper">
+                    <div class="nav-center-btn"><i class="fas fa-qrcode"></i></div>
+                </div>
+                <a href="/ph/chat" class="nav-item active"><i class="fas fa-comments"></i><span>Trao đổi</span></a>
+                <a href="#" class="nav-item"><i class="fas fa-bell"></i><span>Thông báo</span></a>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+
+                const targetInput = document.getElementById('target_partner_id');
+                const chatBox = document.getElementById('chatBox');
+                const chatInput = document.getElementById('chatInput');
+                const btnSend = document.getElementById('btnSendChat');
+
+                // Bắt lỗi nếu Python chưa render ra được Partner ID
+                if (!targetInput || !targetInput.value) {
+                    chatBox.innerHTML = '<div style="text-align: center; color: #EF4444; margin-top: 40px; font-size: 0.85rem; font-weight: bold; background: rgba(255,255,255,0.8); padding: 15px; border-radius: 12px;">Lỗi dữ liệu: Không xác định được người nhận tin nhắn. Vui lòng kiểm tra lại thiết lập cơ sở.</div>';
+                    return;
+                }
+
+                const targetPartnerId = parseInt(targetInput.value);
+
+                function renderMessage(msg) {
+                    const isMe = msg.is_me ? 'me' : 'other';
+                    const authorName = msg.is_me ? 'Bạn' : msg.author;
+                    const cleanBody = msg.body.replace(/&lt;p&gt;|&lt;\/p&gt;/g, '');
+
+                    return `
+                        <div class="msg-row ${isMe}">
+                            <span class="msg-author">${authorName}</span>
+                            <div class="msg-bubble">${cleanBody}</div>
+                            <span class="msg-time">${msg.date}</span>
+                        </div>
+                    `;
+                }
+
+                function loadMessages() {
+                    fetch('/ph/chat/history', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ jsonrpc: "2.0", params: { target_partner_id: targetPartnerId } })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            chatBox.innerHTML = '<div style="color:#EF4444; text-align:center; margin-top:20px;">Lỗi kết nối máy chủ Odoo!</div>';
+                            console.error(data.error);
+                            return;
+                        }
+                        if (data.result) {
+                            chatBox.innerHTML = '';
+                            if(data.result.length === 0) {
+                                chatBox.innerHTML = '<div style="text-align: center; color: #64748B; margin-top: 40px; font-size: 0.8rem; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 12px;">Chưa có cuộc trò chuyện nào.<br/>Hãy gửi tin nhắn đầu tiên!</div>';
+                            } else {
+                                data.result.forEach(msg => {
+                                    chatBox.insertAdjacentHTML('beforeend', renderMessage(msg));
+                                });
+                            }
+                            chatBox.scrollTop = chatBox.scrollHeight;
+                        }
+                    })
+                    .catch(err => {
+                        chatBox.innerHTML = '<div style="color:#EF4444; text-align:center; margin-top:20px;">Lỗi mạng. Vui lòng thử lại.</div>';
+                    });
+                }
+
+                function sendMessage() {
+                    const text = chatInput.value.trim();
+                    if(!text) return;
+
+                    btnSend.disabled = true;
+                    chatInput.disabled = true;
+
+                    fetch('/ph/chat/send', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ jsonrpc: "2.0", params: { target_partner_id: targetPartnerId, message_body: text } })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.result &amp;&amp; data.result.success) {
+                            chatInput.value = '';
+                            loadMessages();
+                        } else if (data.error) {
+                            alert("Không thể gửi tin nhắn. Hãy kiểm tra lại kết nối.");
+                        }
+                    })
+                    .finally(() => {
+                        btnSend.disabled = false;
+                        chatInput.disabled = false;
+                        chatInput.focus();
+                    });
+                }
+
+                btnSend.addEventListener('click', sendMessage);
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') sendMessage();
+                });
+
+                // Khởi chạy ngay
+                loadMessages();
+                setInterval(loadMessages, 10000);
+            });
+        </script>
+        </body>
+        </html>
+    </template>
+</odoo>

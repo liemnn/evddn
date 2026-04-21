@@ -23,6 +23,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
     trangthai = fields.Selection([("-1", "Đang tính")
                                   ,("0", "Đã kiểm tra")
+                                  ,("01", "Phụ huynh đã đóng(cần kiểm tra)")
                                   ,("10", "Đã đóng[Tiền mặt]")
                                   ,("11", "Đã đóng[Chuyển khoản]")
                                   ,("12", "Đã đóng[Ví học sinh]")

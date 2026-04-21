@@ -86,6 +86,7 @@
             <search>
                 <filter string="Đang tính" name="trangthai" domain="[('trangthai','=','-1')]"/>
                 <filter string="Đã kiểm tra" name="trangthai" domain="[('trangthai','=','0')]"/>
+                <filter string="Phụ huynh đã đóng(cần kiểm tra)" name="trangthai" domain="[('trangthai','=','01')]"/>
                 <filter string="Đã đóng[Tiền mặt]" name="trangthai" domain="[('trangthai','=','10')]"/>
                 <filter string="Đã đóng[Chuyển khoản]" name="trangthai" domain="[('trangthai','=','11')]"/>
                 <filter string="Đã xuất [Hóa đơn]" name="trangthai" domain="[('trangthai','=','3')]"/>

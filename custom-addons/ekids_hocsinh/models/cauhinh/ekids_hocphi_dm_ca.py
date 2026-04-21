@@ -14,6 +14,8 @@ class DanhMucCa(models.Model):
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở", required=True, ondelete="restrict")
     name = fields.Char(string="Tên loại hình [Ca] can thiệp",required=True)
     tien = fields.Float(string='Số tiền(vnđ)', digits=(10, 0),required=True)
+    is_tien_trongoi = fields.Boolean(string="Số tiền thu được thiết lập trọn gói theo tháng", default=False)
+
     is_hoantien_khi_nghi = fields.Boolean(string="Sẽ [Hoàn tiền] theo quy định khi [Nghỉ]", default=True)
     is_giam_hocphi = fields.Boolean(string="Được tính toán giảm [học phí] (nếu có)", default=True)
 

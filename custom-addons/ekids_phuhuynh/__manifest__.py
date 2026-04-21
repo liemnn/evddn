@@ -2,16 +2,30 @@
 {
     'name': "E-kids Phụ huynh",
      # any module necessary for this one to work correctly
-    'depends': ['base','ekids_core','ekids_hocsinh'],
+    'depends': ['base','ekids_core','ekids_hocsinh','ekids_func','ekids_diemdanh'],
+    "icons": [
+        {
+          "src": "/ekids_phuhuynh/static/src/img/icon_192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "/ekids_phuhuynh/static/src/img/icon_512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-
-        'views/ekids_hocphi_view.xml',
-        'views/ekids_thongbao_view.xml',
-        'views/ekids_phuhuynh_menu.xml',
-
+        'views/ekids_home_template_view.xml',
+        'views/ekids_lichhoc_template_view.xml',
+        'views/ekids_hocphi_template_view.xml',
+        'views/ekids_chat_template_view.xml',
+        'views/ekids_hocphi_thanhtoan_template_view.xml',
+        'views/ekids_nghiphep_template_view.xml',
+        'views/ekids_info_template_view.xml',
 
 
     ],

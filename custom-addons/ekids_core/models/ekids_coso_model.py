@@ -156,7 +156,7 @@ class CoSo(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'THÔNG BÁO-PHỤ HUYNH',
             'res_model': 'ekids.thongbao',
-            'view_mode': 'kanban,form',
+            'view_mode': 'list,kanban,form',
             'target': 'current',
             'domain': [('coso_id', '=', self.id)],
             'context': {

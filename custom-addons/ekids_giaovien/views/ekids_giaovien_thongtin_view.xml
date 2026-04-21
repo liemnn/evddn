@@ -23,11 +23,13 @@
             <field name="arch" type="xml">
                 <list editable="bottom">
                    <field name="sequence" widget="handle"/>
-                   <field name="tu_ngay" />
-                   <field name="den_ngay" />
-                   <field name="name" />
-                   <field name="chucvu" />
-                   <field name="thanhtich" />
+                   <field name="tu_ngay" string="Từ ngày"/>
+                   <field name="den_ngay" string="Đến ngày"/>
+                   <field name="name" string="Nơi công tác"/>
+                   <field name="chucvu" string="Chức vụ"/>
+                   <field name="thanhtich" string="Thành tích"/>
+                   <field name="is_tham_nien_duoccong" widget="boolean_toggle" string="Được cộng dồn thâm niên"/>
+                    <field name="tham_nien" invisible="is_tham_nien_duoccong == False" string="Thâm niên"/>
                 </list>
             </field>
         </record>

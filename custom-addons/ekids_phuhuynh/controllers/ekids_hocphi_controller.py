@@ -1,0 +1,131 @@
+from odoo import http
+from odoo.http import request
+from datetime import date,datetime,timedelta
+
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import hocsinh_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
+
+class LichHocController(http.Controller):
+
+    # Định nghĩa đường link truy cập. Ví dụ: mydomain.com/app/phuhuynh
+    @http.route('/ph/hocphi', type='http', auth='public', website=True)
+    def render_app_phu_huynh(self, **kwargs):
+        # --- Ở đây anh có thể móc database Odoo để lấy dữ liệu thật ---
+        # Ví dụ giả lập: (Sau này anh sẽ dùng request.env['ekids.hocphi'].search(...) để lấy)
+        user = request.env.user
+        data = {
+            'data': []
+        }
+        if user:
+            hocsinh = (request.env['ekids.hocsinh'].sudo()
+                       .search([('user_id', '=', user.id)], limit=1))
+            if hocsinh:
+                hocphis = request.env['ekids.hocphi'].sudo().search(
+                    [('hocsinh_id', '=', hocsinh.id)],
+                    limit=12,
+                    order="id desc"
+                )
+                data = {
+                    'data': hocphis
+                }
+
+
+
+        # Bắn dữ liệu vào template XML mà ta đã tạo ở Bước 3
+        return request.render('ekids_phuhuynh.hocphis', data)
+
+
+    def func_get_hocphis(self,hocsinh):
+        today = date.today()
+        hocphis = request.env['ekids.hocphi'].sudo().search(
+            [('hocsinh_id', '=', hocsinh.id)],
+            limit=12,
+            order="id desc"
+        )
+        thus = self.func_get_ngay_trong_tuan()
+        if thus:
+            data =[]
+            for thu in thus:
+                week = thu['week']
+                cas= self.func_get_thongtin_ca_trongngay(thu,ca2hocsinhs)
+                data.append({
+                    'week': thu['week'],
+                    'date': thu['date'],
+                    'cas':cas,
+                })
+            return  data
+
+    def func_get_thongtin_ca_trongngay(self, thu, ca2hocsinhs):
+        data = []
+        for ca in ca2hocsinhs:
+            if thu['week'] in ca.name:
+
+                # Bổ sung thuật toán Format tiền: 150000.0 -> 150.000
+                tien_format = "{:,.0f}".format(ca.dm_ca_id.tien).replace(',', '.') if ca.dm_ca_id.tien else False
+
+                values = {
+                    'tu': ca.tu,
+                    'den': ca.den,
+                    'ca': ca.dm_ca_id.name,
+                    # Đổi chữ 'tien' thành 'gia' để khớp 100% với file XML
+                    'gia': tien_format,
+                }
+
+                if ca.giaovien_id:
+                    values['giaovien'] = ca.giaovien_id.name
+
+                data.append(values)
+
+        return data
+
+
+    def func_get_ngay_trong_tuan(self):
+        """
+        Hàm trả về danh sách 7 ngày của tuần hiện tại (Từ Thứ 2 đến Chủ Nhật).
+        Đồng thời đánh dấu ngày nào là hôm nay.
+        """
+        # Lấy ngày hôm nay
+        today = date.today()
+
+        # weekday() trả về từ 0 (Thứ 2) đến 6 (Chủ Nhật)
+        # Lấy ngày bắt đầu của tuần (Thứ 2) bằng cách trừ đi số ngày tương ứng với weekday()
+        ngay_dau_tuan = today - timedelta(days=today.weekday())
+
+        # Danh sách mapping tên thứ bằng Tiếng Việt
+        weeks = [
+            "T2", "T3", "T4", "T5",
+            "T6", "T7", "CN"
+        ]
+
+        data = []
+
+        # Duyệt qua 7 ngày trong tuần
+        for i in range(7):
+            ngay_hien_tai = ngay_dau_tuan + timedelta(days=i)
+            la_hom_nay = (ngay_hien_tai == today)
+
+            values = {
+                "week": weeks[i],
+            }
+
+            if la_hom_nay == True:
+                values['date'] = "Hôm nay"
+            else:
+                values['date'] = ngay_hien_tai.strftime("%d/%m/%Y")
+            data.append(values)
+
+        return data
+
+

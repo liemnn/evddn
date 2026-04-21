@@ -52,7 +52,11 @@ class GiaoVien(models.Model):
 
                                 ], string="Chuyên ngành")
 
-    tinhtrang_honnhan = fields.Selection([("1", "Đã có gia đình"), ("0", "Chưa có gia đình")],'Tình trạng hôn nhân',required=True)
+    tinhtrang_honnhan = fields.Selection([("1", "Đã có gia đình")
+                                             , ("0", "Chưa có gia đình")
+                                             , ("1", "Khác")
+                                          ]
+                                         ,'Tình trạng hôn nhân',required=True)
 
     dilam_tungay = fields.Date(string="*Ngày đi làm",required=True)
     dilam_denngay = fields.Date(string="Ngày nghỉ làm")
@@ -125,10 +129,16 @@ class GiaoVien(models.Model):
             record.sequence = index
             index +=1
 
-    @api.depends('dilam_tungay')
+    @api.depends('dilam_tungay','hoctapcongtac_ids')
     def _compute_tham_nien(self):
         for record in self:
-            record.tham_nien =giaovien_util.func_get_thamnien(record)
+            thamnien =giaovien_util.func_get_thamnien(record)
+            htcts= record.hoctapcongtac_ids
+            if htcts:
+                for htct in htcts:
+                    if htct.is_tham_nien_duoccong == True:
+                        thamnien+= htct.tham_nien
+            record.tham_nien =thamnien
     @api.depends('name')
     def _compute_ten(self):
         for record in self:

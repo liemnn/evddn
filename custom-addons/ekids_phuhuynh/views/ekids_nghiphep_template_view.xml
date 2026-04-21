@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ekids_phuhuynh.nghiphep_page" name="Xin nghỉ phép">
+        &lt;!DOCTYPE html&gt;
+        <html lang="vi">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <title>eKids - Xin nghỉ phép</title>
+
+            <meta name="theme-color" content="#2563EB"/>
+            <link rel="manifest" href="/ph/manifest.json" />
+            <link rel="apple-touch-icon" href="/ekids_phuhuynh/static/src/img/icon_192.png"/>
+
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+
+                :root { --primary: #2563EB; --card-glass: rgba(255, 255, 255, 0.95); --text-main: #1F2937; }
+                * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+                body { background-color: #E0F2FE; width: 100vw; height: 100dvh; overflow: hidden; }
+                .app-container { width: 100%; height: 100%; position: relative; display: flex; flex-direction: column; }
+
+                /* Nền hoạt hình phía sau */
+                .cartoon-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://i.pinimg.com/736x/aa/23/9f/aa239fc6a494439899c8c119127fd51a.jpg') center/cover; z-index: 0; opacity: 1; }
+
+                /* Header */
+                .header { background: linear-gradient(135deg, var(--primary), #3B82F6); padding: 15px 20px; color: white; z-index: 10; display: flex; align-items: center; justify-content: space-between; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+                .back-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; }
+
+                /* Khu vực cuộn chính */
+                .main-content { flex: 1; overflow-y: auto; padding: 20px 15px 120px; z-index: 2; position: relative; scrollbar-width: none; }
+                .main-content::-webkit-scrollbar { display: none; }
+
+                /* =========================================
+                   CSS THIẾT KẾ THẺ XIN NGHỈ (CARD)
+                   ========================================= */
+                .leave-card {
+                    background: var(--card-glass);
+                    border-radius: 16px;
+                    padding: 18px;
+                    margin-bottom: 15px;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+                    border: 1px solid rgba(255,255,255,0.8);
+                    border-left: 5px solid var(--primary);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 15px;
+                    transition: all 0.3s ease;
+                }
+
+                /* KHỐI 1: SỐ NGÀY NGHỈ */
+                .leave-days-box {
+                    background: #eff6ff;
+                    color: var(--primary);
+                    min-width: 75px;
+                    height: 75px;
+                    border-radius: 14px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    border: 1px dashed #bfdbfe;
+                    flex-shrink: 0;
+                }
+                .leave-days-box .number { font-size: 1.6rem; font-weight: 900; line-height: 1; }
+                .leave-days-box .text { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-top: 2px;}
+
+                /* KHỐI 2: THÔNG TIN CHI TIẾT */
+                .leave-info { flex-grow: 1; overflow: hidden; }
+                .leave-reason {
+                    font-size: 1.05rem;
+                    font-weight: 800;
+                    color: #1e293b;
+                    margin-bottom: 6px;
+                    line-height: 1.4;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+                .leave-date {
+                    font-size: 0.85rem;
+                    color: #64748b;
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                .leave-date i { color: #94a3b8; }
+
+                .refund-badge {
+                    font-size: 0.75rem;
+                    color: #10B981;
+                    font-weight: 800;
+                    background: #ECFDF5;
+                    padding: 4px 8px;
+                    border-radius: 8px;
+                    border: 1px solid #A7F3D0;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                    margin-top: 6px;
+                }
+
+                /* KHỐI 3: TRẠNG THÁI  NÚT BẤM */
+                .leave-actions {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 10px;
+                    flex-shrink: 0;
+                }
+
+                .status-badge {
+                    background: #dcfce7;
+                    color: #059669;
+                    font-weight: 800;
+                    font-size: 0.75rem;
+                    padding: 5px 10px;
+                    border-radius: 50px;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                    border: 1px solid #a7f3d0;
+                    white-space: nowrap;
+                }
+                .status-badge.info {
+                    background: #E0F2FE;
+                    color: #0369A1;
+                    border-color: #BAE6FD;
+                }
+
+                .action-buttons { display: flex; gap: 8px; }
+
+                .btn-school {
+                    background: #fffbeb; color: #d97706; border: 1px solid #fde68a;
+                    font-weight: 700; font-size: 0.8rem; padding: 6px 12px;
+                    border-radius: 10px; display: inline-flex; align-items: center; gap: 5px;
+                }
+                .btn-cancel {
+                    background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;
+                    font-weight: 700; font-size: 0.8rem; padding: 6px 12px;
+                    border-radius: 10px; display: inline-flex; align-items: center; gap: 5px;
+                    cursor: pointer; transition: 0.2s;
+                }
+                .btn-cancel:active { transform: scale(0.95); background: #fee2e2; }
+
+                /* RESPONSIVE MOBILE CHO CARD */
+                @media (max-width: 480px) {
+                    .leave-card { flex-direction: column; align-items: flex-start; gap: 12px; }
+                    .leave-info { width: 100%; }
+                    .leave-actions { width: 100%; flex-direction: row; justify-content: space-between; align-items: center; border-top: 1px dashed #e2e8f0; padding-top: 10px; }
+                    .action-buttons { flex-grow: 1; justify-content: flex-end; }
+                }
+
+                /* =========================================
+                   THÀNH PHẦN BOTTOM NAV
+                   ========================================= */
+                .fab { position: fixed; bottom: 85px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; border: none; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); z-index: 99; transition: transform 0.2s; }
+                .fab:active { transform: scale(0.9) rotate(90deg); }
+
+                .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #FFFFFF; display: flex; justify-content: space-between; align-items: center; padding: 8px 10px 15px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 1000; border-top-left-radius: 20px; border-top-right-radius: 20px;}
+                .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #9CA3AF; text-decoration: none; gap: 4px; }
+                .nav-item i { font-size: 1.1rem; }
+                .nav-item span { font-size: 0.6rem; font-weight: 700; }
+                .nav-item.active { color: var(--primary); }
+                .center-btn-wrapper { position: relative; flex-shrink: 0; width: 60px; display: flex; justify-content: center; }
+                .nav-center-btn { width: 52px; height: 52px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.4rem; transform: translateY(-22px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); border: 4px solid #FFFFFF; }
+
+                /* =========================================
+                   POPUP FORM XIN NGHỈ (OVERLAY  SHEET) ĐÃ FIX Z-INDEX
+                   ========================================= */
+                .overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(2px); z-index: 1001; display: none; opacity: 0; transition: 0.3s; }
+                .overlay.show { display: block; opacity: 1; }
+
+                .sheet { position: fixed; bottom: -100%; left: 0; right: 0; background: white; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 25px 20px 45px; z-index: 1002; transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 -10px 40px rgba(0,0,0,0.1);}
+                .sheet.active { bottom: 0; }
+
+                .input-group { margin-bottom: 15px; }
+                .input-group label { display: block; font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px; }
+                .input-group input, .input-group textarea { width: 100%; padding: 14px; border: 1px solid #CBD5E1; border-radius: 12px; font-size: 0.95rem; background: #F8FAFC; outline: none; transition: 0.2s; }
+                .input-group input:focus, .input-group textarea:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.1); }
+
+                .btn-submit { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 14px; font-weight: 800; font-size: 1rem; margin-top: 10px; box-shadow: 0 4px 15px rgba(37,99,235,0.3);}
+            </style>
+        </head>
+        <body>
+            <div class="app-container">
+                <div class="cartoon-bg"></div>
+
+                <div class="header">
+                    <a href="/ph/home" class="back-btn"><i class="fas fa-chevron-left"></i></a>
+                    <div style="text-align: center;">
+                        <div style="font-weight: 800; font-size: 1.05rem;">Lịch sử nghỉ phép</div>
+                        <div style="font-size: 0.65rem; opacity: 0.8;">Năm nay</div>
+                    </div>
+                    <div style="width:36px;"></div>
+                </div>
+
+                <div class="main-content">
+
+                    <t t-if="not nghiphep_list">
+                        <div style="text-align: center; margin-top: 80px; color: #64748B;">
+                            <i class="fas fa-clipboard-check" style="font-size: 3.5rem; color: #CBD5E1; margin-bottom: 15px;"></i>
+                            <p style="font-size: 0.9rem; font-weight: 500;">Bé chưa có ngày nghỉ nào trong năm.</p>
+                        </div>
+                    </t>
+
+                    <t t-foreach="nghiphep_list" t-as="lp">
+                        <div class="leave-card" t-att-style="'border-left-color: #d97706;' if not lp['is_mine'] else ''">
+
+                            <div class="leave-days-box" t-att-style="'color: #d97706; background: #fffbeb; border-color: #fde68a;' if not lp['is_mine'] else ''">
+                                <span class="number"><t t-esc="lp['so_ngay']"/></span>
+                                <span class="text">Ngày</span>
+                            </div>
+
+                            <div class="leave-info">
+                                <div class="leave-reason">
+                                    <t t-out="lp['desc']"/>
+                                </div>
+                                <div class="leave-date">
+                                    <i class="far fa-calendar-alt"></i>
+                                    Từ <t t-esc="lp['tu_ngay'].strftime('%d/%m/%Y')"/> – Đến <t t-esc="lp['den_ngay'].strftime('%d/%m/%Y')"/>
+                                </div>
+
+                                <t t-if="not lp['is_mine'] and lp['is_hoantra_hocphi']">
+                                    <div class="refund-badge">
+                                        <i class="fas fa-coins"></i> Hoàn <t t-esc="lp['tyle_hoantra_hocphi']"/>% học phí tháng tới
+                                    </div>
+                                </t>
+                            </div>
+
+                            <div class="leave-actions">
+                                <t t-if="lp['is_mine']">
+                                    <div class="status-badge">
+                                        <i class="fas fa-check-circle"></i> Đã gửi lên trường
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button class="btn-cancel btn-delete" t-att-data-id="lp['id']">
+                                            <i class="fas fa-trash-alt"></i> Hủy đơn
+                                        </button>
+                                    </div>
+                                </t>
+                                <t t-else="">
+
+                                    <div class="action-buttons">
+                                        <div class="btn-school">
+                                            <i class="fas fa-school"></i> Nhà trường thông báo
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+
+                        </div>
+                    </t>
+                </div>
+
+                <button class="fab" id="openBtn"><i class="fas fa-plus"></i></button>
+
+                <div class="overlay" id="overlay"></div>
+                <div class="sheet" id="sheet">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                        <h3 style="font-weight: 800; color: var(--text-main); font-size: 1.1rem;">Làm đơn nghỉ phép</h3>
+                        <div id="closeBtn" style="width: 32px; height: 32px; background: #F1F5F9; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #64748B; cursor: pointer;">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="hocsinh_id" t-att-value="hocsinh_id"/>
+
+                    <div style="display:flex; gap:15px;">
+                        <div class="input-group" style="flex:1;">
+                            <label>Từ ngày</label>
+                            <input type="date" id="tu_ngay" t-att-value="today_str"/>
+                        </div>
+                        <div class="input-group" style="flex:1;">
+                            <label>Đến ngày</label>
+                            <input type="date" id="den_ngay" t-att-value="today_str"/>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Lý do nghỉ</label>
+                        <textarea id="lydo" rows="3" placeholder="VD: Bé bị ốm, gia đình có việc bận..."></textarea>
+                    </div>
+                    <button class="btn-submit" id="submitBtn">Xác nhận gửi đơn</button>
+                </div>
+
+                <div class="bottom-nav">
+                    <a href="/ph/home" class="nav-item"><i class="fas fa-home"></i><span>Trang chủ</span></a>
+                    <a href="/ph/lichhoc" class="nav-item"><i class="fas fa-calendar-check"></i><span>Lịch học</span></a>
+                    <div class="center-btn-wrapper">
+                        <div class="nav-center-btn"><i class="fas fa-qrcode"></i></div>
+                    </div>
+                    <a href="/ph/nghiphep" class="nav-item active"><i class="fas fa-bed"></i><span>Xin nghỉ</span></a>
+                    <a href="/ph/chat" class="nav-item"><i class="fas fa-comments"></i><span>Trao đổi</span></a>
+                </div>
+            </div>
+
+            <script>
+                // <![CDATA[
+                document.addEventListener('DOMContentLoaded', function() {
+                    const sheet = document.getElementById('sheet');
+                    const overlay = document.getElementById('overlay');
+                    const openBtn = document.getElementById('openBtn');
+                    const closeBtn = document.getElementById('closeBtn');
+                    const submitBtn = document.getElementById('submitBtn');
+
+                    // 1. Logic bật/tắt form trượt
+                    const toggleSheet = (show) => {
+                        if (show) {
+                            overlay.classList.add('show');
+                            setTimeout(() => sheet.classList.add('active'), 10);
+                        } else {
+                            sheet.classList.remove('active');
+                            setTimeout(() => overlay.classList.remove('show'), 300);
+                        }
+                    };
+
+                    if(openBtn) openBtn.onclick = () => toggleSheet(true);
+                    if(closeBtn) closeBtn.onclick = () => toggleSheet(false);
+                    if(overlay) overlay.onclick = () => toggleSheet(false);
+
+                    // 2. Chặn lỗi logic ngày
+                    const inputTuNgay = document.getElementById('tu_ngay');
+                    const inputDenNgay = document.getElementById('den_ngay');
+                    if(inputTuNgay && inputDenNgay) {
+                        inputTuNgay.addEventListener('change', function() {
+                            if (inputTuNgay.value > inputDenNgay.value) {
+                                inputDenNgay.value = inputTuNgay.value;
+                            }
+                        });
+                    }
+
+                    // 3. Gọi API Nộp đơn mới
+                    if(submitBtn) {
+                        submitBtn.onclick = function() {
+                            const val = {
+                                hocsinh_id: document.getElementById('hocsinh_id').value,
+                                tu_ngay: inputTuNgay.value,
+                                den_ngay: inputDenNgay.value,
+                                lydo: document.getElementById('lydo').value.trim()
+                            };
+
+                            if(!val.lydo) {
+                                alert("Vui lòng nhập lý do cho bé nghỉ.");
+                                document.getElementById('lydo').focus();
+                                return;
+                            }
+                            if(val.tu_ngay > val.den_ngay) {
+                                alert("Ngày kết thúc không được nhỏ hơn ngày bắt đầu!");
+                                return;
+                            }
+
+                            submitBtn.disabled = true;
+                            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+
+                            fetch('/ph/nghiphep/submit', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({jsonrpc: "2.0", params: val})
+                            }).then(r => r.json()).then(data => {
+                                if(data.result && data.result.success) {
+                                    alert("Gửi đơn thành công!");
+                                    window.location.reload();
+                                } else {
+                                    alert(data.result ? data.result.error : "Lỗi hệ thống.");
+                                    submitBtn.disabled = false;
+                                    submitBtn.innerHTML = "Xác nhận gửi đơn";
+                                }
+                            }).catch(e => {
+                                alert("Lỗi mạng.");
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = "Xác nhận gửi đơn";
+                            });
+                        };
+                    }
+
+                    // 4. Gọi API Hủy đơn (chỉ hoạt động với đơn của mình)
+                    document.querySelectorAll('.btn-delete').forEach(btn => {
+                        btn.onclick = function() {
+                            if(!confirm("Bạn có chắc chắn muốn hủy đơn nghỉ phép này?")) return;
+
+                            const id = this.getAttribute('data-id');
+                            this.disabled = true;
+                            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                            fetch('/ph/nghiphep/delete', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({jsonrpc: "2.0", params: {nghiphep_id: id}})
+                            }).then(r => r.json()).then(data => {
+                                if(data.result && data.result.success) {
+                                    window.location.reload();
+                                } else {
+                                    alert(data.result ? data.result.error : "Không thể xóa đơn.");
+                                    this.disabled = false;
+                                    this.innerHTML = '<i class="fas fa-trash-alt"></i> Hủy đơn';
+                                }
+                            }).catch(e => {
+                                alert("Lỗi kết nối.");
+                                this.disabled = false;
+                                this.innerHTML = '<i class="fas fa-trash-alt"></i> Hủy đơn';
+                            });
+                        };
+                    });
+                });
+                // ]]>
+            </script>
+        </body>
+        </html>
+    </template>
+</odoo>
