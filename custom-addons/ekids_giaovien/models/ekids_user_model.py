@@ -16,9 +16,7 @@ class User(models.Model):
                                 ,column1="user_id"
                                 ,column2="coso_id"
                                 ,string="Quản lý các cơ sở"
-                                ,required=True
-                                ,default=lambda self: self.env['ekids.coso']
-                                    .search([],limit=5).ids)
+                                ,required=True)
 
     @api._model_create_single
     def create(self, vals):
