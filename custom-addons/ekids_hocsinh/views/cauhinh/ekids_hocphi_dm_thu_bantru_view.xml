@@ -18,7 +18,7 @@
             <field name="arch" type="xml">
                 <list>
                     <field name="sequence" widget="handle"/>
-                    <field name="name"/>
+                    <field name="name" width="200"/>
                     <field name="loai"/>
                     <field name="tien"/>
                     <field name="desc"/>
