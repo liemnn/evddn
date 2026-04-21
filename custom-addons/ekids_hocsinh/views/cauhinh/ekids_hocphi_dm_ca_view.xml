@@ -41,10 +41,14 @@
                         <group>
                             <field name="name"/>
                         </group>
-                        <group col="3">
+                        <group col="4">
                             <group>
                                 <field name="tien"/>
                             </group>
+                             <group>
+                                <field name="is_tien_trongoi" widget="boolean_toggle"/>
+                            </group>
+
                             <group>
                                 <field name="is_hoantien_khi_nghi" widget="boolean_toggle"/>
                             </group>
