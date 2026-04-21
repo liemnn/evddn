@@ -30,26 +30,113 @@
             </field>
         </record>
 
-        <record  id="ekids_hocsinh.hocphi_dm_chinhsach_giam_form" model="ir.ui.view">
+       <record id="ekids_hocsinh.hocphi_dm_chinhsach_giam_form" model="ir.ui.view">
             <field name="name">Danh mục Giảm học phí</field>
             <field name="model">ekids.hocphi_dm_chinhsach_giam</field>
             <field name="arch" type="xml">
-                <form string="Cơ sở">
+                <form string="Chính sách giảm học phí">
                     <sheet>
-                        <group>
-                            <field name="name"/>
-                            <field name="tyle_giam"/>
-                            <field name="desc"/>
-                            <field name="trangthai"/>
-                        </group>
+                        <style>
+                            .ekids_custom_card {
+                                background: #ffffff;
+                                border-radius: 12px;
+                                box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+                                padding: 20px;
+                                height: 100%;
+                                border: 1px solid #f1f5f9;
+                            }
+                            .ekids_card_title {
+                                color: #1e3a8a;
+                                font-size: 13px;
+                                font-weight: 800;
+                                text-transform: uppercase;
+                                margin-bottom: 15px;
+                                padding-bottom: 10px;
+                                border-bottom: 2px solid #e2e8f0;
+                                display: flex;
+                                align-items: center;
+                            }
+                            .ekids_card_title i {
+                                color: #6366f1;
+                                margin-right: 8px;
+                                font-size: 16px;
+                            }
+                            .highlight-box {
+                                background-color: #f8fafc;
+                                border: 1px dashed #cbd5e1;
+                                border-radius: 10px;
+                                padding: 12px 15px;
+                                margin-bottom: 15px;
+                            }
+                        </style>
 
-                        <notebook>
-                            <page name="hocsinh_ids" string="DANH SÁCH HỌC SINH ÁP DỤNG">
-                                <field name="hocsinh_ids"
-                                       domain="[('coso_id', '=', coso_id),('trangthai', '=', '1')]"
-                                       context="{'default_coso_id': coso_id}"/>
-                            </page>
-                        </notebook>
+                        <div class="oe_title mb-4">
+                            <label for="name" class="oe_edit_only fw-bold" string="Tên chính sách giảm"/>
+                            <h1 class="text-primary fw-bolder">
+                                <field name="name" placeholder="VD: Giảm học phí cho con giáo viên..."/>
+                            </h1>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-7 mb-3">
+                                <div class="ekids_custom_card">
+                                    <div class="ekids_card_title">
+                                        <i class="fa fa-sliders"/> Thiết lập tỷ lệ hoặc số tiền giảm
+                                    </div>
+
+                                    <div class="highlight-box d-flex align-items-center">
+                                        <div class="me-3">
+                                            <field name="is_giam_theo_tyle" widget="boolean_toggle" nolabel="1"/>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold" style="color: #334155; font-size: 0.9rem;">Phương thức giảm học phí</div>
+                                            <div class="text-muted" style="font-size: 0.75rem;">
+                                                Bật (Xanh): Giảm theo tỷ lệ % học phí | Tắt (Xám): Trừ thẳng tiền mặt
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <group>
+                                        <field name="tyle_giam" string="Tỷ lệ giảm (%)"
+                                               invisible="not is_giam_theo_tyle"
+                                               class="fw-bold text-success"/>
+
+                                        <field name="tien" string="Số tiền giảm (VNĐ)"
+                                               invisible="is_giam_theo_tyle"
+                                               class="fw-bold text-success"/>
+                                    </group>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 mb-3">
+                                <div class="ekids_custom_card">
+                                    <div class="ekids_card_title">
+                                        <i class="fa fa-info-circle"/> Trạng thái và mô tả
+                                    </div>
+                                    <group>
+                                        <field name="trangthai" string="Trạng thái"  decoration-success="trangthai in ('1', 'active', 'Đang hoạt động')"/>
+                                        <field name="desc" string="Mô tả chi tiết" placeholder="Ghi chú thêm về điều kiện áp dụng chính sách này..."/>
+                                    </group>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <div class="ekids_custom_card" style="padding: 0; overflow: hidden;">
+                                    <notebook>
+                                        <page name="hocsinh_ids" string="DANH SÁCH HỌC SINH ĐƯỢC ÁP DỤNG">
+                                            <div class="p-3">
+                                                <field name="hocsinh_ids"
+                                                       domain="[('coso_id', '=', coso_id),('trangthai', '=', '1')]"
+                                                       context="{'default_coso_id': coso_id}"/>
+                                            </div>
+                                        </page>
+                                    </notebook>
+                                </div>
+                            </div>
+                        </div>
 
                     </sheet>
                 </form>
