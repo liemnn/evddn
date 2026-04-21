@@ -1,12 +1,12 @@
 <odoo>
     <data>
 
-        <menuitem name="Hướng dẫn sử dụng" id="ekids_hdsd.menu_root"
+        <menuitem name="Hướng dẫn PM" id="ekids_hdsd.menu_root"
         web_icon="ekids_hdsd,static/description/icon.png" sequence="12"/>
 
         <record id="ekids_hdsd.action_hdsd" model="ir.actions.act_url">
             <field name="name">Hướng dẫn sử dụng Phần mềm</field>
-            <field name="url">/ekids_hdsd/html/index.html</field>
+            <field name="url">/ekids_hdsd/static/src/html/index.html</field>
             <field name="target">new</field>
         </record>
 
