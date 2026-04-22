@@ -155,6 +155,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
                 # Tinh toan khoang thu ca can thiệp
                 self.func_tao_macdinh_hocphi_ca(hocphi,ca_canthieps,ca2thus,ngay_dihoc_kehoachs,ngay_dihoc_cosos)
+                # tin hoc phi do giam hoc phi theo so tien cu the
+
                 # tinh toan tháng trước để được trừ
                 if thangtruoc_days:
                     ngay_dauthang = thangtruoc_days[0]
@@ -172,16 +174,36 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                          ,ngay_cuoithang,ngay_dihoc_cosos)
             #B3: Tính chính sách giảm học phí cho học sinh
             if hocsinh.dm_chinhsach_giam_id:
-                hocphi.tyle_giamhocphi =hocsinh.dm_chinhsach_giam_id.tyle_giam
-                hocphi.tyle_giamhocphi_bantru = hocsinh.dm_chinhsach_giam_id.tyle_giam
-                hocphi.tyle_giamhocphi_ca = hocsinh.dm_chinhsach_giam_id.tyle_giam
+                hocphi.tyle_giamhocphi = 0
+                hocphi.tyle_giamhocphi_bantru = 0
+                hocphi.tyle_giamhocphi_ca = 0
+                if hocsinh.dm_chinhsach_giam_id.is_giam_theo_tyle == True:
+                     # chỉ tính cho trường hợp chính sách giảm học phí theo tỷ lệ
+                    hocphi.tyle_giamhocphi =hocsinh.dm_chinhsach_giam_id.tyle_giam
+                    hocphi.tyle_giamhocphi_bantru = hocsinh.dm_chinhsach_giam_id.tyle_giam
+                    hocphi.tyle_giamhocphi_ca = hocsinh.dm_chinhsach_giam_id.tyle_giam
+                else:
+                    self.func_tao_khoantru_giam_hocphi_sotien(hocsinh,hocphi)
 
                 hocphi.dm_chinhsach_giam_id = hocsinh.dm_chinhsach_giam_id.id
                 hocphi._compute_hocphi_giam()
                 hocphi._compute_hocphi_phaidong()
 
+
+
                 # tạo default số tiền lớp chung
                 # self.create_default_hocphi_bantru(hs,hocphi,False)
+
+    def func_tao_khoantru_giam_hocphi_sotien(self,hocsinh,hocphi):
+       dm_giam = hocsinh.dm_chinhsach_giam_id
+       if dm_giam and dm_giam.is_giam_theo_tyle == False:
+            data = {
+                'hocphi_id': hocphi.id,
+                'name': dm_giam.name,
+                'tien': dm_giam.tien
+            }
+            self.env['ekids.hocphi_duoctru'].create(data)
+
 
     def func_tinhtoan_lai_hocphi_cho_mot_hocsinh(self):
         thang = int(self.thang_id.name)
