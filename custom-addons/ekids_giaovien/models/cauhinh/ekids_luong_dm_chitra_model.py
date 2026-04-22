@@ -14,7 +14,7 @@ except ImportError as e:
 class LuongDMChiTra(models.Model):
     _name = "ekids.luong_dm_chitra"
     _description = "Danh mục chi tiêu của cơ sở"
-    _order = "sequence asc"
+    _order = "sequence asc,name asc"
 
 
     sequence = fields.Integer(string="Thứ tự tính toán",required=True,default=1)

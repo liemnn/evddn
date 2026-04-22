@@ -7,11 +7,11 @@
         <field name="arch" type="xml">
             <list>
                 <field name="sequence" width="35" string="TT"/>
-                <field name="name" width="300"/>
-                <field name="code" width="35"/>
+                <field name="name" width="350"/>
+                <field name="code" width="100"/>
                 <field name="luong_cocau"/>
                 <field name="luong_loai" string="Phần lương"/>
-                <field name="formula" widget="300"/>
+                <field name="formula" widget="300" optional="hide"/>
 
 
             </list>
