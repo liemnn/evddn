@@ -12,4 +12,7 @@ class LuongDMChamCongKPI(models.Model):
     code = fields.Char(string="Mã", required=True)
     name =fields.Char(string="Tên",required=True)
     donvi = fields.Char(string="Đơn vị", required=True)
-    is_tyle_phantram = fields.Boolean(string="Giá trị là tỷ lệ %", default=False)
+    loai_kpi = fields.Selection([
+        ('0', 'Nhâp số'),
+        ('1', 'Bật/Tắt')
+    ], string="Loại KPI", default='0')

@@ -52,11 +52,15 @@ class ChamCongKPI2Thang(models.Model):
                         'chamcong_kpi2thang_id':self.id,
                         'code': kpi.code,
                         'name': kpi.name,
+                        'loai_kpi': kpi.loai_kpi,
                         'donvi': kpi.donvi,
-                        'is_tyle_phantram':  kpi.is_tyle_phantram,
                         'tong': 0,
                     }
+
+
                     self.env['ekids.chamcong_kpi2thang_ketqua'].create(data)
+
+
 
 
 

@@ -20,7 +20,9 @@
                 <list>
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
-                    <field name="tyle_giam"/>
+                    <field name="is_giam_theo_tyle" widget="boolean_toggle" string="Phân loại giảm Theo %"/>
+                    <field name="tyle_giam" invisible="is_giam_theo_tyle==False" string="Tỷ lệ % giảm"/>
+                    <field name="tien" invisible="is_giam_theo_tyle==True" string="Số tiền(vnđ)"/>
                     <field name="desc"/>
                     <field name="trangthai"
                         decoration-success="trangthai == '1'"
