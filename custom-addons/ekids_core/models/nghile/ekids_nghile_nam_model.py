@@ -46,8 +46,8 @@ class NghiLeNam(models.Model):
         }
         self.env['ekids.nghile'].create(data)
 
-        # TH2: NGHỈ LỄ TẾT
-        days = self.func_layve_nghi_tet_motnam(self.name)
+        # TH2: NGHỈ tết âm lịch
+        days = self.func_get_nghi_tet_amlich(self.name)
         if days:
             tu_ngay = days[0]
             den_ngay = days[len(days)-1]
@@ -57,7 +57,7 @@ class NghiLeNam(models.Model):
                 'tu_ngay':tu_ngay,
                 'den_ngay':den_ngay,
                 'loai':'0',
-                'desc': 'Nghỉ lễ tết Âm lịch theo dự kiến '
+                'desc': 'Nghỉ lễ tết nguyên đán(Âm lịch) '
                         + self.name
                          +', nếu có thay đổi thực tế vui lòng điều chỉnh lại',
                 'trangthai':'1'
@@ -86,7 +86,7 @@ class NghiLeNam(models.Model):
             den_ngay = date(int(self.name), 5, 1)
             data = {
                 'nam_id': self.id,
-                'name': 'Quốc khánh 2/9',
+                'name': 'Nghỉ lễ 30/4 và 1/5',
                 'tu_ngay': tu_ngay,
                 'den_ngay': den_ngay,
                 'loai': '0',
@@ -102,18 +102,18 @@ class NghiLeNam(models.Model):
             den_ngay = date(int(self.name), 9, 2)
             data = {
                 'nam_id': self.id,
-                'name': 'Nghỉ tết dương lịch',
+                'name': 'Nghỉ tết quốc khánh',
                 'tu_ngay': tu_ngay,
                 'den_ngay': den_ngay,
                 'loai': '0',
-                'desc': 'Nghỉ tết dương lịch'
+                'desc': 'Nghỉ tết quốc khánh'
                         + self.name,
                 'trangthai': '1'
 
             }
             self.env['ekids.nghile'].create(data)
 
-    def func_layve_nghi_tet_motnam(self,nam):
+    def func_get_nghi_tet_amlich(self,nam):
         """
         Trả về danh sách các ngày nghỉ Tết Nguyên Đán trong năm dương lịch
         (29 Chạp năm trước đến mùng 5 tháng Giêng)
