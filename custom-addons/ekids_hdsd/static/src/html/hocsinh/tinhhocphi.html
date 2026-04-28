@@ -7,71 +7,125 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        :root { --primary: #2563EB; --bg-body: #F8FAFC; --surface: #FFFFFF; --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0; --sidebar-width: 280px; --c-green: #10B981; --c-red: #EF4444; --c-orange: #F59E0B; }
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #10B981; --c-red: #EF4444; --c-blue-light: #DBEAFE; --c-orange: #F59E0B;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-body); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
-        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; }
-        .top-left { display: flex; align-items: center; gap: 20px; } .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: var(--text-sub); text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: 0.2s; background: #F1F5F9; } .back-btn:hover { background: #E2E8F0; color: var(--text-main); }
-        .logo { font-size: 1.2rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; } .top-right { display: flex; align-items: center; gap: 15px; } .user-profile { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9rem; } .user-profile img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); }
-        .main-layout { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: var(--sidebar-width); background: var(--surface); border-right: 1px solid var(--border-color); overflow-y: auto; padding: 15px 0; flex-shrink: 0; }
-        .menu-group summary::-webkit-details-marker { display: none; } .menu-group summary { list-style: none; outline: none; }
-        .menu-title { padding: 12px 20px; font-size: 0.8rem; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; user-select: none; } .menu-title:hover { background: #F8FAFC; color: var(--primary); }
-        .chevron-icon { font-size: 0.8rem; color: #94A3B8; transition: transform 0.3s ease; } details[open] .chevron-icon { transform: rotate(180deg); color: var(--primary); } details[open] .menu-title { color: var(--primary); }
-        .menu-list { list-style: none; padding-bottom: 10px; animation: slideDown 0.3s ease-out; } @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-        .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 20px 10px 40px; font-size: 0.9rem; font-weight: 500; color: var(--text-sub); cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; } .menu-item i { font-size: 1.1rem; width: 20px; text-align: center; } .menu-item:hover { background: #F1F5F9; color: var(--text-main); } .menu-item.active { background: #EFF6FF; color: var(--primary); font-weight: 700; border-left-color: var(--primary); }
-        .menu-item a { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px; width: 100%; }
-        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--surface); scroll-behavior: smooth; } .doc-container { max-width: 900px; margin: 0 auto; }
-        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;} .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
-        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; } .doc-header h1 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; } .doc-header p { font-size: 1rem; color: var(--text-sub); }
-        .doc-section { margin-bottom: 40px; } .doc-section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; } .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; }
-        .doc-content { font-size: 0.95rem; color: #334155; line-height: 1.7; } .doc-content p { margin-bottom: 12px; }
+
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR TẬP TRUNG --- */
+        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 8px 16px; border-radius: 8px; transition: 0.2s; background: #EFF6FF; border: 1px solid #BFDBFE;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+        .logo { font-size: 1.2rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; display: none; }
+
+        .top-right { display: flex; align-items: center; }
+        .header-title-right { font-weight: 700; font-size: 1rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH (KHÔNG SIDEBAR) --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; }
+
+        /* --- VÙNG NỘI DUNG HƯỚNG DẪN TÀI LIỆU --- */
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%;}
+        .doc-container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h1 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        .doc-section { margin-bottom: 40px; }
+        .doc-section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; flex-shrink: 0;}
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.7; }
+        .doc-content p { margin-bottom: 12px; }
+
+        /* --- MOCKUP CSS --- */
         .ui-mockup-box { background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto;}
-        .mock-dash-card { width: 320px; background: white; border-radius: 16px; border: 1px solid var(--border-color); padding: 25px 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin: 0 auto;} .mock-dash-card i { font-size: 3rem; color: #CBD5E1; margin-bottom: 15px;} .mock-dash-card h3 { font-size: 1.1rem; color: #1E3A8A; margin-bottom: 5px; } .mock-dash-btn { background: #60A5FA; color: white; border-radius: 8px; padding: 12px; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.9rem;}
-        .toolbar-group { display: flex; gap: 10px; align-items: center; margin-bottom: 15px;} .tool-btn { background: #64748B; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer;} .tool-btn.primary { background: #4F46E5; } .tool-title { font-size: 1.1rem; font-weight: 600; color: #1E3A8A; border-left: 2px solid #CBD5E1; padding-left: 15px; margin-left: 5px;}
-        .mock-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.8rem;} .mock-table th { background: #F1F5F9; padding: 10px; text-align: right; font-weight: 600; color: var(--text-sub); border-bottom: 1px solid var(--border-color); white-space: nowrap;} .mock-table th:first-child, .mock-table th:nth-child(2) { text-align: left; } .mock-table td { padding: 10px; border-bottom: 1px solid #E2E8F0; color: var(--text-main); white-space: nowrap; text-align: right;} .mock-table td:first-child, .mock-table td:nth-child(2) { text-align: left; font-weight: 500;} .status-link { color: #3B82F6; cursor: pointer; text-decoration: none;}
-        .fee-detail-card { background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px;} .fee-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #E2E8F0; font-size: 0.9rem;} .fee-row span:first-child { color: var(--text-sub); font-weight: 600;} .fee-row span:last-child { font-weight: 700; color: var(--text-main);} .fee-total { background: var(--c-green); color: white; padding: 12px 15px; border-radius: 6px; font-weight: 800; display: flex; justify-content: space-between; margin-top: 10px; font-size: 1rem;}
-        .status-ribbon { display: flex; background: #F1F5F9; border-radius: 20px; overflow: hidden; font-size: 0.8rem; font-weight: 600; color: var(--text-sub); border: 1px solid var(--border-color);} .status-step { padding: 8px 15px; position: relative; display: flex; align-items: center; justify-content: center; } .status-step:not(:last-child)::after { content: '\f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -5px; font-size: 0.7rem; color: #CBD5E1; z-index: 2;} .status-step.active { background: #DBEAFE; color: var(--primary); }
-        .filter-dropdown { background: white; border: 1px solid var(--border-color); border-radius: 8px; width: 250px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-top: 10px;} .filter-header { padding: 10px 15px; font-weight: 700; font-size: 0.85rem; border-bottom: 1px solid var(--border-color); color: var(--text-main);} .filter-item { padding: 8px 15px; font-size: 0.85rem; color: var(--text-sub); cursor: pointer;} .filter-item:hover { background: #F8FAFC; color: var(--primary);} .filter-item.active { background: #F1F5F9; font-weight: 600; color: var(--text-main);}
-        .alert-box { display: flex; gap: 15px; padding: 20px; border-radius: 12px; margin: 30px 0; background: #FEFCE8; border: 1px solid #FDE047; } .alert-box i { font-size: 1.8rem; color: var(--c-orange); margin-top: 2px; } .alert-box div h4 { font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; text-transform: uppercase;} .alert-box div p { font-size: 0.95rem; color: #334155; margin-bottom: 8px;} .alert-box div p:last-child { margin-bottom: 0;}
-        .key-tag { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 2px 6px; font-size: 0.8rem; font-family: monospace; color: var(--text-main); font-weight: 600; }
+
+        .mock-dash-card { width: 320px; background: white; border-radius: 16px; border: 1px solid var(--border-color); padding: 25px 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin: 0 auto;}
+        .mock-dash-card i { font-size: 3rem; color: #CBD5E1; margin-bottom: 15px;}
+        .mock-dash-card h3 { font-size: 1.1rem; color: #1E3A8A; margin-bottom: 5px; }
+        .mock-dash-btn { background: #60A5FA; color: white; border-radius: 8px; padding: 12px; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.9rem;}
+
+        .toolbar-group { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;}
+        .tool-btn { background: #64748B; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap;}
+        .tool-btn.primary { background: #4F46E5; }
+        .tool-title { font-size: 1.1rem; font-weight: 600; color: #1E3A8A; border-left: 2px solid #CBD5E1; padding-left: 15px; margin-left: 5px;}
+
+        .table-wrapper { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid var(--border-color); }
+        .mock-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.85rem; min-width: 700px;}
+        .mock-table th { background: #F1F5F9; padding: 12px 10px; text-align: right; font-weight: 600; color: var(--text-sub); border-bottom: 1px solid var(--border-color); white-space: nowrap;}
+        .mock-table th:first-child, .mock-table th:nth-child(2) { text-align: left; }
+        .mock-table td { padding: 12px 10px; border-bottom: 1px solid #E2E8F0; color: var(--text-main); white-space: nowrap; text-align: right;}
+        .mock-table td:first-child, .mock-table td:nth-child(2) { text-align: left; font-weight: 500;}
+        .status-link { color: #3B82F6; cursor: pointer; text-decoration: none;}
+
+        .fee-detail-card { background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px;}
+        .fee-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #E2E8F0; font-size: 0.9rem;}
+        .fee-row span:first-child { color: var(--text-sub); font-weight: 600;}
+        .fee-row span:last-child { font-weight: 700; color: var(--text-main);}
+        .fee-total { background: var(--c-green); color: white; padding: 12px 15px; border-radius: 6px; font-weight: 800; display: flex; justify-content: space-between; margin-top: 10px; font-size: 1rem;}
+
+        .status-ribbon-wrapper { overflow-x: auto; margin-bottom: 15px;}
+        .status-ribbon { display: inline-flex; background: #F1F5F9; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-sub); border: 1px solid var(--border-color); white-space: nowrap;}
+        .status-step { padding: 8px 15px; position: relative; display: flex; align-items: center; justify-content: center; }
+        .status-step:not(:last-child)::after { content: '\f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -5px; font-size: 0.7rem; color: #CBD5E1; z-index: 2;}
+        .status-step.active { background: #DBEAFE; color: var(--primary); border-radius: 20px;}
+
+        .alert-box { display: flex; gap: 15px; padding: 20px; border-radius: 12px; margin: 30px 0; background: #FEFCE8; border: 1px solid #FDE047; align-items: flex-start;}
+        .alert-box i { font-size: 1.8rem; color: var(--c-orange); margin-top: 2px; }
+        .alert-box div h4 { font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; text-transform: uppercase;}
+        .alert-box div p { font-size: 0.95rem; color: #334155; margin-bottom: 8px;}
+        .alert-box div p:last-child { margin-bottom: 0;}
+
+        .key-tag { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 2px 6px; font-size: 0.8rem; font-family: monospace; color: var(--text-main); font-weight: 600; display: inline-block;}
+
+        /* --- TỐI ƯU HIỂN THỊ ĐIỆN THOẠI (MOBILE RESPONSIVE) --- */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 15px; }
+            .header-title-right { font-size: 0.85rem; max-width: 150px; text-align: right; line-height: 1.2;}
+
+            .content-area { padding: 15px; }
+            .doc-container { padding: 20px; border-radius: 12px; }
+            .doc-header h1 { font-size: 1.5rem; }
+
+            .toolbar-group { flex-direction: column; align-items: flex-start; }
+            .tool-title { border-left: none; padding-left: 0; margin-left: 0; margin-top: 10px; }
+
+            .fee-row { flex-direction: column; gap: 5px; }
+            .fee-row span:last-child { font-size: 1.1rem; }
+        }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
         <div class="top-left">
-            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-arrow-left"></i> Trang chủ</a>
-            <div class="logo">eKids CMS Documentation</div>
+            <a href="../index.html" class="back-btn"><i class="fas fa-home"></i> Về trang chủ</a>
+            <div class="logo">eKids CMS</div>
         </div>
         <div class="top-right">
-            <div class="user-profile"><span>Quản trị viên</span><img src="https://i.pravatar.cc/150?img=11" alt="Admin"></div>
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
         </div>
     </div>
 
     <div class="main-layout">
-        <div class="sidebar">
-            <details class="menu-group">
-                <summary class="menu-title"><span>A. Thiết lập ban đầu</span><i class="fas fa-chevron-down chevron-icon"></i></summary>
-                <ul class="menu-list">
-                    <li class="menu-item"><a href="../thietlapbandau/thongtin.html"><i class="fas fa-building"></i> Thiết lập thông tin ban đầu</a></li>
-                    <li class="menu-item"><a href="../thietlapbandau/nghile.html"><i class="fas fa-calendar-alt"></i> Quản lý ngày nghỉ, lễ/tết</a></li>
-                    <li class="menu-item"><a href="../hocsinh/cauhinh.html"><i class="fas fa-list-ul"></i> Danh mục Khoản thu & Ca học</a></li>
-                </ul>
-            </details>
-            <details class="menu-group">
-                <summary class="menu-title"><span>B. Hồ sơ & Học phí</span><i class="fas fa-chevron-down chevron-icon"></i></summary>
-                <ul class="menu-list">
-                    <li class="menu-item"><a href="../hocsinh/hosohocsinh.html"><i class="fas fa-user-graduate"></i> Quản lý học sinh</a></li>
-                    <li class="menu-item"><a href="../hocsinh/diemdanh.html"><i class="fas fa-tasks"></i> Điểm danh & Xếp ca</a></li>
-                    <li class="menu-item"><a href="../hocsinh/tinhhocphi.html"><i class="fas fa-file-invoice-dollar"></i> Tính học phí</a></li>
-                </ul>
-            </details>
-        </div>
-
         <div class="content-area">
             <div class="doc-container">
-                <div class="breadcrumb">Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phần B. Hồ sơ & Học phí <i class="fas fa-chevron-right"></i> <span>Tính học phí</span></div>
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phần B. Hồ sơ & Học phí <i class="fas fa-chevron-right"></i> <span>Tính học phí</span>
+                </div>
+
                 <div class="doc-header">
                     <h1>Hướng dẫn: Tự động tính học phí & Quản lý thu phí</h1>
                     <p>Phần mềm eKids tích hợp công cụ tự động tổng hợp dữ liệu từ bảng điểm danh, ngày nghỉ lễ, chính sách giảm giá... để xuất ra bảng học phí chuẩn xác nhất cho từng học sinh.</p>
@@ -82,7 +136,11 @@
                     <div class="doc-content">
                         <p>Tại Hệ thống Chuyên biệt, chọn nút <strong>TÍNH [HỌC PHÍ] THÁNG NÀY</strong> để vào giao diện quản lý tài chính.</p>
                         <div class="ui-mockup-box" style="display: flex; justify-content: center;">
-                            <div class="mock-dash-card"><i class="fas fa-file-invoice-dollar" style="color: #FBBF24;"></i><h3>Trường Ví dụ</h3><div class="mock-dash-btn"><i class="fas fa-calculator"></i> TÍNH [HỌC PHÍ] THÁNG NÀY</div></div>
+                            <div class="mock-dash-card">
+                                <i class="fas fa-file-invoice-dollar" style="color: #FBBF24;"></i>
+                                <h3>Trường Ví dụ</h3>
+                                <div class="mock-dash-btn"><i class="fas fa-calculator"></i> TÍNH [HỌC PHÍ] THÁNG NÀY</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -92,12 +150,19 @@
                     <div class="doc-content">
                         <p>Hệ thống tự động liệt kê toàn bộ học sinh cùng các khoản tiền. Nếu bạn có vừa thay đổi điểm danh hoặc sửa hồ sơ, hãy bấm ngay nút <span class="key-tag" style="background: #64748B; color: white;">Tính lại</span> để phần mềm chạy lại công thức mới nhất.</p>
                         <div class="ui-mockup-box" style="padding: 15px;">
-                            <div class="toolbar-group"><button class="tool-btn">Tính lại</button><button class="tool-btn">In</button><div class="tool-title">Quản lý cơ sở <br><span style="font-weight: 400; font-size: 0.9rem; color: var(--text-sub);">HỌC PHÍ THÁNG 4/2026 <i class="fas fa-cog"></i></span></div></div>
-                            <div style="overflow-x: auto;">
+                            <div class="toolbar-group">
+                                <div>
+                                    <button class="tool-btn">Tính lại</button>
+                                    <button class="tool-btn">In</button>
+                                </div>
+                                <div class="tool-title">Quản lý cơ sở <br><span style="font-weight: 400; font-size: 0.9rem; color: var(--text-sub);">HỌC PHÍ THÁNG 4/2026 <i class="fas fa-cog"></i></span></div>
+                            </div>
+
+                            <div class="table-wrapper">
                                 <table class="mock-table">
                                     <tr><th>TT</th><th>Học sinh</th><th>Đi học</th><th>Lớp chung</th><th>Can thiệp</th><th>Thực đóng</th><th>Trạng thái</th></tr>
-                                    <tr><td>1</td><td>Trần Việt Thắng</td><td style="text-align: center;">25/26</td><td>2.453.846</td><td>3.750.000</td><td style="font-weight: 700;">4.963.077</td><td><span class="status-link" style="color: var(--text-sub);">Đã đóng[Chuyển khoản]</span></td></tr>
-                                    <tr><td>2</td><td>Nguyễn Ngọc Anh</td><td style="text-align: center;">25/26</td><td>2.165.385</td><td>3.750.000</td><td style="font-weight: 700;">5.890.385</td><td><span class="status-link">Đã kiểm tra</span></td></tr>
+                                    <tr><td>1</td><td>Trần Việt Thắng</td><td style="text-align: center;">25/26</td><td>2.453.846</td><td>3.750.000</td><td style="font-weight: 700; color: var(--c-green);">4.963.077</td><td><span class="status-link" style="color: var(--text-sub);">Đã đóng[Chuyển khoản]</span></td></tr>
+                                    <tr><td>2</td><td>Nguyễn Ngọc Anh</td><td style="text-align: center;">25/26</td><td>2.165.385</td><td>3.750.000</td><td style="font-weight: 700; color: var(--c-green);">5.890.385</td><td><span class="status-link">Đã kiểm tra</span></td></tr>
                                 </table>
                             </div>
                         </div>
@@ -122,9 +187,15 @@
                     <h2><span class="step-badge">4</span> Chuyển trạng thái & In phiếu thu</h2>
                     <div class="doc-content">
                         <div class="ui-mockup-box">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 15px;">
                                 <button class="tool-btn primary">In phiếu thu</button>
-                                <div class="status-ribbon"><div class="status-step">Đang tính</div><div class="status-step active">Đã kiểm tra</div><div class="status-step">Đã đóng[Tiền mặt]</div></div>
+                                <div class="status-ribbon-wrapper">
+                                    <div class="status-ribbon">
+                                        <div class="status-step">Đang tính</div>
+                                        <div class="status-step active">Đã kiểm tra</div>
+                                        <div class="status-step">Đã đóng[Tiền mặt]</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -144,17 +215,5 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let currentPage = window.location.pathname.split("/").pop();
-            document.querySelectorAll('.menu-item a').forEach(link => {
-                if (link.getAttribute('href').split("/").pop() === currentPage) {
-                    link.parentElement.classList.add('active');
-                    const parentDetails = link.closest('details');
-                    if (parentDetails) parentDetails.setAttribute('open', '');
-                }
-            });
-        });
-    </script>
 </body>
 </html>

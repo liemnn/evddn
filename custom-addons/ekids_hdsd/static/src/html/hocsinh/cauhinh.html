@@ -7,71 +7,120 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        :root { --primary: #2563EB; --bg-body: #F8FAFC; --surface: #FFFFFF; --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0; --sidebar-width: 280px; --c-green: #10B981; --c-red: #EF4444; --c-blue-light: #DBEAFE; }
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #10B981; --c-red: #EF4444; --c-blue-light: #DBEAFE;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-body); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
-        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; }
-        .top-left { display: flex; align-items: center; gap: 20px; } .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: var(--text-sub); text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: 0.2s; background: #F1F5F9; } .back-btn:hover { background: #E2E8F0; color: var(--text-main); }
-        .logo { font-size: 1.2rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; } .top-right { display: flex; align-items: center; gap: 15px; } .user-profile { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9rem; } .user-profile img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); }
-        .main-layout { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: var(--sidebar-width); background: var(--surface); border-right: 1px solid var(--border-color); overflow-y: auto; padding: 15px 0; flex-shrink: 0; }
-        .menu-group summary::-webkit-details-marker { display: none; } .menu-group summary { list-style: none; outline: none; }
-        .menu-title { padding: 12px 20px; font-size: 0.8rem; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; user-select: none; } .menu-title:hover { background: #F8FAFC; color: var(--primary); }
-        .chevron-icon { font-size: 0.8rem; color: #94A3B8; transition: transform 0.3s ease; } details[open] .chevron-icon { transform: rotate(180deg); color: var(--primary); } details[open] .menu-title { color: var(--primary); }
-        .menu-list { list-style: none; padding-bottom: 10px; animation: slideDown 0.3s ease-out; } @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-        .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 20px 10px 40px; font-size: 0.9rem; font-weight: 500; color: var(--text-sub); cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; } .menu-item i { font-size: 1.1rem; width: 20px; text-align: center; } .menu-item:hover { background: #F1F5F9; color: var(--text-main); } .menu-item.active { background: #EFF6FF; color: var(--primary); font-weight: 700; border-left-color: var(--primary); }
-        .menu-item a { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px; width: 100%; }
-        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--surface); scroll-behavior: smooth; } .doc-container { max-width: 900px; margin: 0 auto; }
-        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;} .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
-        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; } .doc-header h1 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; } .doc-header p { font-size: 1rem; color: var(--text-sub); }
-        .doc-section { margin-bottom: 40px; } .doc-section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; } .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; }
-        .doc-content { font-size: 0.95rem; color: #334155; line-height: 1.7; } .doc-content p { margin-bottom: 12px; }
+
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR TẬP TRUNG --- */
+        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 8px 16px; border-radius: 8px; transition: 0.2s; background: #EFF6FF; border: 1px solid #BFDBFE;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+        .logo { font-size: 1.2rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; display: none; }
+
+        .top-right { display: flex; align-items: center; }
+        .header-title-right { font-weight: 700; font-size: 1rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH (KHÔNG SIDEBAR) --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; }
+
+        /* --- VÙNG NỘI DUNG HƯỚNG DẪN TÀI LIỆU --- */
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%;}
+        .doc-container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h1 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        .doc-section { margin-bottom: 40px; }
+        .doc-section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; flex-shrink: 0;}
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.7; }
+        .doc-content p { margin-bottom: 12px; }
+
+        /* --- MOCKUP CSS --- */
         .ui-mockup-box { background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto;}
-        .mock-dash-card { width: 340px; background: white; border-radius: 16px; border: 1px solid var(--border-color); padding: 25px 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin: 0 auto;} .mock-dash-card i.main-icon { font-size: 3rem; color: #CBD5E1; margin-bottom: 15px;} .mock-dash-card h3 { font-size: 1.1rem; color: #1E3A8A; margin-bottom: 5px; } .mock-dash-card p { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 20px; font-style: italic;}
-        .dash-btn-group { display: flex; flex-direction: column; gap: 10px; } .mock-dash-btn { background: var(--surface); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; padding: 12px; font-weight: 700; display: flex; align-items: center; gap: 10px; font-size: 0.9rem;} .mock-dash-btn.primary { background: #60A5FA; color: white; border: none; justify-content: center;}
-        .mock-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.85rem;} .mock-table th { background: #F1F5F9; padding: 12px 15px; text-align: left; font-weight: 700; color: var(--text-sub); border-bottom: 1px solid var(--border-color); white-space: nowrap;} .mock-table td { padding: 12px 15px; border-bottom: 1px solid #E2E8F0; color: var(--text-main); white-space: nowrap;} .mock-table tr:hover td { background: #F8FAFC; } .status-green { color: var(--c-green); font-weight: 500; }
-        .mock-form { background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; } .mock-form-header { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #E2E8F0;} .mock-row { display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-end;} .mock-col { flex: 1; display: flex; flex-direction: column; gap: 8px; } .mock-label { font-weight: 700; color: var(--text-main); font-size: 0.85rem;} .mock-value { color: var(--text-sub); font-size: 0.9rem; border-bottom: 1px solid #CBD5E1; padding-bottom: 5px;}
-        .mock-toggle { display: inline-flex; align-items: center; justify-content: flex-end; width: 36px; height: 20px; background: #E2E8F0; border-radius: 20px; position: relative; vertical-align: middle; margin-left: 8px; } .mock-toggle::after { content: ''; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.1); } .mock-toggle.active { background: var(--c-green); } .mock-toggle.active::after { transform: translateX(16px); }
-        .mock-tabs { display: flex; border-bottom: 2px solid var(--c-green); margin-top: 20px;} .mock-tab { padding: 10px 15px; font-size: 0.85rem; font-weight: 700; color: var(--c-green); text-transform: uppercase; border: 1px solid var(--c-green); border-bottom: none; border-radius: 6px 6px 0 0; background: white;}
-        .alert-box { display: flex; gap: 15px; padding: 16px; border-radius: 12px; margin: 20px 0; background: var(--c-blue-light); border: 1px solid #BFDBFE; } .alert-box i { font-size: 1.4rem; color: var(--primary); margin-top: 2px; } .alert-box div h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; } .alert-box div p { font-size: 0.9rem; color: #334155; margin: 0; }
-        .key-tag { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 2px 6px; font-size: 0.8rem; font-family: monospace; color: var(--text-main); font-weight: 600; }
+
+        .mock-dash-card { width: 340px; background: white; border-radius: 16px; border: 1px solid var(--border-color); padding: 25px 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin: 0 auto; max-width: 100%;}
+        .mock-dash-card i.main-icon { font-size: 3rem; color: #CBD5E1; margin-bottom: 15px;}
+        .mock-dash-card h3 { font-size: 1.1rem; color: #1E3A8A; margin-bottom: 5px; }
+        .mock-dash-card p { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 20px; font-style: italic;}
+
+        .dash-btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .mock-dash-btn { background: var(--surface); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; padding: 12px; font-weight: 700; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; text-align: left; line-height: 1.3;}
+        .mock-dash-btn.primary { background: #60A5FA; color: white; border: none; justify-content: center; text-align: center;}
+
+        .table-wrapper { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid var(--border-color); }
+        .mock-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.85rem; min-width: 600px;}
+        .mock-table th { background: #F1F5F9; padding: 12px 15px; text-align: left; font-weight: 700; color: var(--text-sub); border-bottom: 1px solid var(--border-color); white-space: nowrap;}
+        .mock-table td { padding: 12px 15px; border-bottom: 1px solid #E2E8F0; color: var(--text-main); white-space: nowrap;}
+        .mock-table tr:hover td { background: #F8FAFC; }
+        .status-green { color: var(--c-green); font-weight: 500; }
+
+        .mock-form { background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; }
+        .mock-form-header { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #E2E8F0; word-break: break-word;}
+        .mock-row { display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-end; flex-wrap: wrap;}
+        .mock-col { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 120px;}
+        .mock-label { font-weight: 700; color: var(--text-main); font-size: 0.85rem;}
+        .mock-value { color: var(--text-sub); font-size: 0.9rem; border-bottom: 1px solid #CBD5E1; padding-bottom: 5px;}
+
+        .mock-toggle { display: inline-flex; align-items: center; justify-content: flex-end; width: 36px; height: 20px; background: #E2E8F0; border-radius: 20px; position: relative; vertical-align: middle; margin-left: 8px; flex-shrink: 0;}
+        .mock-toggle::after { content: ''; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .mock-toggle.active { background: var(--c-green); }
+        .mock-toggle.active::after { transform: translateX(16px); }
+
+        .mock-tabs { display: flex; border-bottom: 2px solid var(--c-green); margin-top: 20px; overflow-x: auto;}
+        .mock-tab { padding: 10px 15px; font-size: 0.85rem; font-weight: 700; color: var(--c-green); text-transform: uppercase; border: 1px solid var(--c-green); border-bottom: none; border-radius: 6px 6px 0 0; background: white; white-space: nowrap;}
+
+        .alert-box { display: flex; gap: 15px; padding: 16px; border-radius: 12px; margin: 20px 0; background: var(--c-blue-light); border: 1px solid #BFDBFE; align-items: flex-start;}
+        .alert-box i { font-size: 1.4rem; color: var(--primary); margin-top: 2px; }
+        .alert-box div h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .alert-box div p { font-size: 0.9rem; color: #334155; margin: 0; }
+
+        .key-tag { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 2px 6px; font-size: 0.8rem; font-family: monospace; color: var(--text-main); font-weight: 600; display: inline-block;}
+
+        /* --- TỐI ƯU HIỂN THỊ ĐIỆN THOẠI (MOBILE RESPONSIVE) --- */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 15px; }
+            .header-title-right { font-size: 0.85rem; max-width: 150px; text-align: right; line-height: 1.2;}
+
+            .content-area { padding: 15px; }
+            .doc-container { padding: 20px; border-radius: 12px; }
+            .doc-header h1 { font-size: 1.5rem; }
+
+            .mock-row { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .mock-col { width: 100%; }
+        }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
         <div class="top-left">
-            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-arrow-left"></i> Trang chủ</a>
+            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
             <div class="logo">eKids CMS Documentation</div>
         </div>
         <div class="top-right">
-            <div class="user-profile"><span>Quản trị viên</span><img src="https://i.pravatar.cc/150?img=11" alt="Admin"></div>
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
         </div>
     </div>
 
     <div class="main-layout">
-        <div class="sidebar">
-            <details class="menu-group">
-                <summary class="menu-title"><span>A. Thiết lập ban đầu</span><i class="fas fa-chevron-down chevron-icon"></i></summary>
-                <ul class="menu-list">
-                    <li class="menu-item"><a href="../thietlapbandau/thongtin.html"><i class="fas fa-building"></i> Thiết lập thông tin ban đầu</a></li>
-                    <li class="menu-item"><a href="../thietlapbandau/nghile.html"><i class="fas fa-calendar-alt"></i> Quản lý ngày nghỉ, lễ/tết</a></li>
-                    <li class="menu-item"><a href="../hocsinh/cauhinh.html"><i class="fas fa-list-ul"></i> Danh mục Khoản thu & Ca học</a></li>
-                </ul>
-            </details>
-            <details class="menu-group">
-                <summary class="menu-title"><span>B. Hồ sơ & Học phí</span><i class="fas fa-chevron-down chevron-icon"></i></summary>
-                <ul class="menu-list">
-                    <li class="menu-item"><a href="../hocsinh/hosohocsinh.html"><i class="fas fa-user-graduate"></i> Quản lý học sinh</a></li>
-                    <li class="menu-item"><a href="../hocsinh/diemdanh.html"><i class="fas fa-tasks"></i> Điểm danh & Xếp ca</a></li>
-                    <li class="menu-item"><a href="../hocsinh/tinhhocphi.html"><i class="fas fa-file-invoice-dollar"></i> Tính học phí</a></li>
-                </ul>
-            </details>
-        </div>
-
         <div class="content-area">
             <div class="doc-container">
                 <div class="breadcrumb">Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phần A. Thiết lập ban đầu <i class="fas fa-chevron-right"></i> <span>Danh mục Khoản thu & Ca học</span></div>
+
                 <div class="doc-header">
                     <h1>Hướng dẫn: Thiết lập Danh mục Khoản thu, Ca học & Chính sách giảm phí</h1>
                     <p>Đây là khu vực cài đặt "bộ não" tính toán cho phần mềm. Việc thiết lập đúng công thức cho từng loại phí, ca học và tỷ lệ giảm giá sẽ giúp hệ thống tự động xuất bảng học phí chính xác 100%.</p>
@@ -83,7 +132,9 @@
                         <p>Từ màn hình bảng điều khiển, bạn sẽ thấy 3 nút chức năng tương ứng với 3 thiết lập nền tảng:</p>
                         <div class="ui-mockup-box" style="display: flex; justify-content: center;">
                             <div class="mock-dash-card">
-                                <i class="fas fa-camera-retro main-icon"></i><h3>Trường Ví dụ</h3><p style="margin-bottom: 15px;">(Thiết lập thông tin phục vụ quản lý học phí/học sinh của trung tâm)</p>
+                                <i class="fas fa-camera-retro main-icon"></i>
+                                <h3>Trường Ví dụ</h3>
+                                <p style="margin-bottom: 15px;">(Thiết lập thông tin phục vụ quản lý học phí/học sinh của trung tâm)</p>
                                 <div class="dash-btn-group">
                                     <div class="mock-dash-btn primary"><i class="fas fa-list-ol" style="width:20px;"></i> Danh mục các khoản thu của [Học sinh]</div>
                                     <div class="mock-dash-btn"><i class="fas fa-university" style="width:20px; color: var(--text-sub);"></i> Danh mục [Ca/Lớp/Dịch vụ] can thiệp</div>
@@ -98,20 +149,26 @@
                     <h2><span class="step-badge">2</span> Quản lý Danh mục các Khoản thu (Bán trú, Lớp chung)</h2>
                     <div class="doc-content">
                         <p><strong>Danh sách:</strong> Nơi lưu trữ các loại phí định kỳ như Tiền ăn trưa, Bán trú, Học liệu...</p>
-                        <div class="ui-mockup-box">
-                            <button class="key-tag" style="background: #64748B; color: white; border: none; margin-bottom: 15px;">Mới</button>
-                            <table class="mock-table">
-                                <tr><th>Tên Loại thu</th><th>Loại hình thu (Công thức)</th><th>Số tiền(vnđ)</th><th>Hoàn tiền</th><th>Giảm học phí</th><th>Trạng thái</th></tr>
-                                <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Bán trú (dưới 3 tuổi)</td><td>Khoản thu = (Số tiền/Ngày đi học quy định...)</td><td>2.350.000</td><td><span class="mock-toggle"></span></td><td><span class="mock-toggle active"></span></td><td class="status-green">Đang hoạt...</td></tr>
-                                <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Tiền ăn trưa, ăn chiều...</td><td>Khoản thu = Số tiền * Ngày đi học thực tế</td><td>35.000</td><td><span class="mock-toggle active"></span></td><td><span class="mock-toggle"></span></td><td class="status-green">Đang hoạt...</td></tr>
-                            </table>
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <button class="key-tag" style="background: #64748B; color: white; border: none; margin-bottom: 15px; padding: 6px 12px; cursor: pointer;">+ Mới</button>
+                            <div class="table-wrapper">
+                                <table class="mock-table">
+                                    <tr><th>Tên Loại thu</th><th>Loại hình thu (Công thức)</th><th>Số tiền(vnđ)</th><th>Hoàn tiền</th><th>Giảm học phí</th><th>Trạng thái</th></tr>
+                                    <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Bán trú (dưới 3 tuổi)</td><td>Khoản thu = (Số tiền/Ngày đi học quy định...)</td><td>2.350.000</td><td><span class="mock-toggle"></span></td><td><span class="mock-toggle active"></span></td><td class="status-green">Đang hoạt...</td></tr>
+                                    <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Tiền ăn trưa, ăn chiều...</td><td>Khoản thu = Số tiền * Ngày đi học thực tế</td><td>35.000</td><td><span class="mock-toggle active"></span></td><td><span class="mock-toggle"></span></td><td class="status-green">Đang hoạt...</td></tr>
+                                </table>
+                            </div>
                         </div>
                         <p><strong>Tạo mới / Chỉnh sửa:</strong> Bấm nút <strong>Mới</strong> hoặc click vào một dòng để thiết lập cấu hình chuyên sâu:</p>
                         <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
                             <div class="mock-form">
                                 <div class="mock-form-header">CẤU HÌNH - CƠ SỞ / CẤU HÌNH - THU BÁN TRÚ (LỚP CHUNG)</div>
-                                <div class="mock-row"><div class="mock-col" style="flex: 2;"><div class="mock-label">Tên Loại thu</div><div class="mock-value">Bán trú (dưới 3 tuổi)</div></div></div>
-                                <div class="mock-row"><div class="mock-col" style="flex: 2;"><div class="mock-label">Loại hình thu</div><div class="mock-value">Khoản thu = (Số tiền/Ngày đi học quy định của tháng) * Ngày đi học thực tế</div></div></div>
+                                <div class="mock-row">
+                                    <div class="mock-col" style="flex: 2;"><div class="mock-label">Tên Loại thu</div><div class="mock-value">Bán trú (dưới 3 tuổi)</div></div>
+                                </div>
+                                <div class="mock-row">
+                                    <div class="mock-col" style="flex: 2;"><div class="mock-label">Loại hình thu</div><div class="mock-value">Khoản thu = (Số tiền/Ngày đi học quy định của tháng) * Ngày đi học thực tế</div></div>
+                                </div>
                                 <div class="mock-row" style="align-items: center; border-bottom: 1px dashed #E2E8F0; padding-bottom: 15px;">
                                     <div class="mock-col"><div class="mock-label">Số tiền(vnđ)</div><div class="mock-value" style="border:none;">2.350.000</div></div>
                                     <div class="mock-col"><div class="mock-label">Sẽ [Hoàn tiền] khi [Nghỉ]</div><div><span class="mock-toggle"></span></div></div>
@@ -127,14 +184,25 @@
                     <h2><span class="step-badge">3</span> Quản lý Danh mục Ca / Dịch vụ Can thiệp</h2>
                     <div class="doc-content">
                         <p>Tương tự như khoản thu, khu vực này để khai báo giá tiền của từng Ca dạy chuyên biệt.</p>
-                        <div class="ui-mockup-box">
-                            <table class="mock-table">
-                                <tr><th>Tên loại hình [Ca] can thiệp</th><th>Số tiền(vnđ)</th><th>Sẽ [Hoàn tiền]</th><th>Được tính giảm</th><th>Trạng thái</th></tr>
-                                <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Ca trong giờ hành chính (150.000)</td><td>130.000</td><td><span class="mock-toggle active"></span></td><td><span class="mock-toggle active"></span></td><td class="status-green">Đang hoạt động</td></tr>
-                                <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Ca đặc biệt (Vào chủ nhật)</td><td>300.000</td><td><span class="mock-toggle active"></span></td><td><span class="mock-toggle active"></span></td><td class="status-green">Đang hoạt động</td></tr>
-                            </table>
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="table-wrapper">
+                                <table class="mock-table">
+                                    <tr><th>Tên loại hình [Ca] can thiệp</th><th>Số tiền(vnđ)</th><th>Sẽ [Hoàn tiền]</th><th>Được tính giảm</th><th>Trạng thái</th></tr>
+                                    <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Ca trong giờ hành chính (150.000)</td><td>130.000</td><td><span class="mock-toggle active"></span></td><td><span class="mock-toggle active"></span></td><td class="status-green">Đang hoạt động</td></tr>
+                                    <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Ca đặc biệt (Vào chủ nhật)</td><td>300.000</td><td><span class="mock-toggle active"></span></td><td><span class="mock-toggle active"></span></td><td class="status-green">Đang hoạt động</td></tr>
+                                </table>
+                            </div>
                         </div>
-                        <div class="alert-box"><i class="fas fa-info-circle"></i><div><h4>Ý nghĩa của các nút Bật/Tắt:</h4><ul style="margin-top: 8px; margin-bottom: 0;"><li><strong>Sẽ [Hoàn tiền]:</strong> Nếu BẬT, khi học sinh nghỉ học, phần mềm sẽ lấy số tiền này nhân với tỷ lệ hoàn phí để trừ tiền cho phụ huynh. Đa số các Ca Can Thiệp đều nên BẬT.</li><li><strong>Được tính toán giảm [học phí]:</strong> Nếu BẬT, khi học sinh thuộc diện Hộ nghèo (được giảm 10%), hệ thống sẽ tự động trích 10% của khoản này ra để tặng lại học sinh. Tiền ăn trưa thường sẽ TẮT nút này.</li></ul></div></div>
+                        <div class="alert-box">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <h4>Ý nghĩa của các nút Bật/Tắt:</h4>
+                                <ul style="margin-top: 8px; margin-bottom: 0;">
+                                    <li><strong>Sẽ [Hoàn tiền]:</strong> Nếu BẬT, khi học sinh nghỉ học, phần mềm sẽ lấy số tiền này nhân với tỷ lệ hoàn phí để trừ tiền cho phụ huynh. Đa số các Ca Can Thiệp đều nên BẬT.</li>
+                                    <li><strong>Được tính toán giảm [học phí]:</strong> Nếu BẬT, khi học sinh thuộc diện Hộ nghèo (được giảm 10%), hệ thống sẽ tự động trích 10% của khoản này ra để tặng lại học sinh. Tiền ăn trưa thường sẽ TẮT nút này.</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -142,24 +210,34 @@
                     <h2><span class="step-badge">4</span> Thiết lập Danh sách Chính sách Giảm Học phí</h2>
                     <div class="doc-content">
                         <p>Truy cập vào <strong>Đối tượng chính sách giảm [Học phí]</strong> để định nghĩa các diện ưu đãi của cơ sở.</p>
-                        <div class="ui-mockup-box">
-                            <button class="key-tag" style="background: #64748B; color: white; border: none; margin-bottom: 15px;">Mới</button>
-                            <table class="mock-table">
-                                <tr><th>Tên chính sách giảm</th><th>Tỷ lệ % giảm</th><th>Trạng thái</th></tr>
-                                <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Con thương binh / liệt sỹ</td><td>10</td><td class="status-green">Đang hoạt động</td></tr>
-                                <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Hộ nghèo/ cận nghèo</td><td>5</td><td class="status-green">Đang hoạt động</td></tr>
-                            </table>
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <button class="key-tag" style="background: #64748B; color: white; border: none; margin-bottom: 15px; padding: 6px 12px; cursor: pointer;">+ Mới</button>
+                            <div class="table-wrapper">
+                                <table class="mock-table">
+                                    <tr><th>Tên chính sách giảm</th><th>Tỷ lệ % giảm</th><th>Trạng thái</th></tr>
+                                    <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Con thương binh / liệt sỹ</td><td>10</td><td class="status-green">Đang hoạt động</td></tr>
+                                    <tr><td><i class="fas fa-th" style="color: #CBD5E1; margin-right: 5px;"></i> Hộ nghèo/ cận nghèo</td><td>5</td><td class="status-green">Đang hoạt động</td></tr>
+                                </table>
+                            </div>
                         </div>
                         <p><strong>Cấu hình Chính sách:</strong> Khi bạn mở chi tiết một chính sách, bạn có thể xem nhanh danh sách những học sinh nào đang được áp dụng chính sách này thông qua Tab "Danh sách học sinh áp dụng".</p>
                         <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
                             <div class="mock-form">
-                                <div class="mock-row" style="margin-bottom: 15px;"><div class="mock-col" style="flex: 2;"><div class="mock-label">Tên chính sách giảm</div><div class="mock-value">Con thương binh / liệt sỹ</div></div></div>
-                                <div class="mock-row" style="margin-bottom: 15px;"><div class="mock-col" style="flex: 2;"><div class="mock-label">Tỷ lệ % giảm học phí</div><div class="mock-value">10</div></div></div>
-                                <div class="mock-tabs"><div class="mock-tab">DANH SÁCH HỌC SINH ÁP DỤNG</div></div>
-                                <table class="mock-table" style="border: none;">
-                                    <tr><th>TT</th><th>Họ và tên</th><th>Biệt danh</th><th>Giới tính</th><th>Ngày sinh</th><th>Trạng thái</th></tr>
-                                    <tr><td colspan="6" style="color: var(--primary); cursor: pointer;">Thêm một dòng</td></tr>
-                                </table>
+                                <div class="mock-row" style="margin-bottom: 15px;">
+                                    <div class="mock-col" style="flex: 2;"><div class="mock-label">Tên chính sách giảm</div><div class="mock-value">Con thương binh / liệt sỹ</div></div>
+                                </div>
+                                <div class="mock-row" style="margin-bottom: 15px;">
+                                    <div class="mock-col" style="flex: 2;"><div class="mock-label">Tỷ lệ % giảm học phí</div><div class="mock-value">10</div></div>
+                                </div>
+                                <div class="mock-tabs">
+                                    <div class="mock-tab">DANH SÁCH HỌC SINH ÁP DỤNG</div>
+                                </div>
+                                <div class="table-wrapper" style="border: none;">
+                                    <table class="mock-table" style="border: none;">
+                                        <tr><th>TT</th><th>Họ và tên</th><th>Biệt danh</th><th>Giới tính</th><th>Ngày sinh</th><th>Trạng thái</th></tr>
+                                        <tr><td colspan="6" style="color: var(--primary); cursor: pointer; text-align: center;">+ Thêm một dòng</td></tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,17 +247,5 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let currentPage = window.location.pathname.split("/").pop();
-            document.querySelectorAll('.menu-item a').forEach(link => {
-                if (link.getAttribute('href').split("/").pop() === currentPage) {
-                    link.parentElement.classList.add('active');
-                    const parentDetails = link.closest('details');
-                    if (parentDetails) parentDetails.setAttribute('open', '');
-                }
-            });
-        });
-    </script>
 </body>
 </html>
