@@ -10,63 +10,46 @@
 
         :root {
             --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
-            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0; --sidebar-width: 280px;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
             --c-green: #10B981; --c-red: #EF4444; --c-blue-light: #DBEAFE; --c-orange-light: #FEF3C7; --c-orange: #D97706;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-        body { background-color: var(--bg-body); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
 
-        /* --- TOP BAR --- */
-        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; }
+        /* --- TOP BAR TẬP TRUNG --- */
+        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
         .top-left { display: flex; align-items: center; gap: 20px; }
-        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: var(--text-sub); text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: 0.2s; background: #F1F5F9; }
-        .back-btn:hover { background: #E2E8F0; color: var(--text-main); }
-        .logo { font-size: 1.2rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
-        .top-right { display: flex; align-items: center; gap: 15px; }
-        .user-profile { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9rem; }
-        .user-profile img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); }
+        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 8px 16px; border-radius: 8px; transition: 0.2s; background: #EFF6FF; border: 1px solid #BFDBFE;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+        .logo { font-size: 1.2rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; display: none; }
 
-        /* --- LAYOUT CHÍNH --- */
-        .main-layout { display: flex; flex: 1; overflow: hidden; }
+        .top-right { display: flex; align-items: center; }
+        .header-title-right { font-weight: 700; font-size: 1rem; color: var(--primary); letter-spacing: 0.2px;}
 
-        /* --- SIDEBAR TREE MENU --- */
-        .sidebar { width: var(--sidebar-width); background: var(--surface); border-right: 1px solid var(--border-color); overflow-y: auto; padding: 15px 0; flex-shrink: 0; }
-        .menu-group summary::-webkit-details-marker { display: none; }
-        .menu-group summary { list-style: none; outline: none; }
-        .menu-title { padding: 12px 20px; font-size: 0.8rem; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; user-select: none; }
-        .menu-title:hover { background: #F8FAFC; color: var(--primary); }
-        .chevron-icon { font-size: 0.8rem; color: #94A3B8; transition: transform 0.3s ease; }
-        details[open] .chevron-icon { transform: rotate(180deg); color: var(--primary); }
-        details[open] .menu-title { color: var(--primary); }
-        .menu-list { list-style: none; padding-bottom: 10px; animation: slideDown 0.3s ease-out; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-        .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 20px 10px 40px; font-size: 0.9rem; font-weight: 500; color: var(--text-sub); cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; }
-        .menu-item i { font-size: 1.1rem; width: 20px; text-align: center; }
-        .menu-item:hover { background: #F1F5F9; color: var(--text-main); }
-        .menu-item.active { background: #EFF6FF; color: var(--primary); font-weight: 700; border-left-color: var(--primary); }
-        .menu-item a { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px; width: 100%; }
+        /* --- LAYOUT CHÍNH (KHÔNG SIDEBAR) --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; }
 
         /* --- VÙNG NỘI DUNG HƯỚNG DẪN TÀI LIỆU --- */
-        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--surface); scroll-behavior: smooth; }
-        .doc-container { max-width: 900px; margin: 0 auto; }
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%;}
+        .doc-container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);}
 
-        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;}
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
         .breadcrumb i { font-size: 0.7rem; }
         .breadcrumb span { color: var(--primary); }
 
         .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
-        .doc-header h1 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; }
-        .doc-header p { font-size: 1rem; color: var(--text-sub); }
+        .doc-header h1 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
 
         .doc-section { margin-bottom: 40px; }
         .doc-section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-        .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; }
+        .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; flex-shrink: 0;}
 
-        .doc-content { font-size: 0.95rem; color: #334155; line-height: 1.7; }
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.7; }
         .doc-content p { margin-bottom: 12px; }
-        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content ul, .doc-content ol { padding-left: 20px; margin-bottom: 16px; }
         .doc-content li { margin-bottom: 8px; }
 
         /* --- MOCKUP CSS --- */
@@ -78,7 +61,8 @@
         .mock-dash-card p { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 20px; font-style: italic;}
         .mock-dash-btn { background: #60A5FA; color: white; border-radius: 8px; padding: 12px; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.9rem;}
 
-        .mock-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.85rem;}
+        .table-wrapper { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid var(--border-color); }
+        .mock-table { width: 100%; border-collapse: collapse; background: white; font-size: 0.85rem; min-width: 600px;}
         .mock-table th { background: #F1F5F9; padding: 12px; text-align: left; font-weight: 700; color: var(--text-sub); border-bottom: 2px solid var(--border-color); white-space: nowrap;}
         .mock-table td { padding: 12px; border-bottom: 1px solid #E2E8F0; color: var(--text-main); white-space: nowrap;}
         .mock-table tr:hover td { background: #F8FAFC; }
@@ -92,79 +76,76 @@
         .ui-line span:first-child { color: var(--text-sub); width: 140px; flex-shrink: 0;}
         .ui-line span:last-child { font-weight: 600; color: var(--text-main); text-align: left; flex: 1;}
 
-        .mock-toggle { display: inline-flex; align-items: center; justify-content: flex-end; width: 36px; height: 20px; background: #E2E8F0; border-radius: 20px; position: relative; vertical-align: middle; margin-left: 8px; }
+        .mock-toggle { display: inline-flex; align-items: center; justify-content: flex-end; width: 36px; height: 20px; background: #E2E8F0; border-radius: 20px; position: relative; vertical-align: middle; margin-left: 8px; flex-shrink: 0;}
         .mock-toggle::after { content: ''; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .mock-toggle.active { background: var(--c-green); }
         .mock-toggle.active::after { transform: translateX(16px); }
 
-        .profile-header-mockup { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .profile-header-mockup { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;}
 
         .mock-tabs { display: flex; border-bottom: 2px solid #E2E8F0; margin-top: 20px; margin-bottom: 20px; overflow-x: auto; scrollbar-width: none;}
         .mock-tab { padding: 12px 20px; font-size: 0.85rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap;}
         .mock-tab.active { color: var(--c-orange); border-bottom-color: var(--c-orange); }
 
-        /* Modal Mockups */
-        .mock-modal-overlay { background: rgba(15, 23, 42, 0.4); border-radius: 8px; padding: 30px; display: flex; justify-content: center; align-items: center;}
+        .mock-modal-overlay { background: rgba(15, 23, 42, 0.4); border-radius: 8px; padding: 20px; display: flex; justify-content: center; align-items: center;}
         .mock-modal { background: white; width: 100%; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden;}
         .mock-modal-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; font-weight: 700; color: var(--text-main);}
         .mock-modal-body { padding: 20px; }
-        .mock-modal-footer { padding: 15px 20px; border-top: 1px solid var(--border-color); background: #F8FAFC; display: flex; gap: 10px;}
+        .mock-modal-footer { padding: 15px 20px; border-top: 1px solid var(--border-color); background: #F8FAFC; display: flex; gap: 10px; flex-wrap: wrap;}
         .mock-btn { padding: 8px 15px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; border: none; cursor: pointer; }
         .mock-btn.primary { background: #64748B; color: white; }
         .mock-btn.secondary { background: #E2E8F0; color: var(--text-main); }
 
-        /* Khối nhập liệu ca học */
         .ca-form-section { background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-bottom: 15px;}
         .ca-form-section h4 { font-size: 0.85rem; color: #1E3A8A; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;}
         .input-row { display: flex; align-items: center; margin-bottom: 12px; font-size: 0.85rem;}
         .input-label { width: 140px; color: var(--text-main); font-weight: 600;}
-        .input-field { flex: 1; border-bottom: 1px solid #CBD5E1; color: var(--text-sub); padding-bottom: 4px;}
+        .input-field { flex: 1; border-bottom: 1px solid #CBD5E1; color: var(--text-sub); padding-bottom: 4px; width: 100%;}
 
-        /* Khối Cảnh báo */
-        .alert-box { display: flex; gap: 15px; padding: 16px; border-radius: 12px; margin: 20px 0; background: var(--c-blue-light); border: 1px solid #BFDBFE; }
+        .alert-box { display: flex; gap: 15px; padding: 16px; border-radius: 12px; margin: 20px 0; background: var(--c-blue-light); border: 1px solid #BFDBFE; align-items: flex-start;}
         .alert-box.warning { background: #FEFCE8; border-color: #FDE047; }
         .alert-box i { font-size: 1.4rem; color: var(--primary); margin-top: 2px; }
         .alert-box.warning i { color: var(--c-orange); }
         .alert-box div h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
         .alert-box div p { font-size: 0.9rem; color: #334155; margin: 0; }
 
-        .key-tag { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 2px 6px; font-size: 0.8rem; font-family: monospace; color: var(--text-main); font-weight: 600; }
+        .key-tag { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 2px 6px; font-size: 0.8rem; font-family: monospace; color: var(--text-main); font-weight: 600; display: inline-block; margin-bottom: 4px;}
 
+        /* --- TỐI ƯU HIỂN THỊ ĐIỆN THOẠI (MOBILE RESPONSIVE) --- */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 15px; }
+            .logo { display: none; }
+            .header-title-right { font-size: 0.85rem; max-width: 150px; text-align: right; line-height: 1.2;}
+
+            .content-area { padding: 15px; }
+            .doc-container { padding: 20px; border-radius: 12px; }
+            .doc-header h1 { font-size: 1.5rem; }
+
+            .ui-grid-2col { grid-template-columns: 1fr; }
+            .profile-header-mockup { flex-direction: column; align-items: flex-start; }
+            .profile-header-mockup > div:last-child { width: 100%; align-items: flex-start; margin-top: 10px;}
+
+            .input-row { flex-direction: column; align-items: flex-start; gap: 8px;}
+            .input-label { width: 100%; }
+
+            /* Tự cuộn ngang cho các khung thứ ngày tháng */
+            .day-toggles { overflow-x: auto; display: flex; gap: 15px; padding-bottom: 5px;}
+        }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
         <div class="top-left">
-            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-arrow-left"></i> Trang chủ</a>
-            <div class="logo">eKids CMS Documentation</div>
+            <a href="../index.html" class="back-btn"><i class="fas fa-home"></i> Về trang chủ</a>
+            <div class="logo">eKids CMS</div>
         </div>
         <div class="top-right">
-            <div class="user-profile"><span>Quản trị viên</span><img src="https://i.pravatar.cc/150?img=11" alt="Admin"></div>
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
         </div>
     </div>
 
     <div class="main-layout">
-
-        <div class="sidebar">
-            <details class="menu-group">
-                <summary class="menu-title"><span>A. Thiết lập ban đầu</span><i class="fas fa-chevron-down chevron-icon"></i></summary>
-                <ul class="menu-list">
-                    <li class="menu-item"><a href="../thietlapbandau/thongtin.html"><i class="fas fa-building"></i> Thiết lập thông primary ban đầu</a></li>
-                    <li class="menu-item"><a href="../thietlapbandau/nghile.html"><i class="fas fa-calendar-alt"></i> Quản lý ngày nghỉ, lễ/tết</a></li>
-                    <li class="menu-item"><a href="../hocsinh/cauhinh.html"><i class="fas fa-list-ul"></i> Danh mục Khoản thu & Ca học</a></li>
-                </ul>
-            </details>
-            <details class="menu-group" open>
-                <summary class="menu-title"><span>B. Hồ sơ & Học phí</span><i class="fas fa-chevron-down chevron-icon"></i></summary>
-                <ul class="menu-list">
-                    <li class="menu-item active"><a href="../hocsinh/hosohocsinh.html"><i class="fas fa-user-graduate"></i> Quản lý học sinh</a></li>
-                    <li class="menu-item"><a href="../hocsinh/diemdanh.html"><i class="fas fa-tasks"></i> Điểm danh & Xếp ca</a></li>
-                    <li class="menu-item"><a href="../hocsinh/tinhhocphi.html"><i class="fas fa-file-invoice-dollar"></i> Tính học phí</a></li>
-                </ul>
-            </details>
-        </div>
-
         <div class="content-area">
             <div class="doc-container">
 
@@ -174,7 +155,7 @@
 
                 <div class="doc-header">
                     <h1>Hướng dẫn: Quản lý Hồ sơ học sinh toàn diện</h1>
-                    <p>Phân hệ Quản lý Học sinh là trái tim của hệ thống. Tại đây bạn không chỉ quản lý thông tin lý lịch mà còn thiết lập lịch học chuyên biệt, chính sách giảm học phí và lưu trữ hồ sơ của từng học sinh.</p>
+                    <p>Tại đây bạn không chỉ quản lý thông tin lý lịch mà còn thiết lập lịch học chuyên biệt, chính sách giảm học phí, khoản thu và lưu trữ hồ sơ của từng học sinh.</p>
                 </div>
 
                 <div class="doc-section">
@@ -196,12 +177,14 @@
                     <h2><span class="step-badge">2</span> Danh sách học sinh</h2>
                     <div class="doc-content">
                         <p>Màn hình danh sách cung cấp cái nhìn tổng quan về tất cả học sinh. Bạn có thể tìm kiếm, lọc theo trạng thái (Đang theo học, Đã nghỉ).</p>
-                        <div class="ui-mockup-box">
-                            <table class="mock-table">
-                                <tr><th>TT</th><th>Họ và tên</th><th>Giới tính</th><th>Ngày sinh</th><th>Tuổi</th><th>Trạng thái</th></tr>
-                                <tr><td>1</td><td>Trần Việt Thắng</td><td>Nam</td><td>30/11/2010</td><td>14 tuổi 10 tháng</td><td class="status-green">Đang theo học</td></tr>
-                                <tr><td>2</td><td>Nguyễn Ngọc Anh</td><td>Nữ</td><td>16/11/2015</td><td>9 tuổi 10 tháng</td><td class="status-green">Đang theo học</td></tr>
-                            </table>
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="table-wrapper">
+                                <table class="mock-table">
+                                    <tr><th>TT</th><th>Họ và tên</th><th>Giới tính</th><th>Ngày sinh</th><th>Tuổi</th><th>Trạng thái</th></tr>
+                                    <tr><td>1</td><td>Trần Việt Thắng</td><td>Nam</td><td>30/11/2010</td><td>14 tuổi 10 tháng</td><td class="status-green">Đang theo học</td></tr>
+                                    <tr><td>2</td><td>Nguyễn Ngọc Anh</td><td>Nữ</td><td>16/11/2015</td><td>9 tuổi 10 tháng</td><td class="status-green">Đang theo học</td></tr>
+                                </table>
+                            </div>
                         </div>
                         <p>Bấm chọn vào tên một học sinh để <strong>Chỉnh sửa</strong>, hoặc bấm nút <span class="key-tag" style="background: var(--primary); color: white;">Mới</span> để thêm một học sinh.</p>
                     </div>
@@ -214,16 +197,16 @@
 
                         <div class="profile-header-mockup">
                             <div style="display: flex; align-items: center; gap: 15px;">
-                                <div style="width: 55px; height: 55px; background: #F1F5F9; border-radius: 8px; display: flex; justify-content: center; align-items: center; color: #CBD5E1; font-size: 1.5rem;"><i class="fas fa-camera"></i></div>
+                                <div style="width: 55px; height: 55px; background: #F1F5F9; border-radius: 8px; display: flex; justify-content: center; align-items: center; color: #CBD5E1; font-size: 1.5rem; flex-shrink: 0;"><i class="fas fa-camera"></i></div>
                                 <div>
-                                    <div style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Chuyên biệt Từ Sơn - Trụ sở chính</div>
-                                    <h3 style="font-size: 1.5rem; color: var(--text-main); line-height: 1.2;">Trần Việt Thắng</h3>
+                                    <div style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Chuyên biệt Từ Sơn</div>
+                                    <h3 style="font-size: 1.3rem; color: var(--text-main); line-height: 1.2;">Trần Việt Thắng</h3>
                                 </div>
                             </div>
                             <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
                                 <span class="status-green" style="background: #D1FAE5; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; text-transform: uppercase;">Đang theo học</span>
                                 <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-main); font-weight: 600;">
-                                    Đánh dấu [Hồ sơ học sinh] đã rà soát xong: <span class="mock-toggle active"></span>
+                                    [Hồ sơ] rà soát xong: <span class="mock-toggle active"></span>
                                 </div>
                             </div>
                         </div>
@@ -233,40 +216,40 @@
                                 <h4><i class="fas fa-address-card"></i> THÔNG TIN VỀ TRẺ</h4>
                                 <div class="ui-line"><span>Ngày sinh</span><span>16/11/2015</span></div>
                                 <div class="ui-line"><span>Giới tính</span><span>Nữ</span></div>
-                                <div class="ui-line"><span>Chiều cao / Cân nặng</span><span>...</span></div>
+                                <div class="ui-line"><span>Chiều cao</span><span>...</span></div>
                             </div>
                             <div class="ui-block">
                                 <h4><i class="fas fa-graduation-cap"></i> THÔNG TIN HỌC TẬP</h4>
-                                <div class="ui-line"><span>Ngày bắt đầu học</span><span>01/01/2025</span></div>
-                                <div class="ui-line"><span>Hình thức theo học</span><span>Cá nhân</span></div>
+                                <div class="ui-line"><span>Ngày bắt đầu</span><span>01/01/2025</span></div>
+                                <div class="ui-line"><span>Hình thức</span><span>Cá nhân</span></div>
                                 <div class="ui-line">
-                                    <span style="color: var(--c-red);"><i class="fas fa-heart"></i> Chính sách giảm HP</span>
-                                    <span style="color: var(--primary); border-bottom: 1px solid var(--primary); padding-bottom: 2px;">Hộ nghèo/ cận nghèo... <i class="fas fa-caret-down"></i></span>
+                                    <span style="color: var(--c-red);"><i class="fas fa-heart"></i> Giảm HP</span>
+                                    <span style="color: var(--primary); border-bottom: 1px solid var(--primary); padding-bottom: 2px;">Hộ nghèo <i class="fas fa-caret-down"></i></span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="ui-mockup-box" style="padding: 15px;">
-                            <div style="margin-bottom: 15px; font-weight: 600;"><i class="far fa-calendar-alt" style="color: var(--primary);"></i> THIẾT LẬP LỊCH ĐI HỌC RIÊNG <span class="mock-toggle active"></span></div>
-                            <div style="display: flex; justify-content: space-around; border: 1px dashed #CBD5E1; padding: 10px; border-radius: 8px;">
-                                <div>T2 <span class="mock-toggle"></span></div>
-                                <div>T3 <span class="mock-toggle active"></span></div>
-                                <div>T4 <span class="mock-toggle"></span></div>
-                                <div>T5 <span class="mock-toggle"></span></div>
-                                <div>T6 <span class="mock-toggle"></span></div>
-                                <div>T7 <span class="mock-toggle"></span></div>
-                                <div>CN <span class="mock-toggle"></span></div>
+                            <div style="margin-bottom: 15px; font-weight: 600;"><i class="far fa-calendar-alt" style="color: var(--primary);"></i> LỊCH ĐI HỌC RIÊNG <span class="mock-toggle active"></span></div>
+                            <div class="day-toggles" style="display: flex; justify-content: space-between; border: 1px dashed #CBD5E1; padding: 10px; border-radius: 8px; overflow-x: auto;">
+                                <div style="display:flex; align-items:center;">T2 <span class="mock-toggle"></span></div>
+                                <div style="display:flex; align-items:center;">T3 <span class="mock-toggle active"></span></div>
+                                <div style="display:flex; align-items:center;">T4 <span class="mock-toggle"></span></div>
+                                <div style="display:flex; align-items:center;">T5 <span class="mock-toggle"></span></div>
+                                <div style="display:flex; align-items:center;">T6 <span class="mock-toggle"></span></div>
+                                <div style="display:flex; align-items:center;">T7 <span class="mock-toggle"></span></div>
+                                <div style="display:flex; align-items:center;">CN <span class="mock-toggle"></span></div>
                             </div>
                         </div>
 
                         <div class="alert-box warning">
                             <i class="fas fa-exclamation-triangle"></i>
                             <div>
-                                <h4 style="font-size: 1.05rem; text-transform: uppercase;">3 Điểm lưu ý quan trọng khi tạo hồ sơ:</h4>
+                                <h4 style="font-size: 1.05rem; text-transform: uppercase;">3 Lưu ý quan trọng:</h4>
                                 <ul style="margin-top: 10px; margin-bottom: 0; padding-left: 20px; font-size: 0.95rem; color: #475569;">
-                                    <li style="margin-bottom: 10px;"><strong>1. Lịch học riêng:</strong> Nếu trẻ chỉ đi học vào một số ngày nhất định trong tuần (Ví dụ: chỉ học T2, T3), bắt buộc phải <strong>Bật thiết lập lịch đi học riêng</strong> và gạt xanh các ngày đi học. Hệ thống sẽ căn cứ vào đây để tính đúng tiền ăn và học phí.</li>
-                                    <li style="margin-bottom: 10px;"><strong>2. Chính sách giảm học phí:</strong> Nếu cơ sở có chính sách ưu đãi (Hộ nghèo, con giáo viên...), hãy chọn đúng loại chính sách ở ô có biểu tượng <i class="fas fa-heart" style="color: var(--c-red);"></i> để phần mềm tự động áp dụng mức giảm giá khi tính phí.</li>
-                                    <li><strong>3. Đánh dấu hoàn thiện:</strong> Sau khi đã điền đầy đủ thông tin, nhớ gạt bật nút <strong>"Đánh dấu [Hồ sơ học sinh] đã rà soát xong"</strong> (nằm ở góc phải trên cùng cạnh tên học sinh) để xác nhận hồ sơ đã chuẩn xác.</li>
+                                    <li style="margin-bottom: 10px;"><strong>Lịch học riêng:</strong> Nếu trẻ chỉ đi học vào một số ngày nhất định, bắt buộc phải bật nút này để hệ thống tính đúng tiền ăn/học phí.</li>
+                                    <li style="margin-bottom: 10px;"><strong>Chính sách giảm học phí:</strong> Chọn đúng loại chính sách để phần mềm tự động áp dụng ưu đãi.</li>
+                                    <li><strong>Đánh dấu hoàn thiện:</strong> Gạt bật nút "Đánh dấu đã rà soát xong" trên cùng để chốt hồ sơ.</li>
                                 </ul>
                             </div>
                         </div>
@@ -277,22 +260,18 @@
                 <div class="doc-section">
                     <h2><span class="step-badge">4</span> Quản lý các Tab Thông tin bổ sung</h2>
                     <div class="doc-content">
-                        <p>Nửa dưới của màn hình là hệ thống Tabs để quản lý mọi ngóc ngách hồ sơ của trẻ.</p>
-
                         <div class="mock-tabs">
                             <div class="mock-tab">Thông tin (+)</div>
-                            <div class="mock-tab">Lịch sử Học/Can thiệp</div>
+                            <div class="mock-tab">Lịch sử Học</div>
                             <div class="mock-tab">Hồ sơ [Scan]</div>
                             <div class="mock-tab">Phụ huynh</div>
                             <div class="mock-tab" style="color: var(--text-sub);">...</div>
                         </div>
-
                         <ul>
-                            <li><strong>THÔNG TIN (+):</strong> Khai báo chi tiết địa chỉ gia đình, tình trạng kinh tế, lịch sử mang thai của mẹ và các tiền sử dị ứng/bệnh lý của trẻ.</li>
-                            <li style="margin-top: 10px;"><strong>LỊCH SỬ HỌC/CAN THIỆP:</strong> Nơi ghi nhận lại hành trình của trẻ (Nơi học tập, thời gian từ ngày - đến ngày, trạng thái).</li>
-                            <li style="margin-top: 10px;"><strong>HỒ SƠ [SCAN]:</strong> Tải lên và lưu trữ dạng số hóa các giấy tờ quan trọng (Khai sinh, Giấy khám sức khỏe...). Bấm <span class="key-tag"><i class="fas fa-paperclip"></i> Hồ sơ/giấy tờ</span> để đính kèm.</li>
-                            <li style="margin-top: 10px;"><strong>PHỤ HUYNH:</strong> Quản lý thông tin liên hệ (Bố, Mẹ). Đặc biệt có nút <span class="key-tag" style="background: #475569; color: white;">Cấp tài khoản [Phụ huynh]</span> để kích hoạt tài khoản cho phụ huynh đăng nhập vào App theo dõi con.</li>
-                            <li style="margin-top: 10px;"><strong>NGHỈ PHÉP:</strong> Quản lý và xem danh sách nghỉ phép của học sinh để làm căn cứ hoàn phí.</li>
+                            <li><strong>THÔNG TIN (+):</strong> Khai báo địa chỉ, tình trạng y tế, tiền sử dị ứng.</li>
+                            <li><strong>HỒ SƠ [SCAN]:</strong> Tải lên bản số hóa Giấy khai sinh, Sổ tiêm chủng...</li>
+                            <li><strong>PHỤ HUYNH:</strong> Thông tin Bố/Mẹ và Cấp tài khoản truy cập App cho Phụ huynh.</li>
+                            <li><strong>NGHỈ PHÉP:</strong> Quản lý danh sách xin nghỉ phép làm căn cứ hoàn phí.</li>
                         </ul>
                     </div>
                 </div>
@@ -303,36 +282,35 @@
                         <p>Đây là nơi gán các loại phí (Tiền ăn, Bán trú, Học liệu...) mà học sinh này phải đóng hàng tháng. Chuyển sang Tab <strong>THU BÁN TRÚ/KHOẢN KHÁC</strong> và thực hiện:</p>
 
                         <ol style="margin-bottom: 15px; padding-left: 20px;">
-                            <li>Click vào dòng chữ màu xanh <span class="key-tag" style="color: var(--primary); background: transparent; border: none; padding: 0;">Thêm một dòng</span>.</li>
-                            <li>Một bảng danh sách các khoản thu hiện ra. Tích <i class="fas fa-check-square" style="color: var(--primary);"></i> chọn các khoản thu phù hợp với học sinh này.</li>
-                            <li>Bấm nút <strong>[Chọn]</strong> để ghi lại.</li>
+                            <li>Click vào nút <span class="key-tag" style="color: var(--primary); background: transparent; border: none; padding: 0;">Thêm một dòng</span>.</li>
+                            <li>Tích <i class="fas fa-check-square" style="color: var(--primary);"></i> chọn các khoản thu phù hợp với học sinh này.</li>
+                            <li>Bấm nút <strong>[Chọn]</strong> để lưu lại.</li>
                         </ol>
 
                         <div class="ui-mockup-box" style="background: transparent; border: none; padding: 0;">
                             <div class="mock-tabs" style="margin-top:0;">
-                                <div class="mock-tab" style="color: var(--text-sub);">...</div>
                                 <div class="mock-tab active">THU BÁN TRÚ/KHOẢN KHÁC</div>
                                 <div class="mock-tab" style="color: var(--text-sub);">CAN THIỆP TRONG TUẦN</div>
                             </div>
 
                             <div class="mock-modal-overlay">
-                                <div class="mock-modal" style="max-width: 700px;">
-                                    <div class="mock-modal-header">Thêm: Khoản thu bán trú của học sinh <i class="fas fa-times" style="color: #94A3B8;"></i></div>
+                                <div class="mock-modal">
+                                    <div class="mock-modal-header">Thêm: Khoản thu bán trú <i class="fas fa-times" style="color: #94A3B8;"></i></div>
                                     <div class="mock-modal-body">
                                         <div style="display: flex; justify-content: center; margin-bottom: 15px;">
-                                            <span style="background: #E2E8F0; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">3 đã chọn <i class="fas fa-times" style="margin-left: 5px;"></i></span>
+                                            <span style="background: #E2E8F0; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">2 đã chọn <i class="fas fa-times" style="margin-left: 5px;"></i></span>
                                         </div>
-                                        <table class="mock-table">
-                                            <tr><th style="width: 30px;"></th><th>Tên Loại thu</th><th>Số tiền(vnđ)</th><th>Hoàn tiền</th><th>Giảm học phí</th></tr>
-                                            <tr style="background: #EFF6FF;"><td><input type="checkbox" checked></td><td>Bán trú (dưới 3 tuổi)</td><td>2.350.000</td><td><span class="mock-toggle"></span></td><td><span class="mock-toggle active" style="margin:0;"></span></td></tr>
-                                            <tr style="background: #EFF6FF;"><td><input type="checkbox" checked></td><td>Đưa đi học mầm non</td><td>10.000</td><td><span class="mock-toggle active" style="margin:0;"></span></td><td><span class="mock-toggle active" style="margin:0;"></span></td></tr>
-                                            <tr><td><input type="checkbox"></td><td>Bán trú (3 - 6 tuổi)</td><td>1.850.000</td><td><span class="mock-toggle"></span></td><td><span class="mock-toggle active" style="margin:0;"></span></td></tr>
-                                            <tr style="background: #EFF6FF;"><td><input type="checkbox" checked></td><td>Học liệu học tập</td><td>50.000</td><td><span class="mock-toggle active" style="margin:0;"></span></td><td><span class="mock-toggle"></span></td></tr>
-                                        </table>
+                                        <div class="table-wrapper">
+                                            <table class="mock-table">
+                                                <tr><th style="width: 30px;"></th><th>Tên Loại thu</th><th>Số tiền(vnđ)</th></tr>
+                                                <tr style="background: #EFF6FF;"><td><input type="checkbox" checked></td><td>Bán trú (dưới 3 tuổi)</td><td>2.350.000</td></tr>
+                                                <tr style="background: #EFF6FF;"><td><input type="checkbox" checked></td><td>Đưa đi học mầm non</td><td>10.000</td></tr>
+                                                <tr><td><input type="checkbox"></td><td>Học liệu học tập</td><td>50.000</td></tr>
+                                            </table>
+                                        </div>
                                     </div>
                                     <div class="mock-modal-footer">
                                         <button class="mock-btn primary">Chọn</button>
-                                        <button class="mock-btn" style="background: #60A5FA; color: white;">Mới</button>
                                         <button class="mock-btn secondary">Đóng</button>
                                     </div>
                                 </div>
@@ -344,12 +322,12 @@
                 <div class="doc-section">
                     <h2><span class="step-badge">6</span> Thiết lập các Ca dạy Can thiệp trong tuần</h2>
                     <div class="doc-content">
-                        <p>Với các bé có nhu cầu học can thiệp riêng (1 kèm 1), bạn chuyển sang Tab <strong>CAN THIỆP TRONG TUẦN</strong> để xếp lịch. Các bước thực hiện:</p>
+                        <p>Với các bé có nhu cầu học can thiệp riêng (1 kèm 1), bạn chuyển sang Tab <strong>CAN THIỆP TRONG TUẦN</strong> để xếp lịch:</p>
 
                         <ol style="margin-bottom: 15px; padding-left: 20px;">
                             <li>Click vào <span class="key-tag" style="color: var(--primary); background: transparent; border: none; padding: 0;">Thêm một dòng</span>.</li>
-                            <li>Bảng tạo Thiết lập Ca hiện ra. Bạn cần điền đầy đủ: <strong>Loại hình Ca</strong>, <strong>Giáo viên phụ trách</strong>, và <strong>Khung giờ học</strong>.</li>
-                            <li><strong>Quan trọng:</strong> Tích xanh vào các Ngày trong tuần mà học sinh tham gia ca học này.</li>
+                            <li>Bảng tạo Thiết lập Ca hiện ra. Điền: <strong>Loại hình Ca</strong>, <strong>Giáo viên</strong>, và <strong>Khung giờ học</strong>.</li>
+                            <li><strong>Đặc biệt:</strong> Tích xanh vào các Ngày trong tuần mà học sinh tham gia ca học này.</li>
                             <li>Bấm <strong>[Lưu & Đóng]</strong>.</li>
                         </ol>
 
@@ -357,47 +335,39 @@
                             <i class="fas fa-info-circle"></i>
                             <div>
                                 <h4>Xếp nhiều ca trong 1 ngày</h4>
-                                <p>Hệ thống cho phép một học sinh có thể học nhiều ca khác nhau trong cùng một ngày. Bạn chỉ cần bấm <em>"Thêm một dòng"</em> nhiều lần để phân rã số ca can thiệp/ngày tuỳ theo liệu trình của trẻ.</p>
+                                <p>Bạn chỉ cần bấm <em>"Thêm một dòng"</em> nhiều lần để phân rã số ca can thiệp/ngày tuỳ theo liệu trình của trẻ.</p>
                             </div>
                         </div>
 
                         <div class="ui-mockup-box" style="background: transparent; border: none; padding: 0;">
                             <div class="mock-modal-overlay">
-                                <div class="mock-modal" style="max-width: 800px;">
-                                    <div class="mock-modal-header">Tạo Thiết lập [Ca] can thiệp trong tuần <i class="fas fa-times" style="color: #94A3B8;"></i></div>
+                                <div class="mock-modal">
+                                    <div class="mock-modal-header">Tạo Thiết lập [Ca] can thiệp <i class="fas fa-times" style="color: #94A3B8;"></i></div>
                                     <div class="mock-modal-body" style="background: #F8FAFC;">
-                                        <h3 style="color: #1E3A8A; font-size: 1.2rem; margin-bottom: 15px;">Chuyên biệt Từ Sơn - Trụ sở chính / Trần Việt Thắng</h3>
-
                                         <div class="ui-grid-2col" style="margin-bottom: 15px;">
                                             <div class="ca-form-section">
-                                                <h4><i class="fas fa-cube"></i> THÔNG TIN CA HỌC</h4>
-                                                <div class="input-row"><div class="input-label">Loại hình (ca) can thiệp</div><div class="input-field">Ca 6B (150.000)</div></div>
+                                                <h4><i class="fas fa-cube"></i> THÔNG TIN CA</h4>
+                                                <div class="input-row"><div class="input-label">Ca học</div><div class="input-field">Ca 6B (150.000)</div></div>
                                                 <div class="input-row"><div class="input-label">Giáo viên</div><div class="input-field">Ngô Thị Ngọc Hoàn</div></div>
-                                                <div class="input-row"><div class="input-label">Số tiền (VNĐ)</div><div class="input-field">150.000</div></div>
                                             </div>
                                             <div class="ca-form-section">
-                                                <h4><i class="far fa-clock"></i> THỜI GIAN CAN THIỆP/HỌC</h4>
-                                                <div class="input-row"><div class="input-label" style="width: 100px;">Khung giờ học</div><div class="input-field" style="display: flex; gap:10px; align-items: center;"><span>00:00</span> <i class="fas fa-arrow-right" style="color: #CBD5E1;"></i> <span>00:00</span></div></div>
-                                                <div class="input-row"><div class="input-label" style="width: 100px;">Ghi chú</div><div class="input-field" style="color: #94A3B8;">Nhập "/" cho các lệnh</div></div>
+                                                <h4><i class="far fa-clock"></i> THỜI GIAN</h4>
+                                                <div class="input-row"><div class="input-label">Khung giờ</div><div class="input-field">00:00 <i class="fas fa-arrow-right"></i> 00:00</div></div>
                                             </div>
                                         </div>
 
                                         <div class="ca-form-section" style="margin-bottom: 0;">
-                                            <h4><i class="far fa-calendar-alt"></i> CÁC NGÀY TRONG TUẦN THAM GIA HỌC CA NÀY</h4>
-                                            <div style="display: flex; justify-content: space-around; margin-top: 15px;">
-                                                <div>T2 <span class="mock-toggle"></span></div>
-                                                <div>T3 <span class="mock-toggle active"></span></div>
-                                                <div>T4 <span class="mock-toggle active"></span></div>
-                                                <div>T5 <span class="mock-toggle"></span></div>
-                                                <div>T6 <span class="mock-toggle active"></span></div>
-                                                <div>T7 <span class="mock-toggle"></span></div>
-                                                <div>CN <span class="mock-toggle"></span></div>
+                                            <h4><i class="far fa-calendar-alt"></i> CÁC NGÀY TRONG TUẦN THAM GIA</h4>
+                                            <div class="day-toggles" style="display: flex; justify-content: space-between; margin-top: 15px; overflow-x: auto; padding-bottom: 10px;">
+                                                <div style="display:flex; align-items:center; gap:5px;">T2 <span class="mock-toggle"></span></div>
+                                                <div style="display:flex; align-items:center; gap:5px;">T3 <span class="mock-toggle active"></span></div>
+                                                <div style="display:flex; align-items:center; gap:5px;">T4 <span class="mock-toggle active"></span></div>
+                                                <div style="display:flex; align-items:center; gap:5px;">T5 <span class="mock-toggle"></span></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mock-modal-footer">
                                         <button class="mock-btn primary">Lưu & Đóng</button>
-                                        <button class="mock-btn primary">Lưu & Tạo mới</button>
                                         <button class="mock-btn secondary">Huỷ bỏ</button>
                                     </div>
                                 </div>
@@ -411,17 +381,5 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let currentPage = window.location.pathname.split("/").pop();
-            document.querySelectorAll('.menu-item a').forEach(link => {
-                if (link.getAttribute('href').split("/").pop() === currentPage) {
-                    link.parentElement.classList.add('active');
-                    const parentDetails = link.closest('details');
-                    if (parentDetails) parentDetails.setAttribute('open', '');
-                }
-            });
-        });
-    </script>
 </body>
 </html>
