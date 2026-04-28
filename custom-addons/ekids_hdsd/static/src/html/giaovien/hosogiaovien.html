@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Quản lý Hồ sơ Giáo viên</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0; --sidebar-width: 280px;
+            --c-green: #10B981; --c-red: #EF4444; --c-blue-light: #DBEAFE; --c-orange: #F59E0B; --c-purple: #8B5CF6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR --- */
+        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; }
+        .top-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: var(--text-sub); text-decoration: none; padding: 8px 12px; border-radius: 8px; transition: 0.2s; background: #F1F5F9; }
+        .back-btn:hover { background: #E2E8F0; color: var(--text-main); }
+        .logo { font-size: 1.2rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+        .top-right { display: flex; align-items: center; gap: 15px; }
+        .user-profile { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9rem; }
+        .user-profile img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--primary); }
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; }
+
+        /* --- SIDEBAR TREE MENU --- */
+        .sidebar { width: var(--sidebar-width); background: var(--surface); border-right: 1px solid var(--border-color); overflow-y: auto; padding: 15px 0; flex-shrink: 0; }
+        .menu-group summary::-webkit-details-marker { display: none; } .menu-group summary { list-style: none; outline: none; }
+        .menu-title { padding: 12px 20px; font-size: 0.8rem; font-weight: 800; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; user-select: none; }
+        .menu-title:hover { background: #F8FAFC; color: var(--primary); }
+        .chevron-icon { font-size: 0.8rem; color: #94A3B8; transition: transform 0.3s ease; }
+        details[open] .chevron-icon { transform: rotate(180deg); color: var(--primary); } details[open] .menu-title { color: var(--primary); }
+        .menu-list { list-style: none; padding-bottom: 10px; animation: slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        .menu-item { display: flex; align-items: center; gap: 12px; padding: 10px 20px 10px 40px; font-size: 0.9rem; font-weight: 500; color: var(--text-sub); cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; }
+        .menu-item i { font-size: 1.1rem; width: 20px; text-align: center; }
+        .menu-item:hover { background: #F1F5F9; color: var(--text-main); }
+        .menu-item.active { background: #EFF6FF; color: var(--primary); font-weight: 700; border-left-color: var(--primary); }
+        .menu-item a { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px; width: 100%; }
+
+        /* --- VÙNG NỘI DUNG HƯỚNG DẪN TÀI LIỆU --- */
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--surface); scroll-behavior: smooth; }
+        .doc-container { max-width: 900px; margin: 0 auto; }
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h1 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px; letter-spacing: -0.5px; }
+        .doc-header p { font-size: 1rem; color: var(--text-sub); }
+
+        .doc-section { margin-bottom: 40px; }
+        .doc-section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; }
+
+        .doc-content { font-size: 0.95rem; color: #334155; line-height: 1.7; }
+        .doc-content p { margin-bottom: 12px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content li { margin-bottom: 8px; }
+
+        /* --- MOCKUP CSS --- */
+        .ui-mockup-box { background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto;}
+
+        .mock-dash-card { width: 300px; background: white; border-radius: 16px; border: 1px solid var(--border-color); padding: 25px 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin: 0 auto;}
+        .mock-dash-card i.main-icon { font-size: 3rem; color: #CBD5E1; margin-bottom: 15px;}
+        .mock-dash-card h3 { font-size: 1.1rem; color: #1E3A8A; margin-bottom: 5px; }
+        .mock-dash-card p { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 20px; font-style: italic; line-height: 1.4;}
+        .mock-dash-btn { background: #60A5FA; color: white; border-radius: 8px; padding: 12px; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.9rem;}
+
+        .mock-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.85rem;}
+        .mock-table th { background: #F1F5F9; padding: 12px; text-align: left; font-weight: 700; color: var(--text-sub); border-bottom: 2px solid var(--border-color); white-space: nowrap;}
+        .mock-table td { padding: 12px; border-bottom: 1px solid #E2E8F0; color: var(--text-main); white-space: nowrap;}
+        .mock-table tr:hover td { background: #F8FAFC; }
+        .status-green { color: var(--c-green); font-weight: 600; }
+
+        .ui-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .ui-block { background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; }
+        .ui-block h4 { font-size: 0.85rem; color: #1E3A8A; margin-bottom: 15px; display: flex; align-items: center; gap: 6px; text-transform: uppercase; font-weight: 800;}
+        .ui-line { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #E2E8F0; }
+        .ui-line:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .ui-line span:first-child { color: var(--text-sub); width: 140px; flex-shrink: 0;}
+        .ui-line span:last-child { font-weight: 600; color: var(--text-main); text-align: left; flex: 1;}
+
+        .mock-toggle { display: inline-flex; align-items: center; justify-content: flex-end; width: 36px; height: 20px; background: #E2E8F0; border-radius: 20px; position: relative; vertical-align: middle; margin-left: 8px; }
+        .mock-toggle::after { content: ''; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .mock-toggle.active { background: var(--c-green); }
+        .mock-toggle.active::after { transform: translateX(16px); }
+
+        .profile-header-mockup { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .header-actions { display: flex; gap: 10px; margin-bottom: 15px; }
+        .header-btn { padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; border: none; cursor: pointer; }
+        .btn-grant { background: #64748B; color: white; }
+        .btn-delete { background: #F1F5F9; color: var(--text-main); }
+
+        .mock-tabs { display: flex; border-bottom: 2px solid #E2E8F0; margin-top: 20px; margin-bottom: 20px; overflow-x: auto; scrollbar-width: none;}
+        .mock-tab { padding: 12px 20px; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap;}
+        .mock-tab.active { color: var(--c-purple); border-bottom-color: var(--c-purple); } /* Tab màu tím cho GV */
+
+        .mock-modal { background: white; width: 100%; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); max-width: 800px; margin: 0 auto;}
+        .mock-modal-header { padding: 15px 20px; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; color: var(--text-main); border-bottom: 1px solid var(--border-color);}
+        .mock-modal-body { padding: 20px; max-height: 400px; overflow-y: auto;}
+
+        .alert-box { display: flex; gap: 15px; padding: 16px; border-radius: 12px; margin: 20px 0; background: var(--c-blue-light); border: 1px solid #BFDBFE; }
+        .alert-box.warning { background: #FEFCE8; border-color: #FDE047; }
+        .alert-box i { font-size: 1.4rem; color: var(--primary); margin-top: 2px; }
+        .alert-box.warning i { color: var(--c-orange); }
+        .alert-box div h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .alert-box div p { font-size: 0.9rem; color: #334155; margin: 0; }
+
+        .key-tag { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 2px 6px; font-size: 0.8rem; font-family: monospace; color: var(--text-main); font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-arrow-left"></i> Trang chủ</a>
+            <div class="logo">eKids CMS Documentation</div>
+        </div>
+        <div class="top-right">
+            <div class="user-profile"><span>Quản trị viên</span><img src="https://i.pravatar.cc/150?img=11" alt="Admin"></div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+
+        <div class="sidebar">
+            <details class="menu-group">
+                <summary class="menu-title"><span>A. Thiết lập ban đầu</span><i class="fas fa-chevron-down chevron-icon"></i></summary>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="../thietlapbandau/thongtin.html"><i class="fas fa-building"></i> Thiết lập thông tin ban đầu</a></li>
+                    <li class="menu-item"><a href="../thietlapbandau/nghile.html"><i class="fas fa-calendar-alt"></i> Quản lý ngày nghỉ, lễ/tết</a></li>
+                    <li class="menu-item"><a href="../hocsinh/cauhinh.html"><i class="fas fa-list-ul"></i> Danh mục Khoản thu & Ca học</a></li>
+                </ul>
+            </details>
+
+            <details class="menu-group">
+                <summary class="menu-title"><span>B. Hồ sơ & Học phí</span><i class="fas fa-chevron-down chevron-icon"></i></summary>
+                <ul class="menu-list">
+                    <li class="menu-item"><a href="../hocsinh/hoso.html"><i class="fas fa-user-graduate"></i> Quản lý học sinh</a></li>
+                    <li class="menu-item"><a href="../hocsinh/diemdanh.html"><i class="fas fa-tasks"></i> Điểm danh & Xếp ca</a></li>
+                    <li class="menu-item"><a href="../hocsinh/tinhhocphi.html"><i class="fas fa-file-invoice-dollar"></i> Tính học phí</a></li>
+                </ul>
+            </details>
+
+            <details class="menu-group" open>
+                <summary class="menu-title"><span>C. Hồ sơ giáo viên & Lương</span><i class="fas fa-chevron-down chevron-icon"></i></summary>
+                <ul class="menu-list">
+                    <li class="menu-item active"><a href="hosogiaovien.html"><i class="fas fa-chalkboard-teacher"></i> Quản lý hồ sơ giáo viên</a></li>
+                    </ul>
+            </details>
+        </div>
+
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phần C. Hồ sơ giáo viên & Lương <i class="fas fa-chevron-right"></i> <span>Quản lý hồ sơ giáo viên</span>
+                </div>
+
+                <div class="doc-header">
+                    <h1>Hướng dẫn: Quản lý Hồ sơ & Thiết lập Cấu trúc lương Giáo viên</h1>
+                    <p>Phân hệ cung cấp công cụ số hóa toàn bộ hồ sơ nhân sự, phân công lịch làm việc đặc thù, ghi nhận khen thưởng và thiết lập công thức tính lương tự động hàng tháng.</p>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">1</span> Lựa chọn chức năng quản lý</h2>
+                    <div class="doc-content">
+                        <p>Tại màn hình Hệ thống Chuyên biệt chính, tìm khối ứng dụng <strong>GIÁO VIÊN</strong> và click để truy cập:</p>
+                        <div class="ui-mockup-box" style="display: flex; justify-content: center;">
+                            <div class="mock-dash-card">
+                                <i class="fas fa-camera-retro main-icon"></i>
+                                <h3 style="color: #1E3A8A;">Trường Ví dụ</h3>
+                                <p>(Quản lý giáo viên làm việc, công tác tại Cơ sở: Tạo hồ sơ, phân công nhiệm vụ, cấp tài khoản)</p>
+                                <div class="mock-dash-btn"><i class="fas fa-users"></i> GIÁO VIÊN</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">2</span> Danh sách Giáo viên</h2>
+                    <div class="doc-content">
+                        <p>Màn hình danh sách hiển thị toàn bộ nhân sự tại cơ sở cùng với các thông tin tóm tắt như Thâm niên, số Điện thoại. Bạn có thể sử dụng <strong>Bộ lọc</strong> để tìm những giáo viên "Đang làm việc" hoặc "Đã nghỉ".</p>
+                        <div class="ui-mockup-box">
+                            <table class="mock-table">
+                                <tr><th>TT</th><th>Họ và tên</th><th>Giới tính</th><th>Ngày sinh</th><th>Điện thoại</th><th>Thâm niên</th><th>Hồ sơ</th><th>Trạng thái</th></tr>
+                                <tr><td>1</td><td>Ngô Thị Ngọc Hoàn</td><td>Nữ</td><td>10/12/1990</td><td>0974 944 153</td><td>14,8</td><td><span class="mock-toggle active" style="margin:0;"></span></td><td class="status-green">Đang làm việc</td></tr>
+                                <tr><td>2</td><td>Phan Thị Hướng</td><td>Nữ</td><td>02/01/1992</td><td>0973 046 591</td><td>7,6</td><td><span class="mock-toggle active" style="margin:0;"></span></td><td class="status-green">Đang làm việc</td></tr>
+                            </table>
+                        </div>
+                        <p>Bấm chọn vào tên một giáo viên để <strong>Chỉnh sửa</strong>, hoặc bấm nút <span class="key-tag" style="background: var(--text-sub); color: white;">Mới</span> để thêm nhân sự.</p>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">3</span> Nhập Thông tin chung & Lịch làm việc đặc thù</h2>
+                    <div class="doc-content">
+                        <p>Khi thêm mới hoặc chỉnh sửa, bạn cần nhập chính xác các thông tin cơ bản của giáo viên. Lưu ý đặc biệt ở phần <strong>Thiết lập lịch làm việc đặc thù</strong>.</p>
+
+                        <div class="profile-header-mockup">
+                            <div style="width: 100%;">
+                                <div class="header-actions">
+                                    <button class="header-btn btn-grant">Cấp quyền cho tài khoản</button>
+                                    <button class="header-btn btn-delete">Xóa tài khoản</button>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; background: #F8FAFC; padding: 15px; border-radius: 8px;">
+                                    <div style="display: flex; align-items: center; gap: 15px;">
+                                        <div style="width: 55px; height: 55px; background: #E2E8F0; border-radius: 50%; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                                            <img src="https://i.pravatar.cc/150?img=5" alt="avt" style="width:100%;">
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 0.7rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Chuyên biệt Từ Sơn - Trụ sở chính</div>
+                                            <h3 style="font-size: 1.4rem; color: var(--text-main);">Ngô Thị Ngọc Hoàn</h3>
+                                            <div style="font-size: 0.8rem; color: var(--text-sub); margin-top: 4px;"><i class="fas fa-graduation-cap"></i> Chuyên môn: Giáo dục đặc biệt</div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+                                        <span class="status-green" style="background: #D1FAE5; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem;">Đang làm việc</span>
+                                        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600;">
+                                            Đánh dấu [Hồ sơ] đã rà soát xong: <span class="mock-toggle active"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui-mockup-box ui-grid-2col" style="margin-top: 0;">
+                            <div class="ui-block">
+                                <h4><i class="fas fa-id-card-alt"></i> THÔNG TIN GIÁO VIÊN</h4>
+                                <div class="ui-line"><span>Ngày sinh</span><span>10/12/1990</span></div>
+                                <div class="ui-line"><span>Điện thoại</span><span>0974 944 153</span></div>
+                                <div class="ui-line"><span>Số CCCD</span><span>027190008549</span></div>
+                            </div>
+                            <div class="ui-block">
+                                <h4><i class="fas fa-briefcase"></i> THÔNG TIN CÔNG TÁC</h4>
+                                <div class="ui-line"><span>Đi làm từ ngày</span><span>01/06/2011</span></div>
+                                <div class="ui-line"><span>Thâm niên</span><span style="color: var(--primary);">14,8 năm</span></div>
+                                <div class="ui-line"><span>Trình độ</span><span>Đại học</span></div>
+                            </div>
+                        </div>
+
+                        <h4 style="margin-top: 25px; margin-bottom: 10px; color: var(--text-main);">Cấu hình Lịch đi làm đặc thù (Part-time / Cộng tác viên):</h4>
+                        <div class="ui-mockup-box" style="padding: 15px;">
+                            <div style="margin-bottom: 15px; font-weight: 600; color: #1E3A8A;"><i class="far fa-calendar-alt"></i> THIẾT LẬP LỊCH LÀM VIỆC ĐẶC THÙ (nếu có)
+                                <br><span style="font-size: 0.8rem; font-weight: 400; color: var(--text-sub);">Bật để thiết lập ngày đi làm đặc thù cho giáo viên: </span><span class="mock-toggle active"></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-around; border: 1px dashed #CBD5E1; padding: 10px; border-radius: 8px;">
+                                <div>T2 <span class="mock-toggle"></span></div>
+                                <div>T3 <span class="mock-toggle active"></span></div>
+                                <div>T4 <span class="mock-toggle"></span></div>
+                                <div>T5 <span class="mock-toggle active"></span></div>
+                                <div>T6 <span class="mock-toggle"></span></div>
+                                <div>T7 <span class="mock-toggle"></span></div>
+                                <div>CN <span class="mock-toggle"></span></div>
+                            </div>
+                        </div>
+
+                        <div class="alert-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <h4>Lưu ý về Lịch làm việc:</h4>
+                                <p>Nếu giáo viên làm full-time (cả tuần), bạn <strong>KHÔNG CẦN</strong> bật nút này. Hệ thống chỉ cần cấu hình này cho các Cộng tác viên chỉ lên trung tâm vào 1-2 ngày cố định (Ví dụ: Chỉ dạy T3 và T5) để hệ thống không chấm công sai vào các ngày họ nghỉ.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">4</span> Quản lý Hồ sơ chuyên sâu & Cấu trúc lương</h2>
+                    <div class="doc-content">
+                        <p>Danh mục Tabs cung cấp công cụ lưu trữ mọi diễn biến trong quá trình làm việc của giáo viên.</p>
+
+                        <div class="mock-tabs">
+                            <div class="mock-tab">HỒ SƠ[SCAN]</div>
+                            <div class="mock-tab">NGƯỜI THÂN</div>
+                            <div class="mock-tab">QUÁ TRÌNH [HỌC TẬP/CÔNG TÁC]</div>
+                            <div class="mock-tab">KHEN THƯỞNG/KỶ LUẬT</div>
+                            <div class="mock-tab">NGHỈ PHÉP</div>
+                            <div class="mock-tab active">CẤU TRÚC [LƯƠNG]</div>
+                            <div class="mock-tab">LƯƠNG HÀNG THÁNG</div>
+                        </div>
+
+                        <ul>
+                            <li><strong>HỒ SƠ [SCAN]:</strong> Quét và tải lên bản mềm các văn bằng, chứng chỉ, hợp đồng lao động để số hóa 100% tủ hồ sơ giấy.</li>
+                            <li><strong>NGƯỜI THÂN:</strong> Ghi lại thông tin liên lạc khẩn cấp.</li>
+                            <li><strong>QUÁ TRÌNH & KHEN THƯỞNG:</strong> Sổ theo dõi lịch sử thăng tiến, các bằng khen hoặc các lỗi vi phạm trong suốt quá trình công tác.</li>
+                            <li><strong>NGHỈ PHÉP:</strong> Quản lý danh sách đơn xin nghỉ phép của giáo viên, làm cơ sở trừ lương chuyên cần.</li>
+                        </ul>
+
+                        <h4 style="margin-top: 25px; margin-bottom: 10px; color: var(--c-purple); font-size: 1.1rem;"><i class="fas fa-money-check-alt"></i> Thiết lập CẤU TRÚC [LƯƠNG]</h4>
+                        <p>Tab quan trọng nhất! Đây là nơi bạn chọn các "Mã lương" mà giáo viên này sẽ được nhận. Khi bạn bấm thêm dòng, một bảng danh sách mã lương (được tạo sẵn từ phần Cài đặt) sẽ hiện ra để bạn tick chọn.</p>
+
+                        <div class="ui-mockup-box" style="background: transparent; border: none; padding: 0;">
+                            <div class="mock-modal">
+                                <div class="mock-modal-header">Thêm: Cấu trúc lương của giáo viên <i class="fas fa-times" style="color: #94A3B8;"></i></div>
+                                <div class="mock-modal-body">
+                                    <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+                                        <span style="background: #E2E8F0; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">3 đã chọn <i class="fas fa-times" style="margin-left: 5px;"></i></span>
+                                    </div>
+                                    <table class="mock-table">
+                                        <tr><th style="width:30px;"></th><th>TT</th><th>Tên</th><th>Mã</th><th>Khoản</th><th>Phần lương</th></tr>
+                                        <tr><td><input type="checkbox"></td><td>1</td><td>Lương cơ bản (Đầu bếp)</td><td>LCB</td><td>Được cộng tiền</td><td>Có điều kiện</td></tr>
+                                        <tr style="background: #EFF6FF;"><td><input type="checkbox" checked></td><td>1</td><td>Lương cơ bản thực nhận (Giáo viên)</td><td>LCB</td><td>Được cộng tiền</td><td>Cố định</td></tr>
+                                        <tr><td><input type="checkbox"></td><td>2</td><td>BHXH giáo viên phải đóng</td><td>BHXH</td><td>Bị trừ tiền</td><td>Cố định</td></tr>
+                                        <tr style="background: #EFF6FF;"><td><input type="checkbox" checked></td><td>4</td><td>Lương trách nhiệm- loại 2 (40k/1hs)</td><td>LTN</td><td>Được cộng tiền</td><td>Cố định</td></tr>
+                                        <tr style="background: #EFF6FF;"><td><input type="checkbox" checked></td><td>12</td><td>Ca 6B</td><td>6B</td><td>Được cộng tiền</td><td>Có điều kiện</td></tr>
+                                    </table>
+                                </div>
+                                <div style="padding: 15px 20px; background: #F8FAFC; border-top: 1px solid var(--border-color); display: flex; gap: 10px;">
+                                    <button style="background: #475569; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; color: white;">Chọn</button>
+                                    <button style="background: #60A5FA; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; color: white;">Mới</button>
+                                    <button style="background: #E2E8F0; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; color: var(--text-main);">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert-box warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <h4>Nguyên tắc tính lương:</h4>
+                                <p>Phần mềm chỉ tính tiền cho những khoản (Mã lương) có xuất hiện trong Tab <strong>CẤU TRÚC [LƯƠNG]</strong> của giáo viên đó. Ví dụ: Nếu giáo viên có dạy ca ngoài giờ, nhưng bạn quên tick chọn mã "Ca ngoài giờ" vào cấu hình của họ, thì cuối tháng hệ thống sẽ không cộng tiền ca ngoài giờ cho họ. <br><br>Tab <strong>LƯƠNG HÀNG THÁNG</strong> sẽ lưu trữ các phiếu lương của các tháng trước để bạn xem lại nhanh chóng.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let currentPage = window.location.pathname.split("/").pop();
+            document.querySelectorAll('.menu-item a').forEach(link => {
+                if (link.getAttribute('href').split("/").pop() === currentPage) {
+                    link.parentElement.classList.add('active');
+                    const parentDetails = link.closest('details');
+                    if (parentDetails) parentDetails.setAttribute('open', '');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
