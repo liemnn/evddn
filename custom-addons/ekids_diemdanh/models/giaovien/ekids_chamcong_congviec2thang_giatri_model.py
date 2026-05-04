@@ -47,6 +47,9 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
         )
 
     tong = fields.Float(string="Tổng", compute="_compute_tong", digits=(10, 1),store=True,defaul=0)
+    tong1 = fields.Float(string="Tổng", digits=(10, 1), store=True, defaul=0)
+    tong2 = fields.Float(string="Tổng", digits=(10, 1), store=True, defaul=0)
+    tong3 = fields.Float(string="Tổng", digits=(10, 1), store=True, defaul=0)
 
 
 
@@ -59,10 +62,32 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
     def _compute_tong(self):
         for record in self:
             tong = 0.0
+            tong1 = 0.0
+            tong2 = 0.0
+            tong3 = 0.0
             for i in range(1, 32):
                 giatri = getattr(record, f'd{i}')
+                # tinh toan ca 1, 2, 3 trong ngay
+                # tinh toan ca 1, 2, 3 trong ngay
+                if giatri > 0:
+                    # 1. Tự động rót vào tong1 (dù là 0.5 hay 1.5 thì min() sẽ tự lo liệu)
+                    tong1 = tong1 + min(giatri, 1.0)
+
+                    # 2. Tự động rót phần dư vào tong2
+                    phan_du_1 = max(0.0, giatri - 1.0)
+                    tong2 = tong2 + min(phan_du_1, 1.0)
+
+                    # 3. Tự động rót phần dư vào tong3 (Đã sửa lỗi chặn tối đa 1.0)
+                    phan_du_2 = max(0.0, giatri - 2.0)
+                    tong3 = tong3 + float(phan_du_2)
+
+
                 tong = tong + float(giatri)
+
             record.update({"tong":tong})
+            record.update({"tong1": tong1})
+            record.update({"tong2": tong2})
+            record.update({"tong3": tong3})
 
 
     def _compute_sequence(self):

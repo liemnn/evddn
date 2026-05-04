@@ -14,6 +14,9 @@ services:
       - ./backup.sh:/backup.sh
       - ./postgresql.conf:/etc/postgresql/postgresql.conf
       - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+      # Đồng bộ thời gian với máy chủ host
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     #ports:
      # - "5432:5432"
     healthcheck:
@@ -35,6 +38,9 @@ services:
       - TZ=Asia/Ho_Chi_Minh
     volumes:
         - ./redis_data:/data
+        # Đồng bộ thời gian với máy chủ host
+        - /etc/localtime:/etc/localtime:ro
+        - /etc/timezone:/etc/timezone:ro
     command: [ "redis-server", "--appendonly", "yes" ]
 
 
@@ -61,6 +67,9 @@ services:
       - ./addons:/mnt/extra-addons
       - ./odoo.conf:/etc/odoo/odoo.conf
       - ./entrypoint.sh:/entrypoint.sh
+      # Đồng bộ thời gian với máy chủ host
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     entrypoint: ["/entrypoint.sh"]
     ports:
       - "8080:8069"
@@ -81,6 +90,9 @@ services:
       - ./nginx_logs:/var/log/nginx
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
+      # Đồng bộ thời gian với máy chủ host
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     environment:
       - TZ=Asia/Ho_Chi_Minh
     restart: always
@@ -90,6 +102,9 @@ services:
     volumes:
       - ./nginx/certbot/www:/var/www/certbot
       - ./nginx/certbot/conf:/etc/letsencrypt
+      # Đồng bộ thời gian với máy chủ host
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
 volumes:
   db_data:

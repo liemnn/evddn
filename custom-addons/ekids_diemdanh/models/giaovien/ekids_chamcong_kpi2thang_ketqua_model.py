@@ -13,13 +13,19 @@ class ChamCongKPI2ThangKetQua(models.Model):
     _description = "Đánh giá các chỉ số đạt để tính lương"
 
     chamcong_kpi2thang_id = fields.Many2one("ekids.chamcong_kpi2thang", string="Cơ sở",required=True,ondelete="cascade")
+    loai_kpi = fields.Selection([
+        ('0', 'Nhâp số'),
+        ('1', 'Bật/Tắt')
+    ], string="Loại KPI",default='0')
 
     code = fields.Char(string="Mã", required=True)
     name = fields.Char(string="Tên", required=True)
     donvi = fields.Char(string="Đơn vị", required=True)
-    is_tyle_phantram = fields.Boolean(string="Giá trị là tỷ lệ %", default=False)
+    ketqua_boolean = fields.Boolean(string="Kết quả (Đạt)")
     tong = fields.Float("Đạt được", default=0, digits=(10, 1))
     desc = fields.Text(string="Ghi chú")
+
+
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -32,6 +38,13 @@ class ChamCongKPI2ThangKetQua(models.Model):
         return records[0] if len(records) == 1 else records
 
     def write(self, vals):
+        if self.loai_kpi == '1':
+            if vals['ketqua_boolean'] == 'True':
+                vals['tong'] = '1'
+            else:
+                vals['tong'] = '0'
+
+
         res = super(ChamCongKPI2ThangKetQua, self).write(vals)
         # Logic xử lý khi danh sách học sinh thay đổi
         for rec in self:
@@ -45,7 +58,14 @@ class ChamCongKPI2ThangKetQua(models.Model):
         if ketquas:
             result =""
             for ketqua in ketquas:
-                result =result + "-"+ketqua.name +"="+str(ketqua.tong)+" "+ str(ketqua.donvi)+"\n"
+                if ketqua.loai_kpi=='0':
+                    result =result + "-"+ketqua.name +"="+str(ketqua.tong)+" "+ str(ketqua.donvi)+"\n"
+                else:
+                    kq= "[Không đạt]"
+                    if ketqua.ketqua_boolean == True:
+                        kq = "[Đạt]"
+                    result = result + "-" + ketqua.name + " là " + kq + "\n"
+
                 self.chamcong_kpi2thang_id.desc=result
 
 

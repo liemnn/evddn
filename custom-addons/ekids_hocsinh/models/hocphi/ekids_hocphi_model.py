@@ -238,6 +238,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
     @api.depends("hocphi_bantru_ids", "hocphi_ca_ids", "hocphi_duoctru_ids","tyle_giamhocphi","is_giamhocphi_dacthu","tyle_giamhocphi_bantru","tyle_giamhocphi_ca")
     def _compute_hocphi_giam(self):
         for hp in self:
+
             if hp.is_giamhocphi_dacthu == True:
                 # Giam theo tong khong chia tung khoan rieng
                 # tyle giảm bán trú
@@ -266,6 +267,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 sotien_giam = (hocphi / 100) * hp.tyle_giamhocphi
                 hp.hocphi_giam = sotien_giam
                 hp.hocphi_phaidong = hocphi - sotien_giam
+
 
 
 
