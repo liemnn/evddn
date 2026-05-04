@@ -156,6 +156,13 @@ class LuongFuncAbstractModel(models.AbstractModel):
                 self.func_dequy_tinhluong(MAP,giaovien,luong,nam,thang,parameters)
 
     def func_get_parameters(self,coso_nghiles,coso_chonghi_truluong,coso_chonghis,giaovien,luong,nghiles,nghipheps,coso_dilam_kehoachs,dl_chamcong,nam,thang):
+        coso = giaovien.coso_id
+        ngays = ngay_util.func_get_cacngay_trong_thang(nam,thang)
+        ngay_dauthang = ngays[0]
+        ngay_cuoithang = ngays[len(ngays)-1]
+
+        if giaovien.dilam_tungay >ngay_dauthang:
+            ngay_dauthang =giaovien.dilam_tungay
         parameters = {}
         parameters['nghiles'] = nghiles
         parameters['nghipheps'] = nghipheps
@@ -176,7 +183,10 @@ class LuongFuncAbstractModel(models.AbstractModel):
 
         parameters["$NGAY_DILAM"] = str(duoc_chamcong)
 
-        chamcong_nghi = duoc_chamcong_nghi + (duoc_chamcongs_nuabuoi * 0.5) + len(coso_chonghi_truluong)
+        gv_nghiphep_truluong = giaovien_util.func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles
+                                                                                           , ['1'],ngay_dauthang, ngay_cuoithang)
+
+        chamcong_nghi = duoc_chamcong_nghi + (duoc_chamcongs_nuabuoi * 0.5) + len(coso_chonghi_truluong)+len(gv_nghiphep_truluong)
 
         parameters["$NGAY_NGHI"] = str(chamcong_nghi)
         #luong.so_ngaynghi = chamcong_nghi
