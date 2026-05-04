@@ -92,15 +92,15 @@ def func_get_ngay_dihoc_cua_coso(coso, nghiles,tu_ngay, den_ngay):
         is_coso_hoatdong = coso_util.func_is_coso_hoatdong(coso, ngay)
         if is_coso_hoatdong:
             # Co so hoat dong
-            days[str(ngay)] = ngay
-            """
+            #days[str(ngay)] = ngay
+
             if nghiles:
-                is_nghile = nghiles.get(str(ngay), False)
-                if is_nghile == False:
+                is_nghile = nghiles.get(str(ngay))
+                if not is_nghile:
                     days[str(ngay)] = ngay
             else:
                days[str(ngay)] = ngay
-            """
+
 
         ngay += timedelta(days=1)
     return days

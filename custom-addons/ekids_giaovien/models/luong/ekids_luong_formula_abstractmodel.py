@@ -88,7 +88,7 @@ class LuongFolmulaAbstractModel(models.AbstractModel):
                     tien = self.func_tao_luong_theo_cautruc_luong_dieukien_giaoviec(MAP, giaovien, loai, luong,
                                                                                     cautruc_luong, parameters)
                 else:
-                    # TH3 Giao việc gia tri dieukien_loai=3
+                    # TH4 Giao việc gia tri dieukien_loai=3
                     tien =self.func_tao_luong_theo_cautruc_luong_dieukien_giaoviec_giatri(MAP,giaovien, loai, luong,
                                                                              cautruc_luong,parameters)
 
@@ -167,9 +167,21 @@ class LuongFolmulaAbstractModel(models.AbstractModel):
             if congviec2thang:
                 duoc_chamcong = congviec2thang.tong
                 parameters["$KETQUA"] = str(duoc_chamcong)
+
+                tong1 = congviec2thang.tong1
+                parameters["$KETQUA1"] = str(tong1)
+
+                tong2 = congviec2thang.tong2
+                parameters["$KETQUA2"] = str(tong2)
+
+                tong3 = congviec2thang.tong3
+                parameters["$KETQUA3"] = str(tong3)
+
                 tien = formula_util.formula_tinhtoan_sotien(MAP, giaovien, cautruc_luong,parameters)
                 name = cautruc_luong.name
-                desc = str(duoc_chamcong) +" "+ cautruc_luong.dm_chamcong_id.donvi
+                desc = str(duoc_chamcong) + " " + cautruc_luong.dm_chamcong_id.donvi
+                if cautruc_luong.desc:
+                    desc = formula_util.formula_get_desc(MAP, giaovien, cautruc_luong, parameters)
 
                 if (tien != None and tien>0):
                     data = {
