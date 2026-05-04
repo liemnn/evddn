@@ -169,13 +169,13 @@ class LuongFolmulaAbstractModel(models.AbstractModel):
                 parameters["$KETQUA"] = str(duoc_chamcong)
 
                 tong1 = congviec2thang.tong1
-                parameters["$KETQUA1"] = str(tong1)
+                parameters["$CA1"] = str(tong1)
 
                 tong2 = congviec2thang.tong2
-                parameters["$KETQUA2"] = str(tong2)
+                parameters["$CA2"] = str(tong2)
 
                 tong3 = congviec2thang.tong3
-                parameters["$KETQUA3"] = str(tong3)
+                parameters["$CA3"] = str(tong3)
 
                 tien = formula_util.formula_tinhtoan_sotien(MAP, giaovien, cautruc_luong,parameters)
                 name = cautruc_luong.name
