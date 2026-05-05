@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Báo cáo Lợi nhuận</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #10B981; --c-red: #EF4444; --c-blue-light: #DBEAFE; --c-purple: #7E22CE;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR --- */
+        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 8px 16px; border-radius: 8px; transition: 0.2s; background: #EFF6FF; border: 1px solid #BFDBFE;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+        .header-title-right { font-weight: 700; font-size: 1rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; }
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%;}
+        .doc-container { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h1 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        .doc-section { margin-bottom: 40px; }
+        .doc-section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; flex-shrink: 0;}
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.7; }
+        .doc-content p { margin-bottom: 12px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content li { margin-bottom: 8px; }
+
+        /* --- MOCKUP CSS --- */
+        .ui-mockup-box { background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto;}
+
+        /* Dashboard Card */
+        .report-dash-card { width: 380px; background: white; border-radius: 16px; padding: 30px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin: 0 auto; max-width: 100%; text-align: center; border: 1px solid var(--border-color);}
+        .report-dash-card h3 { font-size: 1.4rem; color: #1E3A8A; margin-bottom: 5px; font-weight: 800;}
+        .report-dash-card p.subtitle { font-size: 0.95rem; color: var(--text-sub); margin-bottom: 25px;}
+        .report-dash-card p.desc { font-size: 0.85rem; color: #94A3B8; font-style: italic; margin-bottom: 20px;}
+
+        .btn-large-blue { display: flex; align-items: center; justify-content: center; gap: 10px; background: #4F46E5; color: white; border-radius: 12px; padding: 15px; font-weight: 800; font-size: 1rem; margin-bottom: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); transition: 0.2s;}
+        .btn-large-blue:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4); }
+        .btn-large-outline { display: flex; align-items: center; justify-content: center; gap: 10px; background: #F8FAFC; color: #1E293B; border: 1px solid #CBD5E1; border-radius: 12px; padding: 15px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s;}
+
+        /* Modal Popup Chọn Thời Gian */
+        .mock-modal { background: white; width: 100%; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); margin: 0 auto; max-width: 800px;}
+        .mock-modal-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; color: var(--text-main); border-bottom: 1px solid var(--border-color);}
+        .mock-modal-body { padding: 30px; }
+        .mock-modal-footer { padding: 15px 20px; background: #F8FAFC; border-top: 1px solid var(--border-color); display: flex; gap: 10px;}
+
+        .time-filter-row { display: flex; gap: 40px; margin-top: 15px; }
+        .time-filter-group { flex: 1; }
+        .time-filter-label { font-weight: 800; font-size: 0.85rem; color: var(--text-main); margin-bottom: 10px; display: block; text-transform: uppercase;}
+        .time-input-wrap { display: flex; align-items: flex-end; gap: 10px; font-size: 1.2rem; font-weight: 500; color: var(--text-main);}
+        .time-input { border: none; border-bottom: 1px solid #CBD5E1; font-size: 1.1rem; padding: 5px; outline: none; width: 100%; color: var(--text-main);}
+        .time-input:focus { border-color: var(--primary); }
+
+        .mock-btn { padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; border: none; cursor: pointer; }
+        .btn-save { background: #64748B; color: white; }
+        .btn-cancel { background: #E2E8F0; color: var(--text-main); }
+
+        /* Bảng Báo cáo Lợi Nhuận (Giống file Excel/In ấn) */
+        .report-print-container { background: white; padding: 40px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid var(--border-color); min-width: 900px;}
+        .report-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;}
+        .report-header h3 { font-size: 1rem; font-weight: 800; color: black; line-height: 1.4; text-transform: uppercase;}
+        .report-header .print-icon { font-size: 1.5rem; color: #475569; cursor: pointer; border: 1px solid #CBD5E1; padding: 8px 12px; border-radius: 6px; transition: 0.2s;}
+        .report-header .print-icon:hover { background: #F1F5F9; color: black;}
+
+        .report-title-center { text-align: center; margin-bottom: 20px;}
+        .report-title-center h2 { font-size: 1.4rem; font-weight: 800; color: black; text-transform: uppercase; margin-bottom: 5px;}
+        .report-title-center p { font-size: 0.85rem; color: #475569; font-style: italic;}
+
+        .table-wrapper { overflow-x: auto; width: 100%; border: 1px solid #94A3B8; }
+        .report-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .report-table th { padding: 12px 10px; background: #F8FAFC; border: 1px solid #94A3B8; text-align: center; font-weight: 700; color: black; vertical-align: middle;}
+        .report-table td { padding: 10px; border: 1px solid #94A3B8; color: #1E293B; text-align: right; vertical-align: middle;}
+        .report-table td:nth-child(1), .report-table td:nth-child(2) { text-align: center; } /* Tháng, Năm căn giữa */
+        .report-table tr:hover td { background: #F1F5F9; }
+        .report-table .row-total td { background: #E2E8F0; font-weight: 800; color: black;}
+
+        .alert-box { display: flex; gap: 15px; padding: 16px; border-radius: 12px; margin: 20px 0; background: var(--c-blue-light); border: 1px solid #BFDBFE; align-items: flex-start;}
+        .alert-box i { font-size: 1.4rem; color: var(--primary); margin-top: 2px; }
+        .alert-box div h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .alert-box div p { font-size: 0.9rem; color: #334155; margin: 0; }
+
+        /* --- TỐI ƯU HIỂN THỊ ĐIỆN THOẠI --- */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 15px; }
+            .header-title-right { font-size: 0.85rem; max-width: 150px; text-align: right; line-height: 1.2;}
+            .content-area { padding: 15px; }
+            .doc-container { padding: 20px; border-radius: 12px; }
+            .doc-header h1 { font-size: 1.5rem; }
+
+            .time-filter-row { flex-direction: column; gap: 20px; }
+            .report-print-container { padding: 20px; }
+            .report-header { flex-direction: column; gap: 15px; align-items: center; text-align: center;}
+            .report-header .print-icon { align-self: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
+
+        </div>
+        <div class="top-right">
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phần D. Tài chính & Kế toán <i class="fas fa-chevron-right"></i> <span>Báo cáo Lợi nhuận</span>
+                </div>
+
+                <div class="doc-header">
+                    <h1>Hướng dẫn: Xem Báo cáo Lợi nhuận (Lỗ/Lãi) hàng tháng</h1>
+                    <p>Mục tiêu của chức năng này là tự động tổng hợp toàn bộ số liệu từ Học phí (Thu), Chi tiêu nội bộ, Lương giáo viên và Quỹ BHXH để ban quản lý có cái nhìn tổng quan về tình hình hoạt động tài chính (Lỗ/Lãi) của trung tâm theo từng tháng hoặc cả năm tài chính.</p>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">1</span> Truy cập Báo cáo thu chi hàng tháng</h2>
+                    <div class="doc-content">
+                        <p>Từ bảng điều khiển (Dashboard) của phân hệ Báo cáo, bạn click chọn nút <strong>Báo cáo [Thu/Chi] hàng tháng</strong>.</p>
+
+                        <div class="ui-mockup-box" style="display: flex; justify-content: center; background: #F8FAFC;">
+                            <div class="report-dash-card">
+                                <div style="width: 80px; height: 80px; background: white; border-radius: 20px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border-color); font-size: 2.5rem; color: #CBD5E1;">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <h3>Trường Ví dụ</h3>
+                                <p class="subtitle">Slogan 1</p>
+                                <p class="desc">(Xem báo cáo lợi nhuận [Lỗ lãi] từng tháng và cả Năm tài chính)</p>
+
+                                <div class="btn-large-blue"><i class="fas fa-chart-bar"></i> Báo cáo [Thu/Chi] hàng tháng</div>
+                                <div class="btn-large-outline"><i class="fas fa-pie-chart"></i> Báo cáo Số lượng [Học sinh/Giáo viên]</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">2</span> Chọn khoảng thời gian xem báo cáo</h2>
+                    <div class="doc-content">
+                        <p>Hệ thống sẽ hiển thị một cửa sổ yêu cầu chọn thời gian. Mặc định phần mềm sẽ chọn từ đầu năm tài chính đến hiện tại. Bạn hoàn toàn có thể tùy chỉnh xem từ tháng nào đến tháng nào tùy ý, sau đó bấm <strong>Xem báo cáo</strong>.</p>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="mock-modal">
+                                <div class="mock-modal-header">
+                                    báo cáo lợi nhuận <i class="fas fa-times" style="color: #94A3B8; cursor: pointer;"></i>
+                                </div>
+                                <div class="mock-modal-body">
+                                    <div style="font-size: 1.1rem; color: #475569; font-weight: 600; margin-bottom: 20px;">Chuyên biệt Từ Sơn - Trụ sở chính</div>
+
+                                    <div class="time-filter-row">
+                                        <div class="time-filter-group">
+                                            <span class="time-filter-label">THỜI GIAN TỪ</span>
+                                            <div class="time-input-wrap">
+                                                <input type="text" class="time-input" value="Tháng 2" readonly> / <input type="text" class="time-input" value="2026" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="time-filter-group">
+                                            <span class="time-filter-label">THỜI GIAN ĐẾN</span>
+                                            <div class="time-input-wrap">
+                                                <input type="text" class="time-input" value="Tháng 1" readonly> / <input type="text" class="time-input" value="2027" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mock-modal-footer">
+                                    <button class="mock-btn btn-save">Xem báo cáo</button>
+                                    <button class="mock-btn btn-cancel">Đóng lại</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">3</span> Xem kết quả & In Báo cáo</h2>
+                    <div class="doc-content">
+                        <p>Bảng báo cáo chi tiết sẽ xuất hiện với đầy đủ các trường dữ liệu quan trọng. Cột cuối cùng (Lợi nhuận) chính là bức tranh toàn cảnh về sức khỏe tài chính của trung tâm trong tháng đó.</p>
+                        <ul>
+                            <li><strong>Tổng Nguồn Thu =</strong> [1] Học phí thu được + [2] Nguồn thu khác.</li>
+                            <li><strong>Tổng Nguồn Chi =</strong> [3] Chi Lương + [4] Chi BHXH + [5] Các chi tiêu khác (nhà, điện nước...).</li>
+                            <li><strong>Lợi Nhuận =</strong> Tổng Thu - Tổng Chi. <em>(Dấu âm thể hiện tháng đó trung tâm đang chi vượt thu / bị lỗ).</em></li>
+                        </ul>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none; overflow-x: auto;">
+                            <div class="report-print-container">
+                                <div class="report-header">
+                                    <h3>HỆ THỐNG GIÁO DỤC CHUYÊN BIỆT TỪ SƠN</h3>
+                                    <div style="text-align: center;">
+                                        <h3>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h3>
+                                        <p style="text-decoration: underline; font-weight: 600;">Độc lập - Tự do - Hạnh phúc</p>
+                                    </div>
+                                    <div class="print-icon" title="In báo cáo"><i class="fas fa-print"></i></div>
+                                </div>
+
+                                <div class="report-title-center">
+                                    <h2>BÁO CÁO THU CHI - LỢI NHUẬN NĂM 2026</h2>
+                                    <p>Vào hồi 17:42 ngày 05/05/2026</p>
+                                </div>
+
+                                <div class="table-wrapper">
+                                    <table class="report-table">
+                                        <tr>
+                                            <th style="width: 8%;">Tháng</th>
+                                            <th style="width: 8%;">Năm</th>
+                                            <th style="width: 14%;">[1] Học phí</th>
+                                            <th style="width: 14%;">[2] Nguồn thu khác</th>
+                                            <th style="width: 18%;">[3] Chi lương<br><span style="font-weight: 400; font-size: 0.75rem;">(Lương + BHXH nhà trường đóng cho GV)</span></th>
+                                            <th style="width: 12%;">[4] Chi BHXH<br><span style="font-weight: 400; font-size: 0.75rem;">(Giáo viên phải đóng)</span></th>
+                                            <th style="width: 12%;">[5] Chi/Tiêu khác</th>
+                                            <th style="width: 14%;">Lợi nhuận =<br>[1]+[2]-[3]-[4]-[5]</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng:2</td><td>2026</td><td>287,532,517</td><td>4,000,000</td><td>204,838,921</td><td>8,014,125</td><td>90,776,474</td><td style="color: var(--c-red);">-12,097,003</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng:3</td><td>2026</td><td>394,407,235</td><td>34,500,000</td><td>229,674,019</td><td>7,007,280</td><td>126,559,292</td><td style="color: var(--c-green);">65,666,644</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng:4</td><td>2026</td><td>394,374,072</td><td>0</td><td>234,045,001</td><td>7,503,930</td><td>50,920,640</td><td style="color: var(--c-green);">101,904,501</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng:5</td><td>2026</td><td>397,047,467</td><td>0</td><td>0</td><td>0</td><td>0</td><td style="color: var(--c-green);">397,047,467</td>
+                                        </tr>
+                                        <tr class="row-total">
+                                            <td colspan="2">TỔNG THEO NĂM TÀI CHÍNH</td>
+                                            <td>1,473,361,291</td>
+                                            <td>38,500,000</td>
+                                            <td>668,557,941</td>
+                                            <td>22,525,335</td>
+                                            <td>268,256,406</td>
+                                            <td style="color: var(--c-green);">552,521,609</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>Để xuất dữ liệu hoặc in báo cáo nộp cho cấp trên, bạn chỉ cần bấm vào biểu tượng <strong>Máy in <i class="fas fa-print"></i></strong> nằm ở góc trên cùng bên phải màn hình.</p>
+                    </div>
+                </div>
+
+                <div class="alert-box">
+                    <i class="fas fa-check-double"></i>
+                    <div>
+                        <h4>Chốt sổ đồng bộ</h4>
+                        <p>Lưu ý rằng để báo cáo Lợi nhuận phản ánh chính xác nhất, bạn cần đảm bảo rằng các nghiệp vụ: Điểm danh, Đánh giá KPI, và Ghi nhận Thu/Chi nội bộ trong tháng đó đều đã được thực hiện và chốt sổ đầy đủ trước khi xem báo cáo này.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

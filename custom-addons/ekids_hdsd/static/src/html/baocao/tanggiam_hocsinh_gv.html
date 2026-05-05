@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Báo cáo Số lượng Học sinh/Giáo viên</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #10B981; --c-red: #EF4444; --c-blue-light: #DBEAFE; --c-purple: #7E22CE;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR --- */
+        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 8px 16px; border-radius: 8px; transition: 0.2s; background: #EFF6FF; border: 1px solid #BFDBFE;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+        .header-title-right { font-weight: 700; font-size: 1rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; }
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%;}
+        .doc-container { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h1 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        .doc-section { margin-bottom: 40px; }
+        .doc-section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; flex-shrink: 0;}
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.7; }
+        .doc-content p { margin-bottom: 12px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content li { margin-bottom: 8px; }
+
+        /* --- MOCKUP CSS --- */
+        .ui-mockup-box { background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto;}
+
+        /* Dashboard Card */
+        .report-dash-card { width: 380px; background: white; border-radius: 16px; padding: 30px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin: 0 auto; max-width: 100%; text-align: center; border: 1px solid var(--border-color);}
+        .report-dash-card h3 { font-size: 1.4rem; color: #1E3A8A; margin-bottom: 5px; font-weight: 800;}
+        .report-dash-card p.subtitle { font-size: 0.95rem; color: var(--text-sub); margin-bottom: 25px;}
+        .report-dash-card p.desc { font-size: 0.85rem; color: #94A3B8; font-style: italic; margin-bottom: 20px;}
+
+        .btn-large-blue { display: flex; align-items: center; justify-content: center; gap: 10px; background: #4F46E5; color: white; border-radius: 12px; padding: 15px; font-weight: 800; font-size: 1rem; margin-bottom: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); transition: 0.2s;}
+        .btn-large-blue:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4); }
+        .btn-large-outline { display: flex; align-items: center; justify-content: center; gap: 10px; background: #F8FAFC; color: #1E293B; border: 1px solid #CBD5E1; border-radius: 12px; padding: 15px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s;}
+
+        /* Modal Popup Chọn Thời Gian */
+        .mock-modal { background: white; width: 100%; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); margin: 0 auto; max-width: 800px;}
+        .mock-modal-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; color: var(--text-main); border-bottom: 1px solid var(--border-color);}
+        .mock-modal-body { padding: 30px; }
+        .mock-modal-footer { padding: 15px 20px; background: #F8FAFC; border-top: 1px solid var(--border-color); display: flex; gap: 10px;}
+
+        .time-filter-row { display: flex; gap: 40px; margin-top: 15px; }
+        .time-filter-group { flex: 1; }
+        .time-filter-label { font-weight: 800; font-size: 0.85rem; color: var(--text-main); margin-bottom: 10px; display: block; text-transform: uppercase;}
+        .time-input-wrap { display: flex; align-items: flex-end; gap: 10px; font-size: 1.2rem; font-weight: 500; color: var(--text-main);}
+        .time-input { border: none; border-bottom: 1px solid #CBD5E1; font-size: 1.1rem; padding: 5px; outline: none; width: 100%; color: var(--text-main);}
+        .time-input:focus { border-color: var(--primary); }
+
+        .mock-btn { padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; border: none; cursor: pointer; }
+        .btn-save { background: #64748B; color: white; }
+        .btn-cancel { background: #E2E8F0; color: var(--text-main); }
+
+        /* Bảng Báo cáo (Giống file In ấn) */
+        .report-print-container { background: white; padding: 40px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid var(--border-color); min-width: 850px;}
+        .report-header { display: flex; justify-content: flex-end; margin-bottom: 20px;}
+        .print-icon { font-size: 1.5rem; color: #475569; cursor: pointer; border: 1px solid #CBD5E1; padding: 6px 12px; border-radius: 6px; transition: 0.2s;}
+        .print-icon:hover { background: #F1F5F9; color: black;}
+
+        .report-title-center { text-align: center; margin-bottom: 30px;}
+        .report-title-center h2 { font-size: 1.3rem; font-weight: 800; color: #0F172A; text-transform: uppercase; margin-bottom: 5px;}
+
+        .table-wrapper { overflow-x: auto; width: 100%; border: 1px solid #94A3B8; }
+        .report-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .report-table th { padding: 15px 10px; background: #F8FAFC; border: 1px solid #94A3B8; text-align: center; font-weight: 700; color: black; vertical-align: middle;}
+        .report-table td { padding: 12px 10px; border: 1px solid #94A3B8; color: #1E293B; text-align: right; vertical-align: middle;}
+        .report-table td:nth-child(1), .report-table td:nth-child(2) { text-align: center; } /* Tháng, Năm căn giữa */
+        .report-table .row-total td { background: #F1F5F9; font-weight: 800; color: black;}
+
+        .alert-box { display: flex; gap: 15px; padding: 16px; border-radius: 12px; margin: 20px 0; background: var(--c-blue-light); border: 1px solid #BFDBFE; align-items: flex-start;}
+        .alert-box i { font-size: 1.4rem; color: var(--primary); margin-top: 2px; }
+        .alert-box div h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .alert-box div p { font-size: 0.9rem; color: #334155; margin: 0; }
+
+        /* --- TỐI ƯU HIỂN THỊ ĐIỆN THOẠI --- */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 15px; }
+            .header-title-right { font-size: 0.85rem; max-width: 150px; text-align: right; line-height: 1.2;}
+            .content-area { padding: 15px; }
+            .doc-container { padding: 20px; border-radius: 12px; }
+            .doc-header h1 { font-size: 1.5rem; }
+
+            .time-filter-row { flex-direction: column; gap: 20px; }
+            .report-print-container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
+
+        </div>
+        <div class="top-right">
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phần D. Tài chính & Báo cáo <i class="fas fa-chevron-right"></i> <span>Báo cáo Số lượng</span>
+                </div>
+
+                <div class="doc-header">
+                    <h1>Hướng dẫn: Xem báo cáo số lượng Học sinh & Giáo viên</h1>
+                    <p>Chức năng này giúp Ban quản lý nắm bắt được tình hình biến động nhân sự và quy mô học sinh (tăng/giảm, số lượng nhập học mới, số lượng nghỉ) theo từng tháng hoặc cả năm.</p>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">1</span> Lựa chọn chức năng Báo cáo Số lượng</h2>
+                    <div class="doc-content">
+                        <p>Từ bảng điều khiển (Dashboard) của phân hệ Báo cáo, bạn click chọn nút <strong><i class="fas fa-pie-chart"></i> Báo cáo Số lượng [Học sinh/Giáo viên]</strong>.</p>
+
+                        <div class="ui-mockup-box" style="display: flex; justify-content: center; background: #F8FAFC;">
+                            <div class="report-dash-card">
+                                <div style="width: 80px; height: 80px; background: white; border-radius: 20px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--border-color); font-size: 2.5rem; color: #CBD5E1;">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <h3>Trường Ví dụ</h3>
+                                <p class="subtitle">Slogan 1</p>
+                                <p class="desc">(Xem báo cáo lợi nhuận [Lỗ lãi] từng tháng và cả Năm tài chính)</p>
+
+                                <div class="btn-large-outline" style="margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Báo cáo [Thu/Chi] hàng tháng</div>
+                                <div class="btn-large-blue"><i class="fas fa-pie-chart"></i> Báo cáo Số lượng [Học sinh/Giáo viên]</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">2</span> Chọn khoảng thời gian xem báo cáo</h2>
+                    <div class="doc-content">
+                        <p>Tương tự như báo cáo doanh thu, hệ thống sẽ yêu cầu bạn chọn khoảng thời gian. Mặc định là từ đầu năm đến hiện tại. Bấm <strong>Xem báo cáo</strong> sau khi chọn xong.</p>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="mock-modal">
+                                <div class="mock-modal-header">
+                                    BÁO CÁO- [HỌC SINH/GIÁO VIÊN] HÀNG THÁNG <i class="fas fa-times" style="color: #94A3B8; cursor: pointer;"></i>
+                                </div>
+                                <div class="mock-modal-body">
+                                    <div style="font-size: 1.1rem; color: #475569; font-weight: 600; margin-bottom: 20px;">Chuyên biệt Từ Sơn - Trụ sở chính</div>
+
+                                    <div class="time-filter-row">
+                                        <div class="time-filter-group">
+                                            <span class="time-filter-label">THỜI GIAN TỪ</span>
+                                            <div class="time-input-wrap">
+                                                <input type="text" class="time-input" value="Tháng 2" readonly> / <input type="text" class="time-input" value="2026" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="time-filter-group">
+                                            <span class="time-filter-label">THỜI GIAN ĐẾN</span>
+                                            <div class="time-input-wrap">
+                                                <input type="text" class="time-input" value="Tháng 1" readonly> / <input type="text" class="time-input" value="2027" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mock-modal-footer">
+                                    <button class="mock-btn btn-save">Xem báo cáo</button>
+                                    <button class="mock-btn btn-cancel">Đóng lại</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">3</span> Xem kết quả thống kê & In báo cáo</h2>
+                    <div class="doc-content">
+                        <p>Bảng số liệu sẽ hiển thị sự biến động chi tiết. Hãy chú ý đến các cột: <strong>Nghỉ trong tháng</strong> (số học sinh báo nghỉ/rút hồ sơ) và <strong>Mới trong tháng</strong> (số học sinh mới nhập học) để đánh giá tình hình tuyển sinh của cơ sở.</p>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none; overflow-x: auto;">
+                            <div class="report-print-container">
+                                <div class="report-header">
+                                    <div class="print-icon" title="In báo cáo"><i class="fas fa-print"></i></div>
+                                </div>
+
+                                <div class="report-title-center">
+                                    <h2>BÁO CÁO TỔNG [HỌC SINH/GIÁO VIÊN] HÀNG THÁNG</h2>
+                                </div>
+
+                                <div class="table-wrapper">
+                                    <table class="report-table">
+                                        <tr>
+                                            <th style="width: 12%;">Tháng</th>
+                                            <th style="width: 12%;">Năm</th>
+                                            <th style="width: 19%;">[1] Tổng Học sinh</th>
+                                            <th style="width: 19%;">Nghỉ trong tháng</th>
+                                            <th style="width: 19%;">Mới trong tháng</th>
+                                            <th style="width: 19%;">[2] Tổng Giáo viên</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng 2</td><td>2026</td><td>84</td><td>3</td><td>0</td><td>26</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng 3</td><td>2026</td><td>89</td><td>10</td><td>9</td><td>24</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng 4</td><td>2026</td><td>91</td><td>3</td><td>9</td><td>24</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng 5</td><td>2026</td><td>92</td><td>0</td><td>2</td><td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng 6</td><td>2026</td><td>0</td><td>0</td><td>0</td><td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" style="text-align: center; color: #94A3B8; font-style: italic;">... Các tháng tiếp theo ...</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tháng 1</td><td>2027</td><td>0</td><td>0</td><td>0</td><td>0</td>
+                                        </tr>
+                                        <tr class="row-total">
+                                            <td colspan="2" style="text-align: center; text-transform: uppercase;">Tổng</td>
+                                            <td>88</td>
+                                            <td>16</td>
+                                            <td>20</td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>Để xuất dữ liệu ra giấy lưu trữ hoặc gửi báo cáo, bạn chỉ cần bấm vào biểu tượng <strong>Máy in <i class="fas fa-print"></i></strong> nằm ở góc trên cùng bên phải của bảng báo cáo.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
