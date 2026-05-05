@@ -19,8 +19,8 @@
             <field name="arch" type="xml">
                <list editable="bottom" default_order="sequence">
                     <field name="sequence" widget="handle"/>
-                    <field name="name"/>
-                    <field name="loai"/>
+                    <field name="name" width="300"/>
+                    <field name="loai" width="200"/>
                     <field name="desc"/>
                     <field name="trangthai"
                         decoration-success="trangthai == '1'"

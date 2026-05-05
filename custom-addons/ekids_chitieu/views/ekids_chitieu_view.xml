@@ -8,8 +8,8 @@
                  <list editable="bottom" limit="300"  default_order="ngaychi asc">
                     <field name="sequence" widget="handle"/>
                     <field name="ngaychi" width="200"/>
-                    <field name="tien" sum="Total" width="100" widget="integer"/>
-                    <field name="dm_loaichi_id"
+                    <field name="tien" sum="Total" width="200" widget="integer"/>
+                    <field name="dm_loaichi_id" width="200"
                            domain="[('trangthai','=','1'),('loai','=','0')]"
                            context="{'default_coso_id':context.get('default_coso_id')}"/>
                     <field name="desc"/>
@@ -26,9 +26,8 @@
             <field name="arch" type="xml">
                  <list editable="bottom" limit="300" default_order="ngaychi asc">
                     <field name="ngaychi" width="200"/>
-                    <field name="tien" sum="Total" width="100"/>
-                    <field name="tien" sum="Total" width="50"/>
-                    <field name="dm_loaichi_id"
+                    <field name="tien" sum="Total" width="200"/>
+                    <field name="dm_loaichi_id" width="200"
                           domain="[('trangthai','=','1'),('loai','=','1')]"
                            context="{'default_coso_id':context.get('default_coso_id')}"/>
                     <field name="desc"/>
