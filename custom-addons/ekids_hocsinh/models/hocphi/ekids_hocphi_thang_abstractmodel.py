@@ -671,10 +671,12 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             # các ca: nghỉ, nghỉ hoa trả học phí đều được trừ: [-1: nghỉ, 2:Nghỉ và hoàn tra hoc phi]
             days = list(ngaynghis.keys())
             # lấy cả các ca nghỉ, và sẽ dạy bù phục vụ thông báo
-            data = self.func_tinhtoan_tien_ca_duoctru(hocphi, tyle_hoantra, days,ngay_dihoc_cosos)
-            tien_ca = int (data['tien'])
-            name = name+data['name']
-            tien =tien +tien_ca
+            data = self.func_tinhtoan_tien_ca_duoctru_thangtruoc(hocphi, tyle_hoantra, days, ngay_dihoc_cosos)
+            if data:
+                #data = self.func_tinhtoan_tien_ca_duoctru(hocphi, tyle_hoantra, days,ngay_dihoc_cosos)
+                tien_ca = int (data['tien'])
+                name = name+data['name']
+                tien =tien +tien_ca
             if tien > 0:
                 data={
                     'hocphi_id': hocphi.id,
@@ -733,7 +735,81 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         data = {}
         data['tien'] = tien
         data['name'] = name
+
         return data
+
+    def func_tinhtoan_tien_ca_duoctru_thangtruoc(self, hocphi, tyle_hoantra_chung, days, ngay_dihoc_cosos):
+        # Lấy danh sách điểm danh
+        ca2ngays = self.env['ekids.diemdanh_ca2ngay'].search([
+            ('hocsinh_id', '=', hocphi.hocsinh_id.id),
+            ('ngay', 'in', days),
+            ('trangthai', 'in', ['-1', '2', '3']),
+        ])
+
+        datas = {}
+        if not ca2ngays:
+            return datas
+
+        # Tính số ngày học một lần để tối ưu hiệu năng
+        so_ngay_hoc = len(ngay_dihoc_cosos)
+
+        for ca2ngay in ca2ngays:
+            dm_ca = ca2ngay.hocphi_dm_ca_id
+
+            # 1. Xác định tỷ lệ hoàn trả an toàn (Không ghi đè tham số gốc)
+            tyle_apdung = tyle_hoantra_chung
+            if not dm_ca.is_hoantien_khi_nghi:
+                tyle_apdung = dm_ca.tyle_hoan_rieng
+
+            # Bỏ qua không tính toán nếu tỷ lệ hoàn = 0
+            if tyle_apdung <= 0:
+                continue
+
+            # 2. Xác định số tiền của 1 ca
+            tien_mot_ca = dm_ca.tien
+            if dm_ca.is_tien_trongoi:
+                # Chặn lỗi ZeroDivisionError
+                tien_mot_ca = (dm_ca.tien / so_ngay_hoc) if so_ngay_hoc > 0 else 0.0
+
+            # 3. Kiểm tra ca bù
+            ca_bu = 1 if ca2ngay.trangthai == '3' else 0
+            soca = 1 if ca2ngay.trangthai in ['-1','2'] else 0
+
+            # 4. Cộng dồn vào Dictionary
+            ca_id_str = str(dm_ca.id)
+            if ca_id_str in datas:
+                # Đã tồn tại -> Chỉ cộng dồn tiền và ca bù
+                datas[ca_id_str]['tien'] += tien_mot_ca
+                datas[ca_id_str]['soca'] += soca
+                datas[ca_id_str]['ca_bu'] += ca_bu
+            else:
+                # Chưa tồn tại -> Khởi tạo mới đúng cấu trúc phẳng
+                datas[ca_id_str] = {
+                    'name': dm_ca.name,
+                    'tien': tien_mot_ca,
+                    'soca':soca,
+                    'tyle_hoantra': tyle_apdung,
+                    'ca_bu': ca_bu,
+                }
+        if datas:
+            for key in datas:
+                value =datas[key]
+                if value['tien'] > 0:
+                    name =("Hoàn "+ str(value['tyle_hoantra'])
+                           +" % '"+value['name']
+                           +"' với số tiền ="
+                           + string_util.number2string(value['tien'])
+                           +" vnđ (tổng ="+ str(value['soca'])+")")
+                    if value['ca_bu']>0:
+                        name = name +", còn "+ str(value['ca_bu']) +" sẽ được học bù tháng tới."
+                    data = {}
+                    data['tien'] = value['tien']
+                    data['name'] = name
+                    return data
+        return {}
+
+
+
 
 
 
