@@ -666,7 +666,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             if tien >0 :
                #tien_bantru = (tien / 100) * tyle_hoantra
                 name = name + " Hoàn 100% bán trú "+string_util.number2string(tien)+" vnđ"
-                #TH2: tính trừ các khoản can can thiệp
+            #TH2: tính trừ các khoản can can thiệp
+
             # các ca: nghỉ, nghỉ hoa trả học phí đều được trừ: [-1: nghỉ, 2:Nghỉ và hoàn tra hoc phi]
             days = list(ngaynghis.keys())
             # lấy cả các ca nghỉ, và sẽ dạy bù phục vụ thông báo
@@ -713,7 +714,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                         else:
                             for ca2ngay in ca2ngays:
                                 trangthai = ca2ngay.trangthai
-                                if trangthai in ['0', '-1', '2']:
+                                if trangthai in ['-1', '2']:
                                     ca_nghi = ca_nghi + 1
                                     tien = tien + gia_ca
                                 elif trangthai == '3':
