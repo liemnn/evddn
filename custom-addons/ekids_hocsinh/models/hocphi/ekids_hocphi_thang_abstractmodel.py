@@ -398,7 +398,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                    tien =soca * dm_ca.tien
                    # tien thu tron goi theo thang
                    if dm_ca.is_tien_trongoi == True:
-                       tien = soca * (dm_ca.tien/len(ngay_dihoc_cosos))
+                       #tien = soca * (dm_ca.tien/len(ngay_dihoc_cosos))
+                       tien = dm_ca.tien
                    data = {
                         'hocphi_id': hocphi.id,
                         'dm_ca_id':dm_ca.id,
