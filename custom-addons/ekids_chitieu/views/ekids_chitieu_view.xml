@@ -19,6 +19,32 @@
             </field>
         </record>
 
+         <record model="ir.ui.view" id="ekids_chitieu.chi_form">
+            <field name="name">Form Chi</field>
+            <field name="model">ekids.chitieu_chi</field>
+            <field name="arch" type="xml">
+                <form string="Chi tiết khoản chi">
+                    <sheet>
+                        <group>
+                             <field name="coso_id" invisible="1"/>
+                        </group>
+                         <group>
+                            <field name="ngaychi" string="Ngày chi"/>
+                            <field name="tien" string="Số tiền (VNĐ)" widget="integer" class="fw-bold text-danger fs-5"/>
+
+                            <field name="dm_loaichi_id"
+                               domain="[('trangthai','=','1'),('loai','=','0')]"
+                               context="{'default_coso_id': context.get('default_coso_id')}"
+                               placeholder="Chọn loại chi..."/>
+
+                            <field name="desc" nolabel="1" placeholder="Nhập diễn giải chi tiết cho khoản chi này..."/>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
 
         <record model="ir.ui.view" id="ekids_chitieu.thu_list">
             <field name="name">Chi</field>
@@ -34,6 +60,32 @@
                     <field name="create_uid" string="Người tạo"/>
                     <field name="create_date" string="Ngày tạo"/>
                  </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_chitieu.thu_form">
+            <field name="name">Form Chi</field>
+            <field name="model">ekids.chitieu_thu</field>
+            <field name="arch" type="xml">
+                <form string="Chi tiết khoản thu">
+                    <sheet>
+                        <group>
+                             <field name="coso_id" invisible="1"/>
+                        </group>
+                         <group>
+                            <field name="ngaychi" string="Ngày chi"/>
+                            <field name="tien" string="Số tiền (VNĐ)" widget="integer" class="fw-bold text-danger fs-5"/>
+
+                            <field name="dm_loaichi_id"
+                               domain="[('trangthai','=','1'),('loai','=','1')]"
+                               context="{'default_coso_id': context.get('default_coso_id')}"
+                               placeholder="Chọn loại chi..."/>
+
+                            <field name="desc" nolabel="1" placeholder="Nhập diễn giải chi tiết cho khoản thu này..."/>
+                        </group>
+
+                    </sheet>
+                </form>
             </field>
         </record>
 
