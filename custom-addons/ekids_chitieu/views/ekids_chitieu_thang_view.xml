@@ -39,27 +39,108 @@
 
 
         <record id="ekids_chitieu.chitieu_thang_form" model="ir.ui.view">
-            <field name="name">Form</field>
+            <field name="name">Form Chi Tiêu Tháng</field>
             <field name="model">ekids.chitieu_thang</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
                         <field name="coso_id" invisible="1"/>
-                        <group>
-                            <h2>
-                                <field name="name" readonly="id"/>
-                            </h2>
-                        </group>
-                         <notebook>
-                            <page name="chi_ids " string="CÁC KHOẢN [CHI]">
-                                <field name="chi_ids" context="{'default_coso_id':coso_id}"/>
-                            </page>
-                             <page name="thu_ids " string="CÁC KHOẢN [THU KHÁC] NGOÀI HỌC PHÍ">
-                                <field name="thu_ids" context="{'default_coso_id':coso_id}"/>
-                            </page>
-                         </notebook>
 
-                       </sheet>
+                        <div class="oe_title mb-4">
+                            <label for="name" class="oe_edit_only text-muted" string="Tháng / Kỳ chi tiêu"/>
+                            <h1>
+                                <field name="name" readonly="id" class="text-primary"/>
+                            </h1>
+                        </div>
+
+                        <notebook>
+                            <page name="chi_ids" string="CÁC KHOẢN [CHI]">
+                                <field name="chi_ids" context="{'default_coso_id': coso_id}">
+
+                                    <list editable="bottom" limit="300"  default_order="ngaychi asc">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="ngaychi" width="150"/>
+                                        <field name="tien" sum="Total" width="150" widget="integer" class="fw-bold text-success"/>
+                                        <field name="dm_loaichi_id" width="150"
+                                               domain="[('trangthai','=','1'),('loai','=','0')]"
+                                               context="{'default_coso_id':context.get('default_coso_id')}"/>
+                                        <field name="desc"/>
+                                        <field name="create_uid" string="Người tạo"/>
+                                        <field name="create_date" string="Ngày tạo"/>
+                                     </list>
+
+                                    <kanban>
+                                        <field name="ngaychi"/>
+                                        <field name="dm_loaichi_id"/>
+                                        <field name="tien"/>
+
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div class="oe_kanban_global_click d-flex justify-content-between align-items-center p-3 border-bottom shadow-sm mb-2 rounded bg-white">
+                                                    <div>
+                                                        <strong class="o_kanban_record_title text-dark mb-1 d-block" style="font-size: 1rem;">
+                                                            <field name="dm_loaichi_id"/>
+                                                        </strong>
+                                                        <div class="text-muted small">
+                                                            <i class="fa fa-calendar me-1"/> <field name="ngaychi"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <strong class="text-danger" style="font-size: 1.1rem;">
+                                                            <field name="tien"/>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </page>
+
+                            <page name="thu_ids" string="CÁC KHOẢN [THU KHÁC] NGOÀI HỌC PHÍ">
+                                <field name="thu_ids" context="{'default_coso_id': coso_id}">
+
+                                    <list editable="bottom" limit="300" default_order="ngaychi asc">
+                                        <field name="ngaychi" width="150"/>
+                                        <field name="tien" sum="Total" width="150" widget="integer" class="fw-bold text-success"/>
+                                        <field name="dm_loaichi_id" width="150"
+                                              domain="[('trangthai','=','1'),('loai','=','1')]"
+                                               context="{'default_coso_id':context.get('default_coso_id')}"/>
+                                        <field name="desc"/>
+                                        <field name="create_uid" string="Người tạo"/>
+                                        <field name="create_date" string="Ngày tạo"/>
+                                     </list>
+
+                                    <kanban>
+                                        <field name="ngaychi"/>
+                                        <field name="dm_loaichi_id"/>
+                                        <field name="tien"/>
+
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div class="oe_kanban_global_click d-flex justify-content-between align-items-center p-3 border-bottom shadow-sm mb-2 rounded bg-white">
+                                                    <div>
+                                                        <strong class="o_kanban_record_title text-dark mb-1 d-block" style="font-size: 1rem;">
+                                                            <field name="dm_loaichi_id"/>
+                                                        </strong>
+                                                        <div class="text-muted small">
+                                                            <i class="fa fa-calendar me-1"/> <field name="ngaychi"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <strong class="text-success" style="font-size: 1.1rem;">
+                                                            <field name="tien"/>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </sheet>
                 </form>
             </field>
         </record>

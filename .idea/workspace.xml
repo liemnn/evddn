@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/cauhinh/ekids_hocphi_dm_thu_bantru_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/cauhinh/ekids_hocphi_dm_thu_bantru_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/cauhinh/ekids_hocphi_dm_ca_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/cauhinh/ekids_hocphi_dm_ca_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/cauhinh/ekids_hocphi_dm_thu_bantru_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/cauhinh/ekids_hocphi_dm_thu_bantru_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_chitieu_thang_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_chitieu_thang_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_func/hocsinh_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_func/hocsinh_util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +49,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Run",
+    "Python.evddn.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
@@ -113,14 +111,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00031" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1775470192017</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1775470192017</updated>
     </task>
     <task id="LOCAL-00032" summary="liemnn">
       <option name="closed" value="true" />
@@ -506,7 +496,15 @@
       <option name="project" value="LOCAL" />
       <updated>1778039387644</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1778077061260</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1778077061261</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -596,6 +594,16 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py</url>
           <line>804</line>
           <option name="timeStamp" value="76" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_func/hocsinh_util.py</url>
+          <line>10</line>
+          <option name="timeStamp" value="77" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_func/hocsinh_util.py</url>
+          <line>45</line>
+          <option name="timeStamp" value="78" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
