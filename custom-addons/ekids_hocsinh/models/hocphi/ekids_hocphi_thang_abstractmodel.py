@@ -411,17 +411,11 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 if (tien >0 and tyle_hoan_hp >0):
 
                     tien_duoc_hoan_tra = (tien / 100) * tyle_hoan_hp
+                    sotientheongay =self.func_thongtin_duoctru_hocphi_tien(sotientheongay, thu_bantru,hocphi)
                     tien = self.func_thongtin_duoctru_hocphi_tien(tien_duoc_hoan_tra, thu_bantru,hocphi)
 
-                    name = (lydo + str(so_ngaynghi) + " ngày -> hoàn " + str(tyle_hoan_hp) + "% của \"" + thu_bantru.name + "\"="
-                            + string_util.number2string(sotientheongay) + "vnđ × " + str(so_ngaynghi))
-
-                    dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
-                    if (dm_chinhsach_giam
-                            and dm_chinhsach_giam.tyle_giam > 0
-                            and thu_bantru.is_giam_hocphi == True):
-                        name += "(đơn giá đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"
-
+                    name =self.func_get_name_hoantra_hocphi_bantru(self, hocphi, lydo, so_ngaynghi
+                                                                   ,thu_bantru, tyle_hoan_hp,sotientheongay)
                     data = {
                         'hocphi_id': hocphi.id,
                         'name': name,
@@ -475,17 +469,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                     tien_duoc_hoan_tra = (tien / 100) * tyle_hoan_hp
                     sotientheongay =self.func_thongtin_duoctru_hocphi_tien(sotientheongay,thu_bantru, hocphi)
                     tien = self.func_thongtin_duoctru_hocphi_tien(tien_duoc_hoan_tra,thu_bantru, hocphi)
-
-                    name = (lydo + "hoàn " + str(
-                        tyle_hoan_hp) + "% của \"" + thu_bantru.name + "\"="
-                            + string_util.number2string(sotientheongay) + "vnđ × " + str(so_ngaynghi))
-
-                    dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
-                    if (dm_chinhsach_giam
-                            and dm_chinhsach_giam.tyle_giam > 0
-                            and thu_bantru.is_giam_hocphi == True):
-                        name += "(đơn giá đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"
-
+                    name = self.func_get_name_hoantra_hocphi_bantru(self, hocphi, lydo, so_ngaynghi
+                                                                    , thu_bantru, tyle_hoan_hp, sotientheongay)
                     data = {
                         'hocphi_id': hocphi.id,
                         'name': name,
@@ -539,21 +524,19 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 soca = soca - soca_hocbu
                 tien = soca * ca_hoc.tien
 
-            if tien >0 and tyle_hoantra>0:
 
+
+            if ((tien >0 and tyle_hoantra>0)
+                    or soca_hocbu>0):
                 tien = self.func_thongtin_duoctru_hocphi_tien(tien,ca_hoc, hocphi)
-
-                name = lydo+("hoàn " + str(tyle_hoantra)+ "% của ("+
-                    str(soca) + " ca \"" + ca.name+ "\")= "
-                        + string_util.number2string(dongia) + "vnđ × " + str(soca))
-                dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
-                if (dm_chinhsach_giam
-                        and dm_chinhsach_giam.tyle_giam > 0
-                        and ca_hoc.is_giam_hocphi == True):
-                    name += "(đơn giá đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"
-                # thong tin ca hoc bu
-                if soca_hocbu > 0:
-                    name = name + ", còn " + str(soca_hocbu) + " sẽ được học bù tháng tới."
+                name =self.func_get_name_hoantra_hocphi_ca(hocphi,lydo
+                                                               ,len(days)
+                                                               ,ca_hoc
+                                                               ,tyle_hoantra
+                                                               ,soca
+                                                               ,soca_hocbu
+                                                               ,tien
+                                                               ,dongia)
 
                 data = {
                     'hocphi_id': hocphi.id,
@@ -562,16 +545,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 }
                 self.env['ekids.hocphi_duoctru'].create(data)
 
-            elif tien <=0 and soca_hocbu>0:
-                #TH2: thông báo số ca học bù
-                    name = (lydo + "còn " + str(soca_hocbu) + " ca \""
-                            + ca_hoc.name + "\") sẽ học bù tháng tới.")
-                    data = {
-                        'hocphi_id': hocphi.id,
-                        'name': name,
-                        'tien': 0
-                    }
-                    self.env['ekids.hocphi_duoctru'].create(data)
+
 
 
 
@@ -775,10 +749,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 # có dữ liệu
                 for tyle in datas:
                     values = datas[tyle]
-                    lydo = "Nghỉ có phép "+ str(len(values)) + " ngay->"
-                    dm_chinhsach_giam=hocphi.hocsinh_id.dm_chinhsach_giam_id
-                    if dm_chinhsach_giam:
-                        lydo = "Nghỉ có phép " + str(len(values)) + " ngay->"
+                    lydo = "Nghỉ có phép "
                     # TH1: TRỪ BÁN TRÚ
                     is_tyle_hoan_theo_nghiphep =nghiphep.is_hoantra_hocphi
                     self.func_func_hoantra_hocphi_do_nghiphep_bantru(lydo
@@ -890,31 +861,16 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
                     tien_duoc_hoan_tra = (value['tien'] / 100) * value['tyle_hoantra']
                     tien = self.func_thongtin_duoctru_hocphi_tien(tien_duoc_hoan_tra,dm_ca_hoc, hocphi)
-
-                    if value['tien'] > 0:
-                        dongia= value['dongia']
-
-                        # xet xem có giảm hoc phí không:
-
-
-                        name = (lydo +str(len(days))+" ngày -> hoàn "+str(value['tyle_hoantra'])+"% của (" + str(value['soca']) + " ca \""+value['name']+"\")= "
-                                +string_util.number2string(dongia)+"vnđ × "+str(value['soca']))
-                        dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
-                        if (dm_chinhsach_giam
-                                and dm_chinhsach_giam.tyle_giam>0
-                                and dm_ca_hoc.is_giam_hocphi == True):
-                            name += "(đơn giá đã giảm "+str(dm_chinhsach_giam.tyle_giam)+"%)"
-
-                        if value['ca_bu']>0:
-                            name = name +", còn "+ str(value['ca_bu']) +" sẽ được học bù tháng tới."
-                    else:
-                        if value['ca_bu'] > 0:
-                            # thông báo cao bu
-                            name = (lydo + str(len(days)) + " ngày -> còn " + str(value['ca_bu']) + " ca \"" + value[
-                                'name'] + "\") sẽ học bù tháng tới.")
-
+                    dongia = value['dongia']
+                    name =self.func_get_name_hoantra_hocphi_ca(hocphi,lydo
+                                                               ,len(days)
+                                                               ,dm_ca_hoc
+                                                               ,value['tyle_hoantra']
+                                                               ,value['soca']
+                                                               ,value['ca_bu']
+                                                               ,tien
+                                                               ,dongia)
                     #tao ban ghi
-
                     data = {
                         'hocphi_id': hocphi.id,
                         'name': name,
@@ -966,3 +922,38 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                     tien = (tien/100)* (100-tyle)
         return tien
 
+
+    def func_get_name_hoantra_hocphi_ca(self,hocphi,lydo,songay,ca,tyle_hoan_hp,soca,soca_bu,tien,dongia):
+        name=""
+        if tien > 0 and tyle_hoan_hp>0:
+           # xet xem có giảm hoc phí không:
+            name = (lydo + str(songay) + " ngày -> hoàn " + str(tyle_hoan_hp) + "% của (" + str(
+                soca) + " ca \"" + ca.name + "\")= "
+                    + string_util.number2string(dongia) + "vnđ × " + str(soca))
+            dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
+            if (dm_chinhsach_giam
+                    and dm_chinhsach_giam.tyle_giam > 0
+                    and ca.is_giam_hocphi == True):
+                name += "(đơn giá đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"
+
+            if soca_bu > 0:
+                name = name + ", còn " + str(soca_bu) + " sẽ được học bù tháng tới."
+        else:
+            if soca_bu > 0:
+                # thông báo cao bu
+                name = (lydo + str(songay) + " ngày -> còn " + str(soca_bu) + " ca \"" + ca.name+ "\") sẽ học bù tháng tới.")
+        return name
+
+
+    def func_get_name_hoantra_hocphi_bantru(self, hocphi, lydo, songay, thu_bantru, tyle_hoan_hp,dongia):
+
+        name = (lydo + str(songay) + " ngày -> hoàn " + str(tyle_hoan_hp) + "% của \"" + thu_bantru.name + "\"="
+                + string_util.number2string(dongia) + "vnđ × " + str(songay))
+
+        dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
+
+        if (dm_chinhsach_giam
+                and dm_chinhsach_giam.tyle_giam > 0
+                and thu_bantru.is_giam_hocphi == True):
+            name += "(đơn giá đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"
+        return name
