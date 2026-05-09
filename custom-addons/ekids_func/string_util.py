@@ -1,3 +1,4 @@
+from datetime import datetime,date
 def number2string(total):
     total = "{:,.0f}".format(total)
     return total
@@ -16,3 +17,8 @@ def date2string(date):
         return date.strftime("%d/%m/%Y")
     else:
         return ""
+def string2date(datestr):
+    if datestr:
+        return datetime.strptime(datestr,"%Y-%m-%d")
+    else:
+        return False
