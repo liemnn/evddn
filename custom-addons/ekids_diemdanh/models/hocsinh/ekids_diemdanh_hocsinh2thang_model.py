@@ -87,6 +87,22 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                                        string="Tăng cường")
     field_sua = fields.Char("Các trường do người dùng điều chỉnh",default="")
 
+    is_dl_clocked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_clocked")
+
+
+    def _compute_is_dl_clocked(self):
+        today = date.today()
+        sothang_today = (today.year * 12) + today.month
+
+        for record in self:
+            coso = record.coso_id
+            sothang_khoa = int(coso.sothang_khoa_dl_diemdanh)
+            sothang_dl = (int(record.diemdanh_id.nam) * 12) + int(record.diemdanh_id.thang)
+            if (sothang_today - sothang_dl) >= sothang_khoa:
+                record.is_dl_clocked = True
+            else:
+                record.is_dl_clocked = False
+
 
     def _compute_sequence(self):
         index =1
@@ -300,6 +316,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
 
 
     def action_open_popup_thongtin_diemdanh_hocsinh(self):
+
         self.ensure_one()
         self.func_tinhtoan_tong()
         form_view_id = self.env.ref('ekids_diemdanh.diemdanh_hocsinh2thang_form').id  # chú ý id chính xác
@@ -372,7 +389,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
         coso_id = context.get("default_coso_id")
         thang = context.get("default_thang")
         nam = context.get("default_nam")
-        coso_util.func_check_errors(int(nam),int(thang))
+
         if thang and nam:
             diemdanhs = self.env['ekids.diemdanh'].search([
                 ('coso_id', '=', coso_id)
@@ -382,6 +399,10 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
             #B1: xoa di
             if diemdanhs:
                 for diemdanh in diemdanhs:
+                    is_dl_diemdanh_clocked = coso_util.func_is_dl_diemdanh_clocked(diemdanh.coso_id,int(nam), int(thang))
+                    if is_dl_diemdanh_clocked == True:
+                        raise UserError(
+                            _("Dữ liệu điểm danh đã hết hiệu lực được sửa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !."))
                     diemdanh.unlink()
             #B2 tao moi
             data = {
@@ -411,6 +432,13 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                     }
 
 
+    def unlink(self):
+        nam = self.diemdanh_id.nam
+        thang = self.diemdanh_id.thang
+        coso_util.func_is_dl_diemdanh_clocked(self.coso_id
+                                              , int(nam)
+                                              , int(thang))
+        return super().unlink()
 
 
 

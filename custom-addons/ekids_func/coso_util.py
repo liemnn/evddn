@@ -36,3 +36,10 @@ def func_check_errors(nam,thang):
         return True
         #raise UserError("Không thể thực hiện hành động này. Tháng thực hiện đã được khóa")
 
+#type một số như sau: 0: dl chitieu,1: dữ liệu điểm danh
+def func_is_dl_diemdanh_clocked(coso,nam,thang):
+    today = date.today()
+    thang_n = (today.year *12) + today.month
+    thang_m = (nam*12)+thang
+    if (thang_n -thang_m) >= int (coso.sothang_khoa_dl_diemdanh):
+        raise UserError("Dữ liệu đã hết hiệu lực được sửa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")

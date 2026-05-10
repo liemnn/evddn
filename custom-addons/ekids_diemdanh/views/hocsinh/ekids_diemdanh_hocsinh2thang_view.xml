@@ -15,6 +15,7 @@
             <field name="model">ekids.diemdanh_hocsinh2thang</field>
             <field name="arch" type="xml">
                 <list  create="false" delete="true" limit="200" default_order="hocsinh_id asc">
+                    <field name="is_dl_clocked" column_invisible="True"/>
                     <header>
                         <button name="action_xoa_taolai_diemdanh"
                             type="object"
@@ -24,6 +25,7 @@
                             confirm="Nếu bạn xác nhận toàn bộ dữ liệu điểm danh sẽ xóa toàn bộ và xác nhận lại"
                         />
                     </header>
+
                     <field name="sequence" width="25" />
                     <field name="hocsinh_id" width="170"  readonly="true"/>
 

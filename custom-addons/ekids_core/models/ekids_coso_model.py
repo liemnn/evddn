@@ -57,6 +57,29 @@ class CoSo(models.Model):
     is_thu_hocphi_dauthang =fields.Boolean(string="Thiết lập thu [Học phí] đầu tháng",default=True)
     is_dong_hocphi_theoky= fields.Boolean(string="Đóng học phí theo kỳ/Gộp kỳ", default=False)
 
+    sothang_khoa_dl_chitieu = fields.Selection(
+        [('0', 'Không khóa'),('1', '1 Tháng'), ('2', '2 Tháng'), ('3', '3 Tháng'), ('4', '4 Tháng'), ('5', '5 Tháng'),
+         ('6', '6 Tháng'), ('7', '7 Tháng'), ('8', '8 Tháng'), ('9', '9 Tháng'), ('10', '10 Tháng'),
+         ('11', '11 Tháng'), ('12', '12 Tháng')],
+        string='Sẽ khóa dữ liệu [Chi/Tiêu] sau số tháng',
+        default='0',
+        required=True
+    )
+
+    sothang_khoa_dl_diemdanh= fields.Selection(
+        [('0', 'Không khóa'), ('1', '1 Tháng'), ('2', '2 Tháng'), ('3', '3 Tháng'), ('4', '4 Tháng'), ('5', '5 Tháng'),
+         ('6', '6 Tháng'), ('7', '7 Tháng'), ('8', '8 Tháng'), ('9', '9 Tháng'), ('10', '10 Tháng'),
+         ('11', '11 Tháng'), ('12', '12 Tháng')],
+        string='Sẽ khóa dữ liệu [Điểm danh/Chấm công]sau số tháng',
+        default='0',
+        required=True
+    )
+
+    trangthai_hocphi_khoa_dl = fields.Char(string="Danh sách các trạng thái [Học phí] cho phép sửa dữ liệu ['0',...]")
+    trangthai_luong_khoa_dl = fields.Char(string="Danh sách các trạng [Lương] thái cho phép sửa dữ liệu ['0',...]")
+
+
+
     @api.depends('thue_tungay', 'thue_denngay')
     def _compute_trangthai(self):
         today = date.today()

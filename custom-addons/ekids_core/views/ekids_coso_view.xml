@@ -211,6 +211,15 @@
                                 </group>
 
                             </page>
+                            <page string="CẤU HÌNH KHÓA DỮ LIỆU">
+                                 <group>
+                                        <field name="sothang_khoa_dl_chitieu" />
+                                        <field name="sothang_khoa_dl_diemdanh" />
+                                        <field name="trangthai_hocphi_khoa_dl" />
+                                        <field name="trangthai_luong_khoa_dl" />
+                                 </group>
+                            </page>
+
                             <page string="CƠ SỞ THÀNH VIÊN">
                                 <field name="coso_ids" widget="many2many_tags" string="Các cơ sở thành viên"/>
 
