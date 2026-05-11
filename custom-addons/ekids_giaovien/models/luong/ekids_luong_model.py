@@ -303,3 +303,12 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
                     " Bảng [Lương] ở trạng thái này không cho phép sửa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
 
         return super(Luong, self).write(vals)
+
+
+    def unlink(self):
+        is_dl_luong_locked = coso_util.func_is_dl_luong_locked(self, self.coso_id, self.trangthai)
+        if is_dl_luong_locked == True:
+            raise UserError(
+                " Bảng [Lương] ở trạng thái này không cho phép xóa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
+
+        return super().unlink()
