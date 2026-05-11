@@ -18,7 +18,7 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     nam_id = fields.Many2one('ekids.luong_nam',related="thang_id.nam_id", string='Năm', required=True, ondelete="restrict")
 
     trangthai = fields.Selection([("-1", "Đang tính")
-                                    ,("0", "Đã rà soát")
+                                    ,("0", "Đã kiểm tra")
                                    , ("1", "Đã nhận lương")],default="-1")
     is_show_tinhtoan_lai = fields.Boolean(compute="_compute_is_show_tinhtoan_lai")
 

@@ -75,8 +75,8 @@ class CoSo(models.Model):
         required=True
     )
 
-    trangthai_hocphi_khoa_dl = fields.Char(string="Danh sách các trạng thái [Học phí] cho phép sửa dữ liệu ['0',...]")
-    trangthai_luong_khoa_dl = fields.Char(string="Danh sách các trạng [Lương] thái cho phép sửa dữ liệu ['0',...]")
+    trangthai_hocphi_khoa_dl = fields.Char(string="Thiết lập Trạng thái [Học phí] cho phép sửa dữ liệu",default="")
+    trangthai_luong_khoa_dl = fields.Char(string="Thiết lập Trạng thái [Lương] cho phép sửa dữ liệu",default="")
 
 
 

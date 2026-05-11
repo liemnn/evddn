@@ -100,134 +100,181 @@
         </record>
 
         <record model="ir.ui.view" id="ekids_core.coso_form_view">
-            <field name="name">Form Cớ sở</field>
+            <field name="name">Form Cơ sở</field>
             <field name="model">ekids.coso</field>
             <field name="arch" type="xml">
                 <form string="Cơ sở">
                     <sheet>
-                        <group col="4">
-                            <group>
-                                <field name='logo' widget="image" class="oe_avatar"/>
-                                <field name="slogan"/>
-                            </group>
-                            <group colspan="3" col="1">
+                        <field name="is_admin" invisible="1"/>
 
-                                 <div class="row">
-                                    <div class="col-md-2">
-                                      <h3>
-                                          <field name="ma" placeholder="Mã" readonly="is_admin ==False" />
-                                      </h3>
+                        <style>
+                            .ekids_custom_card { background: #ffffff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 20px; height: 100%; border: 1px solid #f1f5f9; }
+                            .ekids_card_title { color: #1e3a8a; font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; }
+                            .ekids_card_title i { color: #6366f1; margin-right: 8px; font-size: 16px; }
+                            .ekids_toggle_row { border: 1px dashed #cbd5e1; background-color: #f8fafc; border-radius: 8px; padding: 10px 15px; }
+                            .info-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 6px; }
+                        </style>
+
+                        <div class="row mb-4 align-items-center">
+                            <div class="col-auto">
+                                <field name="logo" widget="image" class="oe_avatar shadow-sm bg-white border"/>
+                            </div>
+                            <div class="col">
+                                <div class="oe_title">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <field name="ma" placeholder="Mã CS" readonly="not is_admin" class="fw-bold text-danger me-2" style="max-width: 100px; font-size: 1.2rem;"/>
+                                        <h1 class="m-0 p-0">
+                                            <field name="name" placeholder="Tên cơ sở (Ngắn gọn)" readonly="not is_admin" class="text-primary"/>
+                                        </h1>
                                     </div>
-                                    <div class="col-md-10">
-                                      <h3>
-                                          <field name="name" placeholder="Tên" readonly="is_admin ==False"/>
-                                      </h3>
+                                    <field name="fullname" placeholder="Tên đầy đủ của cơ sở / công ty..." class="fw-bold text-muted fs-6 mb-1 d-block"/>
+                                    <field name="slogan" placeholder="Slogan / Thông điệp..." class="text-info font-italic d-block"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="ekids_custom_card">
+                                    <div class="ekids_card_title">
+                                        <i class="fa fa-map-marker"/> Thông tin Liên hệ &amp; Địa chỉ
                                     </div>
-                                 </div>
-                                 <div class="row">
-                                    <div class="col-md-12">
-                                      <h3>
-                                          <field name="fullname" placeholder="Tên đầy đủ" />
-                                      </h3>
-                                    </div>
-                                 </div>
-                            </group>
-                        </group>
-                        <group col="3">
-                            <separator string="1. THÔNG TIN CƠ SỞ"/>
-                            <group>
-                                <field name="masothue"/>
-                            </group>
-
-                            <group>
-                                <field name="email"/>
-                            </group>
-
-                            <group>
-                                <field name="dienthoai"/>
-                            </group>
-                        </group>
-                        <group col="3">
-                            <separator string="2. ĐỊA CHỈ CHI TIẾT"/>
-                            <group>
-                                <field name="diachi_chitiet"/>
-                            </group>
-
-                            <group>
-                                <field name="dm_tinh_id" readonly="is_admin ==False"/>
-                            </group>
-
-                            <group>
-                                <field name="dm_xa_id"/>
-                            </group>
-                        </group>
-                        <group col="3">
-                            <separator string="3. THÔNG TIN THUÊ DỊCH VỤ [PHẦN MỀM]"/>
-                            <group>
-                                <field name="thue_tungay" readonly="is_admin ==False"/>
-                            </group>
-
-                            <group>
-                                <field name="thue_denngay" readonly="is_admin ==False"/>
-                            </group>
-
-
-                            <group>
-                                <field name="trangthai" readonly="true"/>
-                            </group>
-                        </group>
-
-                        <group>
-                            <separator string="4. THÔNG TIN KHÁC"/>
-                            <field name="desc"/>
-                            <field name="user_id" readonly="is_admin ==False"/>
-
-                        </group>
-                        <notebook>
-                            <page name="coso_ids" string="THỜI GIAN HOẠT ĐỘNG">
-
-                                <group col="7">
                                     <group>
-                                        <field name="hd_t2" widget="boolean_toggle"/>
+                                        <field name="masothue" string="Mã số thuế"/>
+                                        <field name="email" string="Email" widget="email"/>
+                                        <field name="dienthoai" string="Điện thoại" widget="phone"/>
                                     </group>
-                                     <group>
-                                        <field name="hd_t3" widget="boolean_toggle"/>
+                                    <hr class="text-muted opacity-25"/>
+                                    <group>
+                                        <field name="dm_tinh_id" string="Tỉnh / Thành phố" readonly="not is_admin" options="{'no_create': True}"/>
+                                        <field name="dm_xa_id" string="Phường / Xã" options="{'no_create': True}"/>
+                                        <field name="diachi_chitiet" string="Số nhà / Đường" placeholder="VD: Số 123 Đường ABC..."/>
                                     </group>
-                                     <group>
-                                        <field name="hd_t4" widget="boolean_toggle"/>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="ekids_custom_card">
+                                    <div class="ekids_card_title">
+                                        <i class="fa fa-server"/> Quản lý Dịch vụ &amp; Hệ thống
+                                    </div>
+                                    <group>
+                                        <field name="thue_tungay" string="Ngày bắt đầu thuê" readonly="not is_admin"/>
+                                        <field name="thue_denngay" string="Ngày hết hạn" readonly="not is_admin"/>
+                                        <field name="trangthai" string="Trạng thái HĐ" readonly="1" widget="badge" decoration-success="trangthai == '1'"/>
                                     </group>
-                                     <group>
-                                        <field name="hd_t5" widget="boolean_toggle"/>
+                                    <hr class="text-muted opacity-25"/>
+                                    <group>
+                                        <field name="user_id" string="Người quản lý (Admin)" readonly="not is_admin" widget="many2one_avatar_user"/>
+                                        <field name="desc" string="Ghi chú thêm" placeholder="Mô tả nội bộ..."/>
                                     </group>
-                                     <group>
-                                        <field name="hd_t6" widget="boolean_toggle"/>
-                                    </group>
-                                     <group>
-                                        <field name="hd_t7" widget="boolean_toggle"/>
-                                    </group>
-                                     <group>
-                                        <field name="hd_t8" widget="boolean_toggle"/>
-                                    </group>
-                                </group>
+                                </div>
+                            </div>
+                        </div>
+
+                        <notebook class="mt-2">
+
+                            <page name="coso_ids" string="THỜI GIAN HOẠT ĐỘNG">
+                                <div class="p-3">
+                                    <div class="fw-bold mb-3 text-muted"><i class="fa fa-calendar-check-o me-2"/> TICK CHỌN CÁC NGÀY CƠ SỞ CÓ HOẠT ĐỘNG (LÀM VIỆC)</div>
+                                    <div class="ekids_toggle_row d-flex justify-content-between align-items-center" style="max-width: 600px;">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="fw-bold text-dark mb-1">T2</span>
+                                            <field name="hd_t2" widget="boolean_toggle" nolabel="1"/>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="fw-bold text-dark mb-1">T3</span>
+                                            <field name="hd_t3" widget="boolean_toggle" nolabel="1"/>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="fw-bold text-dark mb-1">T4</span>
+                                            <field name="hd_t4" widget="boolean_toggle" nolabel="1"/>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="fw-bold text-dark mb-1">T5</span>
+                                            <field name="hd_t5" widget="boolean_toggle" nolabel="1"/>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="fw-bold text-dark mb-1">T6</span>
+                                            <field name="hd_t6" widget="boolean_toggle" nolabel="1"/>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="fw-bold text-dark mb-1">T7</span>
+                                            <field name="hd_t7" widget="boolean_toggle" nolabel="1"/>
+                                        </div>
+                                        <div class="d-flex flex-column align-items-center">
+                                            <span class="fw-bold text-danger mb-1">CN</span>
+                                            <field name="hd_t8" widget="boolean_toggle" nolabel="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </page>
+
+                            <page name="config_lock" string="CẤU HÌNH KHÓA DỮ LIỆU">
+                                <div class="row p-3">
+                                    <div class="col-md-6">
+                                        <div class="fw-bold mb-3 text-muted"><i class="fa fa-lock me-2"/> THỜI GIAN KHÓA SỔ (THÁNG)</div>
+                                        <group>
+                                            <field name="sothang_khoa_dl_chitieu" string="Khóa sổ Chi tiêu sau (tháng)"/>
+                                            <field name="sothang_khoa_dl_diemdanh" string="Khóa sổ Điểm danh sau (tháng)"/>
+
+
+                                        </group>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="fw-bold mb-3 text-muted"><i class="fa fa-money me-2"/> CÁC TRẠNG THÁI CHO PHÉP SỬA LƯƠNG</div>
+                                        <group>
+                                            <field name="trangthai_luong_khoa_dl" placeholder="Ví dụ ['-1','0',...]"/>
+                                        </group>
+
+                                        <div class="info-box mt-3 small">
+                                            <strong class="text-dark d-block mb-2">Bảng tra cứu Mã trạng thái Học phí:</strong>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div><b class="text-danger">-1</b> : Đang tính</div>
+                                                    <div><b class="text-primary">0</b> : Đã kiểm tra</div>
+                                                    <div><b class="text-warning">1</b> : Đã nhận lương</div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="fw-bold mb-3 text-muted"><i class="fa fa-money me-2"/> CÁC TRẠNG THÁI CHO PHÉP SỬA HỌC PHÍ</div>
+                                        <group>
+                                            <field name="trangthai_hocphi_khoa_dl" placeholder="Ví dụ ['-1','0',...]"/>
+                                        </group>
+
+                                        <div class="info-box mt-3 small">
+                                            <strong class="text-dark d-block mb-2">Bảng tra cứu Mã trạng thái [Lương]:</strong>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div><b class="text-danger">-1</b> : Đang tính</div>
+                                                    <div><b class="text-primary">0</b> : Đã kiểm tra</div>
+                                                    <div><b class="text-warning">01</b> : Phụ huynh đã đóng</div>
+                                                    <div><b class="text-success">10</b> : Đã đóng [Tiền mặt]</div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div><b class="text-success">11</b> : Đã đóng [Chuyển khoản]</div>
+                                                    <div><b class="text-success">12</b> : Đã đóng [Ví HS]</div>
+                                                    <div><b class="text-info">3</b> : Đã xuất [Hóa đơn]</div>
+                                                    <div><b class="text-danger">2</b> : Nợ học phí</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
 
                             </page>
-                            <page string="CẤU HÌNH KHÓA DỮ LIỆU">
-                                 <group>
-                                        <field name="sothang_khoa_dl_chitieu" />
-                                        <field name="sothang_khoa_dl_diemdanh" />
-                                        <field name="trangthai_hocphi_khoa_dl" />
-                                        <field name="trangthai_luong_khoa_dl" />
-                                 </group>
+
+                            <page name="branches" string="CƠ SỞ THÀNH VIÊN">
+                                <div class="p-3">
+                                    <field name="coso_ids" widget="many2many_tags" string="Các cơ sở thành viên" placeholder="Thêm cơ sở trực thuộc..."/>
+                                </div>
                             </page>
-
-                            <page string="CƠ SỞ THÀNH VIÊN">
-                                <field name="coso_ids" widget="many2many_tags" string="Các cơ sở thành viên"/>
-
-                            </page>
-
-
-
-
 
                         </notebook>
                     </sheet>
