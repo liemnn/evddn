@@ -38,6 +38,9 @@ def func_check_errors(nam,thang):
 
 #type một số như sau: 0: dl chitieu,1: dữ liệu điểm danh
 def func_is_dl_diemdanh_clocked(coso,nam,thang):
+    if int(coso.sothang_khoa_dl_diemdanh) <=0 :
+        # không thiết lập
+        return False
     today = date.today()
     thang_n = (today.year *12) + today.month
     thang_m = (nam*12)+thang

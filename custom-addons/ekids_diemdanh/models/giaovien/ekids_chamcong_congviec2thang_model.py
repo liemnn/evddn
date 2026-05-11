@@ -267,9 +267,28 @@ class ChamCongCongViec2Thang(models.Model,ChamCongFuncAbstractModel):
                     chamcong_loai2thang.func_tao_macdinh_chamcong()
 
     def write(self, vals):
+        nam = int(self.chamcong_loai2thang_id.nam)
+        thang = int(self.chamcong_loai2thang_id.thang)
+        for day in range(1, 32):
+            d ="d"+str(day)
+            if d in vals:
+                coso_util.func_is_dl_diemdanh_clocked(self.coso_id
+                                                      , nam
+                                                      , thang)
+
         if 'tong_temps' in vals:
             vals['tong'] = vals['tong_temps']
+
+
         return super(ChamCongCongViec2Thang, self).write(vals)
+
+    def unlink(self):
+        nam = int(self.chamcong_loai2thang_id.nam)
+        thang = int(self.chamcong_loai2thang_id.thang)
+        coso_util.func_is_dl_diemdanh_clocked(self.coso_id
+                                              , nam
+                                              , thang)
+        return super().unlink()
 
 
 
