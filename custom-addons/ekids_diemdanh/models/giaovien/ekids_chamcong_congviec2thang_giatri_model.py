@@ -208,3 +208,11 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
 
 
 
+    def unlink(self):
+        nam = int(self.chamcong_loai2thang_id.nam)
+        thang = int(self.chamcong_loai2thang_id.thang)
+        coso_util.func_is_dl_diemdanh_locked(self.coso_id
+                                              , nam
+                                              , thang)
+        return super().unlink()
+

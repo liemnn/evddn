@@ -399,7 +399,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
             #B1: xoa di
             if diemdanhs:
                 for diemdanh in diemdanhs:
-                    is_dl_diemdanh_clocked = coso_util.func_is_dl_diemdanh_clocked(diemdanh.coso_id,int(nam), int(thang))
+                    is_dl_diemdanh_clocked = coso_util.func_is_dl_diemdanh_locked(diemdanh.coso_id,int(nam), int(thang))
                     if is_dl_diemdanh_clocked == True:
                         raise UserError(
                             _("Dữ liệu điểm danh đã hết hiệu lực được sửa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !."))
@@ -435,7 +435,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
     def unlink(self):
         nam = self.diemdanh_id.nam
         thang = self.diemdanh_id.thang
-        coso_util.func_is_dl_diemdanh_clocked(self.coso_id
+        coso_util.func_is_dl_diemdanh_locked(self.coso_id
                                               , int(nam)
                                               , int(thang))
         return super().unlink()

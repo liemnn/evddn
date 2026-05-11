@@ -159,14 +159,14 @@ class DiemDanhHocSinh2Ngay(models.Model):
         }
 
     def write(self, vals):
-        coso_util.func_is_dl_diemdanh_clocked(self.coso_id
+        coso_util.func_is_dl_diemdanh_locked(self.coso_id
                                               ,self.ngay.year
                                               ,self.ngay.month)
         res = super(DiemDanhHocSinh2Ngay, self).write(vals)
         return res
 
     def unlink(self):
-        coso_util.func_is_dl_diemdanh_clocked(self.coso_id
+        coso_util.func_is_dl_diemdanh_locked(self.coso_id
                                               , self.ngay.year
                                               , self.ngay.month)
         return super().unlink()
