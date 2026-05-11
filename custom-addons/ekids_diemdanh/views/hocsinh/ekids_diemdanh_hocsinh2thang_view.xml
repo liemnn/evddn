@@ -15,7 +15,7 @@
             <field name="model">ekids.diemdanh_hocsinh2thang</field>
             <field name="arch" type="xml">
                 <list  create="false" delete="true" limit="200" default_order="hocsinh_id asc">
-                    <field name="is_dl_clocked" column_invisible="True"/>
+                    <field name="is_dl_locked" column_invisible="True"/>
                     <header>
                         <button name="action_xoa_taolai_diemdanh"
                             type="object"

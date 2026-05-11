@@ -27,7 +27,7 @@ class ChiTieuThang(models.Model):
     tong_chi = fields.Integer(string="Tổng chi", readonly=True, compute="_compute_tong_chi_thang")
     tong_thu = fields.Integer(string="Tổng thu", readonly=True, compute="_compute_tong_thu_thang")
 
-    is_dl_clocked = fields.Boolean("Khóa dữ liệu không cho sửa",readonly=True, compute="_compute_is_dl_clocked" )
+    is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa",readonly=True, compute="_compute_is_dl_locked" )
 
     _sql_constraints = [
         ('unique_thuchi_thang',
@@ -36,7 +36,7 @@ class ChiTieuThang(models.Model):
     ]
 
 
-    def _compute_is_dl_clocked(self):
+    def _compute_is_dl_locked(self):
         today = date.today()
         sothang_today = (today.year*12)+today.month
 
@@ -45,9 +45,9 @@ class ChiTieuThang(models.Model):
             sothang_khoa = int(coso.sothang_khoa_dl_chitieu)
             sothang_dl = (int(record.nam_id.name) * 12) +int(record.name)
             if (sothang_today - sothang_dl)>= sothang_khoa:
-                record.is_dl_clocked =True
+                record.is_dl_locked =True
             else:
-                record.is_dl_clocked =False
+                record.is_dl_locked =False
 
 
     #tong chi tieu

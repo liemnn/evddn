@@ -87,10 +87,10 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                                        string="Tăng cường")
     field_sua = fields.Char("Các trường do người dùng điều chỉnh",default="")
 
-    is_dl_clocked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_clocked")
+    is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
 
 
-    def _compute_is_dl_clocked(self):
+    def _compute_is_dl_locked(self):
         today = date.today()
         sothang_today = (today.year * 12) + today.month
 
@@ -99,9 +99,9 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
             sothang_khoa = int(coso.sothang_khoa_dl_diemdanh)
             sothang_dl = (int(record.diemdanh_id.nam) * 12) + int(record.diemdanh_id.thang)
             if (sothang_today - sothang_dl) >= sothang_khoa:
-                record.is_dl_clocked = True
+                record.is_dl_locked = True
             else:
-                record.is_dl_clocked = False
+                record.is_dl_locked = False
 
 
     def _compute_sequence(self):

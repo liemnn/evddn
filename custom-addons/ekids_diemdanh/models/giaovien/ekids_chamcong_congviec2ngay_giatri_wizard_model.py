@@ -25,10 +25,10 @@ class ChamCongCongViec2NgayGiaTriWizard(models.TransientModel):
     ngay =fields.Date(string="Ngày")
     giatri =fields.Float(string="Giá trị",digits=(6, 1),default=1)
 
-    is_dl_clocked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_clocked")
+    is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
 
 
-    def _compute_is_dl_clocked(self):
+    def _compute_is_dl_locked(self):
         today = date.today()
         sothang_today = (today.year * 12) + today.month
 
@@ -40,9 +40,9 @@ class ChamCongCongViec2NgayGiaTriWizard(models.TransientModel):
             sothang_khoa = int(coso.sothang_khoa_dl_chitieu)
             sothang_dl = (int(record.nam_id.name) * 12) + int(record.name)
             if (sothang_today - sothang_dl) >= sothang_khoa:
-                record.is_dl_clocked = True
+                record.is_dl_locked = True
             else:
-                record.is_dl_clocked = False
+                record.is_dl_locked = False
 
     def action_capnhat_ketqua_congviec2ngay_giatri(self):
         context = self.env.context
