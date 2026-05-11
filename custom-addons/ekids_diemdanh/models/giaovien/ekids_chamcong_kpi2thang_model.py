@@ -40,7 +40,7 @@ class ChamCongKPI2Thang(models.Model):
         nam = int(self.chamcong_loai2thang_id.nam)
         thang = int(self.chamcong_loai2thang_id.thang)
         # check xem co khóa dữ liệu không
-        coso_util.func_is_dl_kpi_locked(self.coso_id,nam,thang)
+        coso_util.func_is_dl_kpi_locked(self,self.coso_id,nam,thang)
 
         form_view_id = self.env.ref('ekids_diemdanh.chamcong_kpi2thang_form').id  # chú ý id chính xác
         self.func_tao_macdinh_ketqua_kpi()
@@ -91,7 +91,7 @@ class ChamCongKPI2Thang(models.Model):
     def unlink(self):
         nam = int(self.chamcong_loai2thang_id.nam)
         thang = int(self.chamcong_loai2thang_id.thang)
-        coso_util.func_is_dl_kpi_locked(self.coso_id
+        coso_util.func_is_dl_kpi_locked(self,self.coso_id
                                               , nam
                                               , thang)
         return super().unlink()

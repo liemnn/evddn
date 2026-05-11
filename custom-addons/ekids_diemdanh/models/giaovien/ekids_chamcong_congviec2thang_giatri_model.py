@@ -179,7 +179,7 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
                 coso = self.chamcong_loai2thang_id.coso_id
                 thang = self.chamcong_loai2thang_id.thang
                 nam = self.chamcong_loai2thang_id.nam
-                coso_util.func_is_dl_diemdanh_locked(coso,int(nam),int(thang))
+                coso_util.func_is_dl_diemdanh_locked(self,coso,int(nam),int(thang))
                 ngay = field_name.lstrip("d")
                 day = date(int(nam), int(thang), int(ngay))
 
@@ -213,7 +213,7 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
     def unlink(self):
         nam = int(self.chamcong_loai2thang_id.nam)
         thang = int(self.chamcong_loai2thang_id.thang)
-        coso_util.func_is_dl_diemdanh_locked(self.coso_id
+        coso_util.func_is_dl_diemdanh_locked(self,self.coso_id
                                               , nam
                                               , thang)
         return super().unlink()

@@ -93,7 +93,7 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     def _compute_is_dl_locked(self):
         for record in self:
             coso = record.coso_id
-            is_dl_locked = coso_util.func_is_dl_luong_locked(coso,record.trangthai)
+            is_dl_locked = coso_util.func_is_dl_luong_locked(self,coso,record.trangthai)
             record.is_dl_locked =is_dl_locked
 
 
@@ -297,7 +297,7 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
 
     def write(self, vals):
         if 'trangthai' in vals:
-            is_dl_luong_locked =coso_util.func_is_dl_luong_locked(self.coso_id,self.trangthai)
+            is_dl_luong_locked =coso_util.func_is_dl_luong_locked(self,self.coso_id,self.trangthai)
             if is_dl_luong_locked == True:
                 raise UserError(
                     " Bảng [Lương] ở trạng thái này không cho phép sửa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")

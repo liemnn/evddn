@@ -37,16 +37,20 @@ def func_check_errors(nam,thang):
         #raise UserError("Không thể thực hiện hành động này. Tháng thực hiện đã được khóa")
 
 #type một số như sau: 0: dl chitieu,1: dữ liệu điểm danh
-def func_is_dl_diemdanh_locked(coso,nam,thang):
-    is_locked = func_is_dl_locked(1,coso,nam,thang)
+def func_is_dl_diemdanh_locked(self,coso,nam,thang):
+    is_locked = func_is_dl_locked(self,1,coso,nam,thang)
     if is_locked == True:
         raise UserError("Dữ liệu đã hết hiệu lực được sửa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
-def func_is_dl_kpi_locked(coso,nam,thang):
-    is_locked = func_is_dl_locked(2,coso,nam,thang)
+def func_is_dl_kpi_locked(self,coso,nam,thang):
+    is_locked = func_is_dl_locked(self,2,coso,nam,thang)
+    if self.env.is_admin():
+        return False
     if is_locked == True:
         raise UserError("Dữ liệu đã hết hiệu lực được sửa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
 
-def func_is_dl_locked(type,coso,nam,thang):
+def func_is_dl_locked(self,type,coso,nam,thang):
+    if self.env.is_admin():
+        return False
     #type=1 : diem danh; type=2: Kpi phải lui một tháng
     if type in [1,2]:
         if int(coso.sothang_khoa_dl_diemdanh) <=0 :
@@ -64,7 +68,10 @@ def func_is_dl_locked(type,coso,nam,thang):
     else:
         return False
 
-def func_is_dl_luong_locked(coso,trangthai):
+def func_is_dl_luong_locked(self,coso,trangthai):
+    if self.env.is_admin():
+        return False
+
     if not coso.trangthai_luong_khoa_dl:
         return False
 

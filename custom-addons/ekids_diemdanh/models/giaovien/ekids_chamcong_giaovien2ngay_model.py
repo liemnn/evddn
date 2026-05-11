@@ -168,7 +168,7 @@ class ChamCongGiaoVien2Ngay(models.Model):
     def write(self, vals):
         nam = int(self.ngay.year)
         thang = int(self.ngay.month)
-        coso_util.func_is_dl_diemdanh_locked(self.coso_id
+        coso_util.func_is_dl_diemdanh_locked(self,self.coso_id
                                               ,nam
                                               ,thang)
         res = super(ChamCongGiaoVien2Ngay, self).write(vals)
