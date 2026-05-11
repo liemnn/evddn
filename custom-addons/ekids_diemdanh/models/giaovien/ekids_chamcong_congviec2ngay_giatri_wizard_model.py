@@ -25,24 +25,6 @@ class ChamCongCongViec2NgayGiaTriWizard(models.TransientModel):
     ngay =fields.Date(string="Ngày")
     giatri =fields.Float(string="Giá trị",digits=(6, 1),default=1)
 
-    is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
-
-
-    def _compute_is_dl_locked(self):
-        today = date.today()
-        sothang_today = (today.year * 12) + today.month
-
-        for record in self:
-            coso = record.congviec2thang_giatri_id.coso_id
-            nam = record.ngay.year
-            thang =  record.ngay.year
-
-            sothang_khoa = int(coso.sothang_khoa_dl_chitieu)
-            sothang_dl = (int(record.nam_id.name) * 12) + int(record.name)
-            if (sothang_today - sothang_dl) >= sothang_khoa:
-                record.is_dl_locked = True
-            else:
-                record.is_dl_locked = False
 
     def action_capnhat_ketqua_congviec2ngay_giatri(self):
         context = self.env.context
@@ -64,15 +46,4 @@ class ChamCongCongViec2NgayGiaTriWizard(models.TransientModel):
             "tag": "reload_congviec_jsless",  # tag tùy chọn, bạn định nghĩa trong JS
             "params": result,
         }
-
-    def write(self, vals):
-        nam = int(self.ngay.year)
-        thang = int(self.ngay.month)
-        coso = self.congviec2thang_giatri_id.coso_id
-
-        coso_util.func_is_dl_diemdanh_locked(coso
-                                              , nam
-                                              , thang)
-
-        return super(ChamCongCongViec2NgayGiaTriWizard, self).write(vals)
 

@@ -176,8 +176,10 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
     def action_mo_popup_chamcong_congviec2ngay_giatri(self, record_id=None, field_name=None, field_value='1'):
         if record_id is not None and field_name and field_value is not None:
             if self:
+                coso = self.chamcong_loai2thang_id.coso_id
                 thang = self.chamcong_loai2thang_id.thang
                 nam = self.chamcong_loai2thang_id.nam
+                coso_util.func_is_dl_diemdanh_locked(coso,int(nam),int(thang))
                 ngay = field_name.lstrip("d")
                 day = date(int(nam), int(thang), int(ngay))
 
