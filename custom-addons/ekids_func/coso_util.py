@@ -63,3 +63,12 @@ def func_is_dl_locked(type,coso,nam,thang):
         return True
     else:
         return False
+
+def func_is_dl_luong_locked(coso,trangthai):
+    if not coso.trangthai_luong_khoa_dl:
+        return False
+
+    if trangthai in coso.trangthai_luong_khoa_dl.split(","):
+        return  False
+    else:
+        return True
