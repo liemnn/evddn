@@ -367,10 +367,30 @@
                                 <div class="p-3 bg-white">
                                     <group class="mb-0 mt-0">
                                         <field name="dm_chinhsach_giam_id" string="Diện chính sách giảm học phí" readonly="1"/>
-                                        <field name="is_giamhocphi_dacthu" string="Thiết lập giảm đặc thù cho học sinh" widget="boolean_toggle"/>
-                                        <field name="tyle_giamhocphi" string="% Giảm học phí/tổng " widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == True"/>
-                                        <field name="tyle_giamhocphi_bantru" string="% Giảm [Lớp chung]" widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == False"/>
-                                        <field name="tyle_giamhocphi_ca" string="% Giảm [Can thiệp]" widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == False"/>
+                                        <field name="is_giamhocphi_dacthu"
+                                               string="Thiết lập giảm đặc thù cho học sinh"
+                                               widget="boolean_toggle"
+                                               readonly="is_dl_locked"
+                                        />
+                                        <field name="tyle_giamhocphi"
+                                               string="% Giảm học phí/tổng "
+                                               widget="percent" class="fw-bold text-danger"
+                                               invisible="is_giamhocphi_dacthu == True"
+                                               readonly="is_dl_locked"
+                                        />
+                                        <field name="tyle_giamhocphi_bantru"
+                                               string="% Giảm [Lớp chung]"
+                                               widget="percent" class="fw-bold text-danger"
+                                               invisible="is_giamhocphi_dacthu == False"
+                                               readonly="is_dl_locked"
+                                        />
+                                        <field name="tyle_giamhocphi_ca"
+                                               string="% Giảm [Can thiệp]"
+                                               widget="percent"
+                                               class="fw-bold text-danger"
+                                               invisible="is_giamhocphi_dacthu == False"
+                                               readonly="is_dl_locked"
+                                        />
                                     </group>
                                 </div>
                             </div>

@@ -453,9 +453,12 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
     #kiểm tra các trạng thái chuyển qua
     def write(self, vals):
         # 1. Kiểm tra xem người dùng có đang cố gắng thay đổi trường 'state' hay không
+        coso = self.coso_id
         if 'trangthai' in vals:
+            #Step1 Kiểm tra quyền chuyển trạng thái có hợp lệ
+            coso_util.func_is_chuyen_trangthai(self,coso,self.trangthai,vals['trangthai'])
+            #Step2: tinh toán cảnh báo
             new_state = vals.get('trangthai')
-
             # Quét qua từng bản ghi đang được cập nhật
             for rec in self:
                 # 2. Nếu trạng thái ĐÍCH ĐẾN là "Đã xuất hóa đơn"

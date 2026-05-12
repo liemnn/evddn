@@ -81,14 +81,66 @@ def func_is_dl_luong_locked(self,coso,trangthai):
         return True
 
 
+# phần học phí khá phức tạp cần chekc xme có locked không
+import json
+from odoo.exceptions import UserError
+
 def func_is_dl_hocphi_locked(self,coso,trangthai):
     if self.env.is_admin():
         return False
+    # 1. Nếu chuỗi JSON rỗng (chưa cấu hình), mặc định cho phép sửa (hoặc tùy logic của anh)
 
-    if not coso.trangthai_hocphi_khoa_dl:
+    json_string = coso.trangthai_hocphi_khoa_dl
+    if not json_string:
         return False
 
-    if trangthai in coso.trangthai_hocphi_khoa_dl.split(","):
-        return  False
+    # 2. Cố gắng dịch (parse) chuỗi JSON thành Dictionary (Từ điển) của Python
+    try:
+        config_data = json.loads(json_string)
+    except json.JSONDecodeError:
+        raise UserError("Quản trị phần mềm đã cấu hình cho phép khóa dữ liệu Học phí nhưng lỗi, bạn vui lòng liên hệ quản trị để hỗ trợ !")
+
+    # 3. Chuyển trạng thái về dạng chuỗi (string) để đảm bảo khớp với key trong JSON (VD: số 0 thành "0")
+    trangthai_str = str(trangthai)
+
+    # 4. Tra cứu xem trạng thái đó có nằm trong khai báo JSON không
+    if trangthai_str in config_data:
+        # Lấy giá trị của key 'edit', nếu không thấy thì mặc định là False để an toàn
+        edit= config_data[trangthai_str].get('edit', True)
+        if edit == False:
+            return True
     else:
+        # Trạng thái lạ không có trong JSON -> Khóa lại cho an toàn
         return True
+
+
+def func_is_chuyen_trangthai(self,coso,tt_hientai,tt_dich):
+    if self.env.is_admin():
+        return True
+    # 1. Nếu không có cấu hình, mặc định cho phép mọi dịch chuyển (hoặc tùy anh chặn lại)
+    json_string = coso.trangthai_hocphi_khoa_dl
+    if not json_string:
+        return True
+
+    try:
+        config_data = json.loads(json_string)
+    except Exception:
+        raise UserError("Quản trị phần mềm đã cấu hình cho phép khóa dữ liệu Học phí nhưng lỗi, bạn vui lòng liên hệ quản trị để hỗ trợ !")
+
+
+
+    # 2. Nếu trạng thái hiện tại không có trong cấu hình JSON
+    if tt_hientai not in config_data:
+        # Tùy nghiệp vụ: có thể cho qua hoặc chặn lại. Ở đây tôi chọn cho qua nếu chưa định nghĩa.
+        return True
+
+    # 3. Lấy danh sách các trạng thái được phép đi tiếp
+    allowed_next_states = config_data[tt_hientai].get('trangthai_tieptheo', [])
+
+    # 4. Kiểm tra trạng thái đích có nằm trong danh sách cho phép không
+    if tt_dich in allowed_next_states:
+        return True
+    else:
+        raise UserError("Học phí ở trạng thái này không cho phép [Chuyển] sang [Trạng thái] bạn vừa lựa chọn. vui lòng lựa chọn lại ! ")
+        return False
+
