@@ -131,7 +131,7 @@ class CoSo(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'CẤU HÌNH - THU BÁN TRÚ (LỚP CHUNG)',
             'res_model': 'ekids.hocphi_dm_thu_bantru',
-            'view_mode': 'list,form',
+            'view_mode': 'list,kanban,form',
             'target': 'current',
             'domain': [('coso_id', '=', self.id)],
             'context': {
@@ -147,7 +147,7 @@ class CoSo(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'CẤU HÌNH - CA/LỚP CAN THIỆP',
             'res_model': 'ekids.hocphi_dm_ca',
-            'view_mode': 'list,form',
+            'view_mode': 'list,kanban,form',
             'target': 'current',
             'domain': [('coso_id', '=', self.id)],
             'context': {
