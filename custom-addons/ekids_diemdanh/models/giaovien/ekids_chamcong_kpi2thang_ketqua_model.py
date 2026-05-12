@@ -39,7 +39,7 @@ class ChamCongKPI2ThangKetQua(models.Model):
 
     def write(self, vals):
         if self.loai_kpi == '1':
-            if vals['ketqua_boolean'] == 'True':
+            if vals['ketqua_boolean'] == True:
                 vals['tong'] = '1'
             else:
                 vals['tong'] = '0'
