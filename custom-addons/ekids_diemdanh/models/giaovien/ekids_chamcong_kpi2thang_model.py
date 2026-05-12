@@ -89,11 +89,20 @@ class ChamCongKPI2Thang(models.Model):
             index +=1
 
     def unlink(self):
-        nam = int(self.chamcong_loai2thang_id.nam)
-        thang = int(self.chamcong_loai2thang_id.thang)
-        coso_util.func_is_dl_kpi_locked(self,self.coso_id
-                                              , nam
-                                              , thang)
+        # Duyệt qua từng bản ghi được chọn xóa
+        for rec in self:
+            nam = int(rec.chamcong_loai2thang_id.nam)
+            thang = int(rec.chamcong_loai2thang_id.thang)
+
+            # Đổi self thành rec, gọi hàm kiểm tra khóa dữ liệu KPI cho từng dòng
+            coso_util.func_is_dl_kpi_locked(
+                rec,
+                rec.coso_id,
+                nam,
+                thang
+            )
+
+        # Nếu tất cả các bản ghi đều hợp lệ (không bị khóa), tiến hành lệnh xóa
         return super().unlink()
 
 

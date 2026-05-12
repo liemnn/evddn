@@ -206,15 +206,16 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
                         }
                     }
 
-
-
-
-
     def unlink(self):
-        nam = int(self.chamcong_loai2thang_id.nam)
-        thang = int(self.chamcong_loai2thang_id.thang)
-        coso_util.func_is_dl_diemdanh_locked(self,self.coso_id
-                                              , nam
-                                              , thang)
+        # Duyệt qua từng bản ghi được chọn xóa
+        for rec in self:
+            nam = int(rec.chamcong_loai2thang_id.nam)
+            thang = int(rec.chamcong_loai2thang_id.thang)
+
+            # Kiểm tra khóa dữ liệu cho từng bản ghi độc lập
+            coso_util.func_is_dl_diemdanh_locked(rec, rec.coso_id, nam, thang)
+
+        # Nếu tất cả các dòng đều không bị khóa, tiến hành lệnh xóa hệ thống
         return super().unlink()
+
 

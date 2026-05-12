@@ -479,14 +479,20 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
 
 
-
     def unlink(self):
-        is_dl_locked = coso_util.func_is_dl_hocphi_locked(self, self.coso_id, self.trangthai)
-        if is_dl_locked == True:
-            raise UserError(
-                " Bảng [Học phí] ở trạng thái này không cho phép xóa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
+        # Duyệt qua từng bản ghi học phí được chọn để xóa
+        for rec in self:
+            # Thay self bằng rec để kiểm tra trạng thái của từng dòng riêng biệt
+            is_dl_locked = coso_util.func_is_dl_hocphi_locked(rec, rec.coso_id, rec.trangthai)
 
+            if is_dl_locked == True:
+                raise UserError(
+                    " Bảng [Học phí] ở trạng thái này không cho phép xóa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
+
+        # Vượt qua hết các kiểm tra thì mới cho phép xóa
         return super().unlink()
+
+
 
 
 

@@ -300,16 +300,23 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
                 #B2 tinh toan
                 chamcong_loai2thang.func_tao_macdinh_chamcong()
 
-
-
-
     def unlink(self):
-        nam = int(self.chamcong_loai2thang_id.nam)
-        thang = int(self.chamcong_loai2thang_id.thang)
-        coso_util.func_is_dl_diemdanh_locked(self,self.coso_id
-                                              , nam
-                                              , thang)
+        # Duyệt qua từng bản ghi chấm công được chọn để xóa
+        for rec in self:
+            nam = int(rec.chamcong_loai2thang_id.nam)
+            thang = int(rec.chamcong_loai2thang_id.thang)
+
+            # Gọi hàm kiểm tra khóa dữ liệu cho từng dòng
+            coso_util.func_is_dl_diemdanh_locked(
+                rec,
+                rec.coso_id,
+                nam,
+                thang
+            )
+
+        # Nếu tất cả hợp lệ, tiến hành lệnh xóa hệ thống
         return super().unlink()
+
 
 
 

@@ -305,10 +305,16 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
         return super(Luong, self).write(vals)
 
 
-    def unlink(self):
-        is_dl_luong_locked = coso_util.func_is_dl_luong_locked(self, self.coso_id, self.trangthai)
-        if is_dl_luong_locked == True:
-            raise UserError(
-                " Bảng [Lương] ở trạng thái này không cho phép xóa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
 
+    def unlink(self):
+        # Dùng vòng lặp để duyệt qua tất cả các dòng được chọn xóa
+        for rec in self:
+            # Thay thế self bằng rec để lấy chính xác dữ liệu của từng dòng
+            is_dl_luong_locked = coso_util.func_is_dl_luong_locked(rec, rec.coso_id, rec.trangthai)
+
+            if is_dl_luong_locked == True:
+                raise UserError(
+                    " Bảng [Lương] ở trạng thái này không cho phép xóa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
+
+        # Sau khi kiểm tra toàn bộ hợp lệ mới tiến hành lệnh xóa của hệ thống
         return super().unlink()

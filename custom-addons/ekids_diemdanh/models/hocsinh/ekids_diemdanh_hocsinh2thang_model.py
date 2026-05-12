@@ -431,14 +431,23 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                         }
                     }
 
-
     def unlink(self):
-        nam = self.diemdanh_id.nam
-        thang = self.diemdanh_id.thang
-        coso_util.func_is_dl_diemdanh_locked(self,self.coso_id
-                                              , int(nam)
-                                              , int(thang))
+        # Dùng vòng lặp duyệt qua từng dòng điểm danh được chọn xóa
+        for rec in self:
+            nam = rec.diemdanh_id.nam
+            thang = rec.diemdanh_id.thang
+
+            # Đổi self thành rec để truyền đúng dòng hiện tại vào hàm kiểm tra
+            coso_util.func_is_dl_diemdanh_locked(
+                rec,
+                rec.coso_id,
+                int(nam),
+                int(thang)
+            )
+
+        # Nếu không có dòng nào vi phạm (bị chặn bởi hàm util), hệ thống sẽ tiến hành xóa
         return super().unlink()
+
 
 
 
