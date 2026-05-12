@@ -25,7 +25,7 @@ class CoSo(models.Model):
     thue_tungay = fields.Date(string="Ngày bắt đầu thuê",required=True)
     thue_denngay = fields.Date(string="Ngày kết thúc thuê")
     trangthai = fields.Selection([("0", "Đang cấu hình (chưa thuê)")
-                                     ,("1", "Đang thuê (sử dụng)")
+                                     ,("1", "Đang thuê")
                                      , ("-1", "Hết thời gian thuê ( tạm dừng)")],
                             string="Trạng thái",compute="_compute_trangthai",store=True)
 
