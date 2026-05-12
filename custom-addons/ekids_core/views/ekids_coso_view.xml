@@ -249,6 +249,48 @@
                                         <div class="info-box mt-3 small">
                                             <strong class="text-dark d-block mb-2">Bảng tra cứu Mã trạng thái [Lương]:</strong>
                                             <div class="row">
+                                                {
+                                                  "-1": {
+                                                    "name": "Đang tính",
+                                                    "edit": true,
+                                                    "trangthai_tieptheo": ["0", "2"]
+                                                  },
+                                                  "0": {
+                                                    "name": "Đã kiểm tra",
+                                                    "edit": true,
+                                                    "trangthai_tieptheo": ["-1", "01", "10", "11", "12"]
+                                                  },
+                                                  "01": {
+                                                    "name": "Phụ huynh đã đóng",
+                                                    "edit": false,
+                                                    "trangthai_tieptheo": ["10", "11", "12", "3"]
+                                                  },
+                                                  "10": {
+                                                    "name": "Đã đóng [Tiền mặt]",
+                                                    "edit": false,
+                                                    "trangthai_tieptheo": ["3"]
+                                                  },
+                                                  "11": {
+                                                    "name": "Đã đóng [Chuyển khoản]",
+                                                    "edit": false,
+                                                    "trangthai_tieptheo": ["3"]
+                                                  },
+                                                  "12": {
+                                                    "name": "Đã đóng [Ví HS]",
+                                                    "edit": false,
+                                                    "trangthai_tieptheo": ["3"]
+                                                  },
+                                                  "3": {
+                                                    "name": "Đã xuất [Hóa đơn]",
+                                                    "edit": false,
+                                                    "trangthai_tieptheo": []
+                                                  },
+                                                  "2": {
+                                                    "name": "Nợ học phí",
+                                                    "edit": true,
+                                                    "trangthai_tieptheo": ["01", "10", "11", "12"]
+                                                  }
+                                                }
                                                 <div class="col-6">
                                                     <div><b class="text-danger">-1</b> : Đang tính</div>
                                                     <div><b class="text-primary">0</b> : Đã kiểm tra</div>

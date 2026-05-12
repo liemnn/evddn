@@ -79,3 +79,16 @@ def func_is_dl_luong_locked(self,coso,trangthai):
         return  False
     else:
         return True
+
+
+def func_is_dl_hocphi_locked(self,coso,trangthai):
+    if self.env.is_admin():
+        return False
+
+    if not coso.trangthai_hocphi_khoa_dl:
+        return False
+
+    if trangthai in coso.trangthai_hocphi_khoa_dl.split(","):
+        return  False
+    else:
+        return True
