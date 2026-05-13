@@ -1,0 +1,114 @@
+<odoo>
+    <template id="ekids_chitieu.baocao_chi_template">
+        <t t-call="web.html_container">
+
+            <t t-call="web.basic_layout">
+
+                <div class="page" style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+
+                    <div class="btn-print-container" style="text-align:right; margin-bottom: 20px;">
+                        <button onclick="window.print()"
+                                style="width:30px; height:auto; border:0px; background:transparent;"
+                                title="In báo cáo" type="button" class="d-print-none">
+                            <i class="fa fa-print" style="font-size: 18px; color: #555;"></i>
+                        </button>
+                    </div>
+
+                    <table style="width: 100%; margin-bottom: 30px; border: none;">
+                        <tr>
+                            <td style="width: 40%; text-align: center; vertical-align: top; border: none;">
+                                <h5 style="text-transform: uppercase; font-weight: bold; font-size: 16px; margin-bottom: 0;">
+                                    <t t-esc="coso"/>
+                                </h5>
+                            </td>
+                            <td style="width: 60%; text-align: center; vertical-align: top; border: none;">
+                                <h5 style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">
+                                    CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
+                                </h5>
+                                <h6 style="font-weight: bold; font-size: 15px; text-decoration: underline; margin-top: 0;">
+                                    Độc lập - Tự do - Hạnh phúc
+                                </h6>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <h3 style="font-weight: bold; text-transform: uppercase; font-size: 22px; margin-bottom: 5px;">
+                            DANH SÁCH CHI TỪ <t t-esc="tu_ngay"/> ĐẾN  <t t-esc="den_ngay"/>
+                        </h3>
+                        <p style="font-style: italic; font-size: 14px; color: #555;">
+                            <t t-esc="thoigian"/>
+                        </p>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <t t-foreach="table_data[0]" t-as="header">
+                                    <th><t t-esc="header"/></th>
+                                </t>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="table_data[1:]" t-as="row">
+                                <tr>
+                                    <t t-foreach="row" t-as="cell">
+                                        <td t-att-style="'text-align: center;' if cell_index in [0, 1] else ('text-align: right;' if cell_index == 2 else 'text-align: left;')">
+                                            <t t-out="cell"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <style>
+                    @page {
+                        size: A4 landscape;
+                        margin: 10mm 10mm 10mm 10mm !important;
+                    }
+                    *:not(i) {
+                        font-family: Arial, sans-serif !important;
+                    }
+                    @media print {
+                        .d-print-none {
+                            display: none !important;
+                        }
+                        body, .page {
+                            margin-top: 0px !important;
+                            padding-top: 0px !important;
+                        }
+                    }
+                    .data-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 14px;
+                        margin-bottom: 30px;
+                    }
+                    .data-table th, .data-table td {
+                        border: 1px solid #444;
+                        padding: 8px 5px;
+                    }
+                    .data-table th {
+                        background-color: #e9ecef;
+                        color: #212529;
+                        font-weight: bold;
+                        text-align: center;
+                        vertical-align: middle;
+                        white-space: pre-line;
+                    }
+                    .data-table tr:nth-child(even) {
+                        background-color: #f8f9fa;
+                    }
+                    .data-table tbody tr:last-child {
+                        font-weight: bold;
+                        background-color: #d6d8db;
+                        font-size: 15px;
+                    }
+                </style>
+            </t>
+        </t>
+    </template>
+</odoo>

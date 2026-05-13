@@ -1,0 +1,38 @@
+<odoo>
+    <data>
+        <record id="ekids_chitieu.baocao_chi_wizard_form" model="ir.ui.view">
+            <field name="name">Báo cáo Thu/Chi  của Cơ sở</field>
+            <field name="model">ekids.chitieu_baocao_chi</field>
+            <field name="arch" type="xml">
+                <form string="Xem báo cáo chi theo thời gian">
+                    <group>
+                       <h3><field name="coso_id" readonly="true"/></h3>
+                    </group>
+                    <group col="2">
+                        <separator string="KHOẢNG THỜI GIAN CẦN XEM" />
+                        <group>
+                           <field name="tu_ngay"/>
+                        </group>
+                         <group>
+                           <field name="den_ngay"/>
+                        </group>
+
+
+                    </group>
+                    <group>
+                        <field name="dm_chi_ids" widget="many2many_tags" string="Lựa chọn các [Mục chi] cần xem chi tiết (có thể chọn nhiều)"
+                               domain="[('trangthai','=','1'),('loai','=','0')]"
+                               context="{'default_coso_id':context.get('default_coso_id')}"
+                               />
+                    </group>
+                    <footer>
+                        <button name="action_xem_baocao" type="object" string="Xem báo cáo" class="btn-primary"/>
+                        <button string="Đóng lại" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

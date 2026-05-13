@@ -2,6 +2,8 @@ from odoo import models, fields, api
 from datetime import datetime,date,timedelta
 from dateutil.relativedelta import relativedelta
 
+import logging
+_logger = logging.getLogger(__name__)
 try:
     from odoo.addons.ekids_func import string_util
     from odoo.addons.ekids_func import hocsinh_util

@@ -13,8 +13,11 @@ def string2number(s):
 
 
 def date2string(date):
+    return date2string_format(date,"%d/%m/%Y")
+
+def date2string_format(date,format):
     if date:
-        return date.strftime("%d/%m/%Y")
+        return date.strftime(format)
     else:
         return ""
 def string2date(datestr):

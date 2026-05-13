@@ -6,5 +6,6 @@ from . import ekids_chitieu_chi_model
 from . import ekids_chitieu_thang_model
 from . import ekids_chitieu_nam_model
 from . import ekids_coso_model
+from . import ekids_baocao_chi_model
 
 
