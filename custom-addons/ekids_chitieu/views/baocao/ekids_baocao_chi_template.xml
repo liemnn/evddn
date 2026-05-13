@@ -54,7 +54,7 @@
                             <t t-foreach="table_data[1:]" t-as="row">
                                 <tr>
                                     <t t-foreach="row" t-as="cell">
-                                        <td t-att-style="'text-align: center;' if cell_index in [0, 1] else ('text-align: right;' if cell_index == 2 else 'text-align: left;')">
+                                        <td t-att-style="'text-align: center;' if cell_index in [0] else ('text-align: right;' if cell_index in [2] else 'text-align: left;')">
                                             <t t-out="cell"/>
                                         </td>
                                     </t>

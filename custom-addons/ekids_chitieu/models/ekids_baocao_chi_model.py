@@ -26,6 +26,10 @@ class BaoCaoChiWizard(models.TransientModel):
     loai = fields.Selection([("0", "Chi"), ("1", "Thu khác (ngoài học phí)")], string="Phân loại", required=True,
                             default="0")
 
+    loai_baocao = fields.Selection([("0", "Tổng hợp theo [Hạng mục]")
+                                       , ("1", "Chi tiết các khoản chi")], string="Phân loại", required=True,
+                            default="0")
+
     tu_ngay = fields.Date(
         string="Từ ngày",
         default=lambda self: fields.Date.context_today(self).replace(day=1)
@@ -40,23 +44,38 @@ class BaoCaoChiWizard(models.TransientModel):
     dm_chi_ids = fields.Many2many("ekids.chitieu_dm_loaichi", string="Danh mục chi cần lọc")
 
     def get_table_data(self):
+        table_data = [[]]
 
-        table_data = [['TT','Ngày'
-                          ,'Số tiền (vnđ)'
-                          ,'Loại chi'
-                          ,'Mô tả'
-                          ,'Người chi'
-                          ,'Ngày ghi nhận'
-                          ]]  # Header
+        if self.loai_baocao == '1':
+            table_data = [['TT', 'Ngày'
+                              , 'Số tiền (vnđ)'
+                              , 'Loại chi'
+                              , 'Mô tả'
+                              , 'Người chi'
+                              , 'Ngày ghi nhận'
+                           ]]  # Header
+            datas = self.get_danhsach_chi_theo_thoigian()
+            if datas:
+                index=1
+                for data in datas:
+                    self.get_table_data_by_chi(table_data,index,data)
+                    index =index+1
 
-        datas = self.get_danhsach_chi_theo_thoigian()
-        if datas:
-            index=1
-            for data in datas:
-                self.get_table_data_by_chi(table_data,index,data)
-                index =index+1
+            table_data = self.get_table_data_tong(table_data)
+        else:
+            table_data = [['TT', 'Loại chi'
+                              , 'Tổng tiền (vnđ)'
+                           ]]  # Header
 
-        table_data = self.get_table_data_tong(table_data)
+            datas = self.get_danhsach_dm_loaichi()
+            if datas:
+                index = 1
+                for data in datas:
+                    self.get_table_data_by_loaichi(table_data, index, data)
+                    index = index + 1
+
+
+
         return table_data
 
 
@@ -79,6 +98,42 @@ class BaoCaoChiWizard(models.TransientModel):
 
         return table_data
 
+    def get_table_data_by_loaichi(self, table_data, index, data):
+        tien =self.sum_tien_theo_loaichi(data.id)
+        table_data.append([
+            str(index),
+            data.name,
+            string_util.number2string(tien),
+
+        ])
+
+        return table_data
+
+    def sum_tien_theo_loaichi(self, dm_loaichi_id):
+       # 1. Xây dựng bộ lọc (Domain) cơ bản (Bắt buộc phải có Cơ sở và Khoảng thời gian)
+        domain = [
+            ('coso_id', '=', self.coso_id.id),
+            ('ngaychi', '>=', self.tu_ngay),
+            ('ngaychi', '<=', self.den_ngay),
+        ]
+
+        # 2. Nếu người dùng có chọn cụ thể Loại chi, thì nhồi thêm điều kiện vào Domain
+        if dm_loaichi_id:
+            domain.append(('dm_loaichi_id', '=', dm_loaichi_id))
+
+        # 3. Tính tổng (Dùng phương pháp Query trực tiếp xuống DB để đạt tốc độ cao nhất)
+        # Hàm read_group của Odoo tương đương với lệnh: SELECT SUM(tien) FROM ekids_chitieu_chi WHERE ...
+        ket_qua = self.env['ekids.chitieu_chi'].read_group(
+            domain=domain,
+            fields=['tien'],
+            groupby=[]  # Không group by, gộp chung tất cả thành 1 cục
+        )
+
+        # 4. Trả kết quả về an toàn (Nếu không có dữ liệu thì trả về 0.0)
+        if ket_qua and ket_qua[0].get('tien'):
+            return ket_qua[0]['tien']
+
+        return 0.0
 
     def get_danhsach_chi_theo_thoigian(self):
         domain =[
@@ -92,6 +147,21 @@ class BaoCaoChiWizard(models.TransientModel):
 
         result = self.env['ekids.chitieu_chi'].search(domain)
         return result
+
+    def get_danhsach_dm_loaichi(self):
+        if self.dm_chi_ids:
+            return self.dm_chi_ids
+        else:
+            domain =[
+                ('coso_id','=',self.coso_id.id)
+                ,('trangthai','=','1')
+
+
+            ]
+            result = self.env['ekids.chitieu_dm_loaichi'].search(domain)
+            return result
+
+
 
 
 

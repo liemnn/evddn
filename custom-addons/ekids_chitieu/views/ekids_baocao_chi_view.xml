@@ -1,10 +1,12 @@
 <odoo>
     <data>
-       <record id="ekids_chitieu.baocao_chi_wizard_form" model="ir.ui.view">
-            <field name="name">Báo cáo Thu/Chi - Giao diện Tối ưu</field>
+        <record id="ekids_chitieu.baocao_chi_wizard_form" model="ir.ui.view">
+            <field name="name">Báo cáo Thu/Chi - Giao diện Đỉnh Cao</field>
             <field name="model">ekids.chitieu_baocao_chi</field>
             <field name="arch" type="xml">
                 <form string="Trích xuất Báo cáo">
+
+                    <field name="coso_id" invisible="1"/>
 
                     <style>
                         /* 1. NÚT RADIO DẠNG VIÊN THUỐC (PILL) */
@@ -32,7 +34,7 @@
                             box-shadow: 0 2px 4px rgba(74, 222, 128, 0.3);
                         }
 
-                        /* 2. ÉP NGÀY THÁNG LÊN 1 DÒNG SIÊU GỌN */
+                        /* 2. ÉP NGÀY THÁNG LÊN 1 DÒNG GỌN */
                         .compact-date-row {
                             background-color: #f8fafc;
                             border: 1px solid #e2e8f0;
@@ -51,76 +53,119 @@
                         }
                         .compact-date-row .o_datepicker_button { display: none !important; }
 
-                        /* 3. KHU VỰC HẠNG MỤC CHI TIẾT (TO  ẤN TƯỢNG) */
-                        .big-category-box {
-                            border: 2px solid #3b82f6 !important; /* Viền xanh nổi bật */
-                            border-radius: 16px !important;
-                            background-color: #ffffff !important;
-                            transition: all 0.3s ease;
-                            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+                        /* 3. GIAO DIỆN SELECT LOẠI BÁO CÁO (NGUYÊN KHỐI SANG TRỌNG) */
+                        .premium-field-box {
+                            background-color: #ffffff;
+                            border: 1.5px solid #e2e8f0;
+                            border-radius: 14px;
+                            padding: 10px 14px;
+                            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                            cursor: pointer;
                         }
-                        .big-category-box:focus-within {
-                            border-color: #2563eb !important;
-                            box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.2);
+                        /* Hiệu ứng nổi bồng bềnh và đổi màu viền khi di chuột hoặc click */
+                        .premium-field-box:hover, .premium-field-box:focus-within {
+                            border-color: #3b82f6;
+                            box-shadow: 0 8px 16px -4px rgba(59, 130, 246, 0.15);
+                            transform: translateY(-1px);
                         }
-                        /* Làm các thẻ tag to và dễ đọc hơn */
-                        .big-category-box .o_tag {
-                            font-size: 14px !important;
-                            padding: 5px 12px !important;
-                            background-color: #eff6ff !important;
-                            color: #1e40af !important;
-                            border: 1px solid #bfdbfe !important;
-                            font-weight: 600 !important;
+                        .premium-field-box .icon-box {
+                            width: 42px;
+                            height: 42px;
+                            background-color: #eff6ff;
+                            border-radius: 10px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 18px;
                         }
-                    </style>
+                        /* Tẩy sạch giao diện select mặc định của Odoo */
+                        .premium-select {
+                            border: none !important;
+                            background-color: transparent !important;
+                            font-size: 15px !important;
+                            font-weight: 800 !important;
+                            color: #0f172a !important;
+                            padding: 0 !important;
+                            outline: none !important;
+                            box-shadow: none !important;
+                            width: 100%;
+                            cursor: pointer;
+                        }
+                        .premium-select option { font-weight: 600; color: #1e293b; }
 
-                    <sheet class="p-3" style="border: none !important;">
+                        /* 4. KHU VỰC HẠNG MỤC (TO  ẤN TƯỢNG) */
+                .big-category-box {
+                    border: 2px solid #3b82f6 !important;
+                    border-radius: 16px !important;
+                    background-color: #ffffff !important;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+                }
+                .big-category-box:focus-within {
+                    border-color: #2563eb !important;
+                    box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.2);
+                }
+            </style>
 
-                        <div class="text-center mb-3">
-                            <field name="loai" widget="radio" options="{'horizontal': true}" nolabel="1" class="custom-radio-pill"/>
+            <sheet class="p-3" style="border: none !important;">
+
+                <div class="text-center mb-3">
+                    <field name="loai" widget="radio" options="{'horizontal': true}" nolabel="1" class="custom-radio-pill"/>
+                </div>
+
+                <div class="compact-date-row d-flex justify-content-center align-items-center mb-3 shadow-sm">
+                    <span class="text-uppercase fw-bold text-muted me-2" style="font-size: 10px;">TỪ NGÀY</span>
+                    <field name="tu_ngay" nolabel="1"/>
+
+                    <i class="fa fa-long-arrow-right mx-3 text-muted" style="opacity: 0.5;"></i>
+
+                    <span class="text-uppercase fw-bold text-muted me-2" style="font-size: 10px;">ĐẾN NGÀY</span>
+                    <field name="den_ngay" nolabel="1"/>
+                </div>
+
+                <div class="premium-field-box mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box me-3">
+                            <i class="fa fa-pie-chart text-primary"></i>
                         </div>
 
-                        <div class="compact-date-row d-flex justify-content-center align-items-center mb-4">
-                            <span class="text-uppercase fw-bold text-muted me-2" style="font-size: 10px;">TỪ NGÀY</span>
-                            <field name="tu_ngay" nolabel="1"/>
-
-                            <i class="fa fa-long-arrow-right mx-3 text-muted" style="opacity: 0.5;"></i>
-
-                            <span class="text-uppercase fw-bold text-muted me-2" style="font-size: 10px;">ĐẾN NGÀY</span>
-                            <field name="den_ngay" nolabel="1"/>
+                        <div class="flex-grow-1">
+                            <div class="text-uppercase fw-bold" style="font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; margin-bottom: 2px;">
+                                HÌNH THỨC BÁO CÁO
+                            </div>
+                            <field name="loai_baocao" nolabel="1" class="premium-select"/>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="mt-2">
-                            <div class="d-flex align-items-center mb-2">
-                                <div style="width: 4px; height: 18px; background-color: #3b82f6; border-radius: 2px;" class="me-2"></div>
-                                <span class="fw-bolder text-dark" style="font-size: 15px; letter-spacing: -0.2px;">
-                                    CHỌN HẠNG MỤC MUỐN XEM</span>
-                            </div>
+                <div class="mt-2">
+                    <div class="d-flex align-items-center mb-2">
+                        <div style="width: 4px; height: 18px; background-color: #3b82f6; border-radius: 2px;" class="me-2"></div>
+                        <span class="fw-bolder text-dark" style="font-size: 15px; letter-spacing: -0.2px;">
+                            CHỌN HẠNG MỤC MUỐN XEM (Không chọn thì là xem toàn bộ)
+                        </span>
+                    </div>
 
-                            <div class="big-category-box p-2">
-                                <field name="dm_chi_ids" widget="many2many_tags"
-                                       nolabel="1"
-                                       placeholder="Click để chọn hoặc gõ tìm kiếm... (Bỏ trống để xem tất cả)"
-                                       domain="[('trangthai','=','1'),('loai','=',loai)]"
-                                       context="{'default_coso_id': context.get('default_coso_id')}"
-                                       options="{'no_create': True}"
-                                       class="w-100 m-0 border-0"/>
-                            </div>
-                            <div class="text-muted mt-2 ps-1" style="font-size: 12px; font-style: italic;">
-                                <i class="fa fa-lightbulb-o me-1"/> Chú ý: Bạn có thể chọn nhiều [Mục] cùng lúc để xem dữ liệu
-                            </div>
-                        </div>
+                    <div class="big-category-box p-2">
+                        <field name="dm_chi_ids" widget="many2many_tags"
+                               nolabel="1"
+                               placeholder="Click để chọn hoặc gõ tìm kiếm... (Bỏ trống để xem tất cả)"
+                               domain="[('trangthai','=','1'),('loai','=',loai)]"
+                               context="{'default_coso_id': context.get('default_coso_id')}"
+                               options="{'no_create': True}"
+                               class="w-100 m-0 border-0"/>
+                    </div>
+                </div>
 
-                    </sheet>
+            </sheet>
 
-                    <footer class="d-flex justify-content-end gap-2 p-3" style="border-top: 1px solid #f1f5f9;">
-                        <button name="action_xem_baocao" type="object" string="XEM BÁO CÁO" class="btn btn-primary rounded-pill px-4 fw-bold" icon="fa-line-chart"/>
-                        <button string="Đóng" class="btn btn-link text-muted fw-bold" special="cancel" style="text-decoration: none;"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-
+            <footer class="d-flex justify-content-end gap-2 p-3" style="border-top: 1px solid #f1f5f9;">
+                <button name="action_xem_baocao" type="object" string="XEM BÁO CÁO" class="btn btn-primary rounded-pill px-4 fw-bold" icon="fa-line-chart"/>
+                <button string="Đóng" class="btn btn-link text-muted fw-bold" special="cancel" style="text-decoration: none;"/>
+            </footer>
+        </form>
+    </field>
+</record>
 
     </data>
 </odoo>
