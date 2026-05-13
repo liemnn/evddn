@@ -36,14 +36,12 @@
     'demo': [
         'demo/demo.xml',
     ],
+    # only loaded in demonstration mode
     'assets': {
         'web.assets_backend': [
-            'ekids_chitieu/static/src/css/style.css',
-            'ekids_chitieu/static/src/css/custom_report_style.css',
+            'ekids_hocsinh/static/src/css/ekids_style.css',
 
         ],
     },
-    'fonts': [
 
-    ],
 }

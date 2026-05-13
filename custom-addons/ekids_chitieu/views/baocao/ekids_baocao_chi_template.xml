@@ -6,11 +6,12 @@
 
                 <div class="page" style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
 
-                    <div class="btn-print-container" style="text-align:right; margin-bottom: 20px;">
+                    <div  style="text-align:right; margin-bottom: 20px;">
+
                         <button onclick="window.print()"
-                                style="width:30px; height:auto; border:0px; background:transparent;"
-                                title="In báo cáo" type="button" class="d-print-none">
-                            <i class="fa fa-print" style="font-size: 18px; color: #555;"></i>
+                                style="width:30px; height:auto; border:0px; background:transparent; cursor:pointer;"
+                                title="In báo cáo" type="button">
+                            <i class="fa fa-print" style="font-size: 20px; color: #555;"/>
                         </button>
                     </div>
 
@@ -69,9 +70,17 @@
                         size: A4 landscape;
                         margin: 10mm 10mm 10mm 10mm !important;
                     }
-                    *:not(i) {
-                        font-family: Arial, sans-serif !important;
+
+                    /* BỎ DÒNG *:not(i) ĐI. CHỈ ÉP ARIAL CHO NHỮNG THẺ CHỨA VĂN BẢN */
+                    .page, table, th, td, h3, h5, h6, p, span {
+                        font-family: Arial, sans-serif;
                     }
+
+                    /* Trả lại sự trong sạch cho FontAwesome */
+                    .fa {
+                        font-family: "FontAwesome" !important;
+                    }
+
                     @media print {
                         .d-print-none {
                             display: none !important;

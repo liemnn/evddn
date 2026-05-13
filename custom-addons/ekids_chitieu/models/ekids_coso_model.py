@@ -81,7 +81,7 @@ class CoSo(models.Model):
     def action_view_baocao_chi_action_window(self):
         return {
             'type': 'ir.actions.act_window',
-            'name': 'báo cáo lợi nhuận',
+            'name': 'XEM DANH SÁCH [CHI/TIÊU]',
             'res_model': 'ekids.chitieu_baocao_chi',
             'view_mode': 'form',
             'target': 'new',

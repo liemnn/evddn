@@ -5,19 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_baocao_chi_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/baocao/ekids_baocao_action.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/baocao/ekids_baocao_chi_template.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_baocao_chi_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_baocao/models/ekids_baocao_loinhuan_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_baocao/models/ekids_baocao_loinhuan_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_baocao_chi_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_baocao_chi_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_coso_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_coso_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/security/ir.model.access.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_chitieu_thang_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_chitieu_thang_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_coso_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_coso_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_func/string_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_func/string_util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/baocao/ekids_baocao_chi_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/baocao/ekids_baocao_chi_template.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_baocao_chi_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_baocao_chi_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +52,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Run",
+    "Python.evddn.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
@@ -121,14 +114,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00056" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1776757204473</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1776757204473</updated>
     </task>
     <task id="LOCAL-00057" summary="liemnn">
       <option name="closed" value="true" />
@@ -514,7 +499,15 @@
       <option name="project" value="LOCAL" />
       <updated>1778592592989</updated>
     </task>
-    <option name="localTasksCounter" value="105" />
+    <task id="LOCAL-00105" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1778657932871</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1778657932872</updated>
+    </task>
+    <option name="localTasksCounter" value="106" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -627,6 +620,16 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_kpi2thang_ketqua_model.py</url>
           <line>55</line>
           <option name="timeStamp" value="110" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_baocao_chi_model.py</url>
+          <line>92</line>
+          <option name="timeStamp" value="114" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_baocao_chi_model.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="115" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

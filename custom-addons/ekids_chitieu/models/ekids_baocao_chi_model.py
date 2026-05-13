@@ -23,6 +23,9 @@ class BaoCaoChiWizard(models.TransientModel):
 
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở", readonly=True)
 
+    loai = fields.Selection([("0", "Chi"), ("1", "Thu khác (ngoài học phí)")], string="Phân loại", required=True,
+                            default="0")
+
     tu_ngay = fields.Date(
         string="Từ ngày",
         default=lambda self: fields.Date.context_today(self).replace(day=1)
@@ -30,12 +33,11 @@ class BaoCaoChiWizard(models.TransientModel):
 
     den_ngay = fields.Date(
         string="Đến ngày",
-        default=lambda self: fields.Date.context_today(self) + relativedelta(day=31)
+        default=lambda self: fields.Date.context_today(self)
     )
 
 
-    dm_chi_ids = fields.One2many("ekids.chitieu_dm_loaichi",
-                              "coso_id", string="Chi tiêu của cơ sở")
+    dm_chi_ids = fields.Many2many("ekids.chitieu_dm_loaichi", string="Danh mục chi cần lọc")
 
     def get_table_data(self):
 
@@ -54,6 +56,7 @@ class BaoCaoChiWizard(models.TransientModel):
                 self.get_table_data_by_chi(table_data,index,data)
                 index =index+1
 
+        table_data = self.get_table_data_tong(table_data)
         return table_data
 
 
@@ -73,6 +76,7 @@ class BaoCaoChiWizard(models.TransientModel):
 
 
         ])
+
         return table_data
 
 
@@ -84,7 +88,7 @@ class BaoCaoChiWizard(models.TransientModel):
 
         ]
         if self.dm_chi_ids and len(self.dm_chi_ids)>0:
-            domain.append([('dm_loaichi_id', 'in', self.dm_chi_ids.ids)])
+            domain.append(('dm_loaichi_id', 'in', self.dm_chi_ids.ids))
 
         result = self.env['ekids.chitieu_chi'].search(domain)
         return result
@@ -96,13 +100,8 @@ class BaoCaoChiWizard(models.TransientModel):
 
     #Tinh toán tổng của năm
 
-    def get_table_data_by_nam(self,table_data):
-        hocphi = 0
-        thukhac = 0
-        luong = 0
-        thuho = 0
-        chikhac = 0
-        loinhuan=0
+    def get_table_data_tong(self,table_data):
+        tong =0
 
         if table_data:
             i=0
@@ -110,24 +109,15 @@ class BaoCaoChiWizard(models.TransientModel):
                 if i == 0:
                     i =i+1
                     continue
-                hocphi += string_util.string2number(data[2])
-                thukhac +=  string_util.string2number(data[3])
-                luong += string_util.string2number(data[4])
-                thuho += string_util.string2number(data[5])
-                chikhac +=  string_util.string2number(data[6])
-                loinhuan += string_util.string2number(data[7])
+                tong += string_util.string2number(data[2])
                 i = i+1
 
 
 
         table_data.append([
-            'TỔNG THEO NĂM TÀI CHÍNH','',
-            string_util.number2string(hocphi),
-            string_util.number2string(thukhac),
-            string_util.number2string(luong),
-            string_util.number2string(thuho),
-            string_util.number2string(chikhac),
-            string_util.number2string(loinhuan)
+            '','Tổng',
+            string_util.number2string(tong),
+            '', '','', ''
         ])
         return table_data
 
