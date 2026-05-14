@@ -73,6 +73,7 @@ class BaoCaoChiWizard(models.TransientModel):
                 for data in datas:
                     self.get_table_data_by_loaichi(table_data, index, data)
                     index = index + 1
+            table_data = self.get_table_data_tong_loaichi(table_data)
 
 
 
@@ -155,6 +156,7 @@ class BaoCaoChiWizard(models.TransientModel):
             domain =[
                 ('coso_id','=',self.coso_id.id)
                 ,('trangthai','=','1')
+                ,('loai', '=', self.loai)
 
 
             ]
@@ -188,6 +190,27 @@ class BaoCaoChiWizard(models.TransientModel):
             '','Tổng',
             string_util.number2string(tong),
             '', '','', ''
+        ])
+        return table_data
+
+    def get_table_data_tong_loaichi(self,table_data):
+        tong =0
+
+        if table_data:
+            i=0
+            for data in table_data:
+                if i == 0:
+                    i =i+1
+                    continue
+                tong += string_util.string2number(data[2])
+                i = i+1
+
+
+
+        table_data.append([
+            '','Tổng',
+            string_util.number2string(tong),
+
         ])
         return table_data
 
