@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Khởi tạo dữ liệu</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #22C55E; --c-green-dark: #15803D; --c-red: #EF4444; --c-blue-light: #DBEAFE; --c-orange: #F59E0B;
+            --excel-green: #107C41;
+            --excel-header: #FFEDD5; /* Màu cam nhạt giống ảnh excel */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR --- */
+        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 8px 16px; border-radius: 8px; transition: 0.2s; background: #EFF6FF; border: 1px solid #BFDBFE;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+        .header-title-right { font-weight: 700; font-size: 1rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; }
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%;}
+        .doc-container { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h1 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        /* ================= CSS SƠ ĐỒ 3 BƯỚC KHỞI TẠO ================= */
+        .onboarding-flow-wrapper {
+            background: linear-gradient(to bottom, #F0FDF4 0%, #FFFFFF 100%);
+            border: 1px solid #DCFCE7;
+            border-radius: 16px;
+            padding: 40px 20px;
+            margin-bottom: 50px;
+        }
+        .onboarding-flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: nowrap;
+        }
+        .flow-card {
+            background: #FFFFFF;
+            border: 2px dashed #4ADE80;
+            border-radius: 20px;
+            padding: 25px 20px;
+            width: 30%;
+            min-height: 140px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .flow-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); border-color: #22C55E; }
+        .flow-card-title { color: #FF0000; font-size: 1.4rem; font-weight: 800; margin-bottom: 12px; }
+        .flow-card-desc { color: #0F172A; font-size: 1.05rem; font-weight: 500; line-height: 1.4; }
+        .flow-arrow { color: #1E3A8A; font-size: 3.5rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1)); }
+
+        /* --- NỘI DUNG CHI TIẾT --- */
+        .step-detail-box {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .step-detail-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--primary); }
+        .step-detail-box h3.step-title {
+            font-size: 1.3rem; color: #1E293B; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .step-detail-box h3.step-title span { background: #FEE2E2; color: #EF4444; padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; }
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.6; }
+        .doc-content p { margin-bottom: 12px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content li { margin-bottom: 8px; }
+
+        /* UI Nút Tải Excel */
+        .download-excel-box {
+            background: #F0FDF4; border: 1px dashed #22C55E; border-radius: 8px; padding: 20px; display: flex; align-items: center; justify-content: space-between; margin: 20px 0; flex-wrap: wrap; gap: 15px;
+        }
+        .excel-info { display: flex; align-items: center; gap: 15px; }
+        .excel-icon { font-size: 2.5rem; color: #16A34A; }
+        .excel-text h4 { margin: 0; font-size: 1.1rem; color: #166534; font-weight: 700; }
+        .excel-text p { margin: 0; font-size: 0.9rem; color: #15803D; }
+        .btn-download {
+            background: #16A34A; color: white; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; border: none; cursor: pointer;
+        }
+        .btn-download:hover { background: #15803D; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(22,163,74,0.3);}
+
+        /* MOCKUP EXCEL BẰNG HTML/CSS */
+        .excel-mockup-wrapper {
+            margin: 25px 0; border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .excel-mockup-header {
+            background: var(--excel-green); color: white; padding: 8px 15px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
+        }
+        .excel-warning-row {
+            background: #FFFF00; color: #FF0000; font-weight: 700; font-size: 0.9rem; padding: 8px 15px; border-bottom: 1px solid #CBD5E1; line-height: 1.4;
+        }
+        .excel-table-container { overflow-x: auto; width: 100%; background: white; }
+        .excel-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 600px;}
+        .excel-table th, .excel-table td { border: 1px solid #CBD5E1; padding: 8px 10px; text-align: left; vertical-align: top;}
+        .excel-table th { background: var(--excel-header); color: #1E293B; font-weight: 700; text-align: center; }
+        .excel-table td.col-center { text-align: center; }
+        .excel-table td.col-right { text-align: right; }
+
+        .tab-indicator {
+            background: #F8FAFC; border-top: 1px solid #CBD5E1; padding: 5px 10px; display: flex; gap: 5px; font-size: 0.8rem; font-family: Arial, sans-serif;
+        }
+        .tab-item { padding: 4px 15px; color: #475569; cursor: pointer; }
+        .tab-item.active { background: white; font-weight: 700; color: var(--excel-green); border-bottom: 3px solid var(--excel-green); }
+
+        .instruction-block { margin-top: 15px; }
+        .instruction-block h4 { font-size: 1.1rem; color: #1E3A8A; margin-bottom: 8px; font-weight: 800; display: flex; align-items: center; gap: 8px;}
+        .instruction-block p { color: #334155; }
+
+        /* Khung thông tin tài khoản */
+        .account-info-card { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 20px; margin-top: 15px; font-family: monospace; font-size: 1.05rem; color: #1E3A8A; }
+        .account-info-card div { margin-bottom: 10px; }
+        .account-info-card div:last-child { margin-bottom: 0; }
+        .account-info-card strong { color: #1D4ED8; display: inline-block; width: 120px;}
+
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 15px; }
+            .header-title-right { font-size: 0.85rem; max-width: 150px; text-align: right; line-height: 1.2;}
+            .content-area { padding: 15px; }
+            .doc-container { padding: 20px; border-radius: 12px; }
+            .doc-header h1 { font-size: 1.5rem; }
+            .onboarding-flow-container { flex-direction: column; gap: 15px; }
+            .flow-card { width: 100%; min-height: auto; padding: 20px; }
+            .flow-arrow { transform: rotate(90deg); margin: 5px 0;}
+            .download-excel-box { flex-direction: column; align-items: flex-start; }
+            .btn-download { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
+
+        </div>
+        <div class="top-right">
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phần A. Thiết lập ban đầu <i class="fas fa-chevron-right"></i> <span>Khởi tạo dữ liệu</span>
+                </div>
+
+                <div class="doc-header">
+                    <h2>Hướng dẫn: Quy trình 3 bước Khởi tạo &amp; Trải nghiệm phần mềm</h2>
+                    <p>Để đảm bảo quá trình trải nghiệm và sử dụng phần mềm được chính xác, trơn tru nhất, đội ngũ kỹ thuật eVDDN sẽ hỗ trợ Trung tâm nạp toàn bộ dữ liệu ban đầu thông qua file Excel. Quý trung tâm chỉ cần phối hợp thực hiện theo 3 bước cực kỳ đơn giản dưới đây.</p>
+                </div>
+
+                <div class="onboarding-flow-wrapper">
+                    <div class="onboarding-flow-container">
+                        <div class="flow-card">
+                            <div class="flow-card-title">Bước 1</div>
+                            <div class="flow-card-desc">Cung cấp thông<br/>tin về nhà trường</div>
+                        </div>
+                        <i class="fas fa-arrow-right flow-arrow"></i>
+                        <div class="flow-card">
+                            <div class="flow-card-title">Bước 2</div>
+                            <div class="flow-card-desc">Bộ phận kỹ thuật<br/>hỗ trợ đưa dữ liệu<br/>vào phần mềm</div>
+                        </div>
+                        <i class="fas fa-arrow-right flow-arrow"></i>
+                        <div class="flow-card">
+                            <div class="flow-card-title">Bước 3</div>
+                            <div class="flow-card-desc">Nhận thông tin tài<br/>khoản và sử dụng<br/>phần mềm</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-detail-box" id="step1">
+                    <h3 class="step-title"><span>Bước 1</span> Cung cấp thông tin qua biểu mẫu Excel</h3>
+                    <div class="doc-content">
+                        <p>Vui lòng <strong>Tải biểu mẫu Excel</strong> đính kèm dưới đây. File Excel này bao gồm 6 Trang tính (Sheets). Bạn cần điền đầy đủ dữ liệu theo các cột tương ứng, sau đó gửi lại cho bộ phận kỹ thuật để chúng tôi nạp tự động vào phần mềm.</p>
+
+                        <div class="download-excel-box">
+                            <div class="excel-info">
+                                <i class="fas fa-file-excel excel-icon"></i>
+                                <div class="excel-text">
+                                    <h4>Bieu_Mau_Khoi_Tao_Du_Lieu_eVDDN.xlsx</h4>
+                                    <p>Dung lượng: 45 KB - Mẫu chuẩn để Import</p>
+                                </div>
+                            </div>
+                             <a href="eVDDN_Đăng ký trung tâm.xlsx">
+                                <button class="btn-download">
+
+                                    <i class="fas fa-download">
+
+                                    </i> Tải biểu mẫu ngay</button>
+                            </a>
+
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px dashed #CBD5E1; margin: 30px 0;">
+                        <h4 style="font-size: 1.2rem; color: #0F172A; margin-bottom: 20px;">HƯỚNG DẪN NHẬP LIỆU CHI TIẾT TỪNG TRANG TÍNH (SHEETS):</h4>
+
+                        <div class="instruction-block">
+                            <h4><i class="fas fa-building text-primary"></i> 1. Thông tin của trung tâm (Sheet: 1.Chung)</h4>
+                            <p>Bao gồm: Tên trung tâm, địa chỉ, số điện thoại, và thông tin giáo viên phụ trách hệ thống (người quản lý). <strong>Lưu ý:</strong> Số điện thoại của người quản lý sẽ được dùng làm tài khoản Admin để cấp quyền khởi tạo trung tâm.</p>
+
+                            <div class="excel-mockup-wrapper">
+                                <div class="excel-mockup-header"><i class="fas fa-file-excel"></i> Bieu_Mau_Khoi_Tao_Du_Lieu_eVDDN.xlsx</div>
+                                <div class="excel-warning-row">Chú ý: Toàn bộ dữ liệu cần được trung tâm nhập đầy đủ các dữ liệu trên file excel này là ví dụ để dễ hình dung trong quá trình nhập liệu</div>
+                                <div class="excel-table-container">
+                                    <table class="excel-table">
+                                        <tr style="background: #FEE2E2;">
+                                            <td style="font-weight: bold; width: 30%;">Tên trung tâm</td>
+                                            <td>Trung tâm Hỗ trợ PTGDHN Từ Sơn</td>
+                                        </tr>
+                                        <tr style="background: #FEE2E2;">
+                                            <td style="font-weight: bold;">Số điện thoại liên hệ</td>
+                                            <td>0987654321</td>
+                                        </tr>
+                                        <tr style="background: #FEE2E2;">
+                                            <td style="font-weight: bold;">Giáo viên phụ trách hệ thống</td>
+                                            <td>(Gửi Tên giáo viên: Số điện thoại sẽ là giáo viên chính quản lý tài khoản quản trị)</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="tab-indicator">
+                                    <div class="tab-item active">1.Chung</div>
+                                    <div class="tab-item">2.Học sinh</div>
+                                    <div class="tab-item">3.Học phí</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="instruction-block">
+                            <h4><i class="fas fa-user-graduate text-primary"></i> 2. Danh sách học sinh (Sheet: 2.Học sinh)</h4>
+                            <p>Cần nhập đầy đủ toàn bộ danh sách học sinh đang theo học tính đến thời điểm hiện tại. Thông tin bắt buộc: Họ và tên, Giới tính, Ngày sinh, Ngày đi học.</p>
+
+                            <div class="excel-mockup-wrapper">
+                                <div class="excel-mockup-header"><i class="fas fa-file-excel"></i> Bieu_Mau_Khoi_Tao_Du_Lieu_eVDDN.xlsx</div>
+                                <div class="excel-warning-row">Bạn cần nhập đầy đủ danh sách học sinh đang theo học tại trung tâm tính đến thời điểm hiện tại.<br><u>Chú ý:</u> Dữ liệu hiện tại là dữ liệu "ví dụ" khi nhập liệu bạn cần xóa đi và nhập lại</div>
+                                <div class="excel-table-container">
+                                    <table class="excel-table">
+                                        <tr>
+                                            <th style="width: 50px;">TT</th>
+                                            <th>Họ và tên</th>
+                                            <th>Giới tính</th>
+                                            <th>Ngày sinh (nếu có) <br><small>(ngày/tháng/năm)</small></th>
+                                            <th>Ngày đi học (nếu nhớ)<br><small>(ngày/tháng/năm)</small></th>
+                                        </tr>
+                                        <tr><td class="col-center">1</td><td>Vũ Hải Đăng</td><td class="col-center">Nam</td><td class="col-center">1/1/2025</td><td class="col-center">1/1/2025</td></tr>
+                                        <tr><td class="col-center">2</td><td>Tạ Thị Huyền Anh</td><td class="col-center">Nữ</td><td class="col-center">20/12/2025</td><td class="col-center">2/1/2025</td></tr>
+                                    </table>
+                                </div>
+                                <div class="tab-indicator">
+                                    <div class="tab-item">1.Chung</div>
+                                    <div class="tab-item active">2.Học sinh</div>
+                                    <div class="tab-item">3.Học phí</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="instruction-block">
+                            <h4><i class="fas fa-file-invoice-dollar text-primary"></i> 3. Học phí (Sheet: 3.Học phí)</h4>
+                            <p>Liệt kê toàn bộ danh sách các khoản thu của học sinh tại trung tâm bao gồm: Thu bán trú, thu ca can thiệp (trong/ngoài giờ) và các khoản thu khác phát sinh hàng tháng.</p>
+
+                            <div class="excel-mockup-wrapper">
+                                <div class="excel-mockup-header"><i class="fas fa-file-excel"></i> Bieu_Mau_Khoi_Tao_Du_Lieu_eVDDN.xlsx</div>
+                                <div class="excel-warning-row">Bạn cần nhập danh sách các khoản sẽ thu của học sinh "Học phí" của trung tâm bao gồm: Khoản thu bán trú, thu ca can thiệp...<br><u>Chú ý:</u> Dữ liệu hiện tại là dữ liệu "ví dụ" khi nhập liệu bạn cần xóa đi và nhập lại</div>
+                                <div class="excel-table-container">
+                                    <table class="excel-table">
+                                        <tr>
+                                            <th style="width: 50px;">TT</th>
+                                            <th>Tên ca/ dịch vụ</th>
+                                            <th>Đơn giá (vnđ)</th>
+                                            <th>Loại thu</th>
+                                            <th>Được trừ tiền,<br>hoàn tiền khi nghỉ</th>
+                                            <th>Mô tả làm rõ (nếu có)</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-center">1</td><td>Ca can thiệp trong giờ hành chính</td><td class="col-right" style="font-weight:bold;">150,000</td><td class="col-center">Theo buổi (ca)</td><td class="col-center">Có</td><td>Giờ hành chính...</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-center">2</td><td>Lớp kỹ năng xã hội</td><td class="col-right" style="font-weight:bold;">1,200,000</td><td class="col-center">Trọn gói (cố định)</td><td class="col-center">Không</td><td>Trọn gói theo tháng</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="tab-indicator">
+                                    <div class="tab-item">2.Học sinh</div>
+                                    <div class="tab-item active">3.Học phí</div>
+                                    <div class="tab-item">4.Giảm học phí</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="instruction-block">
+                            <h4><i class="fas fa-percent text-primary"></i> 4. Chính sách giảm học phí (Sheet: 4.Giảm học phí)</h4>
+                            <p>Nếu trung tâm có các chính sách ưu đãi, miễn giảm học phí (Ví dụ: hộ nghèo, con giáo viên...), vui lòng liệt kê Tên chính sách và Tỷ lệ % được giảm.</p>
+
+                            <div class="excel-mockup-wrapper">
+                                <div class="excel-mockup-header"><i class="fas fa-file-excel"></i> Bieu_Mau_Khoi_Tao_Du_Lieu_eVDDN.xlsx</div>
+                                <div class="excel-warning-row">Đây là danh sách chính sách giảm học phí của trung tâm (nếu có), trường hợp không có bạn có thể xóa đi toàn bộ.<br><u>Chú ý:</u> Dữ liệu hiện tại là dữ liệu "ví dụ"...</div>
+                                <div class="excel-table-container">
+                                    <table class="excel-table">
+                                        <tr>
+                                            <th style="width: 50px;">TT</th>
+                                            <th>Đối tượng được giảm học phí (tên)</th>
+                                            <th>Tỷ lệ % giảm</th>
+                                            <th>Mô tả làm rõ (nếu có)</th>
+                                        </tr>
+                                        <tr><td class="col-center">1</td><td>Gia đình hộ cận nghèo</td><td class="col-center">5%</td><td></td></tr>
+                                        <tr><td class="col-center">2</td><td>Con của giáo viên</td><td class="col-center">50%</td><td></td></tr>
+                                    </table>
+                                </div>
+                                <div class="tab-indicator">
+                                    <div class="tab-item">3.Học phí</div>
+                                    <div class="tab-item active">4.Giảm học phí</div>
+                                    <div class="tab-item">5.Giáo viên</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="instruction-block">
+                            <h4><i class="fas fa-chalkboard-teacher text-primary"></i> 5. Danh sách giáo viên / Người lao động (Sheet: 5.Giáo viên)</h4>
+                            <p>Nhập thông tin nhân sự hưởng lương tại trung tâm: Họ tên, số điện thoại, giới tính, CCCD, ngày sinh, và <strong>Ngày đi làm (Bắt buộc)</strong>. <em>Lưu ý: Ngày đi làm là cơ sở quan trọng nhất để hệ thống tự động tính toán Thâm niên cho giáo viên.</em></p>
+
+                            <div class="excel-mockup-wrapper">
+                                <div class="excel-mockup-header"><i class="fas fa-file-excel"></i> Bieu_Mau_Khoi_Tao_Du_Lieu_eVDDN.xlsx</div>
+                                <div class="excel-warning-row">Đây là danh sách "Giáo viên" của trung tâm bao gồm giáo viên, cộng tác viên, nhân sự khác nhận lương.<br><u>Chú ý:</u> Dữ liệu hiện tại là dữ liệu "ví dụ"...</div>
+                                <div class="excel-table-container">
+                                    <table class="excel-table">
+                                        <tr>
+                                            <th style="width: 50px;">TT</th>
+                                            <th>Họ và tên</th>
+                                            <th>Số điện thoại</th>
+                                            <th>CCCD (nếu có)</th>
+                                            <th>Ngày sinh</th>
+                                            <th>Ngày đi làm<br>(Bắt buộc)</th>
+                                        </tr>
+                                        <tr><td class="col-center">1</td><td>Vũ Thị Phượng</td><td class="col-center">0987654321</td><td class="col-center">001122...</td><td class="col-center">1/1/1995</td><td class="col-center" style="background: #DCFCE7; font-weight: bold;">1/1/2021</td></tr>
+                                        <tr><td class="col-center">2</td><td>Hoàng Thu Trang</td><td class="col-center">0912345678</td><td class="col-center">001133...</td><td class="col-center">3/1/1998</td><td class="col-center" style="background: #DCFCE7; font-weight: bold;">3/1/2023</td></tr>
+                                    </table>
+                                </div>
+                                <div class="tab-indicator">
+                                    <div class="tab-item">4.Giảm học phí</div>
+                                    <div class="tab-item active">5.Giáo viên</div>
+                                    <div class="tab-item">6.Lương</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="instruction-block">
+                            <h4><i class="fas fa-money-check-alt text-primary"></i> 6. Cấu trúc lương (Sheet: 6.Lương)</h4>
+                            <p>Đây là danh sách các khoản cấu thành nên lương của trung tâm (Lương cơ bản, Thưởng KPI, Phạt, Hỗ trợ...). Căn cứ vào danh sách này, phần mềm sẽ giúp bạn thiết lập các cấu trúc lương linh hoạt áp dụng riêng cho từng giáo viên sau này.</p>
+
+                            <div class="excel-mockup-wrapper">
+                                <div class="excel-mockup-header"><i class="fas fa-file-excel"></i> Bieu_Mau_Khoi_Tao_Du_Lieu_eVDDN.xlsx</div>
+                                <div class="excel-warning-row">Đây là toàn bộ khoản chi cho người lao động gọi là "Cấu trúc lương". Với mỗi giáo viên sẽ nhận khoản lương khác nhau -> Sau khi nhập vào phần mềm sẽ áp dụng riêng.<br><u>Chú ý:</u> Dữ liệu hiện tại là dữ liệu "ví dụ"...</div>
+                                <div class="excel-table-container">
+                                    <table class="excel-table">
+                                        <tr>
+                                            <th style="width: 50px;">TT</th>
+                                            <th>Mục lương</th>
+                                            <th>Số tiền (vnđ)</th>
+                                            <th>Loại</th>
+                                            <th>Mô tả điều kiện (nếu có)</th>
+                                        </tr>
+                                        <tr><td class="col-center">1</td><td>Lương cơ bản quản lý</td><td class="col-right" style="font-weight:bold;">7,000,000</td><td class="col-center" style="color:#15803D;">Được cộng</td><td>Áp dụng cho quản lý cơ sở</td></tr>
+                                        <tr><td class="col-center">2</td><td>Lương cơ bản giáo viên</td><td class="col-right" style="font-weight:bold;">4,957,000</td><td class="col-center" style="color:#15803D;">Được cộng</td><td>Trên 4 năm là 4.9tr, dưới 4 năm 4.0tr</td></tr>
+                                        <tr><td class="col-center">3</td><td>BHXH - Giáo viên phải đóng</td><td class="col-right" style="font-weight:bold; color:red;">4,718,000</td><td class="col-center" style="color:#EF4444;">Bị trừ</td><td>GV phải đóng 10,5% trên mức đóng</td></tr>
+                                        <tr><td class="col-center">4</td><td>Giáo án</td><td class="col-right" style="font-weight:bold;">50,000</td><td class="col-center" style="color:#15803D;">Được cộng</td><td>50k/1 giáo án được duyệt</td></tr>
+                                    </table>
+                                </div>
+                                <div class="tab-indicator">
+                                    <div class="tab-item">4.Giảm học phí</div>
+                                    <div class="tab-item">5.Giáo viên</div>
+                                    <div class="tab-item active">6.Lương</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="step-detail-box" id="step2">
+                    <h3 class="step-title"><span>Bước 2</span> Kỹ thuật viên xử lý và Nạp dữ liệu</h3>
+                    <div class="doc-content">
+                        <p>Ngay sau khi nhận được file Excel từ Trung tâm, Đội ngũ kỹ thuật của eVDDN sẽ tiến hành:</p>
+                        <ul>
+                            <li>Kiểm tra và chuẩn hóa dữ liệu để đảm bảo không bị lỗi font chữ hay sai định dạng ngày tháng.</li>
+                            <li>Khởi tạo một "Không gian dữ liệu" (Database) độc lập, an toàn và bảo mật riêng biệt cho Trung tâm.</li>
+                            <li>Nạp tự động 100% dữ liệu từ file Excel vào hệ thống phần mềm.</li>
+                        </ul>
+                        <p><em>* Thời gian xử lý bước này thường diễn ra rất nhanh, chỉ từ <strong>1 đến 2 giờ làm việc</strong> kể từ khi nhận file chuẩn.</em></p>
+                    </div>
+                </div>
+
+                <div class="step-detail-box" id="step3">
+                    <h3 class="step-title"><span>Bước 3</span> Nhận tài khoản &amp; Bắt đầu trải nghiệm</h3>
+                    <div class="doc-content">
+                        <p>Khi quá trình nạp dữ liệu hoàn tất, chuyên viên sẽ bàn giao lại cho Quý Trung tâm thông tin tài khoản Quản trị cấp cao nhất (Admin).</p>
+                        <p>Bạn sẽ nhận được cấu trúc thông tin tương tự như sau:</p>
+
+                        <div class="account-info-card">
+                            <div><strong><i class="fas fa-link"></i> Link truy cập:</strong> https://evddn.vn/web</div>
+                            <div><strong><i class="fas fa-user"></i> Tài khoản:</strong> [Số điện thoại Quản lý]</div>
+                            <div><strong><i class="fas fa-key"></i> Mật khẩu:</strong> 123456 (Nên đổi ngay sau lần đăng nhập đầu tiên)</div>
+                        </div>
+
+                        <p style="margin-top: 15px;">Kể từ lúc này, toàn bộ dữ liệu thật của trung tâm đã có sẵn. Bạn có thể bắt đầu sử dụng phần mềm để xếp lịch, điểm danh, tính học phí và tính lương ngay lập tức!</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
