@@ -379,6 +379,11 @@
                                     </div>
 
                                     <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-history text-muted"></i> Thời gian theo học</div>
+                                        <div class="kh-data-value"><field name="thoigian_hoc" required="1"/></div>
+                                    </div>
+
+                                    <div class="kh-data-row">
                                         <div class="kh-data-label"><i class="fa fa-calendar-times-o text-muted"></i> Ngày nghỉ (Học hết ngày)</div>
                                         <div class="kh-data-value"><field name="ngay_nghihoc"/></div>
                                     </div>

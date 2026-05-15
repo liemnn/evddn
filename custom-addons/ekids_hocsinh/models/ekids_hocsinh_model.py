@@ -31,6 +31,7 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
 
 
     ngay_nhaphoc = fields.Date(string="Ngày bắt đầu(đi học, đánh giá..)",required=True)
+    thoigian_hoc = fields.Char(string="Thời gian theo học", compute="_compute_thoigian_hoc", store=False)
     ngay_nghihoc = fields.Date(string="Ngày nghỉ học")
 
     hinhthuc_theohoc = fields.Selection([
@@ -203,6 +204,40 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
                 hs.tuoi = " ".join(parts) if parts else "Dưới 1 tháng"
             else:
                 hs.tuoi = "0"
+
+    def _compute_thoigian_hoc(self):
+        now = datetime.today()
+        for hs in self:
+            if hs.ngay_nhaphoc:
+                # 1. Quy đổi toàn bộ khoảng cách ra tháng
+                nam_diff = now.year - hs.ngay_nhaphoc.year
+                thang_diff = now.month - hs.ngay_nhaphoc.month
+
+                # Tổng số tháng tạm tính
+                tong_thang = (nam_diff * 12) + thang_diff
+
+                # 2. Hiệu chỉnh: Nếu ngày hiện tại chưa đến ngày nhập học của tháng đó
+                # thì chưa tính là tròn 1 tháng
+                if now.day < hs.ngay_nhaphoc.day:
+                    tong_thang -= 1
+
+                # 3. Xử lý kết quả hiển thị
+                if tong_thang <= 0:
+                    hs.thoigian_hoc = "Mới nhập học"
+                else:
+                    nam = tong_thang // 12
+                    thang = tong_thang % 12
+
+                    parts = []
+                    if nam > 0:
+                        parts.append(f"{nam} năm")
+                    if thang > 0:
+                        parts.append(f"{thang} tháng")
+
+                    # Nối các phần lại, ví dụ: "1 năm 2 tháng" hoặc "5 tháng"
+                    hs.thoigian_hoc = " ".join(parts)
+            else:
+                hs.thoigian_hoc = "Chưa có dữ liệu"
 
     @api.model_create_multi
     def create(self, vals_list):

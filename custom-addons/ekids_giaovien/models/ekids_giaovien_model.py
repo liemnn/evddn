@@ -129,7 +129,7 @@ class GiaoVien(models.Model):
             record.sequence = index
             index +=1
 
-    @api.depends('dilam_tungay','hoctapcongtac_ids')
+
     def _compute_tham_nien(self):
         for record in self:
             thamnien =giaovien_util.func_get_thamnien(record)
