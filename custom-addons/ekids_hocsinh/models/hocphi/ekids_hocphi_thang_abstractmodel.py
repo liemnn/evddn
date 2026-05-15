@@ -486,7 +486,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                              , tyle_hoantra
                                                              , days
                                                              , ca_canthieps
-                                                             , ca2thus):
+                                                             , ca2thus
+                                                             , ngay_dihoc_cosos):
         if ca_canthieps and days:
             soca_hocbu = self.env['ekids.diemdanh_ca2ngay'].search_count([
                 ('hocsinh_id', '=', hocphi.hocsinh_id.id),
@@ -516,10 +517,15 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                 if ca.tyle_hoan_rieng > 0:
                                     tyle_hoantra = ca.tyle_hoan_rieng
 
+                        dongia = ca.tien
+                        if ca.is_tien_trongoi == True:
+                            # Chặn lỗi ZeroDivisionError
+                            dongia = (ca.tien / len(ngay_dihoc_cosos))
 
-                        tien += ca2thu.soca * ca.tien
+
+                        tien += ca2thu.soca * dongia
                         soca += ca2thu.soca
-                        dongia = self.func_thongtin_duoctru_hocphi_tien(ca.tien,ca, hocphi)
+                        dongia = self.func_thongtin_duoctru_hocphi_tien(dongia,ca, hocphi)
             if soca_hocbu>0:
                 soca = soca - soca_hocbu
                 tien = soca * ca_hoc.tien
@@ -766,7 +772,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                                       ,int(tyle)
                                                                       ,values
                                                                       ,ca_canthieps
-                                                                      ,ca2thus)
+                                                                      ,ca2thus
+                                                                      ,ngay_dihoc_cosos)
 
 
     def func_hoantra_hocphi_do_diemdanh_nghi_theo_loai(self,lydo,hocphi,tyle_hoantra,thu_bantrus,ngaynghis,ngay_dihoc_kehoachs,ngay_dihoc_cosos):
