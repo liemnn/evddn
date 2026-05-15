@@ -18,7 +18,7 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
     cccd = fields.Char(string="Số định danh cá nhân(nếu có)")
     avatar = fields.Binary(string="Ảnh đại diện")
     ngaysinh = fields.Date(string="Ngày sinh",required=True)
-    tuoi = fields.Char(string="Tuổi", compute="_compute_hocsinh_tuoi",store=True)
+    tuoi = fields.Char(string="Tuổi", compute="_compute_hocsinh_tuoi",store=False)
     gioitinh  = fields.Selection([("0","Nữ"),("1","Nam")],string="Giới tính",required=True)
     chieucao = fields.Integer(string="Chiều cao(cm)")
     cannang = fields.Integer(string="Cân nặng(kg)")
@@ -163,24 +163,46 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
 
 
 
-    @api.depends('ngaysinh')
+
     def _compute_hocsinh_tuoi(self):
         now = datetime.today()
         for hs in self:
             if hs.ngaysinh:
-                tong_thang = (now.year - hs.ngaysinh.year) * 12 + (now.month - hs.ngaysinh.month)
-                if now.day < now.day:
+                # 1. Tính tổng số tháng chênh lệch cơ bản
+                nam_diff = now.year - hs.ngaysinh.year
+                thang_diff = now.month - hs.ngaysinh.month
+
+                # 2. Hiệu chỉnh nếu ngày hiện tại chưa đến ngày sinh trong tháng
+                # (Đây là chỗ code cũ của bạn bị sai: if now.day < now.day)
+                ngay_hien_tai = now.day
+                ngay_sinh = hs.ngaysinh.day
+
+                # Tính tổng tháng thực tế
+                tong_thang = (nam_diff * 12) + thang_diff
+
+                if ngay_hien_tai < ngay_sinh:
                     tong_thang -= 1
+
+                # 3. Chia lại để lấy năm và tháng
+                # Trường hợp đặc biệt: Nếu ngày sinh là cuối tháng (vd: 31/05 mà nay 30/06)
+                # thì tong_thang có thể ra số âm nếu không cẩn thận.
+                if tong_thang < 0:
+                    hs.tuoi = "Mới sinh"
+                    continue
+
                 nam = tong_thang // 12
                 thang = tong_thang % 12
-                tuoi = ""
-                if nam >=1:
-                    tuoi += str(nam) +" tuổi "
-                if thang >=1:
-                    tuoi += str(thang) +" tháng"
-                hs.tuoi=tuoi
+
+                # 4. Xây dựng chuỗi hiển thị
+                parts = []
+                if nam >= 1:
+                    parts.append(f"{nam} tuổi")
+                if thang >= 1:
+                    parts.append(f"{thang} tháng")
+
+                hs.tuoi = " ".join(parts) if parts else "Dưới 1 tháng"
             else:
-                hs.tuoi ='0'
+                hs.tuoi = "0"
 
     @api.model_create_multi
     def create(self, vals_list):
