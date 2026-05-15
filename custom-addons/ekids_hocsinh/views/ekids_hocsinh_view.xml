@@ -32,8 +32,9 @@
                     <field name="gioitinh"/>
                     <field name="ngaysinh"/>
                     <field name="tuoi"/>
-                    <field name="ngay_nhaphoc" string="Ngày nhập học"/>
-                     <field name="ngay_nghihoc" string="Ngày nghỉ"/>
+                    <field name="ngay_nhaphoc" string="Nhập học" width="100"/>
+                    <field name="thoigian_hoc" string="Thời gian học"/>
+                    <field name="ngay_nghihoc" string="Ngày nghỉ" optional="hide"/>
                     <field name="dm_xa_id"/>
                     <field name="is_hoanthien_hoso" width="70"
                            widget="boolean_toggle" readonly="true"/>
@@ -376,6 +377,11 @@
                                     <div class="kh-data-row">
                                         <div class="kh-data-label"><i class="fa fa-calendar-check-o text-muted"></i> Ngày bắt đầu học</div>
                                         <div class="kh-data-value"><field name="ngay_nhaphoc" required="1"/></div>
+                                    </div>
+
+                                    <div class="kh-data-row">
+                                        <div class="kh-data-label"><i class="fa fa-history text-muted"></i> Thời gian theo học</div>
+                                        <div class="kh-data-value"><field name="thoigian_hoc" required="1"/></div>
                                     </div>
 
                                     <div class="kh-data-row">

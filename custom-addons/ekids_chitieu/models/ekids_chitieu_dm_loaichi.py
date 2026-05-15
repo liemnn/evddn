@@ -8,8 +8,7 @@ class LoaiChiTieu(models.Model):
     sequence = fields.Integer(string="STT", default=1)
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở",required=True,ondelete="restrict")
     name = fields.Char(string='Tên',required=True)
-    loai = fields.Selection([("0", "Chi"), ("1", "Thu")
-                                     ], string="Phân loại",required=True,default="0")
+    loai = fields.Selection([("0", "Chi"), ("1", "Thu khác (ngoài học phí)")], string="Phân loại",required=True,default="0")
 
     desc = fields.Html(string="Mô tả")
     trangthai = fields.Selection([("0", "Không hoạt động")

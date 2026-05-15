@@ -31,90 +31,244 @@
             </field>
         </record>
 
+        <record id="ekids_hocsinh.hocphi_dm_ca_kanban" model="ir.ui.view">
+        <field name="name">Dm Ca Kanban</field>
+        <field name="model">ekids.hocphi_dm_ca</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="id"/>
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="tien"/>
+                <field name="desc"/>
+                <field name="is_hoantien_khi_nghi"/>
+                <field name="is_giam_hocphi"/>
+                <field name="trangthai"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click p-3 bg-white border shadow-sm" style="border-radius: 8px; margin-bottom: 8px; display: flex; flex-direction: column; justify-content: space-between;">
+
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <strong class="text-dark flex-grow-1 pe-2" style="font-size: 15px; line-height: 1.3;">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="flex-shrink-0">
+                                        <field name="trangthai" widget="badge" decoration-success="trangthai == '1'" decoration-danger="trangthai == '0'"/>
+                                    </div>
+                                </div>
+
+                                <div t-if="record.desc.raw_value" class="text-muted mb-3 text-truncate" style="font-size: 12px;" title="Ghi chú">
+                                    <i class="fa fa-info-circle me-1 text-secondary"/> <field name="desc"/>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-end pt-2 mt-auto" style="border-top: 1px solid #f0f0f0;">
+
+                                <div class="text-primary fw-bold" style="font-size: 16px;">
+                                    <field name="tien"/> <span class="text-muted fw-normal" style="font-size: 11px;">vnđ</span>
+                                </div>
+
+                                <div class="d-flex flex-wrap gap-1 justify-content-end">
+                                    <span t-if="record.is_hoantien_khi_nghi.raw_value" class="badge bg-light border text-success" style="font-size: 10px; padding: 4px 6px;">
+                                        <i class="fa fa-undo me-1"/>Được hoàn tiền khi nghỉ
+                                    </span>
+                                    <span t-if="record.is_giam_hocphi.raw_value" class="badge bg-light border text-info" style="font-size: 10px; padding: 4px 6px;">
+                                        <i class="fa fa-arrow-down me-1"/>Được áp dụng giảm học phí
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
         <record model="ir.ui.view" id="ekids_hocsinh.hocphi_dm_ca_form">
-            <field name="name">Danh mục ca</field>
-            <field name="model">ekids.hocphi_dm_ca</field>
-            <field name="arch" type="xml">
-                <form string="Cơ sở">
-                    <sheet>
+        <field name="name">Danh mục ca</field>
+        <field name="model">ekids.hocphi_dm_ca</field>
+        <field name="arch" type="xml">
+            <form string="Cơ sở">
+                <sheet>
+                    <field name="coso_id" invisible="1"/>
 
-                        <group>
-                            <field name="name"/>
-                        </group>
-                        <group col="4">
-                            <group>
-                                <field name="tien"/>
-                            </group>
-                             <group>
-                                <field name="is_tien_trongoi" widget="boolean_toggle"/>
-                            </group>
+                    <style>
+                        .ekids_custom_card { background: #ffffff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 20px; height: 100%; border: 1px solid #f1f5f9; }
+                        .ekids_card_title { color: #1e3a8a; font-size: 13px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; }
+                        .ekids_card_title i { color: #6366f1; margin-right: 8px; font-size: 16px; }
+                        .setting-box { background: #f8fafc; border-radius: 8px; padding: 10px 15px; margin-bottom: 12px; border: 1px solid #e2e8f0; }
+                        .ekids_toggle_row { border: 1px dashed #cbd5e1; background-color: #ffffff; border-radius: 8px; padding: 10px; }
+                    </style>
 
-                            <group>
-                                <field name="is_hoantien_khi_nghi" widget="boolean_toggle"/>
-                            </group>
-                            <group>
-                                 <field name="is_giam_hocphi" widget="boolean_toggle"/>
-                            </group>
-                        </group>
-                        <group>
-                            <field name="desc"/>
-                            <field name="trangthai"/>
-                            <field name="is_apdung_rieng" widget="boolean_toggle"/>
-                        </group>
+                    <div class="oe_title mb-4">
+                        <label for="name" class="oe_edit_only fw-bold" string="Tên loại hình [Ca] can thiệp / Dịch vụ"/>
+                        <h1 class="text-primary fw-bolder">
+                            <field name="name" placeholder="VD: Dịch vụ đưa đón trẻ..."/>
+                        </h1>
+                    </div>
 
-                        <group col="3" invisible="is_apdung_rieng ==False">
-                            <separator string="1.GIÁO VIÊN và THỜI GIAN (nếu có)"/>
-                             <group>
-                                 <field name="giaovien_id" domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
-                            </group>
-                            <group>
-                                 <field name="tu" widget="flatpickr_time" placeholder="HH:MM"/>
-                            </group>
-                            <group>
-                                 <field name="den" widget="flatpickr_time" placeholder="HH:MM"/>
-                            </group>
-                        </group>
-                         <group col="1" invisible="is_apdung_rieng ==False">
-                             <separator string="2.ÁP DỤNG CHO CÁC NGÀY TRONG TUẦN"/>
-                             <group col="7">
-                                 <group>
-                                     <field name="t2" widget="boolean_toggle"/>
-                                 </group>
-                                 <group>
-                                     <field name="t3" widget="boolean_toggle"/>
-                                 </group>
-                                 <group>
-                                     <field name="t4" widget="boolean_toggle"/>
-                                 </group>
-                                 <group>
-                                     <field name="t5" widget="boolean_toggle"/>
-                                 </group>
-                                 <group>
-                                     <field name="t6" widget="boolean_toggle"/>
-                                 </group>
-                                 <group>
-                                     <field name="t7" widget="boolean_toggle"/>
-                                 </group>
-                                 <group>
-                                     <field name="t8" widget="boolean_toggle"/>
-                                 </group>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="ekids_custom_card">
+                                <div class="ekids_card_title">
+                                    <i class="fa fa-pencil-square-o"/> Thông tin chung &amp; Định mức
+                                </div>
+                                <group>
+                                    <field name="tien" string="Số tiền (VNĐ)" class="fw-bold text-success fs-4"/>
+                                    <field name="desc" string="Ghi chú" placeholder="Nhập mô tả nội bộ..."/>
+                                </group>
 
-                             </group>
-                         </group>
+                                <div class="setting-box d-flex justify-content-between align-items-center mt-3" style="background: #fff5f5; border-color: #feb2b2;">
+                                    <span class="fw-bold text-danger"><i class="fa fa-users me-2"/>Thiết lập [Riêng] cho học sinh</span>
+                                    <field name="is_apdung_rieng" widget="boolean_toggle" nolabel="1"/>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="col-md-6 mb-3">
+                            <div class="ekids_custom_card">
+                                <div class="ekids_card_title">
+                                    <i class="fa fa-cogs"/> Trạng thái &amp; Cấu hình
+                                </div>
 
-                        <notebook invisible="is_apdung_rieng ==False">
-                            <page name="hocsinh_ids" string="DANH SÁCH HỌC SINH ÁP DỤNG">
-                                <field name="hocsinh_ids"
-                                       domain="[('coso_id', '=', coso_id),('trangthai', '=', '1')]"
-                                       context="{'default_coso_id': coso_id}"/>
-                            </page>
-                        </notebook>
+                                <group>
+                                    <field name="trangthai" string="Trạng thái" widget="badge" decoration-success="trangthai in ('1', 'active', 'Đang hoạt động')"/>
+                                </group>
 
-                    </sheet>
-                </form>
-            </field>
-        </record>
+                                <div class="setting-box d-flex justify-content-between align-items-center mt-3">
+                                    <span class="fw-bold" style="color: #334155;">Thu trọn gói tháng</span>
+                                    <field name="is_tien_trongoi" widget="boolean_toggle" nolabel="1"/>
+                                </div>
+
+                                <div class="setting-box d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold" style="color: #334155;">Được tính toán giảm [học phí] (nếu có)</span>
+                                    <field name="is_giam_hocphi" widget="boolean_toggle" nolabel="1"/>
+                                </div>
+
+                                <div class="setting-box">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="fw-bold" style="color: #334155;">Sẽ [Hoàn tiền] theo quy định khi nghỉ</span>
+                                        <field name="is_hoantien_khi_nghi" widget="boolean_toggle" nolabel="1"/>
+                                    </div>
+                                    <div invisible="is_hoantien_khi_nghi" class="mt-3 border-top pt-2">
+                                        <group>
+                                            <field name="tyle_hoan_rieng" class="text-danger fw-bold"/>
+                                        </group>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2" invisible="not is_apdung_rieng">
+                        <div class="col-12">
+                            <div class="ekids_custom_card" style="padding: 0; overflow: hidden;">
+
+                                <div class="p-3" style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                                    <div class="row">
+
+                                        <div class="col-md-6 border-end">
+                                            <div class="fw-bold mb-3 text-muted" style="font-size: 0.85rem;"><i class="fa fa-clock-o me-1"/> THỜI GIAN &amp; NGƯỜI PHỤ TRÁCH</div>
+                                            <group>
+                                                <field name="giaovien_id" string="Giáo viên" domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
+                                                <label for="tu" string="Khung giờ"/>
+                                                <div class="o_row">
+                                                    <field name="tu" widget="flatpickr_time" placeholder="HH:MM"/>
+                                                    <i class="fa fa-long-arrow-right mx-2 text-muted" aria-label="Đến"/>
+                                                    <field name="den" widget="flatpickr_time" placeholder="HH:MM"/>
+                                                </div>
+                                            </group>
+                                        </div>
+
+                                        <div class="col-md-6 pl-md-4">
+                                            <div class="fw-bold mb-2 text-muted" style="font-size: 0.85rem;"><i class="fa fa-calendar-check-o me-1"/> ÁP DỤNG HỌC CÁC NGÀY TRONG TUẦN</div>
+                                            <div class="ekids_toggle_row d-flex justify-content-between align-items-center mt-3">
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <span class="fw-bold text-dark mb-1" style="font-size:0.75rem;">T2</span>
+                                                    <field name="t2" widget="boolean_toggle" nolabel="1"/>
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <span class="fw-bold text-dark mb-1" style="font-size:0.75rem;">T3</span>
+                                                    <field name="t3" widget="boolean_toggle" nolabel="1"/>
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <span class="fw-bold text-dark mb-1" style="font-size:0.75rem;">T4</span>
+                                                    <field name="t4" widget="boolean_toggle" nolabel="1"/>
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <span class="fw-bold text-dark mb-1" style="font-size:0.75rem;">T5</span>
+                                                    <field name="t5" widget="boolean_toggle" nolabel="1"/>
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <span class="fw-bold text-dark mb-1" style="font-size:0.75rem;">T6</span>
+                                                    <field name="t6" widget="boolean_toggle" nolabel="1"/>
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <span class="fw-bold text-dark mb-1" style="font-size:0.75rem;">T7</span>
+                                                    <field name="t7" widget="boolean_toggle" nolabel="1"/>
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <span class="fw-bold text-danger mb-1" style="font-size:0.75rem;">CN</span>
+                                                    <field name="t8" widget="boolean_toggle" nolabel="1"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <notebook>
+                                    <page name="hocsinh_ids" string="DANH SÁCH HỌC SINH ĐANG THU KHOẢN NÀY">
+                                        <field name="hocsinh_ids"
+                                               domain="[('coso_id', '=', coso_id),('trangthai', '=', '1')]"
+                                               context="{'default_coso_id': coso_id}"
+                                               class="m-0 p-0 border-0">
+
+                                            <list>
+                                                <field name="name" string="Họ và tên"/>
+                                                <field name="bietdanh" string="Biệt danh"/>
+                                                <field name="gioitinh" string="Giới tính"/>
+                                                <field name="ngaysinh" string="Ngày sinh"/>
+                                                <field name="trangthai" widget="badge" decoration-success="trangthai == '1'"/>
+                                            </list>
+
+                                            <kanban>
+                                                <field name="name"/>
+                                                <field name="bietdanh"/>
+                                                <field name="trangthai"/>
+                                                <templates>
+                                                    <t t-name="kanban-box">
+                                                        <div class="oe_kanban_global_click d-flex align-items-center p-2 border-bottom">
+                                                            <div class="oe_kanban_details">
+                                                                <strong class="o_kanban_record_title text-primary"><field name="name"/></strong>
+                                                                <div t-if="record.bietdanh.value" class="small text-muted">
+                                                                    Biệt danh: <field name="bietdanh"/>
+                                                                </div>
+                                                                <div class="mt-1">
+                                                                    <field name="trangthai" widget="badge" decoration-success="trangthai == '1'"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </templates>
+                                            </kanban>
+
+                                        </field>
+                                    </page>
+                                </notebook>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     </data>
 </odoo>

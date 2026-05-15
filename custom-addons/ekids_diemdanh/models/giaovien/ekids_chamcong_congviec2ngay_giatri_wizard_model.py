@@ -5,6 +5,16 @@ from datetime import date
 from odoo.exceptions import ValidationError
 import calendar
 
+import logging
+_logger = logging.getLogger(__name__)
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import giaovien_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
 
 
 class ChamCongCongViec2NgayGiaTriWizard(models.TransientModel):
@@ -14,6 +24,7 @@ class ChamCongCongViec2NgayGiaTriWizard(models.TransientModel):
     congviec2thang_giatri_id = fields.Many2one("ekids.chamcong_congviec2thang_giatri", required=True,ondelete="cascade")
     ngay =fields.Date(string="Ngày")
     giatri =fields.Float(string="Giá trị",digits=(6, 1),default=1)
+
 
     def action_capnhat_ketqua_congviec2ngay_giatri(self):
         context = self.env.context

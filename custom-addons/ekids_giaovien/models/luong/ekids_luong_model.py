@@ -5,6 +5,19 @@ import calendar
 import uuid
 from .ekids_luong_func_abstractmodel import LuongFuncAbstractModel
 from .ekids_luong_formula_abstractmodel import LuongFolmulaAbstractModel
+
+import logging
+_logger = logging.getLogger(__name__)
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import giaovien_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
 class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     _name = 'ekids.luong'
     _description = 'Luong Giáo viên'
@@ -18,7 +31,7 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     nam_id = fields.Many2one('ekids.luong_nam',related="thang_id.nam_id", string='Năm', required=True, ondelete="restrict")
 
     trangthai = fields.Selection([("-1", "Đang tính")
-                                    ,("0", "Đã rà soát")
+                                    ,("0", "Đã kiểm tra")
                                    , ("1", "Đã nhận lương")],default="-1")
     is_show_tinhtoan_lai = fields.Boolean(compute="_compute_is_show_tinhtoan_lai")
 
@@ -73,6 +86,16 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     # làm access token  để chia sẻ
     access_token = fields.Char(string="Thẻ truy cập nhanh")
     share_url = fields.Char("Chi sẻ Phiếu Lương(URL)", compute="_compute_share_url",store=True)
+
+    is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
+
+
+    def _compute_is_dl_locked(self):
+        for record in self:
+            coso = record.coso_id
+            is_dl_locked = coso_util.func_is_dl_luong_locked(self,coso,record.trangthai)
+            record.is_dl_locked =is_dl_locked
+
 
     @api.depends("nhatruong_chitra_ids.tien", "nhatruong_chitra_ids.loai")
     def compute_nhatruong_chi(self):
@@ -271,3 +294,27 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
 
             }
         }
+
+    def write(self, vals):
+        if 'trangthai' in vals:
+            is_dl_luong_locked =coso_util.func_is_dl_luong_locked(self,self.coso_id,self.trangthai)
+            if is_dl_luong_locked == True:
+                raise UserError(
+                    " Bảng [Lương] ở trạng thái này không cho phép sửa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
+
+        return super(Luong, self).write(vals)
+
+
+
+    def unlink(self):
+        # Dùng vòng lặp để duyệt qua tất cả các dòng được chọn xóa
+        for rec in self:
+            # Thay thế self bằng rec để lấy chính xác dữ liệu của từng dòng
+            is_dl_luong_locked = coso_util.func_is_dl_luong_locked(rec, rec.coso_id, rec.trangthai)
+
+            if is_dl_luong_locked == True:
+                raise UserError(
+                    " Bảng [Lương] ở trạng thái này không cho phép xóa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
+
+        # Sau khi kiểm tra toàn bộ hợp lệ mới tiến hành lệnh xóa của hệ thống
+        return super().unlink()

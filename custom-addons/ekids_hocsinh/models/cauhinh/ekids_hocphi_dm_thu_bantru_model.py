@@ -21,6 +21,7 @@ class DanhMucThuBanTru(models.Model):
     desc = fields.Char(string="Mô tả")
     tien = fields.Float(string='Số tiền(vnđ)', digits=(10, 0),required=True)
     is_hoantien_khi_nghi = fields.Boolean(string="Sẽ [Hoàn tiền] theo quy định khi [Nghỉ]", default=True)
+    tyle_hoan_rieng = fields.Integer(string="% Tỷ lệ [Hoàn tiền] riêng cho khoản này(nếu có)", default=0)
 
     is_giam_hocphi = fields.Boolean(string="Được tính toán giảm [học phí] (nếu có)", default=True)
 

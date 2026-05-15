@@ -7,6 +7,19 @@ from .ekids_hocphi_thang_abstractmodel import HocPhiThangAbstractModel
 import uuid
 import calendar
 
+import logging
+_logger = logging.getLogger(__name__)
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import giaovien_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
 class HocPhi(models.Model,HocPhiThangAbstractModel):
     _name = 'ekids.hocphi'
     _description = 'Học phí của học sinh'
@@ -100,6 +113,13 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
     is_show_vi_thanhtoan = fields.Boolean(compute="_compute_is_show_vi_thanhtoan")
 
+    is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
+
+    def _compute_is_dl_locked(self):
+        for record in self:
+            coso = record.coso_id
+            is_dl_locked = coso_util.func_is_dl_hocphi_locked(self, coso, record.trangthai)
+            record.is_dl_locked = is_dl_locked
 
     def _compute_is_show_vi_thanhtoan(self):
         for record in self:
@@ -433,14 +453,16 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
     #kiểm tra các trạng thái chuyển qua
     def write(self, vals):
         # 1. Kiểm tra xem người dùng có đang cố gắng thay đổi trường 'state' hay không
+        coso = self.coso_id
         if 'trangthai' in vals:
+            #Step1 Kiểm tra quyền chuyển trạng thái có hợp lệ
+            coso_util.func_is_chuyen_trangthai(self,coso,self.trangthai,vals['trangthai'])
+            #Step2: tinh toán cảnh báo
             new_state = vals.get('trangthai')
-
             # Quét qua từng bản ghi đang được cập nhật
             for rec in self:
                 # 2. Nếu trạng thái ĐÍCH ĐẾN là "Đã xuất hóa đơn"
                 if new_state == '3':
-
                     # 3. Kiểm tra trạng thái HIỆN TẠI (trước khi lưu)
                     if rec.trangthai not in ['10', '11','12']:
                         raise UserError("CẢNH BÁO: Học sinh chưa đóng tiền, không thể xuất hóa đơn!")
@@ -451,13 +473,26 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                     vals['ngay_dong_hocphi'] = False
 
 
-                # (Anh có thể viết thêm các luật elif khác ở đây cho các trạng thái khác)
-                # elif new_state == 'da_dong_tm':
-                #     if rec.state != 'da_kiem_tra':
-                #         raise UserError("Phải kiểm tra xong mới được thu tiền!")
 
         # 4. Nếu vượt qua mọi bài kiểm tra, gọi hàm super() để Odoo thực hiện lưu vào Database
         return super().write(vals)
+
+
+
+    def unlink(self):
+        # Duyệt qua từng bản ghi học phí được chọn để xóa
+        for rec in self:
+            # Thay self bằng rec để kiểm tra trạng thái của từng dòng riêng biệt
+            is_dl_locked = coso_util.func_is_dl_hocphi_locked(rec, rec.coso_id, rec.trangthai)
+
+            if is_dl_locked == True:
+                raise UserError(
+                    " Bảng [Học phí] ở trạng thái này không cho phép xóa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
+
+        # Vượt qua hết các kiểm tra thì mới cho phép xóa
+        return super().unlink()
+
+
 
 
 

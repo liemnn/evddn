@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Cấu hình Khoản thu Học phí</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #10B981; --c-green-dark: #15803D; --c-red: #EF4444; --c-blue-light: #DBEAFE; --c-orange: #F59E0B; --c-slate: #475569;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR --- */
+        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 8px 16px; border-radius: 8px; transition: 0.2s; background: #EFF6FF; border: 1px solid #BFDBFE;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+        .header-title-right { font-weight: 700; font-size: 1rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; }
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%;}
+        .doc-container { max-width: 1000px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h1 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        .doc-section { margin-bottom: 50px; }
+        .doc-section h2 { font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; background: #F1F5F9; padding: 12px 20px; border-radius: 8px; border-left: 5px solid var(--primary);}
+        .doc-section h2 .step-badge { background: var(--primary); color: white; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; border-radius: 8px; font-size: 1.1rem; flex-shrink: 0; font-weight: 900;}
+
+        .doc-content { font-size: 1.05rem; color: #334155; line-height: 1.7; }
+        .doc-content p { margin-bottom: 15px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 20px; }
+        .doc-content li { margin-bottom: 10px; }
+
+        /* --- MOCKUP CSS GIAO DIỆN CẤU HÌNH --- */
+        .ui-mockup-box { background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin: 20px 0; overflow-x: auto;}
+
+        .mock-form { background: white; border: 1px solid #CBD5E1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); max-width: 800px; margin: 0 auto;}
+        .mock-form-header { background: #F8FAFC; padding: 15px 20px; font-weight: 800; color: #1E293B; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center;}
+        .mock-form-body { padding: 25px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 700; color: #334155; margin-bottom: 8px; font-size: 0.95rem;}
+        .form-control { width: 100%; border: 1px solid #CBD5E1; padding: 10px 15px; border-radius: 6px; font-size: 0.95rem; color: var(--text-main); outline: none;}
+        .form-control:focus { border-color: var(--primary); }
+        .form-select { width: 100%; border: 1px solid #CBD5E1; padding: 10px 15px; border-radius: 6px; font-size: 0.95rem; color: var(--text-main); background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748B'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 10px center/20px; appearance: none; outline: none;}
+
+        .form-row { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;}
+        .form-col { flex: 1; min-width: 200px;}
+
+        /* Dashboard Card */
+        .tuition-dash-card { width: 380px; background: white; border-radius: 16px; padding: 30px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin: 0 auto; max-width: 100%; text-align: center; border: 1px solid var(--border-color);}
+        .tuition-dash-card .dash-icon { width: 70px; height: 70px; background: #F8FAFC; border-radius: 16px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #CBD5E1; border: 1px solid #E2E8F0; }
+        .tuition-dash-card h3 { font-size: 1.4rem; color: #1E3A8A; margin-bottom: 5px; font-weight: 800;}
+        .tuition-dash-card p { font-size: 0.9rem; color: var(--text-sub); margin-bottom: 25px; font-style: italic;}
+        .btn-dash { display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 12px; padding: 12px 15px; font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; cursor: pointer; transition: 0.2s; }
+        .btn-dash.active { background: #4F46E5; color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); }
+        .btn-dash.outline { background: white; color: #1E293B; border: 1px solid #CBD5E1; }
+
+        /* Toolbar & Table */
+        .mock-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: white; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px;}
+        .mock-btn-group { display: flex; gap: 8px; align-items: center; }
+        .mock-btn { padding: 6px 15px; border-radius: 4px; font-size: 0.85rem; font-weight: 700; cursor: pointer; border: 1px solid transparent;}
+        .btn-teal { background: #588CA8; color: white; }
+        .mock-search { background: white; border: 1px solid #CBD5E1; padding: 6px 12px; border-radius: 4px; color: var(--text-sub); font-size: 0.85rem; width: 220px; display: flex; align-items: center; gap: 8px;}
+        .filter-tag { background: #7DD3FC; color: #0C4A6E; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;}
+
+        .table-wrapper { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid var(--border-color); background: white;}
+        .mock-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 900px;}
+        .mock-table th { padding: 12px 10px; background: #F8FAFC; color: var(--text-sub); font-weight: 700; border-bottom: 1px solid var(--border-color); text-align: left; white-space: nowrap;}
+        .mock-table td { padding: 12px 10px; border-bottom: 1px solid #E2E8F0; text-align: left; color: var(--text-main); vertical-align: middle;}
+        .mock-table tr:hover td { background: #F1F5F9; }
+        .status-active { color: var(--c-green); font-weight: 600; }
+
+        /* Nút gạt IOS style */
+        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; margin-bottom: 10px;}
+        .toggle-info { font-size: 0.95rem; font-weight: 600; color: #1E293B; }
+        .toggle-info small { display: block; font-weight: 400; color: #64748B; font-size: 0.8rem; margin-top: 2px;}
+        .toggle-ios { display: inline-block; width: 44px; height: 24px; background: #CBD5E1; border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s; flex-shrink: 0;}
+        .toggle-ios::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: white; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.3); transition: 0.3s;}
+        .toggle-ios.active { background: var(--c-green); }
+        .toggle-ios.active::after { transform: translateX(20px); }
+
+        /* Nút gạt nhỏ trong table */
+        .toggle-ios-sm { display: inline-block; width: 34px; height: 18px; background: #CBD5E1; border-radius: 20px; position: relative; transition: 0.3s;}
+        .toggle-ios-sm::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: white; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.3); transition: 0.3s;}
+        .toggle-ios-sm.active { background: var(--c-green); }
+        .toggle-ios-sm.active::after { transform: translateX(16px); }
+
+        /* Thiết kế 2 cột cho form chi tiết */
+        .form-panels-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px;}
+        .form-panel { background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);}
+        .panel-title { font-size: 0.95rem; font-weight: 800; color: #1E3A8A; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; text-transform: uppercase;}
+
+        .form-row-line { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid #F1F5F9; padding-bottom: 10px;}
+        .form-label { font-weight: 600; color: #1E293B; font-size: 0.9rem; width: 120px; flex-shrink: 0; padding-top: 5px;}
+        .form-value { flex: 1; color: var(--text-sub); font-size: 0.9rem; line-height: 1.5;}
+        .val-text { border-bottom: 1px solid #CBD5E1; padding-bottom: 5px; display: block; width: 100%;}
+        .val-money { color: var(--c-green); font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid var(--c-green); padding-bottom: 5px; display: block; width: 100%;}
+
+        .alert-row-red { background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 20px;}
+        .alert-row-red span { color: #DC2626; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;}
+
+        /* Tab Học sinh */
+        .student-tab-wrapper { padding: 0 20px 20px; }
+        .student-tab-header { display: inline-block; padding: 12px 20px; border-top: 2px solid var(--c-green); border-right: 1px solid var(--border-color); border-left: 1px solid var(--border-color); font-weight: 700; color: var(--c-green); font-size: 0.85rem; text-transform: uppercase; border-radius: 6px 6px 0 0; background: white; margin-bottom: -1px; position: relative; z-index: 2;}
+        .tab-nav { display: inline-block; padding: 12px 25px; border-top: 2px solid var(--c-green); border-right: 1px solid var(--border-color); border-left: 1px solid var(--border-color); font-weight: 700; color: var(--c-green); font-size: 0.85rem; text-transform: uppercase; border-radius: 6px 6px 0 0; background: white; margin-bottom: -1px; position: relative; z-index: 2; margin-left: 20px;}
+
+        .alert-box { display: flex; gap: 15px; padding: 18px; border-radius: 12px; margin: 25px 0; background: var(--c-blue-light); border: 1px solid #BFDBFE; align-items: flex-start;}
+        .alert-box.warning { background: #FEFCE8; border-color: #FDE047; }
+        .alert-box i { font-size: 1.5rem; color: var(--primary); margin-top: 2px; }
+        .alert-box.warning i { color: var(--c-orange); }
+        .alert-box div h4 { font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
+        .alert-box div p { font-size: 0.95rem; color: #334155; margin: 0; line-height: 1.6;}
+
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 15px; }
+            .content-area { padding: 15px; }
+            .doc-container { padding: 20px; border-radius: 12px; }
+            .form-panels-grid { grid-template-columns: 1fr; gap: 15px; padding: 15px;}
+            .form-row, .form-row-line { flex-direction: column; gap: 5px; }
+            .form-label { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
+
+        </div>
+        <div class="top-right">
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phần B. Hồ sơ học sinh &amp; Học phí <i class="fas fa-chevron-right"></i> <span>Cấu hình học phí</span>
+                </div>
+
+                <div class="doc-header">
+                    <h1>Hướng dẫn: Cấu hình các Khoản thu &amp; Dịch vụ Can thiệp</h1>
+                    <p>Mục lục này giúp Ban quản lý định nghĩa tất cả các loại học phí, dịch vụ và chính sách ưu đãi của trung tâm. Việc thiết lập đúng ngay từ đầu sẽ giúp hệ thống tự động tính toán chính xác số tiền cần thu của phụ huynh vào cuối tháng.</p>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">A</span> Thiết lập Danh mục các khoản thu khác</h2>
+                    <div class="doc-content">
+                        <p>Dành cho các khoản thu như: <strong>Tiền ăn bán trú, Đồ dùng học tập, Cơ sở vật chất, Điều hòa...</strong></p>
+
+                        <h4 style="color: #1E3A8A; margin: 20px 0 10px;">Bước 1: Lựa chọn chức năng Cấu hình</h4>
+                        <p>Vào phân hệ <strong>Học phí</strong> (hoặc Học sinh) <i class="fas fa-arrow-right"></i> Chọn menu <strong>Cấu hình</strong> <i class="fas fa-arrow-right"></i> Chọn <strong>Danh mục các khoản thu của [Học sinh]</strong>.</p>
+
+                        <div class="ui-mockup-box" style="display: flex; justify-content: center;">
+                            <div class="tuition-dash-card">
+                                <div class="dash-icon"><i class="fas fa-camera"></i></div>
+                                <h3>Tiền tiểu học</h3>
+                                <p>(Thiết lập thông tin phục vụ quản lý học phí/học sinh của trung tâm)</p>
+                                <div class="btn-dash active"><i class="fas fa-list-ul"></i> Danh mục các khoản thu của [Học sinh]</div>
+                                <div class="btn-dash outline"><i class="fas fa-university"></i> Danh mục [Ca/Lớp/Dịch vụ] can thiệp</div>
+                                <div class="btn-dash outline"><i class="fas fa-gift"></i> Đối tượng chính sách giảm [Học phí]</div>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #1E3A8A; margin: 30px 0 10px;">Bước 2: Xem danh sách & Thêm mới khoản thu</h4>
+                        <p>Hệ thống hiển thị danh sách các khoản thu đang có. Bấm nút <strong>Mới</strong> để tạo một khoản thu, hoặc bấm vào tên khoản thu có sẵn để chỉnh sửa.</p>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="table-wrapper">
+                                <div class="mock-toolbar">
+                                    <div class="mock-btn-group">
+                                        <div class="mock-btn btn-teal">Mới</div>
+                                        <div style="color: #475569; font-size: 0.8rem; line-height: 1.2; text-transform: uppercase;">Cấu hình - Cơ sở<br><strong>Cấu hình - Thu bán trú (Lớp chung) <i class="fas fa-cog"></i></strong></div>
+                                    </div>
+                                </div>
+                                <table class="mock-table">
+                                    <tr>
+                                        <th style="width: 30px;"><input type="checkbox"></th>
+                                        <th>Tên Loại thu</th><th>Loại hình thu</th><th>Số tiền(vnđ)</th><th>Hoàn tiền</th><th>Giảm học phí</th><th>Trạng thái</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td style="font-weight: 600;"><i class="fas fa-grip-vertical" style="color: #CBD5E1; margin-right: 5px;"></i> Bán trú (dưới 3 tuổi)</td>
+                                        <td>Khoản thu = (Số tiền/Ngày đi học quy định...) * Ngày đi...</td>
+                                        <td>2.350.000</td>
+                                        <td><span class="toggle-ios-sm"></span></td>
+                                        <td><span class="toggle-ios-sm active"></span></td>
+                                        <td class="status-active">Đang hoạt động</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #1E3A8A; margin: 30px 0 10px;">Bước 3: Khai báo chi tiết Định mức & Cấu hình</h4>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="form-detail-wrapper">
+                                <div class="form-header">
+                                    <div class="sub-title"><i class="far fa-building"></i> Chuyên biệt Từ Sơn - Trụ sở chính</div>
+                                    <div class="sub-title" style="margin-top: 15px; font-weight: 600; color: #1E293B;">Tên loại hình thu [Bán trú / Dịch vụ]</div>
+                                    <div class="main-title">Bán trú (dưới 3 tuổi)</div>
+                                </div>
+
+                                <div class="form-panels-grid">
+                                    <div class="form-panel">
+                                        <div class="panel-title"><i class="far fa-edit"></i> THÔNG TIN CHUNG & ĐỊNH MỨC</div>
+                                        <div class="form-row-line">
+                                            <div class="form-label">Loại hình thu</div>
+                                            <div class="form-value"><span class="val-text">Khoản thu = (Số tiền/Ngày đi học quy định của tháng) * Ngày đi học thực tế</span></div>
+                                        </div>
+                                        <div class="form-row-line">
+                                            <div class="form-label">Số tiền (VNĐ)</div>
+                                            <div class="form-value"><span class="val-money">2.350.000</span></div>
+                                        </div>
+
+                                        <div class="alert-row-red">
+                                            <span><i class="fas fa-users"></i> Thiết lập [Riêng] cho học sinh áp dụng khoản thu này</span>
+                                            <span class="toggle-ios active"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-panel" style="background: #F8FAFC;">
+                                        <div class="panel-title"><i class="fas fa-cog"></i> TRẠNG THÁI & CẤU HÌNH</div>
+
+                                        <div class="toggle-row" style="background: white;">
+                                            <div class="toggle-info">Là khoản học phí (phục vụ học tập)</div>
+                                            <span class="toggle-ios"></span>
+                                        </div>
+                                        <div class="toggle-row" style="background: white;">
+                                            <div class="toggle-info">Được tính toán giảm [học phí] (nếu có)</div>
+                                            <span class="toggle-ios active"></span>
+                                        </div>
+                                        <div class="toggle-row" style="background: white; border-bottom: none; border-radius: 8px 8px 0 0; margin-bottom: 0;">
+                                            <div class="toggle-info">Sẽ hoàn tiền khi học sinh nghỉ(theo quy định)</div>
+                                            <span class="toggle-ios"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">B</span> Thiết lập Dịch vụ Can thiệp (Ca / Lớp)</h2>
+                    <div class="doc-content">
+                        <p>Dành cho các dịch vụ cốt lõi như: <strong>Ca can thiệp cá nhân (trong/ngoài giờ hành chính), Lớp kỹ năng xã hội, Lớp tiền tiểu học...</strong></p>
+
+                        <h4 style="color: #1E3A8A; margin: 20px 0 10px;">Bước 1: Lựa chọn chức năng Cấu hình Ca/Lớp</h4>
+                        <p>Bạn vào mục <strong>Cấu hình</strong> <i class="fas fa-arrow-right"></i> Chọn <strong>Danh mục [Ca/lớp/dịch vụ] can thiệp</strong>.</p>
+
+                        <div class="ui-mockup-box" style="display: flex; justify-content: center;">
+                            <div class="tuition-dash-card">
+                                <div class="dash-icon"><i class="fas fa-camera"></i></div>
+                                <h3>Tiền tiểu học</h3>
+                                <p>(Thiết lập thông tin phục vụ quản lý học phí/học sinh của trung tâm)</p>
+                                <div class="btn-dash outline"><i class="fas fa-list-ul"></i> Danh mục các khoản thu của [Học sinh]</div>
+                                <div class="btn-dash active"><i class="fas fa-university"></i> Danh mục [Ca/Lớp/Dịch vụ] can thiệp</div>
+                                <div class="btn-dash outline"><i class="fas fa-gift"></i> Đối tượng chính sách giảm [Học phí]</div>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #1E3A8A; margin: 30px 0 10px;">Bước 2: Xem danh sách các Ca/Dịch vụ</h4>
+                        <p>Hệ thống cung cấp sẵn bảng lưới để bạn nhìn tổng quan các Ca. Bấm <strong>Mới</strong> để tạo ca mới, hoặc bấm vào tên ca để sửa định mức.</p>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="table-wrapper">
+                                <div class="mock-toolbar">
+                                    <div class="mock-btn-group">
+                                        <div class="mock-btn btn-teal">Mới</div>
+                                        <div style="color: #475569; font-size: 0.8rem; line-height: 1.2; text-transform: uppercase;">Cấu hình - Cơ sở<br><strong>Cấu hình - CA/LỚP CAN THIỆP <i class="fas fa-cog"></i></strong></div>
+                                    </div>
+                                    <div class="mock-search">
+                                        <i class="fas fa-search"></i>
+                                        <span class="filter-tag"><i class="fas fa-filter"></i> Đang hoạt động <i class="fas fa-times" style="font-size: 0.7rem;"></i></span>
+                                        <span style="opacity: 0.5;">Tìm kiếm...</span>
+                                    </div>
+                                </div>
+                                <table class="mock-table">
+                                    <tr>
+                                        <th style="width: 30px;"><input type="checkbox"></th>
+                                        <th>Tên loại hình [Ca] can thiệp</th><th style="text-align: right;">Số tiền(vnđ)</th><th>Mô tả</th><th style="text-align: center;">Hoàn tiền</th><th style="text-align: center;">Giảm học phí</th><th>Trạng thái</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td style="font-weight: 600; color: var(--text-main);"><i class="fas fa-grip-vertical" style="color: #CBD5E1; margin-right: 5px;"></i> Ca trong (150.000)</td>
+                                        <td style="text-align: right;">150.000</td><td></td>
+                                        <td style="text-align: center;"><span class="toggle-ios-sm active"></span></td>
+                                        <td style="text-align: center;"><span class="toggle-ios-sm active"></span></td>
+                                        <td class="status-active">Đang hoạt động</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td style="font-weight: 600; color: var(--text-main);"><i class="fas fa-grip-vertical" style="color: #CBD5E1; margin-right: 5px;"></i> Ca ngoài (160000)</td>
+                                        <td style="text-align: right;">160.000</td><td></td>
+                                        <td style="text-align: center;"><span class="toggle-ios-sm active"></span></td>
+                                        <td style="text-align: center;"><span class="toggle-ios-sm active"></span></td>
+                                        <td class="status-active">Đang hoạt động</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td style="font-weight: 600; color: var(--text-main);"><i class="fas fa-grip-vertical" style="color: #CBD5E1; margin-right: 5px;"></i> Dịch vụ [Đưa] trẻ đến trường...</td>
+                                        <td style="text-align: right;">10.000</td><td></td>
+                                        <td style="text-align: center;"><span class="toggle-ios-sm active"></span></td>
+                                        <td style="text-align: center;"><span class="toggle-ios-sm active"></span></td>
+                                        <td class="status-active">Đang hoạt động</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td style="font-weight: 600; color: var(--text-main);"><i class="fas fa-grip-vertical" style="color: #CBD5E1; margin-right: 5px;"></i> Ca 6B (150.000)</td>
+                                        <td style="text-align: right;">150.000</td><td></td>
+                                        <td style="text-align: center;"><span class="toggle-ios-sm active"></span></td>
+                                        <td style="text-align: center;"><span class="toggle-ios-sm active"></span></td>
+                                        <td class="status-active">Đang hoạt động</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #1E3A8A; margin: 30px 0 10px;">Bước 3: Form Cấu hình Chi tiết Dịch vụ</h4>
+                        <p>Tại giao diện chi tiết, bạn sẽ khai báo giá tiền của Ca và các tùy chọn tính toán:</p>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="form-detail-wrapper" style="border: 1px solid #CBD5E1;">
+                                <div class="form-header" style="background: #F8FAFC;">
+                                    <div class="sub-title" style="font-weight: 600; color: #1E293B;">Tên loại hình [Ca] can thiệp / Dịch vụ</div>
+                                    <div class="main-title">Ca trong (150.000)</div>
+                                </div>
+
+                                <div class="form-panels-grid">
+                                    <div class="form-panel">
+                                        <div class="panel-title"><i class="far fa-edit"></i> THÔNG TIN CHUNG & ĐỊNH MỨC</div>
+                                        <div class="form-row-line">
+                                            <div class="form-label">Số tiền (VNĐ)</div>
+                                            <div class="form-value"><span class="val-money">150.000</span></div>
+                                        </div>
+                                        <div class="form-row-line" style="border: none;">
+                                            <div class="form-label">Ghi chú</div>
+                                            <div class="form-value"><span class="val-text" style="color: #94A3B8; font-style: italic;">Nhập mô tả nội bộ...</span></div>
+                                        </div>
+
+                                        <div class="alert-row-red" style="background: #FFF1F2; border-color: #FECACA;">
+                                            <span style="color: #EF4444;"><i class="fas fa-users"></i> Thiết lập [Riêng] cho học sinh</span>
+                                            <span class="toggle-ios"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-panel" style="background: #F8FAFC;">
+                                        <div class="panel-title"><i class="fas fa-cog"></i> TRẠNG THÁI & CẤU HÌNH</div>
+                                        <div style="margin-bottom: 20px; font-size: 0.9rem;">
+                                            <span style="font-weight: 600; margin-right: 15px; color: #1E293B;">Trạng thái</span>
+                                            <span style="background: var(--c-green); color: white; padding: 4px 10px; border-radius: 12px; font-weight: 700;">Đang hoạt động</span>
+                                        </div>
+
+                                        <div class="toggle-row" style="background: white;">
+                                            <div class="toggle-info">Thu trọn gói tháng</div>
+                                            <span class="toggle-ios"></span>
+                                        </div>
+                                        <div class="toggle-row" style="background: white;">
+                                            <div class="toggle-info">Được tính toán giảm [học phí] (nếu có)</div>
+                                            <span class="toggle-ios active"></span>
+                                        </div>
+                                        <div class="toggle-row" style="background: white; margin-bottom: 0;">
+                                            <div class="toggle-info">Sẽ [Hoàn tiền] theo quy định khi nghỉ</div>
+                                            <span class="toggle-ios active"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert-box warning">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <h4>Khuyến cáo về Thiết lập "Riêng" đối với Ca can thiệp cá nhân</h4>
+                                <p>Vì mỗi học sinh sẽ có lịch học và số buổi học trong tuần khác nhau, trung tâm <strong>KHÔNG NÊN</strong> bật thiết lập "Riêng" để gán danh sách học sinh ngay tại phần Cấu hình Ca này (Nút gạt màu xám như hình trên). Hãy vào trực tiếp <strong>Hồ sơ học sinh -> Tab Học phí</strong> của từng trẻ để đăng ký Ca và xếp lịch. Việc này đảm bảo hệ thống tính toán chính xác nhất.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">C</span> Thiết lập Chính sách Giảm học phí</h2>
+                    <div class="doc-content">
+                        <p>Dành cho các chính sách ưu đãi: <strong>Con giáo viên, Hộ nghèo, Gia đình đặc biệt khó khăn, Giảm cho gia đình có 2 trẻ cùng học...</strong></p>
+
+                        <h4 style="color: #1E3A8A; margin: 20px 0 10px;">Bước 1: Truy cập danh mục Chính sách giảm</h4>
+                        <p>Bạn chọn nút <strong>Đối tượng chính sách giảm [Học phí]</strong> trên bảng điều khiển Cấu hình Học phí.</p>
+
+                         <div class="ui-mockup-box" style="display: flex; justify-content: center;">
+                            <div class="tuition-dash-card">
+                                <div class="dash-icon"><i class="fas fa-camera"></i></div>
+                                <h3>Tiền tiểu học</h3>
+                                <p>(Thiết lập thông tin phục vụ quản lý học phí/học sinh của trung tâm)</p>
+                                <div class="btn-dash outline"><i class="fas fa-list-ul"></i> Danh mục các khoản thu của [Học sinh]</div>
+                                <div class="btn-dash outline"><i class="fas fa-university"></i> Danh mục [Ca/Lớp/Dịch vụ] can thiệp</div>
+                                <div class="btn-dash active"><i class="fas fa-gift"></i> Đối tượng chính sách giảm [Học phí]</div>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #1E3A8A; margin: 30px 0 10px;">Bước 2: Quản lý danh sách các chính sách</h4>
+                        <p>Hệ thống liệt kê toàn bộ chính sách đang áp dụng. Bạn có thể xem nhanh <strong>Tỷ lệ % giảm</strong> hoặc <strong>Số tiền giảm cố định</strong> của từng chính sách.</p>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="table-wrapper">
+                                <div class="mock-toolbar">
+                                    <div class="mock-btn-teal">Mới</div>
+                                    <div style="font-size: 0.8rem; font-weight: 800; color: #475569;">CẤU HÌNH - DANH MỤC GIẢM HỌC PHÍ <i class="fas fa-cog"></i></div>
+                                    <div class="mock-search"><i class="fas fa-search"></i> Tìm kiếm...</div>
+                                </div>
+                                <table class="mock-table">
+                                    <tr>
+                                        <th style="width: 30px;"><input type="checkbox"></th>
+                                        <th>Tên chính sách giảm</th><th>Phân loại Giảm theo %</th><th style="text-align: right;">Tỷ lệ % giảm</th><th style="text-align: right;">Số tiền(vnđ)</th><th>Trạng thái</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td style="font-weight: 700;">Con của giáo viên / Gia đình đặc biệt khó khăn</td>
+                                        <td><span class="toggle-ios-sm active"></span></td>
+                                        <td style="text-align: right; font-weight: 700;">30</td>
+                                        <td style="text-align: right; color: #94A3B8;">-</td>
+                                        <td class="status-green">Đang hoạt động</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td style="font-weight: 700;">Hộ nghèo/ cận nghèo đặc biệt khó khăn</td>
+                                        <td><span class="toggle-ios-sm active"></span></td>
+                                        <td style="text-align: right; font-weight: 700;">20</td>
+                                        <td style="text-align: right; color: #94A3B8;">-</td>
+                                        <td class="status-green">Đang hoạt động</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #1E3A8A; margin: 30px 0 10px;">Bước 3: Chi tiết thiết lập Tỷ lệ & Áp dụng cho học sinh</h4>
+                        <p>Tại màn hình chi tiết, bạn chọn phương thức giảm (Theo % hoặc theo tiền mặt) và nhập con số cụ thể. Phía dưới là danh sách các học sinh đang được hưởng chính sách này.</p>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="form-detail-wrapper">
+                                <div class="form-header">
+                                    <div style="font-size: 0.85rem; color: #64748B; margin-bottom: 5px;">Tên chính sách giảm</div>
+                                    <div style="font-size: 1.5rem; color: #1E293B; font-weight: 700;">Con của giáo viên/ Gia đình đặc biệt khó khăn</div>
+                                </div>
+
+                                <div class="form-panels-grid">
+                                    <div class="form-panel">
+                                        <div style="font-size: 0.85rem; font-weight: 800; color: #1E3A8A; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                                            <i class="fas fa-edit"></i> THIẾT LẬP TỶ LỆ HOẶC SỐ TIỀN GIẢM
+                                        </div>
+                                        <div class="toggle-row-box">
+                                            <div style="font-size: 0.9rem; font-weight: 600;">Phương thức giảm học phí <br><small style="font-weight: 400; color: #64748B;">Bật (Xanh): Giảm theo tỉ lệ % | Tắt (Xám): Trừ thẳng tiền mặt</small></div>
+                                            <span class="toggle-ios active"></span>
+                                        </div>
+                                        <div class="form-row-line">
+                                            <div class="form-label">Tỷ lệ giảm (%)</div>
+                                            <div class="form-value" style="font-weight: 700; color: var(--c-green); font-size: 1.2rem;">30</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-panel">
+                                        <div style="font-size: 0.85rem; font-weight: 800; color: #1E3A8A; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                                            <i class="fas fa-cog"></i> TRẠNG THÁI VÀ MÔ TẢ
+                                        </div>
+                                        <div class="form-row-line">
+                                            <div class="form-label">Trạng thái</div>
+                                            <div style="flex: 1;"><span class="status-green">Đang hoạt động</span></div>
+                                        </div>
+                                        <div class="form-row-line" style="border: none;">
+                                            <div class="form-label">Mô tả chi tiết</div>
+                                            <div class="form-value" style="color: #94A3B8; font-style: italic;">Ghi chú thêm về điều kiện áp dụng...</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="student-tab-wrapper">
+                                    <div class="tab-nav">DANH SÁCH HỌC SINH ĐƯỢC ÁP DỤNG</div>
+                                    <div class="table-wrapper" style="border-radius: 0 8px 8px 8px;">
+                                        <table class="mock-table" style="margin-bottom: 0;">
+                                            <tr><th>TT Họ và tên</th><th>Biệt danh</th><th>Giới tính</th><th>Ngày sinh</th><th>Phường/Xã</th><th>Trạng thái</th><th></th></tr>
+                                            <tr>
+                                                <td style="font-weight: 700; color: var(--text-main);">1 Đàm Văn Phong</td><td></td><td>Nam</td><td>21/10/2021</td><td>Phường Phù Khê</td>
+                                                <td><span style="background: var(--c-green); color: white; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75rem;">Đang theo học</span></td>
+                                                <td><i class="fas fa-times" style="color: #1E293B; cursor: pointer;"></i></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="7" style="color: var(--primary); font-weight: 700; cursor: pointer; padding: 15px;">Thêm một dòng</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -130,10 +130,15 @@
                      <button name="%(ekids_giaovien.action_phieuluong)d" type="action" string="In Phiếu Lương" class="btn btn-primary"/>
                      <button name="action_xacthuc_tinhlai_luong_giaovien" type="object" invisible="is_show_tinhtoan_lai==False" string="Tính lại Lương" confirm="Khi tính lại Lương dữ liệu cũ sẽ bị xóa. Bạn muốn tính lại chứ?" class="btn btn-secondary"/>
 
-                     <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,1" statusbar_colors='{"-1":"blue","0":"green","1":"red"}' options="{'clickable': true}" groups="ekids_core.tinhluong"/>
+                     <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,1"
+                            statusbar_colors='{"-1":"blue","0":"green","1":"red"}'
+                            options="{'clickable': true}"
+                            readonly="is_dl_locked"
+                            groups="ekids_core.tinhluong"/>
                 </header>
 
                 <sheet>
+                    <field name="is_dl_locked" invisible="1"/>
                     <div class="row align-items-center mb-3 pb-2 border-bottom w-100 mx-0">
                         <div class="col-4 d-flex align-items-baseline ps-0">
                             <span class="fw-bold text-dark me-2" style="font-size: 1.1rem;">Giáo viên:</span>
@@ -252,16 +257,32 @@
 
                     <notebook>
                         <page name="luong_cong_ids" string="1. ĐƯỢC CỘNG (+)">
-                            <field name="luong_cong_ids" context="{'default_luong_id':id ,'default_loai':'1'}" domain="[('luong_id','=',id),('loai','=','1')]"/>
+                            <field name="luong_cong_ids"
+                                   context="{'default_luong_id':id ,'default_loai':'1'}"
+                                   domain="[('luong_id','=',id),('loai','=','1')]"
+                                   readonly="is_dl_locked"
+                            />
                         </page>
                         <page name="luong_tru_ids" string="2. BỊ TRỪ (-)">
-                            <field name="luong_tru_ids"  context="{'default_luong_id': id, 'default_loai': '-1'}"  domain="[('luong_id', '=', id), ('loai', 'in', ['-1', '-2'])]"/>
+                            <field name="luong_tru_ids"
+                                   context="{'default_luong_id': id, 'default_loai': '-1'}"
+                                   domain="[('luong_id', '=', id), ('loai', 'in', ['-1', '-2'])]"
+                                   readonly="is_dl_locked"
+                            />
                         </page>
                         <page name="nhatruong_chitra_ids" string="3. NHÀ TRƯỜNG CHI">
-                            <field name="nhatruong_chitra_ids" context="{'default_luong_id':id ,'default_loai':'0'}" domain="[('luong_id','=',id),('loai','=','0')]"/>
+                            <field name="nhatruong_chitra_ids"
+                                   context="{'default_luong_id':id ,'default_loai':'0'}"
+                                   domain="[('luong_id','=',id),('loai','=','0')]"
+                                   readonly="is_dl_locked"
+                            />
                         </page>
                         <page name="luong_thongtin_ids" string="4. THÔNG TIN KHÁC">
-                            <field name="luong_thongtin_ids" context="{'default_luong_id':id ,'default_loai':'0'}" domain="[('luong_id','=',id),('loai','=','2')]"/>
+                            <field name="luong_thongtin_ids"
+                                   context="{'default_luong_id':id ,'default_loai':'0'}"
+                                   domain="[('luong_id','=',id),('loai','=','2')]"
+                                   readonly="is_dl_locked"
+                            />
                         </page>
                     </notebook>
                 </sheet>

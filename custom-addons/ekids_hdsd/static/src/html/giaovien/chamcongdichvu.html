@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Chấm công Dịch vụ & Ca ngoài giờ</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #10B981; --c-red: #EF4444; --c-blue-light: #DBEAFE; --c-orange: #F59E0B; --c-purple: #8B5CF6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR TẬP TRUNG --- */
+        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 8px 16px; border-radius: 8px; transition: 0.2s; background: #EFF6FF; border: 1px solid #BFDBFE;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+
+        .top-right { display: flex; align-items: center; }
+        .header-title-right { font-weight: 700; font-size: 1rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; }
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%;}
+        .doc-container { max-width: 950px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h1 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        .doc-section { margin-bottom: 40px; }
+        .doc-section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; flex-shrink: 0;}
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.7; }
+        .doc-content p { margin-bottom: 12px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content li { margin-bottom: 8px; }
+
+        /* --- MOCKUP CSS --- */
+        .ui-mockup-box { background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto;}
+
+        /* Dashboard Card (Nhiều nút chức năng) */
+        .mock-dash-card { width: 400px; background: white; border-radius: 16px; border: 1px solid var(--border-color); padding: 25px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin: 0 auto; max-width: 100%; text-align: center;}
+        .mock-dash-card h3 { font-size: 1.3rem; color: #1E3A8A; margin-bottom: 5px; font-weight: 800;}
+        .mock-dash-card p { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px; font-style: italic;}
+        .dash-section-title { font-size: 0.85rem; font-weight: 800; color: #0F172A; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #E2E8F0; padding-bottom: 5px;}
+        .dash-btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;}
+        .mock-dash-btn { border-radius: 8px; padding: 12px 10px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; gap: 8px; font-size: 0.85rem; cursor: pointer; text-align: left; line-height: 1.3; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+        .btn-brown { background: #C19A6B; color: white; border: none; }
+        .btn-blue-light { background: #7DD3FC; color: #0C4A6E; border: none; }
+        .btn-blue { background: #93C5FD; color: #1E3A8A; border: none; }
+        .btn-red { background: #F87171; color: white; border: none; }
+        .btn-outline { background: white; border: 1px solid #CBD5E1; color: #475569; justify-content: center; text-align: center;}
+
+        /* Bảng chấm công (Grid) */
+        .table-wrapper { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid var(--border-color); background: white;}
+        .mock-table-grid { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 700px;}
+        .mock-table-grid th { background: #F8FAFC; padding: 12px 5px; font-weight: 700; color: var(--text-sub); border-bottom: 1px solid var(--border-color); text-align: center; white-space: nowrap;}
+        .mock-table-grid th:nth-child(1), .mock-table-grid th:nth-child(2) { text-align: left; padding-left: 15px;}
+        .mock-table-grid td { padding: 10px 5px; border-bottom: 1px solid #E2E8F0; text-align: center; vertical-align: middle; white-space: nowrap;}
+        .mock-table-grid td:nth-child(1), .mock-table-grid td:nth-child(2) { text-align: left; padding-left: 15px; color: var(--text-main); font-weight: 500;}
+        .mock-table-grid tr:hover td { background: #F1F5F9; }
+
+        .text-red { color: var(--c-red) !important; font-weight: 700 !important; }
+
+        /* Nút gạt IOS style */
+        .toggle-ios { display: inline-block; width: 32px; height: 18px; background: #CBD5E1; border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s;}
+        .toggle-ios::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: white; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: 0.3s;}
+        .toggle-ios.active { background: var(--c-green); }
+        .toggle-ios.active::after { transform: translateX(14px); }
+
+        /* Hiển thị số giờ */
+        .hour-badge { color: var(--c-green); font-weight: 800; font-size: 0.95rem;}
+        .null-icon { color: #94A3B8; font-size: 1.1rem; font-weight: 600;}
+
+        /* Modal/Popup Mockups */
+        .mock-modal { background: white; width: 100%; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 20px; max-width: 800px; margin: 0 auto;}
+        .mock-modal-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; color: var(--text-main); border-bottom: 1px solid var(--border-color);}
+        .mock-modal-body { padding: 20px; }
+        .mock-modal-footer { padding: 15px 20px; background: #F8FAFC; border-top: 1px solid var(--border-color); display: flex; gap: 10px;}
+
+        /* Form Nhập giờ */
+        .input-block { margin-top: 15px; margin-bottom: 25px;}
+        .input-block label { display: block; font-weight: 700; color: var(--text-main); margin-bottom: 5px;}
+        .number-input-lg { width: 100%; border: none; border-bottom: 1px solid var(--primary); font-size: 1.5rem; color: var(--primary); font-weight: 800; padding: 5px 0; outline: none; background: #EFF6FF;}
+
+        /* Form Dạy thay */
+        .teacher-info-row { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 0.9rem;}
+        .teacher-info-row span { color: var(--text-sub);}
+        .teacher-info-row strong { color: var(--primary); margin-left: 5px;}
+        .sub-tab { display: inline-block; padding: 10px 20px; border-top: 3px solid var(--c-green); border-right: 1px solid var(--border-color); border-left: 1px solid var(--border-color); font-weight: 700; color: var(--c-green); font-size: 0.85rem; margin-bottom: -1px; background: white; border-radius: 6px 6px 0 0;}
+        .sub-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; border-top: 1px solid var(--border-color); margin-bottom: 15px;}
+        .sub-table th { padding: 12px 10px; text-align: left; font-weight: 700; color: var(--text-main); border-bottom: 1px solid #E2E8F0;}
+        .sub-table td { padding: 12px 10px; color: var(--text-sub); border-bottom: 1px dashed #E2E8F0;}
+
+        .mock-btn { padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; border: none; cursor: pointer; }
+        .btn-save { background: #64748B; color: white; }
+        .btn-cancel { background: #E2E8F0; color: var(--text-main); }
+
+        .alert-box { display: flex; gap: 15px; padding: 16px; border-radius: 12px; margin: 20px 0; background: var(--c-blue-light); border: 1px solid #BFDBFE; align-items: flex-start;}
+        .alert-box i { font-size: 1.4rem; color: var(--primary); margin-top: 2px; }
+        .alert-box div h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+        .alert-box div p { font-size: 0.9rem; color: #334155; margin: 0; }
+        .key-tag { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 2px 6px; font-size: 0.8rem; font-family: monospace; color: var(--text-main); font-weight: 600; display: inline-block;}
+
+        /* --- TỐI ƯU HIỂN THỊ ĐIỆN THOẠI --- */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 15px; }
+            .header-title-right { font-size: 0.85rem; max-width: 150px; text-align: right; line-height: 1.2;}
+            .content-area { padding: 15px; }
+            .doc-container { padding: 20px; border-radius: 12px; }
+            .doc-header h1 { font-size: 1.5rem; }
+
+            .dash-btn-grid { grid-template-columns: 1fr; }
+            .teacher-info-row { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
+
+        </div>
+        <div class="top-right">
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phần C. Hồ sơ giáo viên & Lương <i class="fas fa-chevron-right"></i> <span>Chấm công dịch vụ khác</span>
+                </div>
+
+                <div class="doc-header">
+                    <h1>Hướng dẫn: Chấm công Dịch vụ, Ca ngoài giờ & Dạy thay</h1>
+                    <p>Bên cạnh chấm công đi làm cơ bản, phần mềm hỗ trợ chấm công theo khối lượng giờ dạy, các nhiệm vụ KPI đặc thù và đặc biệt là cơ chế quản lý lịch Dạy thay giữa các giáo viên rất minh bạch.</p>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">1</span> Lựa chọn loại chấm công dịch vụ</h2>
+                    <div class="doc-content">
+                        <p>Từ bảng điều khiển của phân hệ Giáo viên, bạn sẽ thấy các nút chấm công khác nhau tùy thuộc vào loại hình mà trung tâm bạn đã thiết lập (Ca trong giờ, Ca ngoài giờ, Nhiệm vụ KPI...).</p>
+
+                        <div class="ui-mockup-box" style="display: flex; justify-content: center; background: #F8FAFC;">
+                            <div class="mock-dash-card">
+                                <div style="width: 80px; height: 80px; background: white; border-radius: 20px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 2.5rem; color: #CBD5E1;">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <h3 style="color: #1E3A8A;">Thiên Thần Nhỏ Ninh Bình</h3>
+                                <p>(Thực hiện công tác chấm công cho Giáo viên để tính Lương)</p>
+
+                                <div class="dash-section-title">THỰC HIỆN [THÁNG NÀY]</div>
+                                <div class="dash-btn-grid">
+                                    <div class="mock-dash-btn btn-brown"><i class="far fa-clock"></i> Chấm công đi làm</div>
+                                    <div class="mock-dash-btn btn-blue-light"><i class="fas fa-plus-circle"></i> Ca trong giờ</div>
+                                    <div class="mock-dash-btn btn-blue"><i class="fas fa-plus-circle"></i> Ca ngoài giờ</div>
+                                    <div class="mock-dash-btn btn-red"><i class="far fa-bullseye"></i> Các nhiệm vụ/mục tiêu (KPI)</div>
+                                </div>
+
+                                <div class="dash-section-title">XEM CÁC [THÁNG TRƯỚC]</div>
+                                <div class="mock-dash-btn btn-outline"><i class="far fa-calendar-check"></i> Xem [CHẤM CÔNG] các tháng</div>
+                            </div>
+                        </div>
+                        <p>Bạn click chọn vào một dịch vụ cụ thể (Ví dụ: <strong>Ca ngoài giờ</strong>) để bắt đầu.</p>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">2</span> Xác nhận giảng dạy / Nhập số giờ thực tế</h2>
+                    <div class="doc-content">
+                        <p>Danh sách lưới sẽ hiển thị tất cả các giáo viên được phân công làm dịch vụ này trong tháng.</p>
+                        <ul>
+                            <li><strong>Kiểu 1 (Xác nhận Có/Không):</strong> Bạn chỉ cần click vào các nút gạt mờ để chuyển sang màu xanh (Đã làm).</li>
+                            <li><strong>Kiểu 2 (Nhập khối lượng):</strong> Khi click vào ngày, hệ thống sẽ yêu cầu bạn nhập chính xác số giờ/số ca thực tế đã làm để tính tiền.</li>
+                        </ul>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="table-wrapper">
+                                <table class="mock-table-grid">
+                                    <tr>
+                                        <th style="width:30px;"><input type="checkbox"></th>
+                                        <th>Họ và tên</th><th>Tổng</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>1. Quách Thị Nhâm <i class="far fa-edit" style="color: #94A3B8; margin-left: 5px;"></i></td>
+                                        <td>0,0</td>
+                                        <td><span class="toggle-ios"></span></td>
+                                        <td><span class="toggle-ios"></span></td>
+                                        <td><span class="toggle-ios"></span></td>
+                                        <td><span class="toggle-ios"></span></td>
+                                        <td><span class="toggle-ios"></span></td>
+                                    </tr>
+                                    <tr style="background: #F8FAFC;">
+                                        <td><input type="checkbox"></td>
+                                        <td>2. Nguyễn Thị Thơm <i class="far fa-edit" style="color: #94A3B8; margin-left: 5px;"></i></td>
+                                        <td style="color: var(--text-main); font-weight: 700;">1,0</td>
+                                        <td><span class="toggle-ios active"></span></td>
+                                        <td><span class="toggle-ios"></span></td>
+                                        <td><span class="toggle-ios"></span></td>
+                                        <td><span class="toggle-ios"></span></td>
+                                        <td><span class="toggle-ios"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>3. Đỗ Thị Minh Hường <i class="far fa-edit" style="color: #94A3B8; margin-left: 5px;"></i></td>
+                                        <td style="color: var(--c-green); font-weight: 700;">2,0</td>
+                                        <td><span class="hour-badge">1</span></td>
+                                        <td><span class="null-icon">Ø</span></td>
+                                        <td><span class="hour-badge">1</span></td>
+                                        <td><span class="null-icon">Ø</span></td>
+                                        <td><span class="null-icon">Ø</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <p><strong>Cửa sổ nhập khối lượng:</strong></p>
+                        <div class="ui-mockup-box" style="background: transparent; border: none; padding: 0;">
+                            <div class="mock-modal" style="max-width: 600px;">
+                                <div class="mock-modal-header">Điểm danh ngày <i class="fas fa-times" style="color: #94A3B8; cursor: pointer;"></i></div>
+                                <div class="mock-modal-body">
+                                    <div style="font-size: 0.9rem; color: var(--text-sub);">Ngày: 04/05/2026</div>
+                                    <div class="input-block">
+                                        <label>Nhập và xác thực khối lượng thực tế:</label>
+                                        <input type="text" class="number-input-lg" value="1,0">
+                                    </div>
+                                </div>
+                                <div class="mock-modal-footer">
+                                    <button class="mock-btn btn-save">Cập nhật kết quả</button>
+                                    <button class="mock-btn btn-cancel">Hủy</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">3</span> Quản lý hoạt động Dạy thay</h2>
+                    <div class="doc-content">
+                        <p>Khi có sự sắp xếp dạy thay giữa các giáo viên, hệ thống sẽ tự động bôi <strong>Màu đỏ</strong> tên của giáo viên có phát sinh hoạt động dạy thay (kèm mục tiêu KPI nếu có) để quản lý dễ nhận biết.</p>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="table-wrapper">
+                                <table class="mock-table-grid">
+                                    <tr>
+                                        <th style="width:30px;"><input type="checkbox"></th>
+                                        <th>Họ và tên</th><th>Tổng</th><th>1</th><th>2</th><th>3</th>
+                                    </tr>
+                                    <tr style="background: #FEF2F2;">
+                                        <td><input type="checkbox"></td>
+                                        <td class="text-red">1. Đinh Thị Lan <i class="far fa-edit" style="color: #94A3B8; margin-left: 5px;"></i></td>
+                                        <td class="text-red">0,0</td>
+                                        <td><span class="toggle-ios"></span></td>
+                                        <td><span class="toggle-ios"></span></td>
+                                        <td><span class="toggle-ios"></span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <p>Click đúp vào tên giáo viên màu đỏ để xem chi tiết lịch sử dạy thay của họ:</p>
+
+                        <div class="ui-mockup-box" style="background: transparent; border: none; padding: 0;">
+                            <div class="mock-modal">
+                                <div class="mock-modal-header">KPI - Đinh Thị Lan <i class="fas fa-times" style="color: #94A3B8; cursor: pointer;"></i></div>
+                                <div class="mock-modal-body">
+                                    <div class="teacher-info-row">
+                                        <div><span>Họ và tên:</span> <strong>Đinh Thị Lan</strong></div>
+                                        <div><span>Tổng ca đã dạy thay trong tháng:</span> <strong>1</strong></div>
+                                    </div>
+                                    <div class="input-block">
+                                        <label>Nhập và xác thực khối lượng thực tế:</label>
+                                        <input type="text" class="number-input-lg" value="0,0" style="background: transparent; border-bottom: 1px dashed #CBD5E1; color: var(--text-main); font-weight: 500; font-size: 1.1rem;" readonly>
+                                    </div>
+
+                                    <div class="sub-tab">THÔNG TIN DẠY THAY CỦA GIÁO VIÊN</div>
+                                    <div class="table-wrapper" style="border: none; border-radius: 0;">
+                                        <table class="sub-table">
+                                            <tr><th>Ngày điểm danh</th><th>Học sinh</th><th>Dạy thay cho Giáo viên</th><th>Mô tả</th><th></th></tr>
+                                            <tr>
+                                                <td>05/05/2026</td>
+                                                <td>Nguyễn Hữu Đạt</td>
+                                                <td>Quách Thị Nhâm</td>
+                                                <td>Dạy thay cho cô Nhâm vì cô nghỉ ốm</td>
+                                                <td><i class="far fa-trash-alt" style="color: #94A3B8; cursor: pointer;"></i></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5" style="color: var(--primary); cursor: pointer; font-weight: 600;">+ Thêm một dòng</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="mock-modal-footer">
+                                    <button class="mock-btn btn-save">Lưu</button>
+                                    <button class="mock-btn btn-cancel">Huỷ bỏ</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert-box">
+                    <i class="fas fa-tasks"></i>
+                    <div>
+                        <h4>Ghi nhận kết quả hàng ngày linh hoạt</h4>
+                        <p>Việc chấm công các dịch vụ phụ trợ này có thể được thực hiện <strong>hàng ngày</strong> hoặc gộp lại <strong>vài ngày một lần</strong> tùy thuộc vào quy trình và nhu cầu quản lý của từng trung tâm. Dữ liệu sau khi "Chốt công/Lưu" sẽ ngay lập tức được đồng bộ sang Bảng lương cuối tháng.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

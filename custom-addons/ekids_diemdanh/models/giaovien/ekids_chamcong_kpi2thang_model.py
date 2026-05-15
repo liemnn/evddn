@@ -5,6 +5,19 @@ from datetime import date
 from odoo.exceptions import ValidationError
 import calendar
 
+import logging
+_logger = logging.getLogger(__name__)
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import giaovien_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
+
 
 
 
@@ -24,6 +37,11 @@ class ChamCongKPI2Thang(models.Model):
     kpi2thang_ketqua_ids = fields.One2many('ekids.chamcong_kpi2thang_ketqua', 'chamcong_kpi2thang_id')
 
     def action_nhap_ketqua_kpi(self):
+        nam = int(self.chamcong_loai2thang_id.nam)
+        thang = int(self.chamcong_loai2thang_id.thang)
+        # check xem co khóa dữ liệu không
+        coso_util.func_is_dl_kpi_locked(self,self.coso_id,nam,thang)
+
         form_view_id = self.env.ref('ekids_diemdanh.chamcong_kpi2thang_form').id  # chú ý id chính xác
         self.func_tao_macdinh_ketqua_kpi()
         return {
@@ -69,6 +87,23 @@ class ChamCongKPI2Thang(models.Model):
         for record in self:
             record.sequence = index
             index +=1
+
+    def unlink(self):
+        # Duyệt qua từng bản ghi được chọn xóa
+        for rec in self:
+            nam = int(rec.chamcong_loai2thang_id.nam)
+            thang = int(rec.chamcong_loai2thang_id.thang)
+
+            # Đổi self thành rec, gọi hàm kiểm tra khóa dữ liệu KPI cho từng dòng
+            coso_util.func_is_dl_kpi_locked(
+                rec,
+                rec.coso_id,
+                nam,
+                thang
+            )
+
+        # Nếu tất cả các bản ghi đều hợp lệ (không bị khóa), tiến hành lệnh xóa
+        return super().unlink()
 
 
 

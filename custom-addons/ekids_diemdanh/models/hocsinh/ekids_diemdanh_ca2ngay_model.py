@@ -5,6 +5,17 @@ from datetime import date
 from odoo.exceptions import ValidationError
 import calendar
 
+import logging
+_logger = logging.getLogger(__name__)
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
 
 class DiemDanhCa2Ngay(models.Model):
     _name = "ekids.diemdanh_ca2ngay"
@@ -222,6 +233,19 @@ class DiemDanhCa2Ngay(models.Model):
                     'default_is_diemdanh_hocsinh': True
                 }
         }
+
+    def write(self, vals):
+        coso_util.func_is_dl_diemdanh_locked(self,self.coso_id
+                                              ,self.ngay.year
+                                              ,self.ngay.month)
+        res = super(DiemDanhCa2Ngay, self).write(vals)
+        return res
+
+    def unlink(self):
+        coso_util.func_is_dl_diemdanh_locked(self,self.coso_id
+                                              , self.ngay.year
+                                              , self.ngay.month)
+        return super().unlink()
 
 
 

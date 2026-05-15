@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="ekids_chitieu.action_baocao_chi_view" model="ir.actions.report">
+            <field name="name">Xem báo cáo chi</field>
+            <field name="model">ekids.chitieu_baocao_chi</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_chitieu.baocao_chi_template</field>
+            <field name="report_file">ekids_chitieu.baocao_chi_template</field>
+
+        </record>
+
+
+    </data>
+</odoo>

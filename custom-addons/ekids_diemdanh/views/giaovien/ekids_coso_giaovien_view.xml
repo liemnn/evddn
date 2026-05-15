@@ -32,8 +32,8 @@
                                         justify-content: flex-start;
                                         gap: 8px;
                                         font-weight: 700;
-                                        color: #ffffff;
-                                        font-size: 12px;
+
+                                        font-size: 14px;
                                         cursor: pointer;
                                         transition: transform 0.2s, opacity 0.2s;
                                         box-sizing: border-box;
@@ -45,6 +45,8 @@
                                     .kh-grid-btn:nth-child(2) { background-color: #6bb2e3; }
                                     .kh-grid-btn:nth-child(3) { background-color: #84c5f0; }
                                     .kh-grid-btn:nth-child(4) { background-color: #ef7070; }
+                                    .kh-grid-btn:nth-child(5) { background-color: #6bb2e3; }
+                                     kh-grid-btn:nth-child(6) { background-color: #ef7070; }
 
                                     .kh-grid-btn i { font-size: 18px; flex-shrink: 0; }
                                     .kh-grid-btn span { white-space: normal; word-wrap: break-word; line-height: 1.2; }

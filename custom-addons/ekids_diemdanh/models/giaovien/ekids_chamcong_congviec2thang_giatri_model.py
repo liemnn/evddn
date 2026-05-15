@@ -176,8 +176,10 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
     def action_mo_popup_chamcong_congviec2ngay_giatri(self, record_id=None, field_name=None, field_value='1'):
         if record_id is not None and field_name and field_value is not None:
             if self:
+                coso = self.chamcong_loai2thang_id.coso_id
                 thang = self.chamcong_loai2thang_id.thang
                 nam = self.chamcong_loai2thang_id.nam
+                coso_util.func_is_dl_diemdanh_locked(self,coso,int(nam),int(thang))
                 ngay = field_name.lstrip("d")
                 day = date(int(nam), int(thang), int(ngay))
 
@@ -204,7 +206,16 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
                         }
                     }
 
+    def unlink(self):
+        # Duyệt qua từng bản ghi được chọn xóa
+        for rec in self:
+            nam = int(rec.chamcong_loai2thang_id.nam)
+            thang = int(rec.chamcong_loai2thang_id.thang)
 
+            # Kiểm tra khóa dữ liệu cho từng bản ghi độc lập
+            coso_util.func_is_dl_diemdanh_locked(rec, rec.coso_id, nam, thang)
 
+        # Nếu tất cả các dòng đều không bị khóa, tiến hành lệnh xóa hệ thống
+        return super().unlink()
 
 

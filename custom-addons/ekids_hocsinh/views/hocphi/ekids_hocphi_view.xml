@@ -215,11 +215,14 @@
                     <button name="action_xacthuc_tinhlai_hocphi_hocsinh" invisible="is_show_tinhtoan_lai == False" type="object" confirm="Bạn chắc chắn muốn tính toán lại chứ?" class="btn btn-secondary" string="Tính lại [Học phí]"/>
                     <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,3,2" options="{'clickable': true}"
                            invisible="is_dong_hocphi_theoky == True" />
-                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,12,3,2" options="{'clickable': true}"
+                    <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,12,3,2"
+                            readonly="is_dl_locked"
+                           options="{'clickable': true}"
                            invisible="is_dong_hocphi_theoky == False"/>
                 </header>
 
                 <sheet>
+                    <field name="is_dl_locked" invisible="1"/>
                     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom w-100 mx-0" style="gap: 15px;">
 
                         <div class="d-flex align-items-center flex-wrap" style="gap: 20px;">
@@ -364,10 +367,30 @@
                                 <div class="p-3 bg-white">
                                     <group class="mb-0 mt-0">
                                         <field name="dm_chinhsach_giam_id" string="Diện chính sách giảm học phí" readonly="1"/>
-                                        <field name="is_giamhocphi_dacthu" string="Thiết lập giảm đặc thù cho học sinh" widget="boolean_toggle"/>
-                                        <field name="tyle_giamhocphi" string="% Giảm học phí/tổng " widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == True"/>
-                                        <field name="tyle_giamhocphi_bantru" string="% Giảm [Lớp chung]" widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == False"/>
-                                        <field name="tyle_giamhocphi_ca" string="% Giảm [Can thiệp]" widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == False"/>
+                                        <field name="is_giamhocphi_dacthu"
+                                               string="Thiết lập giảm đặc thù cho học sinh"
+                                               widget="boolean_toggle"
+                                               readonly="is_dl_locked"
+                                        />
+                                        <field name="tyle_giamhocphi"
+                                               string="% Giảm học phí/tổng "
+                                               widget="percent" class="fw-bold text-danger"
+                                               invisible="is_giamhocphi_dacthu == True"
+                                               readonly="is_dl_locked"
+                                        />
+                                        <field name="tyle_giamhocphi_bantru"
+                                               string="% Giảm [Lớp chung]"
+                                               widget="percent" class="fw-bold text-danger"
+                                               invisible="is_giamhocphi_dacthu == False"
+                                               readonly="is_dl_locked"
+                                        />
+                                        <field name="tyle_giamhocphi_ca"
+                                               string="% Giảm [Can thiệp]"
+                                               widget="percent"
+                                               class="fw-bold text-danger"
+                                               invisible="is_giamhocphi_dacthu == False"
+                                               readonly="is_dl_locked"
+                                        />
                                     </group>
                                 </div>
                             </div>
@@ -377,13 +400,22 @@
 
                     <notebook>
                         <page name="hocphi_bantru_ids" string="CHI TIẾT: LỚP CHUNG [+]">
-                            <field name="hocphi_bantru_ids" context="{'default_coso_id': coso_id}"/>
+                            <field name="hocphi_bantru_ids"
+                                   context="{'default_coso_id': coso_id}"
+                                   readonly="is_dl_locked"
+                            />
                         </page>
                         <page name="hocphi_ca_ids" string="CHI TIẾT: CA CAN THIỆP [+]">
-                            <field name="hocphi_ca_ids" context="{'default_coso_id': coso_id}"/>
+                            <field name="hocphi_ca_ids"
+                                   context="{'default_coso_id': coso_id}"
+                                   readonly="is_dl_locked"
+                            />
                         </page>
                         <page name="hocphi_duoctru_ids" string="CHI TIẾT: ĐƯỢC TRỪ [-]">
-                            <field name="hocphi_duoctru_ids" context="{'default_coso_id': coso_id}"/>
+                            <field name="hocphi_duoctru_ids"
+                                   context="{'default_coso_id': coso_id}"
+                                   readonly="is_dl_locked"
+                            />
                         </page>
                     </notebook>
                 </sheet>

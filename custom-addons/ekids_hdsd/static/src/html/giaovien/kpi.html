@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Đánh giá KPI Giáo viên</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #10B981; --c-red: #EF4444; --c-blue-light: #DBEAFE; --c-orange: #F59E0B; --c-purple: #8B5CF6;
+            --c-teal: #0D9488;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR TẬP TRUNG --- */
+        .top-bar { height: 60px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 8px 16px; border-radius: 8px; transition: 0.2s; background: #EFF6FF; border: 1px solid #BFDBFE;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+
+        .top-right { display: flex; align-items: center; }
+        .header-title-right { font-weight: 700; font-size: 1rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; }
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%;}
+        .doc-container { max-width: 950px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color);}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h1 { font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        .doc-section { margin-bottom: 40px; }
+        .doc-section h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .doc-section h2 .step-badge { background: var(--primary); color: white; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 1rem; flex-shrink: 0;}
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.7; }
+        .doc-content p { margin-bottom: 12px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content li { margin-bottom: 8px; }
+
+        /* --- MOCKUP CSS --- */
+        .ui-mockup-box { background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto;}
+
+        /* Dashboard Card */
+        .mock-dash-card { width: 420px; background: white; border-radius: 16px; border: 1px solid var(--border-color); padding: 25px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin: 0 auto; max-width: 100%; text-align: center;}
+        .mock-dash-card h3 { font-size: 1.3rem; color: #1E3A8A; margin-bottom: 5px; font-weight: 800; line-height: 1.3;}
+        .mock-dash-card p { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px; font-style: italic;}
+        .dash-section-title { font-size: 0.85rem; font-weight: 800; color: #0F172A; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #E2E8F0; padding-bottom: 5px;}
+        .dash-btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;}
+        .mock-dash-btn { border-radius: 8px; padding: 12px 10px; font-weight: 700; display: flex; align-items: center; justify-content: flex-start; gap: 8px; font-size: 0.85rem; cursor: pointer; text-align: left; line-height: 1.3; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
+        .btn-brown { background: #C19A6B; color: white; border: none; }
+        .btn-blue-light { background: #93C5FD; color: #1E3A8A; border: none; }
+        .btn-blue-dark { background: #7DD3FC; color: #0C4A6E; border: none; }
+        .btn-outline { background: white; border: 1px solid #CBD5E1; color: #475569; justify-content: center; text-align: center;}
+
+        /* Bảng Danh sách Giáo viên (Grid) */
+        .table-wrapper { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid var(--border-color); background: white;}
+        .mock-table-grid { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 700px;}
+        .mock-table-grid th { background: #F8FAFC; padding: 12px 10px; font-weight: 700; color: var(--text-sub); border-bottom: 1px solid var(--border-color); text-align: left; white-space: nowrap;}
+        .mock-table-grid td { padding: 15px 10px; border-bottom: 1px solid #E2E8F0; text-align: left; vertical-align: top;}
+        .mock-table-grid tr:hover td { background: #F1F5F9; }
+        .edit-icon { color: #94A3B8; margin-left: 10px; cursor: pointer;}
+        .note-lines { color: #475569; line-height: 1.6;}
+
+        /* Modal/Popup Mockups (KPI) */
+        .mock-modal { background: white; width: 100%; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 20px; max-width: 800px; margin: 0 auto;}
+        .mock-modal-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; color: var(--text-main); border-bottom: 1px solid var(--border-color);}
+        .mock-modal-body { padding: 0; }
+        .mock-modal-footer { padding: 15px 20px; background: #F8FAFC; border-top: 1px solid var(--border-color); display: flex; gap: 10px;}
+
+        /* Bảng trong Popup KPI */
+        .kpi-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .kpi-table th { padding: 15px 20px; text-align: left; color: var(--text-main); font-weight: 700; border-bottom: 1px solid var(--border-color); background: white;}
+        .kpi-table td { padding: 15px 20px; border-bottom: 1px solid #E2E8F0; color: #334155; vertical-align: middle;}
+        .kpi-result { color: var(--c-green); font-weight: 700; font-size: 1rem;}
+        .kpi-unit-badge { background: #5EEAD4; color: white; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; display: inline-block;}
+
+        .mock-btn { padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; border: none; cursor: pointer; }
+        .btn-save { background: #64748B; color: white; }
+        .btn-cancel { background: #E2E8F0; color: var(--text-main); }
+
+        .alert-box { display: flex; gap: 15px; padding: 16px; border-radius: 12px; margin: 20px 0; background: var(--c-blue-light); border: 1px solid #BFDBFE; align-items: flex-start;}
+        .alert-box.warning { background: #FEFCE8; border-color: #FDE047; }
+        .alert-box i { font-size: 1.4rem; color: var(--primary); margin-top: 2px; }
+        .alert-box.warning i { color: var(--c-orange); }
+        .alert-box div h4 { font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; text-transform: uppercase;}
+        .alert-box div p { font-size: 0.9rem; color: #334155; margin: 0; }
+        .key-tag { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 6px; padding: 2px 6px; font-size: 0.8rem; font-family: monospace; color: var(--text-main); font-weight: 600; display: inline-block;}
+
+        /* --- TỐI ƯU HIỂN THỊ ĐIỆN THOẠI (MOBILE RESPONSIVE) --- */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 15px; }
+            .header-title-right { font-size: 0.85rem; max-width: 150px; text-align: right; line-height: 1.2;}
+            .content-area { padding: 15px; }
+            .doc-container { padding: 20px; border-radius: 12px; }
+            .doc-header h1 { font-size: 1.5rem; }
+
+            .dash-btn-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="../index.html" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
+
+        </div>
+        <div class="top-right">
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phần C. Hồ sơ giáo viên & Lương <i class="fas fa-chevron-right"></i> <span>Đánh giá KPI hàng tháng</span>
+                </div>
+
+                <div class="doc-header">
+                    <h1>Hướng dẫn: Đánh giá các chỉ tiêu hoàn thành (KPI) cuối tháng</h1>
+                    <p>Đây là nghiệp vụ cực kỳ quan trọng được thực hiện để làm cơ sở tính phụ cấp, lương trách nhiệm, hoặc thưởng cho giáo viên trước khi chốt sổ Lương.</p>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">1</span> Lựa chọn chức năng Đánh giá KPI</h2>
+                    <div class="doc-content">
+                        <p>Tại giao diện Bảng điều khiển của phân hệ Giáo viên, bạn tìm và click chọn nút chức năng <strong>Đánh giá hoàn thành nhiệm vụ KPI (hàng tháng)</strong>.</p>
+
+                        <div class="ui-mockup-box" style="display: flex; justify-content: center; background: #F8FAFC;">
+                            <div class="mock-dash-card">
+                                <div style="width: 80px; height: 80px; background: white; border-radius: 20px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); font-size: 2.5rem; color: #CBD5E1;">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <h3>Trung tâm Thiên thần nhỏ Ninh Bình - CN Tam Điệp</h3>
+                                <p style="margin-bottom: 5px;">Kết nối yêu thương - lắng nghe chia sẻ</p>
+                                <p style="color: #94A3B8;">(Thực hiện công tác chấm công cho Giáo viên để tính Lương)</p>
+
+                                <div class="dash-section-title">THỰC HIỆN [THÁNG NÀY]</div>
+                                <div class="dash-btn-grid">
+                                    <div class="mock-dash-btn btn-brown"><i class="far fa-clock"></i> Chấm công đi làm</div>
+                                    <div class="mock-dash-btn btn-blue-light"><i class="far fa-bullseye"></i> Đánh giá hoàn thành nhiệm vụ KPI (hàng tháng)</div>
+                                </div>
+                                <div class="mock-dash-btn btn-blue-dark" style="margin-bottom: 20px; width: 50%;"><i class="fas fa-plus-circle"></i> Ca 7</div>
+
+                                <div class="dash-section-title">XEM CÁC [THÁNG TRƯỚC]</div>
+                                <div class="mock-dash-btn btn-outline"><i class="far fa-calendar-check"></i> Xem [CHẤM CÔNG] các tháng</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">2</span> Lựa chọn Giáo viên cần đánh giá</h2>
+                    <div class="doc-content">
+                        <p>Hệ thống sẽ hiển thị danh sách toàn bộ giáo viên tại cơ sở. Tại cột <strong>Ghi chú</strong>, bạn có thể xem nhanh các chỉ tiêu mà giáo viên đó đã được ghi nhận.</p>
+
+                        <div class="ui-mockup-box" style="padding: 0; background: transparent; border: none;">
+                            <div class="table-wrapper">
+                                <table class="mock-table-grid">
+                                    <tr>
+                                        <th style="width:30px;"><input type="checkbox"></th>
+                                        <th style="width:50px;">TT</th>
+                                        <th style="width: 250px;">Họ và tên</th>
+                                        <th>Ghi chú</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>4</td>
+                                        <td style="color: var(--text-main); font-weight: 600;">Phan Thị Hướng <i class="far fa-edit edit-icon"></i></td>
+                                        <td class="note-lines">
+                                            -Học sinh tiến bộ (học sinh dễ)=1.0 hs<br>
+                                            -Học sinh tiến bộ (học sinh khó)=1.0 hs<br>
+                                            -Giao án=3.0 bộ
+                                        </td>
+                                    </tr>
+                                    <tr style="background: #F8FAFC;">
+                                        <td><input type="checkbox"></td>
+                                        <td>6</td>
+                                        <td style="color: var(--text-main); font-weight: 600;">Đỗ Thị Minh Hường <i class="far fa-edit edit-icon"></i></td>
+                                        <td class="note-lines">
+                                            -Học sinh tiến bộ (học sinh dễ)=1.0 hs<br>
+                                            -Học sinh tiến bộ (học sinh khó)=0.0 hs<br>
+                                            -Giao án=2.0 bộ
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>7</td>
+                                        <td style="color: var(--text-main); font-weight: 600;">Phùng Thị Lan <i class="far fa-edit edit-icon"></i></td>
+                                        <td class="note-lines">
+                                            -Học sinh tiến bộ (học sinh dễ)=2.0 hs<br>
+                                            -Học sinh tiến bộ (học sinh khó)=1.0 hs<br>
+                                            -Giao án=5.0 bộ
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <p>Để tiến hành nhập hoặc cập nhật kết quả KPI, bạn <strong>Click vào tên của giáo viên</strong> đó.</p>
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">3</span> Nhập kết quả hoàn thành nhiệm vụ</h2>
+                    <div class="doc-content">
+                        <p>Bảng nhập liệu KPI (Popup) sẽ mở ra, liệt kê các tiêu chí đánh giá đã được trung tâm cấu hình sẵn (như số lượng giáo án, số lượng học sinh tiến bộ...). Tại đây có 2 cách nhập kết quả tùy thuộc vào cài đặt của trung tâm:</p>
+                        <ul>
+                            <li><strong>Nhập Số lượng thực tế:</strong> Bạn gõ trực tiếp con số hoàn thành (Ví dụ: 3 bộ giáo án, 2 học sinh) vào cột <em>Kết quả đạt được</em>.</li>
+                            <li><strong>Xác nhận Có/Không:</strong> Đối với các tiêu chí dạng bật/tắt, bạn chỉ cần xác nhận trạng thái hoàn thành.</li>
+                        </ul>
+
+                        <div class="ui-mockup-box" style="background: transparent; border: none; padding: 0;">
+                            <div class="mock-modal">
+                                <div class="mock-modal-header">
+                                    KPI <i class="fas fa-times" style="color: #94A3B8; cursor: pointer;"></i>
+                                </div>
+                                <div class="mock-modal-body">
+                                    <div class="table-wrapper" style="border: none; border-radius: 0;">
+                                        <table class="kpi-table">
+                                            <tr>
+                                                <th style="width: 40%;">Tiêu chí đánh giá <i class="fas fa-chevron-down" style="font-size:0.8rem; color:#CBD5E1; margin-left: 5px;"></i></th>
+                                                <th style="width: 20%;">Kết quả đạt được</th>
+                                                <th style="width: 15%;">Đơn vị</th>
+                                                <th style="width: 25%;">Ghi chú</th>
+                                            </tr>
+                                            <tr>
+                                                <td>Học sinh tiến bộ (học sinh dễ)</td>
+                                                <td class="kpi-result">1,0</td>
+                                                <td><span class="kpi-unit-badge">hs</span></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Học sinh tiến bộ (học sinh khó)</td>
+                                                <td class="kpi-result">1,0</td>
+                                                <td><span class="kpi-unit-badge">hs</span></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Giao án</td>
+                                                <td class="kpi-result">3,0</td>
+                                                <td><span class="kpi-unit-badge" style="background: #38BDF8;">bộ</span></td>
+                                                <td></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="mock-modal-footer">
+                                    <button class="mock-btn btn-save">Lưu</button>
+                                    <button class="mock-btn btn-cancel">Huỷ bỏ</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="doc-section">
+                    <h2><span class="step-badge">4</span> Xác nhận và Lưu ý quan trọng</h2>
+                    <div class="doc-content">
+                        <p>Sau khi nhập xong kết quả, bạn bấm <strong><i class="fas fa-save"></i> Lưu</strong>. Bạn tiếp tục thực hiện tương tự với các giáo viên khác trong danh sách.</p>
+
+                        <div class="alert-box warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <h4>Thời điểm thực hiện đánh giá KPI</h4>
+                                <p>Để dữ liệu đồng bộ chính xác nhất vào Bảng Lương, công việc đánh giá KPI này <strong>NÊN ĐƯỢC THỰC HIỆN VÀO NGÀY CUỐI CÙNG CỦA THÁNG HOẶC NHỮNG NGÀY ĐẦU TIÊN CỦA THÁNG SAU</strong> (Trước khi chốt tính lương). <br><br><em>Ví dụ:</em> Đánh giá kết quả KPI cho tháng 4/2026 của giáo viên thì nên thực hiện vào ngày 01/05/2026.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

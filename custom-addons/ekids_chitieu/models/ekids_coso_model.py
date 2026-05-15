@@ -78,4 +78,21 @@ class CoSo(models.Model):
             }
         }
 
+    def action_view_baocao_chi_action_window(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'XEM DANH SÁCH [CHI/TIÊU]',
+            'res_model': 'ekids.chitieu_baocao_chi',
+            'view_mode': 'form',
+            'target': 'new',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.id,
+                'default_tu_thang':'2',
+                'default_tu_nam':str(date.today().year),
+                'default_den_thang': '1',
+                'default_den_nam': str(date.today().year+1),
+            }
+        }
+
 

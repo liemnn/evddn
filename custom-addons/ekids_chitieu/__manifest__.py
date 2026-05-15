@@ -12,7 +12,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'ekids_core'],
+    'depends': ['base', 'ekids_core','ekids_func'],
 
     # always loaded
     'data': [
@@ -25,20 +25,23 @@
         'views/ekids_chitieu_view.xml',
         'views/ekids_chitieu_thang_view.xml',
         'views/ekids_chitieu_nam_view.xml',
+
+        'views/ekids_baocao_chi_view.xml',
+        'views/baocao/ekids_baocao_chi_template.xml',
+        'views/baocao/ekids_baocao_action.xml',
+
         'views/ekids_menu.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
     ],
+    # only loaded in demonstration mode
     'assets': {
         'web.assets_backend': [
-            'ekids_chitieu/static/src/css/style.css',
-            'ekids_chitieu/static/src/css/custom_report_style.css',
+            'ekids_hocsinh/static/src/css/ekids_style.css',
 
         ],
     },
-    'fonts': [
 
-    ],
 }

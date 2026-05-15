@@ -23,6 +23,13 @@ def func_get_nghipheps_trong_khoang_thoigian(self,coso, hocsinh, nghiles,nhatruo
             while ngay <= ngay_end:
                 if coso_util.func_is_coso_hoatdong(coso, ngay):
                     key = str(ngay)
+                    if hocsinh.is_ngaydihoc_rieng == True:
+                        week = ngay.weekday() + 2
+                        field_name = "hd_t" + str(week)
+                        is_hoc = getattr(hocsinh, field_name)
+                        if is_hoc == False:
+                            ngay += timedelta(days=1)
+                            continue
                     if (nghiles
                             and len(nghiles)>0
                             and nghiles.get(key)):

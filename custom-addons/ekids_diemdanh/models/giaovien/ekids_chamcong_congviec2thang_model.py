@@ -267,9 +267,32 @@ class ChamCongCongViec2Thang(models.Model,ChamCongFuncAbstractModel):
                     chamcong_loai2thang.func_tao_macdinh_chamcong()
 
     def write(self, vals):
+        nam = int(self.chamcong_loai2thang_id.nam)
+        thang = int(self.chamcong_loai2thang_id.thang)
+        for day in range(1, 32):
+            d ="d"+str(day)
+            if d in vals:
+                coso_util.func_is_dl_diemdanh_locked(self,self.coso_id
+                                                      , nam
+                                                      , thang)
+
         if 'tong_temps' in vals:
             vals['tong'] = vals['tong_temps']
+
+
         return super(ChamCongCongViec2Thang, self).write(vals)
+
+    def unlink(self):
+        # Duyệt qua từng bản ghi được chọn xóa
+        for rec in self:
+            nam = int(rec.chamcong_loai2thang_id.nam)
+            thang = int(rec.chamcong_loai2thang_id.thang)
+
+            # Kiểm tra khóa dữ liệu cho từng bản ghi độc lập
+            coso_util.func_is_dl_diemdanh_locked(rec, rec.coso_id, nam, thang)
+
+        # Nếu tất cả các dòng đều không bị khóa, tiến hành lệnh xóa
+        return super().unlink()
 
 
 

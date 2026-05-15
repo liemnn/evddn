@@ -25,7 +25,7 @@ class CoSo(models.Model):
     thue_tungay = fields.Date(string="Ngày bắt đầu thuê",required=True)
     thue_denngay = fields.Date(string="Ngày kết thúc thuê")
     trangthai = fields.Selection([("0", "Đang cấu hình (chưa thuê)")
-                                     ,("1", "Đang thuê (sử dụng)")
+                                     ,("1", "Đang thuê")
                                      , ("-1", "Hết thời gian thuê ( tạm dừng)")],
                             string="Trạng thái",compute="_compute_trangthai",store=True)
 
@@ -56,6 +56,29 @@ class CoSo(models.Model):
 
     is_thu_hocphi_dauthang =fields.Boolean(string="Thiết lập thu [Học phí] đầu tháng",default=True)
     is_dong_hocphi_theoky= fields.Boolean(string="Đóng học phí theo kỳ/Gộp kỳ", default=False)
+
+    sothang_khoa_dl_chitieu = fields.Selection(
+        [('0', 'Không khóa'),('1', '1 Tháng'), ('2', '2 Tháng'), ('3', '3 Tháng'), ('4', '4 Tháng'), ('5', '5 Tháng'),
+         ('6', '6 Tháng'), ('7', '7 Tháng'), ('8', '8 Tháng'), ('9', '9 Tháng'), ('10', '10 Tháng'),
+         ('11', '11 Tháng'), ('12', '12 Tháng')],
+        string='Sẽ khóa dữ liệu [Chi/Tiêu] sau số tháng',
+        default='0',
+        required=True
+    )
+
+    sothang_khoa_dl_diemdanh= fields.Selection(
+        [('0', 'Không khóa'), ('1', '1 Tháng'), ('2', '2 Tháng'), ('3', '3 Tháng'), ('4', '4 Tháng'), ('5', '5 Tháng'),
+         ('6', '6 Tháng'), ('7', '7 Tháng'), ('8', '8 Tháng'), ('9', '9 Tháng'), ('10', '10 Tháng'),
+         ('11', '11 Tháng'), ('12', '12 Tháng')],
+        string='Sẽ khóa dữ liệu [Điểm danh/Chấm công]sau số tháng',
+        default='0',
+        required=True
+    )
+
+    trangthai_hocphi_khoa_dl = fields.Text(string="Thiết lập Trạng thái [Học phí] cho phép sửa dữ liệu",default="")
+    trangthai_luong_khoa_dl = fields.Char(string="Thiết lập Trạng thái [Lương] cho phép sửa dữ liệu",default="")
+
+
 
     @api.depends('thue_tungay', 'thue_denngay')
     def _compute_trangthai(self):
