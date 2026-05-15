@@ -168,7 +168,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 self.func_tao_macdinh_hocphi_bantru(hocphi,thu_bantrus, len(ngay_dihoc_kehoachs),len(ngay_dihoc_cosos))
 
                 # Tinh toan khoang thu ca can thiệp
-                self.func_tao_macdinh_hocphi_ca(hocphi,ca_canthieps,ca2thus,ngay_dihoc_kehoachs)
+                self.func_tao_macdinh_hocphi_ca(hocphi,ca_canthieps,ca2thus,ngay_dihoc_kehoachs,ngay_dihoc_cosos)
                 # tin hoc phi do giam hoc phi theo so tien cu the
 
                 # tinh toan tháng trước để được trừ
@@ -549,7 +549,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
 
 
-    def func_tao_macdinh_hocphi_ca(self,hocphi,ca_canthieps,ca2thus,ngay_dihoc_kehoachs):
+    def func_tao_macdinh_hocphi_ca(self,hocphi,ca_canthieps,ca2thus,ngay_dihoc_kehoachs,ngay_dihoc_cosos):
         if ca_canthieps:
             for dm_ca in ca_canthieps:
                soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca2thus,dm_ca.id,ngay_dihoc_kehoachs)
@@ -557,8 +557,9 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                    tien =soca * dm_ca.tien
                    # tien thu tron goi theo thang
                    if dm_ca.is_tien_trongoi == True:
-                       #tien = soca * (dm_ca.tien/len(ngay_dihoc_cosos))
-                       tien = dm_ca.tien
+                       dongia = (dm_ca.tien/len(ngay_dihoc_cosos))
+                       tien = soca * dongia
+
                    data = {
                         'hocphi_id': hocphi.id,
                         'dm_ca_id':dm_ca.id,
