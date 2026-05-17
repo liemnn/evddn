@@ -147,7 +147,17 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
                                                                              ngay_cuoithang)
         tong_dilam_kehoach = len(tong_dilam_kehoachs)
         self.tong_dilam_kehoach = tong_dilam_kehoach
-        dl_chamcong = giaovien_util.func_get_dulieu_chamcong_thucte_giaovien(self,tong_dilam_kehoachs,self.giaovien_id,nghiles,nghipheps,nam,thang)
+
+        coso_chonghi_truluongs = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, self.coso_id, '2', ngay_dauthang,
+                                                                                    ngay_cuoithang)
+        dl_chamcong = giaovien_util.Ffunc_get_dulieu_chamcong_thucte_giaovien(self
+                                                                             ,tong_dilam_kehoachs
+                                                                             ,self.giaovien_id
+                                                                             ,nghiles
+                                                                             ,coso_chonghi_truluongs
+                                                                             ,nghipheps
+                                                                             ,nam
+                                                                             ,thang)
 
         self.tong_dilam_chamcong = dl_chamcong['dilam_chamcong']
         self.tong_dilam_muon = dl_chamcong['dilam_muon']

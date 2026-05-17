@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta,date
 from datetime import datetime, timedelta,date
 from dateutil.relativedelta import relativedelta
-from . import  coso_util,ngay_util
+from . import  coso_util,ngay_util,string_util
 from odoo.osv import expression
 def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,tu_ngay, den_ngay):
     domain =[
@@ -26,13 +26,11 @@ def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,
 
             ngay = ngay_start
             while ngay <= ngay_end:
+
                 key = str(ngay)
-                if coso_util.func_is_coso_hoatdong(coso, ngay):
-                    if nghiles.get(key):
-                        ngay += timedelta(days=1)
-                        continue
-                    else:
-                        days[key] = nghiphep
+                is_dilam = func_is_dilam_trong_ngay(giaovien, ngay)
+                if is_dilam == True:
+                    days[key] = nghiphep
                 ngay += timedelta(days=1)
     return days
 
@@ -76,7 +74,32 @@ def func_get_ngay_dilam_theo_kehoach(self, coso,nghiles,tu_ngay, den_ngay):
         ngay += timedelta(days=1)
     return days
 
-def func_get_dulieu_chamcong_thucte_giaovien(self,coso_dilam_kehoachs,giaovien,nghiles,nghipheps,nam,thang):
+def func_get_giaovien_ngay_dilam_theo_kehoach(self, coso,giaovien,nghiles,tu_ngay, den_ngay):
+
+    datas = func_get_ngay_dilam_theo_kehoach(self, coso,nghiles,tu_ngay, den_ngay)
+    if giaovien.is_ngaydilam_rieng == False:
+        return datas
+    else:
+        days = {}
+        if datas:
+            for key in datas:
+                day = string_util.string2date(key)
+                is_dilam = func_is_dilam_trong_ngay(giaovien,day)
+                if is_dilam == True:
+                    days[key] = datas[key]
+
+
+        return days
+
+def func_get_dulieu_chamcong_thucte_giaovien(self
+                                             ,coso_dilam_kehoachs
+                                             ,giaovien
+                                             ,nghiles
+                                             ,coso_chonghi_truluongs
+                                             ,nghipheps
+                                             ,nam
+                                             ,thang):
+
     giaovien2thang = func_get_chamcong_giaovien2thang(self,giaovien, nam, thang)
     #TH1: đi lam ca ngay = di lam dung gio + di lam muon ( di ca ngay)
     dilam_cangay =  func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['1','10'],
@@ -93,42 +116,63 @@ def func_get_dulieu_chamcong_thucte_giaovien(self,coso_dilam_kehoachs,giaovien,n
     chamcong_nghi = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['-1'],
                                                                                     nghiles, nghipheps,
                                                                                     coso_dilam_kehoachs)
-    dilam_nghi_giua_thang = func_get_songay_dilam_hoac_nghi_giua_thang(giaovien2thang.giaovien_id,coso_dilam_kehoachs)
+    gv_dilam_kehoachs = func_get_songay_dilam_giaovien_trongthang(giaovien2thang.giaovien_id,coso_dilam_kehoachs)
+
+    gv_nghiles = func_get_giaovien_nghiles(giaovien,nghiles)
+    gv_coso_chonghi_truluongs = func_get_giaovien_coso_nghi_truluong(giaovien, coso_chonghi_truluongs)
 
 
     duoc_chamcong = len(dilam_cangay)  + (len(dilam_nuabuoi) * 0.5)
-    nghi = len(chamcong_nghi) + int(dilam_nghi_giua_thang)
+
     data ={
         'dilam_muon':len(dilam_muon),
         'dilam_nuabuoi':len(dilam_nuabuoi),
-        'dilam_nghi':nghi,
-        'dilam_chamcong':duoc_chamcong
+        'dilam_nghi':len(chamcong_nghi),
+        'dilam_chamcong':duoc_chamcong,
+        'gv_dilam_kehoach':gv_dilam_kehoachs,
+        'gv_nghiles': gv_nghiles,
+        'gv_coso_chonghi_truluongs': gv_coso_chonghi_truluongs
+
     }
 
     return data
 
-def func_get_songay_dilam_hoac_nghi_giua_thang(giaovien,dilam_kehoachs):
+def func_get_songay_dilam_giaovien_trongthang(giaovien,coso_dilam_kehoachs):
     ngay = 0
-    if dilam_kehoachs:
-        for key in dilam_kehoachs:
-            day = dilam_kehoachs.get(key)
+    if coso_dilam_kehoachs:
+        for key in coso_dilam_kehoachs:
+            day = coso_dilam_kehoachs.get(key)
             if day:
-                if (giaovien.dilam_tungay and day < giaovien.dilam_tungay):
-                   ngay = ngay +1
+                is_dilam = func_is_dilam_trong_ngay(giaovien,day)
+                if is_dilam == True:
+                    ngay = ngay +1
 
-                if (giaovien.trangthai =='0'
-                        and giaovien.dilam_denngay
-                        and day > giaovien.dilam_denngay):
-                   ngay = ngay +1
-
-                if giaovien.is_ngaydilam_rieng == True:
-                    #thiết lập ngày đi làm riêng
-                    week = day.weekday() + 2
-                    field_name = "hd_t" + str(week)
-                    is_dilam = getattr(giaovien, field_name)
-                    if is_dilam == False:
-                        ngay = ngay +1
     return ngay
+
+def func_get_giaovien_nghiles(giaovien,nghiles):
+    if giaovien.is_ngaydilam_rieng == False:
+        return nghiles
+    else:
+        days={}
+        for key in nghiles:
+            day = string_util.string2date(key)
+            is_dilam = func_is_dilam_trong_ngay(giaovien,day)
+            if is_dilam == True:
+                days[key] = nghiles.get(key)
+        return days
+
+def func_get_giaovien_coso_nghi_truluong(giaovien,coso_chonghi_truluongs):
+    if giaovien.is_ngaydilam_rieng == False:
+        return coso_chonghi_truluongs
+    else:
+        days={}
+        for key in coso_chonghi_truluongs:
+            day = string_util.string2date(key)
+            is_dilam = func_is_dilam_trong_ngay(giaovien,day)
+            if is_dilam == True:
+                days[key] = coso_chonghi_truluongs.get(key)
+        return days
+
 
 def func_get_chamcong_giaovien2thang(self,giaovien,nam,thang):
     chamcong = self.env['ekids.chamcong_giaovien2thang'].search([
@@ -219,6 +263,48 @@ def func_get_domain_trong_thang(coso_id, nam, thang):
     ])
 
     return domain
+
+
+from odoo import fields
+
+
+def func_is_dilam_trong_ngay(giaovien, ngay):
+    # 1. Ép biến 'ngay' về chuẩn Date duy nhất của Odoo ngay lập tức
+    ngay_chuan = fields.Date.to_date(ngay)
+
+    # Đề phòng trường hợp đầu vào rỗng hoặc lỗi
+    if not ngay_chuan:
+        return False
+
+    # 2. Xử lý hàm weekday() an toàn trên biến đã chuẩn hóa
+    week = ngay_chuan.weekday() + 2
+    field_name = "hd_t" + str(week)
+
+    # 3. Lấy và ép kiểu các mốc thời gian của giáo viên
+    dilam_tungay = fields.Date.to_date(giaovien.dilam_tungay)
+    dilam_denngay = fields.Date.to_date(giaovien.dilam_denngay)
+
+    # 4. Kiểm tra điều kiện "Từ ngày" (chỉ kiểm tra nếu có dữ liệu)
+    if dilam_tungay and ngay_chuan < dilam_tungay:
+        return False
+
+    # 5. Kiểm tra điều kiện "Đến ngày" (chỉ kiểm tra nếu có dữ liệu)
+    if dilam_denngay and ngay_chuan > dilam_denngay:
+        return False
+
+    # 6. Kiểm tra lịch làm việc (Riêng hoặc theo Cơ sở)
+    # Lược bỏ == True cho code gọn và chạy nhanh hơn theo chuẩn Python (PEP8)
+    if giaovien.is_ngaydilam_rieng:
+        is_dilam = getattr(giaovien, field_name)
+        if is_dilam:
+            return True
+    else:
+        coso = giaovien.coso_id
+        is_dilam = getattr(coso, field_name)
+        if is_dilam:
+            return True
+
+    return False
 
 
 
