@@ -150,7 +150,7 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
 
         coso_chonghi_truluongs = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, self.coso_id, '2', ngay_dauthang,
                                                                                     ngay_cuoithang)
-        dl_chamcong = giaovien_util.Ffunc_get_dulieu_chamcong_thucte_giaovien(self
+        dl_chamcong = giaovien_util.func_get_dulieu_chamcong_thucte_giaovien(self
                                                                              ,tong_dilam_kehoachs
                                                                              ,self.giaovien_id
                                                                              ,nghiles
