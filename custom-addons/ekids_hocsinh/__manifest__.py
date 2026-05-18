@@ -17,6 +17,7 @@
         'views/ekids_hocsinh_view.xml',
         'views/ekids_hocsinh_phuhuynh_view.xml',
         'views/ekids_hocsinh_view.xml',
+        'views/ekids_hocsinh_lichsu_canthiep_view.xml',
         'views/ekids_user_view.xml',
 
 

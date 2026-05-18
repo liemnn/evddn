@@ -19,34 +19,191 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="ekids_hocsinh.hocsinh_phuhuynh_kanban">
+            <field name="name">hocsinh_phuhuynh.kanban</field>
+            <field name="model">ekids.hocsinh_phuhuynh</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" default_order="sequence, id">
+
+                    <field name="id"/>
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="dienthoai"/>
+                    <field name="email"/>
+                    <field name="dm_xa_id"/>
+                    <field name="dm_tinh_id"/>
+                    <field name="loai"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                    <i class="fa fa-ellipsis-v fa-lg"></i>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                        <i class="fa fa-pencil me-2"></i> Chỉnh sửa
+                                    </a>
+                                    <a role="menuitem" type="delete"
+                                       confirm="Xóa bản ghi này sẽ làm mất dữ liệu. Bạn có chắc chắn không?" 
+                                       class="dropdown-item text-danger">
+                                        <i class="fa fa-trash-o me-2"></i> Xóa
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="oe_kanban_global_click d-flex align-items-center"
+                                 style="border-radius: 14px; padding: 15px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 8px; transition: transform 0.2s ease;">
+
+                                <div class="me-3 d-flex justify-content-center align-items-center flex-shrink-0"
+                                     style="width: 52px; height: 52px; background-color: #f1f5f9; border-radius: 50%; border: 2px solid #e2e8f0;">
+                                    <i class="fa fa-user text-primary" style="font-size: 22px;"></i>
+                                </div>
+
+                                <div class="flex-grow-1 overflow-hidden">
+
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <strong class="text-truncate" style="font-size: 16px; color: #1e293b; font-weight: 800; max-width: 70%;">
+                                            <field name="name"/>
+                                        </strong>
+                                        <div class="flex-shrink-0 ms-2">
+                                            <field name="loai" widget="badge"
+                                                   decoration-success="loai == '1'"
+                                                   decoration-info="loai == '0'"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center mt-1" style="font-size: 14px; font-weight: 700; color: #475569;">
+                                        <div style="width: 20px;"><i class="fa fa-phone" style="color: #10b981;"></i></div>
+                                        <field name="dienthoai"/>
+                                    </div>
+
+                                    <t t-if="record.email.raw_value">
+                                        <div class="d-flex align-items-center mt-1 text-muted" style="font-size: 12px; font-weight: 500;">
+                                            <div style="width: 20px;"><i class="fa fa-envelope-o"></i></div>
+                                            <span class="text-truncate"><field name="email"/></span>
+                                        </div>
+                                    </t>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
 
 
         <record model="ir.ui.view" id="ekids_hocsinh.hocsinh_phuhuynh_form">
-            <field name="name">form</field>
+            <field name="name">hocsinh_phuhuynh.form.premium</field>
             <field name="model">ekids.hocsinh_phuhuynh</field>
             <field name="arch" type="xml">
             <form>
-                <sheet>
-                    <group>
-                        <field name="name"/>
-                    </group>
-                    <group col="2">
-                        <group>
-                            <field name="dienthoai"/>
-                            <field name="nghenghiep"/>
-                            <field name="dm_tinh_id"/>
-                        </group>
-                        <group>
-                            <field name="email"/>
-                            <field name="trinhdo"/>
-                            <field name="dm_xa_id" domain="[('dm_tinh_id','=',dm_tinh_id)]"/>
-                        </group>
-                    </group>
-                    <group>
-                         <field name="diachi_chitiet"/>
-                         <field name="loai"/>
-                        <field name="desc"/>
-                    </group>
+                <sheet class="p-4" style="border: none !important; background-color: #f8fafc;">
+                    <style>
+                        /* 1. CSS CHUẨN PREMIUM ĐÃ TỐI ƯU */
+                        .modern-input {
+                            border: 1.5px solid #e2e8f0 !important;
+                            border-radius: 8px !important;
+                            padding: 8px 12px !important;
+                            font-weight: 600 !important;
+                            background-color: #ffffff !important;
+                            width: 100%;
+                            color: #1e293b !important;
+                            transition: all 0.2s;
+                        }
+                        .modern-input:focus-within {
+                            border-color: #3b82f6 !important;
+                            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+                        }
+
+                        .section-title {
+                            font-size: 11px;
+                            font-weight: 700;
+                            color: #64748b;
+                            margin-bottom: 6px;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                        }
+
+                        .profile-header-box {
+                            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+                            border: 1px solid #e2e8f0;
+                            border-radius: 14px;
+                            padding: 20px;
+                            margin-bottom: 20px;
+                            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+                        }
+                    </style>
+
+                    <div class="profile-header-box">
+                        <div class="row align-items-center">
+                            <div class="col-lg-8 col-md-7">
+                                <div class="section-title">Họ và tên Phụ huynh</div>
+                                <field name="name" class="modern-input"
+                                       style="font-size: 24px !important; font-weight: 800 !important; color: #1e3a8a !important;"
+                                       placeholder="VD: Nguyễn Văn A..."/>
+                            </div>
+                            <div class="col-lg-4 col-md-5">
+                                <div class="section-title">Mối quan hệ với trẻ</div>
+                                <field name="loai" class="modern-input" style="padding: 11px 12px !important;"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <div class="p-3 bg-white rounded-3 border">
+                                <div class="section-title"><i class="fa fa-phone text-success"></i> Thông tin liên hệ</div>
+                                <div class="row">
+                                    <div class="col-12 mb-2">
+                                        <field name="dienthoai" class="modern-input" placeholder="Số điện thoại..."/>
+                                    </div>
+                                    <div class="col-12">
+                                        <field name="email" class="modern-input" placeholder="Địa chỉ Email..."/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-white rounded-3 border">
+                                <div class="section-title"><i class="fa fa-graduation-cap text-primary"></i> Nghề nghiệp &amp; Học vấn</div>
+                                <div class="row">
+                                    <div class="col-12 mb-2">
+                                        <field name="nghenghiep" class="modern-input" placeholder="Nghề nghiệp..."/>
+                                    </div>
+                                    <div class="col-12">
+                                        <field name="trinhdo" class="modern-input" style="padding: 7px 12px !important;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-3 border mb-3">
+                        <div class="section-title"><i class="fa fa-map-marker text-danger"></i> Địa chỉ thường trú</div>
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <field name="dm_tinh_id" class="modern-input" options="{'no_create': True, 'no_open': True}" placeholder="Tỉnh / Thành phố"/>
+                            </div>
+                            <div class="col-6">
+                                <field name="dm_xa_id" class="modern-input"
+                                       domain="[('dm_tinh_id','=',dm_tinh_id)]"
+                                       options="{'no_create': True, 'no_open': True}" placeholder="Quận / Huyện / Xã"/>
+                            </div>
+                        </div>
+                        <field name="diachi_chitiet" class="modern-input" placeholder="Số nhà, tên đường, thôn xóm..."/>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-3 border">
+                        <div class="section-title"><i class="fa fa-pencil-square-o text-secondary"></i> Ghi chú thêm</div>
+                        <field name="desc" class="modern-input"
+                               placeholder="Các thông tin lưu ý đặc biệt về phụ huynh hoặc cách thức liên hệ ưu tiên..."
+                               style="min-height: 80px;"/>
+                    </div>
 
                 </sheet>
             </form>

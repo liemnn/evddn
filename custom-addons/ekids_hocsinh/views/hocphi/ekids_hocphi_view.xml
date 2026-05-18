@@ -108,7 +108,7 @@
         <field name="name">Học phí</field>
         <field name="model">ekids.hocphi</field>
         <field name="arch" type="xml">
-            <list create="false" delete="true" limit="200" default_order="hocsinh_id asc">
+            <list create="false" delete="true" limit="200" default_order="hocsinh_id asc,id desc">
                 <header>
                     <button name="action_xacthuc_tinhlai_hocphi_theo_thang"
                         type="object"
@@ -166,7 +166,7 @@
         <field name="model">ekids.hocphi</field>
         <field name="priority" eval="100"/>
         <field name="arch" type="xml">
-            <kanban default_group_by="trangthai" create="false" delete="false" limit="200" default_order="hocsinh_id asc,nam_id desc, thang_id desc">
+            <kanban default_group_by="trangthai" create="false" delete="false" limit="200" default_order="hocsinh_id asc,id desc">
                 <field name="trangthai" />
                 <field name="hocsinh_id"/>
                 <header>
