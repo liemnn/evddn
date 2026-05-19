@@ -1,0 +1,192 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="ekids_giaovien.giaovien_khenthuong_list">
+            <field name="name">giaovien_khenthuong</field>
+            <field name="model">ekids.giaovien_khenthuong</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                   <field name="sequence" widget="handle"/>
+                   <field name="name" />
+                   <field name="nam" />
+                   <field name="loai"
+                        decoration-success="loai == '1'"
+                        decoration-danger="loai == '0'"/>
+                   <field name="desc" />
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_giaovien.giaovien_khenthuong_kanban">
+            <field name="name">giaovien_khenthuong.kanban.premium</field>
+            <field name="model">ekids.giaovien_khenthuong</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" default_order="nam desc, sequence">
+
+                    <field name="id"/>
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="nam"/>
+                    <field name="loai"/>
+                    <field name="desc"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                    <i class="fa fa-ellipsis-v fa-lg"></i>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                        <i class="fa fa-pencil me-2"></i> Chỉnh sửa
+                                    </a>
+                                    <a role="menuitem" type="delete"
+                                       confirm="Xóa bản ghi này sẽ làm mất dữ liệu. Bạn có chắc chắn không?"
+                                       class="dropdown-item text-danger">
+                                        <i class="fa fa-trash-o me-2"></i> Xóa
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="oe_kanban_global_click d-flex flex-column position-relative"
+                                 style="border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 8px;">
+
+
+
+                                <div class="mb-2 pe-4">
+                                    <strong style="font-size: 16px; color: #1e3a8a; font-weight: 800; line-height: 1.4;">
+                                        <i class="fa fa-certificate me-1" style="color: #f59e0b;"></i>
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+
+                                <div class="mb-3 d-flex align-items-center gap-2">
+                                    <field name="loai" widget="badge"
+                                           decoration-success="loai == '1'"
+                                           decoration-danger="loai == '0'"/>
+
+                                    <span style="font-size: 12px; font-weight: 700; color: #64748b; background-color: #f8fafc; padding: 3px 8px; border-radius: 6px; border: 1px dashed #cbd5e1;">
+                                        <i class="fa fa-calendar me-1"></i> Năm <field name="nam"/>
+                                    </span>
+                                </div>
+
+                                <div class="text-muted mt-auto pt-2"
+                                     style="font-size: 13px; border-top: 1px solid #f1f5f9; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
+                                    <i class="fa fa-align-left me-1" style="opacity: 0.5;"></i>
+                                    <span title="Chi tiết nội dung">
+                                        <t t-if="record.desc.raw_value">
+                                            <field name="desc"/>
+                                        </t>
+                                        <t t-else="">
+                                            <em style="opacity: 0.5;">(Không có ghi chú chi tiết)</em>
+                                        </t>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="ekids_giaovien.giaovien_khenthuong_form" model="ir.ui.view">
+            <field name="name">giaovien_khenthuong.form.premium</field>
+            <field name="model">ekids.giaovien_khenthuong</field>
+            <field name="arch" type="xml">
+                <form string="Thông tin Khen thưởng / Kỷ luật">
+                    <sheet class="p-4" style="border: none !important; background-color: #f8fafc;">
+
+                        <style>
+                            /* Ô nhập liệu bo góc phát sáng hiện đại */
+                            .modern-input {
+                                border: 1.5px solid #e2e8f0 !important;
+                                border-radius: 8px !important;
+                                padding: 8px 12px !important;
+                                font-weight: 600 !important;
+                                background-color: #ffffff !important;
+                                width: 100%;
+                                color: #1e293b !important;
+                                transition: all 0.2s;
+                            }
+                            .modern-input:focus-within {
+                                border-color: #3b82f6 !important;
+                                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+                            }
+
+                            /* Tiêu đề mục nhỏ gọn, tinh tế */
+                            .section-title {
+                                font-size: 11px;
+                                font-weight: 700;
+                                color: #64748b;
+                                margin-bottom: 6px;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                                display: flex;
+                                align-items: center;
+                                gap: 6px;
+                            }
+
+                            /* Khối hộp tiêu đề phối màu Gradient sang trọng */
+                            .profile-header-box {
+                                background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+                                border: 1px solid #e2e8f0;
+                                border-radius: 14px;
+                                padding: 20px;
+                                margin-bottom: 20px;
+                                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+                            }
+                        </style>
+
+                        <field name="sequence" invisible="1"/>
+                        <field name="giaovien_id" invisible="1"/>
+                        <field name="coso_id" invisible="1"/>
+
+                        <div class="profile-header-box">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="section-title">
+                                        <i class="fa fa-certificate text-warning"/> Tên quyết định / Thành tích / Kỷ luật
+                                    </div>
+                                    <field name="name" class="modern-input"
+                                           style="font-size: 20px !important; font-weight: 800 !important; color: #1e3a8a !important;"
+                                           placeholder="VD: Khen thưởng giáo viên xuất sắc tháng 05/2026, Vi phạm quy chế đi muộn..."/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 col-12 mb-3 mb-md-0">
+                                <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
+                                    <div class="section-title">
+                                        <i class="fa fa-sliders text-primary"/> Phân loại hình thức
+                                    </div>
+                                    <field name="loai" class="modern-input" style="padding: 10px 12px !important;"/>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-12">
+                                <div class="p-3 bg-white rounded-3 border h-100 shadow-sm">
+                                    <div class="section-title">
+                                        <i class="fa fa-calendar text-success"/> Năm áp dụng quyết định
+                                    </div>
+                                    <field name="nam" class="modern-input" style="padding: 10px 12px !important;"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-white rounded-3 border shadow-sm">
+                            <div class="section-title">
+                                <i class="fa fa-align-left text-secondary"/> Nội dung chi tiết / Lý do đưa ra quyết định
+                            </div>
+                            <div class="mt-2 border rounded-2 bg-white" style="min-height: 180px; padding: 6px;">
+                                <field name="desc" widget="html" options="{'style-inline': true}"/>
+                            </div>
+                        </div>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+</data>
+</odoo>

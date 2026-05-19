@@ -1,0 +1,272 @@
+<odoo>
+    <data>
+
+
+        <record model="ir.ui.view" id="ekids_giaovien.giaovien_hoctapcongtac_list">
+            <field name="name">giaovien_hoctapcongtac</field>
+            <field name="model">ekids.giaovien_hoctapcongtac</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                   <field name="sequence" widget="handle"/>
+                   <field name="tu_ngay" string="Từ ngày"/>
+                   <field name="den_ngay" string="Đến ngày"/>
+                   <field name="name" string="Nơi công tác"/>
+                   <field name="chucvu" string="Chức vụ"/>
+                   <field name="thanhtich" string="Thành tích"/>
+                   <field name="is_tham_nien_duoccong" widget="boolean_toggle" string="Được cộng dồn thâm niên"/>
+                    <field name="tham_nien" invisible="is_tham_nien_duoccong == False" string="Thâm niên"/>
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ekids_giaovien.giaovien_hoctapcongtac_kanban">
+            <field name="name">giaovien_hoctapcongtac.kanban.premium</field>
+            <field name="model">ekids.giaovien_hoctapcongtac</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" default_order="tu_ngay desc, sequence">
+
+                    <field name="id"/>
+                    <field name="sequence"/>
+                    <field name="tu_ngay"/>
+                    <field name="den_ngay"/>
+                    <field name="name"/>
+                    <field name="chucvu"/>
+                    <field name="thanhtich"/>
+                    <field name="is_tham_nien_duoccong"/>
+                    <field name="tham_nien"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                    <i class="fa fa-ellipsis-v fa-lg"></i>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                        <i class="fa fa-pencil me-2"></i> Chỉnh sửa
+                                    </a>
+                                    <a role="menuitem" type="delete"
+                                       confirm="Xóa bản ghi này sẽ làm mất dữ liệu. Bạn có chắc chắn không?"
+                                       class="dropdown-item text-danger">
+                                        <i class="fa fa-trash-o me-2"></i> Xóa
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="oe_kanban_global_click d-flex flex-column position-relative"
+                                 style="border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 8px;">
+
+
+
+                                <div class="mb-2 pe-4">
+                                    <strong style="font-size: 16px; color: #1e3a8a; font-weight: 800; line-height: 1.4;">
+                                        <i class="fa fa-building-o me-1" style="color: #3b82f6;"></i>
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+
+                                <div class="mb-3 d-flex align-items-center" style="font-size: 14px; font-weight: 600; color: #475569;">
+                                    <i class="fa fa-briefcase me-2 text-secondary"></i>
+                                    <field name="chucvu"/>
+                                </div>
+
+                                <div class="mb-3 p-2 d-flex justify-content-between align-items-center flex-wrap gap-2"
+                                     style="background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px;">
+
+                                    <div class="d-flex align-items-center" style="font-size: 13px; font-weight: 700; color: #64748b;">
+                                        <i class="fa fa-calendar me-2" style="color: #8b5cf6;"></i>
+                                        <field name="tu_ngay"/>
+                                        <i class="fa fa-long-arrow-right mx-2 text-muted" style="opacity: 0.5; font-size: 10px;"></i>
+
+                                        <t t-if="record.den_ngay.raw_value">
+                                            <field name="den_ngay"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="text-success">Hiện tại</span>
+                                        </t>
+                                    </div>
+
+                                    <t t-if="record.is_tham_nien_duoccong.raw_value">
+                                        <span style="background-color: #ecfdf5; color: #10b981; border: 1px solid #a7f3d0; padding: 3px 8px; font-weight: 700; border-radius: 6px; font-size: 11px; white-space: nowrap;">
+                                            <i class="fa fa-plus-circle me-1"></i> <field name="tham_nien"/>
+                                        </span>
+                                    </t>
+                                </div>
+
+                                <div class="text-muted mt-auto pt-2"
+                                     style="font-size: 13px; border-top: 1px solid #f1f5f9; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
+                                    <i class="fa fa-trophy me-1" style="color: #f59e0b;"></i>
+                                    <span title="Thành tích đạt được">
+                                        <t t-if="record.thanhtich.raw_value">
+                                            <field name="thanhtich"/>
+                                        </t>
+                                        <t t-else="">
+                                            <em style="opacity: 0.5;">(Chưa cập nhật thành tích)</em>
+                                        </t>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="ekids_giaovien.giaovien_hoctapcongtac_form" model="ir.ui.view">
+            <field name="name">giaovien_hoctapcongtac.form.premium</field>
+            <field name="model">ekids.giaovien_hoctapcongtac</field>
+            <field name="arch" type="xml">
+                <form string="Quá trình Học tập và Công tác">
+                    <sheet class="p-4" style="border: none !important; background-color: #f8fafc;">
+
+                        <style>
+                            /* Ô nhập liệu bo góc phát sáng hiện đại */
+                            .modern-input {
+                                border: 1.5px solid #e2e8f0 !important;
+                                border-radius: 8px !important;
+                                padding: 8px 12px !important;
+                                font-weight: 600 !important;
+                                background-color: #ffffff !important;
+                                width: 100%;
+                                color: #1e293b !important;
+                                transition: all 0.2s;
+                            }
+                            .modern-input:focus-within {
+                                border-color: #3b82f6 !important;
+                                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+                            }
+
+                            /* Tiêu đề mục nhỏ gọn, tinh tế */
+                            .section-title {
+                                font-size: 11px;
+                                font-weight: 700;
+                                color: #64748b;
+                                margin-bottom: 6px;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                                display: flex;
+                                align-items: center;
+                                gap: 6px;
+                            }
+
+                            /* Khối hộp tiêu đề phối màu Gradient sang trọng */
+                            .profile-header-box {
+                                background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+                                border: 1px solid #e2e8f0;
+                                border-radius: 14px;
+                                padding: 20px;
+                                margin-bottom: 20px;
+                                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+                            }
+
+                            /* Dải chọn thời gian tinh gọn */
+                            .compact-date-row {
+                                background-color: #ffffff;
+                                border: 1px solid #e2e8f0;
+                                border-radius: 10px;
+                                padding: 12px 20px;
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+                            }
+                            .compact-date-row input {
+                                border: none !important;
+                                background: transparent !important;
+                                font-weight: 800 !important;
+                                font-size: 15px !important;
+                                color: #0f172a !important;
+                                width: 105px !important;
+                                text-align: center !important;
+                                padding: 0 !important;
+                            }
+                            .compact-date-row .o_datepicker_button { display: none !important; }
+
+                            /* Khung bật tắt thâm niên chuyên nghiệp */
+                            .seniority-toggle-box {
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                padding: 12px 15px;
+                                background-color: #ffffff;
+                                border-radius: 8px;
+                                border: 1px solid #e2e8f0;
+                            }
+                        </style>
+
+                        <field name="sequence" invisible="1"/>
+                        <field name="giaovien_id" invisible="1"/>
+
+                        <div class="profile-header-box">
+                            <div class="row">
+                                <div class="col-md-7 col-12 mb-3 mb-md-0">
+                                    <div class="section-title">
+                                        <i class="fa fa-building-o text-primary"/> Nơi học tập / Làm việc
+                                    </div>
+                                    <field name="name" class="modern-input"
+                                           style="font-size: 20px !important; font-weight: 800 !important; color: #1e3a8a !important;"
+                                           placeholder="VD: Trường Tiểu học Từ Sơn, Đại học Sư Phạm..."/>
+                                </div>
+                                <div class="col-md-5 col-12">
+                                    <div class="section-title">
+                                        <i class="fa fa-briefcase text-secondary"/> Bằng cấp / Chức vụ
+                                    </div>
+                                    <field name="chucvu" class="modern-input"
+                                           style="font-size: 16px !important; font-weight: 700 !important;"
+                                           placeholder="VD: Giáo viên can thiệp, Thạc sĩ tâm lý..."/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="section-title">
+                                <i class="fa fa-clock-o text-warning"/> Khoảng thời gian học tập / Làm việc
+                            </div>
+                            <div class="compact-date-row d-flex justify-content-center align-items-center">
+                                <span class="text-uppercase fw-bold text-muted me-2" style="font-size: 11px;">Từ ngày</span>
+                                <field name="tu_ngay" nolabel="1"/>
+
+                                <i class="fa fa-long-arrow-right mx-4 text-muted" style="opacity: 0.4; font-size: 14px;"/>
+
+                                <span class="text-uppercase fw-bold text-muted me-2" style="font-size: 11px;">Đến ngày</span>
+                                <field name="den_ngay" nolabel="1" placeholder="(Hiện tại...)"/>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-white rounded-3 border mb-4 shadow-sm">
+                            <div class="section-title">
+                                <i class="fa fa-line-chart text-success"/> Tích lũy kinh nghiệm nghề nghiệp
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-md-6 col-12 mb-3 mb-md-0">
+                                    <div class="seniority-toggle-box">
+                                        <span class="fw-bold text-dark" style="font-size: 13px;">Được tính cộng dồn vào thâm niên hệ thống:</span>
+                                        <field name="is_tham_nien_duoccong" widget="boolean_toggle"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12" invisible="not is_tham_nien_duoccong">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="flex-grow-1">
+                                            <field name="tham_nien" class="modern-input text-end" style="font-size: 16px !important; font-weight: 800 !important; color: #10b981 !important;" placeholder="0.0"/>
+                                        </div>
+                                        <span class="fw-bold text-muted" style="font-size: 14px; white-space: nowrap;">Năm làm việc</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-white rounded-3 border shadow-sm">
+                            <div class="section-title">
+                                <i class="fa fa-trophy text-danger"/> Thành tích đạt được (Nếu có)
+                            </div>
+                            <field name="thanhtich" class="modern-input"
+                                   placeholder="VD: Chiến sĩ thi đua cấp cơ sở năm 2025, Giáo viên dạy giỏi xuất sắc..."
+                                   style="min-height: 60px;"/>
+                        </div>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+</data>
+</odoo>
