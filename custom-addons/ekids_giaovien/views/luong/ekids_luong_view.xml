@@ -66,6 +66,10 @@
         </field>
      </record>
 
+
+
+
+
     <!--kanban lương thang-->
 
     <record id="ekids_giaovien.luong_list" model="ir.ui.view">
@@ -120,6 +124,64 @@
         </field>
     </record>
         <!--        kanban view-->
+    <record id="ekids_giaovien.luong_kanban" model="ir.ui.view">
+        <field name="name">luong.kanban.premium.compact</field>
+        <field name="model">ekids.luong</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" create="false" delete="true" default_order="giaovien_id asc, id desc">
+
+                <field name="id"/>
+                <field name="giaovien_id"/>
+                <field name="thang_id"/>
+                <field name="nam_id"/>
+                <field name="luong"/>
+                <field name="trangthai"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click d-flex flex-column position-relative"
+                             style="border-radius: 14px; padding: 15px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 10px;">
+
+
+
+                            <div class="d-flex align-items-center mb-3 pe-4">
+                                <div class="rounded-circle d-flex justify-content-center align-items-center me-2 flex-shrink-0"
+                                     style="width: 36px; height: 36px; background-color: #eff6ff; border: 1px solid #bfdbfe;">
+                                    <i class="fa fa-user text-primary" style="font-size: 16px;"></i>
+                                </div>
+                                <strong style="font-size: 16px; color: #1e3a8a; font-weight: 800; line-height: 1.2;">
+                                    <field name="giaovien_id"/>
+                                </strong>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span style="font-size: 13px; font-weight: 700; color: #475569; background-color: #f8fafc; padding: 5px 10px; border-radius: 8px; border: 1px dashed #cbd5e1;">
+                                    <i class="fa fa-calendar text-muted me-1"></i> Kỳ <field name="thang_id"/>/<field name="nam_id"/>
+                                </span>
+
+                                <div class="mt-1">
+                                    <field name="trangthai" widget="badge"
+                                           decoration-warning="trangthai == '-1'"
+                                           decoration-info="trangthai == '0'"
+                                           decoration-success="trangthai == '1'"/>
+                                </div>
+                            </div>
+
+                            <div class="text-center p-3 mt-auto" style="background: linear-gradient(to right, #f0fdf4, #dcfce7); border-radius: 10px; border: 1px solid #86efac;">
+                                <div style="font-size: 11px; color: #166534; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">
+                                    THỰC LĨNH
+                                </div>
+                                <div style="font-size: 24px; color: #15803d; font-weight: 900; line-height: 1.2;">
+                                    <field name="luong" widget="integer"/> <span style="font-size: 14px; font-weight: 700;">VNĐ</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
 
     <record id="ekids_giaovien.luong_form" model="ir.ui.view">
         <field name="name">Thông tin lương giáo viên (Hoàn thiện)</field>

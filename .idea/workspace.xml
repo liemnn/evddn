@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/ekids_giaovien_khenthuong_view.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/ekids_giaovien_nguoithan_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/ekids_giaovien_thongtin_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/ekids_giaovien_hoctapcongtac_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/cauhinh/ekids_giaovien_nghiphep_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/cauhinh/ekids_giaovien_nghiphep_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/cauhinh/ekids_luong_dm_chitra_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/cauhinh/ekids_luong_dm_chitra_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/luong/ekids_luong_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/luong/ekids_luong_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,14 +113,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00073" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1777948834262</created>
-      <option name="number" value="00073" />
-      <option name="presentableId" value="LOCAL-00073" />
-      <option name="project" value="LOCAL" />
-      <updated>1777948834262</updated>
     </task>
     <task id="LOCAL-00074" summary="liemnn">
       <option name="closed" value="true" />
@@ -506,7 +498,15 @@
       <option name="project" value="LOCAL" />
       <updated>1779155405456</updated>
     </task>
-    <option name="localTasksCounter" value="122" />
+    <task id="LOCAL-00122" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779158282381</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1779158282381</updated>
+    </task>
+    <option name="localTasksCounter" value="123" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -602,7 +602,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_model.py</url>
-          <line>299</line>
+          <line>300</line>
           <option name="timeStamp" value="105" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
