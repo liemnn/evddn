@@ -17,6 +17,73 @@
             </field>
         </record>
 
+        <record id="ekids_hocsinh.hocsinh_ca_canthiep_kanban" model="ir.ui.view">
+            <field name="name">hocsinh_ca_canthiep.kanban</field>
+            <field name="model">ekids.hocsinh_ca_canthiep</field>
+            <field name="arch" type="xml">
+                <kanban default_order="sequence, id" class="o_kanban_mobile">
+                    <field name="id"/>
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="tu"/>
+                    <field name="den"/>
+                    <field name="dm_ca_id"/>
+                    <field name="giaovien_id"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click oe_kanban_card d-flex flex-column position-relative"
+                                 style="border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 8px;">
+
+                                <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                    <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                        <i class="fa fa-ellipsis-v fa-lg"></i>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a role="menuitem" type="delete"
+                                           confirm="Bạn có chắc chắn muốn xóa lịch can thiệp này không?"
+                                           class="dropdown-item text-danger">
+                                            <i class="fa fa-trash-o me-2"></i> Xóa
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 pe-4">
+                                    <strong style="font-size: 16px; color: #1e3a8a; font-weight: 800;">
+                                        <i class="fa fa-tag me-1" style="color: #3b82f6;"></i>
+                                        <field name="dm_ca_id"/>
+                                    </strong>
+                                </div>
+
+                                <div class="mb-3 p-2" style="background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px;">
+                                    <div class="d-flex justify-content-center align-items-center mb-1" style="font-size: 14px; font-weight: 700; color: #475569;">
+                                        <i class="fa fa-clock-o me-2" style="color: #f59e0b;"></i>
+                                        <field name="tu"/>
+                                        <i class="fa fa-long-arrow-right mx-2 text-muted" style="opacity: 0.5; font-size: 11px;"></i>
+                                        <field name="den"/>
+                                    </div>
+                                    <div class="text-center mt-1" style="font-size: 16px; font-weight: 800; color: #10b981;">
+                                        <i class="fa fa-calendar-check-o me-1"></i>
+                                        <field name="name"/>
+                                    </div>
+                                </div>
+
+                                <div class="o_kanban_record_bottom mt-auto pt-2" style="border-top: 1px dashed #e2e8f0;">
+                                    <div class="oe_kanban_bottom_left d-flex align-items-center w-100" style="font-size: 13px; font-weight: 600; color: #475569;">
+                                        <div class="me-2 d-flex align-items-center justify-content-center rounded-circle" style="width: 24px; height: 24px; background-color: #f1f5f9;">
+                                            <i class="fa fa-user text-secondary"></i>
+                                        </div>
+                                        Giáo viên:<field name="giaovien_id"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
 
 
         <record model="ir.ui.view" id="ekids_hocsinh.hocsinh_ca_canthiep_form">

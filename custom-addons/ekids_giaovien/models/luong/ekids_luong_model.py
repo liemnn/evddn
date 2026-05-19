@@ -21,6 +21,7 @@ except ImportError as e:
 class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     _name = 'ekids.luong'
     _description = 'Luong Giáo viên'
+    _order = "giaovien_id asc, id desc"
 
     # Khai báo các trường dữ liệu
     sequence = fields.Integer(string="TT", compute="_compute_sequence")

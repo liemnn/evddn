@@ -381,7 +381,7 @@
 
                                     <div class="kh-data-row">
                                         <div class="kh-data-label"><i class="fa fa-history text-muted"></i> Thời gian theo học</div>
-                                        <div class="kh-data-value"><field name="thoigian_hoc" required="1"/></div>
+                                        <div class="kh-data-value"><field name="thoigian_hoc"/></div>
                                     </div>
 
                                     <div class="kh-data-row">
@@ -491,7 +491,7 @@
                                         </div>
                                     </div>
                                 </page>
-                                <page name="lichsu_canthiep_ids" string="LỊCH SỬ HỌC/CAN THIỆP">
+                                <page name="lichsu_canthiep_ids" string="LỊCH SỬ HỌC">
                                     <field name="lichsu_canthiep_ids" context="{'default_coso_id':coso_id}"/>
                                 </page>
                                 <page string="HỒ SƠ[SCAN]">
@@ -561,22 +561,7 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="ekids_hocsinh.hocsinh_lichsu_canthiep_list">
-            <field name="name">hocsinh_lichsu_canthiep list</field>
-            <field name="model">ekids.hocsinh_lichsu_canthiep</field>
-            <field name="arch" type="xml">
-                <list editable="bottom">
-                   <field name="sequence" widget="handle"/>
-                    <field name="name" />
-                   <field name="tu_ngay" />
-                   <field name="den_ngay" />
-                   <field name="desc" />
-                  <field name="trangthai"
-                            decoration-success="trangthai == '1'"
-                            decoration-danger="trangthai == '-1'"/>
-                </list>
-            </field>
-        </record>
+
 
         <record model="ir.actions.act_window" id="ekids_hocsinh.hocsinh_action_window">
             <field name="name"> Quản lý hocsinh</field>

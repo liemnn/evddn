@@ -17,6 +17,7 @@
         'views/ekids_hocsinh_view.xml',
         'views/ekids_hocsinh_phuhuynh_view.xml',
         'views/ekids_hocsinh_view.xml',
+        'views/ekids_hocsinh_lichsu_canthiep_view.xml',
         'views/ekids_user_view.xml',
 
 
@@ -35,6 +36,9 @@
         'views/hocphi/ekids_hocphi_nam_view.xml',
         'views/hocphi/ekids_hocphi_thang_view.xml',
         'views/hocphi/ekids_hocphi_view.xml',
+        'views/hocphi/ekids_hocphi_bantru_view.xml',
+        'views/hocphi/ekids_hocphi_ca_view.xml',
+        'views/hocphi/ekids_hocphi_duoctru_view.xml',
         'views/hocphi/ekids_hocphi_thungoai_view.xml',
         'views/hocphi/ban_in/ekids_hocphi_banin_action.xml',
         'views/hocphi/ban_in/ekids_hocphi_banin_template.xml',

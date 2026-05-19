@@ -23,7 +23,7 @@ except ImportError as e:
 class HocPhi(models.Model,HocPhiThangAbstractModel):
     _name = 'ekids.hocphi'
     _description = 'Học phí của học sinh'
-    _order = "hocsinh_id asc"
+    _order = "hocsinh_id asc,id desc"
 
     # Khai báo các trường dữ liệu
     coso_id = fields.Many2one("ekids.coso", related="hocsinh_id.coso_id", string="Cơ sở", required=True,

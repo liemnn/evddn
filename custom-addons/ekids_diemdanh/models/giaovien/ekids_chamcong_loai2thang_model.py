@@ -148,6 +148,7 @@ class ChamCongLoai2Thang(models.Model,ChamCongFuncAbstractModel):
                     field_name = "d"+str(day)
                     data[field_name]= True
 
+
             giaovien2thang =self.env['ekids.chamcong_congviec2thang'].create(data)
 
     def func_tao_macdinh_congviec_giatri_cho_giaovien(self,giaovien,coso_hoatdongs,nghiles,nghipheps):
