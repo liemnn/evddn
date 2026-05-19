@@ -1,0 +1,17 @@
+<odoo>
+  <data>
+
+   <record id="ekids_hocsinh.hocphi_duoctru" model="ir.ui.view">
+        <field name="name">Tiền Được giảm khi nghỉ</field>
+        <field name="model">ekids.hocphi_duoctru</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="tien" sum="Total" widget="integer"/>
+
+            </list>
+        </field>
+    </record>
+
+  </data>
+</odoo>

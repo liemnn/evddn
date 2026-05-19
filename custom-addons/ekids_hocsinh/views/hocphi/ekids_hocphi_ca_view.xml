@@ -1,0 +1,19 @@
+<odoo>
+  <data>
+
+
+
+    <record id="ekids_hocsinh.hocphi_ca" model="ir.ui.view">
+        <field name="name">Tiền can thiệp theo ca</field>
+        <field name="model">ekids.hocphi_ca</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="dm_ca_id" context="{'default_coso_id':context.get('default_coso_id')}"/>
+                <field name="soca"/>
+                <field name="tien" sum="Total" widget="integer"/>
+            </list>
+        </field>
+    </record>
+
+  </data>
+</odoo>
