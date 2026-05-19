@@ -35,6 +35,21 @@
 
                     <templates>
                         <t t-name="kanban-box">
+                            <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                    <i class="fa fa-ellipsis-v fa-lg"></i>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                        <i class="fa fa-pencil me-2"></i> Chỉnh sửa
+                                    </a>
+                                    <a role="menuitem" type="delete"
+                                       confirm="Xóa bản ghi này sẽ làm mất dữ liệu. Bạn có chắc chắn không?"
+                                       class="dropdown-item text-danger">
+                                        <i class="fa fa-trash-o me-2"></i> Xóa
+                                    </a>
+                                </div>
+                            </div>
                             <div class="oe_kanban_global_click d-flex flex-column"
                                  style="border-radius: 14px; padding: 16px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: all 0.3s ease; margin-bottom: 8px;">
 
@@ -43,12 +58,8 @@
                                         <i class="fa fa-history me-1" style="color: #3b82f6;"></i>
                                         <field name="name"/>
                                     </strong>
-                                    <div class="flex-shrink-0">
-                                        <field name="trangthai" widget="badge"
-                                               decoration-success="trangthai == '1'"
-                                               decoration-danger="trangthai == '-1'"/>
-                                    </div>
                                 </div>
+
 
                                 <div class="mb-3 p-2" style="background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px;">
                                     <div class="d-flex justify-content-center align-items-center" style="font-size: 13px; font-weight: 700; color: #475569;">
@@ -56,12 +67,19 @@
                                             <field name="tu_ngay"/>
                                         </div>
 
-                                        <i class="fa fa-long-arrow-right text-muted mx-3" style="opacity: 0.5;"></i>
+                                        <i class="fa fa-long-arrow-right text-muted mx-3" style="opacity: 0.5;"/>
 
                                         <div class="text-center">
                                             <field name="den_ngay"/>
                                         </div>
+                                        <i class="fa fa-long-arrow-right text-muted mx-3" style="opacity: 0.5;"/>
+                                        <div class="text-center">
+                                            <field name="trangthai" widget="badge"
+                                                   decoration-success="trangthai == '1'"
+                                                   decoration-danger="trangthai == '-1'"/>
+                                        </div>
                                     </div>
+
                                 </div>
 
                                 <div class="text-muted mt-auto pt-2"
@@ -70,6 +88,8 @@
                                     <span title="Mô tả chi tiết">
                                         <field name="desc"/>
                                     </span>
+
+
                                 </div>
 
                             </div>
