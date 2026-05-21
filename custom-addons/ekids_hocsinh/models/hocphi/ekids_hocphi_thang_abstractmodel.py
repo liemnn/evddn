@@ -487,6 +487,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                              , days
                                                              , ca_canthieps
                                                              , ca2thus
+                                                             , ngay_dihoc_kehoachs
                                                              , ngay_dihoc_cosos):
         if ca_canthieps and days:
             soca_hocbu = self.env['ekids.diemdanh_ca2ngay'].search_count([
@@ -520,7 +521,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                         dongia = ca.tien
                         if ca.is_tien_trongoi == True:
                             # Chặn lỗi ZeroDivisionError
-                            dongia = (ca.tien / len(ngay_dihoc_cosos))
+                            dongia = (ca.tien / len(ngay_dihoc_kehoachs))
 
 
                         tien += ca2thu.soca * dongia
@@ -563,8 +564,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                    tien =soca * dm_ca.tien
                    # tien thu tron goi theo thang
                    if dm_ca.is_tien_trongoi == True:
-                       dongia = (dm_ca.tien/len(ngay_dihoc_cosos))
-                       tien = soca * dongia
+                      # dongia = (dm_ca.tien/len(ngay_dihoc_kehoachs))
+                       tien = dm_ca.tien
 
                    data = {
                         'hocphi_id': hocphi.id,
@@ -773,6 +774,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                                       ,values
                                                                       ,ca_canthieps
                                                                       ,ca2thus
+                                                                      ,ngay_dihoc_kehoachs
                                                                       ,ngay_dihoc_cosos)
 
 
@@ -786,7 +788,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             #TH2: TRỪ CA CAN THIEP
             days = list(ngaynghis.keys())
             # lấy cả các ca nghỉ, và sẽ dạy bù phục vụ thông báo
-            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai_ca(lydo,hocphi, tyle_hoantra, days, ngay_dihoc_cosos)
+            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai_ca(lydo,hocphi, tyle_hoantra, days, ngay_dihoc_kehoachs,ngay_dihoc_cosos)
 
 
 
@@ -797,7 +799,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
 
 
-    def func_hoantra_hocphi_do_diemdanh_nghi_theo_loai_ca(self,lydo, hocphi, tyle_hoantra_chung, days, ngay_dihoc_cosos):
+    def func_hoantra_hocphi_do_diemdanh_nghi_theo_loai_ca(self,lydo, hocphi, tyle_hoantra_chung, days, ngay_dihoc_kehoachs,ngay_dihoc_cosos):
         # Lấy danh sách điểm danh
         ca2ngays = self.env['ekids.diemdanh_ca2ngay'].search([
             ('hocsinh_id', '=', hocphi.hocsinh_id.id),
@@ -810,7 +812,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             return datas
 
         # Tính số ngày học một lần để tối ưu hiệu năng
-        so_ngay_hoc = len(ngay_dihoc_cosos)
+        so_ngay_hoc = len(ngay_dihoc_kehoachs)
         dm_ca_hoc=None
         for ca2ngay in ca2ngays:
             dm_ca = ca2ngay.hocphi_dm_ca_id
