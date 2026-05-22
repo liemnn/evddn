@@ -47,7 +47,7 @@ class LichHocController(http.Controller):
         return request.render('ekids_phuhuynh.hocphis', data)
 
 
-    def func_get_hocphis(self,hocsinh):
+    def func_get_hocphis(self,hocsinh,ca2hocsinhs):
         today = date.today()
         hocphis = request.env['ekids.hocphi'].sudo().search(
             [('hocsinh_id', '=', hocsinh.id)],
