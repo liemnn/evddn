@@ -1,25 +1,29 @@
 <odoo>
     <template id="ekids_baocao.baocao_nguonluc_template">
         <t t-call="web.html_container">
-
             <t t-call="web.basic_layout">
 
+                <t t-set="table_data" t-value="docs.get_table_data()"/>
+                <t t-set="ten_baocao" t-value="dict(docs._fields['loai'].selection).get(docs.loai)"/>
+
+                 <div class="btn-print-container" style="text-align:right; margin-bottom: 20px;">
+                   <button onclick="window.print()"
+                            class="btn btn-primary"
+                            style="padding: 8px 16px; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer;"
+                            title="In báo cáo" type="button">
+                        <i class="fa fa-print" style="margin-right: 5px;"></i>
+                    </button>
+                </div>
                 <div class="page" style="font-family: Arial, sans-serif; color: #333;">
 
-                     <div class="btn-print-container" style="text-align:right; margin-bottom: 20px;">
-                        <button onclick="window.print()"
-                                style="width:30px; height:auto; border:0px; background:transparent;"
-                                title="In báo cáo" type="button">
-                            <i class="fa fa-print" style="font-size: 18px; color: #555;"></i>
-                        </button>
-                    </div>
+
 
                      <div style="text-align: center; margin-bottom: 25px;">
                         <h3 style="font-weight: bold; text-transform: uppercase; font-size: 22px; margin-bottom: 5px;">
-                            <t t-esc="name"/> TỪ  <t t-esc="tu_ngay"/> ĐẾN  <t t-esc="den_ngay"/>
+                            <t t-esc="ten_baocao"/>
                         </h3>
                         <p style="font-style: italic; font-size: 14px; color: #555;">
-                            <t t-esc="thoigian"/>
+                            Từ Tháng <t t-esc="docs.tu_thang"/>/<t t-esc="docs.tu_nam"/> - Đến Tháng <t t-esc="docs.den_thang"/>/<t t-esc="docs.den_nam"/>
                         </p>
                     </div>
 
@@ -50,56 +54,39 @@
                 </div>
 
                 <style>
-                    /* --- 1. ÉP KHỔ GIẤY A4 DỌC VÀ LỀ CHUẨN --- */
+                    /* Ép lề, khổ A4 và font chữ */
 
-                    /* --- 2. ÉP FONT ARIAL CHỐNG LỖI CHỮ, NHƯNG THA CHO ICON --- */
                     *:not(i) {
                         font-family: Arial, sans-serif !important;
                     }
-
-                    /* --- 3. ẨN NÚT KHI IN --- */
                     @media print {
-                        .d-print-none {
-                            display: none !important;
-                        }
-                        body, .page {
-                            margin-top: 0px !important;
-                            padding-top: 0px !important;
-                        }
+                        .d-print-none { display: none !important; }
+                        body, .page { margin-top: 0px !important; padding-top: 0px !important; }
                     }
 
-                    /* --- 4. CSS BẢNG BIỂU --- */
+                    /* Bảng biểu co dãn thông minh */
                     .data-table {
                         border-collapse: collapse;
                         width: 100%;
                         font-size: 14px;
+                        table-layout: auto;
                     }
-
                     .data-table th, .data-table td {
                         border: 1px solid #444;
                         padding: 8px;
+                        word-wrap: break-word;
                     }
-
                     .data-table th {
                         background-color: #f2f2f2;
-                        color: #212529; /* Đã thêm dấu chấm phẩy */
+                        color: #212529;
                         font-size: 15px;
                         font-weight: bold;
-                        text-align: center; /* Tiêu đề cho ra giữa hết cho đẹp */
+                        text-align: center;
+                        vertical-align: middle;
                     }
-
-
-
-                    /* Màu nền đan xen */
-                    .data-table tbody tr:nth-child(even) {
-                        background-color: #f8f9fa;
-                    }
-
-                    /* Bôi đậm dòng tổng cộng cuối cùng (nếu có) */
-                    .data-table tbody tr:last-child {
-                        font-weight: bold;
-                        background-color: #e9ecef;
-                    }
+                    .data-table tbody tr:nth-child(even) { background-color: #f8f9fa; }
+                    .data-table tbody tr:last-child { font-weight: bold; background-color: #e9ecef; }
+                    .data-table tr { page-break-inside: avoid; }
                 </style>
             </t>
         </t>

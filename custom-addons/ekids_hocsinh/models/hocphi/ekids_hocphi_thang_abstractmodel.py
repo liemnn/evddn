@@ -34,7 +34,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         #lay tat ca hoc sinh tung hoc trong thang xem.
         nam =int(self.nam_id.name)
         thang =int(self.name)
-        hocsinhs = hocsinh_util.func_get_hocsinhs_trong_thang(self,coso.id,nam,thang)
+        hocsinhs = hocsinh_util.func_danhsach_hocsinh_trongthang(self,coso.id,nam,thang)
 
         if year != ngay_dauthang.year or month != ngay_dauthang.month:
             hocsinh_nghis = self.env['ekids.hocsinh'].search(

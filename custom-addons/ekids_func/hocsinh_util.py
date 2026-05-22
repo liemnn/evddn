@@ -183,7 +183,13 @@ def func_get_tinhtoan_ca2thu_theo_thu(self,hocsinh,day):
     return tinhtoan_ca2thus
 
 def func_get_so_hocsinh_trong_thang(self,coso_id,nam,thang):
-    domain = func_get_domain_trong_thang(coso_id, nam, thang)
+    days = ngay_util.func_get_cacngay_trong_thang(int(nam), int(thang))
+    tu_ngay = days[0]
+    den_ngay = days[len(days) - 1]
+    coso_ids = [coso_id]
+
+    domain = func_get_domain_trong_khoang_thoigian(coso_ids, tu_ngay, den_ngay)
+
     count = self.env['ekids.hocsinh'].search_count(domain)
 
     if count:
@@ -191,21 +197,36 @@ def func_get_so_hocsinh_trong_thang(self,coso_id,nam,thang):
     else:
         return 0
 
-def func_get_hocsinhs_trong_thang(self, coso_id, nam, thang):
-    domain =func_get_domain_trong_thang(coso_id,nam,thang)
+
+
+def func_danhsach_hocsinh_trongthang(self, coso_id, nam, thang):
+    days = ngay_util.func_get_cacngay_trong_thang(int(nam), int(thang))
+    tu_ngay = days[0]
+    den_ngay = days[len(days) - 1]
+    coso_ids = [coso_id]
+
+    domain =func_get_domain_trong_khoang_thoigian(coso_ids,tu_ngay,den_ngay)
 
     hocsinhs = self.env['ekids.hocsinh'].search(domain)
 
     return hocsinhs
 
-def func_get_domain_trong_thang(coso_id, nam, thang):
-    days = ngay_util.func_get_cacngay_trong_thang(int(nam), int(thang))
-    ngay_dauthang = days[0]
-    ngay_cuoithang = days[len(days) - 1]
+def func_danhsach_hocsinh_khoang_thoigian(self, coso_ids, tu_ngay, den_ngay):
+
+    domain =func_get_domain_trong_khoang_thoigian(coso_ids,tu_ngay,den_ngay)
+
+    hocsinhs = self.env['ekids.hocsinh'].search(domain)
+
+    return hocsinhs
+
+
+
+
+def func_get_domain_trong_khoang_thoigian(coso_ids, tu_ngay,den_ngay):
 
     domain_chung= [
-        ('coso_id', '=', coso_id),
-        ('ngay_nhaphoc', '<=', ngay_cuoithang),
+        ('coso_id', 'in', coso_ids),
+        ('ngay_nhaphoc', '<=', den_ngay),
     ]
 
     # Nhóm 1: Học sinh đang theo học
@@ -217,8 +238,8 @@ def func_get_domain_trong_thang(coso_id, nam, thang):
     domain_danghi = [
         ('trangthai', '=', '3'),
         ('ngay_nghihoc', '!=', False),
-        ('ngay_nghihoc', '>=', ngay_dauthang),
-        ('ngay_nghihoc', '<=', ngay_cuoithang),
+        ('ngay_nghihoc', '>=', tu_ngay),
+        ('ngay_nghihoc', '<=', den_ngay),
     ]
 
     domain = expression.AND([

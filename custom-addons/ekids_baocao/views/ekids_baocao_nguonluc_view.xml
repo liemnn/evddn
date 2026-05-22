@@ -30,10 +30,11 @@
                     </group>
                     <group>
                          <field name="loai"/>
-                         <field name="coso_ids" widget="many2many_tags"
+                         <field name="coso_ids" widget="many2many_checkboxes"
                                 string="Các cơ sở cần xem"
                                 invisible="loai in ['1']"
                          />
+
                     </group>
                     <footer>
                         <button name="action_xem_baocao" type="object" string="Xem báo cáo" class="btn-primary"/>
