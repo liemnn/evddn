@@ -231,3 +231,41 @@ def func_get_domain_trong_thang(coso_id, nam, thang):
 
     return domain
 
+
+def func_is_hoc(self, hocsinh, ngay):
+    # Tránh lỗi nếu biến ngay hoặc ngay_nhaphoc bị trống (False/None) dưới database
+    if not ngay or not hocsinh.ngay_nhaphoc:
+        return False
+    # ngày tương lại không học
+    today = date.today()
+    if ngay > today:
+        return False
+
+    # 1. KIỂM TRA THEO TRẠNG THÁI HIỆN TẠI TRÊN HỒ SƠ
+    # Điều kiện cần: Ngày xét phải từ ngày nhập học trở đi
+
+    if ngay >= hocsinh.ngay_nhaphoc:
+        # Trường hợp 1: Học sinh vẫn đang học (chưa có ngày nghỉ học chính thức)
+        if not hocsinh.ngay_nghihoc:
+            return True
+        # Trường hợp 2: Học sinh đã nghỉ học, nhưng ngày xét nằm trước hoặc đúng ngày nghỉ
+        else:  # Đã sửa lỗi thiếu dấu : ở đây
+            if ngay <= hocsinh.ngay_nghihoc:
+                return True
+
+    # 2. KIỂM TRA TRONG LỊCH SỬ CAN THIỆP (Nếu không thỏa mãn điều kiện hiện tại)
+    # Tối ưu: Đẩy thẳng điều kiện ngày xuống Database thông qua Domain của Odoo
+    # Dùng search_count để kiểm tra số lượng bản ghi, tránh kéo data thô lên RAM làm chậm server
+    lichsu_count = self.env['ekids.hocsinh_lichsu_canthiep'].search_count([
+        ('hocsinh_id', '=', hocsinh.id),
+        ('tu_ngay', '<=', ngay),
+        ('den_ngay', '>=', ngay)
+    ])
+
+    if lichsu_count > 0:
+        return True
+
+    # Không nằm trong bất kỳ khoảng thời gian đi học nào
+    return False
+
+

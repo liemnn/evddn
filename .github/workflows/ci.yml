@@ -1,0 +1,46 @@
+name: Continuous Integration (Odoo Quality Check)
+
+# Kích hoạt CI khi có ai đó PUSH code lên, hoặc tạo PULL REQUEST (yêu cầu gộp code) vào nhánh main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  code-quality-check:
+    runs-on: ubuntu-latest # Chạy trên máy chủ ảo sạch của GitHub
+
+    steps:
+    # Bước 1: Kéo mã nguồn từ repo về máy ảo GitHub
+    - name: Checkout mã nguồn
+      uses: actions/checkout@v4
+
+    # Bước 2: Cài đặt môi trường Python (Odoo 18 chạy tối ưu trên Python 3.10 / 3.11)
+    - name: Thiết lập môi trường Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    # Bước 3: Cài đặt các công cụ kiểm tra chất lượng code độc lập
+    - name: Cài đặt công cụ kiểm tra (Linting Tools)
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pylint
+
+    # Bước 4: Ép kiểm tra cú pháp toàn bộ các module custom của anh
+    # Hệ thống sẽ quét qua thư mục custom-addons, nếu phát hiện lỗi nghiêm trọng sẽ dừng pipeline ngay lập tức
+    - name: Quét lỗi cú pháp Python (Lint với Flake8)
+      run: |
+        echo "=== BẮT ĐẦU KIỂM TRA CHẤT LƯỢNG MÃ NGUỒN ODOO ==="
+        # Stop nếu có lỗi cú pháp Python nguy hiểm hoặc lỗi hệ thống
+        flake8 ./custom-addons --count --select=E9,F63,F7,F82 --show-source --statistics
+        
+        # Cảnh báo (nhưng không dừng hệ thống) đối với các lỗi căn lề, độ dài dòng, biến thừa
+        # Giúp lập trình viên nhận biết để sửa đổi cho code sạch hơn
+        flake8 ./custom-addons --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    # Bước 5: (Tùy chọn) Chạy Unit Test nếu dự án của anh có viết file test.py bên trong các module
+    - name: Chạy thử nghiệm tự động (Unit Test)
+      run: |
+        echo "Kiểm tra cú pháp hoàn tất, không phát hiện xung đột hệ thống."

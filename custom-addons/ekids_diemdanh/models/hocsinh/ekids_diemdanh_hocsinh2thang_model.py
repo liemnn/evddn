@@ -205,8 +205,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
     def _compute_all_is_d_nghi(self):
         today =date.today()
         for record in self:
-            ngay_nhaphoc = record.hocsinh_id.ngay_nhaphoc
-            ngay_nghihoc = record.hocsinh_id.ngay_nghihoc
+
             for day in range(1, 32):  # từ 1 đến 32
                 field_name = f'is_d{day}_nghi'
                 try:
@@ -218,15 +217,11 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                     is_hoc = getattr(record.coso_id, thu_field)
                     is_hoatdong = False
                     if is_hoc:
-                        if ngay > today:
-                            is_hoatdong =True
-                        elif (ngay_nghihoc and ngay_nghihoc<ngay):
-                            is_hoatdong =True
+                        is_hoc = hocsinh_util.func_is_hoc(self,record.hocsinh_id,ngay)
+                        if is_hoc == True:
+                            is_hoatdong =False
                         else:
-                            if ngay <ngay_nhaphoc:
-                                is_hoatdong =True
-                            else:
-                                is_hoatdong = False
+                            is_hoatdong = True
                     else:
                         is_hoatdong = True
 
@@ -235,6 +230,16 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
 
                 except ValueError:
                     setattr(record,field_name,True)
+
+    def func_is_thangnay(self):
+        today = date.today()
+
+        if (today.year == int(self.diemdanh_id.thang)
+            and today.month == int(self.diemdanh_id.nam)):
+            return True
+
+
+        return False
 
 
     def func_tinhtoan_giatri_hocsinh2ngay(self,nghiles,coso_hoatdongs,nghipheps,ca_tangcuongs,is_create):

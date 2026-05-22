@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_baocao/views/ekids_baocao_nguonluc_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_baocao/views/ekids_baocao_nguonluc_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_func/hocsinh_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_func/hocsinh_util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,17 +46,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.evddn.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/odoo/evddn/custom-addons/ekids_giaovien/views/luong&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.evddn.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_giaovien/views/luong",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_giaovien\views\luong" />
@@ -110,38 +111,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00080" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778077061260</created>
-      <option name="number" value="00080" />
-      <option name="presentableId" value="LOCAL-00080" />
-      <option name="project" value="LOCAL" />
-      <updated>1778077061261</updated>
-    </task>
-    <task id="LOCAL-00081" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778138564811</created>
-      <option name="number" value="00081" />
-      <option name="presentableId" value="LOCAL-00081" />
-      <option name="project" value="LOCAL" />
-      <updated>1778138564812</updated>
-    </task>
-    <task id="LOCAL-00082" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778141326138</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1778141326138</updated>
-    </task>
-    <task id="LOCAL-00083" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778297605637</created>
-      <option name="number" value="00083" />
-      <option name="presentableId" value="LOCAL-00083" />
-      <option name="project" value="LOCAL" />
-      <updated>1778297605637</updated>
     </task>
     <task id="LOCAL-00084" summary="liemnn">
       <option name="closed" value="true" />
@@ -503,7 +472,39 @@
       <option name="project" value="LOCAL" />
       <updated>1779412658606</updated>
     </task>
-    <option name="localTasksCounter" value="129" />
+    <task id="LOCAL-00129" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779413264633</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1779413264633</updated>
+    </task>
+    <task id="LOCAL-00130" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779415666257</created>
+      <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1779415666257</updated>
+    </task>
+    <task id="LOCAL-00131" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779416176698</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1779416176698</updated>
+    </task>
+    <task id="LOCAL-00132" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779420463771</created>
+      <option name="number" value="00132" />
+      <option name="presentableId" value="LOCAL-00132" />
+      <option name="project" value="LOCAL" />
+      <updated>1779420463771</updated>
+    </task>
+    <option name="localTasksCounter" value="133" />
     <servers />
   </component>
   <component name="UnknownFeatures">
