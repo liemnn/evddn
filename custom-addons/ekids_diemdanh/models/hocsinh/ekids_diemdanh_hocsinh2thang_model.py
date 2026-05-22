@@ -220,10 +220,13 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                     if is_hoc:
                         if ngay > today:
                             is_hoatdong =True
-                        elif (ngay_nghihoc and ngay_nghihoc<ngay):
+                        elif (ngay_nghihoc
+                              and ngay_nghihoc < ngay
+                              and self.is_dl_locked == False):
                             is_hoatdong =True
                         else:
-                            if ngay <ngay_nhaphoc:
+                            if (ngay <ngay_nhaphoc
+                                    and self.is_dl_locked == False):
                                 is_hoatdong =True
                             else:
                                 is_hoatdong = False
