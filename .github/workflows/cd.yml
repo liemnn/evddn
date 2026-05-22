@@ -1,0 +1,52 @@
+name: Continuous Deployment (Odoo 18 Docker Volume)
+
+# Kích hoạt tự động khi anh push code hoặc merge pull request vào nhánh main
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy-odoo-addons:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Bước 1: Lấy mã nguồn mới nhất từ repo evddn trên GitHub
+    - name: Checkout mã nguồn từ GitHub
+      uses: actions/checkout@v4
+
+    # Bước 2: Đồng bộ ruột của thư mục custom-addons lên /opt/odoo18/addons/ trên Server
+    - name: Đẩy mã nguồn custom-addons lên Server trung tâm
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        source: "custom-addons/"  # Lấy đúng thư mục này trên GitHub của anh
+        target: "/opt/odoo18/addons/" # Đổ thẳng vào đường dẫn volume của anh trên Server
+        strip_components: 1       # Bỏ chữ "custom-addons", chỉ lấy toàn bộ thư mục con (ekids_baocao, ekids_hocsinh...) đổ vào target
+
+    # Bước 3: SSH vào Server để phân quyền lại file và ra lệnh cho Docker Compose khởi động lại Odoo
+    - name: Thực thi làm mới dịch vụ Odoo 18
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          echo "=== ĐÃ KẾT NỐI SANG SERVER TRUNG TÂM COPPY ==="
+          
+          # 1. Phân quyền lại thư mục để Docker và Odoo có quyền đọc/ghi file chính xác
+          # Do các file được upload lên bằng tài khoản SSH (có thể là root hoặc ubuntu), cần đảm bảo odoo đọc được.
+          sudo chmod -R 755 /opt/odoo18/addons/
+          
+          # 2. Di chuyển vào thư mục chứa file docker-compose.yml của anh trên Server
+          # Anh hãy thay đổi đường dẫn dưới đây cho đúng với vị trí file docker-compose.yml thực tế trên máy chủ nhé:
+          cd /opt/odoo18/
+          
+          # 3. Ra lệnh cho Docker Compose khởi động lại ứng dụng để quét và nhận diện code mới từ Volume
+          # Hãy thay thế 'odoo' bằng tên service chính xác trong file compose của anh (ví dụ: odoo, web, app...)
+          docker compose restart odoo
+          
+          echo "=== HOÀN THÀNH: PHẦN MỀM ĐÃ ĐƯỢC CẬP NHẬT VÀ KHỞI ĐỘNG LẠI ==="
