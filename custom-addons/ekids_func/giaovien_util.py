@@ -224,21 +224,34 @@ def func_get_thamnien(giaovien):
 
 
 
-def func_get_giaoviens_trong_thang(self, coso_id, nam, thang):
-    domain =func_get_domain_trong_thang(coso_id,nam,thang)
+def func_danhsach_giaovien_khoang_thoigian(self, coso_ids, tu_ngay,den_ngay):
+    domain =func_get_domain_trong_khoang_thoigian(coso_ids,tu_ngay,den_ngay)
 
     giaoviens = self.env['ekids.giaovien'].search(domain)
 
     return giaoviens
 
-def func_get_domain_trong_thang(coso_id, nam, thang):
+def func_danhsach_giaovien_trongthang(self, coso_id, nam, thang):
     days = ngay_util.func_get_cacngay_trong_thang(int(nam), int(thang))
-    ngay_dauthang = days[0]
-    ngay_cuoithang = days[len(days) - 1]
+    tu_ngay = days[0]
+    den_ngay = days[len(days) - 1]
+    coso_ids =[coso_id]
+    domain =func_get_domain_trong_khoang_thoigian(coso_ids,tu_ngay,den_ngay)
+
+    giaoviens = self.env['ekids.giaovien'].search(domain)
+
+    return giaoviens
+
+
+
+
+
+def func_get_domain_trong_khoang_thoigian(coso_ids, tu_ngay,den_ngay):
+
 
     domain_chung= [
-        ('coso_id', '=', coso_id),
-        ('dilam_tungay', '<=', ngay_cuoithang),
+        ('coso_id', 'in', coso_ids),
+        ('dilam_tungay', '<=', den_ngay),
     ]
 
     # Nhóm 1: giáo viên đang làm việc
@@ -250,8 +263,8 @@ def func_get_domain_trong_thang(coso_id, nam, thang):
     domain_danghi = [
         ('trangthai', 'in', ['0','2']),
         ('dilam_denngay', '!=', False),
-        ('dilam_denngay', '>=', ngay_dauthang),
-        ('dilam_denngay', '<=', ngay_cuoithang),
+        ('dilam_denngay', '>=', tu_ngay),
+        ('dilam_denngay', '<=', den_ngay),
     ]
 
     domain = expression.AND([

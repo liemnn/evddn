@@ -92,7 +92,7 @@ class DiemDanh(models.Model):
         nam = ngay_cuoithang.year
         thang = ngay_cuoithang.month
 
-        hocsinhs = hocsinh_util.func_get_hocsinhs_trong_thang(self, self.coso_id.id, nam, thang)
+        hocsinhs = hocsinh_util.func_danhsach_hocsinh_trongthang(self, self.coso_id.id, nam, thang)
 
         hocsinh2thangs = self.env['ekids.diemdanh_hocsinh2thang'].search(
             [
