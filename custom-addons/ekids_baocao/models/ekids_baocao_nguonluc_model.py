@@ -1,16 +1,17 @@
 from odoo import models, fields, api
 from datetime import datetime,date,timedelta
 from dateutil.relativedelta import relativedelta
+from odoo.tools import html2plaintext
+
 import logging
 _logger = logging.getLogger(__name__)
-
 try:
     from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import giaovien_util
     from odoo.addons.ekids_func import hocsinh_util
     from odoo.addons.ekids_func import nghile_util
     from odoo.addons.ekids_func import coso_util
     from odoo.addons.ekids_func import ngay_util
-    from odoo.addons.ekids_func import hocsinh_util
 except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
 
@@ -54,34 +55,103 @@ class BaoCaoNguonLucWizard(models.TransientModel):
         default=lambda self: str(date.today().year +1)
         )
 
+    loai = fields.Selection(
+        [('1', 'Báo cáo số lượng'), ('2', 'Báo cáo danh sách giáo viên')],
+        string='Loại báo cáo',
+        required=True,
+        default='1'
+    )
+
+    coso_ids = fields.Many2many('ekids.coso'
+        ,relation = "ekids_baocao_nguonluc_baocao2coso_rel"
+        , column1 = "baocao_nguonluc_id"
+        , column2 = "coso_Id"
+        ,string="Danh sách Cơ sở"
+        ,required=True
+    )
+
 
     def get_table_data(self):
 
-        table_data = [['Tháng','Năm'
-                          ,'[1] Tổng Học sinh'
-                          ,'Nghỉ trong tháng'
-                          ,'Mới trong tháng'
-                          ,'[2] Tổng Giáo viên'
-                          ]]  # Header
-        tu_thang =self.tu_thang
-        tu_nam =self.tu_nam
+        table_data =[[]]
+        if self.loai =='1':
+            table_data = self.get_table_data_soluong_hocsinh_giaovien()
+        else:
+            table_data =self.get_table_data_danhsach_giaovien()
+
+
+        return table_data
+
+    def get_table_data_danhsach_giaovien(self):
+
+        table_data = [['TT', 'Họ và tên'
+                          , 'Ngày sinh'
+                          , 'CCCD'
+                          , 'Nơi cư trú'
+                          , 'Thâm niên'
+                          , 'Vị trí công việc'
+                          , 'Đơn vị công tac'
+                       ]]  # Header
+        tu_thang = self.tu_thang
+        tu_nam = self.tu_nam
         den_thang = self.den_thang
         den_nam = self.den_nam
-        ngay_first = date(int(tu_nam),int(tu_thang),1)
+        tu_ngay = date(int(tu_nam), int(tu_thang), 1)
+
+        ngays = ngay_util.func_get_cacngay_trong_thang(int(den_nam), int(den_thang))
+        den_ngay = ngays[len(ngays) -1]
+
+        giaoviens = giaovien_util.func_danhsach_giaovien_khoang_thoigian(self, self.coso_ids.ids, tu_ngay,den_ngay)
+        if giaoviens:
+            index =1
+            for gv in giaoviens:
+                desc = html2plaintext(gv.desc) if gv.desc else ''
+                table_data.append([
+                    str(index)
+                    ,gv.name
+                    ,string_util.date2string(gv.ngaysinh)
+                    ,gv.cccd
+                    ,gv.diachi_cutru
+                    ,gv.tham_nien
+                    ,desc
+                    ,gv.coso_id.name
+                ])
+                index =index+1
+
+
+        return table_data
+
+
+    def get_table_data_soluong_hocsinh_giaovien(self):
+
+        table_data = [['TT','Tháng', 'Năm'
+                          , '[1] Tổng Học sinh'
+                          , 'Nghỉ trong tháng'
+                          , 'Mới trong tháng'
+                          , '[2] Tổng Giáo viên'
+                       ]]  # Header
+        tu_thang = self.tu_thang
+        tu_nam = self.tu_nam
+        den_thang = self.den_thang
+        den_nam = self.den_nam
+        ngay_first = date(int(tu_nam), int(tu_thang), 1)
         ngay_last = date(int(den_nam), int(den_thang), 1)
 
-        ngay =ngay_first
-        sum={
-            'tong':0,
-            'nghi':0,
-            'moi':0
+        ngay = ngay_first
+        sum = {
+            'tong': 0,
+            'nghi': 0,
+            'moi': 0
         }
+        index =1
         while ngay <= ngay_last:
-            table_data =self.get_table_data_by_thang(table_data, ngay.year,ngay.month,sum)
+            table_data = self.get_table_data_by_thang(table_data,index, ngay.year, ngay.month, sum)
             ngay = ngay + relativedelta(months=1)
+            index =index=1
 
         # cho tổng 1 nam
         table_data.append([
+            '',
             'Tổng',
             '',
             self.number2string(sum['tong']),
@@ -90,14 +160,13 @@ class BaoCaoNguonLucWizard(models.TransientModel):
             '',
         ])
 
-
         return table_data
 
 
 
     #Tinh toán tháng
 
-    def get_table_data_by_thang(self,table_data,nam,thang,sum):
+    def get_table_data_by_thang(self,table_data,index,nam,thang,sum):
         tong_hs = self.sum_tong_hocsinh_trong_thang(nam,thang)
         hs_nghi = self.sum_tong_hocsinh_nghỉ_trong_thang(nam, thang)
         hs_moi = self.sum_tong_hocsinh_moi_trong_thang(nam, thang)
@@ -105,6 +174,7 @@ class BaoCaoNguonLucWizard(models.TransientModel):
 
 
         table_data.append([
+            str(index),
             'Tháng '+str(thang),
             str(nam),
             self.number2string(tong_hs),
@@ -177,8 +247,17 @@ class BaoCaoNguonLucWizard(models.TransientModel):
 
 
     def action_xem_baocao(self):
+        tu_ngay = "Tháng "+ self.tu_thang+"/"+self.tu_nam
+        den_ngay = "Tháng " + self.den_thang + "/" + self.den_nam
+        name =""
+        if self.loai =="1":
+            name="BÁO CÁO SỐ LƯỢNG [HỌC SINH/GIÁO VIÊN]"
+        else:
+            name = "BÁO CÁO DANH SÁCH GIÁO VIÊN"
         data = {
-            'nam': self.tu_nam,
+            'name': name,
+            'tu_ngay': tu_ngay,
+            'den_ngay': den_ngay,
             'table_data': self.get_table_data()
 
         }

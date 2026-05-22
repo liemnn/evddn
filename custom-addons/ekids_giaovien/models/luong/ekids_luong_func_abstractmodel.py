@@ -44,7 +44,7 @@ class LuongFuncAbstractModel(models.AbstractModel):
 
         coso_dilam_kehoachs = giaovien_util.func_get_ngay_dilam_theo_kehoach(self,coso, nghiles_all,ngay_dauthang, ngay_cuoithang)
         #lay tat ca giao vien
-        giaoviens= giaovien_util.func_get_giaoviens_trong_thang(self, coso.id, nam, thang)
+        giaoviens= giaovien_util.func_danhsach_giaovien_trongthang(self, coso.id, nam, thang)
 
         if giaoviens:
             for giaovien in giaoviens:

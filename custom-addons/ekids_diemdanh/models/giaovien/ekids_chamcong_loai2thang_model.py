@@ -88,7 +88,7 @@ class ChamCongLoai2Thang(models.Model,ChamCongFuncAbstractModel):
         ngay_cuoithang = days[len(days) - 1]
         nam = ngay_dauthang.year
         thang = ngay_dauthang.month
-        giaoviens = giaovien_util.func_get_giaoviens_trong_thang(self, self.coso_id.id, nam, thang)
+        giaoviens = giaovien_util.func_danhsach_giaovien_trongthang(self, self.coso_id.id, nam, thang)
         if giaoviens:
             nghiles = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, self.coso_id, None, ngay_dauthang,
                                                                          ngay_cuoithang)

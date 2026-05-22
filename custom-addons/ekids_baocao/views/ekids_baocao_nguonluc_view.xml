@@ -28,6 +28,13 @@
                         </group>
 
                     </group>
+                    <group>
+                         <field name="loai"/>
+                         <field name="coso_ids" widget="many2many_tags"
+                                string="Các cơ sở cần xem"
+                                invisible="loai in ['1']"
+                         />
+                    </group>
                     <footer>
                         <button name="action_xem_baocao" type="object" string="Xem báo cáo" class="btn-primary"/>
                         <button string="Đóng lại" class="btn-secondary" special="cancel"/>

@@ -14,10 +14,13 @@
                         </button>
                     </div>
 
-                    <div style="text-align: center; margin-bottom: 25px;">
-                        <h3 style="font-weight: bold; text-transform: uppercase; font-size: 20px;">
-                            BÁO CÁO TỔNG [HỌC SINH/GIÁO VIÊN] HÀNG THÁNG
+                     <div style="text-align: center; margin-bottom: 25px;">
+                        <h3 style="font-weight: bold; text-transform: uppercase; font-size: 22px; margin-bottom: 5px;">
+                            <t t-esc="name"/> TỪ  <t t-esc="tu_ngay"/> ĐẾN  <t t-esc="den_ngay"/>
                         </h3>
+                        <p style="font-style: italic; font-size: 14px; color: #555;">
+                            <t t-esc="thoigian"/>
+                        </p>
                     </div>
 
                     <table class="data-table">
@@ -32,7 +35,10 @@
                             <t t-foreach="table_data[1:]" t-as="row">
                                 <tr>
                                     <t t-foreach="row" t-as="cell">
-                                        <td t-att-style="cell_index == 0 and 'text-align: center;' or 'text-align: right;'">
+                                        <td t-att-style="
+                                            'text-align: center;' if cell_index == 0
+                                            else 'text-align: right;' if str(cell).replace(',', '').replace('.', '').replace('/', '').replace('-', '').strip().isdigit()
+                                            else 'text-align: left;'">
                                             <t t-esc="cell"/>
                                         </td>
                                     </t>
@@ -45,10 +51,6 @@
 
                 <style>
                     /* --- 1. ÉP KHỔ GIẤY A4 DỌC VÀ LỀ CHUẨN --- */
-                    @page {
-                        size: A4 portrait; /* Nếu báo cáo của anh bị nhiều cột quá, hãy đổi chữ portrait thành landscape nhé */
-                        margin: 10mm 10mm 10mm 10mm !important;
-                    }
 
                     /* --- 2. ÉP FONT ARIAL CHỐNG LỖI CHỮ, NHƯNG THA CHO ICON --- */
                     *:not(i) {
@@ -86,9 +88,7 @@
                         text-align: center; /* Tiêu đề cho ra giữa hết cho đẹp */
                     }
 
-                    .data-table td {
-                        width: 15%; /* Đã sửa lỗi sai chính tả widht */
-                    }
+
 
                     /* Màu nền đan xen */
                     .data-table tbody tr:nth-child(even) {
