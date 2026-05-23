@@ -206,22 +206,40 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
                 hs.tuoi = "0"
 
     def _compute_thoigian_hoc(self):
-        now = datetime.today()
+        # Lấy ngày hiện tại chuẩn xác theo hệ thống Odoo
+        today = fields.Date.today()
+
         for hs in self:
+            # 1. Chặn các trạng thái không cần tính toán số tháng
+            if hs.trangthai == "2":
+                hs.thoigian_hoc = "Đợi đánh giá"
+                continue
+            elif hs.trangthai == "4":
+                hs.thoigian_hoc = "Đã đánh giá nhưng không học"
+                continue
+
+            # 2. Xử lý các trạng thái cần tính toán (1 và 3)
             if hs.ngay_nhaphoc:
-                # 1. Quy đổi toàn bộ khoảng cách ra tháng
-                nam_diff = now.year - hs.ngay_nhaphoc.year
-                thang_diff = now.month - hs.ngay_nhaphoc.month
+                # Xác định mốc thời gian chốt sổ (end_date)
+                if hs.trangthai == "3":
+                    # Nếu đã nghỉ, tính đến ngày nghỉ. Nếu quên chưa nhập ngày nghỉ thì tạm lấy ngày hôm nay
+                    end_date = hs.ngay_nghihoc if hs.ngay_nghihoc else today
+                else:
+                    # Nếu đang theo học (trangthai == "1"), tính đến ngày hôm nay
+                    end_date = today
+
+                # Thuật toán quy đổi ra tháng của anh
+                nam_diff = end_date.year - hs.ngay_nhaphoc.year
+                thang_diff = end_date.month - hs.ngay_nhaphoc.month
 
                 # Tổng số tháng tạm tính
                 tong_thang = (nam_diff * 12) + thang_diff
 
-                # 2. Hiệu chỉnh: Nếu ngày hiện tại chưa đến ngày nhập học của tháng đó
-                # thì chưa tính là tròn 1 tháng
-                if now.day < hs.ngay_nhaphoc.day:
+                # Hiệu chỉnh: Nếu ngày chốt sổ chưa đến ngày nhập học của tháng đó
+                if end_date.day < hs.ngay_nhaphoc.day:
                     tong_thang -= 1
 
-                # 3. Xử lý kết quả hiển thị
+                # Xử lý kết quả hiển thị
                 if tong_thang <= 0:
                     hs.thoigian_hoc = "Mới nhập học"
                 else:
@@ -234,9 +252,9 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
                     if thang > 0:
                         parts.append(f"{thang} tháng")
 
-                    # Nối các phần lại, ví dụ: "1 năm 2 tháng" hoặc "5 tháng"
                     hs.thoigian_hoc = " ".join(parts)
             else:
+                # Không có ngày nhập học
                 hs.thoigian_hoc = "Chưa có dữ liệu"
 
     @api.model_create_multi
