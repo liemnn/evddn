@@ -260,7 +260,7 @@ class LuongFuncAbstractModel(models.AbstractModel):
 
         parameters["$NGAY_DIMUON"] = str(dilam_muon)
 
-        tham_nien = giaovien_util.func_get_thamnien(giaovien)
+        tham_nien = giaovien.tham_nien
         parameters["$THAM_NIEN"] = str(tham_nien)
         luong.tham_nien = tham_nien
 

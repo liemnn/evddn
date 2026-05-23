@@ -225,7 +225,7 @@ def func_get_thamnien(giaovien):
         # Nếu đã nghỉ làm -> Tính đến ngày nghỉ việc.
         # (Giả định anh đang dùng trường 'ngay_nghiviec', hãy sửa lại tên biến nếu anh đặt tên khác)
         # Nếu quên chưa nhập ngày nghỉ, tạm lấy ngày hôm nay để tránh lỗi hệ thống
-        end_date = giaovien.ngay_nghiviec if giaovien.ngay_nghiviec else today
+        end_date = giaovien.dilam_denngay if giaovien.dilam_denngay else today
     else:
         # Nếu trạng thái "1" (Đang làm việc) hoặc "2" (Nghỉ thai sản, ốm đau) -> Tính đến hôm nay
         end_date = today
