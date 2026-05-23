@@ -212,15 +212,35 @@ def func_get_ngays_theloai_trong_khoang_thoigian(self,chamcong,theloais,nghiles,
 
     return days
 
+
 def func_get_thamnien(giaovien):
-    today = date.today()
+    # 1. Chặn lỗi nếu chưa nhập ngày bắt đầu đi làm
     if not giaovien.dilam_tungay:
         return 0.0
 
-    diff = relativedelta(today, giaovien.dilam_tungay)
-    # số năm + (số tháng / 12)
-    result = diff.years + diff.months / 12.0
-    return round(result, 1)   # làm tròn 1 chữ số thập phân
+    today = date.today()
+
+    # 2. Xác định mốc thời gian chốt sổ (end_date)
+    if giaovien.trangthai == "0":
+        # Nếu đã nghỉ làm -> Tính đến ngày nghỉ việc.
+        # (Giả định anh đang dùng trường 'ngay_nghiviec', hãy sửa lại tên biến nếu anh đặt tên khác)
+        # Nếu quên chưa nhập ngày nghỉ, tạm lấy ngày hôm nay để tránh lỗi hệ thống
+        end_date = giaovien.ngay_nghiviec if giaovien.ngay_nghiviec else today
+    else:
+        # Nếu trạng thái "1" (Đang làm việc) hoặc "2" (Nghỉ thai sản, ốm đau) -> Tính đến hôm nay
+        end_date = today
+
+    # 3. Chốt chặn an toàn: Tránh trường hợp nhập sai (ngày nghỉ trước ngày đi làm) gây ra số âm
+    if end_date < giaovien.dilam_tungay:
+        return 0.0
+
+    # 4. Tính toán khoảng thời gian
+    diff = relativedelta(end_date, giaovien.dilam_tungay)
+
+    # Công thức: số năm + (số tháng / 12)
+    result = diff.years + (diff.months / 12.0)
+
+    return round(result, 1)
 
 
 
