@@ -108,7 +108,7 @@ class ChuongTrinh(models.Model):
             'type': 'ir.actions.act_window',
             'name': "MỤC TIÊU",
             'res_model': 'ekids.ct_muctieu',
-            'view_mode': 'kanban,list,form',
+            'view_mode': 'list,kanban,form',
             'target': 'current',
             'domain': [('chuongtrinh_id', '=', self.id)],
             'context': {

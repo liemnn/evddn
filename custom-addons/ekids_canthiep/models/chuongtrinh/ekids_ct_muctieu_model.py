@@ -7,6 +7,10 @@ class MucTieu(models.Model):
     _name = "ekids.ct_muctieu"
     _description = "Lĩnh vực"
 
+    coso_id = fields.Many2one("ekids.coso", related="linhvuc_id.coso_id", string="Cơ sở", required=True,ondelete="restrict")
+    chuongtrinh_id = fields.Many2one("ekids.ct_chuongtrinh", related="linhvuc_id.chuongtrinh_id", string="Chương trình", required=True,
+                              ondelete="restrict")
+
     sequence = fields.Integer(string="STT", default=1)
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực')
     tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi')

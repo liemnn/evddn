@@ -2,43 +2,74 @@
     <data>
 
         <record id="ekids_canthiep.ct_tuoi_kanban" model="ir.ui.view">
-            <field name="name">Danh mục Tuoi</field>
+            <field name="name">TUỔI</field>
             <field name="model">ekids.ct_tuoi</field>
             <field name="priority" eval="100"/>
             <field name="arch" type="xml">
                 <kanban archivable="false">
-                    <t t-name="kanban-box">
-                        <div class="box">
-                              <nav class="box-navbar">
-                                <ul class="box-menu">
-                                  <li class="box-menu-item">
-                                    <a href="#" >
-                                       <span class="fa fa-ellipsis-v"></span>
+                    <field name="name"/>
+                    <field name="desc"/>
+                    <field name="tong_muctieu"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                    <i class="fa fa-ellipsis-v fa-lg"></i>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                        <i class="fa fa-pencil me-2"></i> Chỉnh sửa
                                     </a>
-                                    <ul class="box-dropdown">
-                                       <li>
+                                    <a role="menuitem" type="delete"
+                                       confirm="Xóa bản ghi này sẽ làm mất dữ liệu. Bạn có chắc chắn không?"
+                                       class="dropdown-item text-danger">
+                                        <i class="fa fa-trash-o me-2"></i> Xóa
+                                    </a>
+                                </div>
+                            </div>
+                            <div t-attf-class="oe_kanban_global_click o_kanban_record d-flex flex-column p-0 book-card"
+                                 style="border: 1px solid #e2e8f0; border-left: 12px solid #28a745; border-radius: 4px 12px 12px 4px; box-shadow: 6px 8px 15px rgba(0,0,0,0.06); background-color: #fdfbf7; overflow: hidden; position: relative;">
 
-                                      </li>
+                                <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 15px; background: linear-gradient(to right, rgba(0,0,0,0.08), transparent);"></div>
 
-                                    </ul>
-                                  </li>
-                                </ul>
-                            </nav>
-                            <!-- Icon Section -->
+                                <div class="p-4 d-flex flex-column h-100" style="position: relative; z-index: 1;">
 
-                            <!-- Title Section -->
-                            <h2 class="title">
-                                <field name="name"/>
-                            </h2>
-                            <!-- Description Section -->
+                                    <div class="book-ribbon" style="position: absolute; top: -10px; right: 20px; width: 30px; height: 40px; background-color: #3b82f6; clip-path: polygon(100% 0, 100% 100%, 50% 75%, 0 100%, 0 0); box-shadow: 2px 2px 5px rgba(0,0,0,0.1);"></div>
 
-                            <p class="description">
-                               <field name="desc"/>
-                            </p>
-                            <!-- Button Section -->
+                                    <div class="d-flex justify-content-between align-items-start mb-3" style="border-bottom: 2px solid #cbd5e1; padding-bottom: 12px;">
+                                        <h3 class="fw-bolder m-0" style="color: #0f172a; font-family: 'Georgia', serif; font-size: 1.25rem; letter-spacing: 0.5px; padding-right: 35px;">
+                                            <i class="fa fa-sitemap text-muted me-2" style="font-size: 1.1rem;"></i>
+                                            <field name="name"/>
+                                        </h3>
+                                    </div>
 
-                        </div>
-                    </t>
+                                    <div style="font-size: 0.9rem;font-style: italic; color: #475569;">
+                                        <field name="desc"/>
+                                    </div>
+
+                                    <div class="mt-auto">
+                                        <button name="action_xem_muctieu" type="object"
+                                                class="btn btn-link text-decoration-none w-100 p-3 stat-box d-flex align-items-center justify-content-between"
+                                                style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); color: inherit;">
+
+                                            <div class="text-start">
+                                                <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">
+                                                    <i class="fa fa-bullseye me-2" style="color: #e11d48; font-size: 1.1rem;"></i>Tổng số Mục tiêu
+                                                </div>
+                                            </div>
+
+                                            <div style="font-size: 2.2rem; font-weight: 300; color: #e11d48; line-height: 1;">
+                                                <field name="tong_muctieu"/>
+                                            </div>
+
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
                 </kanban>
             </field>
         </record>

@@ -12,4 +12,15 @@ class DanhMucTuoi(models.Model):
     name = fields.Char(string="Tên")
     desc =fields.Html(string="Mô tả")
 
+    tong_muctieu = fields.Integer(string="Tổng mục tiêu", compute="_compute_tong_muctieu", store=False)
+
+    def _compute_tong_muctieu(self):
+        for tuoi in self:
+            count = self.env['ekids.ct_muctieu'].search_count([('tuoi_id', '=', tuoi.id)])
+            if count:
+                tuoi.tong_muctieu = count
+            else:
+                tuoi.tong_muctieu = 0
+
+
 
