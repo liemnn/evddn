@@ -12,14 +12,14 @@ class MucTieu(models.Model):
                               ondelete="restrict")
 
     sequence = fields.Integer(string="STT", default=1)
-    linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực')
-    tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi')
+    linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực',required=True)
+    tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi',required=True)
 
-    name = fields.Char(string="Tên")
+    name = fields.Char(string="Tên",required=True)
     chucnang = fields.Html(string="Chức năng phát triển cốt lõi & Lập luận lâm sàng")
     thietke = fields.Html(string="Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)")
-    tieuchi_chuadat = fields.Char(string="Chưa đạt (-)")
-    tieuchi_hinhthanh = fields.Char(string="Đang hình thành (+/-)")
-    tieuchi_dat = fields.Char(string="Đạt (+)")
+    tieuchi_chuadat = fields.Char(string="Chưa đạt (-)",required=True)
+    tieuchi_hinhthanh = fields.Char(string="Đang hình thành (+/-)",required=True)
+    tieuchi_dat = fields.Char(string="Đạt (+)",required=True)
 
 

@@ -9,7 +9,7 @@ class DanhMucTuoi(models.Model):
                               ondelete="restrict")
     sequence = fields.Integer(string="STT", default=1)
     chuongtrinh_id = fields.Many2one('ekids.ct_chuongtrinh', string='Chương trình')
-    name = fields.Char(string="Tên")
+    name = fields.Char(string="Tên",required=True)
     desc =fields.Html(string="Mô tả")
 
     tong_muctieu = fields.Integer(string="Tổng mục tiêu", compute="_compute_tong_muctieu", store=False)
@@ -21,6 +21,21 @@ class DanhMucTuoi(models.Model):
                 tuoi.tong_muctieu = count
             else:
                 tuoi.tong_muctieu = 0
+
+    def action_xem_muctieu(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': "TUỔI:" + self.name,
+            'res_model': 'ekids.ct_muctieu',
+            'view_mode': 'list,kanban,form',
+            'target': 'current',
+            'domain': [('tuoi_id', '=', self.id)],
+            'context': {
+                'default_chuongtrinh_id': self.chuongtrinh_id.id,
+                'default_tuoi_id': self.id,
+            }
+
+        }
 
 
 

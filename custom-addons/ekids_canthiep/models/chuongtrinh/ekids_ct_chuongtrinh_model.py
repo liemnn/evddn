@@ -7,8 +7,8 @@ class ChuongTrinh(models.Model):
 
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở", required=True, ondelete="restrict")
 
-    ma = fields.Char(string="Mã")
-    name = fields.Char(string="Tên")
+    ma = fields.Char(string="Mã",required=True)
+    name = fields.Char(string="Tên",required=True)
     desc =fields.Html(string="Mô tả")
     coso_ids = fields.Many2many(comodel_name="ekids.coso",
                                 relation="ekids_ct_chuongtrinh4coso_ids_rel",

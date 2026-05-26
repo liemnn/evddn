@@ -8,7 +8,7 @@ class LinhVuc(models.Model):
     coso_id = fields.Many2one("ekids.coso", related="chuongtrinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
     sequence = fields.Integer(string="STT", default=1)
-    name = fields.Char(string="Tên")
+    name = fields.Char(string="Tên",required=True)
 
     desc =fields.Html(string="Mô tả")
     chuongtrinh_id = fields.Many2one('ekids.ct_chuongtrinh', string='Chương trình')
