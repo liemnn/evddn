@@ -8,7 +8,7 @@
                 <list default_order="sequence">
                     <field name="sequence" widget="handle"/>
 
-                    <field name="muctieu"  width="40%"/>
+                    <field name="name"  width="40%"/>
                     <field name="trichyeu"/>
                     <field name="kythuat" />
                     <field name="tieuchi"/>
@@ -72,7 +72,7 @@
                         <group>
                             <field name="linhvuc_id"/>
 
-                            <field name="muctieu" placeholder="Tên" />
+                            <field name="name" placeholder="Tên" />
                             <field name="trichyeu"/>
                         </group>
                         <group>

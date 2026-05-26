@@ -6,9 +6,8 @@ class LinhVuc(models.Model):
     _description = "Lĩnh vực"
 
     sequence = fields.Integer(string="STT", default=1)
-    ma = fields.Char(string="Mã")
-    ten = fields.Char(string="Tên")
-    name = fields.Char(string="Tên hiển thị", compute="_compute_ct_linhvuc_name", readonly=True)
+    name = fields.Char(string="Tên")
+
     desc =fields.Html(string="Mô tả")
     chuongtrinh_id = fields.Many2one('ekids.ct_chuongtrinh', string='Chương trình')
 
@@ -25,12 +24,7 @@ class LinhVuc(models.Model):
                 lv.tong_muctieu =count
             else:
                 lv.tong_muctieu = 0
-    def _compute_ct_linhvuc_name(self):
-        for kh in self:
-            if kh.ma:
-                kh.name = '[' + kh.ma + ']-'
-            if kh.ten:
-                kh.name += kh.ten
+
 
     def action_view_ekid_canthiep_kanban_muctieu(self):
         return {

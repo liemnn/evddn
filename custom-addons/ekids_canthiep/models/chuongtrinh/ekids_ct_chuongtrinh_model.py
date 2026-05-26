@@ -74,7 +74,7 @@ class ChuongTrinh(models.Model):
     def action_xem_tuoi(self):
         return {
             'type': 'ir.actions.act_window',
-            'name': self.ma,
+            'name': "ĐỘ TUỔI",
             'res_model': 'ekids.ct_tuoi',
             'view_mode': 'kanban,list,form',
             'target': 'current',
@@ -88,7 +88,7 @@ class ChuongTrinh(models.Model):
     def action_xem_linhvuc(self):
         return {
             'type': 'ir.actions.act_window',
-            'name': self.ma,
+            'name': "LĨNH VỰC",
             'res_model': 'ekids.ct_linhvuc',
             'view_mode': 'kanban,list,form',
             'target': 'current',
@@ -102,7 +102,7 @@ class ChuongTrinh(models.Model):
     def action_xem_muctieu(self):
         return {
             'type': 'ir.actions.act_window',
-            'name': self.ma,
+            'name': "MỤC TIÊU",
             'res_model': 'ekids.ct_muctieu',
             'view_mode': 'kanban,list,form',
             'target': 'current',
