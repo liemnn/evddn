@@ -24,6 +24,21 @@
 
                     <templates>
                         <t t-name="kanban-box">
+                            <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                    <i class="fa fa-ellipsis-v fa-lg"></i>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                        <i class="fa fa-pencil me-2"></i> Chỉnh sửa
+                                    </a>
+                                    <a role="menuitem" type="delete"
+                                       confirm="Xóa bản ghi này sẽ làm mất dữ liệu. Bạn có chắc chắn không?"
+                                       class="dropdown-item text-danger">
+                                        <i class="fa fa-trash-o me-2"></i> Xóa
+                                    </a>
+                                </div>
+                            </div>
                             <div t-attf-class="oe_kanban_global_click o_kanban_record d-flex flex-column p-0 book-card"
                                  style="border: 1px solid #e2e8f0; border-left: 12px solid #28a745; border-radius: 4px 12px 12px 4px; box-shadow: 6px 8px 15px rgba(0,0,0,0.06); background-color: #fdfbf7; overflow: hidden; position: relative;">
 

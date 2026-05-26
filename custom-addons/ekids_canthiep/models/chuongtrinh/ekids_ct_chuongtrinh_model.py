@@ -5,8 +5,8 @@ class ChuongTrinh(models.Model):
     _name = "ekids.ct_chuongtrinh"
     _description = "CHƯƠNG TRÌNH CAN THIỆP"
 
-    coso_id = fields.Many2one("ekids.coso", related="nam_id.coso_id", string="Cơ sở", required=True,
-                              ondelete="restrict")
+    coso_id = fields.Many2one("ekids.coso", string="Cơ sở", required=True, ondelete="restrict")
+
     ma = fields.Char(string="Mã")
     name = fields.Char(string="Tên")
     desc =fields.Html(string="Mô tả")
