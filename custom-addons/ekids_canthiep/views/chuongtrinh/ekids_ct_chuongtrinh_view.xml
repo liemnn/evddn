@@ -19,7 +19,7 @@
             <field name="type">kanban</field>
             <field name="priority" eval="100"/>
             <field name="arch" type="xml">
-                <kanban>
+                <kanban archivable="false" sample="1" action="action_xem_muctieu">
                     <field name="name"/>
                     <field name="desc"/>
                     <field name="tong_tuoi"/>
@@ -28,8 +28,27 @@
 
                     <templates>
                         <t t-name="kanban-box">
+
                             <div t-attf-class="oe_kanban_global_click o_kanban_record d-flex flex-column p-0 book-card"
+                                 type="object"
+                                 name="action_xem_muctieu"
                                  style="border: 1px solid #e2e8f0; border-left: 12px solid #017e84; border-radius: 4px 12px 12px 4px; box-shadow: 6px 8px 15px rgba(0,0,0,0.06); background-color: #fdfbf7; overflow: hidden; position: relative;">
+
+                                <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                    <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                        <i class="fa fa-ellipsis-v fa-lg"></i>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                            <i class="fa fa-pencil me-2"></i> Chỉnh sửa
+                                        </a>
+                                        <a role="menuitem" type="delete"
+                                           confirm="Xóa bản ghi này sẽ làm mất dữ liệu. Bạn có chắc chắn không?"
+                                           class="dropdown-item text-danger">
+                                            <i class="fa fa-trash-o me-2"></i> Xóa
+                                        </a>
+                                    </div>
+                                </div>
 
                                 <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 15px; background: linear-gradient(to right, rgba(0,0,0,0.08), transparent);"></div>
 
@@ -114,13 +133,16 @@
                         </group>
 
                          <group>
-                            <separator string="CÁC CƠ SỞ ÁP DỤNG CHO CHƯƠNG TRÌNH NÀY (để trống là toàn bộ a dụng)" />
+                            <separator string="CÁC CƠ SỞ ÁP DỤNG CHO CHƯƠNG TRÌNH NÀY (để trống là toàn bộ)" />
                             <field name="coso_ids" widget="many2many_tags"/>
                         </group>
 
                         <notebook invisible=" not id">
-                            <page name="linhvuc_ids " string="DANH SÁCH [LĨNH VỰC] CỦA CHƯƠNG TRÌNH">
+                            <page name="linhvuc_ids " string="LĨNH VỰC">
                                 <field name="linhvuc_ids" context="{'default_chuongtrinh_id':id}"/>
+                            </page>
+                            <page name="tuoi_ids " string="ĐỘ TUỔI">
+                                <field name="tuoi_ids" context="{'default_chuongtrinh_id':id}"/>
                             </page>
                         </notebook>
 

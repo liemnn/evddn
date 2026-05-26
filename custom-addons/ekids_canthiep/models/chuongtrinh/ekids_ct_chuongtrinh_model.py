@@ -5,6 +5,8 @@ class ChuongTrinh(models.Model):
     _name = "ekids.ct_chuongtrinh"
     _description = "CHƯƠNG TRÌNH CAN THIỆP"
 
+    coso_id = fields.Many2one("ekids.coso", related="nam_id.coso_id", string="Cơ sở", required=True,
+                              ondelete="restrict")
     ma = fields.Char(string="Mã")
     name = fields.Char(string="Tên")
     desc =fields.Html(string="Mô tả")
@@ -16,6 +18,8 @@ class ChuongTrinh(models.Model):
 
     linhvuc_ids = fields.One2many("ekids.ct_linhvuc",
                                   "chuongtrinh_id", string="Lĩnh vực")
+    tuoi_ids = fields.One2many("ekids.ct_tuoi",
+                                  "chuongtrinh_id", string="Độ tuổi")
 
     tong_tuoi = fields.Integer(string="Tổng cấp độ",compute="_compute_tong_tuoi",store=False)
     tong_linhvuc = fields.Integer(string="Tổng lĩnh vực",compute="_compute_tong_linhvuc",store=False)

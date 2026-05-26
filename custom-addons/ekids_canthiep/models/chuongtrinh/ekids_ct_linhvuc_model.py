@@ -5,6 +5,8 @@ class LinhVuc(models.Model):
     _name = "ekids.ct_linhvuc"
     _description = "Lĩnh vực"
 
+    coso_id = fields.Many2one("ekids.coso", related="chuongtrinh_id.coso_id", string="Cơ sở", required=True,
+                              ondelete="restrict")
     sequence = fields.Integer(string="STT", default=1)
     name = fields.Char(string="Tên")
 
