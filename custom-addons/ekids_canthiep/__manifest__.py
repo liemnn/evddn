@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "E-kids Ngân hàng chương trình [Can thiệp]",
+    'name': "E-kids Chương trình [Can thiệp]",
 
     'description': """
 Long description of module's purpose
@@ -19,15 +19,17 @@ Long description of module's purpose
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-
+        'views/ekids_coso_view.xml',
         'views/ekids_ct_dm_roiloan_view.xml',
-        'views/ekids_ct_dm_tuoi_view.xml',
+
 
         'views/chuongtrinh/ekids_ct_chuongtrinh_view.xml',
+        'views/chuongtrinh/ekids_ct_tuoi_view.xml',
         'views/chuongtrinh/ekids_ct_linhvuc_view.xml',
         'views/chuongtrinh/ekids_ct_muctieu_view.xml',
 
-        'views/chuongtrinh/ekids_ct_dm_capdo_view.xml',
+
+
         'views/mau_kehoach/ekids_mau_kehoach_view.xml',
         'views/mau_kehoach/ekids_mau_kehoach_roiloan_dikem_view.xml',
         'views/mau_kehoach/ekids_mau_kehoach_thang_view.xml',

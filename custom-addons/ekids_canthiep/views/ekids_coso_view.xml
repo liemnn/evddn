@@ -1,0 +1,44 @@
+<odoo>
+    <data>
+        <record id="ekids_chitieu.coso_kanban_view" model="ir.ui.view">
+            <field name="name">ekids_core.coso.kanban - Premium Soft Light</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+               <kanban sample="1" action="action_view_ekid_chitieu_kanban_chitieu_nam" type="object">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-premium-card">
+
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
+                                    </div>
+                                    <div class="kh-premium-title"><field name="name"/></div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">(Tính các khoản chi/tiêu hàng tháng của Cơ sở)</div>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-main"
+                                            name="action_xem_kehoach_canthiep"
+                                            type="object">
+                                        <i class="fa fa-credit-card"></i> KẾ HOẠCH [CAN THIỆP]
+                                    </button>
+
+
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

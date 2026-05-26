@@ -6,8 +6,7 @@ class ChuongTrinh(models.Model):
     _description = "CHƯƠNG TRÌNH CAN THIỆP"
 
     ma = fields.Char(string="Mã")
-    ten = fields.Char(string="Tên")
-    name = fields.Char(string="Tên hiển thị",compute="_compute_ct_chuongtrinh_name",readonly=True)
+    name = fields.Char(string="Tên")
     desc =fields.Html(string="Mô tả")
     coso_ids = fields.Many2many(comodel_name="ekids.coso",
                                 relation="ekids_ct_chuongtrinh4coso_ids_rel",
@@ -18,34 +17,27 @@ class ChuongTrinh(models.Model):
     linhvuc_ids = fields.One2many("ekids.ct_linhvuc",
                                   "chuongtrinh_id", string="Lĩnh vực")
 
-    tong_capdo = fields.Integer(string="Tổng cấp độ",compute="_compute_ct_chuongtrinh_tong_capdo",store=False)
-    tong_linhvuc = fields.Integer(string="Tổng lĩnh vực",compute="_compute_ct_chuongtrinh_tong_linhvuc",store=False)
-    tong_muctieu = fields.Integer(string="Tổng mục tiêu",compute="_compute_ct_chuongtrinh_tong_muctieu",store=False)
+    tong_tuoi = fields.Integer(string="Tổng cấp độ",compute="_compute_tong_tuoi",store=False)
+    tong_linhvuc = fields.Integer(string="Tổng lĩnh vực",compute="_compute_tong_linhvuc",store=False)
+    tong_muctieu = fields.Integer(string="Tổng mục tiêu",compute="_compute_tong_muctieu",store=False)
 
 
-    def _compute_ct_chuongtrinh_name(self):
-        for kh in self:
-            if kh.ma:
-                kh.name = '[' +kh.ma+']-'
-            if kh.ten:
-                kh.name += kh.ten
-
-    def _compute_ct_chuongtrinh_tong_capdo(self):
+    def _compute_tong_tuoi(self):
         for ct in self:
-            count = self.env['ekids.ct_dm_capdo'].search_count([('chuongtrinh_id','=',ct.id)])
+            count = self.env['ekids.ct_tuoi'].search_count([('chuongtrinh_id','=',ct.id)])
             if count:
-                ct.tong_capdo =count
+                ct.tong_tuoi =count
             else:
-                ct.tong_capdo = 0
+                ct.tong_tuoi = 0
 
-    def _compute_ct_chuongtrinh_tong_linhvuc(self):
+    def _compute_tong_linhvuc(self):
         for ct in self:
             count = self.env['ekids.ct_linhvuc'].search_count([('chuongtrinh_id','=',ct.id)])
             if count:
                 ct.tong_linhvuc =count
             else:
                 ct.tong_linhvuc = 0
-    def _compute_ct_chuongtrinh_tong_muctieu(self):
+    def _compute_tong_muctieu(self):
         for ct in self:
             count = self.env['ekids.ct_muctieu'].search_count([('linhvuc_id.chuongtrinh_id','=',ct.id)])
             if count:
@@ -79,8 +71,21 @@ class ChuongTrinh(models.Model):
 
         return super().search_fetch(domain, field_names, offset, limit, order)
 
+    def action_xem_tuoi(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': self.ma,
+            'res_model': 'ekids.ct_tuoi',
+            'view_mode': 'kanban,list,form',
+            'target': 'current',
+            'domain': [('chuongtrinh_id', '=', self.id)],
+            'context':{
+                'default_chuongtrinh_id':self.id
+            }
 
-    def action_view_ekid_canthiep_kanban_linhvuc(self):
+        }
+
+    def action_xem_linhvuc(self):
         return {
             'type': 'ir.actions.act_window',
             'name': self.ma,
@@ -93,16 +98,18 @@ class ChuongTrinh(models.Model):
             }
 
         }
-    def action_view_ekid_canthiep_kanban_dm_capdo(self):
+
+    def action_xem_muctieu(self):
         return {
             'type': 'ir.actions.act_window',
             'name': self.ma,
-            'res_model': 'ekids.ct_dm_capdo',
+            'res_model': 'ekids.ct_muctieu',
             'view_mode': 'kanban,list,form',
             'target': 'current',
             'domain': [('chuongtrinh_id', '=', self.id)],
-            'context':{
-                'default_chuongtrinh_id':self.id
+            'context': {
+                'default_chuongtrinh_id': self.id
             }
 
         }
+

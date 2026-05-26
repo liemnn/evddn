@@ -58,9 +58,7 @@
                             <group>
                                 <field name="linhvuc_id" domain="[('chuongtrinh_id','=',chuongtrinh_id)]"/>
                             </group>
-                            <group>
-                                <field name="capdo_id" domain="[('chuongtrinh_id','=',chuongtrinh_id)]"/>
-                            </group>
+
 
                         </group>
                         <group>

@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
                 <list default_order="sequence">
                     <field name="sequence" widget="handle"/>
-                    <field name="dm_capdo_id"/>
+
                     <field name="muctieu"  width="40%"/>
                     <field name="trichyeu"/>
                     <field name="kythuat" />
@@ -18,7 +18,7 @@
             </field>
         </record>
 
-        <record id="ekids_canthiep.ct_muctieu_kanban_view" model="ir.ui.view">
+        <record id="ekids_canthiep.ct_muctieu_kanban" model="ir.ui.view">
             <field name="name">Chương trình</field>
             <field name="model">ekids.ct_muctieu</field>
             <field name="priority" eval="100"/>
@@ -71,9 +71,7 @@
 
                         <group>
                             <field name="linhvuc_id"/>
-                            <field name="dm_capdo_id"
-                                   domain="[('chuongtrinh_id','=',context.get('default_chuongtrinh_id'))]"
-                                   />
+
                             <field name="muctieu" placeholder="Tên" />
                             <field name="trichyeu"/>
                         </group>

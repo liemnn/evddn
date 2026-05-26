@@ -15,6 +15,11 @@
             <field name="category_id" ref="module_ekids"/>
         </record>
 
+        <record id="ekids_core.ketluan" model="res.groups">
+            <field name="name">Đánh giá/kêt luận [Chuyên môn]</field>
+            <field name="category_id" ref="module_ekids"/>
+        </record>
+
 
 
         <record id="ekids_core.quanlycoso" model="res.groups">

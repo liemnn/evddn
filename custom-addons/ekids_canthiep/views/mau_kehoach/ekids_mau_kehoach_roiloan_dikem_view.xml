@@ -7,7 +7,6 @@
                 <list editable="bottom">
                     <field name="dm_roiloan_id"/>
                     <field name="chuongtrinh_id" context="{'default_coso_id':context.get('default_coso_id')}"/>
-                    <field name="dm_capdo_id"  domain="[('chuongtrinh_id','=',chuongtrinh_id)]"/>
                 </list>
             </field>
         </record>
