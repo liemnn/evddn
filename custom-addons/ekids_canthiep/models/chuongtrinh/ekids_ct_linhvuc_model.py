@@ -29,7 +29,7 @@ class LinhVuc(models.Model):
     def action_xem_muctieu(self):
         return {
             'type': 'ir.actions.act_window',
-            'name': "LĨNH VỰC",
+            'name': "LĨNH VỰC:"+ self.name,
             'res_model': 'ekids.ct_muctieu',
             'view_mode': 'list,kanban,form',
             'target': 'current',

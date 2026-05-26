@@ -1,40 +1,130 @@
 <odoo>
     <data>
-        <record id="ekids_chitieu.coso_kanban_view" model="ir.ui.view">
-            <field name="name">ekids_core.coso.kanban - Premium Soft Light</field>
-            <field name="model">ekids.coso</field>
-            <field name="priority" eval="100"/>
+       <record id="ct_muctieu_search" model="ir.ui.view">
+            <field name="name">ekids.ct_muctieu.search</field>
+            <field name="model">ekids.ct_muctieu</field>
             <field name="arch" type="xml">
-               <kanban sample="1" action="action_view_ekid_chitieu_kanban_chitieu_nam" type="object">
+                <search string="Tìm kiếm Mục tiêu">
+                    <field name="name" string="Nội dung mục tiêu"/>
+                    <field name="linhvuc_id"/>
+                    <field name="tuoi_id"/>
+
+                    <filter string="Đã cấu hình tiêu chí Đạt" name="has_rubric_dat" domain="[('tieuchi_dat', '!=', False)]"/>
+
+                    <group expand="0" string="Gom nhóm theo">
+                        <filter string="Lĩnh vực" name="group_by_linhvuc" context="{'group_by': 'linhvuc_id'}"/>
+                        <filter string="Mốc Độ tuổi" name="group_by_tuoi" context="{'group_by': 'tuoi_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="ct_muctieu_list" model="ir.ui.view">
+            <field name="name">ekids.ct_muctieu.list</field>
+            <field name="model">ekids.ct_muctieu</field>
+            <field name="arch" type="xml">
+                <list string="Danh sách Mục tiêu Can thiệp" default_order="sequence">
+                    <field name="sequence" widget="handle"/>
+                    <field name="tuoi_id" class="fw-bold" decoration-success="1"/>
+                    <field name="linhvuc_id" class="fw-bold" decoration-info="1"/>
+                    <field name="name" string="Mục tiêu can thiệp"/>
+                    <field name="tieuchi_dat" string="Tiêu chí Đạt (+)" optional="show"/>
+                    <field name="tieuchi_hinhthanh" string="Đang hình thành (+/-)" optional="hide"/>
+                    <field name="tieuchi_chuadat" string="Chưa đạt (-)" optional="hide"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="ct_muctieu_kanban" model="ir.ui.view">
+            <field name="name">ekids.ct_muctieu.kanban</field>
+            <field name="model">ekids.ct_muctieu</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="linhvuc_id" class="o_kanban_small_column" quick_create="false">
+                    <field name="id"/>
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="tuoi_id"/>
+                    <field name="linhvuc_id"/>
+                    <field name="chucnang"/>
                     <templates>
                         <t t-name="kanban-box">
-                            <div class="oe_kanban_global_click kh-premium-card">
+                            <div t-attf-class="oe_kanban_global_click o_kanban_record d-flex flex-column p-0"
+                                 style="border: 1px solid #e2e8f0; border-left: 8px solid #71639e; border-radius: 4px 8px 8px 4px; box-shadow: 2px 4px 10px rgba(0,0,0,0.03); background-color: #fdfbf7; overflow: hidden; min-height: 150px; transition: all 0.2s ease;">
 
+                                <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background: linear-gradient(to right, rgba(0,0,0,0.05), transparent);"></div>
 
-                                <div class="kh-premium-header">
-                                    <div class="kh-premium-avatar">
-                                        <field name="logo" widget="image"/>
+                                <div class="p-3 d-flex flex-column h-100 position-relative" style="z-index: 1;">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge text-bg-light border text-success fw-bold" style="font-size: 0.75rem; padding: 4px 8px;">
+                                            <i class="fa fa-clock-o me-1"/> <field name="tuoi_id"/>
+                                        </span>
+                                        <span class="text-muted small fw-bold">N° <field name="sequence"/></span>
                                     </div>
-                                    <div class="kh-premium-title"><field name="name"/></div>
-                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+
+                                    <div class="fw-bold mb-2 flex-grow-1 text-dark"
+                                         style="font-size: 0.92rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                        <field name="name"/>
+                                    </div>
+
+                                    <div class="mt-auto pt-2 border-top border-dashed text-muted"
+                                         style="font-size: 0.8rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; font-style: italic;">
+                                        <i class="fa fa-graduation-cap me-1" style="color: #71639e;"/>
+                                        <field name="chucnang"/>
+                                    </div>
                                 </div>
-
-                                <div class="kh-premium-body">
-                                    <div class="kh-premium-desc">(Tính các khoản chi/tiêu hàng tháng của Cơ sở)</div>
-
-                                    <button class="oe_kanban_action kh-btn-action kh-btn-main"
-                                            name="action_xem_kehoach_canthiep"
-                                            type="object">
-                                        <i class="fa fa-credit-card"></i> KẾ HOẠCH [CAN THIỆP]
-                                    </button>
-
-
-                                </div>
-
                             </div>
                         </t>
                     </templates>
                 </kanban>
+            </field>
+        </record>
+
+        <record id="ct_muctieu_form" model="ir.ui.view">
+            <field name="name">ekids.ct_muctieu.form</field>
+            <field name="model">ekids.ct_muctieu</field>
+            <field name="arch" type="xml">
+                <form string="Thông tin Mục tiêu Can thiệp">
+                    <sheet>
+                        <div class="oe_title mb-4">
+                            <label for="name" class="oe_edit_only" string="Nội dung Mục tiêu Can thiệp"/>
+                            <h1 class="text-break">
+                                <field name="name" placeholder="Ví dụ: Bắt chước 8-10 hành động chỉ gồm một bước với đồ vật..." required="1" options="{'style-inline': true}"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group id="classification_group" string="Thông tin Phân loại">
+                                <field name="sequence" string="Thứ tự (STT)"/>
+                                <field name="tuoi_id" placeholder="Chọn mốc tháng tuổi..." options="{'no_create': True, 'no_open': False}"/>
+                                <field name="linhvuc_id" placeholder="Chọn lĩnh vực phát triển..." options="{'no_create': True, 'no_open': False}"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Thiết kế Hoạt động (ABC)" name="page_thietke">
+                                <div class="alert alert-info my-2" role="alert" style="font-size: 0.9rem;">
+                                    <i class="fa fa-info-circle me-1"/> Người dạy điền chi tiết cấu trúc bao gồm <strong>Tiền đề (A)</strong>, <strong>Hành vi (B)</strong>, <strong>Hệ quả (C)</strong> và các bước tiến hành.
+                                </div>
+                                <field name="thietke" class="oe_sandbox" placeholder="Nhập các bước hướng dẫn chi tiết cho giáo viên tại đây..." options="{'collaborative': true, 'resizable': true}"/>
+                            </page>
+
+                            <page string="Lập luận Lâm sàng" name="page_lamsang">
+                                <div class="alert alert-secondary my-2" role="alert" style="font-size: 0.9rem;">
+                                    <i class="fa fa-book me-1"/> Phân tích chuyên sâu về chức năng phát triển, lý do lựa chọn bài dạy và hệ quả lâm sàng.
+                                </div>
+                                <field name="chucnang" class="oe_sandbox" placeholder="Nhập phân tích cấu trúc lý luận lâm sàng tại đây..." options="{'collaborative': true, 'resizable': true}"/>
+                            </page>
+
+                            <page string="Tiêu chí Đánh giá (Rubrics)" name="page_rubrics">
+                                <group string="Thang đo mức độ thành thục kỹ năng của trẻ">
+                                    <field name="tieuchi_chuadat" placeholder="Trẻ rụt tay, trốn tránh, không phản xạ..."/>
+                                    <field name="tieuchi_hinhthanh" placeholder="Trẻ phối hợp thực hiện khi có hỗ trợ, làm mẫu..."/>
+                                    <field name="tieuchi_dat" placeholder="Trẻ thực hiện độc lập thuần thục đạt tỷ lệ ≥80% cơ hội..."/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
             </field>
         </record>
 

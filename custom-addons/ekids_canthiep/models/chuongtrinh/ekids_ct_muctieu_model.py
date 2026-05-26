@@ -11,9 +11,9 @@ class MucTieu(models.Model):
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực')
     tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi')
 
-    name = fields.Html(string="Mục tiêu [Can thiệp]")
-    chucnang = fields.Html(string="Trích yếu (mã)")
-    thietke = fields.Html(string="Kỹ thuật/chiến lược")
+    name = fields.Char(string="Tên")
+    chucnang = fields.Html(string="Chức năng phát triển cốt lõi & Lập luận lâm sàng")
+    thietke = fields.Html(string="Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)")
     tieuchi_chuadat = fields.Char(string="Chưa đạt (-)")
     tieuchi_hinhthanh = fields.Char(string="Đang hình thành (+/-)")
     tieuchi_dat = fields.Char(string="Đạt (+)")
