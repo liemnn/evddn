@@ -26,10 +26,10 @@ class LinhVuc(models.Model):
                 lv.tong_muctieu = 0
 
 
-    def action_view_ekid_canthiep_kanban_muctieu(self):
+    def action_xem_muctieu(self):
         return {
             'type': 'ir.actions.act_window',
-            'name': self.ma,
+            'name': "LĨNH VỰC",
             'res_model': 'ekids.ct_muctieu',
             'view_mode': 'list,kanban,form',
             'target': 'current',
