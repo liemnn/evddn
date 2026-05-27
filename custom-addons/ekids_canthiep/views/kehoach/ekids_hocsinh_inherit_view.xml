@@ -1,0 +1,18 @@
+<odoo>
+  <data>
+    <record id="ekids_canthiep.kehoach_hocsinh_inherit_list" model="ir.ui.view">
+        <field name="name">Kế hoạch can thiệp</field>
+        <field name="model">ekids.hocsinh</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false" limit="200" default_order="id asc">
+
+                <field name="name" width="170"/>
+                <field name="trangthai_kehoach"/>
+
+
+            </list>
+        </field>
+    </record>
+
+  </data>
+</odoo>

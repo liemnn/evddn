@@ -14,7 +14,7 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'ekids_core','ekids_giaovien'],
+    'depends': ['base', 'ekids_core','ekids_func','ekids_hocsinh','ekids_giaovien'],
 
     # always loaded
     'data': [
@@ -34,6 +34,9 @@ Long description of module's purpose
         'views/mau_kehoach/ekids_mau_kehoach_roiloan_dikem_view.xml',
         'views/mau_kehoach/ekids_mau_kehoach_thang_view.xml',
         'views/mau_kehoach/ekids_mau_kehoach_muctieu2thang_view.xml',
+
+        'views/kehoach/ekids_hocsinh_inherit_view.xml',
+
         'views/ekids_menu.xml',
 
 

@@ -18,9 +18,9 @@
           action="ekids_canthiep.mau_kehoach_action_window"
           groups="base.group_system,ekids_core.ketluan" sequence="2"/>
 
-    <menuitem name="Chương trình" id="ekids_canthiep.chuongtrinh" parent="ekids_canthiep.menu_root"
-          action="ekids_canthiep.ct_chuongtrinh_action_window"
-           groups="base.group_system,ekids_core.ql_ct_canthiep" sequence="3"/>
+    <menuitem name="Chương trình" id="ekids_canthiep.chuongtrinh_menu" parent="ekids_canthiep.menu_root"
+          action="ekids_canthiep.coso_chuongtrinh_action_window"
+          groups="base.group_system,ekids_core.ql_ct_canthiep" sequence="3"/>
 
 
 

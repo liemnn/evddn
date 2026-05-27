@@ -5,7 +5,7 @@
 
 
     # any module necessary for this one to work correctly
-    'depends': ['base','ekids_func','ekids_core','ekids_canthiep','ekids_giaovien'],
+    'depends': ['base','ekids_func','ekids_core','ekids_giaovien'],
 
     # always loaded
     'data': [

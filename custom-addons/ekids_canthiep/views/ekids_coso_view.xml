@@ -1,77 +1,141 @@
 <odoo>
-    <data>
-       <record id="ct_muctieu_search" model="ir.ui.view">
-            <field name="name">ekids.ct_muctieu.search</field>
-            <field name="model">ekids.ct_muctieu</field>
+  <data>
+
+        <record id="ekids_canthiep.canthiep_kanban" model="ir.ui.view">
+            <field name="name">Quản lý học sinh các cơ sở - Premium Soft Light</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
             <field name="arch" type="xml">
-                <search string="Tìm kiếm Mục tiêu">
-                    <field name="name" string="Nội dung mục tiêu"/>
-                    <field name="linhvuc_id"/>
-                    <field name="tuoi_id"/>
-
-                    <filter string="Đã cấu hình tiêu chí Đạt" name="has_rubric_dat" domain="[('tieuchi_dat', '!=', False)]"/>
-
-                    <group expand="0" string="Gom nhóm theo">
-                        <filter string="Lĩnh vực" name="group_by_linhvuc" context="{'group_by': 'linhvuc_id'}"/>
-                        <filter string="Mốc Độ tuổi" name="group_by_tuoi" context="{'group_by': 'tuoi_id'}"/>
-                    </group>
-                </search>
-            </field>
-        </record>
-
-        <record id="ct_muctieu_list" model="ir.ui.view">
-            <field name="name">ekids.ct_muctieu.list</field>
-            <field name="model">ekids.ct_muctieu</field>
-            <field name="arch" type="xml">
-                <list string="Danh sách Mục tiêu Can thiệp" default_order="sequence">
-                    <field name="sequence" widget="handle"/>
-                    <field name="tuoi_id" class="fw-bold" decoration-success="1"/>
-                    <field name="linhvuc_id" class="fw-bold" decoration-info="1"/>
-                    <field name="name" string="Mục tiêu can thiệp"/>
-                    <field name="tieuchi_dat" string="Tiêu chí Đạt (+)" optional="show"/>
-                    <field name="tieuchi_hinhthanh" string="Đang hình thành (+/-)" optional="hide"/>
-                    <field name="tieuchi_chuadat" string="Chưa đạt (-)" optional="hide"/>
-                </list>
-            </field>
-        </record>
-
-        <record id="ct_muctieu_kanban" model="ir.ui.view">
-            <field name="name">ekids.ct_muctieu.kanban</field>
-            <field name="model">ekids.ct_muctieu</field>
-            <field name="arch" type="xml">
-                <kanban default_group_by="linhvuc_id" class="o_kanban_small_column" quick_create="false">
-                    <field name="id"/>
-                    <field name="sequence"/>
-                    <field name="name"/>
-                    <field name="tuoi_id"/>
-                    <field name="linhvuc_id"/>
-                    <field name="chucnang"/>
+                <kanban archivable="false" sample="1">
                     <templates>
                         <t t-name="kanban-box">
-                            <div t-attf-class="oe_kanban_global_click o_kanban_record d-flex flex-column p-0"
-                                 style="border: 1px solid #e2e8f0; border-left: 8px solid #71639e; border-radius: 4px 8px 8px 4px; box-shadow: 2px 4px 10px rgba(0,0,0,0.03); background-color: #fdfbf7; overflow: hidden; min-height: 150px; transition: all 0.2s ease;">
+                            <div class="oe_kanban_global_click kh-premium-card">
 
-                                <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 10px; background: linear-gradient(to right, rgba(0,0,0,0.05), transparent);"></div>
+                                <style>
+                                    /* 1. Khung thẻ chính - Hiệu ứng 3D Layering */
+                                    .kh-premium-card {
+                                        border-radius: 20px;
+                                        background: #ffffff;
+                                        box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+                                        overflow: hidden;
+                                        border: 1px solid #f1f5f9;
+                                        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+                                        display: flex;
+                                        flex-direction: column;
+                                    }
+                                    .kh-premium-card:hover {
+                                        transform: translateY(-5px);
+                                        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+                                    }
 
-                                <div class="p-3 d-flex flex-column h-100 position-relative" style="z-index: 1;">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span class="badge text-bg-light border text-success fw-bold" style="font-size: 0.75rem; padding: 4px 8px;">
-                                            <i class="fa fa-clock-o me-1"/> <field name="tuoi_id"/>
-                                        </span>
-                                        <span class="text-muted small fw-bold">N° <field name="sequence"/></span>
+                                    /* 2. Header VÙNG MÀU NHẸ NHÀNG (Xanh mây pastel) */
+                                    .kh-premium-header {
+                                        background: linear-gradient(135deg, #f0f7ff 0%, #e0e7ff 100%);
+                                        padding: 25px 20px 45px 20px;
+                                        color: #1e3a8a;
+                                        text-align: center;
+                                        position: relative;
+                                    }
+
+                                    .kh-premium-header::before {
+                                        content: "";
+                                        position: absolute;
+                                        top: -15px; right: -15px;
+                                        width: 100px; height: 100px;
+                                        background: rgba(255, 255, 255, 0.5);
+                                        border-radius: 50%;
+                                    }
+
+                                    .kh-premium-avatar {
+                                        width: 75px; height: 75px;
+                                        border-radius: 18px;
+                                        border: 3px solid #ffffff;
+                                        background: #fff;
+                                        box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+                                        margin: 0 auto 12px;
+                                        overflow: hidden;
+                                    }
+                                    .kh-premium-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+                                    .kh-premium-title {
+                                        font-size: 18px;
+                                        font-weight: 800;
+                                        margin: 0;
+                                        color: #1e3a8a;
+                                    }
+                                    .kh-premium-slogan {
+                                        font-size: 13px;
+                                        color: #64748b;
+                                        margin-top: 5px;
+                                        font-weight: 500;
+                                    }
+
+                                    /* 3. Phần thân đè lên Header (Layering) */
+                                    .kh-premium-body {
+                                        padding: 25px 20px 20px;
+                                        background: #ffffff;
+                                        border-radius: 24px 24px 0 0;
+                                        margin-top: -24px;
+                                        position: relative;
+                                        z-index: 2;
+                                        text-align: center;
+                                    }
+
+                                    .kh-premium-desc {
+                                        font-size: 12px;
+                                        color: #94a3b8;
+                                        font-style: italic;
+                                        margin-bottom: 20px;
+                                        line-height: 1.5;
+                                        padding: 0 10px;
+                                    }
+
+                                    /* 4. Nút bấm chính Xanh lam */
+                                    .kh-btn-main {
+                                        width: 100%;
+                                        border-radius: 12px;
+                                        padding: 13px 15px;
+                                        font-size: 15px;
+                                        font-weight: 800;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 10px;
+                                        border: none;
+                                        cursor: pointer;
+                                        transition: all 0.3s ease;
+                                        background: #3b82f6;
+                                        color: #ffffff;
+                                        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+                                    }
+                                    .kh-btn-main:hover {
+                                        background: #2563eb;
+                                        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+                                        transform: translateY(-2px);
+                                        color: #ffffff;
+                                    }
+                                </style>
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
                                     </div>
-
-                                    <div class="fw-bold mb-2 flex-grow-1 text-dark"
-                                         style="font-size: 0.92rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                                        <field name="name"/>
-                                    </div>
-
-                                    <div class="mt-auto pt-2 border-top border-dashed text-muted"
-                                         style="font-size: 0.8rem; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; font-style: italic;">
-                                        <i class="fa fa-graduation-cap me-1" style="color: #71639e;"/>
-                                        <field name="chucnang"/>
-                                    </div>
+                                    <div class="kh-premium-title"><field name="name"/></div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
                                 </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">
+                                        (Quản lý chương trình can thiệp cho trẻ)
+                                    </div>
+
+                                    <button class="oe_kanban_action kh-btn-main"
+                                            name="action_xem_chuongtrinh_kanban"
+                                            type="object">
+                                        <i class="fa fa-graduation-cap"></i> CHƯƠNG TRÌNH CAN THIỆP
+                                    </button>
+                                </div>
+
                             </div>
                         </t>
                     </templates>
@@ -79,56 +143,16 @@
             </field>
         </record>
 
-        <record id="ct_muctieu_form" model="ir.ui.view">
-            <field name="name">ekids.ct_muctieu.form</field>
-            <field name="model">ekids.ct_muctieu</field>
-            <field name="arch" type="xml">
-                <form string="Thông tin Mục tiêu Can thiệp">
-                    <sheet>
-                        <div class="oe_title mb-4">
-                            <label for="name" class="oe_edit_only" string="Nội dung Mục tiêu Can thiệp"/>
-                            <h1 class="text-break">
-                                <field name="name" placeholder="Ví dụ: Bắt chước 8-10 hành động chỉ gồm một bước với đồ vật..." required="1" options="{'style-inline': true}"/>
-                            </h1>
-                        </div>
-
-                        <group>
-                            <group id="classification_group" string="Thông tin Phân loại">
-                                <field name="sequence" string="Thứ tự (STT)"/>
-                                <field name="tuoi_id" placeholder="Chọn mốc tháng tuổi..." options="{'no_create': True, 'no_open': False}"/>
-                                <field name="linhvuc_id" placeholder="Chọn lĩnh vực phát triển..." options="{'no_create': True, 'no_open': False}"/>
-                            </group>
-                        </group>
-
-                        <notebook>
-                            <page string="Thiết kế Hoạt động (ABC)" name="page_thietke">
-                                <div class="alert alert-info my-2" role="alert" style="font-size: 0.9rem;">
-                                    <i class="fa fa-info-circle me-1"/> Người dạy điền chi tiết cấu trúc bao gồm <strong>Tiền đề (A)</strong>, <strong>Hành vi (B)</strong>, <strong>Hệ quả (C)</strong> và các bước tiến hành.
-                                </div>
-                                <field name="thietke" class="oe_sandbox" placeholder="Nhập các bước hướng dẫn chi tiết cho giáo viên tại đây..." options="{'collaborative': true, 'resizable': true}"/>
-                            </page>
-
-                            <page string="Lập luận Lâm sàng" name="page_lamsang">
-                                <div class="alert alert-secondary my-2" role="alert" style="font-size: 0.9rem;">
-                                    <i class="fa fa-book me-1"/> Phân tích chuyên sâu về chức năng phát triển, lý do lựa chọn bài dạy và hệ quả lâm sàng.
-                                </div>
-                                <field name="chucnang" class="oe_sandbox" placeholder="Nhập phân tích cấu trúc lý luận lâm sàng tại đây..." options="{'collaborative': true, 'resizable': true}"/>
-                            </page>
-
-                            <page string="Tiêu chí Đánh giá (Rubrics)" name="page_rubrics">
-                                <group string="Thang đo mức độ thành thục kỹ năng của trẻ">
-                                    <field name="tieuchi_chuadat" placeholder="Trẻ rụt tay, trốn tránh, không phản xạ..."/>
-                                    <field name="tieuchi_hinhthanh" placeholder="Trẻ phối hợp thực hiện khi có hỗ trợ, làm mẫu..."/>
-                                    <field name="tieuchi_dat" placeholder="Trẻ thực hiện độc lập thuần thục đạt tỷ lệ ≥80% cơ hội..."/>
-                                </group>
-                            </page>
-                        </notebook>
-                    </sheet>
-                </form>
-            </field>
+        <record model="ir.actions.act_window" id="ekids_canthiep.coso_chuongtrinh_action_window">
+            <field name="name">CẤU HÌNH - CƠ SỞ</field>
+            <field name="res_model">ekids.coso</field>
+            <field name="context">{ 'kanban_view_ref':'ekids_canthiep.canthiep_kanban'}</field>
+            <field name="view_mode">kanban</field>
         </record>
 
 
 
-    </data>
+
+
+  </data>
 </odoo>
