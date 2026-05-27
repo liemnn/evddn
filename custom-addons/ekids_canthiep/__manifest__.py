@@ -45,6 +45,7 @@ Long description of module's purpose
     'assets': {
         'web.assets_backend': [
             'ekids_canthiep/static/src/css/ekids_style.css',
+            'ekids_canthiep/static/src/css/ekids_canthiep.css',
             
         ],
     },
