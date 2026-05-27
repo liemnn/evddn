@@ -20,13 +20,14 @@ Long description of module's purpose
     'data': [
         'security/ir.model.access.csv',
         'views/ekids_coso_view.xml',
-        'views/ekids_ct_dm_roiloan_view.xml',
+
 
 
         'views/chuongtrinh/ekids_ct_chuongtrinh_view.xml',
         'views/chuongtrinh/ekids_ct_tuoi_view.xml',
         'views/chuongtrinh/ekids_ct_linhvuc_view.xml',
         'views/chuongtrinh/ekids_ct_muctieu_view.xml',
+        'views/chuongtrinh/ekids_ct_dm_roiloan_view.xml',
 
 
 

@@ -1,7 +1,22 @@
 <odoo>
     <data>
 
-        <record id="ekids_canthiep.ct_dm_roiloan_kanban_view" model="ir.ui.view">
+        <record model="ir.ui.view" id="ekids_canthiep.ct_dm_roiloan_list">
+            <field name="name">Danh mục rối loạn</field>
+            <field name="model">ekids.ct_dm_roiloan</field>
+            <field name="arch" type="xml">
+               <list editable="bottom" default_order="sequence">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name" width="300"/>
+                    <field name="desc"/>
+                    <field name="trangthai"
+                        decoration-success="trangthai == '1'"
+                        decoration-danger="trangthai == '0'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_canthiep.ct_dm_roiloan_kanban" model="ir.ui.view">
             <field name="name">Danh mục loại rối loạn</field>
             <field name="model">ekids.ct_dm_roiloan</field>
             <field name="priority" eval="100"/>
@@ -9,21 +24,7 @@
                 <kanban archivable="false">
                     <t t-name="kanban-box">
                         <div class="box">
-                              <nav class="box-navbar">
-                                <ul class="box-menu">
-                                  <li class="box-menu-item">
-                                    <a href="#" >
-                                       <span class="fa fa-ellipsis-v"></span>
-                                    </a>
-                                    <ul class="box-dropdown">
-                                       <li>
 
-                                      </li>
-
-                                    </ul>
-                                  </li>
-                                </ul>
-                            </nav>
                             <!-- Icon Section -->
 
                             <!-- Title Section -->
@@ -49,23 +50,19 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
+                        <field name="coso_id" invisible="1"/>
                         <group>
                              <div class="row">
-                                <div class="col-md-2">
-                                  <h3>
-                                      <field name="ma" placeholder="Mã" />
-                                  </h3>
-                                </div>
                                 <div class="col-md-10">
                                   <h3>
-                                      <field name="ten" placeholder="Tên"/>
+                                      <field name="name" placeholder="Tên"/>
                                   </h3>
                                 </div>
                               </div>
                         </group>
                         <group>
                             <field name="desc"/>
-                            <field name="coso_ids" widget="many2many_tags"/>
+
                         </group>
 
 
@@ -74,11 +71,6 @@
             </field>
         </record>
 
-          <record model="ir.actions.act_window" id="ekids_canthiep.ct_dm_roiloan_action_window">
-            <field name="name">Phân loại rối loạn</field>
-            <field name="res_model">ekids.ct_dm_roiloan</field>
-            <field name="view_mode">kanban,list,form</field>
-        </record>
 
     </data>
 </odoo>
