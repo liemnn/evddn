@@ -67,7 +67,7 @@ class ChuongTrinh(models.Model):
         else:
            if user.has_group('ekids_core.ql_ct_canthiep'):
                 # TH3: user khác của cơ sở ( thường là giáo viên được phân quyền)
-                # sẽ tính trên danh sách các cơ sở được phân cho user này
+                # sẽ tính trên danh sách các cơ sở được quyền can thiệp các chương trình này
                 if user.coso_ids:
                     domain = ['|']
                     domain += [('coso_ids','=',False)]

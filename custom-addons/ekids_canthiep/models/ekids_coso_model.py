@@ -6,12 +6,24 @@ class CoSo(models.Model):
 
 
     def action_xem_chuongtrinh_kanban(self):
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'CHƯƠNG TRÌNH CAN THIỆP',
+            'res_model': 'ekids.ct_chuongtrinh',
+            'view_mode': 'kanban,list,form',
+            'target': 'current',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {'default_coso_id': self.id},
+        }
+
+    def action_xem_kehoach_kanban(self):
         kanban_view_id = self.env.ref('ekids_canthiep.ct_chuongtrinh_kanban').id
         return {
             'type': 'ir.actions.act_window',
             'name': 'CHƯƠNG TRÌNH CAN THIỆP',
             'res_model': 'ekids.ct_chuongtrinh',
-            'view_mode': 'list,form',
+            'view_mode': 'kanban,list,form',
             'views': [(kanban_view_id, 'kanban')],
             'target': 'current',
             'domain': [('coso_id', '=', self.id)],
