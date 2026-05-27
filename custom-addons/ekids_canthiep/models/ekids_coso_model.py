@@ -22,7 +22,7 @@ class CoSo(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'CHƯƠNG TRÌNH CAN THIỆP',
             'res_model': 'ekids.ct_dm_roiloan',
-            'view_mode': 'kanban,list,form',
+            'view_mode': 'list,kanban,form',
             'target': 'current',
             'domain': [('coso_id', '=', self.id)],
             'context': {'default_coso_id': self.id},

@@ -37,7 +37,7 @@
     </record>
 
     <record id="ekids_canthiep.kehoach_hocsinh_inherit_form" model="ir.ui.view">
-            <field name="name">ekids.hocsinh.chuyenmon.form</field>
+            <field name="name">ekids.hocsinh.kehoach.form</field>
             <field name="model">ekids.hocsinh</field>
             <field name="priority" eval="50"/>
             <field name="arch" type="xml">
@@ -64,72 +64,7 @@
                             </div>
                         </div>
 
-                        <notebook>
-                            <page string="🔄 Đánh giá và Kế hoạch Can thiệp" name="page_chu_ky_can_thiep">
 
-                                <div class="alert alert-info py-2 mb-3" role="alert" style="font-size: 0.85rem;">
-                                    <i class="fa fa-info-circle me-2"/> Danh sách các chu kỳ can thiệp của trẻ. Bấm vào từng dòng để xem chi tiết <strong>Kết luận chẩn đoán</strong> song song với <strong>Nội dung kế hoạch</strong>.
-                                </div>
-
-                                <field name="kehoach_ids" nolabel="1" context="{'default_hocsinh_id': id, 'default_coso_id': coso_id}">
-
-                                    <tree string="Các kỳ can thiệp" default_order="create_date desc">
-                                        <field name="create_date" string="Ngày lập kế hoạch" widget="date"/>
-                                        <field name="name" string="Tên Kế hoạch / Lộ trình"/>
-                                        <field name="ketluan_id" string="Căn cứ Kết luận Đánh giá" class="fw-bold text-primary"/>
-                                        <field name="state" string="Trạng thái" widget="badge" decoration-success="state=='active'"/>
-                                    </tree>
-
-                                    <form string="Chi tiết Kỳ Can thiệp">
-                                        <sheet class="p-0">
-                                            <div class="row g-0">
-
-                                                <div class="col-12 col-md-5 p-3 border-end" style="background-color: #fdfbf7;">
-                                                    <h5 class="fw-bold text-primary border-bottom pb-2 mb-3">
-                                                        <i class="fa fa-clipboard2-pulse me-2"/>1. Bác sĩ / Chuyên gia Kết luận
-                                                    </h5>
-
-                                                    <div class="mb-3">
-                                                        <label for="ketluan_id" class="fw-bold small text-muted mb-1" string="Chọn hồ sơ đánh giá căn cứ:"/>
-                                                        <field name="ketluan_id" options="{'no_create': True}" required="1" class="w-100 fw-bold"/>
-                                                    </div>
-
-                                                    <div class="mt-4" invisible="not ketluan_id">
-                                                        <div class="mb-3">
-                                                            <span class="text-uppercase small fw-bold text-secondary d-block">Chẩn đoán lâm sàng chính:</span>
-                                                            <div class="p-2 border rounded bg-white mt-1 fw-bold text-danger">
-                                                                <field name="ketluan_id" readonly="1" options="{'no_open': True}"/>
-                                                            </div>
-                                                        </div>
-
-                                                        </div>
-                                                </div>
-
-                                                <div class="col-12 col-md-7 p-3 bg-white">
-                                                    <h5 class="fw-bold text-success border-bottom pb-2 mb-3">
-                                                        <i class="fa fa-bullseye me-2"/>2. Thiết lập Lộ trình &amp; Kế hoạch Biện pháp
-                                                    </h5>
-
-                                                    <group>
-                                                        <field name="name" string="Tên kế hoạch này" placeholder="Ví dụ: Kế hoạch can thiệp ngôn ngữ kỳ 1..."/>
-                                                        <field name="state" invisible="1"/>
-                                                    </group>
-
-                                                    <div class="mt-3">
-                                                        <label for="name" string="Nội dung mục tiêu hành vi cần đạt trong kỳ:" class="fw-bold text-muted small mb-1"/>
-                                                        <field name="thietke" placeholder="Ghi chú các cột mốc bài dạy sẽ áp dụng cho trẻ tại đây..." class="oe_sandbox"/>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </sheet>
-                                    </form>
-                                </field>
-
-                            </page>
-                        </notebook>
-
-                        <field name="coso_id" invisible="1"/>
                     </sheet>
                 </form>
             </field>
