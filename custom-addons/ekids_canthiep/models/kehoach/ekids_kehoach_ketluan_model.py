@@ -51,6 +51,8 @@ class KeHoachKetLuanLinhVuc(models.Model):
         'ketluan_id',
         string="10.	Đánh giá lên chương trình"
     )  #
+    gv_danhgia = fields.Char(string="Chuyên gia đánh giá")
+    desc = fields.Html(string="Ghi chú")
 
     gv_lapkehoach_id = fields.Many2one('ekids.giaovien'
                                        , string="Giáo viên [Lập kế hoạch]")
@@ -64,7 +66,8 @@ class KeHoachKetLuanLinhVuc(models.Model):
 
 
     trangthai = fields.Selection([
-        ('0', 'Đang soạn thảo'),
-        ('1', 'Kết luận được hoàn thành')
+        ('0', 'Hết hiệu lực'),
+        ('1', 'Đợi lên kế hoạch can thiệp')
+
     ], string="Trạng thái", default='1')
 
