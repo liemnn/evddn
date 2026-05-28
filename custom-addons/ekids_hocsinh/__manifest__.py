@@ -45,24 +45,6 @@
         'views/hocphi/ban_in/ekids_hocphi_banin_wizard_view.xml',
 
 
-
-        'views/ketluan/ekids_ketluan_view.xml',
-        'views/ketluan/ekids_ketluan_roiloan2dikem_view.xml',
-
-        'views/kehoach/ekids_hocsinh_lap_kehoach_view.xml',
-        'views/kehoach/ekids_timkiem_mau_view.xml',
-        'views/kehoach/ekids_lap_kehoach_view.xml',
-        'views/kehoach/ekids_pheduyet_kehoach_view.xml',
-        'views/kehoach/ekids_kehoach_thang_view.xml',
-        'views/kehoach/ekids_muctieu2thang_view.xml',
-
-
-        'views/canthiep/ekids_canthiep_kehoach_view.xml',
-        'views/canthiep/ekids_canthiep_thang_view.xml',
-        'views/canthiep/ekids_canthiep_muctieu2thang_view.xml',
-        'views/canthiep/ekids_ketqua_canthiep2muctieu_view.xml',
-
-
         'views/taichinh/ekids_lichsu_giaodich_view.xml',
 
 

@@ -107,9 +107,6 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
     diachi_chitiet = fields.Char(string="Số nhà/ đường phố, thôn xóm")
 
 
-    ketluan_ids = fields.One2many("ekids.ketluan", "hocsinh_id"
-                                        , string="Kết luận đánh giá")
-
 
 
     thu_bantru_ids = fields.Many2many(comodel_name="ekids.hocphi_dm_thu_bantru"

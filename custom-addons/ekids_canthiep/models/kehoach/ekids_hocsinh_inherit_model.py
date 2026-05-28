@@ -47,7 +47,7 @@ class HocSinhInherit(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'CHƯƠNG TRÌNH CAN THIỆP',
-            'res_model': 'ekids.kehoach_ketluan',
+            'res_model': 'ekids.kehoach',
             'view_mode': 'form',
             'target': 'new',
             'domain': [('coso_id', '=', self.id)],
@@ -61,7 +61,7 @@ class HocSinhInherit(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'CHƯƠNG TRÌNH CAN THIỆP',
-            'res_model': 'ekids.kehoach_ketluan',
+            'res_model': 'ekids.kehoach',
             'view_mode': 'form',
             'target': 'new',
             'domain': [('coso_id', '=', self.id)],

@@ -7,9 +7,6 @@ from . import ekids_phuhuynh_model
 from . import ekids_user_model
 from . import cauhinh
 from . import hocphi
-from . import ketluan
-from . import kehoach
-from . import canthiep
 from . import taichinh
 
 

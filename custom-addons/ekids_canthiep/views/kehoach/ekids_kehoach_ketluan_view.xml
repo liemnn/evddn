@@ -43,11 +43,11 @@
 
                     <div class="kh-card">
                         <div class="kh-card-title"><i class="fa fa-file-text"></i> Định hướng chuyên môn trong can thiệp</div>
-                        <field name="ketluan_khung_ids" nolabel="1">
+                        <field name="ketluan_ids" nolabel="1">
                             <list editable="bottom">
                                 <field name="sequence" widget="handle"/>
                                 <field name="linhvuc_id"/>
-                                <field name="tuoi_id" domain="[('linhvuc_id','=',linhvuc_id)]"/>
+                                <field name="tuoi_id"/>
                             </list>
                         </field>
                         <div style="margin-top: 20px;">
