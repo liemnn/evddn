@@ -85,5 +85,92 @@
             </form>
         </field>
     </record>
+
+    <record id="ekids_canthiep.kehoach_ketluan_form" model="ir.ui.view">
+        <field name="name">Phiếu Kết luận - Premium UI Professional</field>
+        <field name="model">ekids.kehoach</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <style>
+                        /* Bỏ Banner, làm nền sáng và sạch */
+                        .o_form_sheet { padding: 20px 40px !important; max-width: 100% !important; background: #f8fafc !important; }
+
+                        /* Card Sang trọng */
+                        .kh-card { background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid #e2e8f0; }
+                        .kh-card-title { font-size: 15px; font-weight: 800; color: #4338ca; text-transform: uppercase; margin-bottom: 25px; display: flex; align-items: center; gap: 12px; letter-spacing: 0.05em; }
+
+                        /* Tối ưu hóa Input */
+                        .o_form_label { font-weight: 700 !important; color: #475569 !important; margin-bottom: 8px !important; }
+                        .o_input { border: 1px solid #cbd5e1 !important; border-radius: 8px !important; padding: 10px 14px !important; transition: border 0.3s ease; }
+                        .o_input:focus { border-color: #4f46e5 !important; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important; }
+                    </style>
+
+                    <field name="coso_id" invisible="1"/>
+                    <field name="hocsinh_id" invisible="1"/>
+
+
+
+                    <div class="kh-card">
+                        <div class="kh-card-title"><i class="fa fa-stethoscope"></i> Kết luận đánh giá</div>
+                        <group col="2">
+                            <field name="dm_roiloan_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            <field name="mucdo" widget="radio" options="{'horizontal': true}"/>
+                            <field name="chuongtrinh_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            <field name="lieuluong"/>
+                        </group>
+                        <group col="2">
+                            <field name="phuongphap"/>
+                            <field name="kythuat"/>
+                        </group>
+                    </div>
+
+
+
+                    <div class="kh-card">
+                        <div class="kh-card-title"><i class="fa fa-file-text"></i> Định hướng chuyên môn trong can thiệp</div>
+                        <field name="ketluan_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="linhvuc_id"/>
+                                <field name="tuoi_id"/>
+                            </list>
+                        </field>
+                        <div style="margin-top: 20px;">
+                            <group>
+                              <field name="desc" nolabel="1" placeholder="Nhập ghi chú chi tiết..."/>
+                               <field name="lichhen"/>
+                            </group>
+                            <group col="2">
+                              <group>
+                                <field name="gv_danhgia"/>
+                              </group>
+                              <group>
+                                <field name="ngay_danhgia"/>
+                              </group>
+                            </group>
+
+                        </div>
+                    </div>
+
+                     <div class="kh-card">
+                        <div class="kh-card-title"><i class="fa fa-user-circle-o"></i> Phân công lập kế hoạch và can thiệp</div>
+
+                          <group>
+                            <field name="gv_lapkehoach_id" options="{'no_create': True}"/>
+
+                            <field name="gv_kiemduyet_id" options="{'no_create': True}"/>
+
+                            <field name="gv_canthiep_id" options="{'no_create': True}"/>
+                          </group>
+
+
+
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
   </data>
 </odoo>
