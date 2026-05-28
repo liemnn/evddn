@@ -57,6 +57,20 @@ class HocSinhInherit(models.Model):
             },
         }
 
+    def action_lap_kehoach(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'CHƯƠNG TRÌNH CAN THIỆP',
+            'res_model': 'ekids.kehoach_ketluan',
+            'view_mode': 'form',
+            'target': 'new',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'default_hocsinh_id': self.id
+            },
+        }
+
 
 
 
@@ -75,7 +89,7 @@ class HocSinhInherit(models.Model):
                     hs.trangthai_kehoach="01"
 
     def func_soluong_ketluan_con_hieuluc(self, hocsinh):
-        count = self.env['ekids.kehoach_ketluan'].search_count(
+        count = self.env['ekids.kehoach'].search_count(
             [('hocsinh_id', '=', hocsinh.id),
              ('trangthai', '=', '1'),
 
