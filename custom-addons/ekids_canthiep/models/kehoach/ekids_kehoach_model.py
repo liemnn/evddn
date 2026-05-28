@@ -31,6 +31,5 @@ class KeHoach(models.Model):
     den_ngay = fields.Date(string="Đến ngày")
     songay = fields.Integer(string="Số ngày")
 
-    muctieu_ids = fields.One2many("ekids.kehoach_muctieu",
-                                  "kehoach_id", string="Mục tiêu")
-
+    kehoach_muctieu_ids = fields.One2many("ekids.kehoach_muctieu",
+                                  "kehoach_id", string="Các mục tiêu của kế hoạch")

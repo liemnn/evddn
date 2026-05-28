@@ -15,6 +15,5 @@ class KeHoach2LinhVuc(models.Model):
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực', required=True, ondelete="cascade")
     tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi', required=True, ondelete="cascade")
 
-    muctieu_ids = fields.One2many("ekids.kehoach_muctieu",
-                                  "kehoach_linhvuc_id", string="Mục tiêu")
-
+    kehoach_muctieu_ids = fields.One2many("ekids.kehoach_muctieu",
+                                          "linhvuc_id", string="Các mục tiêu của lĩnh vực")
