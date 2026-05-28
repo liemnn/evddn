@@ -37,6 +37,7 @@ Long description of module's purpose
         'views/mau_kehoach/ekids_mau_kehoach_muctieu2thang_view.xml',
 
         'views/kehoach/ekids_hocsinh_inherit_view.xml',
+        'views/kehoach/ekids_kehoach_ketluan_view.xml',
 
         'views/ekids_menu.xml',
 

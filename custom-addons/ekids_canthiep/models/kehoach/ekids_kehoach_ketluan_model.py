@@ -21,7 +21,7 @@ class KeHoachKetLuanLinhVuc(models.Model):
                                       , relation="ekids_kehoach_ketluan2dm_roiloan_rel"
                                       , column1="ketluan_id"
                                       , column2="dm_roiloan_id"
-                                      , string="Kết luận các vấn đề của trẻ")
+                                      , string="Các vấn đề của trẻ")
 
     mucdo = fields.Selection([
         ('1', 'Cần can thiệp'),  # [cite: 12, 13]
@@ -52,6 +52,7 @@ class KeHoachKetLuanLinhVuc(models.Model):
         string="10.	Đánh giá lên chương trình"
     )  #
     gv_danhgia = fields.Char(string="Chuyên gia đánh giá")
+    ngay_danhgia= fields.Date(string="Ngày đánh giá")
     desc = fields.Html(string="Ghi chú")
 
     gv_lapkehoach_id = fields.Many2one('ekids.giaovien'
@@ -67,7 +68,7 @@ class KeHoachKetLuanLinhVuc(models.Model):
 
     trangthai = fields.Selection([
         ('0', 'Hết hiệu lực'),
-        ('1', 'Đợi lên kế hoạch can thiệp')
+        ('1', 'Đã kết luận')
 
     ], string="Trạng thái", default='1')
 
