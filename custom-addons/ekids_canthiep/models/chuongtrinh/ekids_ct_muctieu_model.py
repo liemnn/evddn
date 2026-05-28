@@ -7,32 +7,19 @@ class MucTieu(models.Model):
     _name = "ekids.ct_muctieu"
     _description = "Lĩnh vực"
 
+    coso_id = fields.Many2one("ekids.coso", related="linhvuc_id.coso_id", string="Cơ sở", required=True,ondelete="restrict")
+    chuongtrinh_id = fields.Many2one("ekids.ct_chuongtrinh", related="linhvuc_id.chuongtrinh_id", string="Chương trình", required=True,
+                              ondelete="restrict")
+
     sequence = fields.Integer(string="STT", default=1)
-    linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực')
-    dm_capdo_id = fields.Many2one('ekids.ct_dm_capdo', string='Cấp độ')
+    linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực',required=True)
+    tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi',required=True)
 
-    name = fields.Char(string="Tên", compute="_compute_ct_muctieu_name", readonly=True)
-    muctieu = fields.Html(string="Mục tiêu [Can thiệp]")
-    trichyeu = fields.Html(string="Trích yếu (mã)")
-    kythuat = fields.Html(string="Kỹ thuật/chiến lược")
-    tieuchi = fields.Html(string="Tiêu chí")
-    cach_danhgia = fields.Html(string="Cách [Đánh giá]")
+    name = fields.Char(string="Tên",required=True)
+    chucnang = fields.Html(string="Chức năng phát triển cốt lõi & Lập luận lâm sàng")
+    thietke = fields.Html(string="Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)")
+    tieuchi_chuadat = fields.Char(string="Chưa đạt (-)",required=True)
+    tieuchi_hinhthanh = fields.Char(string="Đang hình thành (+/-)",required=True)
+    tieuchi_dat = fields.Char(string="Đạt (+)",required=True)
 
-    def _compute_ct_muctieu_name(self):
-        for kh in self:
-            if kh.muctieu and kh.linhvuc_id:
-                ten = self.clean_html_text(kh.muctieu)
-                kh.name = ten + ' (' + kh.linhvuc_id.ten + ')'
-            else:
-                kh.name = ""
 
-    @staticmethod
-    def clean_html_text(html_text):
-        # Phân tích HTML và lấy nội dung thuần văn bản
-        soup = BeautifulSoup(html_text, "html.parser")
-        text = soup.get_text(separator=' ')
-
-        # Loại bỏ ký tự xuống dòng và dư thừa khoảng trắng
-        cleaned_text = re.sub(r'\s+', ' ', text).strip()
-
-        return cleaned_text

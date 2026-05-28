@@ -98,9 +98,7 @@
                             <group>
                                 <field name="chinh_ct_chuongtrinh_id"/>
                             </group>
-                            <group>
-                                <field name="chinh_dm_capdo_id" domain="[('chuongtrinh_id', '=', chinh_ct_chuongtrinh_id)]"/>
-                            </group>
+
                         </group>
                         <notebook>
                             <page name="roiloan_dikem_ids " string="[2] CÁC RỐI LOẠN ĐI KÈM">

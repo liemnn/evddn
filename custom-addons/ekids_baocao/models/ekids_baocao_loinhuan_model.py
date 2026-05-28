@@ -34,7 +34,7 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
     )
 
     tu_nam = fields.Selection(
-        [(str(year), str(year)) for year in range(datetime.now().year - 5, datetime.now().year + 1)],
+        [(str(year), str(year)) for year in range(datetime.now().year - 10, datetime.now().year + 1)],
         string="Năm",
         required=True,
         default=lambda self: str((date.today() - relativedelta(months=+1)).year)
@@ -50,7 +50,7 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
     )
 
     den_nam = fields.Selection(
-        [(str(year), str(year)) for year in range(datetime.now().year - 5, datetime.now().year + 2)],
+        [(str(year), str(year)) for year in range(datetime.now().year - 10, datetime.now().year + 2)],
         string="Năm",
         required=True,
         default=lambda self: str((date.today() - relativedelta(months=+1)).year +1)

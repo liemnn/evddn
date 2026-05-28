@@ -1,0 +1,111 @@
+<odoo>
+  <data>
+
+        <record id="ekids_canthiep.canthiep_kanban" model="ir.ui.view">
+            <field name="name">Quản lý học sinh các cơ sở - Premium Soft Light</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false" sample="1">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-premium-card">
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
+                                    </div>
+                                    <div class="kh-premium-title"><field name="name"/></div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">
+                                        (Quản lý chương trình can thiệp cho trẻ)
+                                    </div>
+
+                                    <button class="oe_kanban_action kh-btn-main"
+                                            name="action_xem_chuongtrinh_kanban"
+                                            type="object">
+                                        <i class="fa fa-book"/>
+                                        CHƯƠNG TRÌNH CAN THIỆP
+                                    </button>
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_xem_danhmuc_roiloan"
+                                            type="object">
+                                        <i class="fa fa-bars"/>
+                                        DANH MỤC RỐI LOẠN
+                                    </button>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record id="ekids_canthiep.kehoach_list" model="ir.ui.view">
+            <field name="name">Quản lý học sinh các cơ sở - Premium Soft Light</field>
+            <field name="model">ekids.coso</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false" sample="1">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click kh-premium-card">
+
+                                <div class="kh-premium-header">
+                                    <div class="kh-premium-avatar">
+                                        <field name="logo" widget="image"/>
+                                    </div>
+                                    <div class="kh-premium-title"><field name="name"/></div>
+                                    <div class="kh-premium-slogan"><field name="slogan"/></div>
+                                </div>
+
+                                <div class="kh-premium-body">
+                                    <div class="kh-premium-desc">
+                                        (Quản lý chương trình can thiệp cho trẻ)
+                                    </div>
+
+                                    <button class="oe_kanban_action kh-btn-main"
+                                            name="action_xem_kehoach_canthiep"
+                                            type="object">
+                                        <i class="fa fa-random"/>
+                                        KẾ HOẠCH CAN THIỆP
+                                    </button>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+
+        <record model="ir.actions.act_window" id="ekids_canthiep.coso_chuongtrinh_action_window">
+            <field name="name">CẤU HÌNH - CƠ SỞ</field>
+            <field name="res_model">ekids.coso</field>
+            <field name="context">{ 'kanban_view_ref':'ekids_canthiep.canthiep_kanban'}</field>
+            <field name="view_mode">kanban</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="ekids_canthiep.coso_kehoach_action_window">
+            <field name="name">CẤU HÌNH - CƠ SỞ</field>
+            <field name="res_model">ekids.coso</field>
+            <field name="context">{ 'kanban_view_ref':'ekids_canthiep.kehoach_list'}</field>
+            <field name="view_mode">kanban</field>
+        </record>
+
+
+
+
+
+
+  </data>
+</odoo>

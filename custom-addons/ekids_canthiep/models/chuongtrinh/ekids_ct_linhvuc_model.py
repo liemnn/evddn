@@ -5,10 +5,11 @@ class LinhVuc(models.Model):
     _name = "ekids.ct_linhvuc"
     _description = "Lĩnh vực"
 
+    coso_id = fields.Many2one("ekids.coso", related="chuongtrinh_id.coso_id", string="Cơ sở", required=True,
+                              ondelete="restrict")
     sequence = fields.Integer(string="STT", default=1)
-    ma = fields.Char(string="Mã")
-    ten = fields.Char(string="Tên")
-    name = fields.Char(string="Tên hiển thị", compute="_compute_ct_linhvuc_name", readonly=True)
+    name = fields.Char(string="Tên",required=True)
+
     desc =fields.Html(string="Mô tả")
     chuongtrinh_id = fields.Many2one('ekids.ct_chuongtrinh', string='Chương trình')
 
@@ -25,17 +26,12 @@ class LinhVuc(models.Model):
                 lv.tong_muctieu =count
             else:
                 lv.tong_muctieu = 0
-    def _compute_ct_linhvuc_name(self):
-        for kh in self:
-            if kh.ma:
-                kh.name = '[' + kh.ma + ']-'
-            if kh.ten:
-                kh.name += kh.ten
 
-    def action_view_ekid_canthiep_kanban_muctieu(self):
+
+    def action_xem_muctieu(self):
         return {
             'type': 'ir.actions.act_window',
-            'name': self.ma,
+            'name': "LĨNH VỰC:"+ self.name,
             'res_model': 'ekids.ct_muctieu',
             'view_mode': 'list,kanban,form',
             'target': 'current',

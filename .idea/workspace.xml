@@ -6,8 +6,36 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_func/giaovien_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_func/giaovien_util.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_func_abstractmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_func_abstractmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_inherit_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_inherit_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_kehoach_ketluan_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_kehoach_ketluan_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/canthiep/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/canthiep/ekids_ketqua_canthiep2muctieu_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/kehoach/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/kehoach/abstractmodel/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/kehoach/abstractmodel/ekids_kehoach_action_abstractmodel.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/kehoach/abstractmodel/ekids_kehoach_button_abstractmodel.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/kehoach/abstractmodel/ekids_kehoach_taomoi_abstractmodel.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/kehoach/ekids_kehoach_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/kehoach/ekids_kehoach_thang_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/kehoach/ekids_muctieu2thang_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/kehoach/ekids_timkiem_mau_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/ketluan/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/ketluan/ekids_ketluan_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/ketluan/ekids_ketluan_roiloan2dikem_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/canthiep/ekids_canthiep_kehoach_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/canthiep/ekids_canthiep_muctieu2thang_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/canthiep/ekids_canthiep_thang_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/canthiep/ekids_ketqua_canthiep2muctieu_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/kehoach/ekids_hocsinh_lap_kehoach_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/kehoach/ekids_kehoach_thang_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/kehoach/ekids_lap_kehoach_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/kehoach/ekids_muctieu2thang_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/kehoach/ekids_pheduyet_kehoach_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/kehoach/ekids_timkiem_mau_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/ketluan/ekids_ketluan_roiloan2dikem_view.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/ketluan/ekids_ketluan_view.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,24 +74,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_giaovien/views/luong",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.evddn.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/odoo/evddn/custom-addons/ekids_func&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\odoo\evddn\custom-addons\ekids_giaovien\views\luong" />
-      <recent name="D:\odoo\evddn\custom-addons\ekids_hocsinh\views\hocphi" />
-      <recent name="D:\odoo\evddn\custom-addons\ekids_giaovien\views" />
-      <recent name="D:\odoo\evddn\custom-addons\ekids_hdsd\static\src\html\khoitao" />
-      <recent name="D:\odoo\evddn\custom-addons\ekids_chitieu\views" />
+      <recent name="D:\odoo\evddn\custom-addons\ekids_func" />
+      <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\views\kehoach" />
+      <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\models\kehoach" />
+      <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\views\chuongtrinh" />
+      <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\models\chuongtrinh" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_hdsd\static\src\html\giaovien" />
@@ -111,174 +139,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00090" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778474806954</created>
-      <option name="number" value="00090" />
-      <option name="presentableId" value="LOCAL-00090" />
-      <option name="project" value="LOCAL" />
-      <updated>1778474806955</updated>
-    </task>
-    <task id="LOCAL-00091" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778491635498</created>
-      <option name="number" value="00091" />
-      <option name="presentableId" value="LOCAL-00091" />
-      <option name="project" value="LOCAL" />
-      <updated>1778491635498</updated>
-    </task>
-    <task id="LOCAL-00092" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778492164516</created>
-      <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1778492164516</updated>
-    </task>
-    <task id="LOCAL-00093" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778497689620</created>
-      <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
-      <option name="project" value="LOCAL" />
-      <updated>1778497689620</updated>
-    </task>
-    <task id="LOCAL-00094" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778553617778</created>
-      <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1778553617778</updated>
-    </task>
-    <task id="LOCAL-00095" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778556446910</created>
-      <option name="number" value="00095" />
-      <option name="presentableId" value="LOCAL-00095" />
-      <option name="project" value="LOCAL" />
-      <updated>1778556446910</updated>
-    </task>
-    <task id="LOCAL-00096" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778558356481</created>
-      <option name="number" value="00096" />
-      <option name="presentableId" value="LOCAL-00096" />
-      <option name="project" value="LOCAL" />
-      <updated>1778558356481</updated>
-    </task>
-    <task id="LOCAL-00097" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778569542532</created>
-      <option name="number" value="00097" />
-      <option name="presentableId" value="LOCAL-00097" />
-      <option name="project" value="LOCAL" />
-      <updated>1778569542532</updated>
-    </task>
-    <task id="LOCAL-00098" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778570482635</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1778570482635</updated>
-    </task>
-    <task id="LOCAL-00099" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778571294554</created>
-      <option name="number" value="00099" />
-      <option name="presentableId" value="LOCAL-00099" />
-      <option name="project" value="LOCAL" />
-      <updated>1778571294554</updated>
-    </task>
-    <task id="LOCAL-00100" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778571716390</created>
-      <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1778571716390</updated>
-    </task>
-    <task id="LOCAL-00101" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778572370842</created>
-      <option name="number" value="00101" />
-      <option name="presentableId" value="LOCAL-00101" />
-      <option name="project" value="LOCAL" />
-      <updated>1778572370842</updated>
-    </task>
-    <task id="LOCAL-00102" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778577639667</created>
-      <option name="number" value="00102" />
-      <option name="presentableId" value="LOCAL-00102" />
-      <option name="project" value="LOCAL" />
-      <updated>1778577639667</updated>
-    </task>
-    <task id="LOCAL-00103" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778583035374</created>
-      <option name="number" value="00103" />
-      <option name="presentableId" value="LOCAL-00103" />
-      <option name="project" value="LOCAL" />
-      <updated>1778583035374</updated>
-    </task>
-    <task id="LOCAL-00104" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778592592989</created>
-      <option name="number" value="00104" />
-      <option name="presentableId" value="LOCAL-00104" />
-      <option name="project" value="LOCAL" />
-      <updated>1778592592989</updated>
-    </task>
-    <task id="LOCAL-00105" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778657932871</created>
-      <option name="number" value="00105" />
-      <option name="presentableId" value="LOCAL-00105" />
-      <option name="project" value="LOCAL" />
-      <updated>1778657932872</updated>
-    </task>
-    <task id="LOCAL-00106" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778665174490</created>
-      <option name="number" value="00106" />
-      <option name="presentableId" value="LOCAL-00106" />
-      <option name="project" value="LOCAL" />
-      <updated>1778665174490</updated>
-    </task>
-    <task id="LOCAL-00107" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778668336633</created>
-      <option name="number" value="00107" />
-      <option name="presentableId" value="LOCAL-00107" />
-      <option name="project" value="LOCAL" />
-      <updated>1778668336633</updated>
-    </task>
-    <task id="LOCAL-00108" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778732386436</created>
-      <option name="number" value="00108" />
-      <option name="presentableId" value="LOCAL-00108" />
-      <option name="project" value="LOCAL" />
-      <updated>1778732386437</updated>
-    </task>
-    <task id="LOCAL-00109" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778744981226</created>
-      <option name="number" value="00109" />
-      <option name="presentableId" value="LOCAL-00109" />
-      <option name="project" value="LOCAL" />
-      <updated>1778744981226</updated>
-    </task>
-    <task id="LOCAL-00110" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1778748978236</created>
-      <option name="number" value="00110" />
-      <option name="presentableId" value="LOCAL-00110" />
-      <option name="project" value="LOCAL" />
-      <updated>1778748978236</updated>
     </task>
     <task id="LOCAL-00111" summary="liemnn">
       <option name="closed" value="true" />
@@ -504,7 +364,175 @@
       <option name="project" value="LOCAL" />
       <updated>1779522684431</updated>
     </task>
-    <option name="localTasksCounter" value="139" />
+    <task id="LOCAL-00139" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779523321163</created>
+      <option name="number" value="00139" />
+      <option name="presentableId" value="LOCAL-00139" />
+      <option name="project" value="LOCAL" />
+      <updated>1779523321163</updated>
+    </task>
+    <task id="LOCAL-00140" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779523706754</created>
+      <option name="number" value="00140" />
+      <option name="presentableId" value="LOCAL-00140" />
+      <option name="project" value="LOCAL" />
+      <updated>1779523706754</updated>
+    </task>
+    <task id="LOCAL-00141" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779764986299</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1779764986300</updated>
+    </task>
+    <task id="LOCAL-00142" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779767623235</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1779767623235</updated>
+    </task>
+    <task id="LOCAL-00143" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779768796778</created>
+      <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1779768796778</updated>
+    </task>
+    <task id="LOCAL-00144" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779783625601</created>
+      <option name="number" value="00144" />
+      <option name="presentableId" value="LOCAL-00144" />
+      <option name="project" value="LOCAL" />
+      <updated>1779783625601</updated>
+    </task>
+    <task id="LOCAL-00145" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779784505206</created>
+      <option name="number" value="00145" />
+      <option name="presentableId" value="LOCAL-00145" />
+      <option name="project" value="LOCAL" />
+      <updated>1779784505208</updated>
+    </task>
+    <task id="LOCAL-00146" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779788162167</created>
+      <option name="number" value="00146" />
+      <option name="presentableId" value="LOCAL-00146" />
+      <option name="project" value="LOCAL" />
+      <updated>1779788162167</updated>
+    </task>
+    <task id="LOCAL-00147" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779789335220</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1779789335220</updated>
+    </task>
+    <task id="LOCAL-00148" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779789635128</created>
+      <option name="number" value="00148" />
+      <option name="presentableId" value="LOCAL-00148" />
+      <option name="project" value="LOCAL" />
+      <updated>1779789635128</updated>
+    </task>
+    <task id="LOCAL-00149" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779807085148</created>
+      <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1779807085150</updated>
+    </task>
+    <task id="LOCAL-00150" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779846172834</created>
+      <option name="number" value="00150" />
+      <option name="presentableId" value="LOCAL-00150" />
+      <option name="project" value="LOCAL" />
+      <updated>1779846172834</updated>
+    </task>
+    <task id="LOCAL-00151" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779846751159</created>
+      <option name="number" value="00151" />
+      <option name="presentableId" value="LOCAL-00151" />
+      <option name="project" value="LOCAL" />
+      <updated>1779846751159</updated>
+    </task>
+    <task id="LOCAL-00152" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779848171201</created>
+      <option name="number" value="00152" />
+      <option name="presentableId" value="LOCAL-00152" />
+      <option name="project" value="LOCAL" />
+      <updated>1779848171201</updated>
+    </task>
+    <task id="LOCAL-00153" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779853579512</created>
+      <option name="number" value="00153" />
+      <option name="presentableId" value="LOCAL-00153" />
+      <option name="project" value="LOCAL" />
+      <updated>1779853579513</updated>
+    </task>
+    <task id="LOCAL-00154" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779854129885</created>
+      <option name="number" value="00154" />
+      <option name="presentableId" value="LOCAL-00154" />
+      <option name="project" value="LOCAL" />
+      <updated>1779854129885</updated>
+    </task>
+    <task id="LOCAL-00155" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779863998641</created>
+      <option name="number" value="00155" />
+      <option name="presentableId" value="LOCAL-00155" />
+      <option name="project" value="LOCAL" />
+      <updated>1779863998642</updated>
+    </task>
+    <task id="LOCAL-00156" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779872872287</created>
+      <option name="number" value="00156" />
+      <option name="presentableId" value="LOCAL-00156" />
+      <option name="project" value="LOCAL" />
+      <updated>1779872872288</updated>
+    </task>
+    <task id="LOCAL-00157" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779874143332</created>
+      <option name="number" value="00157" />
+      <option name="presentableId" value="LOCAL-00157" />
+      <option name="project" value="LOCAL" />
+      <updated>1779874143332</updated>
+    </task>
+    <task id="LOCAL-00158" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779937508692</created>
+      <option name="number" value="00158" />
+      <option name="presentableId" value="LOCAL-00158" />
+      <option name="project" value="LOCAL" />
+      <updated>1779937508693</updated>
+    </task>
+    <task id="LOCAL-00159" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1779941265919</created>
+      <option name="number" value="00159" />
+      <option name="presentableId" value="LOCAL-00159" />
+      <option name="project" value="LOCAL" />
+      <updated>1779941265919</updated>
+    </task>
+    <option name="localTasksCounter" value="160" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -614,11 +642,6 @@
           <option name="timeStamp" value="110" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_baocao_chi_model.py</url>
-          <line>48</line>
-          <option name="timeStamp" value="116" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_func/giaovien_util.py</url>
           <line>79</line>
           <option name="timeStamp" value="134" />
@@ -627,6 +650,21 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_func/giaovien_util.py</url>
           <line>254</line>
           <option name="timeStamp" value="141" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_chuongtrinh_model.py</url>
+          <line>59</line>
+          <option name="timeStamp" value="142" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_func/hocsinh_util.py</url>
+          <line>3</line>
+          <option name="timeStamp" value="143" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_inherit_model.py</url>
+          <line>78</line>
+          <option name="timeStamp" value="144" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
