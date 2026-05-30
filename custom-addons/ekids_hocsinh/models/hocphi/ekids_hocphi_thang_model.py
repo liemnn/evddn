@@ -58,23 +58,38 @@ class HocPhiThang(models.Model,HocPhiThangAbstractModel):
 
     def _compute_tong_dong_ck(self):
         for thang in self:
+            # Sử dụng toán tử '|' (OR) để lọc: trangthai='11' HOẶC loai='11'
             result = self.env['ekids.hocphi'].read_group(
-                domain=[('thang_id', '=', thang.id),('trangthai', 'in', ['11','12'])],  # điều kiện lọc (nếu cần)
-                fields=['hocphi_phaidong'],  # tên trường cần tính tổng
-                groupby=[]  # không cần group theo trường nào cả
+                domain=[
+                    ('thang_id', '=', thang.id),
+                    '|',
+                    ('trangthai', '=', '11'),
+                    ('loai', '=', '11')
+                ],
+                fields=['hocphi_phaidong'],
+                groupby=[]
             )
 
-            total = result[0]['hocphi_phaidong'] if result else 0.0
+            # Lấy giá trị tổng từ kết quả read_group
+            total = result[0]['hocphi_phaidong'] if result and result[0]['hocphi_phaidong'] else 0.0
             thang.tong_dong_ck = total
+
     def _compute_tong_dong_tm(self):
         for thang in self:
+            # Sử dụng toán tử '|' (OR) để lọc: trangthai='10' HOẶC loai='10'
             result = self.env['ekids.hocphi'].read_group(
-                domain=[('thang_id', '=', thang.id),('trangthai', '=', '10')],  # điều kiện lọc (nếu cần)
-                fields=['hocphi_phaidong'],  # tên trường cần tính tổng
-                groupby=[]  # không cần group theo trường nào cả
+                domain=[
+                    ('thang_id', '=', thang.id),
+                    '|',
+                    ('trangthai', '=', '10'),
+                    ('loai', '=', '10')
+                ],
+                fields=['hocphi_phaidong'],
+                groupby=[]
             )
 
-            total = result[0]['hocphi_phaidong'] if result else 0.0
+            # Lấy giá trị tổng từ kết quả
+            total = result[0]['hocphi_phaidong'] if result and result[0]['hocphi_phaidong'] else 0.0
             thang.tong_dong_tm = total
 
     def _compute_tong_no(self):

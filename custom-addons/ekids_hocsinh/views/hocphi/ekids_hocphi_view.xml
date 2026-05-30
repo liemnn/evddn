@@ -87,8 +87,8 @@
                 <filter string="Đang tính" name="trangthai" domain="[('trangthai','=','-1')]"/>
                 <filter string="Đã kiểm tra" name="trangthai" domain="[('trangthai','=','0')]"/>
                 <filter string="Phụ huynh đã đóng(cần kiểm tra)" name="trangthai" domain="[('trangthai','=','01')]"/>
-                <filter string="Đã đóng[Tiền mặt]" name="trangthai" domain="[('trangthai','=','10')]"/>
-                <filter string="Đã đóng[Chuyển khoản]" name="trangthai" domain="[('trangthai','=','11')]"/>
+                <filter string="Đã đóng[Tiền mặt]" name="trangthai" domain="[('loai','=','10')]"/>
+                <filter string="Đã đóng[Chuyển khoản]" name="trangthai" domain="[('loai','=','11')]"/>
                 <filter string="Đã xuất [Hóa đơn]" name="trangthai" domain="[('trangthai','=','3')]"/>
                 <filter string="Đang nợ học phí" name="trangthai" domain="[('trangthai','=','2')]"/>
 
@@ -151,8 +151,9 @@
                        decoration-success="trangthai == '3'"
                        decoration-danger="trangthai == '2'"
                 />
-
+                 <field name="loai" string="Hình thức" optional="hide" width="70"/>
                  <field name="ngay_dong_hocphi" string="Ngày đóng" optional="hide" width="70"/>
+
 
 
 

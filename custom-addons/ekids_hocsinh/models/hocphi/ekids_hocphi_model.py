@@ -43,6 +43,11 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                                   ,("3", "Đã xuất[Hóa đơn]")
                                   ,("2", "Nợ học phí")],default='-1')
 
+    loai = fields.Selection([("10", "Tiền mặt")
+                                     , ("11", "Chuyển khoản")
+                                     , ("12", "Ví học sinh")
+                                     ],string="Loại hình đóng học phí")
+
     ngay_dong_hocphi = fields.Date(string="Ngày đóng [Học phí]")
 
     is_show_tinhtoan_lai = fields.Boolean(compute="_compute_is_show_tinhtoan_lai")
@@ -469,6 +474,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 if new_state in ['10', '11','12']:
                     # cập nhật đã đóng tiền:
                     vals['ngay_dong_hocphi'] = datetime.today()
+                    vals['loai'] = new_state
                 elif new_state in ['-1','0','2']:
                     vals['ngay_dong_hocphi'] = False
 

@@ -1,125 +1,74 @@
 <odoo>
   <data>
-    <record id="ekids_canthiep.lap_kehoach_form" model="ir.ui.view">
-        <field name="name">ekids.kehoach.form.premium</field>
-        <field name="model">ekids.kehoach</field>
-        <field name="arch" type="xml">
-            <form string="Kế hoạch Can thiệp">
-                <sheet>
-                    <style>
-                        /* Reset nền Odoo */
-                        .o_form_view .o_form_sheet_bg { background-color: #f8fafc !important; padding-top: 0 !important;}
-                        .o_form_sheet { padding: 0 !important; max-width: 100% !important; border: none !important; background: transparent !important; }
 
-                        /* DẢI BANNER MÀU XANH MINT (Can thiệp/Y tế) */
-                        .kh-hero-banner {
-                            height: 65px;
-                            background: linear-gradient(135deg, #a7f3d0 0%, #34d399 100%);
-                            position: relative;
-                            margin-bottom: -35px;
-                            z-index: 1;
-                            border-bottom: 1px solid #10b981;
-                        }
+      <record id="ekids_canthiep.lap_kehoach_form" model="ir.ui.view">
+            <field name="name">ekids.intervention.plan.form</field>
+            <field name="model">ekids.kehoach</field>
+            <field name="arch" type="xml">
+                <form string="Kế hoạch Can thiệp">
 
-                        .kh-content-wrapper { padding: 0 15px; position: relative; z-index: 2; }
-
-                        /* KHỐI HEADER KẾ HOẠCH */
-                        .kh-profile-header {
-                            display: flex; gap: 20px;
-                            background: #ffffff;
-                            padding: 15px 20px;
-                            border-radius: 12px;
-                            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-                            position: relative;
-                            align-items: center;
-                        }
-
-                        /* ICON ĐẠI DIỆN CHO KẾ HOẠCH */
-                        .kh-avatar-wrapper {
-                            width: 75px; height: 75px;
-                            border-radius: 12px;
-                            background: #ecfdf5; color: #10b981;
-                            display: flex; justify-content: center; align-items: center; font-size: 32px;
-                            border: 2px solid #a7f3d0;
-                            flex-shrink: 0;
-                        }
-
-                        .kh-info-section { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-                        .kh-code { font-size: 12px; font-weight: 800; color: #10b981; text-transform: uppercase; margin-bottom: 4px; }
-                        .kh-name { font-size: 22px; font-weight: 900; color: #1e293b; margin: 0 0 8px 0; }
-
-                        /* THANH THỜI GIAN DÀN NGANG */
-                        .kh-stats-row { display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px; color: #475569; }
-                        .kh-stat-item {
-                            display: flex; align-items: center; gap: 8px;
-                            background: #f8fafc; padding: 6px 12px; border-radius: 8px; border: 1px solid #e2e8f0;
-                        }
-                        .kh-stat-item strong { color: #0f172a; }
-                        .kh-stat-item .o_field_widget { font-weight: 700 !important; color: #0f172a !important; margin: 0; }
-
-                        /* TỐI ƯU HÓA BẢNG ONE2MANY */
-                        .o_list_view .o_list_table th { text-transform: uppercase; font-size: 12px; color: #64748b; background-color: #f1f5f9; }
-                        .o_list_view .o_list_table td { vertical-align: middle; }
-
-                        @media (max-width: 768px) {
-                            .kh-profile-header { flex-direction: column; align-items: center; text-align: center; }
-                            .kh-stats-row { justify-content: center; }
-                        }
-                    </style>
-
-                    <div class="kh-hero-banner"></div>
-
-                    <div class="kh-content-wrapper">
-
-                        <div class="kh-profile-header mb-4">
-                            <div class="kh-avatar-wrapper">
-                                <i class="fa fa-bullseye"></i>
-                            </div>
-
-                            <div class="kh-info-section">
-                                <div class="kh-code">LẬP KẾ HOẠCH CAN THIỆP</div>
-
-                                <h1 class="kh-name"><field name="hocsinh_id" readonly="1"/></h1>
-
-                                <div class="kh-stats-row">
-                                    <div class="kh-stat-item">
-                                        <i class="fa fa-calendar-play-o text-success fs-5"></i>
-                                        <span class="text-muted">Từ ngày:</span>
-                                        <field name="tu_ngay" required="1"/>
-                                    </div>
-                                    <div class="kh-stat-item">
-                                        <i class="fa fa-calendar-check-o text-danger fs-5"></i>
-                                        <span class="text-muted">Đến ngày:</span>
-                                        <field name="den_ngay" required="1"/>
-                                    </div>
-                                    <div class="kh-stat-item">
-                                        <i class="fa fa-clock-o text-primary fs-5"></i>
-                                        <span class="text-muted">Tổng số ngày:</span>
-                                        <field name="songay" readonly="1" force_save="1" class="text-primary"/>
-                                    </div>
-                                </div>
-                            </div>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" readonly="1"/></h1>
                         </div>
+                        <group>
+                            <group>
+                                <field name="hocsinh_id"/>
+                            </group>
+                            <group>
+                                <field name="tu_ngay"/>
+                                <field name="den_ngay"/>
+                            </group>
+                        </group>
 
-                        <div class="kh-card">
-                            <div class="kh-card-title">
-                                <i class="fa fa-history"></i> CHI TIẾT KẾ HOẠCH CAN THIỆP
-                            </div>
-                            <div class="kh-data-row" style="flex-direction: column; align-items: flex-start; margin-bottom: 10px;">
-                               <field name="kehoach_muctieu_ids" nolabel="1">
-                                    <list editable="bottom">
-                                        <field name="sequence" widget="handle"/>
-                                        <field name="linhvuc_id" options="{'no_create': True}" string="Lĩnh vực phát triển"/>
-                                        <field name="tuoi_id" options="{'no_create': True}" string="Độ tuổi"/>
-                                        <field name="muctieu_id" options="{'no_create': True}" string="Mục tiêu chi tiết"/>
+                        <notebook>
+                            <page string="Lĩnh vực và Mục tiêu can thiệp">
+
+                                <field name="kehoach_linhvuc_ids">
+                                    <list string="Lĩnh vực">
+                                        <field name="linhvuc_id"/>
+                                        <field name="tuoi_id"/>
                                     </list>
+
+                                    <form string="Chi tiết Lĩnh vực">
+                                        <group>
+                                            <group>
+                                                <field name="linhvuc_id"/>
+                                            </group>
+                                            <group>
+                                                <field name="tuoi_id"/>
+                                            </group>
+                                        </group>
+
+                                        <field name="kehoach_muctieu_ids">
+                                            <list string="Mục tiêu">
+                                                <field name="sequence" widget="handle"/>
+                                                <field name="muctieu_id"/>
+
+                                            </list>
+
+                                            <form string="Chi tiết Mục tiêu">
+                                                <sheet>
+                                                    <group>
+                                                        <field name="muctieu_id"/>
+
+                                                    </group>
+
+                                                    <separator string="Chức năng phát triển &amp; Lập luận lâm sàng" style="color: #6D28D9;"/>
+                                                    
+                                                </sheet>
+                                            </form>
+                                        </field>
+                                    </form>
                                 </field>
-                            </div>
-                        </div>
-                    </div>
-                </sheet>
-            </form>
-        </field>
-    </record>
+
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
   </data>
 </odoo>
