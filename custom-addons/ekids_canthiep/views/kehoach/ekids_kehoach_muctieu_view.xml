@@ -1,0 +1,116 @@
+<odoo>
+  <data>
+      <record id="ekids_canthiep.lap_kehoach_muctieu_kanban" model="ir.ui.view">
+          <field name="name">ekids.kehoach_muctieu.kanban</field>
+          <field name="model">ekids.kehoach_muctieu</field>
+          <field name="arch" type="xml">
+              <kanban default_order="sequence" class="o_kanban_small_column">
+                  <field name="sequence" widget="handle"/>
+                  <field name="muctieu_id"/>
+                  <field name="linhvuc_id"/>
+                  <field name="tuoi_id"/>
+
+                  <templates>
+                      <t t-name="kanban-box">
+                          <div class="oe_kanban_global_click" style="border: 1px solid #E2E8F0; border-radius: 10px; background: white; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); position: relative; transition: all 0.2s;">
+
+                              <div class="d-flex align-items-start gap-2 mb-3">
+                                  <div class="text-muted" style="cursor: grab; margin-top: 2px;" title="Kéo để sắp xếp">
+                                      <i class="fa fa-arrows-v"></i>
+                                  </div>
+                                  <strong style="color: #1E293B; font-size: 14px; line-height: 1.4;">
+                                      <field name="muctieu_id"/>
+                                  </strong>
+                              </div>
+
+                              <div class="d-flex justify-content-between align-items-center mt-2 pt-2" style="border-top: 1px dashed #E2E8F0;">
+                                  <div>
+                                      <span class="badge" style="background-color: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE;">
+                                          <i class="fa fa-folder-open me-1"></i> <field name="linhvuc_id"/>
+                                      </span>
+                                  </div>
+                                  <div>
+                                      <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA;">
+                                          <field name="tuoi_id"/>
+                                      </span>
+                                  </div>
+                              </div>
+
+                          </div>
+                      </t>
+                  </templates>
+              </kanban>
+          </field>
+      </record>
+
+      <record id="ekids_canthiep.lap_kehoach_muctieu_form" model="ir.ui.view">
+          <field name="name">ekids.kehoach_muctieu.form</field>
+          <field name="model">ekids.kehoach_muctieu</field>
+          <field name="arch" type="xml">
+              <form string="Soạn thảo Mục tiêu Chi tiết">
+                  <style>
+                      .modal-dialog { max-width: 90vw !important; height: 95vh !important; margin: 2.5vh auto !important; }
+                      .modal-content { height: 100% !important; border-radius: 12px !important; }
+                      .modal-body { overflow-y: auto !important; }
+
+                      .form-label-custom { font-weight: 800; font-size: 13px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; margin-top: 15px;}
+                      .input-blue { border: 1px solid #BFDBFE !important; border-radius: 6px !important; background: #ffffff !important; padding: 10px;}
+                      .input-purple { border: 1px solid #DDD6FE !important; border-radius: 6px !important; background: #ffffff !important; padding: 10px;}
+                      .input-brown { border: 1px solid #FDE68A !important; border-radius: 6px !important; background: #FFFBEB !important; padding: 10px;}
+
+                      .c-title { font-weight: 800; font-size: 12px; color: #475569; text-transform: uppercase; margin-bottom: 5px; display: block;}
+                      .criteria-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; }
+
+                      /* Tối ưu Textarea */
+                      .oe_form_field_text textarea { min-height: 60px !important; font-size: 14px !important; color: #1E293B !important;}
+                  </style>
+
+                  <sheet>
+                      <div class="d-flex gap-3 mb-4 p-3 rounded" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                          <div class="flex-grow-1">
+
+                              <field name="linhvuc_id" readonly="1" class="fw-bold fs-6 text-primary w-100" force_save="1"/>
+                          </div>
+                          <div class="flex-grow-1">
+
+                              <field name="tuoi_id" readonly="1" class="fw-bold fs-6 text-danger w-100" force_save="1"/>
+                          </div>
+                      </div>
+
+                      <div class="w-100">
+                          <div>
+
+                              <field name="muctieu_id" required="1" class="input-blue w-100 fs-5 fw-bold" options="{'no_create': True}" placeholder="Gõ để tìm kiếm mục tiêu..."/>
+                          </div>
+
+                          <div>
+                               <div class="text-muted fst-italic bg-light p-2 rounded border">Thêm trường 'chuc_nang' vào model ekids.kehoach_muctieu để nhập liệu ô này.</div>
+                          </div>
+
+                          <div>
+                              <div class="text-muted fst-italic bg-light p-2 rounded border">Thêm trường 'thiet_ke_abc' vào model ekids.kehoach_muctieu để nhập liệu ô này.</div>
+                          </div>
+
+                          <div>
+                              <div class="criteria-grid">
+                                  <div>
+                                      <span class="c-title text-success">[ ĐẠT ]</span>
+                                      </div>
+                                  <div>
+                                      <span class="c-title text-warning">[ ĐANG HÌNH THÀNH ]</span>
+                                      </div>
+                                  <div>
+                                      <span class="c-title text-danger">[ CHƯA ĐẠT ]</span>
+                                      </div>
+                              </div>
+                          </div>
+
+                      </div>
+                  </sheet>
+              </form>
+          </field>
+      </record>
+
+
+  </data>
+</odoo>
