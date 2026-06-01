@@ -281,7 +281,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 hocphi_giam = (bantru + ca) - hp.tien_duoctru
                 tien_giam = ((bantru/100)* tyle_bantru) +((ca/100)* tyle_ca)
                 hp.hocphi_giam = tien_giam
-                hp.hocphi_phaidong = hocphi - hocphi_giam
+                hp._compute_hocphi()
             else:
                 # Giam theo tong khong chia tung khoan rieng
                 bantru = hp.func_hocphi_giam_bantru()
@@ -291,7 +291,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 hocphi = (bantru + ca) - tien_duoctru
                 sotien_giam = (hocphi / 100) * hp.tyle_giamhocphi
                 hp.hocphi_giam = sotien_giam
-                hp.hocphi_phaidong = hocphi - sotien_giam
+                hp._compute_hocphi()
 
 
 
