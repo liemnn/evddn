@@ -28,6 +28,8 @@ class HocSinhInherit(models.Model):
     ],string="Trạng thái kế hoạch",compute="_compute_trangthai_kehoach")
 
 
+
+
     kehoach_ids = fields.One2many("ekids.kehoach",
              "hocsinh_id", string="Các kế hoạch can thệp của học sinh")
 
@@ -69,17 +71,19 @@ class HocSinhInherit(models.Model):
 
     def action_lap_kehoach(self):
         form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
-
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'LẬP KẾ HOẠCH',
-            'res_model': 'ekids.kehoach',
-            'view_mode': 'form',
-            'views': [(form_view_id, 'form')],
-            'target': 'new',
-            'domain': [('coso_id', '=', self.id)],
-            'context': {
-                'default_coso_id': self.coso_id.id,
-                'default_hocsinh_id': self.id
-            },
-        }
+        kehoach = self.func_get_kehoach_hocsinh(self)
+        if kehoach:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'LẬP KẾ HOẠCH',
+                'res_model': 'ekids.kehoach',
+                'view_mode': 'form',
+                'res_id': kehoach.id,
+                'views': [(form_view_id, 'form')],
+                'target': 'new',
+                'domain': [('coso_id', '=', self.id)],
+                'context': {
+                    'default_coso_id': self.coso_id.id,
+                    'default_hocsinh_id': self.id
+                },
+            }

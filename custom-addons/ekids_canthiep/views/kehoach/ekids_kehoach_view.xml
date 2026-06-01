@@ -1,96 +1,125 @@
 <odoo>
   <data>
       <record id="ekids_canthiep.lap_kehoach_form" model="ir.ui.view">
-            <field name="name">ekids.kehoach.workspace.form</field>
-            <field name="model">ekids.kehoach</field>
-            <field name="arch" type="xml">
-                <form string="Thiết lập Kế hoạch Can thiệp">
+          <field name="name">ekids.kehoach.workspace.form</field>
+          <field name="model">ekids.kehoach</field>
+          <field name="arch" type="xml">
+              <form string="Thiết lập Kế hoạch Can thiệp">
+                  <style>
+                      /* RESET NỀN FORM */
+                      .o_form_view .o_form_sheet_bg { background-color: #F8FAFC !important; padding: 20px !important;}
+                      .o_form_sheet { padding: 0 !important; max-width: 100% !important; border: none !important; background: transparent !important; margin: 0 auto;}
 
-                    <style>
-                        /* RESET ODOO SHEET */
-                        .o_form_view .o_form_sheet_bg { background-color: #F8FAFC !important; padding: 20px !important;}
-                        .o_form_sheet { padding: 0 !important; max-width: 1200px !important; border: none !important; background: transparent !important; margin: 0 auto;}
+                      /* THIẾT KẾ KHỐI HEADER */
+                      .workspace-mock { background: white; border: 1px solid #CBD5E1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 20px;}
+                      .ws-header { background: #F8FAFC; padding: 15px 20px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; gap: 10px;}
+                      .ws-body { padding: 20px; }
+                      .ws-info-bar { display: flex; gap: 20px; flex-wrap: wrap; background: #EFF6FF; padding: 15px; border-radius: 8px; border: 1px solid #BFDBFE;}
+                      .ws-field { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 10px;}
+                      .ws-label { font-weight: 700; color: #1E3A8A; font-size: 13px; white-space: nowrap;}
 
-                        /* ================= CSS WORKSPACE CHUNG ================= */
-                        .workspace-mock { background: white; border: 1px solid #CBD5E1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-top: 10px;}
-                        .ws-header { background: #F8FAFC; padding: 15px 20px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; gap: 10px;}
-                        .ws-body { padding: 20px; }
+                      /* ======================================================== */
+                      /* TÙY CHỈNH BẢNG KANBAN THÀNH DẠNG TRELLO BOARD            */
+                      /* ======================================================== */
 
-                        /* THANH THÔNG TIN (Học sinh, Từ ngày, Đến ngày) */
-                        .ws-info-bar { display: flex; gap: 20px; margin-bottom: 25px; flex-wrap: wrap; background: #EFF6FF; padding: 15px; border-radius: 8px; border: 1px solid #BFDBFE;}
-                        .ws-field { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 10px;}
-                        .ws-label { font-weight: 700; color: #1E3A8A; font-size: 13px; white-space: nowrap;}
+                      /* Tùy chỉnh Cột (Lĩnh vực) */
+                      .o_kanban_view.o_kanban_grouped .o_kanban_group {
+                          background-color: #F1F5F9 !important; /* Nền xám nhạt cho cột */
+                          border-radius: 12px;
+                          margin-right: 15px;
+                          padding: 10px;
+                          border: 1px solid #E2E8F0;
+                      }
 
-                        /* TÙY CHỈNH BẢNG LIST VIEW ODOO TRONG SUỐT VÀ GỌN GÀNG */
-                        .o_list_view { border: 1px solid #E2E8F0 !important; border-radius: 10px !important; overflow: hidden; }
-                        .o_list_table th { background: #F8FAFC !important; color: #475569 !important; font-weight: 700 !important; font-size: 13px !important; text-transform: uppercase; padding: 12px 10px !important;}
-                        .o_list_table td { padding: 10px !important; vertical-align: middle !important; font-size: 13px !important; color: #1E293B !important;}
+                      /* Header của Cột (Tên Lĩnh vực) */
+                      .o_kanban_view.o_kanban_grouped .o_kanban_header {
+                          border-bottom: 2px solid #CBD5E1;
+                          padding-bottom: 10px;
+                          margin-bottom: 10px;
+                      }
+                      .o_kanban_view.o_kanban_grouped .o_kanban_header_title {
+                          font-weight: 800 !important;
+                          color: #1E3A8A !important;
+                          font-size: 14px;
+                          text-transform: uppercase;
+                      }
+                  </style>
 
-                        /* ================= CSS POPUP FORM (KHI CLICK VÀO DÒNG) ================= */
-                        .edit-form-container { display: flex; flex-direction: column; gap: 20px; padding: 10px;}
-                        .form-group-custom { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;}
-                        .form-label-custom { font-weight: 800; font-size: 13px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 5px;}
+                  <sheet>
+                      <div class="workspace-mock">
+                          <div class="ws-header">
+                              <i class="fa fa-file-text-o" style="color: #2563EB; font-size: 1.2rem;"></i>
+                              <span style="font-weight: 800; color: #1E293B; font-size: 15px;">LẬP KẾ HOẠCH CAN THIỆP CHO TRẺ</span>
+                          </div>
+                          <div class="ws-body">
+                              <div class="ws-info-bar">
+                                  <div class="ws-field">
+                                      <span class="ws-label"><i class="fa fa-user-circle-o me-1"></i>Học sinh:</span>
+                                      <field name="hocsinh_id" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;" options="{'no_create': True}"/>
+                                  </div>
+                                  <div class="ws-field">
+                                      <span class="ws-label"><i class="fa fa-calendar-play-o me-1"></i>Từ ngày:</span>
+                                      <field name="tu_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
+                                  </div>
+                                  <div class="ws-field">
+                                      <span class="ws-label"><i class="fa fa-calendar-check-o me-1"></i>Đến ngày:</span>
+                                      <field name="den_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
 
-                        /* Style cho từng Textarea theo màu */
-                        .label-blue { color: #3B82F6; }
-                        .input-blue { border: 1px solid #BFDBFE !important; border-radius: 6px !important; background: #ffffff !important; }
+                      <field name="kehoach_muctieu_ids" mode="kanban" context="{'default_group_by': 'kehoach_linhvuc_id'}">
 
-                        .label-purple { color: #8B5CF6; }
-                        .input-purple { border: 1px solid #DDD6FE !important; border-radius: 6px !important; background: #ffffff !important; }
+                          <kanban  class="o_kanban_small_column">
+                              <field name="linhvuc_id"/>
+                              <field name="tuoi_id"/>
 
-                        .label-brown { color: #B45309; }
-                        .input-brown { border: 1px solid #FDE68A !important; border-radius: 6px !important; background: #FFFBEB !important; }
+                              <field name="kehoach_muctieu_ids"/>
 
-                        .label-green { color: #059669; }
+                              <templates>
+                                  <t t-name="kanban-box">
+                                      <div class="oe_kanban_global_click" style="background: white; border: 1px solid #BFDBFE; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); padding: 15px; margin-bottom: 12px; transition: 0.2s;">
 
-                        /* CSS GRID 3 CỘT CHO TIÊU CHÍ ĐÁNH GIÁ */
-                        .criteria-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%;}
-                        .c-title { font-weight: 800; font-size: 12px; color: #475569; text-transform: uppercase; margin-bottom: 5px; display: block;}
-                        .input-green-pass { border: 1px solid #A7F3D0 !important; background: #ffffff !important; border-radius: 6px !important;}
-                        .input-green-warn { border: 1px solid #FDE68A !important; background: #ffffff !important; border-radius: 6px !important;}
-                        .input-green-fail { border: 1px solid #FECACA !important; background: #ffffff !important; border-radius: 6px !important;}
+                                          <div class="float-end">
+                                              <a type="delete" class="text-danger" title="Xóa mục tiêu này"><i class="fa fa-trash"></i></a>
+                                          </div>
 
-                        /* Định dạng các trường Text của Odoo thành Textarea */
-                        .oe_form_field_text textarea { padding: 10px !important; min-height: 70px !important; color: #1E293B !important; font-size: 14px !important;}
-                    </style>
+                                          <div class="fw-bold fs-6 text-primary mb-3 pe-4" style="line-height: 1.4;">
+                                              <i class="fa fa-bullseye me-1 text-warning"></i> <field name="muctieu_id"/>
+                                          </div>
 
-                    <sheet>
+                                          <div class="border-top pt-2 mt-2">
+                                              <div class="text-muted small fw-bold mb-2"><i class="fa fa-cogs"></i> Chuyên đề / Chương trình:</div>
+                                              <field name="kehoach_muctieu_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                          </div>
 
-                        <div class="workspace-mock">
-                            <div class="ws-header">
-                                <i class="fa fa-file-text-o" style="color: #2563EB; font-size: 1.2rem;"></i>
-                                <span style="font-weight: 800; color: #1E293B; font-size: 15px;">LẬP KẾ HOẠCH CAN THIỆP CHO TRẺ</span>
-                            </div>
+                                      </div>
+                                  </t>
+                              </templates>
+                          </kanban>
 
-                            <div class="ws-body">
-                                <!-- HEADER THÔNG TIN CƠ BẢN -->
-                                <div class="ws-info-bar">
-                                    <div class="ws-field">
-                                        <span class="ws-label"><i class="fa fa-user-circle-o me-1"></i>Học sinh:</span>
-                                        <!-- Giả định bạn có trường hocsinh_id ở model kehoach -->
-                                        <field name="hocsinh_id" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;" options="{'no_create': True}"/>
-                                    </div>
-                                    <div class="ws-field">
-                                        <span class="ws-label"><i class="fa fa-calendar-play-o me-1"></i>Từ ngày:</span>
-                                        <field name="tu_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
-                                    </div>
-                                    <div class="ws-field">
-                                        <span class="ws-label"><i class="fa fa-calendar-check-o me-1"></i>Đến ngày:</span>
-                                        <field name="den_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
-                                    </div>
-                                </div>
+                          <form string="Chi tiết Mục tiêu">
+                              <sheet>
+                                  <div class="d-flex gap-3 mb-4 p-3 rounded" style="background: #EFF6FF; border: 1px solid #BFDBFE;">
+                                      <div class="flex-grow-1">
+                                          <label class="fw-bold text-muted small text-uppercase">Thuộc Lĩnh vực</label>
+                                          <field name="linhvuc_id" class="fw-bold fs-5 text-primary w-100" options="{'no_create': True}"/>
+                                      </div>
+                                  </div>
 
-                                <!-- DANH SÁCH MỤC TIÊU ONE2MANY -->
-                                 <!-- Đặt đoạn này bên trong <sheet> của ekids.kehoach -->
-                                <field name="kehoach_linhvuc_ids" mode="kanban"/>
+                                  <group>
+                                      <field name="kehoach_muctieu_id" class="fw-bold fs-6" options="{'no_create': True}"/>
+                                      <field name="muctieu_ids" widget="many2many_tags" />
+                                  </group>
+                              </sheet>
+                          </form>
 
-
-                            </div>
-                        </div>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+                      </field>
+                  </sheet>
+              </form>
+          </field>
+      </record>
 
 
   </data>

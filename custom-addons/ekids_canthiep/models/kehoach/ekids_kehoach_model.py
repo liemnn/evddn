@@ -9,7 +9,7 @@ class KeHoach(models.Model):
 
     coso_id = fields.Many2one("ekids.coso", related="hocsinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
-    name = fields.Char(string="Mã phiếu", required=True, default='Mới')
+    name = fields.Char(string="Mã phiếu", required=True, compute="_compute_name")
 
     # 1. THÔNG TIN HỌC SINH
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True, tracking=True)  # [cite: 2]
@@ -36,3 +36,9 @@ class KeHoach(models.Model):
 
     kehoach_muctieu_ids = fields.One2many("ekids.kehoach_muctieu",
                                   "kehoach_id", string="Các mục tiêu của kế hoạch")
+
+
+    def _compute_name(self):
+        for kh in self:
+            kh.name = kh.hocsinh_id.name
+

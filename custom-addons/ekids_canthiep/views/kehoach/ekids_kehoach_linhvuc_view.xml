@@ -1,5 +1,26 @@
 <odoo>
   <data>
+      <record id="ekids_canthiep.lap_kehoach_linhvuc_list" model="ir.ui.view">
+            <field name="name">ekids.kehoach_linhvuc.list</field>
+            <field name="model">ekids.kehoach_linhvuc</field>
+            <field name="arch" type="xml">
+                <list string="Danh sách Lĩnh vực Can thiệp">
+
+                    <field name="sequence" widget="handle"/>
+
+                    <field name="linhvuc_id"
+                           string="Lĩnh vực"
+                           class="fw-bold text-primary"/>
+
+                    <field name="tuoi_id"
+                           string="Độ tuổi"
+                           class="fw-bold text-danger"/>
+
+                    <field name="kehoach_muctieu_ids"/>
+
+                </list>
+            </field>
+        </record>
       <record id="ekids_canthiep.lap_kehoach_linhvuc_kanban" model="ir.ui.view">
             <field name="name">ekids.kehoach_linhvuc.kanban</field>
             <field name="model">ekids.kehoach_linhvuc</field>
@@ -62,6 +83,7 @@
                     </style>
 
                     <sheet>
+                        <field name="kehoach_id"/>
                         <div class="d-flex gap-3 mb-4 p-3 rounded" style="background: #EFF6FF; border: 1px solid #BFDBFE;">
                             <div class="flex-grow-1">
 
@@ -73,7 +95,7 @@
                             </div>
                         </div>
 
-                        <field name="kehoach_muctieu_ids"/>
+
 
                     </sheet>
                 </form>
