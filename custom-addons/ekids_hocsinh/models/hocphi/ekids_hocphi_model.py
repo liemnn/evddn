@@ -326,7 +326,8 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
 
 
-    @api.depends("hocphi_bantru_ids","hocphi_ca_ids","hocphi_duoctru_ids","hocphi_giam")
+    @api.depends("hocphi_bantru_ids","hocphi_ca_ids","hocphi_duoctru_ids","hocphi_giam"
+        ,"is_giamhocphi_dacthu","tyle_giamhocphi","tyle_giamhocphi_bantru","tyle_giamhocphi_ca")
     def _compute_hocphi_phaidong(self):
         for hp in self:
             hp.hocphi_phaidong = hp.hocphi - hp.hocphi_giam

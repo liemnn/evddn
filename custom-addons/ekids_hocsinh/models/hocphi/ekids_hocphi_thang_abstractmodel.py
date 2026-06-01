@@ -207,8 +207,10 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                     self.func_tao_khoantru_giam_hocphi_sotien(hocsinh,hocphi)
 
                 hocphi.dm_chinhsach_giam_id = hocsinh.dm_chinhsach_giam_id.id
-                hocphi._compute_hocphi_giam()
-                hocphi._compute_hocphi_phaidong()
+
+            hocphi._compute_hocphi()
+            hocphi._compute_hocphi_giam()
+            hocphi._compute_hocphi_phaidong()
 
 
 
