@@ -41,6 +41,7 @@ Long description of module's purpose
         'views/kehoach/ekids_kehoach_view.xml',
         'views/kehoach/ekids_kehoach_linhvuc_view.xml',
         'views/kehoach/ekids_kehoach_muctieu_view.xml',
+        'views/kehoach/ekids_kehoach_muctieu_wizard_view.xml',
 
         'views/ekids_menu.xml',
 

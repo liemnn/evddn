@@ -65,57 +65,84 @@
                                       <span class="ws-label"><i class="fa fa-calendar-check-o me-1"></i>Đến ngày:</span>
                                       <field name="den_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
                                   </div>
+                                  <button name="action_them_muctie"
+                                    type="object"
+                                    string="Thêm Mục tiêu tự động"
+                                    class="btn btn-primary btn-sm"
+                                    icon="fa-plus-circle"/>
                               </div>
                           </div>
                       </div>
 
-                      <field name="kehoach_muctieu_ids" mode="kanban" context="{'default_group_by': 'kehoach_linhvuc_id'}">
+                      <field name="muctieu_ids" mode="kanban">
+                            <list string="Danh sách Mục tiêu" decoration-muted="id == False">
 
-                          <kanban  class="o_kanban_small_column">
-                              <field name="linhvuc_id"/>
-                              <field name="tuoi_id"/>
+                                <field name="linhvuc_id" string="Lĩnh vực" class="fw-bold text-primary" style="width: 25%;"/>
 
-                              <field name="kehoach_muctieu_ids"/>
+                                <field name="tuoi_id" string="Độ tuổi" class="fw-bold text-danger" style="width: 15%;"/>
 
-                              <templates>
-                                  <t t-name="kanban-box">
-                                      <div class="oe_kanban_global_click" style="background: white; border: 1px solid #BFDBFE; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); padding: 15px; margin-bottom: 12px; transition: 0.2s;">
+                                <field name="name" string="Tên Mục tiêu &amp; Mô tả" style="width: 50%;"/>
 
-                                          <div class="float-end">
-                                              <a type="delete" class="text-danger" title="Xóa mục tiêu này"><i class="fa fa-trash"></i></a>
-                                          </div>
+                                <button name="open" type="object" icon="fa-eye" title="Xem chi tiết" class="btn btn-sm btn-link text-primary"/>
 
-                                          <div class="fw-bold fs-6 text-primary mb-3 pe-4" style="line-height: 1.4;">
-                                              <i class="fa fa-bullseye me-1 text-warning"></i> <field name="muctieu_id"/>
-                                          </div>
+                            </list>
 
-                                          <div class="border-top pt-2 mt-2">
-                                              <div class="text-muted small fw-bold mb-2"><i class="fa fa-cogs"></i> Chuyên đề / Chương trình:</div>
-                                              <field name="kehoach_muctieu_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                                          </div>
+                            <kanban create="0" class="o_kanban_small_column">
+                                <field name="linhvuc_id"/>
+                                <field name="tuoi_id"/>
+                                <field name="name"/>
 
-                                      </div>
-                                  </t>
-                              </templates>
-                          </kanban>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="oe_kanban_global_click" style="background: white; border: 1px solid #E2E8F0; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); padding: 16px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 12px; transition: all 0.2s ease;">
 
-                          <form string="Chi tiết Mục tiêu">
-                              <sheet>
-                                  <div class="d-flex gap-3 mb-4 p-3 rounded" style="background: #EFF6FF; border: 1px solid #BFDBFE;">
-                                      <div class="flex-grow-1">
-                                          <label class="fw-bold text-muted small text-uppercase">Thuộc Lĩnh vực</label>
-                                          <field name="linhvuc_id" class="fw-bold fs-5 text-primary w-100" options="{'no_create': True}"/>
-                                      </div>
-                                  </div>
+                                            <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                                                <span class="badge" style="background-color: #EFF6FF; color: #1E3A8A; border: 1px solid #BFDBFE; font-size: 0.8rem; padding: 6px 10px; border-radius: 6px;">
+                                                    <i class="fa fa-folder-open me-1 text-warning"></i> <field name="linhvuc_id"/>
+                                                </span>
+                                                <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; font-size: 0.8rem; padding: 6px 10px; border-radius: 6px;">
+                                                    <field name="tuoi_id"/>
+                                                </span>
+                                            </div>
 
-                                  <group>
-                                      <field name="kehoach_muctieu_id" class="fw-bold fs-6" options="{'no_create': True}"/>
-                                      <field name="muctieu_ids" widget="many2many_tags" />
-                                  </group>
-                              </sheet>
-                          </form>
+                                            <div class="fw-bold fs-6 text-dark mt-1" style="line-height: 1.5; flex-grow: 1;">
+                                                <field name="name"/>
+                                            </div>
 
-                      </field>
+                                            <div class="text-end mt-1 pt-2" style="border-top: 1px dashed #F1F5F9;">
+                                                <span style="color: #2563EB; font-weight: 700; font-size: 0.85rem; padding: 4px 8px; border-radius: 4px; background: #F8FAFC; border: 1px solid #E2E8F0;">
+                                                    Xem chi tiết <i class="fa fa-arrow-right ms-1"></i>
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+
+                            <form string="Chi tiết Mục tiêu">
+                                <sheet>
+                                    <div class="d-flex justify-content-between align-items-center mb-4 p-3 rounded" style="background: #F8FAFC; border: 1px solid #E2E8F0;">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fa fa-folder-open text-warning fs-4"></i>
+                                            <field name="linhvuc_id" class="fw-bold text-primary fs-5 border-0 bg-transparent mb-0" readonly="1" force_save="1"/>
+                                        </div>
+                                        <span class="badge" style="background-color: #F3E8FF; color: #7E22CE; font-size: 14px; padding: 6px 12px; border-radius: 6px;">
+                                            Độ tuổi: <field name="tuoi_id" readonly="1" force_save="1"/>
+                                        </span>
+                                    </div>
+
+                                    <div class="w-100">
+                                        <label for="name" class="fw-bold text-uppercase text-muted mb-2" style="font-size: 12px; letter-spacing: 0.5px;">
+                                            <i class="fa fa-bullseye text-success me-1"></i> Nội dung Mục tiêu
+                                        </label>
+                                        <field name="name" class="fw-bold fs-5 w-100 oe_form_field_text" style="color: #0F172A; border: 1px solid #CBD5E1; border-radius: 8px; padding: 12px; background: white; min-height: 80px;"/>
+                                    </div>
+
+                                    </sheet>
+                            </form>
+
+                        </field>
                   </sheet>
               </form>
           </field>

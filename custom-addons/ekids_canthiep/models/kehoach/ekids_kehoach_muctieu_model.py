@@ -22,7 +22,11 @@ class KeHoach2MucTieu(models.Model):
     kehoach_linhvuc_id = fields.Many2one('ekids.kehoach_linhvuc'
                                          , string='Lĩnh vực'
                                          , required=True, ondelete="cascade")
+    name = fields.Char("Tên",compute="_compute_name")
 
 
     muctieu_id = fields.Many2one('ekids.ct_muctieu', string='Mục tiêu', required=True, ondelete="cascade")
 
+    def _compute_name(self):
+        for mt in self:
+            mt.name =mt.muctieu_id.name

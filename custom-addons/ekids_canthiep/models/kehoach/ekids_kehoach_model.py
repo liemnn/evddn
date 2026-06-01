@@ -31,6 +31,12 @@ class KeHoach(models.Model):
     den_ngay = fields.Date(string="Đến ngày")
     songay = fields.Integer(string="Số ngày")
 
+    muctieu_ids = fields.Many2many(comodel_name="ekids.ct_muctieu"
+                                   , relation="ekids_kehoach_ct_muctieu4kehoach_rel"
+                                   , column1="kehoach_id"
+                                   , column2="muctieu_id"
+                                   , string="Các mục tiêu cho kế hoạch")
+
     kehoach_linhvuc_ids = fields.One2many("ekids.kehoach_linhvuc",
                                           "kehoach_id", string="Các Lĩnh vực của kế hoạch")
 
@@ -38,7 +44,46 @@ class KeHoach(models.Model):
                                   "kehoach_id", string="Các mục tiêu của kế hoạch")
 
 
+
+
+
     def _compute_name(self):
         for kh in self:
             kh.name = kh.hocsinh_id.name
+
+    def action_lap_kehoach(self):
+        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        kehoach = self.func_get_kehoach_hocsinh(self)
+        if kehoach:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'LẬP KẾ HOẠCH',
+                'res_model': 'ekids.kehoach',
+                'view_mode': 'form',
+                'res_id': kehoach.id,
+                'views': [(form_view_id, 'form')],
+                'target': 'new',
+                'domain': [('coso_id', '=', self.id)],
+                'context': {
+                    'default_coso_id': self.coso_id.id,
+                    'default_hocsinh_id': self.id
+                },
+            }
+
+    def action_them_muctie(self):
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'THÊM MỤC TIÊU',
+            'res_model': 'ekids.kehoach_muctieu_wizard',
+            'view_mode': 'form',
+
+            'target': 'new',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'default_hocsinh_id': self.id
+            },
+        }
+
 

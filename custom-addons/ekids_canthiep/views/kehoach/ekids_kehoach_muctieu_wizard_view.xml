@@ -1,0 +1,49 @@
+<odoo>
+  <data>
+      <record id="ekids_canthiep.lap_kehoach_muctieu_wizard_form" model="ir.ui.view">
+            <field name="name">ekids.wizard_them_muctieu.form</field>
+            <field name="model">ekids.kehoach_muctieu_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Thêm Nhanh Mục Tiêu">
+                    <sheet>
+                        <!-- Ẩn kehoach_id đi vì hệ thống tự truyền vào rồi -->
+                        <field name="kehoach_id" invisible="1"/>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="linhvuc_id" class="fw-bold"/>
+                                <field name="linhvuc_id" options="{'no_create': True}" class="form-control"/>
+                            </div>
+                            <div class="col-6">
+                                <label for="tuoi_id" class="fw-bold"/>
+                                <field name="tuoi_id" options="{'no_create': True}" class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <label for="muctieu_ids" class="fw-bold text-primary mb-2">
+                                <i class="fa fa-list-check me-1"></i> Danh sách mục tiêu khả dụng (Tích chọn để thêm)
+                            </label>
+                            <!-- Bộ lọc động: Chỉ lấy các mục tiêu thuộc Lĩnh vực và Tuổi đang chọn -->
+                            <!-- Giả định bảng thư viện ekids.ct_muctieu của bạn có chứa 2 field linhvuc_id và tuoi_id -->
+                            <field name="muctieu_ids" nolabel="1"
+                                   domain="[('linhvuc_id', '=', linhvuc_id), ('tuoi_id', '=', tuoi_id)]">
+                                <list editable="bottom">
+                                    <!-- Chú ý: Đây là field name của bảng thư viện mục tiêu (ekids.ct_muctieu) -->
+                                    <field name="name" string="Tên Mục tiêu"/>
+                                </list>
+                            </field>
+                        </div>
+                    </sheet>
+                    <!-- Nút bấm dưới cùng của Popup -->
+                    <footer>
+                        <button string="Xác nhận Thêm" name="action_xacnhan" type="object" class="btn-primary" icon="fa-check"/>
+                        <button string="Hủy bỏ" class="btn-secondary" special="cancel" icon="fa-times"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+  </data>
+</odoo>
