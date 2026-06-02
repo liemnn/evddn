@@ -815,10 +815,9 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
         # Tính số ngày học một lần để tối ưu hiệu năng
         so_ngay_hoc = len(ngay_dihoc_kehoachs)
-        dm_ca_hoc=None
+
         for ca2ngay in ca2ngays:
             dm_ca = ca2ngay.hocphi_dm_ca_id
-            dm_ca_hoc= dm_ca
             if (dm_ca.is_hoantien_khi_nghi == False
                     and dm_ca.tyle_hoan_rieng <= 0):
                 # không cho phep hoàn tiền khoản này
@@ -873,7 +872,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                         or value['ca_bu'] > 0):
 
                     tien_duoc_hoan_tra = (value['tien'] / 100) * value['tyle_hoantra']
-                    tien = self.func_thongtin_duoctru_hocphi_tien(tien_duoc_hoan_tra,dm_ca_hoc, hocphi)
+                    tien = self.func_thongtin_duoctru_hocphi_tien(tien_duoc_hoan_tra,value['dm_ca'], hocphi)
                     dongia = value['dongia']
                     name =self.func_get_name_hoantra_hocphi_ca(hocphi,lydo
                                                                ,len(days)

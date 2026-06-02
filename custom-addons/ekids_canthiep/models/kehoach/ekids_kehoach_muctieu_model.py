@@ -9,7 +9,6 @@ class KeHoach2MucTieu(models.Model):
 
     sequence = fields.Integer(string="STT", default=1)
     kehoach_id = fields.Many2one("ekids.kehoach",
-                                 related="kehoach_linhvuc_id.kehoach_id",
                                  string="Thuộc kế hoạch nào",
                                  required=True,
                                  ondelete="cascade")
@@ -19,9 +18,6 @@ class KeHoach2MucTieu(models.Model):
     tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi',
                               related="muctieu_id.tuoi_id", required=True, ondelete="cascade")
 
-    kehoach_linhvuc_id = fields.Many2one('ekids.kehoach_linhvuc'
-                                         , string='Lĩnh vực'
-                                         , required=True, ondelete="cascade")
     name = fields.Char("Tên",compute="_compute_name")
 
 

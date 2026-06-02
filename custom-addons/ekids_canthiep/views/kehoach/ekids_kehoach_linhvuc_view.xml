@@ -16,7 +16,7 @@
                            string="Độ tuổi"
                            class="fw-bold text-danger"/>
 
-                    <field name="kehoach_muctieu_ids"/>
+
 
                 </list>
             </field>
@@ -28,7 +28,7 @@
                 <kanban>
                     <field name="linhvuc_id"/>
                     <field name="tuoi_id"/>
-                    <field name="kehoach_muctieu_ids"/>
+
 
                     <templates>
                         <t t-name="kanban-box">
@@ -52,7 +52,7 @@
 
                                 <div class="p-3">
                                     <div class="text-muted small fw-bold mb-2"><i class="fa fa-list-ul me-1"></i> CÁC MỤC TIÊU ĐANG CÓ:</div>
-                                    <field name="kehoach_muctieu_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+
                                 </div>
                             </div>
                         </t>

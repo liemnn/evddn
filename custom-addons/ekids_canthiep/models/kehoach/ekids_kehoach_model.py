@@ -31,17 +31,11 @@ class KeHoach(models.Model):
     den_ngay = fields.Date(string="Đến ngày")
     songay = fields.Integer(string="Số ngày")
 
-    muctieu_ids = fields.Many2many(comodel_name="ekids.ct_muctieu"
-                                   , relation="ekids_kehoach_ct_muctieu4kehoach_rel"
+    kehoach_muctieu_ids = fields.Many2many(comodel_name="ekids.kehoach_muctieu"
+                                   , relation="ekids_kehoach_muctieu4kehoach_rel"
                                    , column1="kehoach_id"
-                                   , column2="muctieu_id"
+                                   , column2="kehoach_muctieu_id"
                                    , string="Các mục tiêu cho kế hoạch")
-
-    kehoach_linhvuc_ids = fields.One2many("ekids.kehoach_linhvuc",
-                                          "kehoach_id", string="Các Lĩnh vực của kế hoạch")
-
-    kehoach_muctieu_ids = fields.One2many("ekids.kehoach_muctieu",
-                                  "kehoach_id", string="Các mục tiêu của kế hoạch")
 
 
 
@@ -72,11 +66,14 @@ class KeHoach(models.Model):
 
     def func_tao_macdinh_kehoach_muctieu(self):
         # unlink cái cũ
-
+        kh_muctieus = self.func_danhsach_kehoach_muctieu(self.id)
+        if kh_muctieus:
+            for kh_muctieu in kh_muctieus:
+                kh_muctieu.unlink()
         # tao cai moi
         if self.kehoach_linhvuc_ids:
             for lv in self.kehoach_linhvuc_ids:
-                muctieus = self.func_danhsach_muctieu(lv.linhvuc_id,lv.tuoi_id)
+                muctieus = self.func_danhsach_muctieu(lv.linhvuc_id.id,lv.tuoi_id.id)
                 if muctieus:
                     for muctieu in muctieus:
                         data={
@@ -85,9 +82,10 @@ class KeHoach(models.Model):
                         }
                         self.env['ekids.kehoach_muctieu'].create(data)
 
-
-
-
+    def func_danhsach_kehoach_muctieu(self, kehoach_id):
+        domain = [('kehoach_id', '=', kehoach_id)]
+        muctieus = self.env['ekids.kehoach_muctieu'].search(domain)
+        return muctieus
     def func_danhsach_muctieu(self,linhvuc_id,tuoi_id):
         domain =[('linhvuc_id','=',linhvuc_id)]
         if tuoi_id:
