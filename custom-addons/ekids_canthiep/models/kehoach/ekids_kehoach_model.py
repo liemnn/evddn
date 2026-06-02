@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from datetime import  timedelta
 from odoo.exceptions import ValidationError
 
 
@@ -37,8 +38,16 @@ class KeHoach(models.Model):
                                    , column2="kehoach_muctieu_id"
                                    , string="Các mục tiêu cho kế hoạch")
 
+    @api.onchange("songay")
+    def _onchage_songay(self):
+        for record in self:
+            record.den_ngay = record.tu_ngay + timedelta(days=record.songay)
 
-
+    @api.onchange("tu_ngay","den_ngay")
+    def _onchage_ngay(self):
+        for record in self:
+            if record.tu_ngay and record.den_ngay:
+                record.songay = record.den_ngay - record.tu_ngay
 
 
     def _compute_name(self):

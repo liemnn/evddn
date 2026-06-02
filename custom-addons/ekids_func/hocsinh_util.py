@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta,date
+from odoo import models, fields, api
 from . import  coso_util,ngay_util
 from odoo.osv import expression
 def func_get_nghipheps_trong_khoang_thoigian(self,coso, hocsinh, nghiles,nhatruong_nghis, tu_ngay, den_ngay):
@@ -290,19 +291,37 @@ def func_is_hoc(self, hocsinh, ngay):
     return False
 
 
-def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh_id,ngay):
+
+
+def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh,ngay):
+    # Ép toàn bộ biến về chuẩn Date an toàn bằng hàm lõi của Odoo
+    d_ngay = fields.Date.to_date(ngay)
+    d_nhaphoc = fields.Date.to_date(hocsinh.ngay_nhaphoc)
+    d_nghihoc = fields.Date.to_date(hocsinh.ngay_nghihoc)
+
+    # 1. Chặn lỗi ngầm nếu thiếu dữ liệu đầu vào
+    if not d_ngay or not d_nhaphoc:
+        return
+
+    # 2. Xử lý logic: Nếu ngày đang xét trước ngày nhập học -> Bỏ qua
+    if d_ngay < d_nhaphoc:
+        return
+
+    # 3. Xử lý logic: Nếu đã nghỉ học và ngày đang xét sau ngày nghỉ học -> Bỏ qua
+    if d_nghihoc and d_ngay > d_nghihoc:
+        return
 
     weekday = ngay.weekday() + 2
     thu_field = 't' + str(weekday)
     ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search([
-                        ('hocsinh_id', '=', hocsinh_id)
+                        ('hocsinh_id', '=', hocsinh.id)
                         ])
     if ca_canthieps:
         for ca_canthiep in ca_canthieps:
             is_canthiep = getattr(ca_canthiep,thu_field)
             if is_canthiep:
                 count = self.env['ekids.diemdanh_ca2ngay'].search_count([
-                    ('hocsinh_id', '=', hocsinh_id),
+                    ('hocsinh_id', '=', hocsinh.id),
                     ('ngay', '=', ngay),
                     ('hocsinh_ca_canthiep_id', '=', ca_canthiep.id),
 
@@ -314,7 +333,7 @@ def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh_id,ngay):
                         'ngay': ngay,
                         'tu':ca_canthiep.tu,
                         'den': ca_canthiep.den,
-                        'hocsinh_id': hocsinh_id,
+                        'hocsinh_id': hocsinh.id,
                         'trangthai': '0',
 
                     }

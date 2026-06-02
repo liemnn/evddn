@@ -40,19 +40,19 @@ class DiemDanhHocSinh2ThangAbstractModel(models.AbstractModel):
                     if field_value == "2" or field_value=='3':
                         #TH1: Nghỉ lễ
                         # TH3: học sinh nghỉ phép... tính là nghỉ học
-                        hocsinh_util.func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh2thang.hocsinh_id.id,day)
+                        hocsinh_util.func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh2thang.hocsinh_id,day)
                         return self.func_mo_popup_nghiles(self.coso_id.id,hocsinh2thang,day)
                     elif field_value == "4":
                         #TH2: học sinh nghỉ phép
-                        hocsinh_util.func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh2thang.hocsinh_id.id, day)
+                        hocsinh_util.func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh2thang.hocsinh_id, day)
                         return self.func_mo_popup_nghiphep(self.hocsinh_id.id,day)
                     else:
                         # TH1: đi học
-                        return self.func_mo_popup_diemdanh_hocsinh2ngay(self.hocsinh_id.id, day,field_value)
-    def func_mo_popup_diemdanh_hocsinh2ngay(self, hocsinh_id, ngay,trangthai):
-        hocsinh2ngay = self.func_tao_diemdanh_hocsinh2ngay(hocsinh_id, ngay,'1')
+                        return self.func_mo_popup_diemdanh_hocsinh2ngay(self.hocsinh_id, day,field_value)
+    def func_mo_popup_diemdanh_hocsinh2ngay(self, hocsinh, ngay,trangthai):
+        hocsinh2ngay = self.func_tao_diemdanh_hocsinh2ngay(hocsinh.id, ngay,'1')
         if hocsinh2ngay:
-            hocsinh_util.func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh_id,ngay)
+            hocsinh_util.func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh,ngay)
             # Tạo default các ca can thiệp theo ngày
             view_form_id = self.env.ref("ekids_diemdanh.diemdanh_hocsinh2ngay_form").id
             return {

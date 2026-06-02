@@ -176,23 +176,31 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                     ngay_dauthang = thangtruoc_days[0]
                     ngay_cuoithang = thangtruoc_days[len(thangtruoc_days) - 1]
 
-                    if hocsinh.ngay_nhaphoc > ngay_dauthang:
+                    is_hocthangtruoc =True
+                    if hocsinh.ngay_nhaphoc > ngay_cuoithang:
+                        is_hocthangtruoc = False
+
+                    if (hocsinh.ngay_nhaphoc > ngay_dauthang
+                            and hocsinh.ngay_nhaphoc < ngay_cuoithang):
                         ngay_dauthang = hocsinh.ngay_nhaphoc
 
+                    if hocsinh.ngay_nghihoc and hocsinh.ngay_nghihoc < ngay_cuoithang:
+                        ngay_cuoithang = hocsinh.ngay_nghihoc
 
 
-                    self.func_hoantra_hocphi_thang_truoc(coso
-                                                         ,nghiles_thangtruoc
-                                                         ,hocphi
-                                                         ,hocsinh
-                                                         ,thu_bantrus
-                                                         ,ca_canthieps
-                                                         ,ca2thus
-                                                         ,ngay_dauthang
-                                                         ,ngay_cuoithang
-                                                         ,ngay_dihoc_cosos
-                                                         ,nhatruong_nghi_bus
-                                                         ,nhatruong_nghis)
+                    if is_hocthangtruoc == True:
+                        self.func_hoantra_hocphi_thang_truoc(coso
+                                                             ,nghiles_thangtruoc
+                                                             ,hocphi
+                                                             ,hocsinh
+                                                             ,thu_bantrus
+                                                             ,ca_canthieps
+                                                             ,ca2thus
+                                                             ,ngay_dauthang
+                                                             ,ngay_cuoithang
+                                                             ,ngay_dihoc_cosos
+                                                             ,nhatruong_nghi_bus
+                                                             ,nhatruong_nghis)
             #B3: Tính chính sách giảm học phí cho học sinh
             if hocsinh.dm_chinhsach_giam_id:
                 hocphi.tyle_giamhocphi = 0
@@ -806,7 +814,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         if days:
             for day in days:
                 ngay =  string_util.string2date(day)
-                hocsinh_util.func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self, hocphi.hocsinh_id.id, ngay)
+                hocsinh_util.func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self, hocphi.hocsinh_id, ngay)
         # Lấy danh sách điểm danh
         ca2ngays = self.env['ekids.diemdanh_ca2ngay'].search([
             ('hocsinh_id', '=', hocphi.hocsinh_id.id),

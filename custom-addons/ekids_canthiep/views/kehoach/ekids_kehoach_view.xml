@@ -11,10 +11,10 @@
                       .o_form_sheet { padding: 0 !important; max-width: 100% !important; border: none !important; background: transparent !important; margin: 0 auto;}
 
                       /* THIẾT KẾ KHỐI HEADER */
-                      .workspace-mock { background: white; border: 1px solid #CBD5E1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 20px;}
+                      .workspace-mock { background: white; border: 1px solid #CBD5E1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 0px;}
                       .ws-header { background: #F8FAFC; padding: 15px 20px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; gap: 10px;}
-                      .ws-body { padding: 20px; }
-                      .ws-info-bar { display: flex; gap: 20px; flex-wrap: wrap; background: #EFF6FF; padding: 15px; border-radius: 8px; border: 1px solid #BFDBFE;}
+                      .ws-body { padding: 5px; }
+                      .ws-info-bar { display: flex; gap: 20px; flex-wrap: wrap; background: #EFF6FF; padding: 5px; border-radius: 8px; border: 1px solid #BFDBFE;}
                       .ws-field { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 10px;}
                       .ws-label { font-weight: 700; color: #1E3A8A; font-size: 13px; white-space: nowrap;}
 
@@ -47,29 +47,27 @@
 
                   <sheet>
                       <div class="workspace-mock">
-                          <div class="ws-header">
-                              <i class="fa fa-file-text-o" style="color: #2563EB; font-size: 1.2rem;"></i>
-                              <span style="font-weight: 800; color: #1E293B; font-size: 15px;">LẬP KẾ HOẠCH CAN THIỆP CHO TRẺ</span>
-                          </div>
+
                           <div class="ws-body">
                               <div class="ws-info-bar">
                                   <div class="ws-field">
                                       <span class="ws-label"><i class="fa fa-user-circle-o me-1"></i>Học sinh:</span>
-                                      <field name="hocsinh_id" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;" options="{'no_create': True}"/>
+                                      <field name="hocsinh_id" readonly="1"/>
                                   </div>
                                   <div class="ws-field">
-                                      <span class="ws-label"><i class="fa fa-calendar-play-o me-1"></i>Từ ngày:</span>
+                                      <span class="ws-label"><i class="fa fa-calendar-play-o me-1"></i>Từ ngày</span>
                                       <field name="tu_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
                                   </div>
+
                                   <div class="ws-field">
-                                      <span class="ws-label"><i class="fa fa-calendar-check-o me-1"></i>Đến ngày:</span>
+                                      <span class="ws-label"><i class="fa fa-calendar-check-o me-1"></i>Đến ngày</span>
                                       <field name="den_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
                                   </div>
-                                  <button name="action_them_muctie"
-                                    type="object"
-                                    string="Thêm Mục tiêu tự động"
-                                    class="btn btn-primary btn-sm"
-                                    icon="fa-plus-circle"/>
+                                  <div class="ws-field">
+                                      <span class="ws-label"><i class="fa fa-calendar-play-o me-1"></i>Số ngày</span>
+                                      <field name="songay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
+                                  </div>
+
                               </div>
                           </div>
                       </div>
