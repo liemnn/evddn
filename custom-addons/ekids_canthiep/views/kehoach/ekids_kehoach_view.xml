@@ -75,17 +75,19 @@
                       </div>
 
                       <field name="kehoach_muctieu_ids">
+
                             <list string="Danh sách Mục tiêu" decoration-muted="id == False">
 
+                                <field name="sequence" widget="handle"/>
+
                                 <field name="linhvuc_id" string="Lĩnh vực" class="fw-bold text-primary" style="width: 25%;"/>
-
                                 <field name="tuoi_id" string="Độ tuổi" class="fw-bold text-danger" style="width: 15%;"/>
-
                                 <field name="name" string="Tên Mục tiêu &amp; Mô tả" style="width: 50%;"/>
-
                             </list>
 
-                            <kanban create="0" class="o_kanban_small_column">
+                            <kanban default_order="sequence" create="0" class="o_kanban_small_column">
+
+                                <field name="sequence"/>
                                 <field name="linhvuc_id"/>
                                 <field name="tuoi_id"/>
                                 <field name="name"/>
@@ -95,9 +97,15 @@
                                         <div class="oe_kanban_global_click" style="background: white; border: 1px solid #E2E8F0; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); padding: 16px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 12px; transition: all 0.2s ease;">
 
                                             <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
-                                                <span class="badge" style="background-color: #EFF6FF; color: #1E3A8A; border: 1px solid #BFDBFE; font-size: 0.8rem; padding: 6px 10px; border-radius: 6px;">
-                                                    <i class="fa fa-folder-open me-1 text-warning"></i> <field name="linhvuc_id"/>
-                                                </span>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="text-muted" title="Kéo thả để sắp xếp" style="cursor: grab; font-size: 1.1rem;">
+                                                        <field name="sequence" widget="handle"/>
+                                                    </span>
+
+                                                    <span class="badge" style="background-color: #EFF6FF; color: #1E3A8A; border: 1px solid #BFDBFE; font-size: 0.8rem; padding: 6px 10px; border-radius: 6px;">
+                                                        <i class="fa fa-folder-open me-1 text-warning"></i> <field name="linhvuc_id"/>
+                                                    </span>
+                                                </div>
                                                 <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; font-size: 0.8rem; padding: 6px 10px; border-radius: 6px;">
                                                     <field name="tuoi_id"/>
                                                 </span>
@@ -117,8 +125,6 @@
                                     </t>
                                 </templates>
                             </kanban>
-
-
 
                         </field>
                   </sheet>

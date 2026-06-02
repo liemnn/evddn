@@ -1,5 +1,22 @@
 <odoo>
   <data>
+      <record id="ekids_canthiep.lap_kehoach_muctieu_list" model="ir.ui.view">
+            <field name="name">ekids.kehoach_muctieu.list</field>
+            <field name="model">ekids.kehoach_muctieu</field>
+            <field name="arch" type="xml">
+                <list string="Danh sách Mục tiêu" decoration-muted="id == False">
+
+                    <field name="sequence" widget="handle"/>
+
+                    <field name="linhvuc_id" string="Lĩnh vực" class="fw-bold text-primary" style="width: 25%;"/>
+
+                    <field name="tuoi_id" string="Độ tuổi" class="fw-bold text-danger" style="width: 15%;"/>
+
+                    <field name="muctieu_id" string="Tên Mục tiêu &amp; Mô tả" style="width: 60%;"/>
+
+                </list>
+            </field>
+      </record>
       <record id="ekids_canthiep.lap_kehoach_muctieu_kanban" model="ir.ui.view">
           <field name="name">ekids.kehoach_muctieu.kanban</field>
           <field name="model">ekids.kehoach_muctieu</field>

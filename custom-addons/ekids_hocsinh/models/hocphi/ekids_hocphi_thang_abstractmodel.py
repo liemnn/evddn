@@ -657,7 +657,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         #TH0: Nhà trường cho nghỉ bù hoàn 100% cho học sinh giáo viên bị trừ lương
 
         if len(nhatruong_nghi_bus)>0:
-            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai('Nhà trường nghỉ [lễ/bù/khác...] ', hocphi
+            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai('Nhà trường nghỉ lễ,bù,khác... ', hocphi
                                                             , 100
                                                             , thu_bantrus
                                                             , nhatruong_nghi_bus, dihoc_kehoachs, ngay_dihoc_cosos)
