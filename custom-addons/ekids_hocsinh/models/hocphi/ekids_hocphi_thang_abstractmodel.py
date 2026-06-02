@@ -657,7 +657,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         #TH0: Nhà trường cho nghỉ bù hoàn 100% cho học sinh giáo viên bị trừ lương
 
         if len(nhatruong_nghi_bus)>0:
-            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai('Nhà trường nghỉ bù lễ', hocphi
+            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai('Nhà trường nghỉ [lễ/bù/khác...] ', hocphi
                                                             , 100
                                                             , thu_bantrus
                                                             , nhatruong_nghi_bus, dihoc_kehoachs, ngay_dihoc_cosos)
@@ -802,6 +802,11 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
 
     def func_hoantra_hocphi_do_diemdanh_nghi_theo_loai_ca(self,lydo, hocphi, tyle_hoantra_chung, days, ngay_dihoc_kehoachs,ngay_dihoc_cosos):
+        #tao mac dinh ca2ngay ngay nghi
+        if days:
+            for day in days:
+                ngay =  string_util.string2date(day)
+                hocsinh_util.func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self, hocphi.hocsinh_id.id, ngay)
         # Lấy danh sách điểm danh
         ca2ngays = self.env['ekids.diemdanh_ca2ngay'].search([
             ('hocsinh_id', '=', hocphi.hocsinh_id.id),

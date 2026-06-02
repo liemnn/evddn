@@ -42,7 +42,7 @@ class DiemDanhCa2Ngay(models.Model):
     giaovien_id = fields.Many2one("ekids.giaovien", string="Giáo viên thực hiện", ondelete="restrict",index=True)
 
     trangthai = fields.Selection([
-        ("0", "Đã được học"),
+        ("0", "Mặc định học"),
         ("1", "Đã được học"),
         ("-1","Không học"),
         ("2", "Nghỉ - Hoàn trả học phí"),

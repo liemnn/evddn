@@ -290,3 +290,38 @@ def func_is_hoc(self, hocsinh, ngay):
     return False
 
 
+def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh_id,ngay):
+
+    weekday = ngay.weekday() + 2
+    thu_field = 't' + str(weekday)
+    ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search([
+                        ('hocsinh_id', '=', hocsinh_id)
+                        ])
+    if ca_canthieps:
+        for ca_canthiep in ca_canthieps:
+            is_canthiep = getattr(ca_canthiep,thu_field)
+            if is_canthiep:
+                count = self.env['ekids.diemdanh_ca2ngay'].search_count([
+                    ('hocsinh_id', '=', hocsinh_id),
+                    ('ngay', '=', ngay),
+                    ('hocsinh_ca_canthiep_id', '=', ca_canthiep.id),
+
+                ])
+                if count <= 0:
+                    data={
+                        'hocphi_dm_ca_id': ca_canthiep.dm_ca_id.id,
+                        'hocsinh_ca_canthiep_id': ca_canthiep.id,
+                        'ngay': ngay,
+                        'tu':ca_canthiep.tu,
+                        'den': ca_canthiep.den,
+                        'hocsinh_id': hocsinh_id,
+                        'trangthai': '0',
+
+                    }
+                    if ca_canthiep.giaovien_id:
+                        data['giaovien_id'] = ca_canthiep.giaovien_id.id
+
+
+                    self.env['ekids.diemdanh_ca2ngay'].create(data)
+
+
