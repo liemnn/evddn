@@ -31,6 +31,11 @@ class CoSo(models.Model):
     def action_xem_kehoach_canthiep(self):
         list_view_id = self.env.ref('ekids_canthiep.kehoach_hocsinh_inherit_list').id
         form_view_id = self.env.ref('ekids_canthiep.kehoach_hocsinh_inherit_form').id
+        user = self.env.user
+
+        is_admin = user.has_group('base.group_system')
+        is_role_ketluan = user.has_group('ekids_core.ketluan')
+
 
         return {
             'type': 'ir.actions.act_window',

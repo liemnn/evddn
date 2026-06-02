@@ -2,6 +2,20 @@ from odoo import models, fields, api
 from datetime import  timedelta
 from odoo.exceptions import ValidationError
 
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import kehoach_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
+
 
 class KeHoach(models.Model):
     _name = 'ekids.kehoach'
@@ -27,10 +41,17 @@ class KeHoach(models.Model):
 
     ], string="Trạng thái",default="00")
 
+    tu_ngay = fields.Date(
+        string="Từ ngày",
+        default=fields.Date.context_today
+    )
 
-    tu_ngay = fields.Date(string="Từ ngày")
-    den_ngay = fields.Date(string="Đến ngày")
-    songay = fields.Integer(string="Số ngày")
+    # Default = Hôm nay + 31 ngày (Dùng hàm lambda để tính toán nhanh)
+    den_ngay = fields.Date(
+        string="Đến ngày",
+        default=lambda self: fields.Date.context_today(self) + timedelta(days=31)
+    )
+    songay = fields.Integer(string="Số ngày",default=31)
 
     kehoach_muctieu_ids = fields.Many2many(comodel_name="ekids.kehoach_muctieu"
                                    , relation="ekids_kehoach_muctieu4kehoach_rel"
@@ -38,16 +59,25 @@ class KeHoach(models.Model):
                                    , column2="kehoach_muctieu_id"
                                    , string="Các mục tiêu cho kế hoạch")
 
-    @api.onchange("songay")
-    def _onchage_songay(self):
+    @api.onchange("tu_ngay")
+    def _onchage_tu_ngay(self):
         for record in self:
-            record.den_ngay = record.tu_ngay + timedelta(days=record.songay)
+            if record.tu_ngay:
+                record.den_ngay = record.tu_ngay + timedelta(days=31)
+            else:
+                # Nếu người dùng xóa Từ ngày, có thể tự động xóa luôn Đến ngày cho đồng bộ
+                record.den_ngay = False
 
-    @api.onchange("tu_ngay","den_ngay")
-    def _onchage_ngay(self):
+
+    @api.onchange("den_ngay")
+    def _onchage_den_ngay(self):
         for record in self:
             if record.tu_ngay and record.den_ngay:
-                record.songay = record.den_ngay - record.tu_ngay
+                # Đóng ngoặc và thêm .days để lấy số nguyên
+                record.songay = (record.den_ngay - record.tu_ngay).days
+            else:
+                # Nếu 1 trong 2 ô ngày bị trống, set số ngày về 0
+                record.songay = 0
 
 
     def _compute_name(self):
@@ -68,8 +98,8 @@ class KeHoach(models.Model):
     @api.model
     def write(self, vals):
         result = super().write(vals)
-        if "kehoach_linhvuc_ids" in vals:
-            result.func_tao_macdinh_kehoach_muctieu()
+        if result and "kehoach_linhvuc_ids" in vals:
+            self.func_tao_macdinh_kehoach_muctieu()
         return result
 
 
@@ -101,11 +131,26 @@ class KeHoach(models.Model):
             domain.append(('tuoi_id', '=', tuoi_id))
         muctieus = self.env['ekids.ct_muctieu'].search(domain)
         return muctieus
-
+    def action_xem_ketluan(self):
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'CHƯƠNG TRÌNH CAN THIỆP',
+            'res_model': 'ekids.kehoach',
+            'view_mode': 'form',
+            'res_id': self.id,
+            'views': [(form_view_id, 'form')],
+            'target': 'new',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'default_hocsinh_id': self.id
+            },
+        }
 
     def action_lap_kehoach(self):
         form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
-        kehoach = self.func_get_kehoach_hocsinh(self)
+        kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self.hocsinh_id)
         if kehoach:
             return {
                 'type': 'ir.actions.act_window',

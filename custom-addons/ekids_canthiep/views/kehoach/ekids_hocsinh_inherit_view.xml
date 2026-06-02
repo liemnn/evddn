@@ -218,13 +218,33 @@
                         </div>
 
                         <notebook>
-                            <page string="🔄 ĐÁNH GIÁ &amp; KẾ HOẠCH CAN THIỆP" >
+                            <page string="KẾ HOẠCH CAN THIỆP" >
 
                                 <div class="alert alert-info py-2 mb-3 mt-3" role="alert" style="font-size: 0.85rem; border-radius: 8px;">
                                     <i class="fa fa-info-circle me-2"/> Danh sách các chu kỳ can thiệp của trẻ. Bấm vào từng dòng để xem chi tiết <strong>Kết luận chẩn đoán</strong> song song với <strong>Nội dung kế hoạch</strong>.
                                 </div>
 
-                                <field name="kehoach_ids" nolabel="1" context="{'default_hocsinh_id': id, 'default_coso_id': coso_id}"/>
+                                <field name="kehoach_ids" nolabel="1" context="{'default_hocsinh_id': id, 'default_coso_id': coso_id}">
+                                     <list string="Danh sách kế hoạch" decoration-muted="id == False">
+                                        <field name="ngay_danhgia" />
+                                        <field name="gv_danhgia" />
+                                        <field name="dm_roiloan_ids" />
+                                        <field name="tu_ngay" />
+                                        <field name="den_ngay" />
+                                        <field name="trangthai" />
+                                        <button name="action_xem_ketluan"
+                                                string="Kết luận"
+                                                type="object"
+                                                class="btn-primary btn-sm"
+                                                invisible="trangthai != '00'"/>
+                                        <button name="action_lap_kehoach"
+                                                string="Kế hoạch"
+                                                type="object"
+                                                class="btn-primary btn-sm"
+                                                invisible="trangthai != '00'"/>
+
+                                    </list>
+                                </field>
 
 
 

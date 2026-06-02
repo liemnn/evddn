@@ -1,90 +1,111 @@
 <odoo>
   <data>
       <record id="ekids_canthiep.lap_kehoach_form" model="ir.ui.view">
-          <field name="name">ekids.kehoach.workspace.form</field>
-          <field name="model">ekids.kehoach</field>
-          <field name="arch" type="xml">
-              <form string="Thiết lập Kế hoạch Can thiệp">
-                  <style>
-                      /* RESET NỀN FORM */
-                      .o_form_view .o_form_sheet_bg { background-color: #F8FAFC !important; padding: 20px !important;}
-                      .o_form_sheet { padding: 0 !important; max-width: 100% !important; border: none !important; background: transparent !important; margin: 0 auto;}
+            <field name="name">ekids.kehoach.workspace.form</field>
+            <field name="model">ekids.kehoach</field>
+            <field name="arch" type="xml">
+                <form string="Thiết lập Kế hoạch Can thiệp">
+                    <style>
+                        /* RESET NỀN FORM */
+                        .o_form_view .o_form_sheet_bg { background-color: #F8FAFC !important; padding: 20px !important;}
+                        .o_form_sheet { padding: 0 !important; max-width: 100% !important; border: none !important; background: transparent !important; margin: 0 auto;}
 
-                      /* THIẾT KẾ KHỐI HEADER */
-                      .workspace-mock { background: white; border: 1px solid #CBD5E1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 0px;}
-                      .ws-header { background: #F8FAFC; padding: 15px 20px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; gap: 10px;}
-                      .ws-body { padding: 5px; }
-                      .ws-info-bar { display: flex; gap: 20px; flex-wrap: wrap; background: #EFF6FF; padding: 5px; border-radius: 8px; border: 1px solid #BFDBFE;}
-                      .ws-field { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 10px;}
-                      .ws-label { font-weight: 700; color: #1E3A8A; font-size: 13px; white-space: nowrap;}
+                        /* THIẾT KẾ KHỐI HEADER */
+                        .workspace-mock { background: white; border: 1px solid #CBD5E1; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 25px;}
 
-                      /* ======================================================== */
-                      /* TÙY CHỈNH BẢNG KANBAN THÀNH DẠNG TRELLO BOARD            */
-                      /* ======================================================== */
+                        /* Thêm justify-content: space-between để tự động đẩy nút sang mép phải */
+                        .ws-header { background: #F8FAFC; padding: 15px 20px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; gap: 10px;}
 
-                      /* Tùy chỉnh Cột (Lĩnh vực) */
-                      .o_kanban_view.o_kanban_grouped .o_kanban_group {
-                          background-color: #F1F5F9 !important; /* Nền xám nhạt cho cột */
-                          border-radius: 12px;
-                          margin-right: 15px;
-                          padding: 10px;
-                          border: 1px solid #E2E8F0;
-                      }
+                        .ws-body { padding: 15px; }
+                        .ws-info-bar { display: flex; gap: 20px; flex-wrap: wrap; background: #EFF6FF; padding: 12px 15px; border-radius: 8px; border: 1px solid #BFDBFE;}
+                        .ws-field { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 10px;}
+                        .ws-label { font-weight: 700; color: #1E3A8A; font-size: 13px; white-space: nowrap;}
 
-                      /* Header của Cột (Tên Lĩnh vực) */
-                      .o_kanban_view.o_kanban_grouped .o_kanban_header {
-                          border-bottom: 2px solid #CBD5E1;
-                          padding-bottom: 10px;
-                          margin-bottom: 10px;
-                      }
-                      .o_kanban_view.o_kanban_grouped .o_kanban_header_title {
-                          font-weight: 800 !important;
-                          color: #1E3A8A !important;
-                          font-size: 14px;
-                          text-transform: uppercase;
-                      }
-                  </style>
+                        /* ======================================================== */
+                        /* TÙY CHỈNH BẢNG KANBAN THÀNH DẠNG TRELLO BOARD            */
+                        /* ======================================================== */
 
-                  <sheet>
-                      <div class="workspace-mock">
+                        /* Tùy chỉnh Cột (Lĩnh vực) */
+                        .o_kanban_view.o_kanban_grouped .o_kanban_group {
+                            background-color: #F1F5F9 !important; /* Nền xám nhạt cho cột */
+                            border-radius: 12px;
+                            margin-right: 15px;
+                            padding: 10px;
+                            border: 1px solid #E2E8F0;
+                        }
 
-                          <div class="ws-body">
-                              <div class="ws-info-bar">
-                                  <div class="ws-field">
-                                      <span class="ws-label"><i class="fa fa-user-circle-o me-1"></i>Học sinh:</span>
-                                      <field name="hocsinh_id" readonly="1"/>
-                                  </div>
-                                  <div class="ws-field">
-                                      <span class="ws-label"><i class="fa fa-calendar-play-o me-1"></i>Từ ngày</span>
-                                      <field name="tu_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
-                                  </div>
+                        /* Header của Cột (Tên Lĩnh vực) */
+                        .o_kanban_view.o_kanban_grouped .o_kanban_header {
+                            border-bottom: 2px solid #CBD5E1;
+                            padding-bottom: 10px;
+                            margin-bottom: 10px;
+                        }
+                        .o_kanban_view.o_kanban_grouped .o_kanban_header_title {
+                            font-weight: 800 !important;
+                            color: #1E3A8A !important;
+                            font-size: 14px;
+                            text-transform: uppercase;
+                        }
+                    </style>
 
-                                  <div class="ws-field">
-                                      <span class="ws-label"><i class="fa fa-calendar-check-o me-1"></i>Đến ngày</span>
-                                      <field name="den_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
-                                  </div>
-                                  <div class="ws-field">
-                                      <span class="ws-label"><i class="fa fa-calendar-play-o me-1"></i>Số ngày</span>
-                                      <field name="songay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
-                                  </div>
+                    <header>
+                        <field name="trangthai" widget="statusbar" statusbar_visible="00,01,1" options="{'clickable': false}"/>
+                    </header>
 
-                              </div>
-                          </div>
-                      </div>
+                    <sheet>
+                        <div class="workspace-mock">
 
-                      <field name="kehoach_muctieu_ids">
+                            <div class="ws-header">
+                                <div class="fw-bold text-primary fs-5">
+                                    <i class="fa fa-info-circle me-1"></i> THÔNG TIN KẾ HOẠCH
+                                </div>
+
+                                <button name="action_xem_ketluan"
+                                        string="Xem kết luận đánh giá"
+                                        type="object"
+                                        icon="fa-eye"
+                                        class="btn-outline-primary btn-sm fw-bold bg-white"
+                                        invisible="trangthai != '00'"/>
+                            </div>
+
+                            <div class="ws-body">
+                                <div class="ws-info-bar">
+                                    <div class="ws-field">
+                                        <span class="ws-label"><i class="fa fa-user-circle-o me-1"></i>Học sinh:</span>
+                                        <field name="hocsinh_id" readonly="1" class="fw-bold"/>
+                                    </div>
+                                    <div class="ws-field">
+                                        <span class="ws-label"><i class="fa fa-calendar-play-o me-1"></i>Từ ngày:</span>
+                                        <field name="tu_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
+                                    </div>
+                                    <div class="ws-field">
+                                        <span class="ws-label"><i class="fa fa-calendar-play-o me-1"></i>Đến ngày:</span>
+                                        <field name="den_ngay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important;"/>
+                                    </div>
+                                    <div class="ws-field">
+                                        <span class="ws-label"><i class="fa fa-clock-o me-1"></i>Kế hoạch dự kiến:</span>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <field name="songay" required="1" class="fw-bold bg-white border rounded px-2 py-1 text-dark" style="border-color: #CBD5E1 !important; width: 60px; text-align: center;"/>
+                                            <span class="text-muted fw-bold">ngày</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <separator string="CÁC MỤC TIÊU TRONG KẾ HOẠCH"/>
+
+                        <field name="kehoach_muctieu_ids" nolabel="1">
 
                             <list string="Danh sách Mục tiêu" decoration-muted="id == False">
-
                                 <field name="sequence" widget="handle"/>
 
                                 <field name="linhvuc_id" string="Lĩnh vực" class="fw-bold text-primary" style="width: 25%;"/>
                                 <field name="tuoi_id" string="Độ tuổi" class="fw-bold text-danger" style="width: 15%;"/>
-                                <field name="name" string="Tên Mục tiêu &amp; Mô tả" style="width: 50%;"/>
+                                <field name="name" string="Tên Mục tiêu &amp; Mô tả" style="width: 60%;"/>
                             </list>
 
                             <kanban default_order="sequence" create="0" class="o_kanban_small_column">
-
                                 <field name="sequence"/>
                                 <field name="linhvuc_id"/>
                                 <field name="tuoi_id"/>
@@ -125,10 +146,10 @@
                             </kanban>
 
                         </field>
-                  </sheet>
-              </form>
-          </field>
-      </record>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
 
   </data>

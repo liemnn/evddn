@@ -68,12 +68,24 @@
                                     <div class="kh-premium-desc">
                                         (Quản lý chương trình can thiệp cho trẻ)
                                     </div>
-
                                     <button class="oe_kanban_action kh-btn-main"
                                             name="action_xem_kehoach_canthiep"
                                             type="object">
                                         <i class="fa fa-random"/>
-                                        KẾ HOẠCH CAN THIỆP
+                                        CAN THIỆP
+                                    </button>
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_xem_kehoach_canthiep"
+                                            type="object">
+                                        <i class="fa fa-random"/>
+                                       LẬP KẾ HOẠCH
+                                    </button>
+
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_xem_kehoach_canthiep"
+                                            type="object">
+                                        <i class="fa fa-random"/>
+                                        PHÊ DUYỆT KẾ HOẠCH
                                     </button>
                                 </div>
 

@@ -63,7 +63,7 @@ class HocSinhInherit(models.Model):
             'res_model': 'ekids.kehoach',
             'view_mode': 'form',
             'views': [(form_view_id, 'form')],
-            'target': 'new',
+            'target': 'current',
             'domain': [('coso_id', '=', self.id)],
             'context': {
                 'default_coso_id': self.coso_id.id,
@@ -73,7 +73,7 @@ class HocSinhInherit(models.Model):
 
     def action_lap_kehoach(self):
         form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
-        kehoach = self.func_get_kehoach_hocsinh(self)
+        kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self)
         if kehoach:
             return {
                 'type': 'ir.actions.act_window',
@@ -82,7 +82,7 @@ class HocSinhInherit(models.Model):
                 'view_mode': 'form',
                 'res_id': kehoach.id,
                 'views': [(form_view_id, 'form')],
-                'target': 'new',
+                'target': 'current',
                 'domain': [('coso_id', '=', self.id)],
                 'context': {
                     'default_coso_id': self.coso_id.id,

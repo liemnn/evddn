@@ -45,13 +45,13 @@ class KeHoachKetLuan(models.Model):
     desc = fields.Html(string="Ghi chú")
 
     gv_lapkehoach_id = fields.Many2one('ekids.giaovien'
-                                       , string="Giáo viên [Lập kế hoạch]")
+                                       , string="Giáo viên [Lập kế hoạch]", required=True)
 
     gv_kiemduyet_id = fields.Many2one('ekids.giaovien'
-                                      , string="Giáo viên [Kiểm duyệt chuyên môn]")
+                                      , string="Giáo viên [Kiểm duyệt chuyên môn]", required=True)
 
 
     gv_canthiep_id = fields.Many2one('ekids.giaovien'
-                                       , string="Giáo viên [Can thiệp]")
+                                       , string="Giáo viên [Can thiệp]", required=True)
 
 

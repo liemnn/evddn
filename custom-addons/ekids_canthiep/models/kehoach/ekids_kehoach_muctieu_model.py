@@ -8,6 +8,8 @@ class KeHoach2MucTieu(models.Model):
     _order = 'id desc'
 
     sequence = fields.Integer(string="STT", default=1)
+    index = fields.Integer(string="STT", default=1,compute="_compute_index")
+
     kehoach_id = fields.Many2one("ekids.kehoach",
                                  string="Thuộc kế hoạch nào",
                                  required=True,
@@ -22,6 +24,13 @@ class KeHoach2MucTieu(models.Model):
 
 
     muctieu_id = fields.Many2one('ekids.ct_muctieu', string='Mục tiêu', required=True, ondelete="cascade")
+
+
+    def _compute_index(self):
+        index =1
+        for record in self:
+            record.index = index
+            index +=1
 
     def _compute_name(self):
         for mt in self:
