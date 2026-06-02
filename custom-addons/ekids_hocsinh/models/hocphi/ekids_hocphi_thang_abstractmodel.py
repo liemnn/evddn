@@ -857,7 +857,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
             # 3. Kiểm tra ca bù
             ca_bu = 1 if ca2ngay.trangthai == '3' else 0
-            soca = 1 if ca2ngay.trangthai in ['-1','2'] else 0
+            soca = 1 if ca2ngay.trangthai in ['0','-1','2'] else 0
 
             # 4. Cộng dồn vào Dictionary
             ca_id_str = str(dm_ca.id)
