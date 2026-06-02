@@ -858,6 +858,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             else:
                 # Chưa tồn tại -> Khởi tạo mới đúng cấu trúc phẳng
                     datas[ca_id_str] = {
+                        'dm_ca': dm_ca,
                         'name': dm_ca.name,
                         'tien': tien_mot_ca,
                         'dongia': dongia,
@@ -876,7 +877,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                     dongia = value['dongia']
                     name =self.func_get_name_hoantra_hocphi_ca(hocphi,lydo
                                                                ,len(days)
-                                                               ,dm_ca_hoc
+                                                               ,value['dm_ca']
                                                                ,value['tyle_hoantra']
                                                                ,value['soca']
                                                                ,value['ca_bu']

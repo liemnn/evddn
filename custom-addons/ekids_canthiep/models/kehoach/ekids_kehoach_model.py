@@ -51,6 +51,51 @@ class KeHoach(models.Model):
         for kh in self:
             kh.name = kh.hocsinh_id.name
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = []
+        for vals in vals_list:
+            result = super(KeHoach, self).create(vals)
+            if result:
+                # Tinh toan so ca trong
+                result.func_tao_macdinh_kehoach_muctieu()
+                records.append(result)
+        return records[0] if len(records) == 1 else records
+
+    @api.model
+    def write(self, vals):
+        result = super().write(vals)
+        if "kehoach_linhvuc_ids" in vals:
+            result.func_tao_macdinh_kehoach_muctieu()
+        return result
+
+
+    def func_tao_macdinh_kehoach_muctieu(self):
+        # unlink cái cũ
+
+        # tao cai moi
+        if self.kehoach_linhvuc_ids:
+            for lv in self.kehoach_linhvuc_ids:
+                muctieus = self.func_danhsach_muctieu(lv.linhvuc_id,lv.tuoi_id)
+                if muctieus:
+                    for muctieu in muctieus:
+                        data={
+                            'kehoach_id':self.id,
+                            'muctieu_id':muctieu.id
+                        }
+                        self.env['ekids.kehoach_muctieu'].create(data)
+
+
+
+
+    def func_danhsach_muctieu(self,linhvuc_id,tuoi_id):
+        domain =[('linhvuc_id','=',linhvuc_id)]
+        if tuoi_id:
+            domain.append(('tuoi_id', '=', tuoi_id))
+        muctieus = self.env['ekids.ct_muctieu'].search(domain)
+        return muctieus
+
+
     def action_lap_kehoach(self):
         form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
         kehoach = self.func_get_kehoach_hocsinh(self)
