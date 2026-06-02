@@ -806,8 +806,10 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         ca2ngays = self.env['ekids.diemdanh_ca2ngay'].search([
             ('hocsinh_id', '=', hocphi.hocsinh_id.id),
             ('ngay', 'in', days),
-            ('trangthai', 'in', ['-1', '2', '3']),
+            ('trangthai', 'in', ['0','-1', '2', '3']),
         ])
+
+
 
         datas = {}
         if not ca2ngays:
