@@ -139,3 +139,41 @@ class HocSinhInherit(models.Model):
                     'default_hocsinh_id': self.id
                 },
             }
+
+    def action_xem_kehoach(self):
+        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self)
+        if kehoach:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'LẬP KẾ HOẠCH',
+                'res_model': 'ekids.kehoach',
+                'view_mode': 'form',
+                'res_id': kehoach.id,
+                'views': [(form_view_id, 'form')],
+                'target': 'current',
+                'domain': [('coso_id', '=', self.coso_id.id)],
+                'context': {
+                    'default_coso_id': self.coso_id.id,
+                    'default_hocsinh_id': self.id
+                },
+            }
+
+    def action_canthiep(self):
+        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self)
+        if kehoach:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'LẬP KẾ HOẠCH',
+                'res_model': 'ekids.kehoach',
+                'view_mode': 'form',
+                'res_id': kehoach.id,
+                'views': [(form_view_id, 'form')],
+                'target': 'current',
+                'domain': [('coso_id', '=', self.coso_id.id)],
+                'context': {
+                    'default_coso_id': self.coso_id.id,
+                    'default_hocsinh_id': self.id
+                },
+            }
