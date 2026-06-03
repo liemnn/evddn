@@ -49,10 +49,11 @@
                     </style>
 
                     <header>
-                        <field name="trangthai" widget="statusbar" statusbar_visible="00,01,1,-1" options="{'clickable': false}"/>
+                        <field name="trangthai" widget="statusbar" statusbar_visible="0,2,1,-1" options="{'clickable': false}"/>
                     </header>
 
                     <sheet>
+
                         <div class="workspace-mock">
 
                             <div class="ws-header">
@@ -65,7 +66,7 @@
                                         type="object"
                                         icon="fa-eye"
                                         class="btn-outline-primary btn-sm fw-bold bg-white"
-                                        invisible="trangthai != '00'"/>
+                                        invisible="trangthai != '0'"/>
                             </div>
 
                             <div class="ws-body">
@@ -95,7 +96,7 @@
 
                         <separator string="CÁC MỤC TIÊU TRONG KẾ HOẠCH"/>
 
-                        <field name="kehoach_muctieu_ids" nolabel="1">
+                        <field name="kehoach_muctieu_ids" nolabel="1" domain="[('kehoach_id','=',id)]">
 
                             <list string="Danh sách Mục tiêu" decoration-muted="id == False">
                                 <field name="sequence" widget="handle"/>
