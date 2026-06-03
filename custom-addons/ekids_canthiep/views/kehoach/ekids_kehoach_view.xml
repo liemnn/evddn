@@ -49,10 +49,38 @@
                     </style>
 
                     <header>
+                        <button name="action_gui_pheduyet"
+                                        string="Gửi phê duyệt"
+                                        type="object"
+                                        icon="fa-eye"
+                                        class="btn-outline-primary fw-bold"
+                                        invisible="trangthai != '0'"/>
+
+                        <button name="action_pheduyet_dat"
+                                        string="Đạt"
+                                        type="object"
+                                        icon="fa-eye"
+                                        confirm="Bạn xác nhận [Kế hoạch] đã đạt để giáo viên tiến hành can thiệp theo thời gian trong kế hoạch"
+                                        class="btn-outline-primary fw-bold"
+                                        invisible="trangthai_pheduyet not in ['0','-1']"/>
+
+                        <button name="action_pheduyet_khongdat"
+                                        string="Không đạt sửa lại"
+
+                                        type="object"
+                                        icon="fa-eye"
+                                        confirm="Bạn xác nhận [Kế hoạch] chưa đạt cần trả về cho giáo viên lập kế hoạch chỉnh sửa lại ?"
+                                        class="btn-outline-primary fw-bold"
+                                        invisible="trangthai_pheduyet not in ['0','-1']"/>
+
+
                         <field name="trangthai" widget="statusbar" statusbar_visible="0,2,1,-1" options="{'clickable': false}"/>
                     </header>
 
                     <sheet>
+
+
+
 
                         <div class="workspace-mock">
 
@@ -60,13 +88,14 @@
                                 <div class="fw-bold text-primary fs-5">
                                     <i class="fa fa-info-circle me-1"></i> THÔNG TIN KẾ HOẠCH
                                 </div>
-
                                 <button name="action_xem_ketluan"
                                         string="Xem kết luận đánh giá"
                                         type="object"
                                         icon="fa-eye"
                                         class="btn-outline-primary btn-sm fw-bold bg-white"
-                                        invisible="trangthai != '0'"/>
+                                        invisible="trangthai in ['0']"/>
+                                <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
+
                             </div>
 
                             <div class="ws-body">
@@ -93,6 +122,12 @@
                                 </div>
                             </div>
                         </div>
+                        <group invisible="trangthai_pheduyet not in ['0','-1']">
+                            <separator string="Ý KIẾN CHUYÊN MÔN VỀ KẾ HOẠCH"/>
+                            <p>
+                                <field name="desc"/>
+                            </p>
+                        </group>
 
                         <separator string="CÁC MỤC TIÊU TRONG KẾ HOẠCH"/>
 

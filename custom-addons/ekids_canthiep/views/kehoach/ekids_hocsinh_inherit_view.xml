@@ -35,13 +35,28 @@
                     string="Khởi tạo kết luận"
                     type="object"
                     class="btn-primary btn-sm"
-                    invisible="trangthai_kehoach != '-2'"/>
+                    invisible="trangthai_kehoach not in ['-2']"/>
 
                 <button name="action_lap_kehoach"
                         string="Lập kế hoạch"
                         type="object"
                         class="btn-success btn-sm"
-                        invisible="trangthai_kehoach != '0'"
+                        invisible="trangthai_kehoach not in ['0','2']"
+
+                />
+                <button name="action_lap_kehoach"
+                        string="Sửa lại kế hoạch"
+                        type="object"
+                        class="btn-success btn-sm"
+                        invisible="trangthai_kehoach not in ['-3']"
+
+                />
+
+                <button name="action_duyet_kehoach"
+                        string="Đợi phê duyệt"
+                        type="object"
+                        class="btn-success btn-sm"
+                        invisible="trangthai_kehoach not in ['4']"
 
                 />
 
@@ -174,6 +189,9 @@
                             .clin-stats-row { justify-content: center; gap: 15px; }
                         }
                     </style>
+                    <group>
+                        <field name="desc"/>
+                    </group>
 
                     <div class="clin-hero-banner"></div>
 
@@ -237,11 +255,7 @@
                                                 type="object"
                                                 class="btn-primary btn-sm"
                                                 invisible="trangthai != '00'"/>
-                                        <button name="action_lap_kehoach"
-                                                string="Kế hoạch"
-                                                type="object"
-                                                class="btn-primary btn-sm"
-                                                invisible="trangthai != '00'"/>
+
 
                                     </list>
                                 </field>

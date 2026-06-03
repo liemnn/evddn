@@ -66,6 +66,8 @@ class KeHoach(models.Model):
                                    , column2="kehoach_muctieu_id"
                                    , string="Các mục tiêu cho kế hoạch")
 
+    desc = fields.Html(string="Ý kiến phê duyệt")
+
     @api.onchange("tu_ngay")
     def _onchage_tu_ngay(self):
         for record in self:
@@ -158,44 +160,21 @@ class KeHoach(models.Model):
             },
         }
 
-    def action_lap_kehoach(self):
-        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
-        kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self.hocsinh_id)
-        if kehoach:
-            return {
-                'type': 'ir.actions.act_window',
-                'name': 'LẬP KẾ HOẠCH',
-                'res_model': 'ekids.kehoach',
-                'view_mode': 'form',
-                'res_id': kehoach.id,
-                'views': [(form_view_id, 'form')],
-                'target': 'new',
-                'domain': [('coso_id', '=', self.id)],
-                'context': {
-                    'default_coso_id': self.coso_id.id,
-                    'default_hocsinh_id': self.id
-                },
-            }
 
-    def action_gui_pheduyet(self):
-        if self.trangthai == '01':
-            self.trangthai ="02"
 
-        form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'CHƯƠNG TRÌNH CAN THIỆP',
-            'res_model': 'ekids.kehoach',
-            'view_mode': 'form',
-            'res_id': self.id,
-            'views': [(form_view_id, 'form')],
-            'target': 'new',
-            'domain': [('coso_id', '=', self.id)],
-            'context': {
-                'default_coso_id': self.coso_id.id,
-                'default_hocsinh_id': self.id
-            },
-        }
+    def action_pheduyet_dat(self):
+        if self.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH:
+            self.trangthai_pheduyet = kehoach_util.PHEDUYET_DA_DUYET
+            self.trangthai = kehoach_util.TRANGTHAI_DANG_CANTHIEP
+
+
+
+    def action_pheduyet_khongdat(self):
+        if self.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH:
+            self.trangthai_pheduyet = kehoach_util.PHEDUYET_CAN_DIEUCHINH
+
+
+
 
 
 

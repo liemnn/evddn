@@ -52,8 +52,8 @@ class CoSo(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'CHƯƠNG TRÌNH CAN THIỆP',
             'res_model': 'ekids.hocsinh',
-            'view_mode': 'list,form',
-            'views': [(list_view_id, 'list'),(form_view_id, 'form')],
+            'view_mode': 'list',
+            'views': [(list_view_id, 'list')],
             'target': 'current',
             'domain': domain,
             'context': {

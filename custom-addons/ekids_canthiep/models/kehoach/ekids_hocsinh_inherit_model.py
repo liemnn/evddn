@@ -104,6 +104,7 @@ class HocSinhInherit(models.Model):
         form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
         kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self)
         if kehoach:
+            kehoach.trangthai = kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH
             return {
                 'type': 'ir.actions.act_window',
                 'name': 'LẬP KẾ HOẠCH',
@@ -112,7 +113,27 @@ class HocSinhInherit(models.Model):
                 'res_id': kehoach.id,
                 'views': [(form_view_id, 'form')],
                 'target': 'current',
-                'domain': [('coso_id', '=', self.id)],
+                'domain': [('coso_id', '=', self.coso_id.id)],
+                'context': {
+                    'default_coso_id': self.coso_id.id,
+                    'default_hocsinh_id': self.id
+                },
+            }
+
+    def action_duyet_kehoach(self):
+        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self)
+        if kehoach:
+            kehoach.trangthai = kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'LẬP KẾ HOẠCH',
+                'res_model': 'ekids.kehoach',
+                'view_mode': 'form',
+                'res_id': kehoach.id,
+                'views': [(form_view_id, 'form')],
+                'target': 'current',
+                'domain': [('coso_id', '=', self.coso_id.id)],
                 'context': {
                     'default_coso_id': self.coso_id.id,
                     'default_hocsinh_id': self.id
