@@ -177,16 +177,14 @@ class HocSinhInherit(models.Model):
             }
 
     def action_xem_danhsach_kehoach(self):
-        list_view_id = self.env.ref('ekids_canthiep.danhsach_kehoach_list').id
         kanban_view_id = self.env.ref('ekids_canthiep.danhsach_kehoach_kanban').id
         form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
-
         return {
             'type': 'ir.actions.act_window',
             'name': 'DANH SÁCH KẾ HOẠCH',
             'res_model': 'ekids.kehoach',
-            'view_mode': 'list,kanban,form',
-            'views': [(list_view_id, 'list'),(kanban_view_id, 'kanban'),(form_view_id, 'form')],
+            'view_mode': 'kanban',
+            'views': [(kanban_view_id, 'kanban'),(form_view_id, 'form')],
             'target': 'current',
             'domain': [('hocsinh_id', '=', self.id)],
             'context': {

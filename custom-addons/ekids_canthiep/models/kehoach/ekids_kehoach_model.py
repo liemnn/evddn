@@ -26,7 +26,7 @@ class KeHoach(models.Model):
     coso_id = fields.Many2one("ekids.coso", related="hocsinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
     name = fields.Char(string="Mã phiếu", required=True, compute="_compute_name")
-
+    index = fields.Integer(string="STT", default=1, compute="_compute_index")
     # 1. THÔNG TIN HỌC SINH
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True, tracking=True)  # [cite: 2]
 
@@ -67,6 +67,12 @@ class KeHoach(models.Model):
                                    , string="Các mục tiêu cho kế hoạch")
 
     desc = fields.Html(string="Ý kiến phê duyệt")
+
+    def _compute_index(self):
+        index = len(self)
+        for record in self:
+            record.index = index
+            index -= 1
 
     @api.onchange("tu_ngay")
     def _onchage_tu_ngay(self):
@@ -176,6 +182,12 @@ class KeHoach(models.Model):
     def action_pheduyet_khongdat(self):
         if self.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH:
             self.trangthai_pheduyet = kehoach_util.PHEDUYET_CAN_DIEUCHINH
+
+    def action_xem_kehoach(self):
+        return False
+
+    def action_canthiep(self):
+        return False
 
 
 
