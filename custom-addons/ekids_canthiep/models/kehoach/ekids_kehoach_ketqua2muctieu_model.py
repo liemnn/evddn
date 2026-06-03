@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from datetime import  timedelta,date
 from odoo.exceptions import ValidationError
 
 
@@ -22,8 +23,44 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("0", "Đang hình thành (+/-)"),
 
 
-    ], string="Trạng thái",required=True)
+    ], string="Trạng thái")
 
     desc = fields.Html(string="Mô tả")
+
+    is_readonly = fields.Boolean(string="Các trạng thái được phép sửa",compute="_compute_is_readonly")
+
+    def _compute_is_readonly(self):
+        # Dùng context_today để lấy ngày chuẩn theo múi giờ của giáo viên
+        today = fields.Date.context_today(self)
+
+        for record in self:
+            # Nếu bản ghi chưa có ngày (trường hợp tạo mới chưa lưu), mặc định cho sửa
+            if not record.ngay:
+                record.is_readonly = False
+                continue
+
+            # 1. Tương lai: Không cho sửa
+            if record.ngay > today:
+                record.is_readonly = True
+
+            # 2. Quá khứ & Hiện tại: Kiểm tra tiếp điều kiện kết quả
+            else:
+                # Nếu ĐÃ ghi nhận kết quả (trường ketqua có giá trị)
+                if record.ketqua:
+                    # Tính khoảng cách số ngày từ ngày can thiệp đến hôm nay
+                    khoang_cach_ngay = (today - record.ngay).days
+
+                    if khoang_cach_ngay > 3:
+                        # Đã quá 3 ngày -> Khóa sổ
+                        record.is_readonly = True
+                    else:
+                        # Vẫn trong hạn 3 ngày -> Cho phép sửa
+                        record.is_readonly = False
+
+                # Nếu CHƯA ghi nhận kết quả
+                else:
+                    # Vẫn cho phép sửa/nhập mới
+                    record.is_readonly = False
+
 
 

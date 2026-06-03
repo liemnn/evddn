@@ -1,19 +1,30 @@
 <odoo>
   <data>
-      <record id="ekids_canthiep.kehoach_ketqua2muctieu_list" model="ir.ui.view">
-            <field name="name">ekids.kehoach_ketqua2muctieu.list</field>
-            <field name="model">ekids.kehoach_ketqua2muctieu</field>
-            <field name="arch" type="xml">
-                <list create="false" delete="false" edit="true" limit="200" default_order="ngay asc">
+     <record id="ekids_canthiep.kehoach_ketqua2muctieu_list" model="ir.ui.view">
+        <field name="name">ekids.kehoach_ketqua2muctieu.list</field>
+        <field name="model">ekids.kehoach_ketqua2muctieu</field>
+        <field name="arch" type="xml">
 
-                    <field name="ngay" />
-                    <field name="ketqua" />
-                    <field name="desc"/>
+            <list editable="bottom" create="0" delete="0" limit="200" default_order="ngay asc" class="hide_search_bar">
 
 
-                </list>
-            </field>
-      </record>
+
+                <field name="ngay" readonly="1" class="fw-bold" width="100"/>
+
+                <field name="ketqua"
+                       readonly="is_readonly"
+                       decoration-danger="ketqua == '-1'"
+                       decoration-warning="ketqua == '0'"
+                       decoration-success="ketqua == '1'"/>
+
+                <field name="desc"
+                       readonly="is_readonly"
+                       placeholder="Nhập ghi chú hoặc nhận xét của giáo viên..."/>
+
+            </list>
+
+        </field>
+    </record>
 
 
   </data>

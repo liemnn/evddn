@@ -1,5 +1,6 @@
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from datetime import  timedelta,date
+from odoo.exceptions import ValidationError, UserError
 
 
 class KeHoach2MucTieu(models.Model):
@@ -60,6 +61,7 @@ class KeHoach2MucTieu(models.Model):
             mt.tieuchi_dat =mt.muctieu_id.tieuchi_dat
 
     def action_ghinhan_ketqua_canthiep(self):
+        self.func_khoitao_ketqua2muctieu()
         return {
             'type': 'ir.actions.act_window',
             'name': 'KẾT QUẢ CAN THIỆP',
@@ -71,3 +73,51 @@ class KeHoach2MucTieu(models.Model):
                 'default_kehoach_muctieu_id': self.id
             },
         }
+
+    def func_khoitao_ketqua2muctieu(self):
+        # 1. Chuẩn hóa ngày hiện tại (Nên dùng context_today để đúng múi giờ người dùng Odoo)
+        today = fields.Date.context_today(self)
+
+        # 2. Ép kiểu an toàn về Date, triệt tiêu hoàn toàn lỗi Datetime vs Date
+        tu_ngay = fields.Date.to_date(self.kehoach_id.tu_ngay)
+        den_ngay = fields.Date.to_date(self.kehoach_id.den_ngay)
+
+        if not tu_ngay or not den_ngay:
+            raise UserError("Kế hoạch chưa thiết lập đủ Từ ngày và Đến ngày.")
+
+        if today <= tu_ngay:
+            raise UserError("Kế hoạch chưa đến thời gian can thiệp")
+
+        # 3. Tìm ngày bắt đầu chạy vòng lặp (Dùng max() thay cho if-else cho ngắn gọn)
+        current_date = max(tu_ngay, today)
+
+        # =========================================================================
+        # BƯỚC TỐI ƯU HIỆU SUẤT (Senior Level):
+        # Thay vì query Database mỗi ngày trong vòng lặp, ta lấy hết 1 lần.
+        # =========================================================================
+
+        # Tìm tất cả các kết quả đã sinh ra trong khoảng thời gian này (Chỉ tốn 1 query)
+        ketqua_da_co = self.env['ekids.kehoach_ketqua2muctieu'].search_read([
+            ('kehoach_muctieu_id', '=', self.id),
+            ('ngay', '>=', current_date),
+            ('ngay', '<=', den_ngay)
+        ], ['ngay'])
+
+        # Tạo một mảng chứa các ngày đã tồn tại để đối chiếu
+        danh_sach_ngay_da_co = [fields.Date.to_date(kq['ngay']) for kq in ketqua_da_co]
+
+        # Khởi tạo mảng trống để chứa data chuẩn bị tạo mới
+        vals_list = []
+
+        # 4. Quét vòng lặp để lọc ra các ngày chưa có
+        while current_date <= den_ngay:
+            if current_date not in danh_sach_ngay_da_co:
+                vals_list.append({
+                    "kehoach_muctieu_id": self.id,
+                    "ngay": current_date,
+                })
+            current_date += timedelta(days=1)
+
+        # 5. Bulk Create: Đẩy toàn bộ mảng vào Database trong 1 câu query duy nhất
+        if vals_list:
+            self.env['ekids.kehoach_ketqua2muctieu'].create(vals_list)
