@@ -60,4 +60,14 @@ class KeHoach2MucTieu(models.Model):
             mt.tieuchi_dat =mt.muctieu_id.tieuchi_dat
 
     def action_ghinhan_ketqua_canthiep(self):
-        return None
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'KẾT QUẢ CAN THIỆP',
+            'res_model': 'ekids.kehoach_ketqua2muctieu',
+            'view_mode': 'list',
+            'target': 'new',
+            'domain': [('kehoach_muctieu_id', '=', self.id)],
+            'context': {
+                'default_kehoach_muctieu_id': self.id
+            },
+        }

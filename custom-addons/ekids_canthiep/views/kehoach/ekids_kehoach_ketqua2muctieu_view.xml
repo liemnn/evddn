@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+      <record id="ekids_canthiep.kehoach_ketqua2muctieu_list" model="ir.ui.view">
+            <field name="name">ekids.kehoach_ketqua2muctieu.list</field>
+            <field name="model">ekids.kehoach_ketqua2muctieu</field>
+            <field name="arch" type="xml">
+                <list create="false" delete="false" edit="true" limit="200" default_order="ngay asc">
+
+                    <field name="ngay" />
+                    <field name="ketqua" />
+                    <field name="desc"/>
+
+
+                </list>
+            </field>
+      </record>
+
+
+  </data>
+</odoo>
