@@ -175,3 +175,17 @@ class HocSinhInherit(models.Model):
                     'default_kehoach_id': kehoach.id
                 },
             }
+
+    def action_xem_danhsach_kehoach(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH SÁCH KẾ HOẠCH',
+            'res_model': 'ekids.kehoach',
+            'view_mode': 'list,kanban,form',
+            'target': 'new',
+            'domain': [('hocsinh_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'default_hocsinh_id': self.id
+            },
+        }

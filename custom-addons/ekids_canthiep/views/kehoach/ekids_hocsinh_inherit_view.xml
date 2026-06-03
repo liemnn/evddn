@@ -31,51 +31,67 @@
                         decoration-danger="trangthai == '3'" width="100"/>
                 <field name="trangthai_kehoach" string="Kế hoạch"/>
 
-                <button name="action_khoitao_ketluan"
-                    string="Khởi tạo kết luận"
-                    type="object"
-                    class="btn-primary btn-sm"
-                    invisible="trangthai_kehoach not in ['-2']"/>
+               <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-secondary btn-sm"
+                        icon="fa-list-ul"
+                        title="Xem lịch sử danh sách [Kế hoạch] đã can thiệp cho trẻ"
+                />
 
                 <button name="action_lap_kehoach"
                         string="Lập kế hoạch"
                         type="object"
-                        class="btn-success btn-sm"
+                        class="btn-primary btn-sm"
+                        icon="fa-calendar-plus-o"
                         invisible="trangthai_kehoach not in ['0','2']"
-
+                        title="Lập [Kế hoạch] can thiệp cho trẻ"
                 />
-                <button name="action_lap_kehoach"
-                        string="Sửa lại kế hoạch"
-                        type="object"
-                        class="btn-success btn-sm"
-                        invisible="trangthai_kehoach not in ['-3']"
 
+                <button name="action_lap_kehoach"
+                        string="Sửa lại"
+                        type="object"
+                        class="btn-warning btn-sm text-dark fw-bold"
+                        icon="fa-pencil-square-o"
+                        invisible="trangthai_kehoach not in ['-3']"
+                        title="Kế hoạch yêu cầu sửa lại trước khi can thiệp"
                 />
 
                 <button name="action_duyet_kehoach"
-                        string="Đợi phê duyệt"
+                        string="Trình phê duyệt"
                         type="object"
-                        class="btn-success btn-sm"
+                        class="btn-info btn-sm text-white"
+                        icon="fa-paper-plane"
                         invisible="trangthai_kehoach not in ['4']"
-
+                        title="Gửi bản kế hoạch này lên cấp Quản lý để xin xét duyệt trước khi dạy"
                 />
 
                 <button name="action_xem_kehoach"
                         string="Xem kế hoạch"
                         type="object"
-                        class="btn-success btn-sm"
+                        class="btn-secondary btn-sm"
+                        icon="fa-eye"
                         invisible="trangthai_kehoach not in ['3']"
-
+                        title="Xem lại nội dung chi tiết của kế hoạch đã được phê duyệt"
                 />
 
                 <button name="action_canthiep"
-                        string="Thực hiện [Can thiệp]"
+                        string="Can thiệp"
                         type="object"
-                        class="btn-warning btn-sm"
+                        class="btn-success btn-sm fw-bold text-uppercase"
+                        icon="fa-play-circle"
                         invisible="trangthai_kehoach not in ['1']"
-
+                        title="Bấm vào đây để mở bảng đánh giá và ghi nhận kết quả học tập hàng ngày của trẻ"
                 />
 
+                <button name="action_khoitao_ketluan"
+                        string="Tạo kết luận"
+                        type="object"
+                        class="btn-dark btn-sm"
+                        icon="fa-flag-checkered"
+                        invisible="trangthai_kehoach not in ['-2']"
+                        title="Kết thúc đợt can thiệp, tiến hành viết đánh giá tổng kết sự tiến bộ của học sinh"
+                />
 
 
 

@@ -62,5 +62,65 @@ class KeHoachKetQua2MucTieu(models.Model):
                     # Vẫn cho phép sửa/nhập mới
                     record.is_readonly = False
 
+    def action_set_chuadat(self):
+        for rec in self:
+            if not rec.is_readonly: rec.ketqua = '-1'
+        url = self.func_get_url_back()
+        return url
+
+    def action_set_hinhthanh(self):
+        for rec in self:
+            if not rec.is_readonly: rec.ketqua = '0'
+        url = self.func_get_url_back()
+        return url
+
+    def action_set_dat(self):
+        for rec in self:
+            if not rec.is_readonly: rec.ketqua = '1'
+        url =self.func_get_url_back()
+        return url
+
+    def action_vao_form_ghichu(self):
+        # Đảm bảo chỉ thao tác trên 1 bản ghi
+        self.ensure_one()
+
+        return {
+            'name': 'CHI TIẾT CAN THIỆP',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach_ketqua2muctieu',
+            'res_id': self.id,  # Trỏ chính xác vào ID của dòng đang click
+            'view_mode': 'form',
+            'target': 'new',  # Tiếp tục mở một mini-popup đè lên (Odoo hỗ trợ Modal lồng Modal)
+        }
+
+    def action_save_ghichu(self):
+        # Đảm bảo thao tác trên đúng 1 bản ghi hiện tại
+        self.ensure_one()
+
+        # Odoo đã tự lưu dữ liệu. Giờ ta chỉ việc ra lệnh mở lại Kanban Popup
+        return {
+            'name': 'KẾT QUẢ CAN THIỆP',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach_ketqua2muctieu',
+            'view_mode': 'kanban,list,form',
+            # Lọc đúng dữ liệu của mục tiêu đang xem để Kanban hiện đúng danh sách
+            'domain': [('kehoach_muctieu_id', '=', self.kehoach_muctieu_id.id)],
+            'target': 'new',
+            'context': self.env.context,
+        }
+
+    def func_get_url_back(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'KẾT QUẢ CAN THIỆP',
+            'res_model': 'ekids.kehoach_ketqua2muctieu',
+            'view_mode': 'kanban,list,form',
+            'target': 'new',
+            'domain': [('kehoach_muctieu_id', '=', self.kehoach_muctieu_id.id)],
+            'context': {
+                'default_kehoach_muctieu_id': self.kehoach_muctieu_id.id
+            },
+        }
+
 
 

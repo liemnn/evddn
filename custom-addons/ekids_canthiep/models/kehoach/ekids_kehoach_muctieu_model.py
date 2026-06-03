@@ -66,7 +66,7 @@ class KeHoach2MucTieu(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'KẾT QUẢ CAN THIỆP',
             'res_model': 'ekids.kehoach_ketqua2muctieu',
-            'view_mode': 'list',
+            'view_mode': 'kanban,list,form',
             'target': 'new',
             'domain': [('kehoach_muctieu_id', '=', self.id)],
             'context': {
