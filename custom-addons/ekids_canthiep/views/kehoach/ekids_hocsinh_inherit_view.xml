@@ -35,13 +35,13 @@
                     string="Khởi tạo kết luận"
                     type="object"
                     class="btn-primary btn-sm"
-                    invisible="trangthai_kehoach != '0'"/>
+                    invisible="trangthai_kehoach != '-2'"/>
 
                 <button name="action_lap_kehoach"
                         string="Lập kế hoạch"
                         type="object"
                         class="btn-success btn-sm"
-                        invisible="trangthai_kehoach != '00'"
+                        invisible="trangthai_kehoach != '0'"
 
                 />
 
@@ -49,7 +49,7 @@
                         string="Chỉnh sửa KH"
                         type="object"
                         class="btn-warning btn-sm"
-                        invisible="trangthai_kehoach != '01'"/>
+                        invisible="trangthai_kehoach != '1'"/>
 
 
             </list>

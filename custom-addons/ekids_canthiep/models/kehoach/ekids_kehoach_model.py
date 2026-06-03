@@ -1,5 +1,6 @@
 from odoo import models, fields, api
-from datetime import  timedelta
+from datetime import  timedelta,date
+
 from odoo.exceptions import ValidationError
 
 import logging
@@ -29,17 +30,23 @@ class KeHoach(models.Model):
     # 1. THÔNG TIN HỌC SINH
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True, tracking=True)  # [cite: 2]
 
-    # 2. CHẨN ĐOÁN & MỨC ĐỘ
 
     trangthai = fields.Selection([
-        ("00", "Kết luận đợi lập kế hoạch"),
-        ("01", "Đang lập kế hoạch"),
-        ("1", "Đang can thiệp"),
-        ("02", "Kế hoạch đã phê duyệt"),
-        ("-1", "Kế hoạch hết hiệu lực"),
-        ("03", "Kế hoạch cần chỉnh sửa"),
+        (kehoach_util.TRANGTHAI_DOI_LAP_KEHOACH, "Kết luận đợi lập kế hoạch"),
+        (kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH, "Đang lập kế hoạch"),
+        (kehoach_util.TRANGTHAI_DANG_CANTHIEP, "Đang can thiệp"),
+        (kehoach_util.TRANGTHAI_HET_HIEULUC, "Kế hoạch hết hiệu lực"),
 
-    ], string="Trạng thái",default="00")
+
+    ], string="Trạng thái",default=kehoach_util.TRANGTHAI_DOI_LAP_KEHOACH)
+
+    trangthai_pheduyet = fields.Selection([
+        (kehoach_util.PHEDUYET_DOI_DUYET, "Đợi phê duyệt"),
+        (kehoach_util.PHEDUYET_CAN_DIEUCHINH, "Cần điều chỉnh lại"),
+        (kehoach_util.PHEDUYET_DA_DUYET, "Đã được duyệt"),
+
+
+    ], string="Trạng thái phê duyệt", default=kehoach_util.PHEDUYET_DOI_DUYET)
 
     tu_ngay = fields.Date(
         string="Từ ngày",
@@ -78,6 +85,9 @@ class KeHoach(models.Model):
             else:
                 # Nếu 1 trong 2 ô ngày bị trống, set số ngày về 0
                 record.songay = 0
+
+
+
 
 
     def _compute_name(self):
@@ -167,14 +177,18 @@ class KeHoach(models.Model):
                 },
             }
 
-    def action_them_muctie(self):
+    def action_gui_pheduyet(self):
+        if self.trangthai == '01':
+            self.trangthai ="02"
 
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
         return {
             'type': 'ir.actions.act_window',
-            'name': 'THÊM MỤC TIÊU',
-            'res_model': 'ekids.kehoach_muctieu_wizard',
+            'name': 'CHƯƠNG TRÌNH CAN THIỆP',
+            'res_model': 'ekids.kehoach',
             'view_mode': 'form',
-
+            'res_id': self.id,
+            'views': [(form_view_id, 'form')],
             'target': 'new',
             'domain': [('coso_id', '=', self.id)],
             'context': {
@@ -182,5 +196,6 @@ class KeHoach(models.Model):
                 'default_hocsinh_id': self.id
             },
         }
+
 
 

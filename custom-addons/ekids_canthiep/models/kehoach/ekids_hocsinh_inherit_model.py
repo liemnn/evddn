@@ -1,4 +1,5 @@
 from odoo import models, fields, api, exceptions
+from datetime import  timedelta,date
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -17,15 +18,20 @@ class HocSinhInherit(models.Model):
     _inherit = "ekids.hocsinh"
 
     trangthai_kehoach = fields.Selection([
-        ("0", "Chưa có kết luận đánh giá"),
-        ("00", "Kết luận đợi lập kế hoạch"),
-        ("01", "Đang lập kế hoạch"),
-        ("1", "Đang can thiệp"),
-        ("02", "Kế hoạch đã phê duyệt"),
-        ("-1", "Kế hoạch hết hiệu lực"),
-        ("03", "Kế hoạch cần chỉnh sửa"),
+        (kehoach_util.HOCSINH_CHUA_CO_KEHOACH, "Chưa có [Kết luận] đánh giá"),
+        (kehoach_util.HOCSINH_DOI_LAP_KEHOACH, "Đợi lập kế hoạch"),
+        (kehoach_util.HOCSINH_DANG_LAP_KEHOACH, "Đang lập kế hoạch"),
+        (kehoach_util.HOCSINH_DANG_CANTHIEP, "Đang can thiệp"),
+        (kehoach_util.HOCSINH_HET_HIEULUC, "Hết hiệu lực"),
+        (kehoach_util.HOCSINH_DA_DUYET, "Đã duyệt đợi ngày can thiệp"),
+        (kehoach_util.HOCSINH_DOI_DUYET, "Kế hoạch đợi duyệt"),
+        (kehoach_util.HOCSINH_CAN_DIEUCHINH, "Kế hoạch cần chỉnh sửa"),
+
 
     ],string="Trạng thái kế hoạch",compute="_compute_trangthai_kehoach")
+
+
+
 
 
 
@@ -34,18 +40,41 @@ class HocSinhInherit(models.Model):
              "hocsinh_id", string="Các kế hoạch can thệp của học sinh")
 
 
-
-
-
-
     def _compute_trangthai_kehoach(self):
+        today =date.today()
         for hs in self:
-            kehoach = self.func_get_kehoach_hocsinh(hs)
-            if kehoach:
-                #th1: chưa có kết luận
-                hs.trangthai_kehoach = kehoach.trangthai
+            kh = self.func_get_kehoach_hocsinh(hs)
+            trangthai=""
+            if not kh:
+                trangthai= kehoach_util.HOCSINH_CHUA_CO_KEHOACH
             else:
-                hs.trangthai_kehoach ="0"
+                # có kế hoạch rồi
+                if kh.trangthai == kehoach_util.TRANGTHAI_DOI_LAP_KEHOACH:
+                    #doi lập kế hoạch
+                   trangthai= kehoach_util.HOCSINH_DOI_LAP_KEHOACH
+                elif kh.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH:
+                    # dang trong quá trình lap ke hoach
+                    if kh.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET:
+                        trangthai = kehoach_util.HOCSINH_DOI_DUYET
+                    elif kh.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH:
+                        trangthai = kehoach_util.HOCSINH_CAN_DIEUCHINH
+                    else:
+                       trangthai = kehoach_util.PHEDUYET_DA_DUYET
+                else:
+                    # dang can thiep
+                    if kh.trangthai== kehoach_util.TRANGTHAI_HET_HIEULUC:
+                        trangthai = kehoach_util.HOCSINH_HET_HIEULUC
+                    else:
+
+                        if kh.den_ngay < today:
+                            trangthai = kehoach_util.HOCSINH_HET_HIEULUC
+                        elif (today >= kh.tu_ngay
+                                and today <= kh.den_ngay):
+                            trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
+                        else:
+                            trangthai = kehoach_util.HOCSINH_DA_DUYET
+            hs.trangthai_kehoach =trangthai
+
 
     def func_get_kehoach_hocsinh(self, hocsinh):
         kehoach = self.env['ekids.kehoach'].search([
