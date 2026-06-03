@@ -166,14 +166,12 @@ class HocSinhInherit(models.Model):
             return {
                 'type': 'ir.actions.act_window',
                 'name': 'LẬP KẾ HOẠCH',
-                'res_model': 'ekids.kehoach',
-                'view_mode': 'form',
-                'res_id': kehoach.id,
-                'views': [(form_view_id, 'form')],
+                'res_model': 'ekids.kehoach_muctieu',
+                'view_mode': 'kanban,list',
                 'target': 'current',
-                'domain': [('coso_id', '=', self.coso_id.id)],
+                'domain': [('kehoach_id', '=', kehoach.id)],
                 'context': {
                     'default_coso_id': self.coso_id.id,
-                    'default_hocsinh_id': self.id
+                    'default_kehoach_id': kehoach.id
                 },
             }

@@ -18,47 +18,153 @@
             </field>
       </record>
       <record id="ekids_canthiep.lap_kehoach_muctieu_kanban" model="ir.ui.view">
-          <field name="name">ekids.kehoach_muctieu.kanban</field>
-          <field name="model">ekids.kehoach_muctieu</field>
-          <field name="arch" type="xml">
-              <kanban default_order="sequence" class="o_kanban_small_column">
-                  <field name="sequence" widget="handle"/>
-                  <field name="muctieu_id"/>
-                  <field name="linhvuc_id"/>
-                  <field name="tuoi_id"/>
+            <field name="name">ekids.kehoach_muctieu.kanban</field>
+            <field name="model">ekids.kehoach_muctieu</field>
+            <field name="arch" type="xml">
+                <kanban default_order="sequence" class="custom_kanban_list_view">
 
-                  <templates>
-                      <t t-name="kanban-box">
-                          <div class="oe_kanban_global_click" style="border: 1px solid #E2E8F0; border-radius: 10px; background: white; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); position: relative; transition: all 0.2s;">
+                    <field name="id"/>
+                    <field name="sequence"/>
+                    <field name="muctieu_id"/>
+                    <field name="linhvuc_id"/>
+                    <field name="tuoi_id"/>
+                    <field name="chucnang"/>
+                    <field name="thietke"/>
+                    <field name="tieuchi_chuadat"/>
+                    <field name="tieuchi_hinhthanh"/>
+                    <field name="tieuchi_dat"/>
 
-                              <div class="d-flex align-items-start gap-2 mb-3">
-                                  <div class="text-muted" style="cursor: grab; margin-top: 2px;" title="Kéo để sắp xếp">
-                                      <i class="fa fa-arrows-v"></i>
-                                  </div>
-                                  <strong style="color: #1E293B; font-size: 14px; line-height: 1.4;">
-                                      <field name="muctieu_id"/>
-                                  </strong>
-                              </div>
+                    <templates>
+                        <t t-name="kanban-box">
 
-                              <div class="d-flex justify-content-between align-items-center mt-2 pt-2" style="border-top: 1px dashed #E2E8F0;">
-                                  <div>
-                                      <span class="badge" style="background-color: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE;">
-                                          <i class="fa fa-folder-open me-1"></i> <field name="linhvuc_id"/>
-                                      </span>
-                                  </div>
-                                  <div>
-                                      <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA;">
-                                          <field name="tuoi_id"/>
-                                      </span>
-                                  </div>
-                              </div>
+                            <style>
+                                .custom_kanban_list_view .o_kanban_record {
+                                    width: 100% !important;
+                                    flex: 0 0 100% !important;
+                                    margin: 0 !important;
+                                    padding: 0 0 8px 0 !important;
+                                    background: transparent !important;
+                                    border: none !important;
+                                }
+                            </style>
 
-                          </div>
-                      </t>
-                  </templates>
-              </kanban>
-          </field>
-      </record>
+                            <div class="oe_kanban_global_click d-flex flex-column"
+                                 style="border: 1px solid #E2E8F0; border-radius: 10px; background: white; padding: 12px 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.03); transition: all 0.2s;">
+
+                                <div class="d-flex align-items-center justify-content-between w-100">
+
+                                    <div class="d-flex align-items-center gap-3" style="flex: 1; min-width: 0;">
+                                        <div class="text-muted" style="cursor: grab;" title="Kéo để sắp xếp">
+                                            <field name="sequence" widget="handle"/>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 ms-2">
+                                            <span class="badge" style="background-color: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE;">
+                                                <i class="fa fa-folder-open me-1"></i> <field name="linhvuc_id"/>
+                                            </span>
+                                            <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA;">
+                                                <field name="tuoi_id"/>
+                                            </span>
+                                        </div>
+                                        <strong class="text-dark text-truncate" style="font-size: 14.5px; line-height: 1.4;">
+                                            <field name="muctieu_id"/>
+                                        </strong>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-3 ms-3">
+
+                                        <div class="d-flex align-items-center bg-light border px-3 py-1" style="border-radius: 20px; font-size: 13px; border-color: #E2E8F0 !important; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
+                                            <span class="fw-bold text-dark pe-2 me-2 border-end border-secondary" title="Tổng tiến độ">
+                                                <i class="fa fa-bar-chart me-1 text-primary"></i> 12/30
+                                            </span>
+
+                                            <span class="text-success fw-bold me-2" title="Số lần Đạt">
+                                                12 <span style="font-size: 10px;">(+)</span>
+                                            </span>
+                                            <span class="fw-bold fw-bold me-2" style="color: #D97706;" title="Số lần Đang hình thành">
+                                                15 <span style="font-size: 10px;">(+/-)</span>
+                                            </span>
+                                            <span class="text-danger fw-bold me-2" title="Số lần Chưa đạt">
+                                                8 <span style="font-size: 10px;">(-)</span>
+                                            </span>
+
+                                        </div>
+
+                                        <button type="object"
+                                                name="action_ghinhan_ketqua_canthiep"
+                                                class="btn btn-sm btn-warning fw-bold text-dark shadow-sm"
+                                                onclick="event.stopPropagation();"
+                                                style="border-radius: 6px;">
+                                            <i class="fa fa-pencil-square-o me-1"></i> Ghi nhận
+                                        </button>
+
+                                        <a role="button"
+                                           class="btn btn-sm btn-light text-primary fw-bold"
+                                           data-bs-toggle="collapse"
+                                           t-attf-data-bs-target="#collapseInfo_{{record.id.raw_value}}"
+                                           onclick="event.stopPropagation();"
+                                           title="Xem chi tiết thiết kế &amp; tiêu chí"
+                                           style="border: 1px solid #E2E8F0; cursor: pointer; border-radius: 6px;">
+                                            <i class="fa fa-angle-down"></i>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                                <div t-attf-id="collapseInfo_{{record.id.raw_value}}" class="collapse mt-3 pt-3" style="border-top: 1px dashed #CBD5E1;">
+
+                                    <div class="row mb-3" style="font-size: 13.5px;">
+                                        <div class="col-md-6 mb-2">
+                                            <strong class="text-success"><i class="fa fa-star-o me-1"></i>Chức năng phát triển cốt lõi:</strong>
+                                            <div class="mt-1 text-muted" style="white-space: normal; line-height: 1.5;">
+                                                <field name="chucnang"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2">
+                                            <strong class="text-warning" style="color: #D97706 !important;"><i class="fa fa-paint-brush me-1"></i>Thiết kế hoạt động cho giáo viên:</strong>
+                                            <div class="mt-1 text-muted" style="white-space: normal; line-height: 1.5;">
+                                                <field name="thietke"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="font-size: 13px;">
+                                        <div class="col-12 mb-2">
+                                            <strong class="text-secondary"><i class="fa fa-check-square-o me-1"></i>Tiêu chí đánh giá:</strong>
+                                        </div>
+
+                                        <div class="col-md-4 mb-2">
+                                            <div class="p-2 h-100" style="background-color: #FEF2F2; border: 1px solid #FECACA; border-radius: 6px;">
+                                                <strong style="color: #DC2626;">(-) Chưa đạt:</strong>
+                                                <div class="mt-1 text-dark" style="white-space: normal;">
+                                                    <field name="tieuchi_chuadat"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 mb-2">
+                                            <div class="p-2 h-100" style="background-color: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px;">
+                                                <strong style="color: #D97706;">(+/-) Đang hình thành:</strong>
+                                                <div class="mt-1 text-dark" style="white-space: normal;">
+                                                    <field name="tieuchi_hinhthanh"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 mb-2">
+                                            <div class="p-2 h-100" style="background-color: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 6px;">
+                                                <strong style="color: #16A34A;">(+) Đạt:</strong>
+                                                <div class="mt-1 text-dark" style="white-space: normal;">
+                                                    <field name="tieuchi_dat"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div> </div> </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
 
       <record id="ekids_canthiep.lap_kehoach_muctieu_form" model="ir.ui.view">
           <field name="name">ekids.kehoach_muctieu.form</field>
