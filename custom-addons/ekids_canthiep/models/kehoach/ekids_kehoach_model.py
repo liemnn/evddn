@@ -161,6 +161,10 @@ class KeHoach(models.Model):
         }
 
 
+    def action_gui_pheduyet(self):
+        if (self.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH
+            and self.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+            self.trangthai_pheduyet = kehoach_util.PHEDUYET_DOI_DUYET
 
     def action_pheduyet_dat(self):
         if self.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH:

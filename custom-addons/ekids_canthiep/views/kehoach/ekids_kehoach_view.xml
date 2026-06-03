@@ -54,7 +54,7 @@
                                         type="object"
                                         icon="fa-eye"
                                         class="btn-outline-primary fw-bold"
-                                        invisible="trangthai != '0'"/>
+                                        invisible="trangthai_pheduyet not in ['-1']"/>
 
                         <button name="action_pheduyet_dat"
                                         string="Đạt"
@@ -62,7 +62,7 @@
                                         icon="fa-eye"
                                         confirm="Bạn xác nhận [Kế hoạch] đã đạt để giáo viên tiến hành can thiệp theo thời gian trong kế hoạch"
                                         class="btn-outline-primary fw-bold"
-                                        invisible="trangthai_pheduyet not in ['0','-1']"/>
+                                        invisible="trangthai_pheduyet not in ['0']"/>
 
                         <button name="action_pheduyet_khongdat"
                                         string="Không đạt sửa lại"
@@ -71,7 +71,7 @@
                                         icon="fa-eye"
                                         confirm="Bạn xác nhận [Kế hoạch] chưa đạt cần trả về cho giáo viên lập kế hoạch chỉnh sửa lại ?"
                                         class="btn-outline-primary fw-bold"
-                                        invisible="trangthai_pheduyet not in ['0','-1']"/>
+                                        invisible="trangthai_pheduyet not in ['0']"/>
 
 
                         <field name="trangthai" widget="statusbar" statusbar_visible="0,2,1,-1" options="{'clickable': false}"/>
@@ -123,9 +123,10 @@
                             </div>
                         </div>
                         <group invisible="trangthai_pheduyet not in ['0','-1']">
-                            <separator string="Ý KIẾN CHUYÊN MÔN VỀ KẾ HOẠCH"/>
+
                             <p>
-                                <field name="desc"/>
+                                <strong>Ý KIẾN CHUYÊN MÔN VỀ KẾ HOẠCH</strong>
+                                <field name="desc" class="fw-bold bg-white border rounded px-2 py-1 text-dark"/>
                             </p>
                         </group>
 
