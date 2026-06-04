@@ -67,7 +67,7 @@
 
                                     <t t-if="record.is_readonly.raw_value">
                                         <span class="text-muted mt-1" style="font-size: 11.5px; font-weight: 500;">
-                                            <i class="fa fa-lock me-1 text-danger"></i> Đã khóa sổ
+                                            <i class="fa fa-lock me-1 text-danger"></i> Chưa đến ngày
                                         </span>
                                     </t>
                                     <t t-else="">
@@ -79,17 +79,19 @@
                             </div>
 
                             <div class="text-center" style="min-width: 160px;">
+
                                 <t t-if="record.is_readonly.raw_value">
+                                    <t t-if="record.ketqua.raw_value == ''">
+                                        <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 12px; border-radius: 6px;">
+                                            <i class="fa fa-times-circle me-1"></i> Chưa ghi nhận
+                                        </span>
+                                    </t>
                                     <t t-if="record.ketqua.raw_value == '-1'">
                                         <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 12px; border-radius: 6px;">
                                             <i class="fa fa-times-circle me-1"></i> Chưa đạt
                                         </span>
                                     </t>
-                                    <t t-elif="record.ketqua.raw_value == '0'">
-                                        <span class="badge" style="background-color: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; padding: 6px 12px; border-radius: 6px;">
-                                            <i class="fa fa-minus-circle me-1"></i> Đang hình thành
-                                        </span>
-                                    </t>
+
                                     <t t-elif="record.ketqua.raw_value == '1'">
                                         <span class="badge" style="background-color: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; padding: 6px 12px; border-radius: 6px;">
                                             <i class="fa fa-check-circle me-1"></i> Đạt
