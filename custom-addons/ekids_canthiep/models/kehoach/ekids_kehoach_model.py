@@ -167,6 +167,7 @@ class KeHoach(models.Model):
         }
 
 
+
     def action_gui_pheduyet(self):
         if (self.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH
             and self.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
@@ -184,7 +185,22 @@ class KeHoach(models.Model):
             self.trangthai_pheduyet = kehoach_util.PHEDUYET_CAN_DIEUCHINH
 
     def action_xem_kehoach(self):
-        return False
+        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'LẬP KẾ HOẠCH',
+            'res_model': 'ekids.kehoach',
+            'view_mode': 'form',
+            'res_id': self.id,
+            'views': [(form_view_id, 'form')],
+            'target': 'current',
+            'domain': [('coso_id', '=', self.coso_id.id)],
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'default_hocsinh_id': self.hocsinh_id.id
+            },
+        }
 
     def action_canthiep(self):
         return False

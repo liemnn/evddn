@@ -18,58 +18,77 @@
                     <field name="gv_lapkehoach_id"/>
                     <field name="gv_kiemduyet_id"/>
                     <field name="gv_canthiep_id"/>
+                    <field name="index"/>
 
                     <templates>
                         <t t-name="kanban-box">
 
-                            <!-- LỚP CSS ĐỘC QUYỀN: PHÂN BA VÙNG KIỂU GRID DASHBOARD -->
+                            <!-- HỆ THỐNG CSS ĐÁP ỨNG DI ĐỘNG & TỐI ƯU GIAO DIỆN -->
                             <style>
                                 .saas_three_zone_kanban .o_kanban_record {
                                     width: 100% !important;
                                     flex: 0 0 100% !important;
-                                    margin: 0 0 8px 0 !important;
+                                    margin: 0 0 12px 0 !important;
                                     padding: 0 !important;
                                     background: transparent !important;
                                     border: none !important;
                                 }
-                                /* Card chính phẳng, nén diện tích, bo góc tinh xảo */
+
+                                /* --- CẤU HÌNH MẶC ĐỊNH CHO MOBILE (ĐIỆN THOẠI) --- */
                                 .three_zone_card {
                                     background: #FFFFFF;
                                     border: 1px solid #E4E7EC;
-                                    border-radius: 12px;
+                                    border-radius: 16px;
+                                    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
                                     transition: all 0.2s ease;
+                                    flex-direction: column !important; /* Đổ dọc hoàn toàn trên điện thoại */
+                                    align-items: stretch !important;
                                 }
-                                .three_zone_card:hover {
-                                    border-color: #2563EB !important;
-                                    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.05) !important;
-                                    background-color: #F8FAFC;
+
+                                /* Chia khối linh hoạt cho giao diện Mobile */
+                                .zone_responsive_block {
+                                    width: 100% !important;
+                                    min-width: 100% !important;
+                                    padding-left: 0 !important;
+                                    border-left: none !important;
+                                    border-top: 1px dashed #EAECF0; /* Nét đứt ngăn cách các vùng */
+                                    padding-top: 12px;
+                                    margin-top: 6px;
                                 }
-                                /* Định dạng tiêu đề nhỏ của từng vùng */
-                                .zone_title {
-                                    font-size: 10px !important;
-                                    font-weight: 700 !important;
-                                    text-uppercase: true;
-                                    color: #98A2B3;
-                                    letter-spacing: 0.5px;
+                                .zone-block-1 {
+                                    border-top: none !important;
+                                    padding-top: 0 !important;
+                                    margin-top: 0 !important;
+                                }
+
+                                .index-circle-container {
+                                    align-self: flex-start;
                                     margin-bottom: 6px;
                                 }
-                                /* Thẻ nhân sự mini */
+
+                                .zone_title {
+                                    font-size: 11.5px !important;
+                                    font-weight: 700 !important;
+                                    text-uppercase: true;
+                                    letter-spacing: 0.5px;
+                                    color: #98A2B3;
+                                    margin-bottom: 6px;
+                                }
                                 .mini_badge_user {
                                     display: inline-flex;
                                     align-items: center;
-                                    padding: 2px 6px;
+                                    padding: 3px 8px;
                                     background: #F1F5F9;
                                     border: 1px solid #E2E8F0;
                                     border-radius: 4px;
                                     font-size: 11px;
                                     color: #334155;
                                 }
-                                /* Nút bấm phẳng đồng bộ cho vùng 1 và vùng 2 */
                                 .btn-zone-action {
-                                    font-size: 11px !important;
+                                    font-size: 12.5px !important;
                                     font-weight: 700 !important;
-                                    padding: 3px 8px !important;
-                                    border-radius: 5px !important;
+                                    padding: 4px 10px !important;
+                                    border-radius: 6px !important;
                                     background: #FFFFFF !important;
                                     border: 1px solid #D0D5DD !important;
                                     color: #344054 !important;
@@ -77,45 +96,78 @@
                                     align-items: center;
                                     gap: 4px;
                                 }
-                                .btn-zone-action:hover {
-                                    background: #F2F4F7 !important;
-                                    color: #2563EB !important;
-                                    border-color: #2563EB !important;
+
+                                /* --- CẤU HÌNH CHO DESKTOP (MÁY TÍNH MÀN HÌNH LỚN) --- */
+                                @media (min-width: 992px) {
+                                    .three_zone_card {
+                                        flex-direction: row !important; /* Quay lại hàng ngang */
+                                        align-items: center !important;
+                                    }
+                                    .three_zone_card:hover {
+                                        border-color: #3B82F6 !important;
+                                        box-shadow: 0 8px 20px rgba(14, 165, 233, 0.06) !important;
+                                    }
+                                    .index-circle-container {
+                                        align-self: auto !important;
+                                        margin-bottom: 0 !important;
+                                    }
+                                    .zone_responsive_block {
+                                        border-top: none !important;
+                                        padding-top: 0 !important;
+                                        margin-top: 0 !important;
+                                    }
+                                    .zone-block-1 {
+                                        flex: 1 !important;
+                                        min-width: 195px !important;
+                                    }
+                                    .zone-block-2 {
+                                        flex: 1.8 !important;
+                                        min-width: 350px !important;
+                                        border-left: 1px solid #EAECF0 !important;
+                                        padding-left: 16px !important;
+                                    }
+                                    .zone-block-3 {
+                                        flex: 1.5 !important;
+                                        min-width: 300px !important;
+                                        border-left: 1px solid #EAECF0 !important;
+                                        padding-left: 16px !important;
+                                    }
                                 }
                             </style>
 
                             <!-- CONTAINER CHÍNH CỦA DÒNG -->
-                            <div class="three_zone_card oe_kanban_global_click d-flex align-items-center py-2 px-3 gap-2"
+                            <div class="three_zone_card oe_kanban_global_click d-flex p-3 gap-2"
                                  t-attf-style="border-left: 4px solid #{record.trangthai.raw_value == 'dang_canthiep' ? '#10B981' : (record.trangthai.raw_value == 'dang_lap' ? '#F59E0B' : (record.trangthai.raw_value == 'het_hieuluc' ? '#EF4444' : '#98A2B3'))};">
 
-                                <!-- STT ĐẦU DÒNG (Sắp xếp lớn đến nhỏ) -->
-                                <div class="d-flex align-items-center justify-content-center font-monospace text-dark fw-bolder"
+                                <!-- KHỐI SỐ THỨ TỰ (INDEX): SIÊU ĐẬM NÉT, GRADIENT PASTEL TRẺ EM -->
+                                <div class="index-circle-container d-flex align-items-center justify-content-center font-monospace text-white"
                                      style="width: 46px;
                                             height: 46px;
                                             border-radius: 50%;
-                                            border: 2.5px solid #1E293B;
-                                            background-color: #F8FAFC;
+                                            background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%);
                                             font-size: 20px;
-                                            font-weight: 900;
+                                            font-weight: 950; /* Tăng tối đa độ đậm đà */
                                             flex-shrink: 0;
-                                            margin-right: 8px;
-                                            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
+                                            margin-right: 10px;
+                                            border: 2px solid #FFFFFF;
+                                            box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3) !important;
+                                            text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
                                     <field name="index"/>
                                 </div>
 
                                 <!-- ================================================================== -->
-                                <!-- VÙNG 1: KẾT LUẬN (Hồ sơ chẩn đoán ban đầu)                         -->
+                                <!-- VÙNG 1: KẾT LUẬN                                                   -->
                                 <!-- ================================================================== -->
-                                <div class="d-flex flex-column justify-content-between" style="flex: 1; min-width: 190px; min-height: 70px;">
+                                <div class="zone_responsive_block zone-block-1 d-flex flex-column justify-content-between" style="min-height: 70px;">
                                     <div>
                                         <div class="zone_title"><i class="fa fa-file-text-o me-1"></i>THÔNG TIN KẾT LUẬN</div>
-                                        <div style="font-size: 12px; color: #344054;">
-                                            <span class="fw-bold"><field name="ngay_danhgia"/></span>
+                                        <div style="font-size: 12.5px; color: #344054;">
+                                            <span class="fw-bold text-dark"><field name="ngay_danhgia"/></span>
                                             <span class="text-muted mx-1">|</span>
-                                            <span class="text-muted">ĐG: <b class="text-dark"><field name="gv_danhgia"/></b></span>
+                                            <span class="text-muted">Đánh giá: <b class="text-dark"><field name="gv_danhgia"/></b></span>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="mt-2">
                                         <button type="object" name="action_xem_ketluan" class="btn-zone-action btn btn-sm shadow-sm" onclick="event.stopPropagation();">
                                             <i class="fa fa-folder-open-o"></i> Xem Kết Luận
                                         </button>
@@ -123,26 +175,34 @@
                                 </div>
 
                                 <!-- ================================================================== -->
-                                <!-- VÙNG 2: KẾ HOẠCH (Chu kỳ thời gian & Nhân sự lập duyệt)            -->
+                                <!-- VÙNG 2: KẾ HOẠCH (ĐÃ LÀM ĐẬM VÀ ĐÓNG KHỐI PHẦN SỐ NGÀY)            -->
                                 <!-- ================================================================== -->
-                                <div class="d-flex flex-column justify-content-between pl-3"
-                                     style="flex: 1.8; min-width: 340px; border-left: 1px solid #EAECF0; min-height: 70px;">
+                                <div class="zone_responsive_block zone-block-2 d-flex flex-column justify-content-between" style="min-height: 70px;">
                                     <div>
-                                        <div class="zone_title"><i class="fa fa-calendar me-1"></i>THÔNG TIN KẾ HOẠCH</div>
-                                        <div class="d-flex align-items-center gap-2">
+                                        <div class="zone_title"><i class="fa fa-calendar me-1"></i>KẾ HOẠCH</div>
+                                        <div class="d-flex flex-wrap align-items-center gap-2">
                                             <!-- Chu kỳ ngày nén ngang -->
-                                            <div class="font-monospace fw-bold text-dark" style="font-size: 11.5px;">
-                                                <field name="tu_ngay"/><i class="fa fa-long-arrow-right text-muted mx-1"></i><field name="den_ngay"/>
-                                                <span class="text-primary ms-1">(<field name="songay"/> ngày)</span>
+                                            <div class="font-monospace fw-bold text-dark" style="font-size: 12.5px;">
+                                                <field name="tu_ngay"/><i class="fa fa-long-arrow-right text-muted mx-1.5"></i><field name="den_ngay"/>
                                             </div>
+                                            <!-- LÀM ĐẬM: Đóng khối Tag nổi bật cho trường số ngày -->
+                                            <span class="badge px-2 py-1 shadow-sm"
+                                                  style="background-color: #EFF6FF;
+                                                         color: #1D4ED8;
+                                                         border: 1px solid #BFDBFE;
+                                                         font-size: 11.5px;
+                                                         font-weight: 800;
+                                                         border-radius: 6px;">
+                                                <i class="fa fa-clock-o me-1"></i><strong><field name="songay"/></strong> ngày
+                                            </span>
                                             <!-- Nhân sự nhóm lập duyệt -->
-                                            <div class="d-flex gap-1 ms-2">
+                                            <div class="d-flex gap-1">
                                                 <div class="mini_badge_user" title="Người lập"><i class="fa fa-pencil text-warning me-1"></i><field name="gv_lapkehoach_id"/></div>
                                                 <div class="mini_badge_user" title="Người duyệt"><i class="fa fa-shield text-info me-1"></i><field name="gv_kiemduyet_id"/></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="mt-2">
                                         <button type="object" name="action_xem_kehoach" class="btn-zone-action btn btn-sm shadow-sm" onclick="event.stopPropagation();">
                                             <i class="fa fa-eye text-primary"></i> Xem Kế Hoạch
                                         </button>
@@ -150,22 +210,19 @@
                                 </div>
 
                                 <!-- ================================================================== -->
-                                <!-- VÙNG 3: CAN THIỆP (Giáo viên dạy, Trạng thái & Nút hành động chính)-->
+                                <!-- VÙNG 3: CAN THIỆP                                                  -->
                                 <!-- ================================================================== -->
-                                <div class="d-flex align-items-center justify-content-between pl-3"
-                                     style="flex: 1.5; min-width: 290px; border-left: 1px solid #EAECF0; min-height: 70px;">
+                                <div class="zone_responsive_block zone-block-3 d-flex align-items-center justify-content-between gap-2" style="min-height: 70px;">
 
-                                    <!-- Tiểu khối thông tin nhân sự và trạng thái bên trái Vùng 3 -->
-                                    <div class="d-flex flex-column justify-content-between" style="height: 100%;">
+                                    <div class="d-flex flex-column justify-content-between" style="height: 100%; min-height: 68px;">
                                         <div>
-                                            <div class="zone_title"><i class="fa fa-graduation-cap me-1"></i>CAN THIỆP</div>
-                                            <div class="mini_badge_user fw-bold" style="background: #FFF7ED; border-color: #FFEDD5; color: #C2410C;">
+                                            <div class="zone_title"><i class="fa fa-graduation-cap me-1"></i>THÔNG TIN CAN THIỆP</div>
+                                            <div class="mini_badge_user fw-bold" style="background: #FFF7ED; border-color: #FFEDD5; color: #C2410C; padding: 3px 8px;">
                                                 <i class="fa fa-user text-orange me-1"></i>Dạy: <field name="gv_canthiep_id"/>
                                             </div>
                                         </div>
 
-                                        <!-- Cụm hiển thị trạng thái kép -->
-                                        <div class="d-flex align-items-center gap-2" style="font-size: 11px;">
+                                        <div class="d-flex align-items-center gap-2 mt-1.5" style="font-size: 12.5px;">
                                             <t t-if="record.trangthai_pheduyet.raw_value == 'da_duyet'">
                                                 <span class="badge" style="padding: 2px 6px; background-color: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; border-radius: 4px;">Đã duyệt</span>
                                             </t>
@@ -191,11 +248,10 @@
                                         </div>
                                     </div>
 
-                                    <!-- Nút bấm hành động tối cao của Vùng 3 nằm ở góc ngoài cùng -->
-                                    <div style="width: 110px;">
+                                    <div style="width: 105px; flex-shrink: 0;">
                                         <button type="object" name="action_canthiep"
                                                 class="btn btn-sm btn-success w-100 fw-bold text-white shadow-sm d-flex align-items-center justify-content-center gap-1"
-                                                style="height: 34px !important; border-radius: 6px !important; font-size: 12px !important; background-color: #10B981 !important; border: none !important;"
+                                                style="height: 34px !important; border-radius: 6px !important; font-size: 13px !important; background-color: #10B981 !important; border: none !important;"
                                                 onclick="event.stopPropagation();">
                                             <i class="fa fa-play-circle" style="font-size: 13px;"></i> CAN THIỆP
                                         </button>
@@ -227,7 +283,7 @@
                         .ws-body { padding: 15px; }
                         .ws-info-bar { display: flex; gap: 20px; flex-wrap: wrap; background: #EFF6FF; padding: 12px 15px; border-radius: 8px; border: 1px solid #BFDBFE;}
                         .ws-field { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 10px;}
-                        .ws-label { font-weight: 700; color: #1E3A8A; font-size: 13px; white-space: nowrap;}
+                        .ws-label { font-weight: 700; color: #1E3A8A; font-size: 14px; white-space: nowrap;}
 
                         /* ======================================================== */
                         /* TÙY CHỈNH BẢNG KANBAN THÀNH DẠNG TRELLO BOARD            */
@@ -251,7 +307,7 @@
                         .o_kanban_view.o_kanban_grouped .o_kanban_header_title {
                             font-weight: 800 !important;
                             color: #1E3A8A !important;
-                            font-size: 14px;
+                            font-size: 16px;
                             text-transform: uppercase;
                         }
                     </style>

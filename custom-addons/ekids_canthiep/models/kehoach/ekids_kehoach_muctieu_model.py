@@ -85,7 +85,7 @@ class KeHoach2MucTieu(models.Model):
         if not tu_ngay or not den_ngay:
             raise UserError("Kế hoạch chưa thiết lập đủ Từ ngày và Đến ngày.")
 
-        if today <= tu_ngay:
+        if today <tu_ngay:
             raise UserError("Kế hoạch chưa đến thời gian can thiệp")
 
         # 3. Tìm ngày bắt đầu chạy vòng lặp (Dùng max() thay cho if-else cho ngắn gọn)
@@ -121,3 +121,5 @@ class KeHoach2MucTieu(models.Model):
         # 5. Bulk Create: Đẩy toàn bộ mảng vào Database trong 1 câu query duy nhất
         if vals_list:
             self.env['ekids.kehoach_ketqua2muctieu'].create(vals_list)
+
+
