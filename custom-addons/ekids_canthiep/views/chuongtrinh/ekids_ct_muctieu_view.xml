@@ -25,6 +25,7 @@
             <field name="arch" type="xml">
                 <list string="Danh sách Mục tiêu Can thiệp" default_order="sequence">
                     <field name="sequence" widget="handle"/>
+                    <field name="sequence" width="50"/>
                     <field name="linhvuc_id" class="fw-bold" decoration-info="1"/>
                     <field name="tuoi_id" class="fw-bold" decoration-success="1"/>
                     <field name="name" string="Mục tiêu can thiệp"/>
@@ -239,16 +240,15 @@
 
                             <div class="kh-profile-header">
                                 <div class="kh-avatar-wrapper">
-                                    <i class="fa fa-bullseye" style="font-size: 40px; color: #4f46e5;"></i>
+                                    <i style="font-size: 30px; color: #4f46e5;text-align: center;font-weight: bold;padding:0px;">
+                                        <field name="sequence"/>
+                                    </i>
                                 </div>
 
                                 <div class="kh-name-section">
                                     <div class="kh-header-row">
 
                                         <div class="kh-name-container">
-                                            <div style="font-weight: 800; color: #4f46e5; font-size: 13px; margin-bottom: 8px; text-transform: uppercase;">
-                                                <i class="fa fa-file-text-o"></i> Mục tiêu/mô tả:
-                                            </div>
 
                                             <field name="name" nolabel="1" placeholder="Hãy nhập tên [Mục tiêu/ Mô tả]..."/>
                                         </div>
@@ -262,6 +262,7 @@
                                                 <span class="lbl"><i class="fa fa-child"></i> Độ tuổi</span>
                                                 <field name="tuoi_id" options="{'no_open': True, 'no_create': True}"/>
                                             </div>
+
                                         </div>
 
                                     </div>
