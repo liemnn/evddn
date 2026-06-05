@@ -520,8 +520,10 @@
                                                                     <field name="linhvuc_id"/>
                                                                 </h4>
                                                                 <span class="badge" style="background-color: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; font-size: 12px; font-weight: 700; padding: 3px 6px; border-radius: 5px;">
-                                                                    <i class="fa fa-birthday-cake me-1"></i><field name="tuoi_id"/>
+                                                                    <i class="fa fa-birthday-cake me-1"></i>
+                                                                    <field name="tuoi_id"/>
                                                                 </span>
+                                                                 
                                                             </div>
 
                                                             <!-- ĐÃ SỬA: CỤM ĐẾM SỐ LƯỢNG KẾT HỢP NÚT HÀNH ĐỘNG MỞ POPUP -->
@@ -540,9 +542,7 @@
 
                                                         <!-- HIỂN THỊ DANH SÁCH BÀI HỌC HÀNG DỌC -->
                                                         <div class="mt-3 pt-2.5 custom_muctieu_html_holder">
-                                                            <div class="text-uppercase text-muted fw-bold mb-2" style="font-size: 9.5px; letter-spacing: 0.5px; color:#94A3B8;">
-                                                                <i class="fa fa-caret-down me-1"></i>Danh sách bài học / mục tiêu chi tiết hàng dọc:
-                                                            </div>
+
                                                             <t t-out="record.muctieu_html.raw_value"/>
                                                         </div>
                                                     </div>
