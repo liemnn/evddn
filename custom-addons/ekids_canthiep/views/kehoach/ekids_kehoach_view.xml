@@ -265,23 +265,55 @@
             </field>
         </record>
 
-      <record id="ekids_canthiep.lap_kehoach_form" model="ir.ui.view">
+        <record id="ekids_canthiep.lap_kehoach_form" model="ir.ui.view">
             <field name="name">ekids.kehoach.form</field>
             <field name="model">ekids.kehoach</field>
             <field name="arch" type="xml">
                 <form string="Kế hoạch Can thiệp">
 
+                    <!-- CONTROL HEADER BAR -->
                     <header>
-                        <button string="Trình phê duyệt" name="action_gui_pheduyet" type="object" class="btn-primary" invisible="trangthai_pheduyet != 'can_dieuchinh'"/>
-                        <button string="Phê duyệt Đạt" name="action_pheduyet_dat" type="object" class="btn-success" invisible="trangthai == 'dang_canthiep'"/>
-                        <button string="Phê duyệt Không Đạt" name="action_pheduyet_khongdat" type="object" class="btn-danger" invisible="trangthai == 'dang_canthiep'"/>
-                        <field name="trangthai" widget="statusbar" statusbar_visible="doi_lap,dang_lap,dang_canthiep"/>
+                        <button name="action_gui_pheduyet"
+                                string="Gửi phê duyệt"
+                                type="object"
+                                icon="fa-paper-plane"
+                                class="btn-outline-primary fw-bold"
+                                invisible="trangthai_pheduyet not in ['-1']"/>
+
+                        <button name="action_pheduyet_dat"
+                                string="Đạt"
+                                type="object"
+                                icon="fa-check-circle"
+                                confirm="Bạn xác nhận [Kế hoạch] đã đạt để giáo viên tiến hành can thiệp theo thời gian trong kế hoạch"
+                                class="btn-success fw-bold"
+                                invisible="trangthai_pheduyet not in ['0']"/>
+
+                        <button name="action_pheduyet_khongdat"
+                                string="Không đạt sửa lại"
+                                type="object"
+                                icon="fa-times-circle"
+                                confirm="Bạn xác nhận [Kế hoạch] chưa đạt cần trả về cho giáo viên lập kế hoạch chỉnh sửa lại ?"
+                                class="btn-danger fw-bold"
+                                invisible="trangthai_pheduyet not in ['0']"/>
+
+                        <field name="trangthai" widget="statusbar" statusbar_visible="0,2,1,-1" options="{'clickable': false}"/>
                     </header>
 
                     <sheet class="p-4 bg-white">
 
+                        <!-- SYSTEM SUPER COMPACT & ACCENT ZONE STYLE -->
                         <style>
-                            /* 1. Thiết kế vòng tròn chỉ số Index mầu sắc trẻ em rực rỡ */
+                            /* Khối không gian bo viền tạo điểm nhấn phía đầu */
+                            .ekids_header_accent_zone {
+                                background: #FFFFFF;
+                                border: 1px solid #E4E7EC;
+                                border-radius: 16px;
+                                padding: 5px;
+                                box-shadow: 0 1px 3px rgba(16, 24, 40, 0.04), 0 1px 2px rgba(16, 24, 40, 0.02);
+                                margin-bottom: 22px;
+                            }
+
+                            /* Vòng tròn số thứ tự Index mầu sắc trẻ em rực rỡ */
                             .ekids_master_index {
                                 width: 48px;
                                 height: 48px;
@@ -295,131 +327,237 @@
                                 font-weight: 900;
                                 font-size: 20px;
                                 border: 2px solid #FFFFFF;
-                                box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
+                                box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
+                                flex-shrink: 0;
                             }
-                            /* Ép ô hiển thị số của Odoo chạy trần phẳng không khung viền */
-                            .ekids_master_index span {
-                                font-weight: 950 !important;
-                                color: #FFFFFF !important;
-                            }
+                            .ekids_master_index span { font-weight: 950 !important; color: #FFFFFF !important; }
 
-                            /* 2. Ép các Label và Value của vùng thông tin Master phẳng, đậm nét */
-                            .ekids_master_box {
-                                background-color: #F8FAFC;
-                                border: 1px solid #F1F5F9;
-                                border-radius: 14px;
-                                padding: 16px;
-                            }
-                            .master_label {
-                                font-size: 11.5px !important;
-                                font-weight: 700 !important;
-                                text-uppercase: true;
-                                color: #94A3B8;
-                                letter-spacing: 0.5px;
-                                margin-bottom: 4px;
-                            }
-                            .master_value {
-                                font-size: 15px !important;
-                                font-weight: 700 !important;
-                                color: #1E293B !important;
-                            }
-
-                            /* 3. Tinh chỉnh trường Giáo viên lập duyệt thu gọn thành khối nhãn */
-                            .mini_tag_field {
-                                display: inline-flex;
-                                align-items: center;
-                                padding: 2px 6px;
-                                background: #EFF6FF;
-                                color: #1E4ED8;
-                                border: 1px solid #BFDBFE;
-                                border-radius: 5px;
-                                font-size: 12px;
-                                font-weight: 700;
-                            }
-
-                            /* 4. Làm đẹp bảng danh mục Lĩnh vực One2many cấp 1 */
-                            .ekids_table_holder .o_field_x2many_list_row_add {
+                            /* Ô nhập ngày tháng tinh giản cao cấp phủ mầu pastel nhẹ */
+                            .compact_date_field input {
+                                padding: 4px 8px !important;
+                                height: 28px !important;
                                 font-size: 13px !important;
                                 font-weight: 700 !important;
-                                color: #2563EB !important;
-                                padding: 10px 0 !important;
+                                text-align: center !important;
+                                border-radius: 6px !important;
+                                width: 110px !important;
+                                border: 1px solid #D0D5DD !important;
+                                background: #F8FAFC !important;
+                                color: #1E293B !important;
+                                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+                                transition: all 0.2s;
                             }
-                            /* Tạo phong cách nút "Thiết lập mục tiêu" phẳng thay vì icon thô */
-                            .btn_setup_goals {
-                                background-color: #FFFFFF !important;
-                                border: 1px solid #BFDBFE !important;
-                                color: #2563EB !important;
+                            .compact_date_field input:focus {
+                                border-color: #3B82F6 !important;
+                                background: #FFFFFF !important;
+                                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+                            }
+
+                            /* Ép buộc Badge Đỏ co khít diện tích thực tế */
+                            .ekids_red_compact_badge {
+                                background-color: #FEF2F2 !important;
+                                color: #DC2626 !important;
+                                border: 1px solid #FCA5A5 !important;
+                                font-size: 12.5px !important;
+                                padding: 4px 10px !important;
+                                border-radius: 6px !important;
+                                font-weight: 900 !important;
+                                display: inline-flex !important;
+                                align-items: center !important;
+                                gap: 5px !important;
+                                width: auto !important;
+                                max-width: fit-content !important;
+                            }
+                            .ekids_red_compact_badge .o_field_widget,
+                            .ekids_red_compact_badge span,
+                            .ekids_red_compact_badge input {
+                                width: auto !important;
+                                max-width: 40px !important;
+                                display: inline-block !important;
+                                text-align: center !important;
+                                color: #DC2626 !important;
+                                font-weight: 900 !important;
+                                background: transparent !important;
+                                border: none !important;
+                                padding: 0 !important;
+                            }
+
+                            /* Custom nút bấm xem kết luận đồng điệu giao diện phẳng */
+                            .btn_view_review {
+                                font-size: 12.5px !important;
+                                font-weight: 700 !important;
+                                padding: 5px 14px !important;
+                                border-radius: 8px !important;
+                                border: 1px solid #D0D5DD !important;
+                                background: #FFFFFF !important;
+                                color: #344054 !important;
+                                box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05) !important;
+                                transition: all 0.15s;
+                            }
+                            .btn_view_review:hover {
+                                background: #F8FAFC !important;
+                                border-color: #98A2B3 !important;
+                                color: #0284C7 !important;
+                            }
+
+                            /* ----------------------------------------------------- */
+                            /* CẤU HÌNH KANBAN DÒNG PHẲNG KHÔNG CLICK TOÀN THẺ         */
+                            /* ----------------------------------------------------- */
+                            .ekids_inner_kanban_container .o_kanban_renderer .o_kanban_record {
+                                width: 100% !important;
+                                flex: 0 0 100% !important;
+                                margin: 0 0 10px 0 !important;
+                                padding: 0 !important;
+                                background: transparent !important;
+                                border: none !important;
+                            }
+                            .linhvuc_row_card {
+                                background: #FFFFFF;
+                                border: 1px solid #E4E7EC;
+                                border-radius: 12px;
+                                padding: 14px 18px;
+                                width: 100%;
+                                box-shadow: 0 2px 6px rgba(16, 24, 40, 0.01);
+                                transition: all 0.15s ease-in-out;
+                            }
+                            /* Nút nhỏ Thêm Mục Tiêu Premium Blue */
+                            .btn_add_muctieu_mini {
+                                background-color: #2563EB !important;
+                                color: #FFFFFF !important;
                                 font-weight: 700 !important;
                                 font-size: 12px !important;
                                 padding: 4px 12px !important;
                                 border-radius: 6px !important;
-                                box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+                                border: none !important;
+                                box-shadow: 0 2px 4px rgba(37, 99, 235, 0.15) !important;
+                                transition: all 0.15s ease;
                             }
-                            .btn_setup_goals:hover {
-                                background-color: #2563EB !important;
-                                color: #FFFFFF !important;
-                                border-color: #2563EB !important;
+                            .btn_add_muctieu_mini:hover {
+                                background-color: #1D4ED8 !important;
+                                box-shadow: 0 4px 8px rgba(37, 99, 235, 0.25) !important;
                             }
+                            .custom_muctieu_html_holder { border-top: 1px dashed #E4E7EC; }
                         </style>
 
-                        <div class="d-flex align-items-center gap-3 mb-4">
-                            <div class="ekids_master_index">
-                                <field name="index" readonly="1"/>
-                            </div>
-                            <div>
-                                <span class="text-uppercase text-muted fw-bold block" style="font-size: 10px; letter-spacing: 0.5px; color:#94A3B8;">Mã phiếu hệ thống</span>
-                                <h2 class="text-xl font-black text-slate-800 leading-tight mb-0" style="font-weight: 900; color:#1E293B;">
-                                    KH-<field name="name" readonly="1"/>
-                                </h2>
+                        <!-- ===================================================================================== -->
+                        <!-- KHỐI BIÊN TRÊN ĐƯỢC BO VIỀN (ACCENT ZONE)                                             -->
+                        <!-- ===================================================================================== -->
+                        <div class="ekids_header_accent_zone">
+                            <div class="row align-items-center justify-content-between g-3">
+
+                                <div class="col-xl-8 col-12 d-flex align-items-center gap-3">
+                                    <div class="ekids_master_index">
+                                        <field name="index" readonly="1"/>
+                                    </div>
+
+                                    <div class="d-flex flex-column gap-1.5">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <span class="badge text-uppercase font-weight-bold" style="background: #E0F2FE; color: #0369A1; font-size: 10px; padding: 3px 6px; border-radius: 4px; border: 1px solid #BAE6FD;">
+                                                Học sinh:</span>
+                                            <h2 class="text-xl font-black mb-0" style="font-weight: bold; color:#1E293B;">
+                                                <field name="name" readonly="1"/>
+                                            </h2>
+                                        </div>
+
+                                        <div class="d-flex align-items-center gap-2 text-muted font-monospace flex-wrap" style="font-size: 13px;">
+
+                                            <span class="d-flex align-items-center justify-content-center rounded" style="width:24px; height:24px; background:#FEF3C7; border: 1px solid #FDE68A;">
+                                                <i class="fa fa-calendar text-warning" style="font-size:12px;"></i>
+                                            </span>
+                                            <span class="fw-bold text-secondary font-sans" style="font-size: 13px; font-family: -apple-system, sans-serif; color: #475569 !important;">
+                                                Thời gian:</span>
+                                            <field name="tu_ngay" class="compact_date_field"/>
+                                            <i class="fa fa-long-arrow-right text-muted mx-0.5" style="font-size:11px;"></i>
+                                            <field name="den_ngay" class="compact_date_field"/>
+
+                                            <span class="badge ekids_red_compact_badge shadow-sm">
+                                                <i class="fa fa-clock-o"></i>
+                                                <strong><field name="songay"/></strong> ngày
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-12 d-flex flex-column align-items-end justify-content-center gap-2">
+                                    <button name="action_xem_ketluan" string="Xem kết luận đánh giá" type="object" icon="fa-file-text-o" class="btn_view_review" invisible="trangthai in ['0']"/>
+                                    <div class="p-1.5 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
+                                        <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
-                        <div class="row g-3 mb-4 ekids_master_box">
-                            <div class="col-md-4 col-12">
-                                <div class="master_label"><i class="fa fa-child text-primary me-1.5"></i>Họ và tên trẻ</div>
-                                <div class="master_value"><field name="hocsinh_id" options="{'no_open': True}"/></div>
-                            </div>
-
-                            <div class="col-md-4 col-12">
-                                <div class="master_label"><i class="fa fa-calendar-minus-o text-warning me-1.5"></i>Chu kỳ áp dụng</div>
-                                <div class="d-flex align-items-center gap-1.5 font-monospace master_value">
-                                    <span class="px-2 py-0.5 bg-white border rounded shadow-sm"><field name="tu_ngay"/></span>
-                                    <i class="fa fa-long-arrow-right text-muted mx-0.5" style="font-size:11px;"></i>
-                                    <span class="px-2 py-0.5 bg-white border rounded shadow-sm"><field name="den_ngay"/></span>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-12">
-                                <div class="master_label"><i class="fa fa-clock-o text-success me-1.5"></i>Quỹ thời gian</div>
-                                <div class="mt-0.5">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-extrabold bg-blue-50 text-blue-700 border border-blue-200">
-                                        <strong><field name="songay"/></strong> ngày can thiệp thực tế
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
+                        <!-- ========================================================== -->
+                        <!-- TẦNG 3: HỆ THỐNG TABS QUẢN LÝ GIÁO ÁN CAN THIỆP            -->
+                        <!-- ========================================================== -->
                         <notebook>
+                            <page string="MỤC TIÊU KẾ HOẠCH" icon="fa-graduation-cap">
+                                <div class="ekids_inner_kanban_container mt-3">
+                                    <field name="kehoach_linhvuc_ids" mode="kanban" nolabel="1">
 
-                            <page string="Nội dung Giáo án &amp; Mục tiêu" icon="fa-graduation-cap">
-                                <div class="ekids_table_holder mt-2">
-
-                                    <field name="kehoach_linhvuc_ids" nolabel="1">
-                                        <list string="Lĩnh vực can thiệp đợt này" default_order="sequence">
-                                            <field name="sequence" widget="handle"/>
+                                        <!-- ĐÃ GỠ GIAO DIỆN CLICK TOÀN THẺ TRÊN KANBAN -->
+                                        <kanban class="o_kanban_mobile" default_order="sequence" create="0" delete="0" edit="0">
+                                            <field name="id"/>
+                                            <field name="sequence"/>
                                             <field name="linhvuc_id"/>
                                             <field name="tuoi_id"/>
+                                            <field name="muctieu_ids"/>
+                                            <field name="muctieu_html"/>
 
-                                        </list>
+                                            <templates>
+                                                <t t-name="kanban-box">
+                                                    <!-- Bỏ class oe_kanban_global_click tại đây -->
+                                                    <div class="linhvuc_row_card">
 
+                                                        <!-- TIÊU ĐỀ DÒNG & CỤM ĐIỀU HƯỚNG NÚT BẤM BÊN PHẢI -->
+                                                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <div class="d-flex align-items-center justify-content-center bg-blue-50 rounded shadow-sm" style="width:28px; height:28px; border: 1px solid #BAE6FD;">
+                                                                    <i class="fa fa-folder-open text-primary" style="font-size:13px;"></i>
+                                                                </div>
+                                                                <h4 class="fw-bold text-dark mb-0" style="font-size: 15px; font-weight: 800;">
+                                                                    <field name="linhvuc_id"/>
+                                                                </h4>
+                                                                <span class="badge" style="background-color: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; font-size: 12px; font-weight: 700; padding: 3px 6px; border-radius: 5px;">
+                                                                    <i class="fa fa-birthday-cake me-1"></i><field name="tuoi_id"/>
+                                                                </span>
+                                                            </div>
+
+                                                            <!-- ĐÃ SỬA: CỤM ĐẾM SỐ LƯỢNG KẾT HỢP NÚT HÀNH ĐỘNG MỞ POPUP -->
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <!-- Badge đếm mục tiêu -->
+                                                                <span class="badge" style="background-color: #E0F2FE; color: #0369A1; font-weight: 800; font-size: 11.5px; padding: 5px 10px; border-radius: 6px;">
+                                                                    <i class="fa fa-tasks me-1"></i> <t t-esc="record.muctieu_ids.raw_value.length"/> mục tiêu
+                                                                </span>
+
+                                                                <!-- NÚT MỚI THÊM: Click vào đây mới chính thức kích hoạt mở Form Popup -->
+                                                                <button type="object" name="action_open_linhvuc_popup" class="btn_add_muctieu_mini">
+                                                                    <i class="fa fa-plus-circle me-1"></i>Thêm mục tiêu
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- HIỂN THỊ DANH SÁCH BÀI HỌC HÀNG DỌC -->
+                                                        <div class="mt-3 pt-2.5 custom_muctieu_html_holder">
+                                                            <div class="text-uppercase text-muted fw-bold mb-2" style="font-size: 9.5px; letter-spacing: 0.5px; color:#94A3B8;">
+                                                                <i class="fa fa-caret-down me-1"></i>Danh sách bài học / mục tiêu chi tiết hàng dọc:
+                                                            </div>
+                                                            <t t-out="record.muctieu_html.raw_value"/>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </templates>
+                                        </kanban>
+
+                                        <!-- KHỐI FORM POPUP SỬA CHI TIẾT SẼ ĐƯỢC GỌI KHI PHÍM MINI ĐƯỢC ẤN -->
                                         <form string="Chi tiết Mục tiêu của Lĩnh vực">
                                             <sheet class="p-4 bg-white">
                                                 <div class="p-3 mb-4 rounded-3" style="background-color: #F0F9FF; border: 1px solid #BAE6FD;">
                                                     <span class="text-uppercase text-muted font-weight-bold d-block mb-1" style="font-size:10px; color:#0369A1 !important;">Lĩnh vực đang thiết lập mục tiêu</span>
                                                     <h4 class="fw-black mb-0" style="color:#0369A1; font-weight:800;"><field name="linhvuc_id" options="{'no_open': True}"/> (<field name="tuoi_id"/>)</h4>
                                                 </div>
-
-                                                <h5 class="fw-bold text-secondary mb-2" style="font-size:13px;"><i class="fa fa-check-square-o text-success me-1.5"></i>DANH SÁCH CÁC MỤC TIÊU CHI TIẾT</h5>
+                                                <h5 class="fw-bold text-secondary mb-2" style="font-size:13.5px;"><i class="fa fa-check-square-o text-success me-1.5"></i>DANH SÁCH CÁC MỤC TIÊU CHI TIẾT</h5>
                                                 <field name="muctieu_ids" nolabel="1">
                                                     <list editable="bottom">
                                                         <field name="sequence" widget="handle"/>
@@ -429,11 +567,12 @@
                                                 </field>
                                             </sheet>
                                         </form>
+
                                     </field>
                                 </div>
                             </page>
 
-                            <page string="Ý kiến phê duyệt chuyên môn" icon="fa-commenting-o">
+                            <page string="Mô tả, ý kiến làm rõ" icon="fa-commenting-o">
                                 <div class="p-3 rounded-3 mt-2" style="border-left: 4px solid #7C3AED; background-color: #F8FAFC;">
                                     <h5 class="fw-extrabold mb-2 text-uppercase" style="color: #6D28D9; font-size: 13px; letter-spacing: 0.5px;">
                                         <i class="fa fa-shield me-1.5"></i>Ghi chú phê duyệt từ Hội đồng chuyên môn
@@ -441,14 +580,12 @@
                                     <field name="desc" nolabel="1" placeholder="Nội dung góp ý, chỉnh sửa kế hoạch can thiệp từ quản lý chuyên môn..."/>
                                 </div>
                             </page>
-
                         </notebook>
 
                     </sheet>
                 </form>
             </field>
         </record>
-
 
   </data>
 </odoo>
