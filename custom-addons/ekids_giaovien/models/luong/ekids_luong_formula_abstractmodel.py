@@ -283,7 +283,10 @@ class LuongFolmulaAbstractModel(models.AbstractModel):
                 for kq in kpi2thang_ketquas:
                     parameters["$"+kq.code] = str(kq.tong)
                     if "$"+kq.code in formula_text:
-                        desc = desc +kq.name+"=" + str(kq.tong) + " "+str(kq.donvi)+".\n"
+                        if not cautruc_luong.desc or not cautruc_luong.desc.strip():
+                            desc = desc +kq.name+"=" + str(kq.tong) + " "+str(kq.donvi)+".\n"
+                        else:
+                            desc = formula_util.formula_get_desc(MAP,giaovien,cautruc_luong,parameters)
 
 
                 tien = formula_util.formula_tinhtoan_sotien(MAP,giaovien,cautruc_luong,parameters)
