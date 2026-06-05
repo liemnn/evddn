@@ -534,7 +534,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                             dongia = (ca.tien / len(ngay_dihoc_kehoachs))
 
 
-                        tien += ca2thu.soca * dongia
+                        tien += ((ca2thu.soca * dongia)/100)*tyle_hoantra
                         soca += ca2thu.soca
                         dongia = self.func_thongtin_duoctru_hocphi_tien(dongia,ca, hocphi)
             if soca_hocbu>0:
