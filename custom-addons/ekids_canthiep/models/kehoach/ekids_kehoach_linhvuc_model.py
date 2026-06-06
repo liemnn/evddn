@@ -12,6 +12,14 @@ class KeHoach2LinhVuc(models.Model):
                                  required=True,
                                  ondelete="cascade")
 
+    chuongtrinh_id = fields.Many2one(
+        'ekids.ct_chuongtrinh',
+        string='Chương trình',
+        required=True,
+        ondelete="cascade",
+        default=lambda self: self.env['ekids.ct_chuongtrinh'].search([], limit=1, order='id asc').id
+    )
+
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực', required=True, ondelete="cascade")
     tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi', required=True, ondelete="cascade")
 
@@ -52,3 +60,7 @@ class KeHoach2LinhVuc(models.Model):
 
                 html_str += '</div>'
             rec.muctieu_html = html_str
+
+
+    def action_open_linhvuc_popup(self):
+        return False

@@ -79,13 +79,13 @@
 
                    <!-- ================= VÙNG 5: CẤU TRÚC LẠI SIÊU GỌN GÀNG & TIẾT KIỆM DIỆN TÍCH TỐI ĐA ================= -->
                     <div class="kh-card mb-4">
-                        <!-- 1. Tiêu đề trần siêu mỏng, không lồng group rườm rà -->
+                        <!-- 1. Tiêu đề trần siêu mỏng -->
                         <div class="kh-card-title d-flex align-items-center gap-2 mb-2">
                             <i class="fa fa-compass text-success" style="font-size: 14px;"></i>
                             <span class="font-weight-bold" style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.02em;">Cấu trúc chương trình can thiệp</span>
                         </div>
 
-                        <!-- 2. Thanh chọn chương trình tối giản (Dạng Toolbar phẳng, ẩn nhãn để tiết kiệm dòng) -->
+                        <!-- 2. Thanh chọn chương trình tối giản -->
                         <div class="row mb-2 mx-0">
                             <div class="col-12 p-0">
                                 <group col="12" class="p-0 m-0 class_dense_fields">
@@ -99,8 +99,20 @@
                             <field name="kehoach_linhvuc_ids" nolabel="1">
                                 <list editable="bottom" class="o_list_premium m-0 border-0">
                                     <field name="sequence" widget="handle"/>
-                                    <field name="linhvuc_id" string="Mã chương trình / Lĩnh vực can thiệp" options="{'no_create': True}"/>
-                                    <field name="tuoi_id" string="Khung tuổi phát triển mục tiêu" options="{'no_create': True}"/>
+
+                                    <!-- SỬA LỖI 1: Bỏ .ids, chỉ để chuongtrinh_ids -->
+                                    <field name="chuongtrinh_id" string="Chương trình"
+                                           domain="[('id', 'in', parent.chuongtrinh_ids)]"
+                                           options="{'no_create': True}" width="300"/> <!-- Nên để True để tránh giáo viên tạo rác chương trình -->
+
+                                    <!-- SỬA LỖI 2: Đảm bảo domain lọc động mượt mà theo dòng -->
+                                    <field name="linhvuc_id" string="Lĩnh vực"
+                                           domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
+                                           options="{'no_create': True}"  width="300"/>
+
+                                    <field name="tuoi_id" string="Độ tuổi"
+                                           domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
+                                           options="{'no_create': True}"/>
                                 </list>
                             </field>
                         </div>
