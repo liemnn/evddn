@@ -277,8 +277,6 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 # tong giảm ca can thiệp
                 ca = hp.func_hocphi_giam_ca()
                 # tổng giảm
-                hocphi = hp.hocphi
-                hocphi_giam = (bantru + ca) - hp.tien_duoctru
                 tien_giam = ((bantru/100)* tyle_bantru) +((ca/100)* tyle_ca)
                 hp.hocphi_giam = tien_giam
                 hp._compute_hocphi()
@@ -287,9 +285,9 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 bantru = hp.func_hocphi_giam_bantru()
                 # tong giảm ca can thiệp
                 ca = hp.func_hocphi_giam_ca()
-                tien_duoctru = hp.tien_duoctru
-                hocphi = (bantru + ca) - tien_duoctru
-                sotien_giam = (hocphi / 100) * hp.tyle_giamhocphi
+                #tien_duoctru = hp.tien_duoctru
+
+                sotien_giam = ((bantru + ca) / 100) * hp.tyle_giamhocphi
                 hp.hocphi_giam = sotien_giam
                 hp._compute_hocphi()
 
