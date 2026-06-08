@@ -8,7 +8,7 @@ class KeHoach2LinhVuc(models.Model):
     _order = 'id desc'
 
     sequence = fields.Integer(string="STT", default=1)
-    kehoach_id = fields.Many2one("ekids.kehoach", string="Thuộc kế hoạch nào",
+    ketluan_id = fields.Many2one("ekids.kehoach_ketluan", string="Thuộc kết luận nào",
                                  required=True,
                                  ondelete="cascade")
 

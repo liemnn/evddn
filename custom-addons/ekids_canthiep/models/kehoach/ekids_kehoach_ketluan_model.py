@@ -1,10 +1,39 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import kehoach_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
 
 
-class KeHoachKetLuan(models.Model):
-    _inherit = 'ekids.kehoach'
 
+
+class KetLuan(models.Model):
+    _name = 'ekids.kehoach_ketluan'
+    _description = 'Kết luận Đánh giá & Định hướng Kế hoạch'
+    _order = 'id desc'
+
+    coso_id = fields.Many2one("ekids.coso", related="hocsinh_id.coso_id", string="Cơ sở", required=True,
+                              ondelete="restrict")
+    name = fields.Char(string="Kết luận lần", required=True, compute="_compute_name")
+    index = fields.Integer(string="STT", default=1, compute="_compute_index")
+    # 1. THÔNG TIN HỌC SINH
+    hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True, tracking=True)  # [cite: 2]
+
+    trangthai = fields.Selection([
+        (kehoach_util.TRANGTHAI_DOI_LAP_KEHOACH, "Kết luận đợi lập kế hoạch"),
+        (kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH, "Đang lập kế hoạch"),
+        (kehoach_util.TRANGTHAI_DANG_CANTHIEP, "Đang can thiệp"),
+        (kehoach_util.TRANGTHAI_HET_HIEULUC, "Kế hoạch hết hiệu lực"),
+
+    ], string="Trạng thái", default=kehoach_util.TRANGTHAI_DOI_LAP_KEHOACH)
 
     dm_roiloan_ids = fields.Many2many(comodel_name="ekids.ct_dm_roiloan"
                                       , relation="ekids_kehoach_ketluan2dm_roiloan_rel"
@@ -37,7 +66,7 @@ class KeHoachKetLuan(models.Model):
     # 5. BẢNG CHI TIẾT ĐỘ TUỔI PHÁT TRIỂN
     kehoach_linhvuc_ids = fields.One2many(
         'ekids.kehoach_linhvuc',
-        'kehoach_id',
+        'ketluan_id',
         string="10.	Đánh giá lên chương trình"
     )  #
     gv_danhgia = fields.Char(string="Chuyên gia đánh giá")
@@ -54,4 +83,12 @@ class KeHoachKetLuan(models.Model):
     gv_canthiep_id = fields.Many2one('ekids.giaovien'
                                        , string="Giáo viên [Can thiệp]", required=True)
 
+    def _compute_name(self):
+        for record in self:
+            record.name = string_util.date2string(record.ngay_danhgia) +"-"+ record.gv_danhgia
 
+    def _compute_index(self):
+        index = len(self)
+        for record in self:
+            record.index = index
+            index -= 1

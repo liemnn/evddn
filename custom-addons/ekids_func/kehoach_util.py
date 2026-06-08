@@ -53,7 +53,7 @@ def func_get_ids_hocsinh_theo_vaitro(self):
         domain = expression.OR([domain_lap, domain_duyet, domain_canthiep])
 
         # 3. Tìm kiếm
-        kehoachs = self.env['ekids.kehoach'].search(domain)
+        kehoachs = self.env['ekids.kehoach_ketluan'].search(domain)
         if kehoachs:
             hocsinh_ids=[]
             for kh in kehoachs:

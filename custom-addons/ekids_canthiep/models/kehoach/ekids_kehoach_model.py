@@ -28,7 +28,13 @@ class KeHoach(models.Model):
     name = fields.Char(string="Mã phiếu", required=True, compute="_compute_name")
     index = fields.Integer(string="STT", default=1, compute="_compute_index")
     # 1. THÔNG TIN HỌC SINH
-    hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True, tracking=True)  # [cite: 2]
+    hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True)  # [cite: 2]
+    ketluan_id = fields.Many2one('ekids.kehoach_ketluan', string="Kết luận", required=True)  # [cite: 2]
+
+
+    kehoach_linhvuc_ids = fields.One2many("ekids.kehoach_linhvuc",
+                                  compute="_compute_kehoach_linhvuc",
+                                  string="Lĩnh vực và độ tuổi thuộc kết luận")
 
 
     trangthai = fields.Selection([
@@ -67,6 +73,12 @@ class KeHoach(models.Model):
                                    , string="Các mục tiêu cho kế hoạch")
 
     desc = fields.Html(string="Ý kiến phê duyệt")
+
+
+    def _compute_kehoach_linhvuc(self):
+        for record in self:
+            record.kehoach_linhvuc_ids = record.ketluan_id.kehoach_linhvuc_ids
+
 
     def _compute_index(self):
         index = len(self)
