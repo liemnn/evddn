@@ -28,12 +28,11 @@ class KetLuan(models.Model):
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True, tracking=True)  # [cite: 2]
 
     trangthai = fields.Selection([
-        (kehoach_util.TRANGTHAI_DOI_LAP_KEHOACH, "Kết luận đợi lập kế hoạch"),
-        (kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH, "Đang lập kế hoạch"),
-        (kehoach_util.TRANGTHAI_DANG_CANTHIEP, "Đang can thiệp"),
-        (kehoach_util.TRANGTHAI_HET_HIEULUC, "Kế hoạch hết hiệu lực"),
+        (kehoach_util.KETLUAN_DANG_TAO, "Đang lâp"),
+        (kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH, "Cho phép lập [Kế hoạch]"),
+        (kehoach_util.KETLUAN_HET_HIEULUC, "Hết hiệu lực lập [Kế hoạch]"),
 
-    ], string="Trạng thái", default=kehoach_util.TRANGTHAI_DOI_LAP_KEHOACH)
+    ], string="Trạng thái", default=kehoach_util.KETLUAN_DANG_TAO)
 
     dm_roiloan_ids = fields.Many2many(comodel_name="ekids.ct_dm_roiloan"
                                       , relation="ekids_kehoach_ketluan2dm_roiloan_rel"

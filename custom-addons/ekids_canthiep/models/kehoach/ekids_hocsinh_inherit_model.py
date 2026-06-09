@@ -17,6 +17,18 @@ except ImportError as e:
 class HocSinhInherit(models.Model):
     _inherit = "ekids.hocsinh"
 
+    trangthai_ketluan = fields.Selection([
+        (kehoach_util.HOCSINH_CHUA_CO_KEHOACH, "Chưa có [Kết luận] đánh giá"),
+        (kehoach_util.HOCSINH_DOI_LAP_KEHOACH, "Đợi lập kế hoạch"),
+        (kehoach_util.HOCSINH_DANG_LAP_KEHOACH, "Đang lập kế hoạch"),
+        (kehoach_util.HOCSINH_DANG_CANTHIEP, "Đang can thiệp"),
+        (kehoach_util.HOCSINH_HET_HIEULUC, "Hết hiệu lực"),
+        (kehoach_util.HOCSINH_DA_DUYET, "Đã duyệt đợi ngày can thiệp"),
+        (kehoach_util.HOCSINH_DOI_DUYET, "Kế hoạch đợi duyệt"),
+        (kehoach_util.HOCSINH_CAN_DIEUCHINH, "Kế hoạch cần chỉnh sửa"),
+
+    ], string="Trạng thái kế hoạch", compute="_compute_trangthai_ketluan")
+
     trangthai_kehoach = fields.Selection([
         (kehoach_util.HOCSINH_CHUA_CO_KEHOACH, "Chưa có [Kết luận] đánh giá"),
         (kehoach_util.HOCSINH_DOI_LAP_KEHOACH, "Đợi lập kế hoạch"),

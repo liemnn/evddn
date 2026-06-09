@@ -38,17 +38,17 @@ class KeHoach(models.Model):
 
 
     trangthai = fields.Selection([
-        (kehoach_util.TRANGTHAI_DOI_LAP_KEHOACH, "Kết luận đợi lập kế hoạch"),
-        (kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH, "Đang lập kế hoạch"),
-        (kehoach_util.TRANGTHAI_DANG_CANTHIEP, "Đang can thiệp"),
-        (kehoach_util.TRANGTHAI_HET_HIEULUC, "Kế hoạch hết hiệu lực"),
+        (kehoach_util.KEHOACH_DANG_LAP, "Đang lập"),
+        (kehoach_util.KEHOACH_DANG_PHEDUYET, "Đợi duyệt"),
+        (kehoach_util.KEHOACH_DANG_CANTHIEP, "Đang can thiệp"),
+        (kehoach_util.KEHOACH_HET_HIEULUC, "Hết hiệu lực"),
 
 
-    ], string="Trạng thái",default=kehoach_util.TRANGTHAI_DOI_LAP_KEHOACH)
+    ], string="Trạng thái",default=kehoach_util.KEHOACH_DANG_LAP)
 
     trangthai_pheduyet = fields.Selection([
         (kehoach_util.PHEDUYET_DOI_DUYET, "Đợi phê duyệt"),
-        (kehoach_util.PHEDUYET_CAN_DIEUCHINH, "Cần điều chỉnh lại"),
+        (kehoach_util.PHEDUYET_CAN_DIEUCHINH, "Cần điều chỉnh"),
         (kehoach_util.PHEDUYET_DA_DUYET, "Đã được duyệt"),
 
 
