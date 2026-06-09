@@ -26,6 +26,21 @@ HOCSINH_DOI_DUYET="4"
 HOCSINH_CAN_DIEUCHINH="-3"
 
 
+def func_get_ketluan_hocsinh(self, hocsinh):
+    ketluan = self.env['ekids.kehoach_ketluan'].search([
+        ('hocsinh_id', '=', hocsinh.id),
+    ]
+        , order="ngay_danhgia desc, id desc", limit=1)
+    return ketluan
+
+
+def func_get_ketluan_hocsinh_trangthai(self, hocsinh, trangthai):
+    ketluan = self.env['ekids.kehoach_ketluan'].search([
+        ('hocsinh_id', '=', hocsinh.id),
+        ('trangthai', '=', trangthai),
+    ]
+        , order="ngay_danhgia desc, id desc", limit=1)
+    return ketluan
 
 def func_get_kehoach_hocsinh(self, hocsinh):
     kehoach = self.env['ekids.kehoach'].search([
@@ -33,6 +48,16 @@ def func_get_kehoach_hocsinh(self, hocsinh):
     ]
         , order="tu_ngay desc, id desc", limit=1)
     return kehoach
+
+
+def func_get_kehoach_hocsinh_trangthai(self, hocsinh, trangthai):
+    kehoach = self.env['ekids.kehoach'].search([
+        ('hocsinh_id', '=', hocsinh.id),
+        ('trangthai', '=', trangthai),
+    ]
+        , order="tu_ngay desc, id desc", limit=1)
+    return kehoach
+
 
 def func_get_ids_hocsinh_theo_vaitro(self):
     user = self.env.user

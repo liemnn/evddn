@@ -94,3 +94,24 @@ class KetLuan(models.Model):
 
     def action_lap_kehoach(self):
         return None
+
+    def create(self, vals):
+
+        analytic_lines = super().create(vals)
+        analytic_lines.move_line_id._update_analytic_distribution()
+        return analytic_lines
+
+    def write(self, vals):
+        affected_move_lines = self.move_line_id
+        res = super().write(vals)
+        if any(field in vals for field in ['amount', 'move_line_id'] + self._get_plan_fnames()):
+            if 'move_line_id' in vals:
+                affected_move_lines |= self.move_line_id
+            affected_move_lines._update_analytic_distribution()
+        return res
+
+    def unlink(self):
+        affected_move_lines = self.move_line_id
+        res = super().unlink()
+        affected_move_lines._update_analytic_distribution()
+        return res

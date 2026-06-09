@@ -66,7 +66,7 @@ class HocSinhInherit(models.Model):
             is_taomoi = True
 
         for hs in self:
-            ketluan_moi = self.func_get_ketluan_hocsinh(hs)
+            ketluan_moi = kehoach_util.func_get_ketluan_hocsinh(self,hs)
             if ketluan_moi.trangthai == kehoach_util.KETLUAN_DANG_TAO:
                 hs.is_tao_ketluan = False
             else:
@@ -79,7 +79,7 @@ class HocSinhInherit(models.Model):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
         for hs in self:
-            ketluan = self.func_get_ketluan_hocsinh_trangthai(hs,kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH)
+            ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,hs,kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH)
             if not ketluan:
                 hs.is_lap_kehoach = False
             else:
@@ -96,7 +96,7 @@ class HocSinhInherit(models.Model):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
         for hs in self:
-            kehoach = self.func_get_kehoach_hocsinh_trangthai(hs,kehoach_util.KEHOACH_DANG_PHEDUYET)
+            kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs,kehoach_util.KEHOACH_DANG_PHEDUYET)
             if not kehoach:
                 hs.is_kiemduyet = False
             else:
@@ -126,7 +126,7 @@ class HocSinhInherit(models.Model):
             # để tránh lỗi lọt điều kiện không gán dữ liệu của Odoo Compute
             hs.is_canthiep = False
 
-            kehoach = self.func_get_kehoach_hocsinh_trangthai(hs, kehoach_util.KEHOACH_DANG_CANTHIEP)
+            kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs, kehoach_util.KEHOACH_DANG_CANTHIEP)
 
             if kehoach:
                 # --- ÉP KIỂU NGÀY AN TOÀN TUYỆT ĐỐI (DATE VS DATETIME) ---
@@ -153,27 +153,14 @@ class HocSinhInherit(models.Model):
     def _compute_trangthai_ketluan(self):
         today =date.today()
         for hs in self:
-            ketluan = self.func_get_ketluan_hocsinh(hs)
+            ketluan = kehoach_util.func_get_ketluan_hocsinh(self,hs)
 
             if not ketluan:
                 hs.trangthai_ketluan= kehoach_util.KETLUAN_CHUA_CO
             else:
                 hs.trangthai_ketluan =ketluan.trangthai
 
-    def func_get_ketluan_hocsinh(self, hocsinh):
-        ketluan = self.env['ekids.kehoach_ketluan'].search([
-                            ('hocsinh_id', '=', hocsinh.id),
-                            ]
-                    , order="ngay_danhgia desc, id desc",limit=1)
-        return ketluan
 
-    def func_get_ketluan_hocsinh_trangthai(self, hocsinh,trangthai):
-        ketluan = self.env['ekids.kehoach_ketluan'].search([
-            ('hocsinh_id', '=', hocsinh.id),
-            ('trangthai', '=', trangthai),
-        ]
-            , order="ngay_danhgia desc, id desc", limit=1)
-        return ketluan
 
 
 
@@ -182,7 +169,7 @@ class HocSinhInherit(models.Model):
         today = date.today()
 
         for hs in self:
-            kehoach = self.func_get_kehoach_hocsinh(hs)
+            kehoach = kehoach_util.func_get_kehoach_hocsinh(self,hs)
             trangthai = ""
 
             if not kehoach:
@@ -222,20 +209,7 @@ class HocSinhInherit(models.Model):
             hs.trangthai_kehoach = trangthai
 
 
-    def func_get_kehoach_hocsinh(self, hocsinh):
-        kehoach = self.env['ekids.kehoach'].search([
-                            ('hocsinh_id', '=', hocsinh.id),
-                            ]
-                    , order="tu_ngay desc, id desc",limit=1)
-        return kehoach
 
-    def func_get_kehoach_hocsinh_trangthai(self, hocsinh,trangthai):
-        kehoach = self.env['ekids.kehoach'].search([
-                            ('hocsinh_id', '=', hocsinh.id),
-                            ('trangthai', '=', trangthai),
-                            ]
-                    , order="tu_ngay desc, id desc",limit=1)
-        return kehoach
 
 
     def action_taomoi_ketluan(self):
