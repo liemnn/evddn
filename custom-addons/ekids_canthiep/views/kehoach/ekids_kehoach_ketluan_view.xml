@@ -1,12 +1,307 @@
 <odoo>
   <data>
 
+    <record id="ekids_canthiep.kehoach_ketluan_kanban" model="ir.ui.view">
+        <field name="name">ekids.kehoach_ketluan.kanban</field>
+        <field name="model">ekids.kehoach_ketluan</field>
+        <field name="arch" type="xml">
+            <kanban default_order="id desc" sample="1" class="saas_four_zone_kanban">
+
+                <field name="id"/>
+                <field name="index"/>
+                <field name="name"/>
+                <field name="hocsinh_id"/>
+                <field name="ngay_danhgia"/>
+                <field name="gv_danhgia"/>
+                <field name="dm_roiloan_ids"/>
+                <field name="mucdo"/>
+                <field name="lieuluong"/>
+                <field name="lichhen"/>
+                <field name="gv_lapkehoach_id"/>
+                <field name="gv_kiemduyet_id"/>
+                <field name="gv_canthiep_id"/>
+                <field name="kehoach_linhvuc_ids"/>
+                <field name="trangthai"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+
+                        <style>
+                            .saas_four_zone_kanban .o_kanban_record {
+                                width: 100% !important;
+                                flex: 0 0 100% !important;
+                                margin: 0 0 12px 0 !important;
+                                padding: 0 !important;
+                                background: transparent !important;
+                                border: none !important;
+                            }
+
+                            /* CẤU HÌNH GIAO DIỆN DI ĐỘNG (MOBILE) */
+                            .four_zone_card {
+                                background: #FFFFFF;
+                                border: 1px solid #E4E7EC;
+                                border-radius: 16px;
+                                box-shadow: 0 2px 6px rgba(16, 24, 40, 0.02);
+                                transition: all 0.2s ease-in-out;
+                                flex-direction: column !important;
+                                align-items: stretch !important;
+                            }
+
+                            .zone_responsive_block {
+                                width: 100% !important;
+                                min-width: 100% !important;
+                                padding-left: 0 !important;
+                                border-left: none !important;
+                                border-top: 1px dashed #EAECF0;
+                                padding-top: 12px;
+                                margin-top: 4px;
+                            }
+                            .zone-block-1 {
+                                border-top: none !important;
+                                padding-top: 0 !important;
+                                margin-top: 0 !important;
+                            }
+
+                            .index-circle-container {
+                                align-self: flex-start;
+                                margin-bottom: 4px;
+                            }
+
+                            .zone_title {
+                                font-size: 11px !important;
+                                font-weight: 700 !important;
+                                text-uppercase: true;
+                                letter-spacing: 0.5px;
+                                color: #94A3B8;
+                                margin-bottom: 6px;
+                            }
+
+                            .mini_badge_teacher {
+                                display: inline-flex;
+                                align-items: center;
+                                padding: 3px 6px;
+                                background: #F8FAFC;
+                                border: 1px solid #E2E8F0;
+                                border-radius: 5px;
+                                font-size: 12px;
+                                color: #334155;
+                            }
+
+                            /* Nút Lập kế hoạch chính màu xanh dương trẻ em */
+                            .btn_create_plan_action {
+                                background-color: #2563EB !important;
+                                color: #FFFFFF !important;
+                                font-weight: 700 !important;
+                                font-size: 12.5px !important;
+                                padding: 6px 12px !important;
+                                border-radius: 8px !important;
+                                border: none !important;
+                                box-shadow: 0 2px 4px rgba(37, 99, 235, 0.15) !important;
+                                transition: all 0.15s ease;
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                gap: 4px;
+                            }
+                            .btn_create_plan_action:hover {
+                                background-color: #1D4ED8 !important;
+                                box-shadow: 0 4px 8px rgba(37, 99, 235, 0.25) !important;
+                            }
+
+                            /* CẤU HÌNH DÀN NGANG MÁY TÍNH (DESKTOP MÀN HÌNH RỘNG) */
+                            @media (min-width: 1200px) {
+                                .four_zone_card {
+                                    flex-direction: row !important;
+                                    align-items: center !important;
+                                }
+                                .four_zone_card:hover {
+                                    border-color: #3B82F6 !important;
+                                    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.05) !important;
+                                }
+                                .index-circle-container {
+                                    align-self: auto !important;
+                                    margin-bottom: 0 !important;
+                                }
+                                .zone_responsive_block {
+                                    border-top: none !important;
+                                    padding-top: 0 !important;
+                                    margin-top: 0 !important;
+                                }
+
+                                /* Phân bổ tỷ lệ không gian 4 vùng đối xứng hoàn hảo */
+                                .zone-block-1 {
+                                    flex: 1.4 !important;
+                                    min-width: 280px !important;
+                                }
+                                .zone-block-2 {
+                                    flex: 1.1 !important;
+                                    min-width: 210px !important;
+                                    border-left: 1px solid #EAECF0 !important;
+                                    padding-left: 14px !important;
+                                }
+                                .zone-block-3 {
+                                    flex: 1.3 !important;
+                                    min-width: 250px !important;
+                                    border-left: 1px solid #EAECF0 !important;
+                                    padding-left: 14px !important;
+                                }
+                                .zone-block-4 {
+                                    flex: 1 !important;
+                                    min-width: 190px !important;
+                                    border-left: 1px solid #EAECF0 !important;
+                                    padding-left: 14px !important;
+                                }
+                            }
+                        </style>
+
+
+                        <div class="four_zone_card d-flex p-3 gap-2">
+
+                            <div class="index-circle-container d-flex align-items-center justify-content-center font-monospace text-white"
+                                 style="width: 44px;
+                                        height: 44px;
+                                        border-radius: 50%;
+                                        background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%);
+                                        font-size: 19px;
+                                        font-weight: 950;
+                                        flex-shrink: 0;
+                                        margin-right: 8px;
+                                        border: 2px solid #FFFFFF;
+                                        box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2) !important;">
+                                <field name="index"/>
+                            </div>
+
+                            <div class="zone_responsive_block zone-block-1 d-flex flex-column justify-content-between" style="min-height: 75px;">
+                                <div>
+                                    <div class="zone_title">
+                                        <i class="fa fa-user-circle text-primary"></i>
+                                        CHUẨN ĐOÁN
+                                    </div>
+                                    <div class="fw-bold text-dark" style="font-size: 14.5px; font-weight: 800;">
+                                        <field name="hocsinh_id"/>
+                                    </div>
+                                    <div class="text-muted mt-0.5" style="font-size: 12px; line-height: 1.4;">
+                                        <div><i class="fa fa-calendar-check-o me-1"></i>
+                                            Ngày đánh giá: <b class="text-slate-700"><field name="ngay_danhgia"/></b></div>
+                                        <div><i class="fa fa-user-md me-1"></i>
+                                            Chuyên gia: <b class="text-slate-700"><field name="gv_danhgia"/></b></div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-wrap">
+                                    <field name="dm_roiloan_ids" widget="many2many_tags"/>
+                                </div>
+                            </div>
+
+                            <div class="zone_responsive_block zone-block-2 d-flex flex-column justify-content-start gap-1" style="min-height: 75px;">
+                                <div class="zone_title"><i class="fa fa-sliders text-warning"></i> ĐỊNH HƯỚNG</div>
+
+                                <div style="font-size: 12.5px;">
+                                    <span class="text-muted">Mức độ:</span>
+
+                                        <span class="badge" style="background-color: #E0F2FE; color: #0369A1; font-weight:700;">
+                                           <field name="mucdo"/>
+
+                                        </span>
+                                </div>
+
+                                <div class="text-dark font-weight-bold" style="font-size: 12.5px; font-weight: 700;">
+                                    <span class="text-muted font-weight-normal">
+                                        Liều lượng:
+                                    </span>
+                                    <field name="lieuluong"/>
+                                </div>
+
+                                <div style="font-size: 12.5px;">
+                                    <span class="text-muted">Lịch hẹn:</span>
+
+                                        <span class="text-danger font-weight-bold" style="font-weight: 700;">
+                                            <i class="fa fa-clock-o"></i>
+                                            <field name="lichhen"/>
+                                        </span>
+
+                                </div>
+                            </div>
+
+                            <div class="zone_responsive_block zone-block-3 d-flex flex-column justify-content-start gap-1.5" style="min-height: 75px;">
+                                <div class="zone_title"><i class="fa fa-users text-info"></i>PHÂN CÔNG</div>
+
+                                <div>
+                                    <span class="text-muted" style="font-size: 11px; display:inline-block; width:65px;">
+                                        Kế hoạch:
+                                    </span>
+                                    <div class="mini_badge_teacher font-weight-bold" style="font-weight: 700;">
+                                        <i class="fa fa-pencil text-warning me-1"></i>
+                                        <field name="gv_lapkehoach_id"/>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <span class="text-muted" style="font-size: 11px; display:inline-block; width:65px;">
+                                        Kiểm duyệt:
+                                    </span>
+                                    <div class="mini_badge_teacher font-weight-bold" style="font-weight: 700;">
+                                        <i class="fa fa-shield text-info me-1"></i>
+                                        <field name="gv_kiemduyet_id"/>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <span class="text-muted" style="font-size: 11px; display:inline-block; width:65px;">
+                                        Can thiệp
+                                    </span>
+                                    <div class="mini_badge_teacher font-weight-bold" style="background: #FFF7ED; border-color: #FFEDD5; color: #C2410C; font-weight: 700;">
+                                        <i class="fa fa-graduation-cap text-orange me-1"></i>
+                                        <field name="gv_canthiep_id"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="zone_responsive_block zone-block-4 d-flex flex-column justify-content-between gap-2" style="min-height: 75px;">
+                                <div>
+
+
+                                    <div class="mt-1">
+                                        <span class="badge shadow-sm"
+                                              style="background-color: #F0FDF4;
+                                                     color: #16A34A;
+                                                     border: 1px solid #BBF7D0;
+                                                     font-size: 12px;
+                                                     padding: 4px 10px;
+                                                     font-weight: 800;
+                                                     border-radius: 6px;">
+
+                                            <field name="trangthai"/>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2">
+                                    <button type="object"
+                                            name="action_lap_kehoach"
+                                            class="btn_create_plan_action w-100 shadow-sm"
+                                            onclick="event.stopPropagation();">
+                                        <i class="fa fa-calendar-plus-o"></i> Lập kế hoạch
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="ekids_canthiep.kehoach_ketluan_form" model="ir.ui.view">
         <field name="name">Phiếu Kết luận - Premium UI Professional</field>
         <field name="model">ekids.kehoach_ketluan</field>
         <field name="arch" type="xml">
             <form class="o_premium_layout">
+                <header>
+                    <field name="trangthai" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': true}"/>
+                </header>
                 <sheet>
+
                     <!-- Các trường ẩn bổ trợ hệ thống -->
                     <field name="coso_id" invisible="1"/>
 
@@ -14,12 +309,12 @@
                     <div class="o_premium_header d-flex align-items-center justify-content-between p-3 mb-4 bg-white rounded-3 border shadow-sm">
                         <div class="d-flex align-items-center gap-3">
                             <div class="avatar_circle bg-primary text-white d-flex align-items-center justify-content-center rounded-circle" style="width: 45px; height: 45px; font-weight: 700; font-size: 16px;">
-                                <i class="fa fa-user"></i>
+                                <field name="index"/>
                             </div>
                             <div class="student_info">
                                 <div class="d-flex align-items-center gap-2">
-                                    <span class="badge bg-light text-primary border font-weight-bold" style="padding: 4px 8px; font-size: 11px;">HỌC SINH:</span>
-                                    <field name="hocsinh_id" class="font-weight-bold text-dark m-0" style="font-size: 18px;"/>
+                                    <span class="badge bg-light text-primary" style="padding: 4px 8px; font-size: 11px;">HỌC SINH:</span>
+                                    <field name="hocsinh_id" readonly="true" class="font-weight-bold text-dark m-0" style="font-size: 18px;"/>
                                 </div>
                                 <div class="d-flex align-items-center gap-3 mt-1 text-muted" style="font-size: 13px;">
                                     <span><i class="fa fa-calendar-minus-o me-1"></i>Thời gian đánh giá: <field name="ngay_danhgia" class="d-inline-block"/></span>
@@ -126,13 +421,31 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4">
-                                <group col="12" class="p-0 m-0"><field name="gv_lapkehoach_id" string="lập kế hoạch" options="{'no_create': True}" colspan="12"/></group>
+                                <group col="12" class="p-0 m-0">
+                                    <field name="gv_lapkehoach_id"
+                                               string="lập kế hoạch"
+                                               options="{'no_create': False}"
+                                               domain="[('coso_id','=',coso_id)]"
+                                               colspan="12"/>
+                                </group>
                             </div>
                             <div class="col-md-4 border-start-md">
-                                <group col="12" class="p-0 m-0"><field name="gv_kiemduyet_id" string="Phê duyệt" options="{'no_create': True}" colspan="12"/></group>
+                                <group col="12" class="p-0 m-0">
+                                    <field name="gv_kiemduyet_id"
+                                           string="Phê duyệt"
+                                           options="{'no_create': False}"
+                                           domain="[('coso_id','=',coso_id)]"
+                                           colspan="12"/>
+                                </group>
                             </div>
                             <div class="col-md-4 border-start-md">
-                                <group col="12" class="p-0 m-0"><field name="gv_canthiep_id" string="Can thiệp" options="{'no_create': True}" colspan="12"/></group>
+                                <group col="12" class="p-0 m-0">
+                                    <field name="gv_canthiep_id"
+                                           string="Can thiệp"
+                                           options="{'no_create': False}"
+                                           domain="[('coso_id','=',coso_id)]"
+                                           colspan="12"/>
+                                </group>
                             </div>
                         </div>
                     </div>

@@ -28,7 +28,7 @@ class KetLuan(models.Model):
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True, tracking=True)  # [cite: 2]
 
     trangthai = fields.Selection([
-        (kehoach_util.KETLUAN_DANG_TAO, "Đang lâp"),
+        (kehoach_util.KETLUAN_DANG_TAO, "Đang soạn thảo"),
         (kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH, "Cho phép lập [Kế hoạch]"),
         (kehoach_util.KETLUAN_HET_HIEULUC, "Hết hiệu lực lập [Kế hoạch]"),
 
@@ -91,3 +91,6 @@ class KetLuan(models.Model):
         for record in self:
             record.index = index
             index -= 1
+
+    def action_lap_kehoach(self):
+        return None

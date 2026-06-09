@@ -1,5 +1,7 @@
 from odoo import models, fields, api, exceptions
-from datetime import  timedelta,date
+from datetime import  timedelta,date,datetime
+from odoo.exceptions import UserError
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -18,20 +20,16 @@ class HocSinhInherit(models.Model):
     _inherit = "ekids.hocsinh"
 
     trangthai_ketluan = fields.Selection([
-        (kehoach_util.HOCSINH_CHUA_CO_KEHOACH, "Chưa có [Kết luận] đánh giá"),
-        (kehoach_util.HOCSINH_DOI_LAP_KEHOACH, "Đợi lập kế hoạch"),
-        (kehoach_util.HOCSINH_DANG_LAP_KEHOACH, "Đang lập kế hoạch"),
-        (kehoach_util.HOCSINH_DANG_CANTHIEP, "Đang can thiệp"),
-        (kehoach_util.HOCSINH_HET_HIEULUC, "Hết hiệu lực"),
-        (kehoach_util.HOCSINH_DA_DUYET, "Đã duyệt đợi ngày can thiệp"),
-        (kehoach_util.HOCSINH_DOI_DUYET, "Kế hoạch đợi duyệt"),
-        (kehoach_util.HOCSINH_CAN_DIEUCHINH, "Kế hoạch cần chỉnh sửa"),
+        (kehoach_util.KETLUAN_CHUA_CO, "Chưa có"),
+        (kehoach_util.KETLUAN_DANG_TAO, "Đang soạn thảo"),
+        (kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH, "Cho phép lập [Kế hoạch]"),
+        (kehoach_util.KETLUAN_HET_HIEULUC, "Hết hiệu lực lập [Kế hoạch]"),
 
-    ], string="Trạng thái kế hoạch", compute="_compute_trangthai_ketluan")
+    ],compute="_compute_trangthai_ketluan"
+    ,string="Trạng thái")
 
     trangthai_kehoach = fields.Selection([
-        (kehoach_util.HOCSINH_CHUA_CO_KEHOACH, "Chưa có [Kết luận] đánh giá"),
-        (kehoach_util.HOCSINH_DOI_LAP_KEHOACH, "Đợi lập kế hoạch"),
+        (kehoach_util.HOCSINH_CHUA_CO_KEHOACH, "Không thể tạo"),
         (kehoach_util.HOCSINH_DANG_LAP_KEHOACH, "Đang lập kế hoạch"),
         (kehoach_util.HOCSINH_DANG_CANTHIEP, "Đang can thiệp"),
         (kehoach_util.HOCSINH_HET_HIEULUC, "Hết hiệu lực"),
@@ -52,40 +50,176 @@ class HocSinhInherit(models.Model):
              "hocsinh_id", string="Các kế hoạch can thệp của học sinh")
 
 
-    def _compute_trangthai_kehoach(self):
+    is_tao_ketluan = fields.Boolean(compute="_compute_is_tao_ketluan")
+    is_lap_kehoach = fields.Boolean(compute="_compute_is_lap_kehoach")
+    is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
+    is_canthiep = fields.Boolean(compute="_compute_is_canthiep")
+
+
+    def _compute_is_tao_ketluan(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_role_ketluan = user.has_group('ekids_core.ketluan')
+
+        is_taomoi= False
+        if is_admin or is_role_ketluan:
+            is_taomoi = True
+
+        for hs in self:
+            ketluan_moi = self.func_get_ketluan_hocsinh(hs)
+            if ketluan_moi.trangthai == kehoach_util.KETLUAN_DANG_TAO:
+                hs.is_tao_ketluan = False
+            else:
+                if is_taomoi == True :
+                    hs.is_tao_ketluan = True
+                else:
+                    hs.is_tao_ketluan = False
+
+    def _compute_is_lap_kehoach(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for hs in self:
+            ketluan = self.func_get_ketluan_hocsinh_trangthai(hs,kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH)
+            if not ketluan:
+                hs.is_lap_kehoach = False
+            else:
+                if is_admin:
+                    hs.is_lap_kehoach = True
+                else:
+                    giaovien = ketluan.gv_lapkehoach_id
+                    if giaovien.user_id.id == user.id:
+                        hs.is_lap_kehoach = True
+                    else:
+                        hs.is_lap_kehoach = False
+
+    def _compute_is_kiemduyet(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for hs in self:
+            kehoach = self.func_get_kehoach_hocsinh_trangthai(hs,kehoach_util.KEHOACH_DANG_PHEDUYET)
+            if not kehoach:
+                hs.is_kiemduyet = False
+            else:
+                if kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET:
+                    if is_admin:
+                        hs.is_kiemduyet = True
+                    else:
+                        giaovien = kehoach.ketluan_id.gv_kiemduyet_id
+                        if giaovien.user_id.id == user.id:
+                            hs.is_kiemduyet = True
+                        else:
+                            hs.is_kiemduyet = False
+                else:
+                    hs.is_kiemduyet = False
+
+
+
+
+
+    def _compute_is_canthiep(self):
+        today = date.today()
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
+        for hs in self:
+            # LƯU Ý SỐNG CÒN: Luôn gán mặc định False đầu vòng lặp cho từng học sinh
+            # để tránh lỗi lọt điều kiện không gán dữ liệu của Odoo Compute
+            hs.is_canthiep = False
+
+            kehoach = self.func_get_kehoach_hocsinh_trangthai(hs, kehoach_util.KEHOACH_DANG_CANTHIEP)
+
+            if kehoach:
+                # --- ÉP KIỂU NGÀY AN TOÀN TUYỆT ĐỐI (DATE VS DATETIME) ---
+                tu_ngay = kehoach.tu_ngay.date() if isinstance(kehoach.tu_ngay, datetime) else kehoach.tu_ngay
+                den_ngay = kehoach.den_ngay.date() if isinstance(kehoach.den_ngay, datetime) else kehoach.den_ngay
+
+
+                # Kiểm tra khoảng thời gian hiệu lực (Đảm bảo các ô ngày không bị False/Rỗng)
+                if tu_ngay and den_ngay and tu_ngay <= today <= den_ngay:
+
+                    # Phân quyền xử lý gán kết quả True
+                    if is_admin:
+                        hs.is_canthiep = True
+                    else:
+                        giaovien = kehoach.ketluan_id.gv_canthiep_id
+                        # Phòng thủ kiểm tra chắc chắn để tránh lỗi sập hệ thống (Null Pointer) khi chưa chọn giáo viên
+                        if giaovien and giaovien.user_id and giaovien.user_id.id == user.id:
+                            hs.is_canthiep = True
+
+
+
+
+
+    def _compute_trangthai_ketluan(self):
         today =date.today()
         for hs in self:
-            kh = self.func_get_kehoach_hocsinh(hs)
-            trangthai=""
-            if not kh:
-                trangthai= kehoach_util.HOCSINH_CHUA_CO_KEHOACH
+            ketluan = self.func_get_ketluan_hocsinh(hs)
+
+            if not ketluan:
+                hs.trangthai_ketluan= kehoach_util.KETLUAN_CHUA_CO
             else:
-                # có kế hoạch rồi
-                if kh.trangthai == kehoach_util.TRANGTHAI_DOI_LAP_KEHOACH:
-                    #doi lập kế hoạch
-                   trangthai= kehoach_util.HOCSINH_DOI_LAP_KEHOACH
-                elif kh.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH:
-                    # dang trong quá trình lap ke hoach
-                    if kh.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET:
+                hs.trangthai_ketluan =ketluan.trangthai
+
+    def func_get_ketluan_hocsinh(self, hocsinh):
+        ketluan = self.env['ekids.kehoach_ketluan'].search([
+                            ('hocsinh_id', '=', hocsinh.id),
+                            ]
+                    , order="ngay_danhgia desc, id desc",limit=1)
+        return ketluan
+
+    def func_get_ketluan_hocsinh_trangthai(self, hocsinh,trangthai):
+        ketluan = self.env['ekids.kehoach_ketluan'].search([
+            ('hocsinh_id', '=', hocsinh.id),
+            ('trangthai', '=', trangthai),
+        ]
+            , order="ngay_danhgia desc, id desc", limit=1)
+        return ketluan
+
+
+
+    def _compute_trangthai_kehoach(self):
+        # Lấy ngày hôm nay chuẩn dạng date
+        today = date.today()
+
+        for hs in self:
+            kehoach = self.func_get_kehoach_hocsinh(hs)
+            trangthai = ""
+
+            if not kehoach:
+                trangthai = kehoach_util.HOCSINH_CHUA_CO_KEHOACH
+            else:
+                # --- ÉP KIỂU NGÀY AN TOÀN TRÁNH LỖI DATETIME VS DATE ---
+                tu_ngay = kehoach.tu_ngay.date() if isinstance(kehoach.tu_ngay, datetime) else kehoach.tu_ngay
+                den_ngay = kehoach.den_ngay.date() if isinstance(kehoach.den_ngay, datetime) else kehoach.den_ngay
+
+                # Khối 1: Tính toán các trạng thái ban đầu và phê duyệt
+                if kehoach.trangthai == kehoach_util.KEHOACH_DANG_LAP:
+                    trangthai = kehoach_util.HOCSINH_DANG_LAP_KEHOACH
+
+                elif kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
+                    if kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET:
                         trangthai = kehoach_util.HOCSINH_DOI_DUYET
-                    elif kh.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH:
+                    elif kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH:
                         trangthai = kehoach_util.HOCSINH_CAN_DIEUCHINH
                     else:
-                       trangthai = kehoach_util.PHEDUYET_DA_DUYET
-                else:
-                    # dang can thiep
-                    if kh.trangthai== kehoach_util.TRANGTHAI_HET_HIEULUC:
-                        trangthai = kehoach_util.HOCSINH_HET_HIEULUC
-                    else:
+                        # Đã duyệt -> Chuyển trạng thái học sinh thành ĐÃ DUYỆT
+                        trangthai = kehoach_util.HOCSINH_DA_DUYET
+                        # Cập nhật trạng thái của chính bản ghi kế hoạch sang ĐANG CAN THIỆP
+                        kehoach.trangthai = kehoach_util.KEHOACH_DANG_CANTHIEP
 
-                        if kh.den_ngay < today:
-                            trangthai = kehoach_util.HOCSINH_HET_HIEULUC
-                        elif (today >= kh.tu_ngay
-                                and today <= kh.den_ngay):
-                            trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
-                        else:
-                            trangthai = kehoach_util.HOCSINH_DA_DUYET
-            hs.trangthai_kehoach =trangthai
+                # Khối 2: ĐƯA VÀO TRONG ELSE - Tính toán thời hạn riêng cho trạng thái ĐANG CAN THIỆP
+                # (Sử dụng luôn giá trị vừa cập nhật từ Khối 1 nếu có)
+                if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                    if den_ngay and den_ngay < today:
+                        trangthai = kehoach_util.HOCSINH_HET_HIEULUC
+                        kehoach.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
+                    elif tu_ngay and den_ngay and tu_ngay <= today <= den_ngay:
+                        trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
+                    else:
+                        trangthai = kehoach_util.HOCSINH_DA_DUYET
+
+            # Gán giá trị cuối cùng cho học sinh
+            hs.trangthai_kehoach = trangthai
 
 
     def func_get_kehoach_hocsinh(self, hocsinh):
@@ -95,17 +229,40 @@ class HocSinhInherit(models.Model):
                     , order="tu_ngay desc, id desc",limit=1)
         return kehoach
 
+    def func_get_kehoach_hocsinh_trangthai(self, hocsinh,trangthai):
+        kehoach = self.env['ekids.kehoach'].search([
+                            ('hocsinh_id', '=', hocsinh.id),
+                            ('trangthai', '=', trangthai),
+                            ]
+                    , order="tu_ngay desc, id desc",limit=1)
+        return kehoach
 
-    def action_khoitao_ketluan(self):
+
+    def action_taomoi_ketluan(self):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
         return {
             'type': 'ir.actions.act_window',
             'name': 'CHƯƠNG TRÌNH CAN THIỆP',
-            'res_model': 'ekids.kehoach',
+            'res_model': 'ekids.kehoach_ketluan',
             'view_mode': 'form',
             'views': [(form_view_id, 'form')],
             'target': 'current',
             'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'default_hocsinh_id': self.id
+            },
+        }
+
+    def action_xem_danhsach_ketluan(self):
+          return {
+            'type': 'ir.actions.act_window',
+            'name': 'KẾT LUẬN',
+            'res_model': 'ekids.kehoach_ketluan',
+            'view_mode': 'kanban,form',
+
+            'target': 'current',
+            'domain': [('hocsinh_id', '=', self.id)],
             'context': {
                 'default_coso_id': self.coso_id.id,
                 'default_hocsinh_id': self.id
