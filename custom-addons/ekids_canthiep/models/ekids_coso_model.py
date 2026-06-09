@@ -22,7 +22,7 @@ class CoSo(models.Model):
 
         return {
             'type': 'ir.actions.act_window',
-            'name': 'CHƯƠNG TRÌNH CAN THIỆP',
+            'name': 'CHƯƠNG TRÌNH',
             'res_model': 'ekids.ct_chuongtrinh',
             'view_mode': 'kanban,list,form',
             'target': 'current',
@@ -33,7 +33,7 @@ class CoSo(models.Model):
     def action_xem_danhmuc_roiloan(self):
         return {
             'type': 'ir.actions.act_window',
-            'name': 'CHƯƠNG TRÌNH CAN THIỆP',
+            'name': 'DANH MỤC RỐI LOẠN',
             'res_model': 'ekids.ct_dm_roiloan',
             'view_mode': 'list,kanban,form',
             'target': 'current',
@@ -49,7 +49,7 @@ class CoSo(models.Model):
             domain = [('coso_id', '=', self.id),('id','in',hocsinh_ids)]
         return {
             'type': 'ir.actions.act_window',
-            'name': 'CHƯƠNG TRÌNH CAN THIỆP',
+            'name': 'KẾ HOẠCH',
             'res_model': 'ekids.hocsinh',
             'view_mode': 'list',
             'views': [(list_view_id, 'list')],

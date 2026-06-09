@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError,UserError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -96,22 +96,24 @@ class KetLuan(models.Model):
         return None
 
     def create(self, vals):
-
-        analytic_lines = super().create(vals)
-        analytic_lines.move_line_id._update_analytic_distribution()
-        return analytic_lines
+        hocsinh_id = vals['hocsinh_id']
+        if hocsinh_id:
+            hocsinh = self.browse(hocsinh_id)
+            if hocsinh:
+                kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, hocsinh, kehoach_util.KETLUAN_DANG_TAO)
+                if kehoach:
+                    raise UserError("Đang có Kết luận ở trạng thái [Đang soạn thảo] bản không thể tạo kết luận mới")
+                else:
+                    ketluan = super().create(vals)
+                    return ketluan
+        raise UserError("Không thể tạo [Kết luận] mới vui lòng kiểm tra lại")
 
     def write(self, vals):
-        affected_move_lines = self.move_line_id
-        res = super().write(vals)
-        if any(field in vals for field in ['amount', 'move_line_id'] + self._get_plan_fnames()):
-            if 'move_line_id' in vals:
-                affected_move_lines |= self.move_line_id
-            affected_move_lines._update_analytic_distribution()
-        return res
+
+        ketluan = super().write(vals)
+
+        return ketluan
 
     def unlink(self):
-        affected_move_lines = self.move_line_id
-        res = super().unlink()
-        affected_move_lines._update_analytic_distribution()
-        return res
+        ketluan = super().unlink()
+        return ketluan
