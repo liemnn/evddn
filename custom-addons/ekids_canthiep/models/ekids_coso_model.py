@@ -49,7 +49,7 @@ class CoSo(models.Model):
             domain = [('coso_id', '=', self.id),('id','in',hocsinh_ids)]
         return {
             'type': 'ir.actions.act_window',
-            'name': 'KẾ HOẠCH',
+            'name': 'DANH SÁCH',
             'res_model': 'ekids.hocsinh',
             'view_mode': 'list',
             'views': [(list_view_id, 'list')],

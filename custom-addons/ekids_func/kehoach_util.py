@@ -30,32 +30,32 @@ def func_get_ketluan_hocsinh(self, hocsinh):
     ketluan = self.env['ekids.kehoach_ketluan'].search([
         ('hocsinh_id', '=', hocsinh.id),
     ]
-        , order="ngay_danhgia desc, id desc", limit=1)
+        , order="id desc", limit=1)
     return ketluan
 
 
-def func_get_ketluan_hocsinh_trangthai(self, hocsinh, trangthai):
+def func_get_ketluan_hocsinh_trangthai(self, hocsinh, trangthais):
     ketluan = self.env['ekids.kehoach_ketluan'].search([
         ('hocsinh_id', '=', hocsinh.id),
-        ('trangthai', '=', trangthai),
+        ('trangthai', 'in', trangthais),
     ]
-        , order="ngay_danhgia desc, id desc", limit=1)
+        , order="id desc", limit=1)
     return ketluan
 
 def func_get_kehoach_hocsinh(self, hocsinh):
     kehoach = self.env['ekids.kehoach'].search([
         ('hocsinh_id', '=', hocsinh.id),
     ]
-        , order="tu_ngay desc, id desc", limit=1)
+        , order="id desc", limit=1)
     return kehoach
 
 
-def func_get_kehoach_hocsinh_trangthai(self, hocsinh, trangthai):
+def func_get_kehoach_hocsinh_trangthai(self, hocsinh, trangthais):
     kehoach = self.env['ekids.kehoach'].search([
         ('hocsinh_id', '=', hocsinh.id),
-        ('trangthai', '=', trangthai),
+        ('trangthai', 'in', trangthais),
     ]
-        , order="tu_ngay desc, id desc", limit=1)
+        , order="id desc", limit=1)
     return kehoach
 
 

@@ -25,7 +25,6 @@ class KeHoach(models.Model):
 
     coso_id = fields.Many2one("ekids.coso", related="hocsinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
-    name = fields.Char(string="Mã phiếu", required=True, compute="_compute_name")
     index = fields.Integer(string="STT", default=1, compute="_compute_index")
     # 1. THÔNG TIN HỌC SINH
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True)  # [cite: 2]
@@ -110,9 +109,6 @@ class KeHoach(models.Model):
 
 
 
-    def _compute_name(self):
-        for kh in self:
-            kh.name = kh.hocsinh_id.name
 
     @api.model_create_multi
     def create(self, vals_list):

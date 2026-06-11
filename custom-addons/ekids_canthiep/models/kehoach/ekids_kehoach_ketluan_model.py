@@ -117,6 +117,7 @@ class KetLuan(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         # 1. Duyệt qua danh sách dữ liệu đầu vào (Hỗ trợ cả tạo đơn và tạo hàng loạt)
+
         for vals in vals_list:
             hocsinh_id = vals.get('hocsinh_id')
 
@@ -146,6 +147,9 @@ class KetLuan(models.Model):
     def write(self, vals):
         # 1. Chốt chặn an toàn: Chỉ tính toán nếu trường 'trangthai' thực sự nằm trong danh sách thay đổi
         if 'trangthai' in vals:
+            user = self.env.user
+            is_admin = user.has_group('base.group_system')
+
             trangthai_moi = vals.get('trangthai')
 
             # 2. Vòng lặp chống lỗi Multi-record (Expected singleton)
@@ -166,9 +170,10 @@ class KetLuan(models.Model):
 
                     # TH2: Phiếu đã [Hết hiệu lực] -> Cấm tuyệt đối không cho bẻ lái sang trạng thái khác
                     elif trangthai_cu == kehoach_util.KETLUAN_HET_HIEULUC:
-                        raise UserError(
-                            "Hồ sơ kết luận này đã hết hiệu lực, không thể thay đổi [Trạng thái]!"
-                        )
+                        if is_admin == False:
+                            raise UserError(
+                                "Hồ sơ kết luận này đã hết hiệu lực, không thể thay đổi [Trạng thái]!"
+                            )
 
         # 3. Gọi hàm super() ở cuối cùng sau khi đã vượt qua tất cả các tầng kiểm duyệt bảo mật
         return super(KetLuan, self).write(vals)

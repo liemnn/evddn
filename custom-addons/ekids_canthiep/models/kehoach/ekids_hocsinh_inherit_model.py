@@ -29,13 +29,13 @@ class HocSinhInherit(models.Model):
     ,string="Trạng thái")
 
     trangthai_kehoach = fields.Selection([
-        (kehoach_util.HOCSINH_CHUA_CO_KEHOACH, "Không thể tạo"),
-        (kehoach_util.HOCSINH_DANG_LAP_KEHOACH, "Đang lập kế hoạch"),
+        (kehoach_util.HOCSINH_CHUA_CO_KEHOACH, "Chưa có"),
+        (kehoach_util.HOCSINH_DANG_LAP_KEHOACH, "Đang lập"),
         (kehoach_util.HOCSINH_DANG_CANTHIEP, "Đang can thiệp"),
         (kehoach_util.HOCSINH_HET_HIEULUC, "Hết hiệu lực"),
-        (kehoach_util.HOCSINH_DA_DUYET, "Đã duyệt đợi ngày can thiệp"),
-        (kehoach_util.HOCSINH_DOI_DUYET, "Kế hoạch đợi duyệt"),
-        (kehoach_util.HOCSINH_CAN_DIEUCHINH, "Kế hoạch cần chỉnh sửa"),
+        (kehoach_util.HOCSINH_DA_DUYET, "Đã duyệt"),
+        (kehoach_util.HOCSINH_DOI_DUYET, "Đợi duyệt"),
+        (kehoach_util.HOCSINH_CAN_DIEUCHINH, "Cần chỉnh sửa"),
 
 
     ],string="Trạng thái kế hoạch",compute="_compute_trangthai_kehoach")
@@ -52,6 +52,7 @@ class HocSinhInherit(models.Model):
 
     is_tao_ketluan = fields.Boolean(compute="_compute_is_tao_ketluan")
     is_lap_kehoach = fields.Boolean(compute="_compute_is_lap_kehoach")
+    is_sua_kehoach = fields.Boolean(compute="_compute_is_sua_kehoach")
     is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
     is_canthiep = fields.Boolean(compute="_compute_is_canthiep")
 
@@ -66,31 +67,52 @@ class HocSinhInherit(models.Model):
             is_taomoi = True
 
         for hs in self:
-            ketluan_moi = kehoach_util.func_get_ketluan_hocsinh(self,hs)
-            if ketluan_moi.trangthai == kehoach_util.KETLUAN_DANG_TAO:
+            trangthais =[kehoach_util.KETLUAN_DANG_TAO]
+            ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,hs,trangthais)
+            if ketluan:
                 hs.is_tao_ketluan = False
+
             else:
-                if is_taomoi == True :
-                    hs.is_tao_ketluan = True
-                else:
-                    hs.is_tao_ketluan = False
+                hs.is_tao_ketluan = is_taomoi
+
 
     def _compute_is_lap_kehoach(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
         for hs in self:
-            ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,hs,kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH)
+            trangthais = [kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]
+            ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,hs,trangthais)
             if not ketluan:
                 hs.is_lap_kehoach = False
             else:
-                if is_admin:
-                    hs.is_lap_kehoach = True
-                else:
-                    giaovien = ketluan.gv_lapkehoach_id
-                    if giaovien.user_id.id == user.id:
+                trangthais =[kehoach_util.KEHOACH_DANG_LAP
+                                ,kehoach_util.KEHOACH_DANG_PHEDUYET]
+                kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs,trangthais)
+                if not kehoach:
+                    if is_admin:
                         hs.is_lap_kehoach = True
                     else:
-                        hs.is_lap_kehoach = False
+                        giaovien = ketluan.gv_lapkehoach_id
+                        if giaovien.user_id.id == user.id:
+                            hs.is_lap_kehoach = True
+                        else:
+                            hs.is_lap_kehoach = False
+                else:
+                    hs.is_lap_kehoach = False
+    def _compute_is_sua_kehoach(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for hs in self:
+            trangthais = [kehoach_util.KEHOACH_DANG_LAP]
+            kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs,trangthais)
+            if not kehoach:
+                hs.is_sua_kehoach = False
+            else:
+                giaovien = kehoach.ketluan_id.gv_lapkehoach_id
+                if (is_admin or giaovien.user_id.id == user.id):
+                    hs.is_sua_kehoach = True
+                else:
+                    hs.is_sua_kehoach = False
 
     def _compute_is_kiemduyet(self):
         user = self.env.user
@@ -245,23 +267,49 @@ class HocSinhInherit(models.Model):
 
     def action_lap_kehoach(self):
         form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
-        kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self)
-        if kehoach:
-            kehoach.trangthai = kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH
+        trangthais = [kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]
+        ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,self,trangthais)
+        if ketluan:
             return {
                 'type': 'ir.actions.act_window',
                 'name': 'LẬP KẾ HOẠCH',
                 'res_model': 'ekids.kehoach',
                 'view_mode': 'form',
-                'res_id': kehoach.id,
                 'views': [(form_view_id, 'form')],
                 'target': 'current',
                 'domain': [('coso_id', '=', self.coso_id.id)],
                 'context': {
                     'default_coso_id': self.coso_id.id,
+                    'default_ketluan_id': ketluan.id,
                     'default_hocsinh_id': self.id
                 },
             }
+
+    def action_sua_kehoach(self):
+        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        trangthais =[kehoach_util.KEHOACH_DANG_LAP]
+        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthais)
+        if kehoach:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'LẬP KẾ HOẠCH',
+                'res_model': 'ekids.kehoach',
+                'view_mode': 'form',
+                'views': [(form_view_id, 'form')],
+                'res_id': kehoach.id,
+                'target': 'current',
+                'domain': [('coso_id', '=', self.coso_id.id)],
+                'context': {
+                    'default_coso_id': self.coso_id.id,
+                    'default_kehoach_id': kehoach.id,
+                    'default_hocsinh_id': self.id
+                },
+            }
+        else:
+            raise UserError(
+                "Hiện đã có [Kế hoạch] đang lập không thể tạo kế hoạch mới !"
+            )
+
 
     def action_duyet_kehoach(self):
         form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
