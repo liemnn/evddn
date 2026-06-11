@@ -466,7 +466,12 @@
                                 </div>
 
                                 <div class="col-xl-4 col-12 d-flex flex-column align-items-end justify-content-center gap-2">
-                                    <button name="action_xem_ketluan" string="Xem kết luận đánh giá" type="object" icon="fa-file-text-o" class="btn_view_review" invisible="trangthai in ['0']"/>
+                                    <button name="action_xem_ketluan"
+                                            string="Xem kết luận đánh giá"
+                                            type="object" icon="fa-file-text-o"
+                                            class="btn_view_review"
+                                            />
+
                                     <div class="p-1.5 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
                                         <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
                                     </div>
@@ -538,17 +543,26 @@
                                         </kanban>
 
                                         <!-- KHỐI FORM POPUP SỬA CHI TIẾT SẼ ĐƯỢC GỌI KHI PHÍM MINI ĐƯỢC ẤN -->
-                                        <form string="Chi tiết Mục tiêu của Lĩnh vực">
+                                        <form string="Danh sách [Mục tiêu] thuộc lĩnh vực trong kế hoạch">
                                             <sheet class="p-4 bg-white">
                                                 <div class="p-3 mb-4 rounded-3" style="background-color: #F0F9FF; border: 1px solid #BAE6FD;">
-                                                    <span class="text-uppercase text-muted font-weight-bold d-block mb-1" style="font-size:10px; color:#0369A1 !important;">Lĩnh vực đang thiết lập mục tiêu</span>
-                                                    <h4 class="fw-black mb-0" style="color:#0369A1; font-weight:800;"><field name="linhvuc_id" options="{'no_open': True}"/> (<field name="tuoi_id"/>)</h4>
+                                                    <span class="text-uppercase text-muted font-weight-bold d-block mb-1" style="font-size:10px; color:#0369A1 !important;">
+                                                        Lĩnh vực đang thiết lập mục tiêu
+                                                    </span>
+                                                    <h4 class="fw-black mb-0" style="color:#0369A1; font-weight:800;">
+                                                        <field name="linhvuc_id" options="{'no_open': True}"/>
+
+                                                    </h4>
+                                                    <h4 class="fw-black mb-0" style="color:#0369A1; font-weight:800;">
+
+                                                        <field name="tuoi_id"/>
+                                                    </h4>
                                                 </div>
                                                 <h5 class="fw-bold text-secondary mb-2" style="font-size:13.5px;"><i class="fa fa-check-square-o text-success me-1.5"></i>DANH SÁCH CÁC MỤC TIÊU CHI TIẾT</h5>
                                                 <field name="muctieu_ids" nolabel="1">
                                                     <list editable="bottom">
-                                                        <field name="sequence" widget="handle"/>
-                                                        <field name="name" string="Nội dung bài học/mục tiêu can thiệp"/>
+                                                        <field name="sequence" widget="handle" string="TT"/>
+                                                        <field name="name" string="Mục tiêu"/>
                                                         <field name="chucnang" string="Hướng dẫn lập luận lâm sàng" optional="show"/>
                                                     </list>
                                                 </field>
@@ -562,7 +576,8 @@
                             <page string="Mô tả, ý kiến làm rõ" icon="fa-commenting-o">
                                 <div class="p-3 rounded-3 mt-2" style="border-left: 4px solid #7C3AED; background-color: #F8FAFC;">
                                     <h5 class="fw-extrabold mb-2 text-uppercase" style="color: #6D28D9; font-size: 13px; letter-spacing: 0.5px;">
-                                        <i class="fa fa-shield me-1.5"></i>Ghi chú phê duyệt từ Hội đồng chuyên môn
+                                        <i class="fa fa-shield me-1.5"></i>
+                                        Ghi chú nội dung
                                     </h5>
                                     <field name="desc" nolabel="1" placeholder="Nội dung góp ý, chỉnh sửa kế hoạch can thiệp từ quản lý chuyên môn..."/>
                                 </div>

@@ -161,10 +161,10 @@ class KeHoach(models.Model):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
         return {
             'type': 'ir.actions.act_window',
-            'name': 'CHƯƠNG TRÌNH CAN THIỆP',
-            'res_model': 'ekids.kehoach',
+            'name': 'XEM KẾT LUẬN',
+            'res_model': 'ekids.kehoach_ketluan',
             'view_mode': 'form',
-            'res_id': self.id,
+            'res_id': self.ketluan_id.id,
             'views': [(form_view_id, 'form')],
             'target': 'new',
             'domain': [('coso_id', '=', self.id)],
