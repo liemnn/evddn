@@ -170,7 +170,12 @@ class KeHoach(models.Model):
             'domain': [('coso_id', '=', self.id)],
             'context': {
                 'default_coso_id': self.coso_id.id,
-                'default_hocsinh_id': self.id
+                'default_hocsinh_id': self.id,
+                # 🌟 THÊM 3 DÒNG CHỐT CHẶN DƯỚI ĐÂY ĐỂ KHÓA ĐỂN FORM VIEW
+                'edit': False,  # 🚫 Tắt hoàn toàn tính năng và ẩn nút [Sửa]
+                'create': False,  # 🚫 Tắt tính năng và ẩn nút [Tạo mới]
+                'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
+
             },
         }
 

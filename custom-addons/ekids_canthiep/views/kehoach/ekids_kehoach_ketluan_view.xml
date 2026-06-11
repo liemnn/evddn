@@ -318,6 +318,7 @@
                                             <field name="hocsinh_id"
                                                    readonly="1"
                                                    force_save="1"
+                                                   options="{'no_open': True}"
                                                    class="font-weight-bold text-dark m-0" style="font-size: 18px;"/>
                                         </div>
                                         <div class="d-flex align-items-center gap-3 mt-1 text-muted" style="font-size: 13px;">
@@ -425,7 +426,7 @@
                                             <field name="gv_lapkehoach_id"
                                                    string="lập kế hoạch"
                                                    readonly="is_readonly"
-                                                   options="{'no_create': False}"
+                                                   options="{'no_open': True}"
                                                    domain="[('coso_id','=',coso_id)]"
                                                    colspan="12"/>
                                         </group>
@@ -435,7 +436,7 @@
                                             <field name="gv_kiemduyet_id"
                                                    string="Phê duyệt"
                                                    readonly="is_readonly"
-                                                   options="{'no_create': False}"
+                                                   options="{'no_open': True}"
                                                    domain="[('coso_id','=',coso_id)]"
                                                    colspan="12"/>
                                         </group>
@@ -445,7 +446,7 @@
                                             <field name="gv_canthiep_id"
                                                    string="Can thiệp"
                                                    readonly="is_readonly"
-                                                   options="{'no_create': False}"
+                                                   options="{'no_open': True}"
                                                    domain="[('coso_id','=',coso_id)]"
                                                    colspan="12"/>
                                         </group>
