@@ -82,6 +82,25 @@ class KetLuan(models.Model):
     gv_canthiep_id = fields.Many2one('ekids.giaovien'
                                        , string="Giáo viên [Can thiệp]", required=True)
 
+    is_readonly = fields.Boolean(compute="_compute_is_readonly")
+
+    kehoach_ids = fields.One2many("ekids.kehoach", "ketluan_id"
+                                , string="Các kế hoạch")
+
+    def _compute_is_readonly(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_role_ketluan = user.has_group('ekids_core.ketluan')
+
+        for record in self:
+            if record.trangthai not in ['0']:
+                record.is_readonly = True
+            else:
+                if is_admin or is_role_ketluan:
+                    record.is_readonly = False
+                else:
+                    record.is_readonly = True
+
     def _compute_name(self):
         for record in self:
             record.name = string_util.date2string(record.ngay_danhgia) +"-"+ record.gv_danhgia
@@ -95,25 +114,72 @@ class KetLuan(models.Model):
     def action_lap_kehoach(self):
         return None
 
-    def create(self, vals):
-        hocsinh_id = vals['hocsinh_id']
-        if hocsinh_id:
-            hocsinh = self.browse(hocsinh_id)
-            if hocsinh:
-                kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, hocsinh, kehoach_util.KETLUAN_DANG_TAO)
-                if kehoach:
-                    raise UserError("Đang có Kết luận ở trạng thái [Đang soạn thảo] bản không thể tạo kết luận mới")
-                else:
-                    ketluan = super().create(vals)
-                    return ketluan
-        raise UserError("Không thể tạo [Kết luận] mới vui lòng kiểm tra lại")
+    @api.model_create_multi
+    def create(self, vals_list):
+        # 1. Duyệt qua danh sách dữ liệu đầu vào (Hỗ trợ cả tạo đơn và tạo hàng loạt)
+        for vals in vals_list:
+            hocsinh_id = vals.get('hocsinh_id')
+
+            if hocsinh_id:
+                # 2. Sử dụng search_count để đếm nhanh số phiếu [Đang lập] của học sinh này dưới DB
+                # SELECT COUNT này quét thẳng vào index nên tốc độ xử lý siêu tốc (< 5ms)
+                draft_count = self.env['ekids.kehoach_ketluan'].search_count([
+                    ('hocsinh_id', '=', hocsinh_id),
+                    ('trangthai', '=', kehoach_util.KETLUAN_DANG_TAO)
+                ])
+
+                # 3. Chốt chặn bảo mật
+                if draft_count > 0:
+                    hocsinh = self.env['ekids.hocsinh'].browse(hocsinh_id)
+                    raise UserError(
+                        f"Học sinh [{hocsinh.name}] đang có một phiếu Kết luận ở trạng thái [Đang lập]. "
+                        f"Vui lòng hoàn thiện hoặc hủy phiếu cũ trước khi tạo kết luận mới!"
+                    )
+            else:
+                raise UserError("Không thể tạo phiếu Kết luận mới khi trường [Học sinh] đang bị bỏ trống!")
+
+        # 4. Gọi super() DUY NHẤT MỘT LẦN ở cuối cùng để lưu hàng loạt xuống Database
+        return super(KetLuan, self).create(vals_list)
+
+
 
     def write(self, vals):
+        # 1. Chốt chặn an toàn: Chỉ tính toán nếu trường 'trangthai' thực sự nằm trong danh sách thay đổi
+        if 'trangthai' in vals:
+            trangthai_moi = vals.get('trangthai')
 
-        ketluan = super().write(vals)
+            # 2. Vòng lặp chống lỗi Multi-record (Expected singleton)
+            for rec in self:
+                trangthai_cu = rec.trangthai
 
-        return ketluan
+                # Chỉ xử lý kiểm tra nếu trạng thái MỚI khác trạng thái CŨ
+                if trangthai_cu != trangthai_moi:
+
+                    # TH1: Từ [Cho phép lập KH] quay về [Đang lập] -> Check xem có kế hoạch con chưa
+                    if trangthai_cu == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH:
+                        if trangthai_moi == kehoach_util.KETLUAN_DANG_TAO:
+                            # Mẹo Odoo: Chỉ cần check 'if rec.kehoach_ids' thay vì dùng len() > 0 để tối ưu tốc độ
+                            if rec.kehoach_ids:  # Thay bằng tên trường kế hoạch chính xác trên model của bạn
+                                raise UserError(
+                                    "Đã tồn tại [Kế hoạch] gắn với kết luận này, không thể chuyển ngược về trạng thái [Đang lập]!"
+                                )
+
+                    # TH2: Phiếu đã [Hết hiệu lực] -> Cấm tuyệt đối không cho bẻ lái sang trạng thái khác
+                    elif trangthai_cu == kehoach_util.KETLUAN_HET_HIEULUC:
+                        raise UserError(
+                            "Hồ sơ kết luận này đã hết hiệu lực, không thể thay đổi [Trạng thái]!"
+                        )
+
+        # 3. Gọi hàm super() ở cuối cùng sau khi đã vượt qua tất cả các tầng kiểm duyệt bảo mật
+        return super(KetLuan, self).write(vals)
+
+
 
     def unlink(self):
-        ketluan = super().unlink()
-        return ketluan
+        for rec in self:
+            if (rec.trangthai == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH
+                    or rec.trangthai == kehoach_util.KETLUAN_HET_HIEULUC):
+                raise UserError(
+                    "Không cho phép xóa [Kết luận] khi đang lập kế hoạch hoặc hết hiệu lực")
+
+        return super(KetLuan, self).unlink()

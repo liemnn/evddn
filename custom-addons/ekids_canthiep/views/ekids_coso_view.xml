@@ -89,14 +89,14 @@
 
 
         <record model="ir.actions.act_window" id="ekids_canthiep.coso_chuongtrinh_action_window">
-            <field name="name">CẤU HÌNH - CƠ SỞ</field>
+            <field name="name">CHƯƠNG TRÌNH</field>
             <field name="res_model">ekids.coso</field>
             <field name="context">{ 'kanban_view_ref':'ekids_canthiep.canthiep_kanban'}</field>
             <field name="view_mode">kanban</field>
         </record>
 
         <record model="ir.actions.act_window" id="ekids_canthiep.coso_kehoach_action_window">
-            <field name="name">CẤU HÌNH - CƠ SỞ</field>
+            <field name="name">KẾ HOẠCH</field>
             <field name="res_model">ekids.coso</field>
             <field name="context">{ 'kanban_view_ref':'ekids_canthiep.kehoach_list'}</field>
             <field name="view_mode">kanban</field>

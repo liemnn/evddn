@@ -274,14 +274,15 @@
                                 <div class="kh-html-zone zone-trichyeu">
                                     <div class="kh-zone-header"><i class="fa fa-tag"></i> Chức năng phát triển cốt lõi và Lập luận lâm sàng</div>
                                     <div class="kh-zone-body">
-                                        <field name="chucnang" nolabel="1" placeholder="Ví dụ: NN1.1, NT2.3..."/>
+
+                                        <field name="chucnang" widget="ckeditor"/>
                                     </div>
                                 </div>
 
                                 <div class="kh-html-zone zone-kythuat">
                                     <div class="kh-zone-header"><i class="fa fa-lightbulb-o"></i> Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)</div>
                                     <div class="kh-zone-body">
-                                        <field name="thietke" nolabel="1" placeholder="Soạn thiết kế..."/>
+                                        <field name="thietke" widget="ckeditor" nolabel="1" placeholder="Soạn thiết kế..."/>
                                     </div>
                                 </div>
 
