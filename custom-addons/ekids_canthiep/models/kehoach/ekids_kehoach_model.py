@@ -28,12 +28,15 @@ class KeHoach(models.Model):
     index = fields.Integer(string="STT", default=1, compute="_compute_index")
     # 1. THÔNG TIN HỌC SINH
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True)  # [cite: 2]
+
+    kehoach_linhvuc_ids = fields.One2many("ekids.kehoach_linhvuc",
+                                          inverse_name="kehoach_id",
+                                          string="Lĩnh vực và độ tuổi thuộc kết luận")
+
+
     ketluan_id = fields.Many2one('ekids.kehoach_ketluan', string="Kết luận", required=True)  # [cite: 2]
 
 
-    kehoach_linhvuc_ids = fields.One2many("ekids.kehoach_linhvuc",
-                                  compute="_compute_kehoach_linhvuc",
-                                  string="Lĩnh vực và độ tuổi thuộc kết luận")
 
 
     trangthai = fields.Selection([

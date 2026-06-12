@@ -21,7 +21,7 @@
                     <field name="gv_lapkehoach_id"/>
                     <field name="gv_kiemduyet_id"/>
                     <field name="gv_canthiep_id"/>
-                    <field name="kehoach_linhvuc_ids"/>
+                    <field name="linhvuc_ids"/>
                     <field name="trangthai"/>
 
                     <templates>
@@ -392,7 +392,7 @@
                                 </div>
 
                                 <div class="o_table_responsive border rounded-3 overflow-hidden shadow-sm">
-                                    <field name="kehoach_linhvuc_ids" readonly="is_readonly" nolabel="1">
+                                    <field name="linhvuc_ids" readonly="is_readonly" nolabel="1">
                                         <list editable="bottom" class="o_list_premium m-0 border-0">
                                             <field name="sequence" widget="handle"/>
 

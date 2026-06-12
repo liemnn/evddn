@@ -63,10 +63,10 @@ class KetLuan(models.Model):
     lichhen = fields.Char(string="Lịch hẹn lần sau")
 
     # 5. BẢNG CHI TIẾT ĐỘ TUỔI PHÁT TRIỂN
-    kehoach_linhvuc_ids = fields.One2many(
-        'ekids.kehoach_linhvuc',
+    linhvuc_ids = fields.One2many(
+        'ekids.kehoach_ketluan2linhvuc',
         'ketluan_id',
-        string="10.	Đánh giá lên chương trình"
+        string="Các lĩnh vực thuộc kết luận"
     )  #
     gv_danhgia = fields.Char(string="Chuyên gia đánh giá")
     ngay_danhgia= fields.Date(string="Ngày đánh giá")

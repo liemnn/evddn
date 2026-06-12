@@ -8,7 +8,7 @@ class KeHoach2LinhVuc(models.Model):
     _order = 'id desc'
 
     sequence = fields.Integer(string="STT", default=1)
-    ketluan_id = fields.Many2one("ekids.kehoach_ketluan", string="Thuộc kết luận nào",
+    kehoach_id = fields.Many2one("ekids.kehoach", string="Thuộc kế hoạch nào",
                                  required=True,
                                  ondelete="cascade")
 
@@ -17,7 +17,6 @@ class KeHoach2LinhVuc(models.Model):
         string='Chương trình',
         required=True,
         ondelete="cascade",
-        default=lambda self: self.env['ekids.ct_chuongtrinh'].search([], limit=1, order='id asc').id
     )
 
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực', required=True, ondelete="cascade")
