@@ -218,6 +218,13 @@
                 <header>
                     <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary" string="In phiếu thu"/>
                     <button name="action_xacthuc_tinhlai_hocphi_hocsinh" invisible="is_show_tinhtoan_lai == False" type="object" confirm="Bạn chắc chắn muốn tính toán lại chứ?" class="btn btn-secondary" string="Tính lại [Học phí]"/>
+                    <button name="action_chot_hocphi_khi_hocsinh_nghi"
+                            invisible="not is_chot_hocphi"
+                            type="object"
+                            confirm="Hết tháng này học sinh sẽ nghỉ học bạn chắc chắn muốn chốt lại toàn bộ [Học phí] trong tháng đề hoàn thành trước khi nghỉ ?"
+                            class="btn btn-secondary"
+                            string="Chốt Học phí"/>
+
                     <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,3,2" options="{'clickable': true}"
                            invisible="is_dong_hocphi_theoky == True" />
                     <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,12,3,2"

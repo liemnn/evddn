@@ -5,6 +5,20 @@ from datetime import datetime, timedelta,date
 from odoo.exceptions import ValidationError
 import calendar
 
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import hocsinh_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
 
 class DiemDanhHocSinhNghiPhepWizard(models.TransientModel):
     _name = 'ekids.diemdanh_hocsinh_nghiphep_wizard'
@@ -18,6 +32,8 @@ class DiemDanhHocSinhNghiPhepWizard(models.TransientModel):
     desc = fields.Html(string="Lý do nghỉ")
     is_hoantra_hocphi = fields.Boolean(string="Cho phép thiết lập % hoàn trả [Học phí] riêng", default=False)
     tyle_hoantra_hocphi = fields.Integer(string="Tỷ lệ % sẽ được hoàn trả [Học phí] tháng tơi", default=0)
+
+    is_se_hocbu = fields.Boolean(string="Tất cả các ca sẽ được [Học Bù]", default=False)
 
     @api.constrains('tu_ngay', 'den_ngay')
     def _constrains_nghiLe(self):
@@ -36,11 +52,13 @@ class DiemDanhHocSinhNghiPhepWizard(models.TransientModel):
                 'desc': record.desc,
                 'is_hoantra_hocphi': record.is_hoantra_hocphi,
                 'tyle_hoantra_hocphi': record.tyle_hoantra_hocphi,
+                'is_se_hocbu': record.is_se_hocbu,
 
             }
             nghiphep = self.env['ekids.hocsinh_nghiphep'].create(data)
             if nghiphep:
                 record.func_update_diemdanh_hocsinh2ngay()
+
 
         return {
             'type': 'ir.actions.client',
@@ -60,8 +78,12 @@ class DiemDanhHocSinhNghiPhepWizard(models.TransientModel):
             ngay = tu_ngay
             field_d="d"+ str(tu_ngay.day)
             while ngay <= den_ngay:
+                if self.is_se_hocbu:
+                    hocsinh_util.func_tao_macdinh_diemdanh_ca2ngay_theo_ngay_nghiphep(self, hocsinh2thang.hocsinh_id, ngay)
+
                 field_d = "d"+ str(ngay.day)
                 setattr(hocsinh2thang, field_d, '4')
+
                 ngay += timedelta(days=1)
 
 

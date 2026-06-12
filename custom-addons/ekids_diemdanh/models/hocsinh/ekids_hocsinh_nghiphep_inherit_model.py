@@ -4,6 +4,21 @@ from datetime import datetime, timedelta,date
 
 
 _logger = logging.getLogger(__name__)
+
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import hocsinh_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
 class HocSinhNghiPhepInherit(models.Model):
     _inherit = "ekids.hocsinh_nghiphep"
 
@@ -50,6 +65,8 @@ class HocSinhNghiPhepInherit(models.Model):
             ngay = tu_ngay
             field_d="d"+ str(tu_ngay.day)
             while ngay <= den_ngay:
+                if self.is_se_hocbu:
+                    hocsinh_util.func_capnhat_macdinh_diemdanh_ca2ngay_theo_ngay_nghiphep(self, hocsinh2thang.hocsinh_id, ngay)
                 field_d = "d"+ str(ngay.day)
                 setattr(hocsinh2thang, field_d, '1')
                 ngay += timedelta(days=1)
