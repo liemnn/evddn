@@ -442,7 +442,7 @@
                                             <span class="badge text-uppercase font-weight-bold" style="background: #E0F2FE; color: #0369A1; font-size: 10px; padding: 3px 6px; border-radius: 4px; border: 1px solid #BAE6FD;">
                                                 Học sinh:</span>
                                             <h2 class="text-xl font-black mb-0" style="font-weight: bold; color:#1E293B;">
-                                                <field name="hocsinh_id" readonly="1"/>
+                                                <field name="hocsinh_id" readonly="1" options="{'no_open': True}"/>
                                             </h2>
                                         </div>
 
@@ -526,7 +526,7 @@
                                                                 </span>
 
                                                                 <!-- NÚT MỚI THÊM: Click vào đây mới chính thức kích hoạt mở Form Popup -->
-                                                                <button type="object" name="action_open_linhvuc_popup" class="btn_add_muctieu_mini">
+                                                                <button type="object" name="action_xem_muctieu_cua_linhvuc" class="btn_add_muctieu_mini">
                                                                     <i class="fa fa-plus-circle me-1"></i>Thêm mục tiêu
                                                                 </button>
                                                             </div>
@@ -558,7 +558,10 @@
                                                         <field name="tuoi_id"/>
                                                     </h4>
                                                 </div>
-                                                <h5 class="fw-bold text-secondary mb-2" style="font-size:13.5px;"><i class="fa fa-check-square-o text-success me-1.5"></i>DANH SÁCH CÁC MỤC TIÊU CHI TIẾT</h5>
+                                                <h5 class="fw-bold text-secondary mb-2" style="font-size:13.5px;">
+                                                    <i class="fa fa-check-square-o text-success me-1.5"></i>
+                                                        DANH SÁCH CÁC MỤC TIÊU CHI TIẾT
+                                                </h5>
                                                 <field name="muctieu_ids" nolabel="1">
                                                     <list editable="bottom">
                                                         <field name="sequence" widget="handle" string="TT"/>

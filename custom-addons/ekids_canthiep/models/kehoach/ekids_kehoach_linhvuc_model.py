@@ -62,5 +62,5 @@ class KeHoach2LinhVuc(models.Model):
             rec.muctieu_html = html_str
 
 
-    def action_open_linhvuc_popup(self):
+    def action_xem_muctieu_cua_linhvuc(self):
         return False
