@@ -270,20 +270,42 @@ class HocSinhInherit(models.Model):
         trangthais = [kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]
         ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,self,trangthais)
         if ketluan:
-            return {
-                'type': 'ir.actions.act_window',
-                'name': 'LẬP KẾ HOẠCH',
-                'res_model': 'ekids.kehoach',
-                'view_mode': 'form',
-                'views': [(form_view_id, 'form')],
-                'target': 'current',
-                'domain': [('coso_id', '=', self.coso_id.id)],
-                'context': {
-                    'default_coso_id': self.coso_id.id,
-                    'default_ketluan_id': ketluan.id,
-                    'default_hocsinh_id': self.id
-                },
-            }
+            kehoach = self.func_tao_kehoach_macdinh(ketluan)
+            if kehoach:
+                return {
+                    'type': 'ir.actions.act_window',
+                    'name': 'LẬP KẾ HOẠCH',
+                    'res_model': 'ekids.kehoach',
+                    'view_mode': 'form',
+                    'views': [(form_view_id, 'form')],
+                    'res_id': kehoach.id,
+                    'target': 'current',
+                    'domain': [('coso_id', '=', self.coso_id.id)],
+                    'context': {
+                        'default_coso_id': self.coso_id.id,
+                        'default_ketluan_id': ketluan.id,
+                        'default_hocsinh_id': self.id
+                    },
+                }
+
+    def func_tao_kehoach_macdinh(self,ketluan):
+        data ={
+            "hocsinh_id":self.id,
+            "ketluan_id": ketluan.id,
+        }
+        kehoach = self.env['ekids.kehoach'].create(data)
+        if kehoach:
+            linhvucs = ketluan.linhvuc_ids
+            for linhvuc in linhvucs:
+                data2={
+                    'kehoach_id':kehoach.id,
+                    'chuongtrinh_id': linhvuc.linhvuc_id.chuongtrinh_id.id,
+                    'linhvuc_id': linhvuc.linhvuc_id.id,
+                    'tuoi_id': linhvuc.tuoi_id.id,
+                }
+                self.env['ekids.kehoach_linhvuc'].create(data2)
+            return  kehoach
+        return None
 
     def action_sua_kehoach(self):
         form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
