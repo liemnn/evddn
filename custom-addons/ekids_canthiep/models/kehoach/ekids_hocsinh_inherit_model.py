@@ -99,20 +99,37 @@ class HocSinhInherit(models.Model):
                             hs.is_lap_kehoach = False
                 else:
                     hs.is_lap_kehoach = False
+
     def _compute_is_sua_kehoach(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
-        for hs in self:
-            trangthais = [kehoach_util.KEHOACH_DANG_LAP]
-            kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs,trangthais)
-            if not kehoach:
-                hs.is_sua_kehoach = False
+
+        for rec in self:
+            # Bước 1: Mặc định ban đầu là không cho sửa
+            rec.is_sua_kehoach = False
+            target_kehoach = None
+
+            # Bước 2: Tìm kế hoạch thỏa mãn điều kiện quy trình
+            # Ưu tiên 1: Tìm kế hoạch "Đang lập"
+            kh_dang_lap = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, rec, [kehoach_util.KEHOACH_DANG_LAP])
+
+            if kh_dang_lap:
+                target_kehoach = kh_dang_lap
             else:
-                giaovien = kehoach.ketluan_id.gv_lapkehoach_id
-                if (is_admin or giaovien.user_id.id == user.id):
-                    hs.is_sua_kehoach = True
-                else:
-                    hs.is_sua_kehoach = False
+                # Ưu tiên 2: Nếu không có "Đang lập", tìm "Đợi duyệt" nhưng phải ở trạng thái "Cần điều chỉnh"
+                kh_doi_duyet = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, rec,
+                                                                               [kehoach_util.KEHOACH_DANG_PHEDUYET])
+                # Check an toàn tránh lỗi sập hệ thống bằng cách kiểm tra kh_doi_duyet có tồn tại hay không trước
+                if kh_doi_duyet and kh_doi_duyet.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH:
+                    target_kehoach = kh_doi_duyet
+
+            # Bước 3: Nếu tìm thấy kế hoạch hợp lệ, tiến hành kiểm tra quyền hạn của người dùng
+            if target_kehoach:
+                giaovien_lap = target_kehoach.ketluan_id.gv_lapkehoach_id
+
+                # So sánh trực tiếp Recordset (giaovien_lap.user_id == user) cực kỳ an toàn, không lo crash
+                if is_admin or (giaovien_lap and giaovien_lap.user_id == user):
+                    rec.is_sua_kehoach = True
 
     def _compute_is_kiemduyet(self):
         user = self.env.user
@@ -308,36 +325,62 @@ class HocSinhInherit(models.Model):
         return None
 
     def action_sua_kehoach(self):
+        self.ensure_one()  # Đảm bảo hàm chỉ chạy trên 1 dòng học sinh duy nhất, tránh lỗi sập hệ thống
         form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
-        trangthais =[kehoach_util.KEHOACH_DANG_LAP]
-        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthais)
-        if kehoach:
+
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        target_kehoach = None
+
+        # 🌟 BƯỚC 1: ĐỒNG BỘ LOGIC TÌM KIẾM KẾ HOẠCH ĐƯỢC PHÉP SỬA
+        # Ưu tiên 1: Tìm kế hoạch "Đang lập"
+        kh_dang_lap = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, [kehoach_util.KEHOACH_DANG_LAP])
+
+        if kh_dang_lap:
+            target_kehoach = kh_dang_lap
+        else:
+            # Ưu tiên 2: Tìm kế hoạch "Đợi duyệt" nhưng ở trạng thái "Cần điều chỉnh"
+            kh_doi_duyet = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self,
+                                                                           [kehoach_util.KEHOACH_DANG_PHEDUYET])
+            if kh_doi_duyet and kh_doi_duyet.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH:
+                target_kehoach = kh_doi_duyet
+
+        # 🌟 BƯỚC 2: ĐIỀU HƯỚNG MỞ FORM HOẶC BÁO LỖI CHẶN QUYỀN
+        if target_kehoach:
+            # Phòng thủ tầng sâu (Backend Security Check): Đảm bảo người dùng thực sự có quyền sửa
+            giaovien_lap = target_kehoach.ketluan_id.gv_lapkehoach_id
+            if not (is_admin or (giaovien_lap and giaovien_lap.user_id == user)):
+                raise UserError(
+                    "Bạn không có quyền chỉnh sửa kế hoạch này! Chỉ Giáo viên lập kế hoạch này hoặc Quản trị viên mới có quyền.")
+
+            # Trả về Action mở đúng Form phiếu kế hoạch tìm thấy
             return {
                 'type': 'ir.actions.act_window',
                 'name': 'LẬP KẾ HOẠCH',
                 'res_model': 'ekids.kehoach',
                 'view_mode': 'form',
                 'views': [(form_view_id, 'form')],
-                'res_id': kehoach.id,
+                'res_id': target_kehoach.id,  # Ghim đúng ID của kế hoạch vào form view
                 'target': 'current',
                 'domain': [('coso_id', '=', self.coso_id.id)],
                 'context': {
                     'default_coso_id': self.coso_id.id,
-                    'default_kehoach_id': kehoach.id,
                     'default_hocsinh_id': self.id
                 },
             }
-        else:
-            raise UserError(
-                "Hiện đã có [Kế hoạch] đang lập không thể tạo kế hoạch mới !"
-            )
+
+        # 🌟 BƯỚC 3: SỬA LẠI THÔNG BÁO LỖI ĐÚNG NGỮ NGHĨA
+        raise UserError(
+            f"Học sinh [{self.name}] hiện không có Kế hoạch nào ở trạng thái có thể chỉnh sửa "
+            f"(Đang lập hoặc Cần điều chỉnh sửa lại)!"
+        )
 
 
     def action_duyet_kehoach(self):
         form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
-        kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self)
+        trangthais = [kehoach_util.KEHOACH_DANG_PHEDUYET]
+        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, trangthais)
         if kehoach:
-            kehoach.trangthai = kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH
             return {
                 'type': 'ir.actions.act_window',
                 'name': 'LẬP KẾ HOẠCH',
@@ -349,7 +392,11 @@ class HocSinhInherit(models.Model):
                 'domain': [('coso_id', '=', self.coso_id.id)],
                 'context': {
                     'default_coso_id': self.coso_id.id,
-                    'default_hocsinh_id': self.id
+                    'default_hocsinh_id': self.id,
+                    # 🌟 THÊM 3 DÒNG CHỐT CHẶN DƯỚI ĐÂY ĐỂ KHÓA ĐỂN FORM VIEW
+                    'edit': True,  # 🚫 Tắt hoàn toàn tính năng và ẩn nút [Sửa]
+                    'create': False,  # 🚫 Tắt tính năng và ẩn nút [Tạo mới]
+                    'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
                 },
             }
 

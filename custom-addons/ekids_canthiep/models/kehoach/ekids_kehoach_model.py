@@ -76,6 +76,37 @@ class KeHoach(models.Model):
 
     desc = fields.Html(string="Ý kiến phê duyệt")
 
+    is_gui_pheduyet = fields.Boolean(compute="_compute_is_gui_pheduyet")
+    is_pheduyet = fields.Boolean(compute="_compute_is_pheduyet")
+
+    def _compute_is_gui_pheduyet(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for kehoach in self:
+            if (kehoach.trangthai== kehoach_util.KEHOACH_DANG_LAP or
+                kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                if (is_admin or kehoach.ketluan_id.gv_lapkehoach_id.user_id.id == user.id):
+                    kehoach.is_gui_pheduyet = True
+                else:
+                    kehoach.is_gui_pheduyet = False
+            else:
+                kehoach.is_gui_pheduyet= False
+
+    def _compute_is_pheduyet(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for kehoach in self:
+            if (kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
+                and kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET):
+                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.user_id.id == user.id):
+                    kehoach.is_pheduyet = True
+                else:
+                    kehoach.is_pheduyet = False
+            else:
+                kehoach.is_pheduyet = False
+
+
+
 
     def _compute_kehoach_linhvuc(self):
         for record in self:
@@ -185,19 +216,21 @@ class KeHoach(models.Model):
 
 
     def action_gui_pheduyet(self):
-        if (self.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH
-            and self.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+        if (self.trangthai == kehoach_util.KEHOACH_DANG_LAP
+                or self.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+
+            self.trangthai = kehoach_util.KEHOACH_DANG_PHEDUYET
             self.trangthai_pheduyet = kehoach_util.PHEDUYET_DOI_DUYET
 
     def action_pheduyet_dat(self):
-        if self.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH:
+        if self.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
             self.trangthai_pheduyet = kehoach_util.PHEDUYET_DA_DUYET
-            self.trangthai = kehoach_util.TRANGTHAI_DANG_CANTHIEP
+            self.trangthai = kehoach_util.KEHOACH_DANG_CANTHIEP
 
 
 
     def action_pheduyet_khongdat(self):
-        if self.trangthai == kehoach_util.TRANGTHAI_DANG_LAP_KEHOACH:
+        if self.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
             self.trangthai_pheduyet = kehoach_util.PHEDUYET_CAN_DIEUCHINH
 
     def action_xem_kehoach(self):

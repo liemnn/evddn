@@ -257,6 +257,8 @@
             <field name="model">ekids.kehoach</field>
             <field name="arch" type="xml">
                 <form string="Kế hoạch Can thiệp">
+                    <field name="is_pheduyet" invisible="1"/>
+                    <field name="is_gui_pheduyet" invisible="1"/>
 
                     <!-- CONTROL HEADER BAR -->
                     <header>
@@ -265,23 +267,24 @@
                                 type="object"
                                 icon="fa-paper-plane"
                                 class="btn-outline-primary fw-bold"
-                                invisible="trangthai_pheduyet not in ['-1']"/>
+                                confirm="Bạn chắc chắn muốn gửi [Kế hoạch] lên quản lý chuyên môn để duyệt không ?"
+                                invisible=" not is_gui_pheduyet"/>
 
                         <button name="action_pheduyet_dat"
-                                string="Đạt"
+                                string="Duyệt đồng ý [Kế hoạch]"
                                 type="object"
                                 icon="fa-check-circle"
                                 confirm="Bạn xác nhận [Kế hoạch] đã đạt để giáo viên tiến hành can thiệp theo thời gian trong kế hoạch"
                                 class="btn-success fw-bold"
-                                invisible="trangthai_pheduyet not in ['0']"/>
+                                invisible="not is_pheduyet"/>
 
                         <button name="action_pheduyet_khongdat"
-                                string="Không đạt sửa lại"
+                                string="Không đạt [Sửa lại]"
                                 type="object"
                                 icon="fa-times-circle"
                                 confirm="Bạn xác nhận [Kế hoạch] chưa đạt cần trả về cho giáo viên lập kế hoạch chỉnh sửa lại ?"
                                 class="btn-danger fw-bold"
-                                invisible="trangthai_pheduyet not in ['0']"/>
+                                invisible="not is_pheduyet"/>
 
                         <field name="trangthai" widget="statusbar" statusbar_visible="0,2,1,-1" options="{'clickable': false}"/>
                     </header>
@@ -441,9 +444,9 @@
                                         <div class="d-flex align-items-center gap-2 flex-wrap">
                                             <span class="badge text-uppercase font-weight-bold" style="background: #E0F2FE; color: #0369A1; font-size: 10px; padding: 3px 6px; border-radius: 4px; border: 1px solid #BAE6FD;">
                                                 Học sinh:</span>
-                                            <h2 class="text-xl font-black mb-0" style="font-weight: bold; color:#1E293B;">
+                                            <h3 class="text-xl font-black mb-0" style="font-weight: bold; color:#1E293B;">
                                                 <field name="hocsinh_id" readonly="1" options="{'no_open': True}"/>
-                                            </h2>
+                                            </h3>
                                         </div>
 
                                         <div class="d-flex align-items-center gap-2 text-muted font-monospace flex-wrap" style="font-size: 13px;">
@@ -452,7 +455,7 @@
                                                 <i class="fa fa-calendar text-warning" style="font-size:12px;"></i>
                                             </span>
                                             <span class="fw-bold text-secondary font-sans" style="font-size: 13px; font-family: -apple-system, sans-serif; color: #475569 !important;">
-                                                Thời gian can thiệp của [Kế hoạch]:</span>
+                                                Thời gian của [Kế hoạch]:</span>
                                             <field name="tu_ngay" class="compact_date_field"/>
                                             <i class="fa fa-long-arrow-right text-muted mx-0.5" style="font-size:11px;"></i>
                                             <field name="den_ngay" class="compact_date_field"/>
@@ -466,15 +469,16 @@
                                 </div>
 
                                 <div class="col-xl-4 col-12 d-flex flex-column align-items-end justify-content-center gap-2">
+                                     <div class="p-1.5 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
+                                        <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
+                                    </div>
                                     <button name="action_xem_ketluan"
                                             string="Xem kết luận đánh giá"
                                             type="object" icon="fa-file-text-o"
                                             class="btn_view_review"
                                             />
 
-                                    <div class="p-1.5 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
-                                        <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
-                                    </div>
+
                                 </div>
 
                             </div>

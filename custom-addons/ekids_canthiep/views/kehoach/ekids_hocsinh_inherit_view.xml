@@ -63,12 +63,21 @@
                 />
 
                 <button name="action_sua_kehoach"
-                        string="Sửa lại"
+                        string="Sửa"
                         type="object"
                         class="btn-warning btn-sm text-dark fw-bold"
                         icon="fa-pencil-square-o"
                         invisible="is_sua_kehoach == False"
                         title="Sửa lại [Kế hoạch] đang soạn thảo"
+                />
+
+               <button name="action_duyet_kehoach"
+                        string="Duyệt"
+                        type="object"
+                        class="btn-info btn-sm text-white"
+                        icon="fa-paper-plane"
+                        invisible="trangthai_kehoach not in ['4']"
+                        title="Gửi bản kế hoạch này lên cấp Quản lý để xin xét duyệt trước khi dạy"
                 />
 
                 <button name="action_xem_danhsach_kehoach"
@@ -85,14 +94,7 @@
 
 
 
-                <button name="action_duyet_kehoach"
-                        string="Trình phê duyệt"
-                        type="object"
-                        class="btn-info btn-sm text-white"
-                        icon="fa-paper-plane"
-                        invisible="trangthai_kehoach not in ['4']"
-                        title="Gửi bản kế hoạch này lên cấp Quản lý để xin xét duyệt trước khi dạy"
-                />
+
 
 
 
