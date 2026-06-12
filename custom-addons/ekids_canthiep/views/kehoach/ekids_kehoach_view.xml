@@ -486,10 +486,10 @@
                         <notebook>
                             <page string="MỤC TIÊU KẾ HOẠCH" icon="fa-graduation-cap">
                                 <div class="ekids_inner_kanban_container mt-3">
-                                    <field name="kehoach_linhvuc_ids" mode="kanban" nolabel="1">
+                                    <field name="kehoach_linhvuc_ids" mode="kanban" nolabel="1" >
 
                                         <!-- ĐÃ GỠ GIAO DIỆN CLICK TOÀN THẺ TRÊN KANBAN -->
-                                        <kanban class="o_kanban_mobile" default_order="sequence" >
+                                        <kanban class="o_kanban_mobile" default_order="sequence" create="0" delete="0" edit="0">
                                             <field name="id"/>
                                             <field name="sequence"/>
                                             <field name="linhvuc_id"/>
@@ -515,14 +515,14 @@
                                                                     <i class="fa fa-birthday-cake me-1"></i>
                                                                     <field name="tuoi_id"/>
                                                                 </span>
-                                                                 
+
                                                             </div>
 
                                                             <!-- ĐÃ SỬA: CỤM ĐẾM SỐ LƯỢNG KẾT HỢP NÚT HÀNH ĐỘNG MỞ POPUP -->
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <!-- Badge đếm mục tiêu -->
                                                                 <span class="badge" style="background-color: #E0F2FE; color: #0369A1; font-weight: 800; font-size: 11.5px; padding: 5px 10px; border-radius: 6px;">
-                                                                    <i class="fa fa-tasks me-1"></i> <t t-esc="record.muctieu_ids.raw_value.length"/> mục tiêu
+                                                                    <i class="fa fa-tasks me-1"></i> Có <t t-esc="record.muctieu_ids.raw_value.length"/> mục tiêu
                                                                 </span>
 
                                                                 <!-- NÚT MỚI THÊM: Click vào đây mới chính thức kích hoạt mở Form Popup -->
@@ -557,12 +557,12 @@
                                                         </div>
 
                                                         <div class="text-primary fw-bolder lh-sm" style="font-weight: 800; font-size: 15px; letter-spacing: -0.2px;">
-                                                            <field name="linhvuc_id" options="{'no_open': True}"/>
+                                                            <field name="linhvuc_id" readonly="true" options="{'no_open': True}"/>
                                                         </div>
                                                     </div>
 
-                                                    <div class="border rounded-3 bg-white shadow-sm p-2 px-3 flex-fill text-start"
-                                                         style="border-color: #E2E8F0 !important; border-width: 2px !important; min-width: 220px; py: 6px !important;">
+                                                    <div class="border border-primary rounded-3 bg-white shadow-sm p-2 px-3 flex-fill text-start"
+                                                         style="border-width: 2px !important; min-width: 220px; py: 6px !important;">
 
                                                         <div class="d-flex align-items-center text-muted mb-0.5" style="font-size: 10px; gap: 6px;">
                                                             <i class="fa fa-street-view text-slate-400" style="font-size: 12px;"></i>
@@ -570,22 +570,30 @@
                                                         </div>
 
                                                         <div class="text-primary fw-bolder lh-sm" style="font-weight: 800; font-size: 15px; letter-spacing: -0.2px;">
-                                                            <field name="tuoi_id" options="{'no_open': True}"/>
+                                                            <field name="tuoi_id" readonly="true" options="{'no_open': True}"/>
                                                         </div>
                                                     </div>
+
+
 
                                                 </div>
 
                                                 <h5 class="fw-bold text-secondary mb-2" style="font-size:13px; letter-spacing: 0.02em;">
                                                     <i class="fa fa-check-square-o text-success me-1.5"></i>
-                                                    DANH SÁCH CÁC MỤC TIÊU CHI TIẾT
+                                                    CÁC MỤC TIÊU TRONG KẾ HOẠCH THUỘC [LĨNH VỰC] và [ĐỘ TUỔI]
                                                 </h5>
 
-                                                <field name="muctieu_ids" nolabel="1" create="1" edit="1" delete="1">
+                                                <field name="muctieu_ids"
+                                                       domain="[('linhvuc_id','=',linhvuc_id),('tuoi_id','=',tuoi_id)]">
                                                     <list editable="bottom" create="1" edit="1" delete="1">
                                                         <field name="sequence" widget="handle" string="TT"/>
                                                         <field name="name" string="Mục tiêu"/>
-                                                        <field name="chucnang" string="Hướng dẫn lập luận lâm sàng" optional="show"/>
+                                                        <field name="chucnang" string="Chức năng" optional="hide"/>
+                                                        <field name="thietke" string="Thiết kế" optional="hide"/>
+                                                        <field name="tieuchi_chuadat" string="Chưa đạt" optional="hide"/>
+                                                        <field name="tieuchi_hinhthanh" string="Hình thành" optional="hide"/>
+                                                        <field name="tieuchi_dat" string="Đạt" optional="hide"/>
+
                                                     </list>
                                                 </field>
                                             </sheet>
