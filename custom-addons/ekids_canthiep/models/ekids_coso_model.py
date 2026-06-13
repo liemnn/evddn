@@ -41,7 +41,7 @@ class CoSo(models.Model):
             'context': {'default_coso_id': self.id},
         }
 
-    def action_xem_kehoach_canthiep(self):
+    def action_xem_kehoachs(self):
         list_view_id = self.env.ref('ekids_canthiep.kehoach_hocsinh_inherit_list').id
         hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro(self)
         domain =[('coso_id', '=', self.id)]

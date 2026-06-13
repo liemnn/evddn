@@ -2,6 +2,8 @@ from odoo import models, fields, api, exceptions
 from datetime import  timedelta,date,datetime
 from odoo.exceptions import UserError
 
+from .ekids_hocsinh_kehoach_abstractmodel import HocSinhKeHoachAbstractModel
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -16,7 +18,7 @@ except ImportError as e:
 
 
 
-class HocSinhInherit(models.Model):
+class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
     _inherit = "ekids.hocsinh"
 
     trangthai_ketluan = fields.Selection([
@@ -420,21 +422,26 @@ class HocSinhInherit(models.Model):
             }
 
     def action_canthiep(self):
-        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
-        kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self)
+        self.ensure_one()
+        # Kiểm tra phân quyền lâm sàng nâng cao nếu cần
+        trangthai=[kehoach_util.KEHOACH_DANG_CANTHIEP]
+        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthai)
         if kehoach:
             return {
-                'type': 'ir.actions.act_window',
-                'name': 'LẬP KẾ HOẠCH',
-                'res_model': 'ekids.kehoach_muctieu',
-                'view_mode': 'kanban,list',
-                'target': 'current',
-                'domain': [('kehoach_id', '=', kehoach.id)],
+                'type': 'ir.actions.client',
+                # 🌟 BỔ SUNG DÒNG NÀY: Định nghĩa tiêu đề xuất hiện trên Breadcrumbs
+                'name': 'KẾ HOẠCH CAN THIỆP:'+ self.name,
+                'tag': 'ekids_canthiep.kehoach_canthiep_action',  # Thẻ tag đăng ký trùng khớp với file JS Registry
+                'target': 'current',  # Mở tràn màn hình làm việc hiện tại
                 'context': {
-                    'default_coso_id': self.coso_id.id,
-                    'default_kehoach_id': kehoach.id
+                    'kehoach_id': kehoach.id,  # Gửi ID phiếu kế hoạch sang cấu phần Frontend
                 },
             }
+        else:
+            raise UserError(
+                f"Học sinh [{self.name}] hiện không có Kế hoạch nào ở trạng thái có thể Can thiệp"
+
+            )
 
     def action_xem_danhsach_kehoach(self):
         kanban_view_id = self.env.ref('ekids_canthiep.danhsach_kehoach_kanban').id
@@ -452,3 +459,4 @@ class HocSinhInherit(models.Model):
                 'default_hocsinh_id': self.id
             },
         }
+
