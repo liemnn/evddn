@@ -589,8 +589,8 @@
 
                                                 <field name="muctieu_ids"
                                                        domain="[('linhvuc_id','=',linhvuc_id),('tuoi_id','=',tuoi_id)]">
-                                                    <list editable="bottom" create="1" edit="1" delete="1">
-                                                        <field name="sequence" widget="handle" string="TT"/>
+                                                    <list editable="bottom" create="0" edit="0" delete="1">
+                                                        <field name="sequence" string="TT"/>
                                                         <field name="name" string="Mục tiêu"/>
                                                         <field name="chucnang" string="Chức năng" optional="hide"/>
                                                         <field name="thietke" string="Thiết kế" optional="hide"/>

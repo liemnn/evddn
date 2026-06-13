@@ -30,12 +30,34 @@ class KeHoach2MucTieu(models.Model):
 
     muctieu_id = fields.Many2one('ekids.ct_muctieu', string='Mục tiêu', required=True, ondelete="cascade")
 
-
+    # 2. Viết hàm xử lý thuật toán phân nhóm và reset số thứ tự
+    @api.depends('kehoach_id', 'linhvuc_id', 'sequence')
     def _compute_index(self):
-        index =1
+        # Khởi tạo bộ nhớ đệm map dữ liệu dạng: (id_kế_hoạch, id_lĩnh_vực) -> [danh_sách_id_mục_tiêu]
+        cache_maps = {}
+
         for record in self:
-            record.index = index
-            index +=1
+            if not record.kehoach_id or not record.linhvuc_id:
+                record.index = 1
+                continue
+
+            # Tạo khóa đại diện cho phân nhóm
+            group_key = (record.kehoach_id.id, record.linhvuc_id.id)
+
+            # Nếu phân nhóm này chưa được truy vấn, tiến hành quét DB một lần duy nhất
+            if group_key not in cache_maps:
+                siblings = self.env['ekids.kehoach_muctieu'].search([
+                    ('kehoach_id', '=', record.kehoach_id.id),
+                    ('linhvuc_id', '=', record.linhvuc_id.id)
+                ], order='sequence, id asc')  # Sắp xếp chuẩn theo sequence của bạn
+
+                cache_maps[group_key] = siblings.ids
+
+            # Tìm vị trí đứng của bản ghi hiện tại trong nhóm (Mảng bắt đầu từ 0 nên cần +1)
+            if record.id in cache_maps[group_key]:
+                record.index = cache_maps[group_key].index(record.id) + 1
+            else:
+                record.index = 1
 
     def _compute_name(self):
         for mt in self:
