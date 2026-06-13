@@ -47,9 +47,9 @@
                 .badge-fail { background-color: #FEF2F2; color: #DC2626; border-color: #FECACA; }
 
                 .goal-status-pill { font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 5px; text-transform: uppercase; display: inline-block; min-width: 90px; text-align: center; letter-spacing: 0.2px; }
-                .status-pill-dat { background-color: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0; }
-                .status-pill-chuadat { background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
-                .status-pill-hinhthanh { background-color: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
+                .status-pill-1 { background-color: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0; }
+                .status-pill--1 { background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
+                .status-pill-0 { background-color: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
 
                 .btn-record-mini { background-color: #FBBF24; color: #0F172A; font-weight: 700; font-size: 0.8rem; padding: 6px 12px; border-radius: 5px; border: 1px solid #F59E0B; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
 
@@ -165,7 +165,9 @@
                                         </td>
 
                                         <td style="width: 110px; text-align: center;">
-                                            <span t-attf-class="goal-status-pill status-pill-#{muctieu.status}"><t t-esc="muctieu.status == 'dat' ? 'Đạt' : muctieu.status == 'hinhthanh' ? 'Hình thành' : 'Chưa đạt'"></t></span>
+                                            <span t-attf-class="goal-status-pill status-pill-#{muctieu.trangthai}">
+                                                <t t-esc="muctieu.trangthai == '0' ? 'Chưa can thiệp' : muctieu.trangthai == '1' ? 'Đạt' : 'Chưa đạt'"></t>
+                                            </span>
                                         </td>
 
                                         <td style="width: 110px; text-align: right;">

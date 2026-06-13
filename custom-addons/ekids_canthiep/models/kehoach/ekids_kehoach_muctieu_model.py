@@ -12,7 +12,13 @@ class KeHoach2MucTieu(models.Model):
     index = fields.Integer(string="STT", default=1,compute="_compute_index")
 
     kehoach_id = fields.Many2one("ekids.kehoach",
+                                 related="kehoach_linhvuc_id.kehoach_id",
                                  string="Thuộc kế hoạch nào",
+                                 required=True,
+                                 ondelete="cascade")
+
+    kehoach_linhvuc_id = fields.Many2one("ekids.kehoach_linhvuc",
+                                 string=" Thuộc Kế hoạch Lĩnh vực nào",
                                  required=True,
                                  ondelete="cascade")
 
@@ -29,6 +35,14 @@ class KeHoach2MucTieu(models.Model):
     tieuchi_dat = fields.Char(string="Đạt (+)",compute="_compute_tieuchi_dat")
 
     muctieu_id = fields.Many2one('ekids.ct_muctieu', string='Mục tiêu', required=True, ondelete="cascade")
+
+    trangthai = fields.Selection([
+        ("0", "Chưa can thiệp"),
+        ("1", "Đạt (+)"),
+        ("-1", "Chưa đạt (-)"),
+
+    ], string="Trạng thái", default="0")
+
 
     # 2. Viết hàm xử lý thuật toán phân nhóm và reset số thứ tự
     @api.depends('kehoach_id', 'linhvuc_id', 'sequence')

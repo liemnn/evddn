@@ -68,6 +68,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                             "id": muctieu.id,
                             "index": getattr(muctieu, 'sequence', 1),
                             "name": muctieu.name or '',
+                            "trangthai": muctieu.trangthai,
 
                             # 💡 BỔ SUNG SẴN: Các trường lâm sàng (Đề phòng sau này XML của anh cần gọi ra dùng)
                             "chucnang": getattr(muctieu, 'chucnang', ''),
@@ -75,7 +76,6 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                             "tieuchi_dat": getattr(muctieu, 'tieuchi_dat', ''),
                             "tieuchi_hinhthanh": getattr(muctieu, 'tieuchi_hinhthanh', ''),
                             "tieuchi_chuadat": getattr(muctieu, 'tieuchi_chuadat', ''),
-                            "status": "hinhthanh",  # Chỉ thị trạng thái mặc định cho Pill màu
                             "cnt_all": "12/30",
                             "cnt_ok": "12",
                             "cnt_half": "15",
