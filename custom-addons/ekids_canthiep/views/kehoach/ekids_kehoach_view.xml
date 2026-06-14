@@ -488,7 +488,7 @@
                         <!-- TẦNG 3: HỆ THỐNG TABS QUẢN LÝ GIÁO ÁN CAN THIỆP            -->
                         <!-- ========================================================== -->
                         <notebook>
-                            <page string="MỤC TIÊU KẾ HOẠCH" icon="fa-graduation-cap">
+                            <page string="MỤC TIÊU TRONG LĨNH VỰC CỦA KẾ HOẠCH" icon="fa-graduation-cap">
                                 <div class="ekids_inner_kanban_container mt-3">
                                     <field name="kehoach_linhvuc_ids" mode="kanban" nolabel="1" options="{'no_open': True}">
 
@@ -526,10 +526,10 @@
                                                                     <i class="fa fa-tasks me-1"></i> Có <t t-esc="record.kehoach_muctieu_ids.raw_value.length"></t> mục tiêu
                                                                 </span>
 
-                                                                <button type="object" name="action_xem_linhvucwizard2muctieu"
+                                                                <button type="object" name="action_xem_danhsach_ct_muctieu"
                                                                         context="{'default_kehoach_linhvuc_id':id}"
                                                                         class="btn_add_muctieu_mini">
-                                                                    <i class="fa fa-plus-circle me-1"></i>Thêm mục tiêu
+                                                                    <i class="fa fa-plus-circle me-1"></i>Thêm/xóa [mục tiêu]
                                                                 </button>
                                                             </div>
                                                         </div>

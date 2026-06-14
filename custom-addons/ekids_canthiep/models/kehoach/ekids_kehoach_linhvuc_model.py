@@ -61,57 +61,32 @@ class KeHoach2LinhVuc(models.Model):
                 html_str += '</div>'
             rec.muctieu_html = html_str
 
-    def action_xem_linhvucwizard2muctieu(self):
-        # Lấy ID của danh sách list view danh mục mục tiêu mẫu
-        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_linhvuc_wizard_form').id
+    def action_xem_danhsach_ct_muctieu(self):
+        self.ensure_one()
+
+        # Tìm ID của Form View của bảng tạm Wizard anh em mình vừa tạo ở Bước 2
+        wizard_form_id = self.env.ref('ekids_canthiep.kehoach_linhvuc_wizard_form').id
 
         return {
             'type': 'ir.actions.act_window',
             'name': 'LỰA CHỌN MỤC TIÊU CHO KẾ HOẠCH',
             'res_model': 'ekids.kehoach_linhvuc_wizard',
-            'view_mode': 'form',  # 🌟 SỬA TỪ 'form' THÀNH 'list' để hiện danh sách
-            'views': [(form_view_id, 'form')],  # Chuẩn Odoo 18
-            'target': 'new',  # Mở dạng Pop-up
+            'view_mode': 'form',
+            'views': [(wizard_form_id, 'form')],
+            'target': 'new',
             'context': {
-                # Ép bộ lọc tự động chỉ hiển thị các mục tiêu thuộc Lĩnh vực và Độ tuổi này
                 'search_default_linhvuc_id': self.linhvuc_id.id,
                 'search_default_tuoi_id': self.tuoi_id.id,
 
-                # Truyền ngầm các thông tin này sang Context để lát nữa bốc đầu xử lý dữ liệu
+                # 🌟 BỔ SUNG DÒNG NÀY: Truyền ID dòng hiện tại sang để điền vào trường bắt buộc của Wizard
+                'default_kehoach_linhvuc_id': self.id,
+
                 'default_kehoach_id': self.kehoach_id.id,
                 'default_linhvuc_id': self.linhvuc_id.id,
                 'default_tuoi_id': self.tuoi_id.id,
 
-                'edit': False,  # 🚫 Tắt hoàn toàn tính năng và ẩn nút [Sửa]
-                'create': False,  # 🚫 Tắt tính năng và ẩn nút [Tạo mới]
-                'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
+                'edit': False,
+                'create': False,
+                'delete': False,
             },
         }
-
-    def action_xem_danhsach_ct_muctieu(self):
-        # Lấy ID của danh sách list view danh mục mục tiêu mẫu
-        list_view_id = self.env.ref('ekids_canthiep.ct_muctieu_list').id
-
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'LỰA CHỌN MỤC TIÊU CHO KẾ HOẠCH',
-            'res_model': 'ekids.ct_muctieu',
-            'view_mode': 'list',  # 🌟 SỬA TỪ 'form' THÀNH 'list' để hiện danh sách
-            'views': [(list_view_id, 'list')],  # Chuẩn Odoo 18
-            'target': 'new',  # Mở dạng Pop-up
-            'context': {
-                # Ép bộ lọc tự động chỉ hiển thị các mục tiêu thuộc Lĩnh vực và Độ tuổi này
-                'search_default_linhvuc_id': self.linhvuc_id.id,
-                'search_default_tuoi_id': self.tuoi_id.id,
-
-                # Truyền ngầm các thông tin này sang Context để lát nữa bốc đầu xử lý dữ liệu
-                'default_kehoach_id': self.kehoach_id.id,
-                'default_linhvuc_id': self.linhvuc_id.id,
-                'default_tuoi_id': self.tuoi_id.id,
-
-                'edit': False,  # 🚫 Tắt hoàn toàn tính năng và ẩn nút [Sửa]
-                'create': False,  # 🚫 Tắt tính năng và ẩn nút [Tạo mới]
-                'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
-            },
-        }
-

@@ -1,61 +1,49 @@
 <odoo>
   <data>
 
-        <record id="ekids_canthiep.lap_kehoach_linhvuc_wizard_form" model="ir.ui.view">
+        <record id="ekids_canthiep.kehoach_linhvuc_wizard_form" model="ir.ui.view">
             <field name="name">ekids.kehoach_linhvuc_wizard.form</field>
             <field name="model">ekids.kehoach_linhvuc_wizard</field>
             <field name="arch" type="xml">
-                <form string="Chi tiết Lĩnh vực &amp; Mục tiêu">
+                <form string="BỔ SUNG MỤC TIÊU CHO KẾ HOẠCH">
                     <style>
-                        .modal-dialog { max-width: 95vw !important; height: 95vh !important; margin: 2.5vh auto !important; }
-                        .modal-content { height: 100% !important; border-radius: 12px !important; }
-                        .modal-body { overflow-y: auto !important; }
-
-                        .o_list_table th { background: #F8FAFC !important; color: #475569 !important; text-transform: uppercase; font-size: 12px;}
-
-                        .form-label-custom { font-weight: 800; font-size: 13px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; margin-top: 15px;}
-                        .input-blue { border: 1px solid #BFDBFE !important; border-radius: 6px !important; background: #ffffff !important;}
-                        .input-purple { border: 1px solid #DDD6FE !important; border-radius: 6px !important; background: #ffffff !important;}
-                        .input-brown { border: 1px solid #FDE68A !important; border-radius: 6px !important; background: #FFFBEB !important;}
-
-                        .c-title { font-weight: 800; font-size: 12px; color: #475569; text-transform: uppercase; margin-bottom: 5px; display: block;}
-                        .criteria-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; }
+                        .modal-dialog { max-width: 85vw !important; margin: 4vh auto !important; }
+                        .form-label-custom { font-weight: 800; font-size: 13px; text-transform: uppercase; margin-bottom: 6px; display: block;}
                     </style>
-
                     <sheet>
-                        <field name="kehoach_id" invisible="True"/>
 
-                        <div class="d-flex gap-3 mb-2 p-3 rounded shadow-sm" style="background: #EFF6FF; border: 1px solid #BFDBFE;">
+                        <field name="kehoach_linhvuc_id" invisible="1"/>
+
+                        <div class="d-flex gap-3 mb-3 p-3 rounded" style="background: #EFF6FF; border: 1px solid #BFDBFE;">
                             <div class="flex-grow-1">
-                                <label for="linhvuc_id" class="form-label-custom text-primary" style="margin-top: 0;">
-                                    <i class="fa fa-folder-open"></i> Chọn Lĩnh vực can thiệp
-                                </label>
-                                <field name="linhvuc_id" required="1" class="fw-bold fs-5 text-primary w-100" options="{'no_create': True, 'no_open': True}"/>
+                                <label for="linhvuc_id" class="form-label-custom text-primary"/>
+                                <field name="linhvuc_id" readonly="1" options="{'no_open': True}" class="fw-bold fs-5 text-primary"/>
                             </div>
                             <div class="flex-grow-1">
-                                <label for="tuoi_id" class="form-label-custom text-danger" style="margin-top: 0;">
-                                    <i class="fa fa-child"></i> Chọn Độ tuổi phát triển
-                                </label>
-                                <field name="tuoi_id" required="1" class="fw-bold fs-5 text-danger w-100" options="{'no_create': True, 'no_open': True}"/>
+                                <label for="tuoi_id" class="form-label-custom text-danger"/>
+                                <field name="tuoi_id" readonly="1" options="{'no_open': True}" class="fw-bold fs-5 text-danger"/>
                             </div>
                         </div>
 
                         <div class="mt-4">
-                            <label for="muctieu_ids" class="form-label-custom text-dark mb-2">
-                                <i class="fa fa-tasks"></i> Danh sách mục tiêu phù hợp (Tích chọn hàng loạt mục tiêu bên dưới)
+                            <label for="muctieu_ids" class="form-label-custom text-dark">
+                                <i class="fa fa-list-check me-1"></i> Danh sách mục tiêu mẫu phù hợp (Vui lòng tích chọn):
                             </label>
-
-                            <field name="muctieu_ids" widget="many2many_list" class="w-100">
-                                <list create="false" delete="false">
-                                    <field name="name" string="Tên Mục tiêu / Chỉ số hành vi lâm sàng"/>
+                            <field name="muctieu_ids"
+                                   widget="many2many_list"
+                                   domain="[('linhvuc_id','=',linhvuc_id),('tuoi_id','=',tuoi_id)]"
+                            >
+                                <list create="false" delete="false" edit="false">
+                                    <field name="name" string="Nội dung mục tiêu / Chỉ số hành vi mẫu" decoration-bf="1"/>
+                                    <field name="chucnang" string="Chức năng cốt lõi" optional="hide"/>
+                                    <field name="thietke" string="Thiết kế hoạt động" optional="hide"/>
                                 </list>
                             </field>
                         </div>
                     </sheet>
-
                     <footer>
-                        <button name="action_xac_nhan" string="Xác nhận &amp; Lưu kế hoạch" type="object" class="btn-primary" data-hotkey="q"/>
-                        <button string="Hủy bỏ" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                        <button name="action_xac_nhan_luu" string="Thêm vào kế hoạch" type="object" class="btn-primary" data-hotkey="q"/>
+                        <button string="Đóng cửa sổ" class="btn-secondary" special="cancel" data-hotkey="x"/>
                     </footer>
                 </form>
             </field>
