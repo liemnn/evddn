@@ -1,26 +1,5 @@
 <odoo>
   <data>
-      <record id="ekids_canthiep.lap_kehoach_linhvuc_list" model="ir.ui.view">
-            <field name="name">ekids.kehoach_linhvuc.list</field>
-            <field name="model">ekids.kehoach_linhvuc</field>
-            <field name="arch" type="xml">
-                <list string="Danh sách Lĩnh vực Can thiệp">
-
-                    <field name="sequence" widget="handle"/>
-
-                    <field name="linhvuc_id"
-                           string="Lĩnh vực"
-                           class="fw-bold text-primary"/>
-
-                    <field name="tuoi_id"
-                           string="Độ tuổi"
-                           class="fw-bold text-danger"/>
-
-
-
-                </list>
-            </field>
-        </record>
       <record id="ekids_canthiep.lap_kehoach_linhvuc_kanban" model="ir.ui.view">
             <field name="name">ekids.kehoach_linhvuc.kanban</field>
             <field name="model">ekids.kehoach_linhvuc</field>
@@ -61,46 +40,7 @@
             </field>
         </record>
 
-        <record id="ekids_canthiep.lap_kehoach_linhvuc_form" model="ir.ui.view">
-            <field name="name">ekids.kehoach_linhvuc.form</field>
-            <field name="model">ekids.kehoach_linhvuc</field>
-            <field name="arch" type="xml">
-                <form string="Chi tiết Lĩnh vực &amp; Mục tiêu">
-                    <style>
-                        .modal-dialog { max-width: 95vw !important; height: 95vh !important; margin: 2.5vh auto !important; }
-                        .modal-content { height: 100% !important; border-radius: 12px !important; }
-                        .modal-body { overflow-y: auto !important; }
 
-                        .o_list_table th { background: #F8FAFC !important; color: #475569 !important; text-transform: uppercase; font-size: 12px;}
-
-                        .form-label-custom { font-weight: 800; font-size: 13px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; margin-top: 15px;}
-                        .input-blue { border: 1px solid #BFDBFE !important; border-radius: 6px !important; background: #ffffff !important;}
-                        .input-purple { border: 1px solid #DDD6FE !important; border-radius: 6px !important; background: #ffffff !important;}
-                        .input-brown { border: 1px solid #FDE68A !important; border-radius: 6px !important; background: #FFFBEB !important;}
-
-                        .c-title { font-weight: 800; font-size: 12px; color: #475569; text-transform: uppercase; margin-bottom: 5px; display: block;}
-                        .criteria-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; }
-                    </style>
-
-                    <sheet>
-                        <field name="kehoach_id" readonly="true"/>
-                        <div class="d-flex gap-3 mb-4 p-3 rounded" style="background: #EFF6FF; border: 1px solid #BFDBFE;">
-                            <div class="flex-grow-1">
-
-                                <field name="linhvuc_id" required="1" class="fw-bold fs-5 text-primary w-100" options="{'no_create': True}"/>
-                            </div>
-                            <div class="flex-grow-1">
-
-                                <field name="tuoi_id" required="1" class="fw-bold fs-5 text-danger w-100" options="{'no_create': True}"/>
-                            </div>
-                        </div>
-
-
-
-                    </sheet>
-                </form>
-            </field>
-        </record>
 
 
   </data>

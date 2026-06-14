@@ -59,7 +59,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
 
                 # 🌟 SỬA LỖI: Khởi tạo mảng chứa danh sách mục tiêu để tránh bị ghi đè dữ liệu
                 muctieus_json_list = []
-                muctieus = linhvuc.muctieu_ids
+                muctieus = linhvuc.kehoach_muctieu_ids
 
                 if muctieus:
                     for muctieu in muctieus:

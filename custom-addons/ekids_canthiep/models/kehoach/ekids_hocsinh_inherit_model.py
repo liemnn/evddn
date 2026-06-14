@@ -302,6 +302,7 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
                     'domain': [('coso_id', '=', self.coso_id.id)],
                     'context': {
                         'default_coso_id': self.coso_id.id,
+                        'default_kehoach_id': kehoach.id,
                         'default_ketluan_id': ketluan.id,
                         'default_hocsinh_id': self.id
                     },

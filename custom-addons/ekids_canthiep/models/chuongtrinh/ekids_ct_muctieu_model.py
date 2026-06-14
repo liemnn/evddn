@@ -1,4 +1,5 @@
 from odoo import models, fields, api, exceptions
+from odoo.exceptions import ValidationError
 import re
 from bs4 import BeautifulSoup
 
@@ -22,4 +23,41 @@ class MucTieu(models.Model):
     tieuchi_hinhthanh = fields.Char(string="Đang hình thành (+/-)",required=True)
     tieuchi_dat = fields.Char(string="Đạt (+)",required=True)
 
+    def action_luachon_ct_muctieu_vao_kehoach(self):
+        self.ensure_one()  # Xử lý đích danh dòng vừa được bấm nút
+
+        # Bốc các ID cấu trúc được truyền từ context ngầm của nút cha
+        kehoach_id = self.env.context.get('default_kehoach_id')
+        linhvuc_id = self.env.context.get('default_linhvuc_id')
+        tuoi_id = self.env.context.get('default_tuoi_id')
+
+        return self.action_chon_kehoach_muctieu()
+
+
+
+    def action_chon_kehoach_muctieu(self):
+        # Lấy ID của danh sách list view danh mục mục tiêu mẫu
+        list_view_id = self.env.ref('ekids_canthiep.ct_muctieu_list').id
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'LỰA CHỌN MỤC TIÊU CHO KẾ HOẠCH',
+            'res_model': 'ekids.ct_muctieu',
+            'view_mode': 'list',  # 🌟 SỬA TỪ 'form' THÀNH 'list' để hiện danh sách
+            'views': [(list_view_id, 'list')],  # Chuẩn Odoo 18
+            'target': 'new',  # Mở dạng Pop-up
+            'context': {
+                # Ép bộ lọc tự động chỉ hiển thị các mục tiêu thuộc Lĩnh vực và Độ tuổi này
+                'search_default_linhvuc_id': self.linhvuc_id.id,
+                'search_default_tuoi_id': self.tuoi_id.id,
+
+                'edit': False,  # 🚫 Tắt hoàn toàn tính năng và ẩn nút [Sửa]
+                'create': False,  # 🚫 Tắt tính năng và ẩn nút [Tạo mới]
+                'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
+            },
+        }
+
+
+    def func_chon_muctieu_vao_kehoach(self,kehoach_linhvuc_id):
+        return None
 

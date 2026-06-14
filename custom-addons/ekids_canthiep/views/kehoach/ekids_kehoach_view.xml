@@ -490,118 +490,57 @@
                         <notebook>
                             <page string="MỤC TIÊU KẾ HOẠCH" icon="fa-graduation-cap">
                                 <div class="ekids_inner_kanban_container mt-3">
-                                    <field name="kehoach_linhvuc_ids" mode="kanban" nolabel="1" >
+                                    <field name="kehoach_linhvuc_ids" mode="kanban" nolabel="1" options="{'no_open': True}">
 
-                                        <!-- ĐÃ GỠ GIAO DIỆN CLICK TOÀN THẺ TRÊN KANBAN -->
-                                        <kanban class="o_kanban_mobile" default_order="sequence" create="0" delete="0" edit="0">
+                                        <kanban class="o_kanban_mobile" default_order="sequence"
+                                                create="0" delete="0" edit="0" open_form_view="0">
                                             <field name="id"/>
                                             <field name="sequence"/>
                                             <field name="linhvuc_id"/>
                                             <field name="tuoi_id"/>
-                                            <field name="muctieu_ids"/>
+                                            <field name="kehoach_muctieu_ids"/>
                                             <field name="muctieu_html"/>
 
                                             <templates>
                                                 <t t-name="kanban-box">
-                                                    <!-- Bỏ class oe_kanban_global_click tại đây -->
                                                     <div class="linhvuc_row_card">
 
-                                                        <!-- TIÊU ĐỀ DÒNG & CỤM ĐIỀU HƯỚNG NÚT BẤM BÊN PHẢI -->
                                                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <div class="d-flex align-items-center justify-content-center bg-blue-50 rounded shadow-sm" style="width:28px; height:28px; border: 1px solid #BAE6FD;">
                                                                     <i class="fa fa-folder-open text-primary" style="font-size:13px;"></i>
                                                                 </div>
+
                                                                 <h4 class="fw-bold text-dark mb-0" style="font-size: 15px; font-weight: 800;">
-                                                                    <field name="linhvuc_id"/>
+                                                                    <field name="linhvuc_id" options="{'no_open': True}"/>
                                                                 </h4>
+
                                                                 <span class="badge" style="background-color: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; font-size: 12px; font-weight: 700; padding: 3px 6px; border-radius: 5px;">
                                                                     <i class="fa fa-birthday-cake me-1"></i>
-                                                                    <field name="tuoi_id"/>
+                                                                    <field name="tuoi_id" options="{'no_open': True}"/>
                                                                 </span>
-
                                                             </div>
 
-                                                            <!-- ĐÃ SỬA: CỤM ĐẾM SỐ LƯỢNG KẾT HỢP NÚT HÀNH ĐỘNG MỞ POPUP -->
                                                             <div class="d-flex align-items-center gap-2">
-                                                                <!-- Badge đếm mục tiêu -->
                                                                 <span class="badge" style="background-color: #E0F2FE; color: #0369A1; font-weight: 800; font-size: 11.5px; padding: 5px 10px; border-radius: 6px;">
-                                                                    <i class="fa fa-tasks me-1"></i> Có <t t-esc="record.muctieu_ids.raw_value.length"/> mục tiêu
+                                                                    <i class="fa fa-tasks me-1"></i> Có <t t-esc="record.kehoach_muctieu_ids.raw_value.length"></t> mục tiêu
                                                                 </span>
 
-                                                                <!-- NÚT MỚI THÊM: Click vào đây mới chính thức kích hoạt mở Form Popup -->
-                                                               <button type="edit" class="btn_add_muctieu_mini">
+                                                                <button type="object" name="action_xem_linhvucwizard2muctieu"
+                                                                        context="{'default_kehoach_linhvuc_id':id}"
+                                                                        class="btn_add_muctieu_mini">
                                                                     <i class="fa fa-plus-circle me-1"></i>Thêm mục tiêu
                                                                 </button>
                                                             </div>
                                                         </div>
 
-                                                        <!-- HIỂN THỊ DANH SÁCH BÀI HỌC HÀNG DỌC -->
                                                         <div class="mt-3 pt-2.5 custom_muctieu_html_holder">
-
-                                                            <t t-out="record.muctieu_html.raw_value"/>
+                                                            <t t-out="record.muctieu_html.raw_value"></t>
                                                         </div>
                                                     </div>
                                                 </t>
                                             </templates>
                                         </kanban>
-
-                                        <!-- KHỐI FORM POPUP SỬA CHI TIẾT SẼ ĐƯỢC GỌI KHI PHÍM MINI ĐƯỢC ẤN -->
-                                        <form string="Danh sách [Mục tiêu] thuộc lĩnh vực trong kế hoạch">
-                                            <sheet class="p-3 bg-white">
-
-                                                <div class="d-flex align-items-center justify-content-center flex-wrap mb-3" style="gap: 12px;">
-
-                                                    <div class="border border-primary rounded-3 bg-white shadow-sm p-2 px-3 flex-fill text-start"
-                                                         style="border-width: 2px !important; min-width: 220px; py: 6px !important;">
-
-                                                        <div class="d-flex align-items-center text-muted mb-0.5" style="font-size: 10px; gap: 6px;">
-                                                            <i class="fa fa-cubes text-primary-light" style="font-size: 12px;"></i>
-                                                            <span class="text-uppercase fw-bold" style="letter-spacing: 0.5px; color: #94A3B8;">Lĩnh vực</span>
-                                                        </div>
-
-                                                        <div class="text-primary fw-bolder lh-sm" style="font-weight: 800; font-size: 15px; letter-spacing: -0.2px;">
-                                                            <field name="linhvuc_id" readonly="true" options="{'no_open': True}"/>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="border border-primary rounded-3 bg-white shadow-sm p-2 px-3 flex-fill text-start"
-                                                         style="border-width: 2px !important; min-width: 220px; py: 6px !important;">
-
-                                                        <div class="d-flex align-items-center text-muted mb-0.5" style="font-size: 10px; gap: 6px;">
-                                                            <i class="fa fa-street-view text-slate-400" style="font-size: 12px;"></i>
-                                                            <span class="text-uppercase fw-bold" style="letter-spacing: 0.5px; color: #94A3B8;">Độ tuổi</span>
-                                                        </div>
-
-                                                        <div class="text-primary fw-bolder lh-sm" style="font-weight: 800; font-size: 15px; letter-spacing: -0.2px;">
-                                                            <field name="tuoi_id" readonly="true" options="{'no_open': True}"/>
-                                                        </div>
-                                                    </div>
-
-
-
-                                                </div>
-
-                                                <h5 class="fw-bold text-secondary mb-2" style="font-size:13px; letter-spacing: 0.02em;">
-                                                    <i class="fa fa-check-square-o text-success me-1.5"></i>
-                                                    CÁC MỤC TIÊU TRONG KẾ HOẠCH THUỘC [LĨNH VỰC] và [ĐỘ TUỔI]
-                                                </h5>
-
-                                                <field name="muctieu_ids"
-                                                       domain="[('linhvuc_id','=',linhvuc_id),('tuoi_id','=',tuoi_id)]">
-                                                    <list editable="bottom" create="0" edit="0" delete="1">
-                                                        <field name="sequence" string="TT"/>
-                                                        <field name="name" string="Mục tiêu"/>
-                                                        <field name="chucnang" string="Chức năng" optional="hide"/>
-                                                        <field name="thietke" string="Thiết kế" optional="hide"/>
-                                                        <field name="tieuchi_chuadat" string="Chưa đạt" optional="hide"/>
-                                                        <field name="tieuchi_hinhthanh" string="Hình thành" optional="hide"/>
-                                                        <field name="tieuchi_dat" string="Đạt" optional="hide"/>
-
-                                                    </list>
-                                                </field>
-                                            </sheet>
-                                        </form>
                                     </field>
                                 </div>
                             </page>
