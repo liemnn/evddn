@@ -7,8 +7,9 @@
             <field name="arch" type="xml">
                 <list default_order="sequence">
                     <field name="sequence" widget="handle"/>
-                    <field name="sequence" width="50"/>
+                    <field name="index" width="50"/>
                     <field name="name"/>
+                    <field name="tong_muctieu" width="150"/>
                     <field name="desc" />
                 </list>
             </field>

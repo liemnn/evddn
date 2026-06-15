@@ -4,10 +4,14 @@ from odoo import models, fields, api, exceptions
 class LinhVuc(models.Model):
     _name = "ekids.ct_linhvuc"
     _description = "Lĩnh vực"
+    _order = "sequence asc"
+
 
     coso_id = fields.Many2one("ekids.coso", related="chuongtrinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
     sequence = fields.Integer(string="STT", default=1)
+    index = fields.Integer(string="STT", compute="_compute_index", store=False)
+
     name = fields.Char(string="Tên",required=True)
 
     desc =fields.Html(string="Mô tả")
@@ -18,7 +22,11 @@ class LinhVuc(models.Model):
 
     tong_muctieu = fields.Integer(string="Tổng mục tiêu", compute="_compute_ct_linhvuc_tong_muctieu", store=False)
 
-
+    def _compute_index(self):
+        index = 1
+        for record in self:
+            record.index = index
+            index += 1
     def _compute_ct_linhvuc_tong_muctieu(self):
         for lv in self:
             count = self.env['ekids.ct_muctieu'].search_count([('linhvuc_id','=',lv.id)])

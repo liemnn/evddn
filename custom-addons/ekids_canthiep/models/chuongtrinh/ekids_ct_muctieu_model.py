@@ -7,12 +7,15 @@ from bs4 import BeautifulSoup
 class MucTieu(models.Model):
     _name = "ekids.ct_muctieu"
     _description = "Lĩnh vực"
+    _order = "sequence asc"
 
     coso_id = fields.Many2one("ekids.coso", related="linhvuc_id.coso_id", string="Cơ sở", required=True,ondelete="restrict")
     chuongtrinh_id = fields.Many2one("ekids.ct_chuongtrinh", related="linhvuc_id.chuongtrinh_id", string="Chương trình", required=True,
                               ondelete="restrict")
 
     sequence = fields.Integer(string="STT", default=1)
+    index = fields.Integer(string="STT hiển thị", compute="_compute_index", store=False)
+    index_list = fields.Integer(string="STT hiển thị", compute="_compute_index_list", store=False)
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực',required=True)
     tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi',required=True)
 
@@ -22,6 +25,28 @@ class MucTieu(models.Model):
     tieuchi_chuadat = fields.Char(string="Chưa đạt (-)",required=True)
     tieuchi_hinhthanh = fields.Char(string="Đang hình thành (+/-)",required=True)
     tieuchi_dat = fields.Char(string="Đạt (+)",required=True)
+
+    @api.depends('linhvuc_id', 'sequence')
+    def _compute_index(self):
+        # 1. Gom nhóm các bản ghi thực tế đang hiển thị trên màn hình theo từng Lĩnh vực
+        linhvuc_groups = {}
+        for rec in self:
+            linhvuc_groups.setdefault(rec.linhvuc_id.id, []).append(rec)
+
+        # 2. Sắp xếp tuyến tính nội bộ từng nhóm và đánh số thứ tự từ 1 trở đi
+        for lv_id, rec_list in linhvuc_groups.items():
+            # Sắp xếp danh sách dựa trên sequence và id để đảm bảo thứ tự kéo thả không đổi
+            sorted_list = sorted(rec_list, key=lambda r: (r.sequence, r.id))
+
+            for idx, rec in enumerate(sorted_list, 1):
+                rec.index = idx
+
+
+    def _compute_index_list(self):
+        index =1
+        for record in self:
+            record.index_list = index
+            index +=1
 
     def action_luachon_ct_muctieu_vao_kehoach(self):
         self.ensure_one()  # Xử lý đích danh dòng vừa được bấm nút
