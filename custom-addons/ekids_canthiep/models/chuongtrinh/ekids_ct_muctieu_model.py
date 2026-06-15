@@ -26,6 +26,9 @@ class MucTieu(models.Model):
     tieuchi_hinhthanh = fields.Char(string="Đang hình thành (+/-)",required=True)
     tieuchi_dat = fields.Char(string="Đạt (+)",required=True)
 
+    trangthai = fields.Selection([("0", "Không hoạt động")
+                                     , ("1", "Đang hoạt động")], default="1", required=True)
+
     @api.depends('linhvuc_id', 'sequence')
     def _compute_index(self):
         # 1. Gom nhóm các bản ghi thực tế đang hiển thị trên màn hình theo từng Lĩnh vực

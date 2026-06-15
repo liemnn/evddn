@@ -27,6 +27,8 @@ class ChuongTrinh(models.Model):
     tong_linhvuc = fields.Integer(string="Tổng lĩnh vực",compute="_compute_tong_linhvuc",store=False)
     tong_muctieu = fields.Integer(string="Tổng mục tiêu",compute="_compute_tong_muctieu",store=False)
 
+    trangthai = fields.Selection([("0", "Không hoạt động")
+                                     , ("1", "Đang hoạt động")], default="1", required=True)
 
     def _compute_tong_tuoi(self):
         for ct in self:

@@ -37,6 +37,9 @@
                     <field name="tuoi_id" string="Độ tuổi" options="{'no_open': True, 'no_create': True}"/>
 
                     <field name="name" string="Nội dung mục tiêu / Chỉ số hành vi mẫu" decoration-bf="True"/>
+                    <field name="trangthai"
+                           decoration-success="trangthai == '1'"
+                           decoration-danger="trangthai == '0'"/>
                     <field name="tieuchi_chuadat" string="Chưa đạt" optional="hide" decoration-danger="True"/>
                     <field name="tieuchi_hinhthanh" string="hình thành" optional="hide" decoration-warning="True"/>
                     <field name="tieuchi_dat" string="Đạt" optional="hide" decoration-success="True"/>

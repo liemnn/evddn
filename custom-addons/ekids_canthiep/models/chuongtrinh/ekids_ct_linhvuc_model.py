@@ -22,6 +22,9 @@ class LinhVuc(models.Model):
 
     tong_muctieu = fields.Integer(string="Tổng mục tiêu", compute="_compute_ct_linhvuc_tong_muctieu", store=False)
 
+    trangthai = fields.Selection([("0", "Không hoạt động")
+                                     , ("1", "Đang hoạt động")], default="1", required=True)
+
     def _compute_index(self):
         index = 1
         for record in self:

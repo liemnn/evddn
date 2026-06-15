@@ -10,6 +10,9 @@
                     <field name="name" />
                     <field name="tong_muctieu" width="150"/>
                     <field name="desc"  />
+                    <field name="trangthai"
+                           decoration-success="trangthai == '1'"
+                           decoration-danger="trangthai == '0'"/>
                 </list>
             </field>
         </record>

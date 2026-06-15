@@ -8,6 +8,9 @@
                     <field name="name"/>
                     <field name="title" />
                     <field name="desc" />
+                    <field name="trangthai"
+                           decoration-success="trangthai == '1'"
+                           decoration-danger="trangthai == '0'"/>
 
                 </list>
             </field>
