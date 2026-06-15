@@ -11,23 +11,21 @@ class KeHoachCanthiepController(http.Controller):
         API JSON-RPC cung cấp dữ liệu động thời gian thực cho màn hình OWL Can thiệp
         """
         # 1. Tìm bản ghi Kế hoạch lớn cha
-        plan = request.env['ekids.kehoach'].browse(int(plan_id))
-        if not plan.exists():
+        kehoach = request.env['ekids.kehoach'].browse(int(plan_id))
+        if not kehoach.exists():
             return {'status': 'error', 'message': 'Kế hoạch can thiệp không tồn tại'}
 
         # 2. Đóng gói thông tin Master Readonly phía trên
-        plan_info = {
-            'student_name': plan.hocsinh_id.name,
-            'tu_ngay': plan.tu_ngay.strftime('%d/%m/%Y') if plan.tu_ngay else '',
-            'den_ngay': plan.den_ngay.strftime('%d/%m/%Y') if plan.den_ngay else '',
-            'songay': f"{plan.songay} ngày"
+        kehoach_obj = {
+            'student_name': kehoach.hocsinh_id.name,
+            'tu_ngay': kehoach.tu_ngay.strftime('%d/%m/%Y') if kehoach.tu_ngay else '',
+            'den_ngay': kehoach.den_ngay.strftime('%d/%m/%Y') if kehoach.den_ngay else '',
+            'songay': f"{kehoach.songay} ngày"
         }
 
         # 3. Truy vấn bảng mục tiêu chi tiết của kế hoạch này (ekids.kehoach_muctieu)
         # Sắp xếp chuẩn theo sequence Lĩnh vực
-        muctieu_records = request.env['ekids.kehoach_muctieu'].search([
-            ('kehoach_id', '=', plan.id)
-        ], order='sequence, id asc')
+        muctieu_records = kehoach.kehoach_muctieu_ids
 
         # Thuật toán gom nhóm dữ liệu theo mục tiêu của từng Lĩnh vực chuyên môn
         domains_dict = {}
@@ -72,6 +70,6 @@ class KeHoachCanthiepController(http.Controller):
 
         return {
             'status': 'success',
-            'planInfo': plan_info,
+            'planInfo': kehoach_obj,
             'domains': list(domains_dict.values())
         }

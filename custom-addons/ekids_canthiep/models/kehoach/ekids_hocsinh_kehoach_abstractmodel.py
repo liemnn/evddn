@@ -71,8 +71,8 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                             "trangthai": muctieu.trangthai,
 
                             # 💡 BỔ SUNG SẴN: Các trường lâm sàng (Đề phòng sau này XML của anh cần gọi ra dùng)
-                            "chucnang": getattr(muctieu, 'chucnang', ''),
-                            "thietke": getattr(muctieu, 'thietke', ''),
+                            "chucnang": muctieu.muctieu_id.chucnang,
+                            "thietke": muctieu.muctieu_id.thietke,
                             "tieuchi_dat": getattr(muctieu, 'tieuchi_dat', ''),
                             "tieuchi_hinhthanh": getattr(muctieu, 'tieuchi_hinhthanh', ''),
                             "tieuchi_chuadat": getattr(muctieu, 'tieuchi_chuadat', ''),

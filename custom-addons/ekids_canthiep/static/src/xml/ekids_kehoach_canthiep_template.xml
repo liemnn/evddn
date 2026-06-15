@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="ekids_canthiep.kehoach_canthiep">
-        <div class="p-3 p-md-4 w-100 h-100 overflow-auto bg-light" style="font-family: Arial, sans-serif;">
+        <div class="p-3 p-md-4 w-100 h-100 overflow-auto bg-light">
 
             <style>
                 /* NÚT QUAY LẠI DANH SÁCH KẾ HOẠCH */
@@ -33,20 +33,20 @@
 
                 .goals-table-wrapper { width: 100%; overflow-x: auto; }
                 .goals-table { width: 100%; border-collapse: collapse; min-width: 1050px; table-layout: fixed; }
-                .goals-table td { padding: 14px 14px; border-bottom: 1px solid #F1F5F9; vertical-align: middle; font-size: 0.98rem !important; color: #0F172A; font-family: Arial, sans-serif; }
+                .goals-table td { padding: 14px 14px; border-bottom: 1px solid #F1F5F9; vertical-align: middle; font-size: 0.98rem !important; color: #0F172A;}
                 .goal-name-text { font-weight: 600 !important; color: #1E293B !important; line-height: 1.5; }
                 .goal-index-circle { background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%); color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: 800; }
 
                 /* 🌟 CẤU HÌNH HỆ THỐNG VI NHÃN TIẾN ĐỘ MỚI SANG TRỌNG */
                 .clinical-counts-box { display: flex; align-items: center; gap: 6px; background: transparent; padding: 0; border: none; width: fit-content; }
-                .count-badge { display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 4px 8px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; font-weight: 700; border: 1px solid transparent; }
+                .count-badge { display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 4px 8px; border-radius: 6px; font-weight: 700; border: 1px solid transparent; }
 
                 .badge-all { background-color: #F1F5F9; color: #475569; border-color: #E2E8F0; }
                 .badge-ok { background-color: #DCFCE7; color: #16A34A; border-color: #BBF7D0; }
                 .badge-half { background-color: #FFFBEB; color: #D97706; border-color: #FDE68A; }
                 .badge-fail { background-color: #FEF2F2; color: #DC2626; border-color: #FECACA; }
 
-                .goal-status-pill { font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 5px; text-transform: uppercase; display: inline-block; min-width: 90px; text-align: center; letter-spacing: 0.2px; }
+                .goal-status-pill { font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 5px;display: inline-block; min-width: 90px; text-align: center; letter-spacing: 0.2px; }
                 .status-pill-1 { background-color: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0; }
                 .status-pill--1 { background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
                 .status-pill-0 { background-color: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
@@ -55,10 +55,10 @@
 
                 .detail-info-container { padding: 22px 24px; display: flex; flex-direction: column; gap: 20px; border-left: 4px solid #2563EB; background: #FFFFFF; margin: 4px 12px 14px 12px; border-radius: 0 8px 8px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.01); }
                 .info-label-premium { font-weight: 700; font-size: 0.88rem; text-transform: uppercase; display: flex; align-items: center; gap: 6px; letter-spacing: 0.2px; }
-                .clinical-desc-p { font-size: 0.95rem !important; line-height: 1.6; color: #334155; text-align: justify; margin-top: 6px; font-family: Arial, sans-serif; }
+                .clinical-desc-p { font-size: 0.95rem !important; line-height: 1.6; color: #334155; text-align: justify; margin-top: 6px; }
 
                 .criteria-flex-layout { display: flex; gap: 14px; width: 100%; flex-wrap: wrap; }
-                .criteria-card-item { flex: 1; min-width: 250px; border-radius: 6px; padding: 12px 14px; border: 1px solid #FECACA; background-color: #FEF2F2; font-family: Arial, sans-serif; }
+                .criteria-card-item { flex: 1; min-width: 250px; border-radius: 6px; padding: 12px 14px; border: 1px solid #FECACA; background-color: #FEF2F2;}
                 .criteria-card-item.warn { border-color: #FDE68A; background-color: #FFFBEB; }
                 .criteria-card-item.success { border-color: #BBF7D0; background-color: #F0FDF4; }
                 .criteria-box-desc-text { font-size: 0.92rem !important; margin-top: 4px; line-height: 1.4; }
@@ -134,7 +134,7 @@
                             <span class="domain-age-badge"><t t-esc="linhvuc.tuoi"></t></span>
                         </div>
                         <div class="domain-progress-badge">
-                            <i class="fa fa-chart-pie"></i> Tiến độ: <t t-esc="linhvuc.muctieus.filter(m => m.status === 'dat').length"></t> / <t t-esc="linhvuc.muctieus.length"></t> mục tiêu
+                            <i class="fa fa-chart-pie"></i> Tiến độ đạt: <t t-esc="linhvuc.muctieus.filter(m => m.status === 'dat').length"></t> / <t t-esc="linhvuc.muctieus.length"></t> mục tiêu
                         </div>
                     </div>
 
@@ -156,7 +156,8 @@
                                                     <t t-esc="muctieu.cnt_ok"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">+</span>
                                                 </div>
                                                 <div class="count-badge badge-half" title="Số ca Đang hình thành">
-                                                    <t t-esc="muctieu.cnt_half"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">±</span>
+                                                    <t t-esc="muctieu.cnt_half"></t>
+                                                    <span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">+/-</span>
                                                 </div>
                                                 <div class="count-badge badge-fail" title="Số ca Chưa đạt">
                                                     <t t-esc="muctieu.cnt_fail"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">-</span>
@@ -189,11 +190,13 @@
                                                 <div class="row w-100 m-0 g-3">
                                                     <div class="col-md-6 ps-0 pe-0 pe-md-3">
                                                         <span class="info-label-premium text-success"><i class="fa fa-star"></i> Chức năng phát triển cốt lõi:</span>
-                                                        <p class="text-muted text-justify clinical-desc-p" style="line-height:1.6;"><t t-html="muctieu.chucnang"></t></p>
+                                                        <HtmlContent value="muctieu.chucnang"/>
                                                     </div>
+
                                                     <div class="col-md-6 pe-0 ps-0 ps-md-3">
-                                                        <span class="info-label-premium text-warning" style="color: #EA580C !important;"><i class="fa fa-magic"></i> Thiết kế hoạt động cho giáo viên:</span>
-                                                        <p class="text-muted text-justify clinical-desc-p" style="line-height:1.6;"><t t-html="muctieu.thietke"></t></p>
+                                                        <span class="info-label-premium text-warning" style="color: #EA580C !important;">
+                                                            <i class="fa fa-magic"></i> Thiết kế hoạt động cho giáo viên:</span>
+                                                        <HtmlContent value="muctieu.thietke"/>
                                                     </div>
                                                 </div>
                                                 <div class="w-100 mt-2">

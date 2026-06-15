@@ -1,15 +1,45 @@
 /** @odoo-module **/
-import { Component, useState, onWillStart } from "@odoo/owl";
+// 🌟 ĐÃ CẢI TIẾN: Import thêm thẻ "xml" của OWL để viết giao diện trực tiếp trong JS
+import { Component, useState, onWillStart, useRef, onMounted, onWillUpdateProps, xml } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+
+// Sub-Component chuyên trách render Rich Text với template INLINE (Tuyệt đối không lo thiếu template)
+class HtmlContent extends Component {
+    // 🌟 KHẮC PHỤC LỖI CHÍ MẠNG: Khai báo giao diện trực tiếp tại đây, Odoo sẽ nạp tức thì
+    static template = xml`
+        <div class="text-muted text-justify clinical-desc-p" style="line-height:1.6; font-size: 0.95rem;" t-ref="htmlRoot"/>
+    `;
+
+    setup() {
+        const rootRef = useRef("htmlRoot");
+
+        const renderHtml = (props) => {
+            if (rootRef.el) {
+                let rawHtml = props.value || "";
+                // Tự động giải mã nếu chuỗi bị dính thực thể mã hóa thô (&lt;p&gt;)
+                if (typeof rawHtml === 'string' && (rawHtml.includes("&lt;") || rawHtml.includes("&gt;") || rawHtml.includes("&amp;"))) {
+                    const doc = new DOMParser().parseFromString(rawHtml, "text/html");
+                    rawHtml = doc.documentElement.textContent || "";
+                }
+                // Ép trình duyệt thực thi chạy định dạng format HTML giàu thuộc tính
+                rootRef.el.innerHTML = rawHtml;
+            }
+        };
+
+        onMounted(() => renderHtml(this.props));
+        onWillUpdateProps((nextProps) => renderHtml(nextProps));
+    }
+}
 
 export class KeHoachCanthiepComponent extends Component {
     static template = "ekids_canthiep.kehoach_canthiep";
 
+    // Đăng ký Sub-Component vào bộ nạp của màn hình chính
+    static components = { HtmlContent };
+
     setup() {
         this.orm = useService("orm");
-
-        // 🌟 SỬA LỖI 1: Khai báo action Service của Odoo 18 để thực thi được hàm doAction
         this.actionService = useService("action");
 
         this.state = useState({
@@ -24,14 +54,12 @@ export class KeHoachCanthiepComponent extends Component {
         });
     }
 
-    // Đảo ngược trạng thái Ẩn/Hiện của khối Lĩnh vực khi giáo viên click
     toggleDomain(domainId, ev) {
         ev.stopPropagation();
         this.state.collapsedDomains[domainId] = !this.state.collapsedDomains[domainId];
     }
 
     async _loadData() {
-        // Phòng hờ kiểm tra cả 2 khóa ID trong context để tránh rỗng dữ liệu đầu vào
         const planId = this.props.action.context.active_id || this.props.action.context.kehoach_id;
         const result = await this.orm.call("ekids.hocsinh", "get_owl_canthiep_data", [planId]);
         if (result && result.status === "success") {
@@ -50,33 +78,19 @@ export class KeHoachCanthiepComponent extends Component {
         alert("Ghi nhận kết quả cho mục tiêu ID: " + goalId);
     }
 
-    // 🌟 BỔ SUNG: Hàm đóng màn hình quay lại nếu XML của anh có gọi nút actionQuayLai
     actionQuayLai(ev) {
         ev.stopPropagation();
         this.actionService.doAction({ type: "ir.actions.act_window_close" });
     }
 
-    // Hàm gọi chung các Action từ model Python
     async goiKeHoachAction(tenAction, ev) {
         ev.stopPropagation();
-
-        // 🌟 TỐI ƯU: Lấy linh hoạt giữa kehoach_id hoặc active_id để không bị rỗng ID khi chạy
         const kehoach_id = this.props.action.context.kehoach_id || this.props.action.context.active_id;
-        console.log("Kehoach_id =========", kehoach_id);
-
-        if (!kehoach_id) {
-            console.warn("Không tìm thấy ID Kế hoạch trong context hành động!");
-            return;
-        }
+        if (!kehoach_id) return;
 
         try {
-            // 🌟 SỬA LỖI 2: Vá lỗi chuỗi nháy kép Python thành chuỗi JavaScript hợp lệ
-            console.log("Bắt đầu gọi hành động: " + tenAction);
-
-            // Truyền động tên hàm Python được gửi từ XML vào tầng ORM
             const actionWindow = await this.orm.call("ekids.kehoach", tenAction, [kehoach_id]);
             if (actionWindow) {
-                // Thực thi trả giao diện về WebClient Odoo 18
                 await this.actionService.doAction(actionWindow);
             }
         } catch (error) {
