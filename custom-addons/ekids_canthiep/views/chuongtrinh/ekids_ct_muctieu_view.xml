@@ -62,6 +62,8 @@
                     <field name="linhvuc_id"/>
                     <field name="tuoi_id"/>
 
+                    <field name="trangthai"/>
+
                     <templates>
                         <t t-name="kanban-box">
                             <style>
@@ -76,7 +78,7 @@
                                     border: none !important;
                                     box-shadow: none !important;
                                 }
-                                /* 🌟 ĐÃ SỬA: Hình tròn STT to lên, bôi đậm, nền xanh gradient như phần kế hoạch */
+                                /* Hình tròn STT to xanh gradient nổi bật */
                                 .ekids_item_index_circle {
                                     width: 30px;
                                     height: 30px;
@@ -86,13 +88,13 @@
                                     display: inline-flex;
                                     align-items: center;
                                     justify-content: center;
-
-                                    font-weight: 900; /* Bôi đậm số thứ tự */
+                                    font-family: monospace;
+                                    font-weight: 900;
                                     font-size: 13px;
                                     flex-shrink: 0;
                                     box-shadow: 0 2px 4px rgba(2, 132, 199, 0.2);
                                 }
-                                /* Hiệu ứng hover đổi màu viền nhẹ nhàng khi rê chuột qua bài học */
+                                /* Hiệu ứng hover nhẹ nhàng đổi màu viền card */
                                 .ekids_card_row:hover {
                                     border-color: #3B82F6 !important;
                                     background-color: #F8FAFC !important;
@@ -116,12 +118,27 @@
                                         <i class="fa fa-birthday-cake me-1"></i>
                                         <field name="tuoi_id"/>
                                     </span>
+
+
                                 </div>
 
                                 <div class="mt-2.5 w-100 text-dark font-sans"
                                      style="font-size: 14px; font-weight: normal; line-height: 1.5; white-space: normal; color: #1E293B !important; padding-left: 2px;">
                                     <field name="name"/>
                                 </div>
+                                <span class="ms-1 flex-shrink-0">
+                                    <t t-if="record.trangthai.raw_value == '0'">
+                                        <span class="badge" style="background-color: #F1F5F9; color: red; border: 1px solid #E2E8F0; font-size: 10px; padding: 3px 6px; border-radius: 4px; font-weight: 700;">
+                                             <field name="trangthai"/>
+                                        </span>
+                                    </t>
+                                    <t t-elif="record.trangthai.raw_value == '1'">
+                                        <span class="badge" style="background-color: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; font-size: 10px; padding: 3px 6px; border-radius: 4px; font-weight: 700;">
+                                           <field name="trangthai"/>
+                                        </span>
+                                    </t>
+
+                                </span>
 
                             </div>
                         </t>
@@ -171,50 +188,94 @@
                                 flex-shrink: 0; margin-top: -45px;
                             }
 
-                            .kh-name-section { flex-grow: 1; display: flex; flex-direction: column; width: 100%; }
+                            .kh-name-section { flex-grow: 1; display: flex; flex-direction: column; width: 100%; min-width: 0; }
 
                             /* Hàng chứa Tên mục tiêu và Các thẻ Select Box */
                             .kh-header-row {
-                                display: flex; justify-content: space-between; align-items: stretch; gap: 25px; width: 100%;
+                                display: flex; justify-content: space-between; align-items: flex-start; gap: 25px; width: 100%;
                             }
 
-                            /* ========================================================= */
-                            /* CỤM NỘI DUNG MỤC TIÊU (ĐÃ TỐI ƯU CHO TRƯỜNG CHAR)        */
-                            /* ========================================================= */
-                            .kh-name-container { width: 100%; flex-grow: 1; }
-
-                            /* Ép widget odoo rộng 100% */
-                            .kh-name-container .o_field_widget {
-                                width: 100% !important;
-                            }
+                            /* CỤM NỘI DUNG MỤC TIÊU */
+                            .kh-name-container { width: 100%; flex-grow: 1; display: flex; flex-direction: column; gap: 10px; }
+                            .kh-name-container .o_field_widget { width: 100% !important; }
 
                             /* Căn chỉnh trực tiếp vào thẻ Input của Odoo */
                             .kh-name-container .o_input {
-                                font-size: 20px !important;      /* Chữ to nổi bật */
-                                font-weight: 700 !important;     /* In đậm */
-                                color: #0f172a !important;       /* Màu chữ xám đen sang trọng */
-                                width: 100% !important;          /* Kéo dài tối đa 100% vùng chứa */
-                                border: none !important;         /* Xóa viền hộp mặc định */
-                                border-bottom: 2px dashed #cbd5e1 !important; /* Tạo dòng kẻ đứt nét */
+                                font-size: 20px !important;
+                                font-weight: 700 !important;
+                                color: #0f172a !important;
+                                width: 100% !important;
+                                border: none !important;
+                                border-bottom: 2px dashed #cbd5e1 !important;
                                 background: transparent !important;
                                 padding: 8px 0 !important;
                                 box-shadow: none !important;
                                 transition: all 0.3s ease;
                             }
-
-                            /* Hiệu ứng khi giáo viên click chuột vào gõ */
                             .kh-name-container .o_input:focus {
-                                border-bottom: 2px solid #4f46e5 !important; /* Dòng kẻ đậm lên màu xanh */
+                                border-bottom: 2px solid #4f46e5 !important;
                                 outline: none !important;
                             }
-
-                            /* Căn chỉnh màu mờ cho chữ Placeholder */
                             .kh-name-container .o_input::placeholder {
                                 color: #94a3b8 !important;
                                 font-weight: 500 !important;
                             }
 
-                            /* CỤM SELECT BOX */
+                            /* 🌟 BỔ SUNG CSS: Khối định dạng hàng Trạng thái nằm dưới phần tên */
+                            .kh-status-row {
+                                display: flex;
+                                justify-content: flex-start;
+                                width: 100%;
+                            }
+                            .kh-status-box {
+                                display: inline-flex;
+                                align-items: center;
+                                padding: 4px 12px;
+                                border-radius: 6px;
+                                font-weight: 800;
+                                gap: 6px;
+                                transition: all 0.2s ease;
+
+                                /* Mặc định màu XANH LÁ (Đang sử dụng / Hoạt động) */
+                                background: #f0fdf4;
+
+                                border: 1px solid #bbf7d0;
+                            }
+                            .kh-status-box .o_field_widget { width: 130px !important; }
+                            .kh-status-box .o_input {
+                                font-weight: 900 !important;
+                                font-size: 13px !important;
+                                border: none !important;
+                                background: transparent !important;
+                                padding: 0 !important;
+                                box-shadow: none !important;
+                                cursor: pointer;
+                                color: red !important;
+                            }
+
+                            /* 🌟 THUẬT TOÁN CSS :HAS() TỰ ĐỔI SANG MÀU ĐỎ KHI CHỌN KHÓA / NHÁP / KHÔNG HOẠT ĐỘNG */
+                            .kh-status-box:has(select option[value="lock"]:checked),
+                            .kh-status-box:has(select option[value="draft"]:checked),
+                            .kh-status-box:has(select option[value="2"]:checked),
+                            .kh-status-box:has(select option[value="0"]:checked),
+                            .kh-status-box:has(span:contains("Khóa")),
+                            .kh-status-box:has(span:contains("Nháp")),
+                            .kh-status-box:has(span:contains("Không hoạt động")) {
+                                background: #fef2f2 !important;
+                                color: #dc2626 !important;
+                                border-color: #fecaca !important;
+                            }
+                            .kh-status-box:has(select option[value="lock"]:checked) .o_input,
+                            .kh-status-box:has(select option[value="draft"]:checked) .o_input,
+                            .kh-status-box:has(select option[value="2"]:checked) .o_input,
+                            .kh-status-box:has(select option[value="0"]:checked) .o_input,
+                            .kh-status-box:has(span:contains("Khóa")) .o_input,
+                            .kh-status-box:has(span:contains("Nháp")) .o_input,
+                            .kh-status-box:has(span:contains("Không hoạt động")) .o_input {
+                                color: #dc2626 !important;
+                            }
+
+                            /* CỤM SELECT BOX BÊN PHẢI (LĨNH VỰC &amp; ĐỘ TUỔI) */
                             .kh-select-group {
                                 display: flex; flex-direction: row; gap: 12px; flex-shrink: 0;
                             }
@@ -246,46 +307,34 @@
 
                             /* 3. PHÂN TÁCH VÙNG HTML */
                             .kh-zones-container { display: flex; flex-direction: column; gap: 20px; }
+                            .kh-html-zone { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden; }
+                            .kh-zone-header { padding: 12px 20px; font-weight: 800; font-size: 14px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #f1f5f9; }
+                            .kh-zone-body { padding: 15px 20px; background: #fafaf9; }
 
-                            .kh-html-zone {
-                                background: #ffffff; border-radius: 12px;
-                                box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-                                overflow: hidden;
-                            }
-                            .kh-zone-header {
-                                padding: 12px 20px; font-weight: 800; font-size: 14px; text-transform: uppercase;
-                                display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #f1f5f9;
-                            }
-                            .kh-zone-body {
-                                padding: 15px 20px; background: #fafaf9;
-                            }
-
-                            /* Zone 1: Trích yếu (Tím) */
                             .zone-trichyeu { border: 1px solid #e2e8f0; border-left: 5px solid #8b5cf6; }
                             .zone-trichyeu .kh-zone-header { background: #f5f3ff; color: #6d28d9; }
-
-                            /* Zone 2: Kỹ thuật (Cam) */
                             .zone-kythuat { border: 1px solid #e2e8f0; border-left: 5px solid #f59e0b; }
                             .zone-kythuat .kh-zone-header { background: #fffbeb; color: #b45309; }
-
-                            /* Zone 3: KPI (Xanh lá) */
                             .zone-kpi { border: 1px solid #e2e8f0; border-left: 5px solid #10b981; }
                             .zone-kpi .kh-zone-header { background: #ecfdf5; color: #047857; }
 
-                            /* Khung cho tiêu chí KPI */
                             .kh-kpi-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
                             .kh-kpi-box { padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);}
                             .kh-kpi-title { font-size: 12px; font-weight: 800; margin-bottom: 8px; text-align: center; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px;}
 
-                            /* Mobile Responsive */
+                            /* 🌟 ĐÃ TỐI ƯU TOÀN DIỆN MOBILE CHỐNG VỠ KHUNG */
                             @media (max-width: 992px) {
-                                .kh-header-row { flex-direction: column; gap: 20px; }
-                                .kh-select-group { flex-direction: row; flex-wrap: wrap; width: 100%; justify-content: flex-start; }
+                                .kh-profile-header { flex-direction: column; align-items: center; text-align: center; padding-top: 55px; }
+                                .kh-avatar-wrapper { margin-top: 0; margin-bottom: 5px; }
+                                .kh-header-row { flex-direction: column; gap: 18px; }
+                                .kh-name-container .o_input { text-align: center !important; }
+                                .kh-select-group { flex-direction: row; flex-wrap: wrap; width: 100%; justify-content: center; }
+                                .kh-status-row { justify-content: center; }
                                 .kh-kpi-grid { grid-template-columns: 1fr; }
                             }
                         </style>
 
-                         <field name="chuongtrinh_id" invisible="1"/>
+                        <field name="chuongtrinh_id" invisible="1"/>
 
                         <div class="kh-hero-banner"></div>
 
@@ -293,7 +342,7 @@
 
                             <div class="kh-profile-header">
                                 <div class="kh-avatar-wrapper">
-                                    <i style="font-size: 30px; color: #4f46e5;text-align: center;font-weight: bold;padding:0px;">
+                                    <i style="font-size: 30px; color: #4f46e5; text-align: center; font-weight: bold; padding: 0px;">
                                         <field name="sequence"/>
                                     </i>
                                 </div>
@@ -302,8 +351,14 @@
                                     <div class="kh-header-row">
 
                                         <div class="kh-name-container">
-
                                             <field name="name" nolabel="1" placeholder="Hãy nhập tên [Mục tiêu/ Mô tả]..."/>
+
+                                            <div class="kh-status-row">
+                                                <div class="kh-status-box">
+                                                    <i class="fa fa-toggle-on"></i> TRẠNG THÁI:
+                                                    <field name="trangthai" nolabel="1" class="fw-bold"/>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="kh-select-group">
@@ -321,7 +376,6 @@
                                                        options="{'no_open': True, 'no_create': True}"
                                                 />
                                             </div>
-
                                         </div>
 
                                     </div>
@@ -329,47 +383,37 @@
                             </div>
 
                             <div class="kh-zones-container">
-
                                 <div class="kh-html-zone zone-trichyeu">
                                     <div class="kh-zone-header"><i class="fa fa-tag"></i> Chức năng phát triển cốt lõi và Lập luận lâm sàng</div>
-                                    <div class="kh-zone-body">
-
-                                        <field name="chucnang"/>
-                                    </div>
+                                    <div class="kh-zone-body"><field name="chucnang"/></div>
                                 </div>
 
                                 <div class="kh-html-zone zone-kythuat">
                                     <div class="kh-zone-header"><i class="fa fa-lightbulb-o"></i> Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)</div>
-                                    <div class="kh-zone-body">
-                                      <field name="thietke"/>
-                                    </div>
+                                    <div class="kh-zone-body"><field name="thietke"/></div>
                                 </div>
 
                                 <div class="kh-html-zone zone-kpi">
                                     <div class="kh-zone-header"><i class="fa fa-check-square-o"></i> Tiêu chí đánh giá mức độ thành thục</div>
                                     <div class="kh-zone-body" style="background: #ffffff;">
-
                                         <div class="kh-kpi-grid">
                                             <div class="kh-kpi-box" style="border-color: #bbf7d0;">
                                                 <div class="kh-kpi-title" style="color: #16a34a;">ĐẠT (+)</div>
                                                 <field name="tieuchi_dat" placeholder="Mô tả tiêu chí Đạt..." style="width: 100%; border: none; background: transparent; text-align: center;"/>
                                             </div>
-
                                             <div class="kh-kpi-box" style="border-color: #fde68a;">
                                                 <div class="kh-kpi-title" style="color: #d97706;">ĐANG HÌNH THÀNH (+/-)</div>
                                                 <field name="tieuchi_hinhthanh" placeholder="Mô tả tiêu chí Đang hình thành..." style="width: 100%; border: none; background: transparent; text-align: center;"/>
                                             </div>
-
                                             <div class="kh-kpi-box" style="border-color: #fecaca;">
                                                 <div class="kh-kpi-title" style="color: #dc2626;">CHƯA ĐẠT (-)</div>
                                                 <field name="tieuchi_chuadat" placeholder="Mô tả tiêu chí Chưa đạt..." style="width: 100%; border: none; background: transparent; text-align: center;"/>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
-
                             </div>
+
                         </div>
                     </sheet>
                 </form>
