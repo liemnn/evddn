@@ -7,7 +7,6 @@
                 <list>
                     <field name="name"/>
                     <field name="title" />
-                    <field name="desc" />
                     <field name="trangthai"
                            decoration-success="trangthai == '1'"
                            decoration-danger="trangthai == '0'"/>
@@ -28,6 +27,8 @@
                     <field name="tong_tuoi"/>
                     <field name="tong_linhvuc"/>
                     <field name="tong_muctieu"/>
+
+                    <field name="trangthai"/>
 
                     <templates>
                         <t t-name="kanban-box">
@@ -60,9 +61,18 @@
                                     <div class="book-ribbon" style="position: absolute; top: -10px; right: 20px; width: 30px; height: 40px; background-color: #f59e0b; clip-path: polygon(100% 0, 100% 100%, 50% 75%, 0 100%, 0 0); box-shadow: 2px 2px 5px rgba(0,0,0,0.1);"></div>
 
                                     <div class="d-flex justify-content-between align-items-start mb-3" style="border-bottom: 2px solid #cbd5e1; padding-bottom: 12px;">
-                                        <h3 class="fw-bolder m-0" style="color: #0f172a;">
-                                            <i class="fa fa-book text-muted me-2" style="font-size: 1.1rem;"></i>
+                                        <h3 class="fw-bolder m-0 d-flex align-items-center gap-2 flex-wrap" style="color: #0f172a; max-width: 85%;">
+                                            <i class="fa fa-book text-muted" style="font-size: 1.1rem;"></i>
                                             <field name="title"/>
+
+                                            <span class="ms-1 flex-shrink-0">
+
+                                                    <span class="badge" style="background-color: #EFF6FF;
+                                                        color: #2563EB; border: 1px solid #BFDBFE; font-size: 10px; padding: 3px 6px; border-radius: 4px; font-weight: 700; letter-spacing: 0.3px;">
+                                                        <field name="trangthai"/>
+                                                    </span>
+
+                                            </span>
                                         </h3>
                                     </div>
 
@@ -141,7 +151,7 @@
                                 margin-bottom: 25px;
                             }
 
-                            /* Bố cục header mới */
+                            /* Bố cục header */
                             .kh-header-grid { display: flex; align-items: flex-start; gap: 20px; }
                             .kh-avatar-wrapper {
                                 width: 90px; height: 90px;
@@ -152,7 +162,7 @@
                             }
 
                             /* Khu vực tên và thông tin */
-                            .kh-main-info { flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
+                            .kh-main-info { flex-grow: 1; display: flex; flex-direction: column; gap: 15px; min-width: 0; }
 
                             /* Tên chương trình bung rộng 100% */
                             .kh-name-input { width: 100%; }
@@ -170,14 +180,21 @@
                             }
                             .kh-name-input .o_input:focus { border-bottom: 2px solid #4f46e5 !important; outline: none; }
 
-                            /* Dòng dưới: Mã và Select Box */
-                            .kh-footer-info { display: flex; gap: 20px; align-items: center; }
+                            /* 🌟 ĐÃ SỬA CHUẨN MOBILE: Hàng chứa Mã và Trạng thái tự động co giãn đẩy sang 2 rìa */
+                            .kh-footer-info {
+                                display: flex;
+                                gap: 15px;
+                                align-items: center;
+                                justify-content: space-between; /* ➔ Ép ô Trạng thái tự động dạt về lề phải trên Máy tính */
+                                width: 100%;
+                                flex-wrap: wrap; /* ➔ Tự bẻ dòng thông minh trên Điện thoại chống vỡ khung */
+                            }
 
-                            /* 🌟 ĐÃ TỐI ƯU: Thiết kế khối chứa và định vị độ rộng ô Tên Viết Tắt */
+                            /* Thiết kế ô Tên Viết Tắt */
                             .kh-code-box {
                                 display: inline-flex;
                                 align-items: center;
-                                background: #fff1f2; /* Chuyển sang nền hồng nhạt giúp tương phản sang trọng với màu chữ */
+                                background: #fff1f2;
                                 padding: 6px 14px;
                                 border-radius: 8px;
                                 font-weight: 800;
@@ -185,13 +202,75 @@
                                 border: 1px solid #ffe4e6;
                                 gap: 6px;
                             }
-                            /* Nới rộng khoảng cách hiển thị trường Many2one / Char từ 100px lên 180px phù hợp */
-                            .kh-code-box .o_field_widget { width: 180px !important; }
-                            /* Ép chữ người dùng nhập vào ô viết tắt luôn bôi đậm dày dặn */
-                            .kh-code-box .o_input {
+                            .kh-code-box .o_field_widget { width: 160px !important; }
+                            .kh-code-box .o_input { font-weight: 900 !important; color: #e11d48 !important; font-size: 13.5px !important; }
+
+                            /* 🌟 ĐÃ TỐI ƯU ĐỘNG: Định dạng ô lựa chọn Trạng Thái */
+                            .kh-status-box {
+                                display: inline-flex;
+                                align-items: center;
+                                padding: 6px 14px;
+                                border-radius: 8px;
+                                font-weight: 800;
+                                gap: 6px;
+                                transition: all 0.2s ease;
+
+                                /* Mặc định ban đầu lấy tông màu XANH LỤC (Đang áp dụng / Đang sử dụng) */
+                                background: #f0fdf4;
+
+                                border: 1px solid #bbf7d0;
+                            }
+                            .kh-status-box .o_field_widget { width: 140px !important; }
+                            .kh-status-box .o_input {
                                 font-weight: 900 !important;
-                                color: #e11d48 !important;
                                 font-size: 13.5px !important;
+                                border: none !important;
+                                background: transparent !important;
+                                padding: 0 !important;
+                                box-shadow: none !important;
+                                cursor: pointer;
+                                color: #16a34a !important; /* Mặc định chữ xanh */
+                            }
+
+                            /* 🌟 THUẬT TOÁN CSS :HAS() ĐỔI MÀU ĐỎ KHI CHỌN KHÓA / NHÁP / KHÔNG HOẠT ĐỘNG */
+                            .kh-status-box:has(select option[value="lock"]:checked),
+                            .kh-status-box:has(select option[value="draft"]:checked),
+                            .kh-status-box:has(select option[value="2"]:checked),
+                            .kh-status-box:has(select option[value="0"]:checked),
+                            .kh-status-box:has(span:contains("Khóa")),
+                            .kh-status-box:has(span:contains("Nháp")),
+                            .kh-status-box:has(span:contains("Không hoạt động")) {
+                                background: #fef2f2 !important; /* Đổi sang nền Đỏ nhạt */
+                                color: #dc2626 !important;
+                                border-color: #fecaca !important;
+                            }
+                            /* Đồng bộ chữ bên trong select dropdown thành màu đỏ */
+                            .kh-status-box:has(select option[value="lock"]:checked) .o_input,
+                            .kh-status-box:has(select option[value="draft"]:checked) .o_input,
+                            .kh-status-box:has(select option[value="2"]:checked) .o_input,
+                            .kh-status-box:has(select option[value="0"]:checked) .o_input,
+                            .kh-status-box:has(span:contains("Khóa")) .o_input,
+                            .kh-status-box:has(span:contains("Nháp")) .o_input,
+                            .kh-status-box:has(span:contains("Không hoạt động")) .o_input {
+                                color: #dc2626 !important;
+                            }
+
+                            /* 🌟 ĐỊNH HÌNH RESPONSIVE TRÊN THIẾT BỊ DI ĐỘNG (MOBILE VIEW CO GIÃN) */
+                            @media (max-width: 576px) {
+                                .kh-header-grid {
+                                    flex-direction: column; /* Đổi Avatar xếp dọc trên tên chương trình */
+                                    align-items: center;
+                                    text-align: center;
+                                    gap: 12px;
+                                }
+                                .kh-avatar-wrapper { width: 75px; height: 75px; }
+                                .kh-avatar-wrapper i { font-size: 32px !important; }
+                                .kh-name-input .o_input { font-size: 16px !important; text-align: center; }
+
+                                /* Ép 2 khối hộp kéo dãn rộng full 100% chiều ngang màn hình điện thoại */
+                                .kh-footer-info { flex-direction: column; align-items: stretch; gap: 10px; }
+                                .kh-code-box, .kh-status-box { width: 100% !important; justify-content: center; }
+                                .kh-code-box .o_field_widget, .kh-status-box .o_field_widget { width: auto !important; flex-grow: 1; }
                             }
 
                             /* 3. Vùng nội dung phân tách màu */
@@ -223,6 +302,11 @@
                                         <div class="kh-code-box">
                                             <i class="fa fa-barcode"></i> TÊN VIẾT TẮT:
                                             <field name="name" nolabel="1" placeholder="Nhập tên viết tắt..."/>
+                                        </div>
+
+                                        <div class="kh-status-box">
+                                            <i class="fa fa-toggle-on"></i> TRẠNG THÁI:
+                                            <field name="trangthai" nolabel="1" class="fw-bold"/>
                                         </div>
                                     </div>
                                 </div>
