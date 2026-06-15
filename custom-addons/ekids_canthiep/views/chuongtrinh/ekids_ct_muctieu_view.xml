@@ -83,7 +83,7 @@
                                     display: inline-flex;
                                     align-items: center;
                                     justify-content: center;
-                                    font-family: monospace;
+
                                     font-weight: 900; /* Bôi đậm số thứ tự */
                                     font-size: 13px;
                                     flex-shrink: 0;
@@ -105,11 +105,13 @@
                                     </div>
 
                                     <span class="badge" style="background-color: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; font-size: 10.5px; padding: 4px 8px; border-radius: 5px;">
-                                        <i class="fa fa-folder-open me-1"></i> <field name="linhvuc_id"/>
+                                        <i class="fa fa-folder-open me-1"></i>
+                                        <field name="linhvuc_id"/>
                                     </span>
 
                                     <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; font-size: 10.5px; padding: 4px 8px; border-radius: 5px;">
-                                        <i class="fa fa-birthday-cake me-1"></i> <field name="tuoi_id"/>
+                                        <i class="fa fa-birthday-cake me-1"></i>
+                                        <field name="tuoi_id"/>
                                     </span>
                                 </div>
 
@@ -280,6 +282,8 @@
                             }
                         </style>
 
+                         <field name="chuongtrinh_id" invisible="1"/>
+
                         <div class="kh-hero-banner"></div>
 
                         <div class="kh-content-wrapper">
@@ -302,11 +306,17 @@
                                         <div class="kh-select-group">
                                             <div class="kh-highlight-box">
                                                 <span class="lbl"><i class="fa fa-cubes"></i> Lĩnh vực</span>
-                                                <field name="linhvuc_id" options="{'no_open': True, 'no_create': True}" required="1"/>
+                                                <field name="linhvuc_id"
+                                                       options="{'no_open': True, 'no_create': True}"
+                                                       domain="[('chuongtrinh_id','=',chuongtrinh_id)]"
+                                                       required="1"/>
                                             </div>
                                             <div class="kh-highlight-box">
                                                 <span class="lbl"><i class="fa fa-child"></i> Độ tuổi</span>
-                                                <field name="tuoi_id" options="{'no_open': True, 'no_create': True}"/>
+                                                <field name="tuoi_id"
+                                                       domain="[('chuongtrinh_id','=',chuongtrinh_id)]"
+                                                       options="{'no_open': True, 'no_create': True}"
+                                                />
                                             </div>
 
                                         </div>

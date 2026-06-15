@@ -5,8 +5,8 @@
             <field name="model">ekids.ct_chuongtrinh</field>
             <field name="arch" type="xml">
                 <list>
-                    <field name="ma"/>
-                    <field name="name" />
+                    <field name="name"/>
+                    <field name="title" />
                     <field name="desc" />
 
                 </list>
@@ -57,9 +57,9 @@
                                     <div class="book-ribbon" style="position: absolute; top: -10px; right: 20px; width: 30px; height: 40px; background-color: #f59e0b; clip-path: polygon(100% 0, 100% 100%, 50% 75%, 0 100%, 0 0); box-shadow: 2px 2px 5px rgba(0,0,0,0.1);"></div>
 
                                     <div class="d-flex justify-content-between align-items-start mb-3" style="border-bottom: 2px solid #cbd5e1; padding-bottom: 12px;">
-                                        <h3 class="fw-bolder m-0" style="color: #0f172a; font-family: 'Georgia', serif; font-size: 1.25rem; letter-spacing: 0.5px; padding-right: 35px;">
+                                        <h3 class="fw-bolder m-0" style="color: #0f172a;">
                                             <i class="fa fa-book text-muted me-2" style="font-size: 1.1rem;"></i>
-                                            <field name="name"/>
+                                            <field name="title"/>
                                         </h3>
                                     </div>
 
@@ -164,14 +164,32 @@
                                 background: transparent !important;
                                 padding: 5px 0 !important;
                                 box-shadow: none !important;
-
                             }
                             .kh-name-input .o_input:focus { border-bottom: 2px solid #4f46e5 !important; outline: none; }
 
                             /* Dòng dưới: Mã và Select Box */
                             .kh-footer-info { display: flex; gap: 20px; align-items: center; }
-                            .kh-code-box { display: flex; align-items: center; background: #f1f5f9; padding: 6px 12px; border-radius: 8px; font-weight: 900; color: #e11d48; }
-                            .kh-code-box .o_field_widget { width: 100px !important; }
+
+                            /* 🌟 ĐÃ TỐI ƯU: Thiết kế khối chứa và định vị độ rộng ô Tên Viết Tắt */
+                            .kh-code-box {
+                                display: inline-flex;
+                                align-items: center;
+                                background: #fff1f2; /* Chuyển sang nền hồng nhạt giúp tương phản sang trọng với màu chữ */
+                                padding: 6px 14px;
+                                border-radius: 8px;
+                                font-weight: 800;
+                                color: #e11d48;
+                                border: 1px solid #ffe4e6;
+                                gap: 6px;
+                            }
+                            /* Nới rộng khoảng cách hiển thị trường Many2one / Char từ 100px lên 180px phù hợp */
+                            .kh-code-box .o_field_widget { width: 180px !important; }
+                            /* Ép chữ người dùng nhập vào ô viết tắt luôn bôi đậm dày dặn */
+                            .kh-code-box .o_input {
+                                font-weight: 900 !important;
+                                color: #e11d48 !important;
+                                font-size: 13.5px !important;
+                            }
 
                             /* 3. Vùng nội dung phân tách màu */
                             .kh-zones-container { display: flex; flex-direction: column; gap: 20px; margin-bottom: 20px; }
@@ -188,22 +206,21 @@
                         <div class="kh-hero-banner"></div>
                         <div class="kh-content-wrapper">
 
-                            <div class="kh-profile-header">
+                            <div class="kh-profile-header kh-header-grid">
                                 <div class="kh-avatar-wrapper">
                                     <i class="fa fa-graduation-cap" style="font-size: 40px; color: #4f46e5;"></i>
                                 </div>
 
                                 <div class="kh-main-info">
                                     <div class="kh-name-input">
-                                        <field name="name" nolabel="1" placeholder="Nhập tên chương trình..."/>
+                                        <field name="title" nolabel="1" placeholder="Nhập tên chương trình..."/>
                                     </div>
 
                                     <div class="kh-footer-info">
                                         <div class="kh-code-box">
-                                            <i class="fa fa-barcode me-2"></i> MÃ:
-                                            <field name="ma" nolabel="1" placeholder="Nhập mã..."/>
+                                            <i class="fa fa-barcode"></i> TÊN VIẾT TẮT:
+                                            <field name="name" nolabel="1" placeholder="Nhập tên viết tắt..."/>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -225,10 +242,13 @@
 
                             <notebook>
                                 <page name="linhvuc_ids" string="LĨNH VỰC">
-                                    <field name="linhvuc_ids" context="{'default_chuongtrinh_id':id}"/>
+                                    <field name="linhvuc_ids" context="{'default_chuongtrinh_id': id}"/>
                                 </page>
                                 <page name="tuoi_ids" string="ĐỘ TUỔI">
-                                    <field name="tuoi_ids" context="{'default_chuongtrinh_id':id}"/>
+                                    <field name="tuoi_ids" context="{'default_chuongtrinh_id': id}"/>
+                                </page>
+                                <page name="muctieu_ids" string="MỤC TIÊU">
+                                    <field name="muctieu_ids" context="{'default_chuongtrinh_id': id}"/>
                                 </page>
                             </notebook>
 

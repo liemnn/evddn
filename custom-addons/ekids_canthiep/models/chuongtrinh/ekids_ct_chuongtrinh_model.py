@@ -6,9 +6,8 @@ class ChuongTrinh(models.Model):
     _description = "CHƯƠNG TRÌNH CAN THIỆP"
 
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở", required=True, ondelete="restrict")
-
-    ma = fields.Char(string="Mã",required=True)
-    name = fields.Char(string="Tên",required=True)
+    name = fields.Char(string="Tên (viết tắt)",required=True)
+    title = fields.Char(string="Tên chương trình", required=True)
     desc =fields.Html(string="Mô tả")
     coso_ids = fields.Many2many(comodel_name="ekids.coso",
                                 relation="ekids_ct_chuongtrinh4coso_ids_rel",
@@ -20,6 +19,9 @@ class ChuongTrinh(models.Model):
                                   "chuongtrinh_id", string="Lĩnh vực")
     tuoi_ids = fields.One2many("ekids.ct_tuoi",
                                   "chuongtrinh_id", string="Độ tuổi")
+
+    muctieu_ids = fields.One2many("ekids.ct_muctieu",
+                               "chuongtrinh_id", string="Độ tuổi")
 
     tong_tuoi = fields.Integer(string="Tổng cấp độ",compute="_compute_tong_tuoi",store=False)
     tong_linhvuc = fields.Integer(string="Tổng lĩnh vực",compute="_compute_tong_linhvuc",store=False)
