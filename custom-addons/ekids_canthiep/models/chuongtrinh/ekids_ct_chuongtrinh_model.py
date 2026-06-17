@@ -53,29 +53,17 @@ class ChuongTrinh(models.Model):
             else:
                 ct.tong_muctieu = 0
 
-
-
-
-
-
     @api.model
     def search_fetch(self, domain, field_names, offset=0, limit=50, order=None):
         # Lấy thông tin người dùng hiện tại
         user = self.env.user
+        # TH3: user khác của cơ sở ( thường là giáo viên được phân quyền)
+        # sẽ tính trên danh sách các cơ sở được phân cho user này
+        if user.coso_ids:
+            ids = user.coso_ids
+            if len(ids) > 0:
+                domain += [('coso_id', 'in', ids)]
 
-        # Điều kiện lọc (ví dụ: chỉ cho phép xem các đơn hàng có đối tác là khách hàng của user)
-        if user.has_group('base.group_system'):  # Kiểm tra nhóm quyền
-            # TH1: là admin của toàn hệ thống
-            domain = []  # Thêm điều kiện cho
-
-        else:
-           if user.has_group('ekids_core.ql_ct_canthiep'):
-                # TH3: user khác của cơ sở ( thường là giáo viên được phân quyền)
-                # sẽ tính trên danh sách các cơ sở được quyền can thiệp các chương trình này
-                if user.coso_ids:
-                    domain = ['|']
-                    domain += [('coso_ids','=',False)]
-                    domain +=[('coso_ids', 'in', user.coso_ids.ids)]# Thêm điều kiện cho
 
         return super().search_fetch(domain, field_names, offset, limit, order)
 

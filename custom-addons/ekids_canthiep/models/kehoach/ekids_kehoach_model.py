@@ -191,27 +191,31 @@ class KeHoach(models.Model):
             domain.append(('tuoi_id', '=', tuoi_id))
         muctieus = self.env['ekids.ct_muctieu'].search(domain)
         return muctieus
-    def action_xem_ketluan(self):
-        form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'XEM KẾT LUẬN',
-            'res_model': 'ekids.kehoach_ketluan',
-            'view_mode': 'form',
-            'res_id': self.ketluan_id.id,
-            'views': [(form_view_id, 'form')],
-            'target': 'new',
-            'domain': [('coso_id', '=', self.id)],
-            'context': {
-                'default_coso_id': self.coso_id.id,
-                'default_hocsinh_id': self.id,
-                # 🌟 THÊM 3 DÒNG CHỐT CHẶN DƯỚI ĐÂY ĐỂ KHÓA ĐỂN FORM VIEW
-                'edit': False,  # 🚫 Tắt hoàn toàn tính năng và ẩn nút [Sửa]
-                'create': False,  # 🚫 Tắt tính năng và ẩn nút [Tạo mới]
-                'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
 
-            },
-        }
+    def action_xem_ketluan(self):
+        kehoach = self.env['ekids.kehoach'].browse(self.id)
+        if kehoach:
+
+            form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'XEM KẾT LUẬN',
+                'res_model': 'ekids.kehoach_ketluan',
+                'view_mode': 'form',
+                'res_id':kehoach.ketluan_id.id,
+                'views': [(form_view_id, 'form')],
+                'target': 'new',
+                'domain': [('coso_id', '=', kehoach.coso_id.id)],
+                'context': {
+                    'default_coso_id': kehoach.coso_id.id,
+                    'default_hocsinh_id': kehoach.hocsinh_id.id,
+                    # 🌟 THÊM 3 DÒNG CHỐT CHẶN DƯỚI ĐÂY ĐỂ KHÓA ĐỂN FORM VIEW
+                    'edit': False,  # 🚫 Tắt hoàn toàn tính năng và ẩn nút [Sửa]
+                    'create': False,  # 🚫 Tắt tính năng và ẩn nút [Tạo mới]
+                    'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
+
+                },
+            }
 
 
 

@@ -61,10 +61,12 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
 
         table_data = [['Tháng','Năm', '[1] Học phí'
                           ,'[2] Nguồn thu khác'
-                          ,'[3] Chi lương \n (Lương + BHXH nhà trường đóng cho GV)'
-                          ,'[4] Chi BHXH \n (Giáo viên phải đóng)'
+                          ,'[A] TỔNG THU\n=[1]+[2]'
+                          ,'[3] Chi lương\n(Lương + BHXH nhà trường đóng cho GV)'
+                          ,'[4] Chi BHXH\n(Giáo viên phải đóng)'
                           ,'[5] Chi/Tiêu khác'
-                          ,'Lợi nhuận = \n [1]+[2]-[3]-[4]-[5]']]  # Header
+                          ,'[B] TỔNG CHI\n=[3]+[4]+[5]'
+                          ,'LỢI NHUẬN\n=[A]-[B]']]  # Header
         tu_thang =self.tu_thang
         tu_nam =self.tu_nam
         den_thang = self.den_thang
@@ -89,20 +91,24 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
     def get_table_data_by_thang(self,table_data,nam,thang):
         hocphi = self.sum_tong_hocphi_thucthu_by_thang(nam,thang)
         thukhac = self.sum_tong_thu_by_thang(nam, thang)
+        tong_thu = hocphi+thukhac
         luong = self.sum_tong_luong_chitra_by_thang(nam,thang)
         thuho = self.sum_tong_nhatruong_thuho_chitra_by_thang(nam, thang)
         chikhac = self.sum_tong_chi_by_thang(nam,thang)
+        tong_chi = luong +thuho+chikhac
 
 
-        loinhuan = (hocphi + thukhac) - (luong +thuho+chikhac)
+        loinhuan = tong_thu - tong_chi
         table_data.append([
             'Tháng:'+thang,
             nam,
             string_util.number2string(hocphi),
             string_util.number2string(thukhac),
+            string_util.number2string(tong_thu),
             string_util.number2string(luong),
             string_util.number2string(thuho),
             string_util.number2string(chikhac),
+            string_util.number2string(tong_chi),
             string_util.number2string(loinhuan)
         ])
         return table_data
@@ -180,9 +186,11 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
     def get_table_data_by_nam(self,table_data):
         hocphi = 0
         thukhac = 0
+        tong_thu = 0
         luong = 0
         thuho = 0
         chikhac = 0
+        tong_chi = 0
         loinhuan=0
 
         if table_data:
@@ -193,10 +201,12 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
                     continue
                 hocphi += string_util.string2number(data[2])
                 thukhac +=  string_util.string2number(data[3])
-                luong += string_util.string2number(data[4])
-                thuho += string_util.string2number(data[5])
-                chikhac +=  string_util.string2number(data[6])
-                loinhuan += string_util.string2number(data[7])
+                tong_thu += string_util.string2number(data[4])
+                luong += string_util.string2number(data[5])
+                thuho += string_util.string2number(data[6])
+                chikhac +=  string_util.string2number(data[7])
+                tong_chi += string_util.string2number(data[8])
+                loinhuan += string_util.string2number(data[9])
                 i = i+1
 
 
@@ -205,9 +215,11 @@ class BaoCaoLoiNhuanWizard(models.TransientModel):
             'TỔNG THEO NĂM TÀI CHÍNH','',
             string_util.number2string(hocphi),
             string_util.number2string(thukhac),
+            string_util.number2string(tong_thu),
             string_util.number2string(luong),
             string_util.number2string(thuho),
             string_util.number2string(chikhac),
+            string_util.number2string(tong_chi),
             string_util.number2string(loinhuan)
         ])
         return table_data

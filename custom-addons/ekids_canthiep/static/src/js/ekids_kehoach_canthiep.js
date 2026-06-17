@@ -83,6 +83,21 @@ export class KeHoachCanthiepComponent extends Component {
         this.actionService.doAction({ type: "ir.actions.act_window_close" });
     }
 
+    async goiMucTieuAction(tenAction,muctieu_id,ev) {
+        ev.stopPropagation();
+        if (!muctieu_id) return;
+
+        try {
+            alert("tenAction="+tenAction+",muctieu_id="+muctieu_id)
+            const actionWindow = await this.orm.call("ekids.kehoach_muctieu", tenAction, [muctieu_id]);
+            if (actionWindow) {
+                await this.actionService.doAction(actionWindow);
+            }
+        } catch (error) {
+            console.error(`Lỗi khi thực thi hàm ${tenAction} từ hệ thống:`, error);
+        }
+    }
+
     async goiKeHoachAction(tenAction, ev) {
         ev.stopPropagation();
         const kehoach_id = this.props.action.context.kehoach_id || this.props.action.context.active_id;
