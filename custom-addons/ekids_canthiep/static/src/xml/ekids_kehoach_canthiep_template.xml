@@ -37,7 +37,11 @@
                 .goal-name-text { font-weight: 600 !important; color: #1E293B !important; line-height: 1.5; }
                 .goal-index-circle { background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%); color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: 800; }
 
-                /* 🌟 CẤU HÌNH HỆ THỐNG VI NHÃN TIẾN ĐỘ MỚI SANG TRỌNG */
+                /* STYLE CHO HÀNG CHƯA ĐƯỢC PHÉP CAN THIỆP (NỀN HƠI XÁM NHẸ NHƯNG CHỮ VẪN RÕ) */
+                .row-goal-disabled { background-color: #F8FAFC !important; }
+                .goal-index-circle-locked { background: #BAC7D5 !important; color: #FFFFFF !important; }
+
+                /* CẤU HÌNH HỆ THỐNG VI NHÃN TIẾN ĐỘ MỚI SANG TRỌNG */
                 .clinical-counts-box { display: flex; align-items: center; gap: 6px; background: transparent; padding: 0; border: none; width: fit-content; }
                 .count-badge { display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 4px 8px; border-radius: 6px; font-weight: 700; border: 1px solid transparent; }
 
@@ -46,12 +50,18 @@
                 .badge-half { background-color: #FFFBEB; color: #D97706; border-color: #FDE68A; }
                 .badge-fail { background-color: #FEF2F2; color: #DC2626; border-color: #FECACA; }
 
-                .goal-status-pill { font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 5px;display: inline-block; min-width: 90px; text-align: center; letter-spacing: 0.2px; }
-                .status-pill-1 { background-color: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0; }
-                .status-pill--1 { background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
-                .status-pill-0 { background-color: #FFFBEB; color: #D97706; border: 1px solid #FDE68A; }
+                /* 🌟 HỆ THỐNG PHÂN PHÒNG CÁC LOẠI VI NHÃN ĐỘNG MỚI */
+                .goal-status-pill { font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 5px; display: inline-block; min-width: 110px; text-align: center; letter-spacing: 0.2px; }
+                .status-pill-1 { background-color: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0; } /* Đạt */
+                .status-pill-0 { background-color: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; } # /* Đang can thiệp (Màu xanh dương dịu mắt) */
+                .status-pill-locked { background-color: #F1F5F9; color: #64748B; border: 1px solid #E2E8F0; } /* Chưa can thiệp */
 
-                .btn-record-mini { background-color: #FBBF24; color: #0F172A; font-weight: 700; font-size: 0.8rem; padding: 6px 12px; border-radius: 5px; border: 1px solid #F59E0B; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+                /* ĐỊNH DẠNG NÚT CAN THIỆP PHẲNG PREMIUM */
+                .btn-record-mini { background-color: #FBBF24; color: #0F172A; font-weight: 700; font-size: 0.8rem; padding: 6px 14px; border-radius: 5px; border: 1px solid #F59E0B; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s ease; }
+                .btn-record-mini:hover:not(:disabled) { background-color: #F59E0B; }
+
+                /* HIỆU ỨNG KHÓA NÚT CAN THIỆP */
+                .btn-record-mini:disabled { background-color: #E2E8F0 !important; border-color: #CBD5E1 !important; color: #94A3B8 !important; cursor: not-allowed !important; box-shadow: none !important; }
 
                 .detail-info-container { padding: 22px 24px; display: flex; flex-direction: column; gap: 20px; border-left: 4px solid #2563EB; background: #FFFFFF; margin: 4px 12px 14px 12px; border-radius: 0 8px 8px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.01); }
                 .info-label-premium { font-weight: 700; font-size: 0.88rem; text-transform: uppercase; display: flex; align-items: center; gap: 6px; letter-spacing: 0.2px; }
@@ -68,14 +78,11 @@
                 @media (max-width: 768px) {
                     .btn-back-plans, .btn-view-conclusion { width: 100% !important; justify-content: center; font-size: 0.85rem; padding: 8px 12px !important; }
                     .ws-info-bar { padding: 12px; gap: 10px; margin-bottom: 16px; border-radius: 8px; }
-
                     .field-student { flex: 1 1 100% !important; }
                     .field-from-date, .field-to-date { flex: 1 1 calc(50% - 5px) !important; min-width: 130px; }
                     .field-duration { flex: 1 1 100% !important; }
-
                     .ws-readonly-input { padding: 6px 12px !important; font-size: 0.88rem !important; }
                     .ws-label { font-size: 0.78rem !important; }
-
                     .domain-block-title { flex-direction: column; align-items: flex-start; gap: 10px; }
                     .domain-title-text { font-size: 1.05rem !important; }
                     .goals-table { min-width: 100% !important; table-layout: auto !important; }
@@ -134,7 +141,7 @@
                             <span class="domain-age-badge"><t t-esc="linhvuc.tuoi"></t></span>
                         </div>
                         <div class="domain-progress-badge">
-                            <i class="fa fa-chart-pie"></i> Tiến độ đạt: <t t-esc="linhvuc.muctieus.filter(m => m.status === 'dat').length"></t> / <t t-esc="linhvuc.muctieus.length"></t> mục tiêu
+                            <i class="fa fa-chart-pie"></i> Tiến độ đạt: <t t-esc="linhvuc.muctieus.filter(m => m.trangthai === '1').length"></t> / <t t-esc="linhvuc.muctieus.length"></t> mục tiêu
                         </div>
                     </div>
 
@@ -143,43 +150,44 @@
                             <tbody>
                                 <t t-foreach="linhvuc.muctieus" t-as="muctieu" t-key="muctieu.id">
 
-                                    <tr t-attf-class="summary-row #{state.expandedGoals[muctieu.id] ? 'active-view' : ''}" t-on-click="(ev) => this.toggleGoalDetails(muctieu.id, ev)">
-                                        <td style="width: 45px; text-align: center;"><div class="goal-index-circle"><t t-esc="muctieu_index + 1"></t></div></td>
+                                    <tr t-attf-class="summary-row #{state.expandedGoals[muctieu.id] ? 'active-view' : ''} #{!muctieu.is_unlocked ? 'row-goal-disabled' : ''}"
+                                        t-on-click="(ev) => this.toggleGoalDetails(muctieu.id, ev)"
+                                        style="cursor: pointer;">
+
+                                        <td style="width: 45px; text-align: center;">
+                                            <div t-attf-class="goal-index-circle #{!muctieu.is_unlocked ? 'goal-index-circle-locked' : ''}">
+                                                <t t-esc="muctieu_index + 1"/>
+                                            </div>
+                                        </td>
+
                                         <td style="width: 42%; text-align: left;"><span class="goal-name-text"><t t-esc="muctieu.name"></t></span></td>
 
                                         <td style="width: 210px;">
                                             <div class="clinical-counts-box">
-                                                <div class="count-badge badge-all" title="Tổng số ca/buổi">
-                                                    <i class="fa fa-chart-bar"></i> <t t-esc="muctieu.cnt_all"></t>
-                                                </div>
-                                                <div class="count-badge badge-ok" title="Số ca Đạt">
-                                                    <t t-esc="muctieu.cnt_ok"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">+</span>
-                                                </div>
-                                                <div class="count-badge badge-half" title="Số ca Đang hình thành">
-                                                    <t t-esc="muctieu.cnt_half"></t>
-                                                    <span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">+/-</span>
-                                                </div>
-                                                <div class="count-badge badge-fail" title="Số ca Chưa đạt">
-                                                    <t t-esc="muctieu.cnt_fail"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">-</span>
-                                                </div>
+                                                <div class="count-badge badge-all" title="Tổng số ca/buổi"><i class="fa fa-chart-bar"></i> <t t-esc="muctieu.cnt_all"></t></div>
+                                                <div class="count-badge badge-ok" title="Số ca Đạt"><t t-esc="muctieu.cnt_ok"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">+</span></div>
+                                                <div class="count-badge badge-half" title="Số ca Đang hình thành"><t t-esc="muctieu.cnt_half"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">+/-</span></div>
+                                                <div class="count-badge badge-fail" title="Số ca Chưa đạt"><t t-esc="muctieu.cnt_fail"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">-</span></div>
                                             </div>
                                         </td>
 
                                         <td style="width: 110px; text-align: center;">
-                                            <span t-attf-class="goal-status-pill status-pill-#{muctieu.trangthai}">
-                                                <t t-esc="muctieu.trangthai == '0' ? 'Chưa can thiệp' : muctieu.trangthai == '1' ? 'Đạt' : 'Chưa đạt'"></t>
+                                            <span t-attf-class="goal-status-pill #{muctieu.status_class}">
+                                                <t t-esc="muctieu.status_text"></t>
                                             </span>
                                         </td>
 
                                         <td style="width: 110px; text-align: right;">
-                                            <button class="btn-record-mini" t-on-click="(ev) => this.goiMucTieuAction('action_ghinhan_ketqua_canthiep',muctieu.id, ev)">
-                                                <i class="fa fa-edit"></i> Ghi nhận
+                                            <button class="btn-record-mini"
+                                                    t-att-disabled="!muctieu.allow_update"
+                                                    t-on-click="(ev) => this.goiMucTieuAction('action_ghinhan_ketqua_canthiep', muctieu.id, ev)">
+                                                <i class="fa fa-bolt"></i> Can thiệp
                                             </button>
                                         </td>
 
                                         <td style="width: 45px; text-align: center;">
                                             <button class="btn-more-info">
-                                                <i t-attf-class="fa #{state.expandedGoals[muctieu.id] ? 'fa-chevron-up' : 'fa-ellipsis-h'}"></i>
+                                                <i t-attf-class="fa #{state.expandedGoals[muctieu.id] ? 'fa-chevron-up' : 'fa-chevron-down'}"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -204,21 +212,15 @@
                                                     <div class="criteria-flex-layout">
                                                         <div class="criteria-card-item">
                                                             <span class="fw-bold text-danger small">(-) Chưa đạt:</span>
-                                                            <div class="criteria-box-desc-text text-danger-dark">
-                                                                <t t-esc="muctieu.tieuchi_chuadat"></t>
-                                                            </div>
+                                                            <div class="criteria-box-desc-text text-danger-dark"><t t-esc="muctieu.tieuchi_chuadat"></t></div>
                                                         </div>
                                                         <div class="criteria-card-item warn">
                                                             <span class="fw-bold small" style="color:#B45309;">(+/-) Đang hình thành:</span>
-                                                            <div class="criteria-box-desc-text" style="color:#78350F;">
-                                                                <t t-esc="muctieu.tieuchi_hinhthanh"></t>
-                                                            </div>
+                                                            <div class="criteria-box-desc-text" style="color:#78350F;"><t t-esc="muctieu.tieuchi_hinhthanh"></t></div>
                                                         </div>
                                                         <div class="criteria-card-item success">
                                                             <span class="fw-bold text-success small">(+) Đạt:</span>
-                                                            <div class="criteria-box-desc-text text-success-dark">
-                                                                <t t-esc="muctieu.tieuchi_dat"></t>
-                                                            </div>
+                                                            <div class="criteria-box-desc-text text-success-dark"><t t-esc="muctieu.tieuchi_dat"></t></div>
                                                         </div>
                                                     </div>
                                                 </div>
