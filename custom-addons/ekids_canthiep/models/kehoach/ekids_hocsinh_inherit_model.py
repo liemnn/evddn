@@ -70,8 +70,8 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
 
         for hs in self:
             trangthais =[kehoach_util.KETLUAN_DANG_TAO]
-            ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,hs,trangthais)
-            if ketluan:
+            count = kehoach_util.func_count_ketluan_hocsinh_trangthai(self,hs,trangthais)
+            if count>0:
                 hs.is_tao_ketluan = False
 
             else:
@@ -89,8 +89,8 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
             else:
                 trangthais =[kehoach_util.KEHOACH_DANG_LAP
                                 ,kehoach_util.KEHOACH_DANG_PHEDUYET]
-                kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs,trangthais)
-                if not kehoach:
+                kehoach_count = kehoach_util.func_count_kehoach_hocsinh_trangthai(self,hs,trangthais)
+                if kehoach_count <=0:
                     if is_admin:
                         hs.is_lap_kehoach = True
                     else:

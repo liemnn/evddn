@@ -42,6 +42,14 @@ def func_get_ketluan_hocsinh_trangthai(self, hocsinh, trangthais):
         , order="id desc", limit=1)
     return ketluan
 
+def func_count_ketluan_hocsinh_trangthai(self, hocsinh, trangthais):
+    count = self.env['ekids.kehoach_ketluan'].search_count ([
+        ('hocsinh_id', '=', hocsinh.id),
+        ('trangthai', 'in', trangthais),
+    ])
+    return count
+
+
 def func_get_kehoach_hocsinh(self, hocsinh):
     kehoach = self.env['ekids.kehoach'].search([
         ('hocsinh_id', '=', hocsinh.id),
@@ -57,6 +65,14 @@ def func_get_kehoach_hocsinh_trangthai(self, hocsinh, trangthais):
     ]
         , order="id desc", limit=1)
     return kehoach
+
+def func_count_kehoach_hocsinh_trangthai(self, hocsinh, trangthais):
+    count = self.env['ekids.kehoach'].search_count([
+        ('hocsinh_id', '=', hocsinh.id),
+        ('trangthai', 'in', trangthais),
+    ])
+    return count
+
 
 
 def func_get_ids_hocsinh_theo_vaitro(self):
