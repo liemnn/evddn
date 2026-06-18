@@ -43,6 +43,9 @@ class KeHoach2MucTieu(models.Model):
 
     ], string="Trạng thái", default="0")
 
+    ketqua2muctieu_ids = fields.One2many("ekids.kehoach_ketqua2muctieu", "kehoach_muctieu_id"
+                                        , string="Thuộc kế hoạch mục tiêu nào")
+
 
     # 2. Viết hàm xử lý thuật toán phân nhóm và reset số thứ tự
     @api.depends('kehoach_id', 'linhvuc_id', 'sequence')
@@ -96,19 +99,43 @@ class KeHoach2MucTieu(models.Model):
         for mt in self:
             mt.tieuchi_dat =mt.muctieu_id.tieuchi_dat
 
-    def action_ghinhan_ketqua_canthiep(self):
+    def action_canthiep(self):
+        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_muctieu_form').id
+
         self.func_khoitao_ketqua2muctieu()
         return {
             'type': 'ir.actions.act_window',
             'name': 'KẾT QUẢ CAN THIỆP',
-            'res_model': 'ekids.kehoach_ketqua2muctieu',
-            'view_mode': 'kanban,list,form',
-            'views': [(False, 'kanban'), (False, 'list'), (False, 'form')],
+            'res_model': 'ekids.kehoach_muctieu',
+            'view_mode': 'form',
+            'res_id':self.id,
+            'views': [(form_view_id, 'form')],
             'target': 'new',
-            'domain': [('kehoach_muctieu_id', '=', self.id)],
+
+        }
+
+    def action_donglai_ve_kehoach(self):
+        """ Hàm nằm ở chân Form View giúp đóng popup và ép màn hình OWL cha reload dữ liệu """
+        self.ensure_one()
+
+        # Phòng hờ bốc ID kế hoạch từ trường dữ liệu hoặc từ context ẩn của hệ thống
+        hocsinh = self.kehoach_id.hocsinh_id
+
+        if not hocsinh:
+            # Nếu không tìm thấy ID kế hoạch, đóng popup đơn thuần để tránh sập trang
+            return {'type': 'ir.actions.act_window_close'}
+
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'ekids_canthiep.kehoach_canthiep_action',
+
+            # 🌟 THAM SỐ CHÍ MẠNG: Ép phá vỡ Modal Dialog để làm mới không gian làm việc chính
+            'target': 'main',
+
             'context': {
-                'default_kehoach_muctieu_id': self.id
-            },
+                'active_id': hocsinh.id,
+                'kehoach_id': hocsinh.id,
+            }
         }
 
     def func_khoitao_ketqua2muctieu(self):

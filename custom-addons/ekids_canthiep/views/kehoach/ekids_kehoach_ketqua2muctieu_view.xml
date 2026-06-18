@@ -39,15 +39,6 @@
                 <field name="desc"/>
                 <field name="is_readonly"/>
 
-                <header>
-                    <button string="Đóng lại và về Kế hoạch"
-                            name="action_set_chuadat"
-                            type="object"
-                            class="btn-primary fw-bold shadow-sm"
-                            icon="fa-arrow-left"
-                            style="border-radius: 6px; padding: 6px 14px; margin-bottom: 8px;"/>
-                </header>
-
                 <templates>
                     <t t-name="kanban-box">
 

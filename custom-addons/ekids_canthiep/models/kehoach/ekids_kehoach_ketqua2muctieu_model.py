@@ -101,10 +101,10 @@ class KeHoachKetQua2MucTieu(models.Model):
         return {
             'name': 'KẾT QUẢ CAN THIỆP',
             'type': 'ir.actions.act_window',
-            'res_model': 'ekids.kehoach_ketqua2muctieu',
-            'view_mode': 'kanban,list,form',
+            'res_model': 'ekids.kehoach_muctieu',
+            'res_id': self.kehoach_muctieu_id.id,  # Trỏ chính xác vào ID của dòng đang click
+            'view_mode': 'form',
             # Lọc đúng dữ liệu của mục tiêu đang xem để Kanban hiện đúng danh sách
-            'domain': [('kehoach_muctieu_id', '=', self.kehoach_muctieu_id.id)],
             'target': 'new',
             'context': self.env.context,
         }
@@ -113,13 +113,11 @@ class KeHoachKetQua2MucTieu(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'KẾT QUẢ CAN THIỆP',
-            'res_model': 'ekids.kehoach_ketqua2muctieu',
-            'view_mode': 'kanban,list,form',
+            'res_model': 'ekids.kehoach_muctieu',
+            'res_id': self.kehoach_muctieu_id.id,  # Trỏ chính xác vào ID của dòng đang click
+            'view_mode': 'form',
             'target': 'new',
-            'domain': [('kehoach_muctieu_id', '=', self.kehoach_muctieu_id.id)],
-            'context': {
-                'default_kehoach_muctieu_id': self.kehoach_muctieu_id.id
-            },
+
         }
 
 
