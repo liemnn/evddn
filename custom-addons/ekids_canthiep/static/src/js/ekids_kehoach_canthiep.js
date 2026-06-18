@@ -88,7 +88,7 @@ export class KeHoachCanthiepComponent extends Component {
         if (!muctieu_id) return;
 
         try {
-            alert("tenAction="+tenAction+",muctieu_id="+muctieu_id)
+
             const actionWindow = await this.orm.call("ekids.kehoach_muctieu", tenAction, [muctieu_id]);
             if (actionWindow) {
                 await this.actionService.doAction(actionWindow);
