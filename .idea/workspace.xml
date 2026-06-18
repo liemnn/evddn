@@ -6,8 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_chuongtrinh_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_chuongtrinh_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_kehoach_abstractmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_kehoach_abstractmodel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/static/src/xml/ekids_kehoach_canthiep_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/static/src/xml/ekids_kehoach_canthiep_template.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/security/ir.model.access.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/ekids_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/ekids_menu.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +52,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Run",
+    "Python.evddn.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
@@ -622,6 +625,16 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py</url>
           <line>99</line>
           <option name="timeStamp" value="229" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_chuongtrinh_model.py</url>
+          <line>65</line>
+          <option name="timeStamp" value="232" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_chuongtrinh_model.py</url>
+          <line>59</line>
+          <option name="timeStamp" value="233" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

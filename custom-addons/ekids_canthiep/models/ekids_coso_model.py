@@ -26,7 +26,6 @@ class CoSo(models.Model):
             'res_model': 'ekids.ct_chuongtrinh',
             'view_mode': 'kanban,list,form',
             'target': 'current',
-            'domain': [('coso_id', '=', self.id)],
             'context': {'default_coso_id': self.id},
         }
 

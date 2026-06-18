@@ -105,6 +105,11 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
             # BƯỚC 3: ĐÓNG GÓI DỮ LIỆU ĐẦU RA CHUẨN UX MỚI
             # =========================================================================
             for linhvuc in linhvucs:
+                tong_muctieu = len(linhvuc.kehoach_muctieu_ids)
+                tong_muctieu_dat = 0
+                tong_muctieu_hinhthanh = 0
+                tong_muctieu_chua_dat = 0
+
                 linhvuc_json = {
                     "id": linhvuc.id,
                     "linhvuc": linhvuc.linhvuc_id.name if linhvuc.linhvuc_id else '',
@@ -118,7 +123,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                 for muctieu in sorted_muctieus:
                     is_unlocked = muctieu_status_map.get(muctieu.id, False)
 
-                    cnt_all, cnt_ok, cnt_half, cnt_fail = "0", "0", "0", "0"
+
 
                     # 🌟 ĐỊNH NGHĨA QUY TẮC PHÂN LOẠI TRẠNG THÁI MỚI THEO Ý ANH LIÊM
                     if muctieu.trangthai == '1':

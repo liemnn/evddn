@@ -1,4 +1,5 @@
 from odoo import models, fields, api, exceptions
+from odoo.osv import expression
 
 
 class ChuongTrinh(models.Model):
@@ -60,9 +61,12 @@ class ChuongTrinh(models.Model):
         # TH3: user khác của cơ sở ( thường là giáo viên được phân quyền)
         # sẽ tính trên danh sách các cơ sở được phân cho user này
         if user.coso_ids:
-            ids = user.coso_ids
-            if len(ids) > 0:
-                domain += [('coso_id', 'in', ids)]
+            coso_ids = user.coso_ids
+            if len(coso_ids) > 0:
+                domain_tacgia = [('coso_id', 'in', coso_ids.ids)]
+                domain_chiase = [('coso_ids', 'in', coso_ids.ids)]
+                new_domain = expression.OR([domain_tacgia, domain_chiase])
+                domain = expression.AND([domain, new_domain])
 
 
         return super().search_fetch(domain, field_names, offset, limit, order)
