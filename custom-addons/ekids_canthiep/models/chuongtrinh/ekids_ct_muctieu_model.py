@@ -12,6 +12,8 @@ class MucTieu(models.Model):
     coso_id = fields.Many2one("ekids.coso", related="linhvuc_id.coso_id", string="Cơ sở", required=True,ondelete="restrict")
     chuongtrinh_id = fields.Many2one("ekids.ct_chuongtrinh", related="linhvuc_id.chuongtrinh_id", string="Chương trình", required=True,
                               ondelete="restrict")
+    # Trường này chỉ dùng để hứng dữ liệu từ Excel lúc Import, không lưu vào Postgres
+    import_chuongtrinh_name = fields.Char(string="Tên chương trình import", store=False)
 
     sequence = fields.Integer(string="STT", default=1)
     index = fields.Integer(string="STT hiển thị", compute="_compute_index", store=False)
@@ -88,4 +90,57 @@ class MucTieu(models.Model):
 
     def func_chon_muctieu_vao_kehoach(self,kehoach_linhvuc_id):
         return None
+
+    @api.model
+    def load(self, fields_list, data):
+        """
+        Hàm can thiệp ngầm vào luồng Import Excel của Odoo 18.
+        Tự động map trúng Lĩnh vực dựa theo điều kiện lọc của Chương trình.
+        """
+        # Kiểm tra xem file Excel tải lên có chứa đồng thời cả 2 cột Chương trình và Lĩnh vực không
+        if 'linhvuc_id' in fields_list and  'tuoi_id' in fields_list:
+            linhvuc_idx = fields_list.index('linhvuc_id')
+            tuoi_idx = fields_list.index('tuoi_id')
+            chuongtrinh_idx = fields_list.index('import_chuongtrinh_name')
+
+            # 🌟 MẸO CHÍ MẠNG: Ép Odoo đổi kiểu map cột Lĩnh vực từ Tên chữ sang ID số hệ thống
+            fields_list[linhvuc_idx] = 'linhvuc_id/.id'
+            fields_list[tuoi_idx] = 'tuoi_id/.id'
+
+            # Duyệt qua từng hàng dữ liệu trong file Excel giáo viên tải lên
+            for row in data:
+
+                linhvuc_name = row[linhvuc_idx]  # Ví dụ: "Vận động"
+                tuoi_name = row[tuoi_idx]  # Ví dụ: "Vận động"
+                ct_name = row[chuongtrinh_idx]
+                if linhvuc_name and tuoi_name:
+                    # Truy vấn chính xác Lĩnh vực thuộc Chương trình tương ứng
+                    linhvuc = self.env['ekids.ct_linhvuc'].search([
+                        ('name', '=', linhvuc_name),
+                        ('chuongtrinh_id.name', '=', ct_name)
+                    ], limit=1)
+
+
+
+                    if linhvuc:
+                        # Ghi đè chữ "Vận động" thành ID số (ví dụ: 45) để Odoo nạp thẳng, không bị nhận nhầm
+                        row[linhvuc_idx] = linhvuc.id
+                    else:
+                        # Nếu ghi sai tên, trả về False để Odoo báo lỗi dòng đó trực quan
+                        row[linhvuc_idx] = False
+
+                    tuoi = self.env['ekids.ct_tuoi'].search([
+                        ('name', '=', tuoi_name),
+                        ('chuongtrinh_id.name', '=', ct_name)
+                    ], limit=1)
+
+                    if tuoi:
+                        # Ghi đè chữ "Vận động" thành ID số (ví dụ: 45) để Odoo nạp thẳng, không bị nhận nhầm
+                        row[tuoi_idx] = tuoi.id
+                    else:
+                        # Nếu ghi sai tên, trả về False để Odoo báo lỗi dòng đó trực quan
+                        row[tuoi_idx] = False
+
+        # Trả luồng về cho Odoo xử lý bulk create tiếp tục
+        return super(MucTieu, self).load(fields_list, data)
 

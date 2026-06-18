@@ -47,7 +47,14 @@ class KetLuan(models.Model):
     ], string="Mức độ", required=True, default="1")
 
     # 3. ĐỊNH HƯỚNG CAN THIỆP
-    lieuluong = fields.Char(string="Liều lượng can thiệp", required=True)
+    lieuluong = fields.Selection([
+        ('1', '1 giờ/ ngày'),  # [cite: 12, 13]
+        ('2', '2 giờ/ ngày'),  # [cite: 14]
+        ('3', '3 giờ/ ngày'),  # [cite: 15]
+        ('4', 'Trên 3 giờ/ ngày')  # [cite: 15]
+    ], string="Liều lượng", required=True, default="1")
+
+
 
     # Gợi ý: Nếu bạn có model ekids.ct_chuongtrinh, hãy đổi thành Many2one. Ở đây dùng Char theo doc.
     chuongtrinh_ids = fields.Many2many(comodel_name="ekids.ct_chuongtrinh"
@@ -56,11 +63,24 @@ class KetLuan(models.Model):
                                       , column2="chuongtrinh_id"
                                       , string="Chương trình can thiệp")
 
-    phuongphap = fields.Char(string="Phương pháp can thiệp")  # [cite: 22]
+
+    phuongphap = fields.Selection([
+        ('1', 'ABA'),  # [cite: 12, 13]
+        ('2', 'AAC'),  # [cite: 14]
+        ('3', 'TEACCH')  # [cite: 15]
+
+    ], string="Phương pháp", default="1")
+
     kythuat = fields.Char(string="Kỹ thuật can thiệp")
 
     # 4. LỊCH HẸN
-    lichhen = fields.Char(string="Lịch hẹn lần sau")
+
+    lichhen = fields.Selection([
+        ('1', 'Đánh giá lại sau 6 tháng can thiệp'),  # [cite: 12, 13]
+        ('2', 'Đánh giá lại sau 12 tháng can thiệp'),  # [cite: 14]
+        ('3', 'Đánh giá lại khi trẻ đủ 4 tuổi'), # [cite: 15]
+        ('4', 'Đánh giá lại khi trẻ đủ 6 tuổi')  # [cite: 15]
+    ], string="Lịch hẹn lần sau", default="1")
 
     # 5. BẢNG CHI TIẾT ĐỘ TUỔI PHÁT TRIỂN
     linhvuc_ids = fields.One2many(

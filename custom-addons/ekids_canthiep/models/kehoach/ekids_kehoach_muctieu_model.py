@@ -187,3 +187,7 @@ class KeHoach2MucTieu(models.Model):
             self.env['ekids.kehoach_ketqua2muctieu'].create(vals_list)
 
 
+
+
+
+

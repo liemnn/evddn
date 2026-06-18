@@ -60,6 +60,7 @@ class ChuongTrinh(models.Model):
         user = self.env.user
         # TH3: user khác của cơ sở ( thường là giáo viên được phân quyền)
         # sẽ tính trên danh sách các cơ sở được phân cho user này
+
         if user.coso_ids:
             coso_ids = user.coso_ids
             if len(coso_ids) > 0:
@@ -67,6 +68,9 @@ class ChuongTrinh(models.Model):
                 domain_chiase = [('coso_ids', 'in', coso_ids.ids)]
                 new_domain = expression.OR([domain_tacgia, domain_chiase])
                 domain = expression.AND([domain, new_domain])
+        else:
+            domain_trangthai = [('trangthai', '=', "2")]
+            domain = expression.AND([domain, domain_trangthai])
 
 
         return super().search_fetch(domain, field_names, offset, limit, order)
