@@ -67,10 +67,25 @@ class KeHoach2LinhVucWizard(models.TransientModel):
                 vals_list.append({
                     'kehoach_linhvuc_id': self.kehoach_linhvuc_id.id,
                     'muctieu_id': baimau.id,
+                    'sequence': baimau.sequence,
                     'trangthai': '0',
                 })
 
         if vals_list:
             self.env['ekids.kehoach_muctieu'].create(vals_list)
+
+        #cap nhat truoc sau
+
+        muctieus = self.env['ekids.kehoach_muctieu'].search([
+            ('kehoach_linhvuc_id', '=', self.kehoach_linhvuc_id.id)
+        ],order="sequence asc, id desc")
+        if muctieus:
+            muctieu_truoc = None
+            for muctieu in muctieus:
+                setattr(muctieu,"kehoach_muctieu_truoc_id",muctieu_truoc)
+                muctieu_truoc = muctieu
+
+
+
 
         return {'type': 'ir.actions.act_window_close'}

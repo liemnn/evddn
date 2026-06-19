@@ -30,7 +30,7 @@ class ChamCongCa2NgayDayThay(models.Model,ChamCongFuncAbstractModel):
                               ondelete="restrict")
 
     congviec2thang_id = fields.Many2one("ekids.chamcong_congviec2thang", string="Thuộc",required=True, ondelete="cascade")
-    giaovien_id = fields.Many2one('ekids.giaovien', string="Giáo viên dạy thay", stored=True,
+    giaovien_id = fields.Many2one('ekids.giaovien', string="Giáo viên dạy thay",
                                 required=True,ondelete="cascade")
 
     giaovien_nghi_id = fields.Many2one('ekids.giaovien', string="Dạy thay cho Giáo viên",

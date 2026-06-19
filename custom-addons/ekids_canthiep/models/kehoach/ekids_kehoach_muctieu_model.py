@@ -6,9 +6,9 @@ from odoo.exceptions import ValidationError, UserError
 class KeHoach2MucTieu(models.Model):
     _name = 'ekids.kehoach_muctieu'
     _description = 'Các mục tiêu cho kế hoạch'
-    _order = 'id desc'
+    _order = 'sequence asc,id desc'
 
-    sequence = fields.Integer(string="STT", compute="_compute_sequence")
+    sequence = fields.Integer(string="STT", compute="_compute_sequence",store=True)
     index = fields.Integer(string="STT", default=1,compute="_compute_index")
 
     kehoach_id = fields.Many2one("ekids.kehoach",
@@ -35,6 +35,12 @@ class KeHoach2MucTieu(models.Model):
     tieuchi_dat = fields.Char(string="Đạt (+)",compute="_compute_tieuchi_dat")
 
     muctieu_id = fields.Many2one('ekids.ct_muctieu', string='Mục tiêu', required=True, ondelete="cascade")
+
+    # 🌟 1. TRƯỜNG ĐỨNG TRƯỚC (Predecessor - Many2one về chính mình)
+    kehoach_muctieu_truoc_id = fields.Many2one(
+        'ekids.kehoach_muctieu',
+        string='Muc tiêu đứng trước',
+    )
 
     trangthai = fields.Selection([
         ("0", "Chưa can thiệp"),

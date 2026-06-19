@@ -67,11 +67,11 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                     is_chophep_canthiep =True
                     index =1
                     for muctieu in muctieus:
-                        
                         # Đóng gói từng cấu trúc mục tiêu con
                         muctieu_json = {
                             "id": muctieu.id,
                             "index": index,
+                            "is_canthiep":is_chophep_canthiep,
                             "name": muctieu.name or '',
                             "trangthai": muctieu.trangthai,
 
