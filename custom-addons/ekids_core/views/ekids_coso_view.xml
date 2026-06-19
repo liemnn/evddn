@@ -282,6 +282,54 @@
                                 </div>
                             </page>
 
+                            <page name="config_lock" string="THIẾT LẬP THAM SỐ [KẾ HOẠCH CAN THIỆP]">
+                                <div class="p-3">
+
+                                    <div class="row">
+                                        <div class="col-12 mb-3">
+                                            <div class="fw-bold text-muted mb-2"><i class="fa fa-code me-2"/> CẤU HÌNH JSON CÁC THAM SỐ PHỤC VỤ PHẦN [LÂP KẾ HOẠCH CAN THIỆP]</div>
+                                            <field name="canthiep_cauhinh"
+                                                   widget="ace"
+                                                   options="{'mode': 'json'}"
+                                                   nolabel="1"
+                                                   class="w-100"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-7">
+                                            <strong class="text-dark small d-block mb-2">Mẫu cấu hình JSON (Bôi đen để Copy):</strong>
+                                            <pre class="bg-dark text-light p-3 rounded json-block">{
+"-1": { "name": "Đang tính", "edit": true, "trangthai_tieptheo": ["0", "2"] },
+"0":  { "name": "Đã kiểm tra", "edit": false, "trangthai_tieptheo": ["-1", "01", "10", "11", "12"] },
+
+
+}</pre>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="info-box h-100 small">
+                                                <strong class="d-block mb-2">Mã trạng thái Học phí:</strong>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mb-1"><b>-1</b>: Đang tính</div>
+                                                        <div class="mb-1"><b>0</b>: Đã kiểm tra</div>
+                                                        <div class="mb-1"><b>01</b>: PH đã đóng</div>
+                                                        <div class="mb-1"><b>10</b>: Tiền mặt</div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mb-1"><b>11</b>: C.Khoản</div>
+                                                        <div class="mb-1"><b>12</b>: Ví HS</div>
+                                                        <div class="mb-1"><b>3</b>: Hóa đơn</div>
+                                                        <div class="mb-1"><b>2</b>: Nợ phí</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </page>
+
+
                             <page name="branches" string="CƠ SỞ THÀNH VIÊN">
                                 <div class="p-3">
                                     <field name="coso_ids" widget="many2many_tags" placeholder="Chọn các cơ sở trực thuộc..."/>
