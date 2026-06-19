@@ -179,7 +179,7 @@
 
                                         <td style="width: 110px; text-align: right;">
                                             <button class="btn-record-mini"
-                                                    t-att-disabled="!muctieu.allow_update"
+                                                    t-att-disabled="!muctieu.is_canthiep"
                                                     t-on-click="(ev) => this.goiMucTieuAction('action_canthiep', muctieu.id, ev)">
                                                 <i class="fa fa-bolt"></i> Can thiệp
                                             </button>

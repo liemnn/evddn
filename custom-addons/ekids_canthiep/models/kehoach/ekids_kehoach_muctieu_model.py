@@ -2,6 +2,20 @@ from odoo import models, fields, api
 from datetime import  timedelta,date
 from odoo.exceptions import ValidationError, UserError
 
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import kehoach_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
+
 
 class KeHoach2MucTieu(models.Model):
     _name = 'ekids.kehoach_muctieu'
@@ -49,12 +63,28 @@ class KeHoach2MucTieu(models.Model):
 
     ], string="Trạng thái", default="0")
 
+    is_chophep_canthiep = fields.Boolean(string="cho phép can thiệp hay không",compute="_compute_is_chophep_canthiep")
+
     ketqua2muctieu_ids = fields.One2many("ekids.kehoach_ketqua2muctieu", "kehoach_muctieu_id"
                                         , string="Thuộc kế hoạch mục tiêu nào")
 
     def _compute_sequence(self):
         for mt in self:
             mt.sequence =mt.muctieu_id.sequence
+
+    def _compute_is_chophep_canthiep(self):
+        today =date.today()
+        for mt in self:
+            kehoach =mt.kehoach_id
+            is_chophep_canthiep = False
+            if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                if today >= kehoach.tu_ngay and today <=kehoach.den_ngay:
+                    if not mt.kehoach_muctieu_truoc_id or mt.kehoach_muctieu_truoc_id.trangthai=='1':
+                        is_chophep_canthiep = True
+            mt.is_chophep_canthiep = is_chophep_canthiep
+
+
+
 
     # 2. Viết hàm xử lý thuật toán phân nhóm và reset số thứ tự
 

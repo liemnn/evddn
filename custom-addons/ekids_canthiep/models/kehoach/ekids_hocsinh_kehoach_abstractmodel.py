@@ -64,14 +64,13 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                 muctieus = muctieus.sorted(key=lambda m: (m.sequence, m.id))
 
                 if muctieus:
-                    is_chophep_canthiep =True
                     index =1
                     for muctieu in muctieus:
                         # Đóng gói từng cấu trúc mục tiêu con
                         muctieu_json = {
                             "id": muctieu.id,
                             "index": index,
-                            "is_canthiep":is_chophep_canthiep,
+                            "is_canthiep":muctieu.is_chophep_canthiep,
                             "name": muctieu.name or '',
                             "trangthai": muctieu.trangthai,
 
