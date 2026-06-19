@@ -192,6 +192,22 @@
                                 }
                             </style>
 
+                            <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                    <i class="fa fa-ellipsis-v fa-lg"></i>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                        <i class="fa fa-pencil me-2"></i> Sửa
+                                    </a>
+                                    <a role="menuitem" type="delete"
+                                       confirm="Bạn có chắc chắn muốn xóa hạng mục lương này không? Thao tác này sẽ làm thay đổi tổng lương!"
+                                       class="dropdown-item text-danger">
+                                        <i class="fa fa-trash-o me-2"></i> Xóa
+                                    </a>
+                                </div>
+                            </div>
+
                             <div class="k_master_card">
 
                                 <div class="k-col-1 d-flex flex-column gap-2">
@@ -280,7 +296,9 @@
                                     </div>
 
 
-                                    <button type="object" name="action_lap_kehoach" class="k_btn_action" onclick="event.stopPropagation();">
+                                    <button type="object" name="action_lap_kehoach"
+                                            invisible="not trangthai=='1'"
+                                            class="k_btn_action" onclick="event.stopPropagation();">
                                         <i class="fa fa-calendar-plus-o"></i> Lập kế hoạch
                                     </button>
                                 </div>

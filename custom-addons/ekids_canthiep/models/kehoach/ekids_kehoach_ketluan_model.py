@@ -132,7 +132,26 @@ class KetLuan(models.Model):
             index -= 1
 
     def action_lap_kehoach(self):
-        return None
+        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+
+        kehoach = self.hocsinh_id.func_tao_kehoach_macdinh(self)
+        if kehoach:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'LẬP KẾ HOẠCH',
+                'res_model': 'ekids.kehoach',
+                'view_mode': 'form',
+                'views': [(form_view_id, 'form')],
+                'res_id': kehoach.id,
+                'target': 'current',
+                'domain': [('coso_id', '=', self.coso_id.id)],
+                'context': {
+                    'default_coso_id': self.coso_id.id,
+                    'default_kehoach_id': kehoach.id,
+                    'default_ketluan_id': self.id,
+                    'default_hocsinh_id': self.hocsinh_id.id
+                },
+            }
 
     @api.model_create_multi
     def create(self, vals_list):

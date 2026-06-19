@@ -130,6 +130,22 @@
                                 }
                             </style>
 
+                            <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                    <i class="fa fa-ellipsis-v fa-lg"></i>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                        <i class="fa fa-pencil me-2"></i> Sửa
+                                    </a>
+                                    <a role="menuitem" type="delete"
+                                       confirm="Bạn có chắc chắn muốn xóa hạng mục lương này không? Thao tác này sẽ làm thay đổi tổng lương!"
+                                       class="dropdown-item text-danger">
+                                        <i class="fa fa-trash-o me-2"></i> Xóa
+                                    </a>
+                                </div>
+                            </div>
+
                             <!-- CONTAINER CHÍNH CỦA DÒNG -->
                             <div class="three_zone_card oe_kanban_global_click d-flex p-3 gap-2"
                                  t-attf-style="border-left: 4px solid #{record.trangthai.raw_value == 'dang_canthiep' ? '#10B981' : (record.trangthai.raw_value == 'dang_lap' ? '#F59E0B' : (record.trangthai.raw_value == 'het_hieuluc' ? '#EF4444' : '#98A2B3'))};">
@@ -266,7 +282,7 @@
                                 string="Gửi phê duyệt"
                                 type="object"
                                 icon="fa-paper-plane"
-                                class="btn-outline-primary fw-bold"
+                                class="btn-success fw-bold"
                                 confirm="Bạn chắc chắn muốn gửi [Kế hoạch] lên quản lý chuyên môn để duyệt không ?"
                                 invisible=" not is_gui_pheduyet"/>
 

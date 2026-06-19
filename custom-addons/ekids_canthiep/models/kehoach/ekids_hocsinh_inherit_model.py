@@ -309,23 +309,27 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
                 }
 
     def func_tao_kehoach_macdinh(self,ketluan):
-        data ={
-            "hocsinh_id":self.id,
-            "ketluan_id": ketluan.id,
-        }
-        kehoach = self.env['ekids.kehoach'].create(data)
-        if kehoach:
-            linhvucs = ketluan.linhvuc_ids
-            for linhvuc in linhvucs:
-                data2={
-                    'kehoach_id':kehoach.id,
-                    'chuongtrinh_id': linhvuc.linhvuc_id.chuongtrinh_id.id,
-                    'linhvuc_id': linhvuc.linhvuc_id.id,
-                    'tuoi_id': linhvuc.tuoi_id.id,
-                }
-                self.env['ekids.kehoach_linhvuc'].create(data2)
-            return  kehoach
-        return None
+
+        trangthais=[kehoach_util.KEHOACH_DANG_LAP,kehoach_util.KEHOACH_DANG_PHEDUYET]
+        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthais)
+        if not kehoach:
+            data ={
+                "hocsinh_id":self.id,
+                "ketluan_id": ketluan.id,
+            }
+            kehoach = self.env['ekids.kehoach'].create(data)
+            if kehoach:
+                linhvucs = ketluan.linhvuc_ids
+                for linhvuc in linhvucs:
+                    data2={
+                        'kehoach_id':kehoach.id,
+                        'chuongtrinh_id': linhvuc.linhvuc_id.chuongtrinh_id.id,
+                        'linhvuc_id': linhvuc.linhvuc_id.id,
+                        'tuoi_id': linhvuc.tuoi_id.id,
+                    }
+                    self.env['ekids.kehoach_linhvuc'].create(data2)
+                return  kehoach
+        return kehoach
 
     def action_sua_kehoach(self):
         self.ensure_one()  # Đảm bảo hàm chỉ chạy trên 1 dòng học sinh duy nhất, tránh lỗi sập hệ thống

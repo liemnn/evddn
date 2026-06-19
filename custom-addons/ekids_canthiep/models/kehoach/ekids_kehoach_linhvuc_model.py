@@ -69,7 +69,7 @@ class KeHoach2LinhVuc(models.Model):
 
         return {
             'type': 'ir.actions.act_window',
-            'name': 'LỰA CHỌN MỤC TIÊU CHO KẾ HOẠCH',
+            'name': 'CÁC MỤC TRONG LĨNH VỰC CỦA KẾ HOẠCH',
             'res_model': 'ekids.kehoach_linhvuc_wizard',
             'view_mode': 'form',
             'views': [(wizard_form_id, 'form')],
