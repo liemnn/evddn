@@ -293,189 +293,291 @@
         </record>
 
         <record id="ekids_canthiep.kehoach_ketluan_form" model="ir.ui.view">
-            <field name="name">Phiếu Kết luận - Premium UI Professional</field>
+            <field name="name">Phiếu Kết luận - Premium Compact UI</field>
             <field name="model">ekids.kehoach_ketluan</field>
             <field name="arch" type="xml">
                 <form class="o_premium_layout">
                     <header>
                         <field name="trangthai" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': true}"/>
                     </header>
-                    <sheet>
+                    <sheet class="p-2 p-md-3 bg-light-smooth">
+
+                        <style>
+                            .bg-light-smooth { background-color: #F8FAFC !important; }
+
+                            /* THANH THÔNG TIN HEADER HỌC SINH TỐI ƯU GỌN GÀNG */
+                            .ws-info-bar {
+                                display: flex !important;
+                                gap: 12px !important;
+                                margin-bottom: 14px !important;
+                                flex-wrap: wrap !important;
+                                background: #FFFFFF !important;
+                                padding: 6px 14px !important;
+                                border-radius: 10px !important;
+                                border: 1px solid #E2E8F0 !important;
+                                align-items: center !important;
+                            }
+                            .ws-field {
+                                flex: 1 !important;
+                                min-width: 190px !important;
+                                display: flex !important;
+                                flex-direction: column !important;
+                                gap: 3px !important;
+                            }
+                            .ws-label {
+                                font-weight: 700 !important;
+                                color: #64748B !important;
+                                font-size: 0.8rem !important;
+                                text-transform: uppercase !important;
+                                display: flex !important;
+                                align-items: center !important;
+                                gap: 4px !important;
+                            }
+
+                            /* 🌟 ĐÃ THÊM: HÌNH TRÒN MÀU XANH ĐỒNG BỘ CHO SỐ LẦN ĐÁNH GIÁ (INDEX) */
+                            .ws-index-circle {
+                                background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%) !important;
+                                color: #FFFFFF !important;
+                                width: 32px !important;
+                                height: 32px !important;
+                                border-radius: 50% !important;
+                                display: inline-flex !important;
+                                align-items: center !important;
+                                justify-content: center !important;
+                                font-weight: 800 !important;
+                                font-size: 0.95rem !important;
+                                box-shadow: 0 2px 4px rgba(2, 132, 199, 0.15) !important;
+                                flex-shrink: 0 !important;
+                            }
+
+                            .ws-field-box {
+                                width: 100% !important;
+                                border: 1px solid #E2E8F0 !important;
+                                padding: 4px 10px !important;
+                                border-radius: 6px !important;
+                                display: flex !important;
+                                align-items: center !important;
+                                min-height: 32px !important;
+                            }
+                            .ws-field-box .o_field_widget {
+                                font-size: 0.9rem !important;
+                                font-weight: 800 !important;
+                                margin: 0 !important;
+                                border: none !important;
+                                background: transparent !important;
+                            }
+
+                            .field-student .ws-field-box { background-color: #EFF6FF !important; border-color: #BFDBFE !important; color: #1E40AF !important; }
+                            .field-date .ws-field-box { background-color: #F0FDF4 !important; border-color: #BBF7D0 !important; color: #166534 !important; }
+                            .field-doctor .ws-field-box { background-color: #FFFBEB !important; border-color: #FEF3C7 !important; color: #92400E !important; }
+                            .field-student .o_field_widget { color: #1E40AF !important; }
+
+                            /* 🌟 ĐÃ SỬA: PHÂN VÙNG Ô KHỐI ÉP PADDING CHUẨN 7PX ĐỂ TIẾT KIỆM KHÔNG GIAN */
+                            .premium-zone-card {
+                                background: #FFFFFF !important;
+                                border: 1px solid #E2E8F0 !important;
+                                border-radius: 10px !important;
+                                padding: 7px 12px !important;
+                                margin-bottom: 12px !important;
+                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
+                            }
+                            .zone-clinical { border-left: 4px solid #EF4444 !important; }
+                            .zone-methods { border-left: 4px solid #6366F1 !important; }
+                            .zone-curriculum { border-left: 4px solid #10B981 !important; }
+                            .zone-teachers { border-left: 4px solid #F59E0B !important; }
+                            .zone-guideline { border-left: 4px solid #64748B !important; }
+
+                            .zone-header-title {
+                                font-size: 0.95rem !important;
+                                font-weight: 800 !important;
+                                letter-spacing: 0.2px !important;
+                                text-transform: uppercase !important;
+                                display: flex !important;
+                                align-items: center !important;
+                                gap: 6px !important;
+                                margin-bottom: 8px !important;
+                            }
+                            .label-clinical-title { color: #DC2626 !important; }
+                            .label-methods-title { color: #4F46E5 !important; }
+                            .label-curriculum-title { color: #059669 !important; }
+                            .label-teachers-title { color: #D97706 !important; }
+                            .label-guideline-title { color: #475569 !important; }
+
+                            .o_premium_layout .o_form_label { font-weight: 700 !important; color: #475569 !important; font-size: 13px !important; }
+                            .border-separator-md { border-left: 1px dashed #E2E8F0; }
+
+                            @media (max-width: 768px) {
+                                .ws-field { flex: 1 1 100% !important; }
+                                .border-separator-md { border-left: none !important; border-top: 1px dashed #E2E8F0; margin-top: 10px; padding-top: 10px; }
+                            }
+                        </style>
 
                         <field name="coso_id" invisible="1" />
                         <field name="is_readonly" invisible="1"/>
 
                         <div class="w-100">
 
-                            <div class="o_premium_header d-flex align-items-center justify-content-between p-3 mb-4 bg-white rounded-3 border shadow-sm">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="avatar_circle bg-primary text-white d-flex align-items-center justify-content-center rounded-circle" style="width: 45px; height: 45px; font-weight: 700; font-size: 16px;">
+                            <div class="ws-info-bar">
+
+                                <div class="d-flex align-items-center gap-2" style="flex-shrink: 0;">
+                                    <div class="ws-index-circle">
                                         <field name="index"/>
                                     </div>
-                                    <div class="student_info">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="badge bg-light text-primary" style="padding: 4px 8px; font-size: 11px;">HỌC SINH:</span>
-                                            <field name="hocsinh_id"
-                                                   readonly="1"
-                                                   force_save="1"
-                                                   options="{'no_open': True}"
-                                                   class="font-weight-bold text-dark m-0" style="font-size: 18px;"/>
-                                        </div>
-                                        <div class="d-flex align-items-center gap-3 mt-1 text-muted" style="font-size: 13px;">
-                                            <span><i class="fa fa-calendar-minus-o me-1"></i>Thời gian đánh giá:
-                                                <field name="ngay_danhgia" readonly="is_readonly" class="d-inline-block"/>
-                                            </span>
-                                            <span><i class="fa fa-user-md me-1"></i>Người đánh giá:
-                                                <field name="gv_danhgia" readonly="is_readonly" class="d-inline-block" options="{'no_open': True}"/>
-                                            </span>
-                                        </div>
+
+                                </div>
+
+                                <div class="ws-field field-student">
+                                    <span class="ws-label"><i class="fa fa-user-graduate"></i> Học sinh</span>
+                                    <div class="ws-field-box">
+                                        <field name="hocsinh_id" readonly="1" force_save="1" options="{'no_open': True}"/>
                                     </div>
                                 </div>
+
+                                <div class="ws-field field-date">
+                                    <span class="ws-label"><i class="fa fa-calendar"></i> Ngày đánh giá</span>
+                                    <div class="ws-field-box">
+                                        <field name="ngay_danhgia" readonly="is_readonly"/>
+                                    </div>
+                                </div>
+
+                                <div class="ws-field field-doctor">
+                                    <span class="ws-label"><i class="fa fa-user-md"></i> Chuyên gia đánh giá</span>
+                                    <div class="ws-field-box">
+                                        <field name="gv_danhgia" readonly="is_readonly" options="{'no_open': True}"/>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <div class="kh-card mb-4">
-                                <div class="kh-card-title d-flex align-items-center gap-2 mb-3">
-                                    <i class="fa fa-stethoscope"></i>
-                                    <span>ĐÁNH GIÁ LÂM SÀNG</span>
+                            <div class="premium-zone-card zone-clinical">
+                                <div class="zone-header-title label-clinical-title">
+                                    <i class="fa fa-heartbeat" style="font-size: 14px;"></i>
+                                    <span>Đánh giá lâm sàng</span>
                                 </div>
-                                <div class="row mb-3">
+                                <div class="row mb-2">
                                     <div class="col-12">
-                                        <group col="12" class="p-0 m-0 class_dense_fields">
-                                            <field name="dm_roiloan_ids" readonly="is_readonly" string="Hội chứng rối loạn" widget="many2many_tags" options="{'no_create': True}" colspan="12"/>
+                                        <group col="12" class="p-0 m-0">
+                                            <field name="dm_roiloan_ids" readonly="is_readonly"
+                                                   string="Các rối loạn của trẻ" widget="many2many_tags" options="{'no_create': True}" colspan="12" class="w-100"/>
                                         </group>
                                     </div>
                                 </div>
 
-                                <div class="row border-top pt-3">
-                                    <div class="col-md-6">
-                                        <group col="12" class="p-0 m-0 class_dense_fields">
-                                            <field name="mucdo" readonly="is_readonly" string="Mức độ can thiệp" colspan="12"/>
+                                <div class="row border-top pt-2 mx-0" style="border-style: dashed !important; border-color: #F1F5F9 !important;">
+                                    <div class="col-md-6 ps-0 pe-0 pe-md-3">
+                                        <group col="12" class="p-0 m-0">
+                                            <field name="mucdo" readonly="is_readonly" string="Mức độ" colspan="12"/>
                                         </group>
                                     </div>
-                                    <div class="col-md-6 border-start-md">
-                                        <group col="12" class="p-0 m-0 class_dense_fields">
-                                            <field name="lieuluong" readonly="is_readonly" string="Tần suất can thiệp" colspan="12" placeholder="Ví dụ: 2 giờ/ngày, 5 ngày/tuần..."/>
+                                    <div class="col-md-6 pe-0 ps-0 ps-md-3 border-separator-md">
+                                        <group col="12" class="p-0 m-0">
+                                            <field name="lieuluong" readonly="is_readonly" string="Liều lượng can thiệp" colspan="12" placeholder="Ví dụ: 2 giờ/ngày, 5 ngày/tuần..."/>
                                         </group>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <div class="kh-card mb-0">
+                            <div class="row mb-0">
+                                <div class="col-md-6 mb-2 mb-md-0">
+                                    <div class="premium-zone-card zone-methods h-100 mb-0">
+                                        <div class="zone-header-title label-methods-title">
+                                            <i class="fa fa-graduation-cap"></i>
+                                            <span>Phương pháp can thiệp</span>
+                                        </div>
                                         <group col="12" class="p-0 m-0">
-                                            <field name="phuongphap" readonly="is_readonly" string="Phương pháp cốt lõi" colspan="12" placeholder="Ví dụ: PECS, ABA, TEACCH..."/>
+                                            <field name="phuongphap" readonly="is_readonly" nolabel="1"
+                                                   placeholder="Ví dụ: Ứng dụng PECS giao tiếp, can thiệp hành vi ABA..." colspan="12"/>
                                         </group>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="kh-card mb-0">
+                                    <div class="premium-zone-card zone-methods h-100 mb-0" style="border-left-color: #8B5CF6 !important;">
+                                        <div class="zone-header-title" style="color: #7C3AED !important;">
+                                            <i class="fa fa-magic"></i>
+                                            <span>Kỹ thuật can thiệp</span>
+                                        </div>
                                         <group col="12" class="p-0 m-0">
-                                            <field name="kythuat" readonly="is_readonly" string="Kỹ thuật bổ trợ" colspan="12" placeholder="Mô tả kỹ thuật hành vi bổ trợ cụ thể..."/>
+                                            <field name="kythuat" readonly="is_readonly" nolabel="1" placeholder="Mô tả kỹ thuật sửa lỗi phát âm, khen thưởng hành vi cụ thể..." colspan="12"/>
                                         </group>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="kh-card mb-4">
-                                <div class="kh-card-title d-flex align-items-center gap-2 mb-2">
-                                    <i class="fa fa-compass text-success" style="font-size: 14px;"></i>
-                                    <span class="font-weight-bold" style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.02em;">Cấu trúc chương trình can thiệp</span>
+                            <div class="premium-zone-card zone-curriculum mt-2">
+                                <div class="zone-header-title label-curriculum-title">
+                                    <i class="fa fa-sitemap"></i>
+                                    <span>Đánh giá lên khung chương trình</span>
                                 </div>
 
                                 <div class="row mb-2 mx-0">
                                     <div class="col-12 p-0">
-                                        <group col="12" class="p-0 m-0 class_dense_fields">
-                                            <field name="chuongtrinh_ids" readonly="is_readonly" nolabel="1" widget="many2many_tags" options="{'no_create': True}" placeholder="Bấm chọn Chương trình can thiệp áp dụng cho trẻ..." colspan="12"/>
+                                        <group col="12" class="p-0 m-0">
+                                            <field name="chuongtrinh_ids" readonly="is_readonly" string="Bộ khung áp dụng" widget="many2many_tags" options="{'no_create': True}" placeholder="Bấm chọn các Khung chương trình can thiệp lớn áp dụng..." colspan="12"/>
                                         </group>
                                     </div>
                                 </div>
 
-                                <div class="o_table_responsive border rounded-3 overflow-hidden shadow-sm">
+                                <div class="o_table_responsive border rounded-3 overflow-hidden shadow-sm bg-white mt-1" style="border-color: #E2E8F0 !important;">
                                     <field name="linhvuc_ids" readonly="is_readonly" nolabel="1">
                                         <list editable="bottom" class="o_list_premium m-0 border-0">
                                             <field name="sequence" widget="handle"/>
-
-                                            <field name="chuongtrinh_id" string="Chương trình"
-                                                   readonly="parent.is_readonly"
-                                                   domain="[('id', 'in', parent.chuongtrinh_ids)]"
-                                                   options="{'no_create': True}" width="300"/>
-
-                                            <field name="linhvuc_id" string="Lĩnh vực"
-                                                   readonly="parent.is_readonly"
-                                                   domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
-                                                   options="{'no_create': True}"  width="300"/>
-
-                                            <field name="tuoi_id" string="Độ tuổi"
-                                                   readonly="parent.is_readonly"
-                                                   domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
-                                                   options="{'no_create': True}"/>
+                                            <field name="sequence" width="50"/>
+                                            <field name="chuongtrinh_id" string="Khung Chương trình" readonly="parent.is_readonly" domain="[('id', 'in', parent.chuongtrinh_ids)]" options="{'no_create': True}" width="300"/>
+                                            <field name="linhvuc_id" string="Lĩnh vực phát triển" readonly="parent.is_readonly" domain="[('chuongtrinh_id', '=', chuongtrinh_id)]" options="{'no_create': True}" width="300"/>
+                                            <field name="tuoi_id" string="Độ tuổi mốc" readonly="parent.is_readonly" domain="[('chuongtrinh_id', '=', chuongtrinh_id)]" options="{'no_create': True}"/>
                                         </list>
                                     </field>
                                 </div>
                             </div>
 
-                            <div class="kh-card mb-4">
-                                <div class="kh-card-title d-flex align-items-center gap-2 mb-3">
-                                    <i class="fa fa-users text-warning"></i>
-                                    <span>PHÂN CÔNG GIÁO VIÊN</span>
+                            <div class="premium-zone-card zone-teachers">
+                                <div class="zone-header-title label-teachers-title">
+                                    <i class="fa fa-users"></i>
+                                    <span>Phân công giáo viên</span>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
+                                <div class="row mx-0">
+                                    <div class="col-md-4 ps-0 pe-0 pe-md-2">
                                         <group col="12" class="p-0 m-0">
-                                            <field name="gv_lapkehoach_id"
-                                                   string="lập kế hoạch"
-                                                   readonly="is_readonly"
-                                                   options="{'no_open': True}"
-                                                   domain="[('coso_id','=',coso_id)]"
-                                                   colspan="12"/>
+                                            <field name="gv_lapkehoach_id" string="Lập kế hoạch" readonly="is_readonly" options="{'no_open': True}" domain="[('coso_id','=',coso_id)]" colspan="12"/>
                                         </group>
                                     </div>
-                                    <div class="col-md-4 border-start-md">
+                                    <div class="col-md-4 pe-0 ps-0 px-md-2 border-separator-md">
                                         <group col="12" class="p-0 m-0">
-                                            <field name="gv_kiemduyet_id"
-                                                   string="Phê duyệt"
-                                                   readonly="is_readonly"
-                                                   options="{'no_open': True}"
-                                                   domain="[('coso_id','=',coso_id)]"
-                                                   colspan="12"/>
+                                            <field name="gv_kiemduyet_id" string="Phê duyệt [chuyên môn]" readonly="is_readonly" options="{'no_open': True}" domain="[('coso_id','=',coso_id)]" colspan="12"/>
                                         </group>
                                     </div>
-                                    <div class="col-md-4 border-start-md">
+                                    <div class="col-md-4 pe-0 ps-0 ps-md-2 border-separator-md">
                                         <group col="12" class="p-0 m-0">
-                                            <field name="gv_canthiep_id"
-                                                   string="Can thiệp"
-                                                   readonly="is_readonly"
-                                                   options="{'no_open': True}"
-                                                   domain="[('coso_id','=',coso_id)]"
-                                                   colspan="12"/>
+                                            <field name="gv_canthiep_id" string="Can thiệp" readonly="is_readonly" options="{'no_open': True}" domain="[('coso_id','=',coso_id)]" colspan="12"/>
                                         </group>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="kh-card mb-4">
-                                <div class="kh-card-title d-flex align-items-center gap-2 mb-2">
-                                    <i class="fa fa-file-text-o text-muted"></i>
-                                    <span>Mô tả chỉ dẫn chi tiết</span>
+                            <div class="premium-zone-card zone-guideline">
+                                <div class="zone-header-title label-guideline-title">
+                                    <i class="fa fa-file-text-o"></i>
+                                    <span>Mô tả thêm thông tin</span>
                                 </div>
-                                <group col="12" class="p-0 m-0">
-                                    <field name="desc" readonly="is_readonly" nolabel="1" placeholder="Nhập các mô tả diễn biến hành vi, lưu ý lâm sàng cụ thể..." colspan="12"/>
+                                <group col="12" class="p-0 m-0 mb-2">
+                                    <field name="desc" readonly="is_readonly" nolabel="1"
+                                           string="Mô tả thêm thông tin" colspan="12"/>
                                 </group>
-                            </div>
 
-                            <div class="kh-card mb-4 border-0 shadow-none bg-transparent p-0">
-                                <div class="kh-card-title d-flex align-items-center gap-2 mb-2">
-                                    <i class="fa fa-calendar-check-o text-muted" style="font-size: 14px;"></i>
-                                    <span>Kế hoạch hẹn đánh giá lần sau</span>
+                                <div class="w-100 pt-2 border-top" style="border-style: dashed !important; border-color: #E2E8F0 !important;">
+                                    <div class="zone-header-title" style="color: #475569 !important; font-size: 13px; margin-bottom: 4px;">
+                                        <i class="fa fa-calendar-check-o text-info"></i>
+                                        <span>Lịch hẹn lần sau</span>
+                                    </div>
+                                    <group col="12" class="p-0 m-0">
+                                        <field name="lichhen" readonly="is_readonly" nolabel="1"
+                                               string="Lịch hẹn lần sau"
+                                               colspan="12"/>
+                                    </group>
                                 </div>
-
-                                <group col="12" class="p-0 m-0 class_dense_fields">
-                                    <field name="lichhen" readonly="is_readonly" nolabel="1" placeholder="Bấm để lựa chọn ngày hẹn tái đánh giá định kỳ..." colspan="12"/>
-                                </group>
                             </div>
+
                         </div>
-
                     </sheet>
                 </form>
             </field>

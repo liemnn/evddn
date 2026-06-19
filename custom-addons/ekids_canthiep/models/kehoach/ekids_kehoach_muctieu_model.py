@@ -8,7 +8,7 @@ class KeHoach2MucTieu(models.Model):
     _description = 'Các mục tiêu cho kế hoạch'
     _order = 'id desc'
 
-    sequence = fields.Integer(string="STT", default=1)
+    sequence = fields.Integer(string="STT", compute="_compute_sequence")
     index = fields.Integer(string="STT", default=1,compute="_compute_index")
 
     kehoach_id = fields.Many2one("ekids.kehoach",
@@ -46,35 +46,17 @@ class KeHoach2MucTieu(models.Model):
     ketqua2muctieu_ids = fields.One2many("ekids.kehoach_ketqua2muctieu", "kehoach_muctieu_id"
                                         , string="Thuộc kế hoạch mục tiêu nào")
 
+    def _compute_sequence(self):
+        for mt in self:
+            mt.sequence =mt.muctieu_id.sequence
 
     # 2. Viết hàm xử lý thuật toán phân nhóm và reset số thứ tự
-    @api.depends('kehoach_id', 'linhvuc_id', 'sequence')
+
     def _compute_index(self):
-        # Khởi tạo bộ nhớ đệm map dữ liệu dạng: (id_kế_hoạch, id_lĩnh_vực) -> [danh_sách_id_mục_tiêu]
-        cache_maps = {}
-
-        for record in self:
-            if not record.kehoach_id or not record.linhvuc_id:
-                record.index = 1
-                continue
-
-            # Tạo khóa đại diện cho phân nhóm
-            group_key = (record.kehoach_id.id, record.linhvuc_id.id)
-
-            # Nếu phân nhóm này chưa được truy vấn, tiến hành quét DB một lần duy nhất
-            if group_key not in cache_maps:
-                siblings = self.env['ekids.kehoach_muctieu'].search([
-                    ('kehoach_id', '=', record.kehoach_id.id),
-                    ('linhvuc_id', '=', record.linhvuc_id.id)
-                ], order='sequence, id asc')  # Sắp xếp chuẩn theo sequence của bạn
-
-                cache_maps[group_key] = siblings.ids
-
-            # Tìm vị trí đứng của bản ghi hiện tại trong nhóm (Mảng bắt đầu từ 0 nên cần +1)
-            if record.id in cache_maps[group_key]:
-                record.index = cache_maps[group_key].index(record.id) + 1
-            else:
-                record.index = 1
+        index =1
+        for mt in self:
+            mt.index =index
+            index +=1
 
     def _compute_name(self):
         for mt in self:
