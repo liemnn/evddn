@@ -67,6 +67,8 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                     index =1
                     for muctieu in muctieus:
                         # Đóng gói từng cấu trúc mục tiêu con
+                        tong_canthiep= muctieu.ketqua_dat + muctieu.ketqua_hinhthanh+ muctieu.ketqua_khongdat
+                        tong_str = str(tong_canthiep)+"/"+str(len(muctieu.ketqua2muctieu_ids)-1)
                         muctieu_json = {
                             "id": muctieu.id,
                             "index": index,
@@ -80,10 +82,10 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                             "tieuchi_dat": getattr(muctieu, 'tieuchi_dat', ''),
                             "tieuchi_hinhthanh": getattr(muctieu, 'tieuchi_hinhthanh', ''),
                             "tieuchi_chuadat": getattr(muctieu, 'tieuchi_chuadat', ''),
-                            "cnt_all": "12/30",
-                            "cnt_ok": "12",
-                            "cnt_half": "15",
-                            "cnt_fail": "3"
+                            "cnt_all": tong_str,
+                            "cnt_ok": str(muctieu.ketqua_dat),
+                            "cnt_half": str(muctieu.ketqua_hinhthanh),
+                            "cnt_fail": str(muctieu.ketqua_khongdat)
                         }
                         # Thêm mục tiêu vào danh sách mảng
                         muctieus_json_list.append(muctieu_json)

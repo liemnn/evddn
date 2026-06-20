@@ -205,7 +205,7 @@
                             <kanban create="0" delete="0" class="custom_daily_kanban hide_search_bar" default_order="ngay asc">
                                 <field name="id"/>
                                 <field name="ngay"/>
-                                <field name="ketqua"/>
+                                <field name="trangthai"/>
                                 <field name="desc"/>
                                 <field name="is_readonly"/>
                                 <templates>
@@ -234,14 +234,14 @@
                                             </div>
                                             <div class="text-center" style="min-width: 160px;">
                                                 <t t-if="record.is_readonly.raw_value">
-                                                    <span t-if="record.ketqua.raw_value == '' or !record.ketqua.raw_value" class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 12px; border-radius: 6px;">Chưa ghi nhận</span>
-                                                    <span t-if="record.ketqua.raw_value == '-1'" class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 12px; border-radius: 6px;">Chưa đạt</span>
-                                                    <span t-if="record.ketqua.raw_value == '1'" class="badge" style="background-color: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; padding: 6px 12px; border-radius: 6px;">Đạt</span>
+                                                    <span t-if="record.trangthai.raw_value == '' or !record.trangthai.raw_value" class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 12px; border-radius: 6px;">Chưa ghi nhận</span>
+                                                    <span t-if="record.trangthai.raw_value == '-1'" class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 12px; border-radius: 6px;">Chưa đạt</span>
+                                                    <span t-if="record.trangthai.raw_value == '1'" class="badge" style="background-color: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; padding: 6px 12px; border-radius: 6px;">Đạt</span>
                                                 </t>
                                                 <div t-if="!record.is_readonly.raw_value" class="btn-group" role="group" style="box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-radius: 6px;">
-                                                    <button type="object" name="action_set_chuadat" t-attf-class="btn btn-sm fw-bold #{record.ketqua.raw_value == '-1' ? 'btn-danger' : 'btn-outline-danger'}">(-)</button>
-                                                    <button type="object" name="action_set_hinhthanh" t-attf-class="btn btn-sm fw-bold #{record.ketqua.raw_value == '0' ? 'btn-warning text-dark' : 'btn-outline-warning'}">(+/-)</button>
-                                                    <button type="object" name="action_set_dat" t-attf-class="btn btn-sm fw-bold #{record.ketqua.raw_value == '1' ? 'btn-success' : 'btn-outline-success'}">(+)</button>
+                                                    <button type="object" name="action_set_chuadat" t-attf-class="btn btn-sm fw-bold #{record.trangthai.raw_value == '-1' ? 'btn-danger' : 'btn-outline-danger'}">(-)</button>
+                                                    <button type="object" name="action_set_hinhthanh" t-attf-class="btn btn-sm fw-bold #{record.trangthai.raw_value == '0' ? 'btn-warning text-dark' : 'btn-outline-warning'}">(+/-)</button>
+                                                    <button type="object" name="action_set_dat" t-attf-class="btn btn-sm fw-bold #{record.trangthai.raw_value == '1' ? 'btn-success' : 'btn-outline-success'}">(+)</button>
                                                 </div>
                                             </div>
                                             <div class="ms-4 d-flex align-items-center justify-content-between" style="flex: 1; min-width: 0;">

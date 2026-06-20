@@ -17,7 +17,7 @@ class KeHoachKetQua2MucTieu(models.Model):
 
     ngay = fields.Date(string="Ngày",required=True)
 
-    ketqua = fields.Selection([
+    trangthai = fields.Selection([
         ("1", "Đạt (+)"),
         ("-1", "Chưa đạt (-)"),
         ("0", "Đang hình thành (+/-)"),
@@ -46,7 +46,7 @@ class KeHoachKetQua2MucTieu(models.Model):
             # 2. Quá khứ & Hiện tại: Kiểm tra tiếp điều kiện kết quả
             else:
                 # Nếu ĐÃ ghi nhận kết quả (trường ketqua có giá trị)
-                if record.ketqua:
+                if record.trangthai:
                     # Tính khoảng cách số ngày từ ngày can thiệp đến hôm nay
                     khoang_cach_ngay = (today - record.ngay).days
 
@@ -64,19 +64,19 @@ class KeHoachKetQua2MucTieu(models.Model):
 
     def action_set_chuadat(self):
         for rec in self:
-            if not rec.is_readonly: rec.ketqua = '-1'
+            if not rec.is_readonly: rec.trangthai = '-1'
         url = self.func_get_url_back()
         return url
 
     def action_set_hinhthanh(self):
         for rec in self:
-            if not rec.is_readonly: rec.ketqua = '0'
+            if not rec.is_readonly: rec.trangthai = '0'
         url = self.func_get_url_back()
         return url
 
     def action_set_dat(self):
         for rec in self:
-            if not rec.is_readonly: rec.ketqua = '1'
+            if not rec.is_readonly: rec.trangthai = '1'
         url =self.func_get_url_back()
         return url
 

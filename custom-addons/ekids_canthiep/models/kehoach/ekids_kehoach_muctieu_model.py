@@ -68,21 +68,72 @@ class KeHoach2MucTieu(models.Model):
     ketqua2muctieu_ids = fields.One2many("ekids.kehoach_ketqua2muctieu", "kehoach_muctieu_id"
                                         , string="Thuộc kế hoạch mục tiêu nào")
 
+    ketqua_dat= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_dat")
+    ketqua_hinhthanh= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_hinhthanh")
+    ketqua_khongdat = fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_khongdat")
+
+    def _compute_ketqua_dat(self):
+        for mt in self:
+            tong = 0
+            ketquas = mt.ketqua2muctieu_ids
+            if ketquas:
+
+                for ketqua in ketquas:
+                    if ketqua.trangthai =="1":
+                        tong += 1
+            mt.ketqua_dat=tong
+
+    def _compute_ketqua_khongdat(self):
+        for mt in self:
+            tong = 0
+            ketquas = mt.ketqua2muctieu_ids
+            if ketquas:
+
+                for ketqua in ketquas:
+                    if ketqua.trangthai =="-1":
+                        tong += 1
+            mt.ketqua_khongdat=tong
+
+    def _compute_ketqua_hinhthanh(self):
+        for mt in self:
+            tong = 0
+            ketquas = mt.ketqua2muctieu_ids
+            if ketquas:
+
+                for ketqua in ketquas:
+                    if ketqua.trangthai =="0":
+                        tong += 1
+            mt.ketqua_hinhthanh=tong
+
+
     def _compute_sequence(self):
         for mt in self:
             mt.sequence =mt.muctieu_id.sequence
 
     def _compute_is_chophep_canthiep(self):
         today =date.today()
+
         for mt in self:
             kehoach =mt.kehoach_id
             is_chophep_canthiep = False
             if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
                 if today >= kehoach.tu_ngay and today <=kehoach.den_ngay:
-                    if not mt.kehoach_muctieu_truoc_id or mt.kehoach_muctieu_truoc_id.trangthai=='1':
-                        is_chophep_canthiep = True
+                    soluong_str = coso_util.func_cauhinh_canthiep(self,kehoach.coso_id,"muctieu_soluong_mo")
+                    is_chophep_canthiep = mt.func_is_chophep_canthiep(int(soluong_str))
             mt.is_chophep_canthiep = is_chophep_canthiep
 
+    def func_is_chophep_canthiep(self,index):
+        if not self.kehoach_muctieu_truoc_id:
+            return True
+        else:
+            if index <=1:
+                return False
+            elif self.trangthai == "1":
+                return True
+            else:
+                index = index -1
+                muctieu= self.kehoach_muctieu_truoc_id
+                return muctieu.func_is_chophep_canthiep(index)
 
 
 

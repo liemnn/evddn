@@ -11,11 +11,11 @@
 
                 <field name="ngay" readonly="1" class="fw-bold" width="100"/>
 
-                <field name="ketqua"
+                <field name="trangthai"
                        readonly="is_readonly"
-                       decoration-danger="ketqua == '-1'"
-                       decoration-warning="ketqua == '0'"
-                       decoration-success="ketqua == '1'"/>
+                       decoration-danger="trangthai == '-1'"
+                       decoration-warning="trangthai == '0'"
+                       decoration-success="trangthai == '1'"/>
 
                 <field name="desc"
                        readonly="is_readonly"
@@ -35,7 +35,7 @@
 
                 <field name="id"/>
                 <field name="ngay"/>
-                <field name="ketqua"/>
+                <field name="trangthai"/>
                 <field name="desc"/>
                 <field name="is_readonly"/>
 
@@ -81,18 +81,18 @@
                             <div class="text-center" style="min-width: 160px;">
 
                                 <t t-if="record.is_readonly.raw_value">
-                                    <t t-if="record.ketqua.raw_value == ''">
+                                    <t t-if="record.trangthai.raw_value == ''">
                                         <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 12px; border-radius: 6px;">
                                             <i class="fa fa-times-circle me-1"></i> Chưa ghi nhận
                                         </span>
                                     </t>
-                                    <t t-if="record.ketqua.raw_value == '-1'">
+                                    <t t-if="record.trangthai.raw_value == '-1'">
                                         <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 12px; border-radius: 6px;">
                                             <i class="fa fa-times-circle me-1"></i> Chưa đạt
                                         </span>
                                     </t>
 
-                                    <t t-elif="record.ketqua.raw_value == '1'">
+                                    <t t-elif="record.trangthai.raw_value == '1'">
                                         <span class="badge" style="background-color: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; padding: 6px 12px; border-radius: 6px;">
                                             <i class="fa fa-check-circle me-1"></i> Đạt
                                         </span>
@@ -101,9 +101,15 @@
 
                                 <t t-else="">
                                     <div class="btn-group" role="group" style="box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-radius: 6px;">
-                                        <button type="object" name="action_set_chuadat" t-attf-class="btn btn-sm fw-bold #{record.ketqua.raw_value == '-1' ? 'btn-danger' : 'btn-outline-danger'}" title="Đánh dấu Chưa đạt">(-)</button>
-                                        <button type="object" name="action_set_hinhthanh" t-attf-class="btn btn-sm fw-bold #{record.ketqua.raw_value == '0' ? 'btn-warning text-dark' : 'btn-outline-warning'}" title="Đánh dấu Đang hình thành">(+/-)</button>
-                                        <button type="object" name="action_set_dat" t-attf-class="btn btn-sm fw-bold #{record.ketqua.raw_value == '1' ? 'btn-success' : 'btn-outline-success'}" title="Đánh dấu Đạt">(+)</button>
+                                        <button type="object" name="action_set_chuadat"
+                                                t-attf-class="btn btn-sm fw-bold #{record.trangthai.raw_value == '-1' ? 'btn-danger' : 'btn-outline-danger'}"
+                                                title="Xác nhận [Chưa đạt]">(-)</button>
+                                        <button type="object" name="action_set_hinhthanh"
+                                                t-attf-class="btn btn-sm fw-bold #{record.trangthai.raw_value == '0' ? 'btn-warning text-dark' : 'btn-outline-warning'}"
+                                                title="Xác nhận [Đang hình thành]">(+/-)</button>
+                                        <button type="object" name="action_set_dat"
+                                                t-attf-class="btn btn-sm fw-bold #{record.trangthai.raw_value == '1' ? 'btn-success' : 'btn-outline-success'}"
+                                                title="Xác nhận [Đạt]">(+)</button>
                                     </div>
                                 </t>
                             </div>

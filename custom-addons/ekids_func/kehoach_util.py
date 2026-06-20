@@ -26,6 +26,10 @@ HOCSINH_DOI_DUYET="4"
 HOCSINH_CAN_DIEUCHINH="-3"
 
 
+
+MUCTIEU_SOLUONG_MO="muctieu_soluong_mo"
+
+
 def func_get_ketluan_hocsinh(self, hocsinh):
     ketluan = self.env['ekids.kehoach_ketluan'].search([
         ('hocsinh_id', '=', hocsinh.id),

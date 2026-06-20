@@ -282,13 +282,13 @@
                                 </div>
                             </page>
 
-                            <page name="config_lock" string="THIẾT LẬP THAM SỐ [KẾ HOẠCH CAN THIỆP]">
+                            <page name="config_lock" string="THIẾT LẬP THAM SỐ PHỤC VỤ HOẠT ĐỘNG CƠ SỞ">
                                 <div class="p-3">
 
                                     <div class="row">
                                         <div class="col-12 mb-3">
-                                            <div class="fw-bold text-muted mb-2"><i class="fa fa-code me-2"/> CẤU HÌNH JSON CÁC THAM SỐ PHỤC VỤ PHẦN [LÂP KẾ HOẠCH CAN THIỆP]</div>
-                                            <field name="canthiep_cauhinh"
+                                            <div class="fw-bold text-muted mb-2"><i class="fa fa-code me-2"/> CẤU HÌNH JSON CÁC THAM SỐ PHỤC VỤ HOẠT ĐỘNG</div>
+                                            <field name="cauhinh"
                                                    widget="ace"
                                                    options="{'mode': 'json'}"
                                                    nolabel="1"
@@ -300,10 +300,7 @@
                                         <div class="col-md-7">
                                             <strong class="text-dark small d-block mb-2">Mẫu cấu hình JSON (Bôi đen để Copy):</strong>
                                             <pre class="bg-dark text-light p-3 rounded json-block">{
-"-1": { "name": "Đang tính", "edit": true, "trangthai_tieptheo": ["0", "2"] },
-"0":  { "name": "Đã kiểm tra", "edit": false, "trangthai_tieptheo": ["-1", "01", "10", "11", "12"] },
-
-
+"KEHOACH_CANTHIEP": { "muctieu_soluong_mo": "1", "edit": true}
 }</pre>
                                         </div>
                                         <div class="col-md-5">

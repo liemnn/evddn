@@ -78,7 +78,7 @@ class CoSo(models.Model):
     trangthai_hocphi_khoa_dl = fields.Text(string="Thiết lập Trạng thái [Học phí] cho phép sửa dữ liệu",default="")
     trangthai_luong_khoa_dl = fields.Char(string="Thiết lập Trạng thái [Lương] cho phép sửa dữ liệu",default="")
 
-    canthiep_cauhinh = fields.Text(string="Thiết lập cấu hình cho phần lập kế hoạch can thiệp", default="")
+    cauhinh = fields.Text(string="Thiết lập cấu hình cho Cơ sở", default="")
 
 
 
