@@ -68,7 +68,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                     for muctieu in muctieus:
                         # Đóng gói từng cấu trúc mục tiêu con
                         tong_canthiep= muctieu.ketqua_dat + muctieu.ketqua_hinhthanh+ muctieu.ketqua_khongdat
-                        tong_str = str(tong_canthiep)+"/"+str(len(muctieu.ketqua2muctieu_ids)-1)
+                        tong_str = str(tong_canthiep)+"/"+str(len(muctieu.ketqua2muctieu_ids))
                         muctieu_json = {
                             "id": muctieu.id,
                             "index": index,

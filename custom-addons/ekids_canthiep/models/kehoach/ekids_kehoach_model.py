@@ -64,9 +64,9 @@ class KeHoach(models.Model):
     # Default = Hôm nay + 31 ngày (Dùng hàm lambda để tính toán nhanh)
     den_ngay = fields.Date(
         string="Đến ngày",
-        default=lambda self: fields.Date.context_today(self) + timedelta(days=31)
+        default=lambda self: fields.Date.context_today(self) + timedelta(days=30)
     )
-    songay = fields.Integer(string="Số ngày",default=31)
+    songay = fields.Integer(string="Số ngày",default=30)
 
     kehoach_muctieu_ids = fields.Many2many(comodel_name="ekids.kehoach_muctieu"
                                    , relation="ekids_kehoach_muctieu4kehoach_rel"
@@ -123,7 +123,7 @@ class KeHoach(models.Model):
     def _onchage_tu_ngay(self):
         for record in self:
             if record.tu_ngay:
-                record.den_ngay = record.tu_ngay + timedelta(days=31)
+                record.den_ngay = record.tu_ngay + timedelta(days=30)
             else:
                 # Nếu người dùng xóa Từ ngày, có thể tự động xóa luôn Đến ngày cho đồng bộ
                 record.den_ngay = False
