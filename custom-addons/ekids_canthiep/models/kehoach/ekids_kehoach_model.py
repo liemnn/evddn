@@ -69,6 +69,25 @@ class KeHoach(models.Model):
         required=True,
     )
 
+    gv_lapkehoach_id = fields.Many2one('ekids.giaovien'
+                                       , string="Giáo viên [Lập kế hoạch]"
+                                       , required=True
+                                       , compute="_compute_gv_lapkehoach_id"
+                                       , store=True)
+
+    gv_kiemduyet_id = fields.Many2one('ekids.giaovien'
+                                      , string="Giáo viên [Kiểm duyệt chuyên môn]"
+                                      , required=True
+                                      , compute="_compute_gv_kiemduyet_id"
+                                      , store=True)
+
+    gv_canthiep_id = fields.Many2one('ekids.giaovien'
+                                     , string="Giáo viên [Can thiệp]"
+                                     , required=True
+                                     , compute="_compute_gv_canthiep_id"
+                                     , store=True)
+
+
     songay = fields.Integer(string="Số ngày",default=30)
 
     kehoach_muctieu_ids = fields.Many2many(comodel_name="ekids.kehoach_muctieu"
@@ -81,6 +100,22 @@ class KeHoach(models.Model):
 
     is_gui_pheduyet = fields.Boolean(compute="_compute_is_gui_pheduyet")
     is_pheduyet = fields.Boolean(compute="_compute_is_pheduyet")
+
+
+    @api.depends("ketluan_id")
+    def _compute_gv_lapkehoach_id(self):
+        for record in self:
+            record.gv_lapkehoach_id =record.ketluan_id.gv_lapkehoach_id
+
+    @api.depends("ketluan_id")
+    def _compute_gv_kiemduyet_id(self):
+        for record in self:
+            record.gv_kiemduyet_id = record.ketluan_id.gv_kiemduyet_id
+
+    @api.depends("ketluan_id")
+    def _compute_gv_canthiep_id(self):
+        for record in self:
+            record.gv_canthiep_id = record.ketluan_id.gv_canthiep_id
 
 
 
@@ -332,7 +367,7 @@ class KeHoach(models.Model):
 
 
     def action_xem_kehoach(self):
-        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
 
         return {
             'type': 'ir.actions.act_window',

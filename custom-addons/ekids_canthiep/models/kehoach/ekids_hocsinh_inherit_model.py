@@ -286,7 +286,7 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
         }
 
     def action_lap_kehoach(self):
-        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
         trangthais = [kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]
         ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,self,trangthais)
         if ketluan:
@@ -357,7 +357,7 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
 
     def action_sua_kehoach(self):
         self.ensure_one()  # Đảm bảo hàm chỉ chạy trên 1 dòng học sinh duy nhất, tránh lỗi sập hệ thống
-        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
 
         user = self.env.user
         is_admin = user.has_group('base.group_system')
@@ -408,7 +408,7 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
 
 
     def action_duyet_kehoach(self):
-        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
         trangthais = [kehoach_util.KEHOACH_DANG_PHEDUYET]
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, trangthais)
         if kehoach:
@@ -432,7 +432,7 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
             }
 
     def action_xem_kehoach(self):
-        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
         kehoach = kehoach_util.func_get_kehoach_hocsinh(self,self)
         if kehoach:
             return {
@@ -474,14 +474,13 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
             )
 
     def action_xem_danhsach_kehoach(self):
-        kanban_view_id = self.env.ref('ekids_canthiep.danhsach_kehoach_kanban').id
-        form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
+        kanban_view_id = self.env.ref('ekids_canthiep.kehoach_kanban').id
         return {
             'type': 'ir.actions.act_window',
             'name': 'DANH SÁCH KẾ HOẠCH',
             'res_model': 'ekids.kehoach',
             'view_mode': 'kanban',
-            'views': [(kanban_view_id, 'kanban'),(form_view_id, 'form')],
+            'views': [(kanban_view_id, 'kanban')],
             'target': 'current',
             'domain': [('hocsinh_id', '=', self.id)],
             'context': {

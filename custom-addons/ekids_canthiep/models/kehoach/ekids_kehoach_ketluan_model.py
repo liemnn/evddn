@@ -132,7 +132,7 @@ class KetLuan(models.Model):
             index -= 1
 
     def action_lap_kehoach(self):
-        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_form').id
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
 
         kehoach = self.hocsinh_id.func_tao_kehoach_macdinh(self)
         if kehoach:
