@@ -155,7 +155,7 @@
                                         style="cursor: pointer;">
 
                                         <td style="width: 45px; text-align: center;">
-                                            <div t-attf-class="goal-index-circle #{!muctieu.is_unlocked ? 'goal-index-circle-locked' : ''}">
+                                            <div t-attf-class="goal-index-circle #{!muctieu.is_canthiep ? 'goal-index-circle-locked' : ''}">
                                                 <t t-esc="muctieu_index + 1"/>
                                             </div>
                                         </td>
@@ -172,11 +172,17 @@
                                         </td>
 
                                         <td style="width: 110px; text-align: center;">
-                                            <span t-attf-class="goal-status-pill #{muctieu.status_class}">
-                                                <t t-esc="muctieu.status_text"></t>
-                                            </span>
+                                            <t t-if="muctieu.trangthai == '1'">
+                                                <span class="goal-status-pill"
+                                                      style="!important; color: #16A34A !important; border: 1px solid #BBF7D0 !important;">Đã đạt</span></t>
+                                            <t t-elif="muctieu.trangthai == '2'"><span class="goal-status-pill" style="background-color: #EFF6FF !important; color: #2563EB !important; border: 1px solid #BFDBFE !important;">Đang can thiệp</span></t>
+                                            <t t-elif="muctieu.trangthai == '-1'"><span class="goal-status-pill" style="background-color: #FEF2F2 !important; color: #DC2626 !important; border: 1px solid #FECACA !important;">Không đạt</span></t>
+                                            <t t-else="">
+                                                <span class="goal-status-pill" style="color: #64748B !important;">
+                                                    Chưa can thiệp
+                                                </span>
+                                            </t>
                                         </td>
-
                                         <td style="width: 110px; text-align: right;">
                                             <button class="btn-record-mini"
                                                     t-att-disabled="!muctieu.is_canthiep"

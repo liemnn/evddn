@@ -29,6 +29,8 @@ class KeHoachKetQua2MucTieu(models.Model):
 
     is_readonly = fields.Boolean(string="Các trạng thái được phép sửa",compute="_compute_is_readonly")
 
+    is_system = fields.Boolean(string="cập nhật do máy tính tạo ra",default=True)
+
     def _compute_is_readonly(self):
         # Dùng context_today để lấy ngày chuẩn theo múi giờ của giáo viên
         today = fields.Date.context_today(self)
@@ -64,19 +66,25 @@ class KeHoachKetQua2MucTieu(models.Model):
 
     def action_set_chuadat(self):
         for rec in self:
-            if not rec.is_readonly: rec.trangthai = '-1'
+            if not rec.is_readonly:
+                rec.trangthai = '-1'
+                rec.is_system = False
         url = self.func_get_url_back()
         return url
 
     def action_set_hinhthanh(self):
         for rec in self:
-            if not rec.is_readonly: rec.trangthai = '0'
+            if not rec.is_readonly:
+                rec.trangthai = '0'
+                rec.is_system = False
         url = self.func_get_url_back()
         return url
 
     def action_set_dat(self):
         for rec in self:
-            if not rec.is_readonly: rec.trangthai = '1'
+            if not rec.is_readonly:
+                rec.trangthai = '1'
+                rec.is_system = False
         url =self.func_get_url_back()
         return url
 
