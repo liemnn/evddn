@@ -145,7 +145,7 @@ def func_is_chuyen_trangthai(self,coso,tt_hientai,tt_dich):
         raise UserError("Học phí ở trạng thái này không cho phép [Chuyển] sang [Trạng thái] bạn vừa lựa chọn. vui lòng lựa chọn lại ! ")
         return False
 
-def func_cauhinh_canthiep(self,coso,thamso):
+def func_cauhinh_canthiep(self,coso,thamso,default):
     json_string = coso.cauhinh
     if not json_string:
         return None
@@ -163,6 +163,10 @@ def func_cauhinh_canthiep(self,coso,thamso):
         raise UserError(
             "Không thây tham số [KEHOACH_CANTHIEP] của cơ sở[" + coso.name + "] vui lòng liên hệ quản trị phần mềm ! ")
     else:
-        return config_data["KEHOACH_CANTHIEP"].get(thamso,[])
+        result = config_data["KEHOACH_CANTHIEP"].get(thamso,[])
+        if result:
+            return result
+        else:
+            return default
 
 

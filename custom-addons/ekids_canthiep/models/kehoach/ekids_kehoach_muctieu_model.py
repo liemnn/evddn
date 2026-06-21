@@ -71,6 +71,37 @@ class KeHoach2MucTieu(models.Model):
     ketqua_dat= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_dat")
     ketqua_hinhthanh= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_hinhthanh")
     ketqua_khongdat = fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_khongdat")
+    ketqua_dat_lientiep = fields.Integer(string="Kết quả Đạt liên tiếp", compute="_compute_ketqua_dat_lientiep")
+
+    @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
+    def _compute_ketqua_dat_lientiep(self):
+        for mt in self:
+            max = 0
+            current_max = 0
+
+            # 🌟 BƯỚC QUY HOẠCH CHÍ MẠNG: Ép sắp xếp danh sách kết quả tịnh tiến theo ngày tăng dần
+            # Sử dụng sorted() của Python giúp chạy mượt mà trên RAM mà không cần Re-query SQL
+            ketquas = mt.ketqua2muctieu_ids
+            if ketquas:
+                for kq in ketquas:
+                    # Nếu trạng thái bằng '1' (Đạt) dạng chuỗi hoặc số nguyên tùy cấu hình database của anh
+                    if kq.trangthai == '1':
+                        current_max += 1
+                        # Cập nhật lại chuỗi dài nhất nếu chuỗi hiện tại vượt mốc cũ
+                        if current_max > max:
+                            max = current_max
+                    else:
+                        # Đứt gãy chuỗi đạt liên tiếp -> Reset bộ đếm tạm thời về 0
+                        current_max = 0
+
+                # Gán kết quả chuỗi kỷ lục tìm được vào trường compute
+            mt.ketqua_dat_lientiep = max
+            soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, mt.kehoach_id.coso_id, "muctieu_soluong_dat_lientiep","6")
+            if max >= int(soluong_dat_lientiep_str):
+                mt.trangthai ="1"
+            else:
+                mt.trangthai = "-1"
+
 
     def _compute_ketqua_dat(self):
         for mt in self:
@@ -118,9 +149,11 @@ class KeHoach2MucTieu(models.Model):
             is_chophep_canthiep = False
             if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
                 if today >= kehoach.tu_ngay and today <=kehoach.den_ngay:
-                    soluong_str = coso_util.func_cauhinh_canthiep(self,kehoach.coso_id,"muctieu_soluong_mo")
+                    soluong_str = coso_util.func_cauhinh_canthiep(self,kehoach.coso_id,"muctieu_soluong_mo","2")
                     is_chophep_canthiep = mt.func_is_chophep_canthiep(int(soluong_str))
             mt.is_chophep_canthiep = is_chophep_canthiep
+            if is_chophep_canthiep and mt.trangthai=="0":
+                mt.trangthai="-1"
 
     def func_is_chophep_canthiep(self,index):
         if not self.kehoach_muctieu_truoc_id:

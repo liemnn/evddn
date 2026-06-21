@@ -82,6 +82,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                             "tieuchi_dat": getattr(muctieu, 'tieuchi_dat', ''),
                             "tieuchi_hinhthanh": getattr(muctieu, 'tieuchi_hinhthanh', ''),
                             "tieuchi_chuadat": getattr(muctieu, 'tieuchi_chuadat', ''),
+                            "dat_lientiep": str(muctieu.ketqua_dat_lientiep),
                             "cnt_all": tong_str,
                             "cnt_ok": str(muctieu.ketqua_dat),
                             "cnt_half": str(muctieu.ketqua_hinhthanh),

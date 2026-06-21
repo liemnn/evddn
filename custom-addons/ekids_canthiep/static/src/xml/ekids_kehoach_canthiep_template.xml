@@ -164,23 +164,31 @@
 
                                         <td style="width: 210px;">
                                             <div class="clinical-counts-box">
-                                                <div class="count-badge badge-all" title="Tổng số ca/buổi"><i class="fa fa-chart-bar"></i> <t t-esc="muctieu.cnt_all"></t></div>
-                                                <div class="count-badge badge-ok" title="Số ca Đạt"><t t-esc="muctieu.cnt_ok"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">+</span></div>
-                                                <div class="count-badge badge-half" title="Số ca Đang hình thành"><t t-esc="muctieu.cnt_half"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">+/-</span></div>
-                                                <div class="count-badge badge-fail" title="Số ca Chưa đạt"><t t-esc="muctieu.cnt_fail"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">-</span></div>
+                                                <div class="count-badge badge-all" title="Tổng số ngày can thiệp trẻ đã can thiệp / Số ngày của kế hoạch">
+                                                    <i class="fa fa-chart-bar"></i>
+                                                    <t t-esc="muctieu.cnt_all"></t>
+                                                </div>
+                                                <div class="count-badge badge-ok" title="Tổng số ngày can thiệp trẻ [Đạt liên tiếp] / Tổng số ngày đạt (+)">
+                                                    <t t-esc="muctieu.dat_lientiep"></t>/<t t-esc="muctieu.cnt_ok"></t>
+                                                    <span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">+</span>
+                                                </div>
+                                                <div class="count-badge badge-half" title="Tổng số ngày can thiệp trẻ Đang hình thành (+/-)"><t t-esc="muctieu.cnt_half"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">+/-</span></div>
+                                                <div class="count-badge badge-fail" title="Tổng số ngày can thiệp trẻ Chưa đạt (+/-)"><t t-esc="muctieu.cnt_fail"></t><span style="font-size: 0.7rem; font-weight: 900; margin-left: 2px;">-</span></div>
                                             </div>
                                         </td>
 
                                         <td style="width: 110px; text-align: center;">
                                             <t t-if="muctieu.trangthai == '1'">
-                                                <span class="goal-status-pill"
-                                                      style="!important; color: #16A34A !important; border: 1px solid #BBF7D0 !important;">Đã đạt</span></t>
-                                            <t t-elif="muctieu.trangthai == '2'"><span class="goal-status-pill" style="background-color: #EFF6FF !important; color: #2563EB !important; border: 1px solid #BFDBFE !important;">Đang can thiệp</span></t>
-                                            <t t-elif="muctieu.trangthai == '-1'"><span class="goal-status-pill" style="background-color: #FEF2F2 !important; color: #DC2626 !important; border: 1px solid #FECACA !important;">Không đạt</span></t>
+                                                <span class="goal-status-pill"   style="color:#16A34A !important;">Đã đạt</span>
+                                            </t>
+                                            <t t-elif="muctieu.trangthai == '2'">
+                                                <span class="goal-status-pill" style="color: #2563EB !important;">Đang can thiệp</span>
+                                            </t>
+                                            <t t-elif="muctieu.trangthai == '-1'">
+                                                <span class="goal-status-pill" style="color: #DC2626 !important;">Chưa đạt</span>
+                                            </t>
                                             <t t-else="">
-                                                <span class="goal-status-pill" style="color: #64748B !important;">
-                                                    Chưa can thiệp
-                                                </span>
+                                                <span class="goal-status-pill" style="color: #64748B !important;">Chưa can thiệp</span>
                                             </t>
                                         </td>
                                         <td style="width: 110px; text-align: right;">
