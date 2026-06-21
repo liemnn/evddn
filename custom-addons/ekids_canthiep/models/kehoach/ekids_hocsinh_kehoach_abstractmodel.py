@@ -70,6 +70,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                         # Đóng gói từng cấu trúc mục tiêu con
                         tong_canthiep= muctieu.ketqua_dat + muctieu.ketqua_hinhthanh+ muctieu.ketqua_khongdat
                         tong_str = str(tong_canthiep)+"/"+str(len(muctieu.ketqua2muctieu_ids))
+                        muctieu._compute_is_chophep_canthiep()
                         muctieu_json = {
                             "id": muctieu.id,
                             "index": index,

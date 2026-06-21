@@ -75,6 +75,7 @@ class KeHoach2MucTieu(models.Model):
 
     @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
     def _compute_ketqua_dat_lientiep(self):
+        today =date.today()
         for mt in self:
             max = 0
             current_max = 0
@@ -84,6 +85,8 @@ class KeHoach2MucTieu(models.Model):
             ketquas = mt.ketqua2muctieu_ids
             if ketquas:
                 for kq in ketquas:
+                    if kq.ngay > today:
+                        continue
                     # Nếu trạng thái bằng '1' (Đạt) dạng chuỗi hoặc số nguyên tùy cấu hình database của anh
                     if kq.trangthai == '1':
                         current_max += 1
@@ -157,6 +160,9 @@ class KeHoach2MucTieu(models.Model):
 
     def func_is_chophep_canthiep(self,index):
         if not self.kehoach_muctieu_truoc_id:
+            return True
+        elif self.kehoach_muctieu_truoc_id.trangthai=="1":
+            # trang thai truoc đã đạt
             return True
         else:
             if index <=1:
