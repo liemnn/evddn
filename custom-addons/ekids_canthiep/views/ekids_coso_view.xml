@@ -46,7 +46,7 @@
         </record>
 
 
-        <record id="ekids_canthiep.kehoach_list" model="ir.ui.view">
+        <record id="ekids_canthiep.coso_kehoach_kanban" model="ir.ui.view">
             <field name="name">Quản lý học sinh các cơ sở - Premium Soft Light</field>
             <field name="model">ekids.coso</field>
             <field name="priority" eval="100"/>
@@ -98,7 +98,7 @@
         <record model="ir.actions.act_window" id="ekids_canthiep.coso_kehoach_action_window">
             <field name="name">KẾ HOẠCH</field>
             <field name="res_model">ekids.coso</field>
-            <field name="context">{ 'kanban_view_ref':'ekids_canthiep.kehoach_list'}</field>
+            <field name="context">{ 'kanban_view_ref':'ekids_canthiep.coso_kehoach_kanban'}</field>
             <field name="view_mode">kanban</field>
         </record>
 

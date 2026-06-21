@@ -1,10 +1,31 @@
 <odoo>
   <data>
-        <record id="ekids_canthiep.kehoach_kanban" model="ir.ui.view">
-            <field name="name">ekids.kehoach.kanban</field>
+       <record id="ekids_canthiep.kehoach_list" model="ir.ui.view">
+            <field name="name">ekids.kehoach.list</field>
             <field name="model">ekids.kehoach</field>
             <field name="arch" type="xml">
-                <kanban default_group_by="trangthai" class="o_kanban_mobile" create="false" sample="1">
+                <list string="Danh sách Kế hoạch can thiệp"
+                      default_order="tu_ngay desc" create="false" delete="false">
+
+                    <field name="index" string="STT" />
+                    <field name="hocsinh_id" string="Học sinh" />
+
+                    <field name="tu_ngay" string="Từ ngày" />
+                    <field name="den_ngay" string="Đến ngày" />
+                    <field name="songay" string="Số ngày" />
+                    <field name="gv_lapkehoach_id" />
+                    <field name="gv_kiemduyet_id" />
+                    <field name="gv_canthiep_id" />
+                     <field name="trangthai"/>
+
+                </list>
+            </field>
+        </record>
+       <record id="ekids_canthiep.kehoach_kanban" model="ir.ui.view">
+            <field name="name">Kế hoạch can thiệp - Premium SaaS Design V2</field>
+            <field name="model">ekids.kehoach</field>
+            <field name="arch" type="xml">
+                <kanban default_order="id desc" sample="1" class="ekids_premium_kehoach_v2" create="false" default_group_by="trangthai">
 
                     <field name="id"/>
                     <field name="index"/>
@@ -16,90 +37,301 @@
                     <field name="trangthai_pheduyet"/>
                     <field name="tu_ngay"/>
                     <field name="den_ngay"/>
+                    <field name="songay"/>
                     <field name="is_gui_pheduyet"/>
                     <field name="is_pheduyet"/>
 
                     <templates>
-                        <t t-name="card">
-                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill p-3">
+                        <t t-name="kanban-box">
 
-                                <div class="o_kanban_record_top d-flex align-items-center justify-content-between border-bottom pb-2 mb-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="badge bg-secondary text-white fw-bold px-2 py-1" title="Số thứ tự kết luận">
-                                            STT: <t t-esc="record.index.value"/>
-                                        </span>
-                                        <strong class="o_kanban_record_title text-primary fs-5 ms-1">
-                                            <field name="hocsinh_id"/>
-                                        </strong>
-                                    </div>
-                                    <div class="text-muted small">
-                                        <i class="fa fa-calendar-o me-1"/>
-                                        <t t-esc="record.tu_ngay.value"/> - <t t-esc="record.den_ngay.value"/>
+                            <style>
+                                /* Khóa khung bao mặc định thô sơ của Odoo */
+                                .ekids_premium_kehoach_v2 .o_kanban_record {
+                                    width: 100% !important;
+                                    flex: 0 0 100% !important;
+                                    margin: 0 0 16px 0 !important;
+                                    padding: 0 !important;
+                                    background: transparent !important;
+                                    border: none !important;
+                                }
+
+                                /* --- 📱 LAYOUT DI ĐỘNG (MOBILE FIRST) --- */
+                                .k_master_card {
+                                    background: #FFFFFF !important;
+                                    border: 1px solid #E2E8F0 !important;
+                                    border-radius: 24px !important;
+                                    box-shadow: 0 4px 20px rgba(148, 163, 184, 0.06) !important;
+                                    padding: 16px !important;
+                                    display: flex !important;
+                                    flex-direction: column !important;
+                                    gap: 12px !important;
+                                    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+                                }
+
+                                .k_card_header {
+                                    display: flex !important;
+                                    align-items: center !important;
+                                    justify-content: space-between !important;
+                                    padding-bottom: 12px !important;
+                                    border-bottom: 1px solid #F1F5F9 !important;
+                                }
+
+                                /* Vòng tròn số ID cá tính màu xanh chủ đạo */
+                                .k_avatar_index {
+                                    width: 38px !important;
+                                    height: 38px !important;
+                                    border-radius: 12px !important;
+                                    background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%) !important;
+                                    color: #0369A1 !important;
+                                    font-weight: 800 !important;
+                                    font-size: 15px !important;
+                                    display: flex !important;
+                                    align-items: center !important;
+                                    justify-content: center !important;
+                                }
+
+                                .k_student_name {
+                                    font-size: 16px !important;
+                                    font-weight: 800 !important;
+                                    color: #0F172A !important;
+                                    margin: 0 !important;
+                                    letter-spacing: -0.3px !important;
+                                }
+
+                                /* Hộp kén chức năng phân vùng nội dung (Inner Pods) */
+                                .k_inner_pod {
+                                    background: #F8FAFC !important;
+                                    border: 1px solid #F1F5F9 !important;
+                                    border-radius: 16px !important;
+                                    padding: 12px !important;
+                                }
+
+                                .k_pod_title {
+                                    font-size: 11px !important;
+                                    font-weight: 700 !important;
+                                    color: #94A3B8 !important;
+                                    text-transform: uppercase !important;
+                                    letter-spacing: 0.5px !important;
+                                    margin-bottom: 8px !important;
+                                    display: flex !important;
+                                    align-items: center !important;
+                                    gap: 6px !important;
+                                }
+
+                                .k_teacher_row {
+                                    display: flex !important;
+                                    align-items: center !important;
+                                    justify-content: space-between !important;
+                                    font-size: 12.5px !important;
+                                    padding: 5px 0 !important;
+                                    border-bottom: 1px dashed #E2E8F0 !important;
+                                }
+                                .k_teacher_row:last-child {
+                                    border-bottom: none !important;
+                                }
+
+                                /* Nhãn trạng thái viên thuốc chuẩn Apple */
+                                .k_status_pill {
+                                    padding: 6px 12px !important;
+                                    border-radius: 10px !important;
+                                    font-size: 12px !important;
+                                    font-weight: 700 !important;
+                                    display: inline-flex !important;
+                                    align-items: center !important;
+                                    gap: 4px !important;
+                                }
+                                .status_dang_lap { background: #FEF3C7 !important; color: #D97706 !important; }
+                                .status_doi_duyet { background: #E0F2FE !important; color: #0369A1 !important; }
+                                .status_canthiep { background: #D1FAE5 !important; color: #065F46 !important; }
+                                .status_het_han { background: #FEE2E2 !important; color: #991B1B !important; }
+
+                                /* Hệ thống nút bấm Premium có đổ bóng mềm đổ màu tương ứng nút gốc */
+                                .k_btn_action {
+                                    color: #FFFFFF !important;
+                                    font-weight: 800 !important;
+                                    font-size: 13px !important;
+                                    padding: 10px 16px !important;
+                                    border-radius: 14px !important;
+                                    border: none !important;
+                                    display: inline-flex !important;
+                                    align-items: center !important;
+                                    justify-content: center !important;
+                                    gap: 6px !important;
+                                    width: 100% !important;
+                                    transition: all 0.2s ease;
+                                }
+                                .btn_sua { background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%) !important; color: #000000 !important; box-shadow: 0 4px 14px rgba(217, 119, 6, 0.2) !important; }
+                                .btn_duyet { background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%) !important; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important; }
+                                .btn_canthiep { background: linear-gradient(135deg, #10B981 0%, #047857 100%) !important; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25) !important; }
+                                .btn_khongdat { background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%) !important; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.2) !important; }
+                                .btn_ketthuc { background: #64748B !important; box-shadow: 0 4px 14px rgba(100, 116, 139, 0.2) !important; }
+
+                                .k_btn_action:hover {
+                                    transform: translateY(-1px) !important;
+                                    opacity: 0.95;
+                                }
+
+                                /* --- 💻 ĐỀ GIAO DIỆN KHI XEM TRÊN MÁY TÍNH (MÀN HÌNH RỘNG NẰM PHẲNG TRÊN 1 DÒNG) --- */
+                                @media (min-width: 992px) {
+                                    .k_master_card {
+                                        flex-direction: row !important;
+                                        align-items: center !important;
+                                        padding: 16px 20px !important;
+                                        gap: 20px !important;
+                                    }
+                                    .k_card_header {
+                                        border-bottom: none !important;
+                                        padding-bottom: 0 !important;
+                                        flex-direction: column !important;
+                                        align-items: flex-start !important;
+                                        justify-content: center !important;
+                                        gap: 6px !important;
+                                    }
+                                    .k_inner_pod {
+                                        background: transparent !important;
+                                        border: none !important;
+                                        padding: 0 !important;
+                                        border-radius: 0 !important;
+                                    }
+                                    .k_teacher_row {
+                                        border-bottom: none !important;
+                                        justify-content: flex-start !important;
+                                        gap: 8px !important;
+                                        padding: 2px 0 !important;
+                                    }
+                                    .k_btn_action {
+                                        width: auto !important;
+                                    }
+
+                                    /* Chia cột phẳng đối xứng tuyệt đối trên Web */
+                                    .k-col-1 { flex: 1.4 !important; min-width: 250px !important; }
+                                    .k-col-2 { flex: 1.3 !important; min-width: 260px !important; border-left: 1px solid #E2E8F0 !important; padding-left: 20px !important; }
+                                    .k-col-3 { flex: 1.2 !important; min-width: 240px !important; border-left: 1px solid #E2E8F0 !important; padding-left: 20px !important; }
+                                    .k-col-4 { flex: 1.1 !important; min-width: 210px !important; border-left: 1px solid #E2E8F0 !important; padding-left: 20px !important; display: flex !important; flex-direction: column !important; align-items: flex-end !important; justify-content: space-between !important; min-height: 85px; }
+                                }
+                            </style>
+
+                            <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                    <i class="fa fa-ellipsis-v fa-lg"></i>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                        <i class="fa fa-pencil me-2"></i> Sửa cấu trúc
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="k_master_card">
+
+                                <div class="k-col-1 d-flex flex-column gap-2">
+                                    <div class="k_card_header">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="k_avatar_index"><t t-esc="record.index.raw_value"/></div>
+                                            <div>
+                                                <h4 class="k_student_name"><field name="hocsinh_id"/></h4>
+                                                <div class="text-muted font-monospace mt-0.5" style="font-size: 11.5px;">
+                                                    <i class="fa fa-hashtag me-1"></i>Mã KH: #<t t-esc="record.id.raw_value"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-md-none">
+                                            <t t-if="record.trangthai.raw_value == 'dang_lap'"><span class="k_status_pill status_dang_tao">Đang lập</span></t>
+                                            <t t-elif="record.trangthai.raw_value == 'dang_pheduyet'"><span class="k_status_pill status_doi_duyet">Đợi duyệt</span></t>
+                                            <t t-elif="record.trangthai.raw_value == 'dang_canthiep'"><span class="k_status_pill status_canthiep">Can thiệp</span></t>
+                                            <t t-else=""><span class="k_status_pill status_het_han">Hết hiệu lực</span></t>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="o_kanban_record_body mb-3 text-secondary">
-                                    <div class="d-flex align-items-center mb-1">
-                                        <span class="fw-bold small me-2" style="width: 110px;"><i class="fa fa-pencil text-muted me-1"/> Người lập:</span>
-                                        <span><field name="gv_lapkehoach_id"/></span>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-1">
-                                        <span class="fw-bold small me-2" style="width: 110px;"><i class="fa fa-gavel text-muted me-1"/> Người duyệt:</span>
-                                        <span><field name="gv_kiemduyet_id"/></span>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-1">
-                                        <span class="fw-bold small me-2" style="width: 110px;"><i class="fa fa-user-md text-muted me-1"/> Can thiệp:</span>
-                                        <span><field name="gv_canthiep_id"/></span>
+                                <div class="k-col-2 k_inner_pod">
+                                    <div class="k_pod_title"><i class="fa fa-calendar-check-o text-warning"></i> Chu kỳ kế hoạch</div>
+                                    <div class="d-flex flex-column gap-1.5" style="font-size: 13px;">
+                                        <div>
+                                            <span class="text-muted">Từ ngày:</span> <b class="text-dark"><field name="tu_ngay"/></b>
+                                        </div>
+                                        <div>
+                                            <span class="text-muted">Đến ngày:</span> <b class="text-dark"><field name="den_ngay"/></b>
+                                        </div>
+                                        <div>
+                                            <span class="text-muted">Tổng thời hạn:</span>
+                                            <span class="badge bg-light text-dark border fw-bold px-2 py-0.5" style="font-size:11.5px;">
+                                                <t t-esc="record.songay.value"/> ngày
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="o_kanban_record_bottom d-flex align-items-center justify-content-between border-top pt-2">
+                                <div class="k-col-3 k_inner_pod">
+                                    <div class="k_pod_title"><i class="fa fa-users text-info"></i> Ban nhân sự phụ trách</div>
+                                    <div class="d-flex flex-column gap-1">
+                                        <div class="k_teacher_row">
+                                            <span class="text-muted" style="font-size:11.5px;"><i class="fa fa-pencil text-muted me-1"></i>Người lập:</span>
+                                            <span class="text-slate-800 fw-semibold"><field name="gv_lapkehoach_id"/></span>
+                                        </div>
+                                        <div class="k_teacher_row">
+                                            <span class="text-muted" style="font-size:11.5px;"><i class="fa fa-shield text-muted me-1"></i>Người duyệt:</span>
+                                            <span class="text-slate-800 fw-semibold"><field name="gv_kiemduyet_id"/></span>
+                                        </div>
+                                        <div class="k_teacher_row">
+                                            <span class="text-muted" style="font-size:11.5px;"><i class="fa fa-graduation-cap text-muted me-1"></i>Can thiệp:</span>
+                                            <span class="text-primary font-weight-bold" style="font-weight: 700;"><field name="gv_canthiep_id"/></span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                    <div>
-                                        <span t-if="record.trangthai.raw_value == 'dang_lap'" class="badge rounded-pill bg-warning text-dark fw-bold px-2 py-1">
-                                            <i class="fa fa-edit me-1"/> Đang lập
-                                        </span>
-                                        <span t-if="record.trangthai.raw_value == 'dang_pheduyet'" class="badge rounded-pill bg-info text-white fw-bold px-2 py-1">
-                                            <i class="fa fa-hourglass-half me-1"/> Đợi duyệt
-                                        </span>
-                                        <span t-if="record.trangthai.raw_value == 'dang_canthiep'" class="badge rounded-pill bg-success text-white fw-bold px-2 py-1">
-                                            <i class="fa fa-play-circle me-1"/> Can thiệp
-                                        </span>
-                                        <span t-if="record.trangthai.raw_value == 'het_hieuluc'" class="badge rounded-pill bg-danger text-white fw-bold px-2 py-1">
-                                            <i class="fa fa-archive me-1"/> Hết hiệu lực
-                                        </span>
+                                <div class="k-col-4">
+                                    <div class="d-none d-md-block">
+                                        <t t-if="record.trangthai.raw_value == 'dang_lap'">
+                                            <span class="k_status_pill status_dang_tao">
+                                                <i class="fa fa-circle me-1" style="font-size:5px;"></i><field name="trangthai"/>
+                                            </span>
+                                        </t>
+                                        <t t-elif="record.trangthai.raw_value == 'dang_pheduyet'">
+                                            <span class="k_status_pill status_doi_duyet">
+                                                <i class="fa fa-circle me-1" style="font-size:5px;"></i><field name="trangthai"/>
+                                            </span>
+                                        </t>
+                                        <t t-elif="record.trangthai.raw_value == 'dang_canthiep'">
+                                            <span class="k_status_pill status_canthiep">
+                                                <i class="fa fa-circle me-1" style="font-size:5px;"></i><field name="trangthai"/>
+                                            </span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="k_status_pill status_het_han">
+                                                <i class="fa fa-circle me-1" style="font-size:5px;"></i><field name="trangthai"/>
+                                            </span>
+                                        </t>
                                     </div>
 
-                                    <div class="o_kanban_buttons">
+                                    <div class="w-100 d-flex gap-1.5 justify-content-end align-items-center mt-2">
 
                                         <t t-if="record.trangthai.raw_value == 'dang_lap'">
-                                            <button name="action_xem_kehoach" type="object" class="btn btn-warning btn-sm text-dark fw-bold px-2" title="Sửa lại kế hoạch">
-                                                <i class="fa fa-pencil-square-o"/> Sửa
+                                            <button name="action_xem_kehoach" type="object" class="k_btn_action btn_sua" onclick="event.stopPropagation();">
+                                                <i class="fa fa-pencil-square-o"></i> Sửa
                                             </button>
-                                            <button t-if="record.is_gui_pheduyet.raw_value" name="action_gui_pheduyet" type="object" class="btn btn-primary btn-sm ms-1 px-2" title="Gửi lên cấp quản lý xét duyệt">
-                                                <i class="fa fa-paper-plane"/> Gửi duyệt
+                                            <button t-if="record.is_gui_pheduyet.raw_value" name="action_gui_pheduyet" type="object" class="k_btn_action btn_duyet" onclick="event.stopPropagation();">
+                                                <i class="fa fa-paper-plane"></i> Gửi duyệt
                                             </button>
                                         </t>
 
                                         <t t-if="record.trangthai.raw_value == 'dang_pheduyet' and record.is_pheduyet.raw_value">
-                                            <button name="action_pheduyet_dat" type="object" class="btn btn-success btn-sm px-2 text-white fw-bold" title="Phê duyệt Đạt">
-                                                <i class="fa fa-check"/> Duyệt đạt
+                                            <button name="action_pheduyet_dat" type="object" class="k_btn_action btn_canthiep" onclick="event.stopPropagation();">
+                                                <i class="fa fa-check"></i> Duyệt đạt
                                             </button>
-                                            <button name="action_pheduyet_khongdat" type="object" class="btn btn-danger btn-sm ms-1 px-2 text-white" title="Yêu cầu điều chỉnh lại">
-                                                <i class="fa fa-times"/> Từ chối
+                                            <button name="action_pheduyet_khongdat" type="object" class="k_btn_action btn_khongdat" onclick="event.stopPropagation();">
+                                                <i class="fa fa-times"></i> Từ chối
                                             </button>
                                         </t>
 
                                         <t t-if="record.trangthai.raw_value == 'dang_canthiep'">
-                                            <button name="action_canthiep" type="object" class="btn btn-success btn-sm fw-bold px-2 text-uppercase" title="Ghi nhận kết quả học tập hàng ngày">
-                                                <i class="fa fa-play-circle"/> Dạy &amp; Ghi nhận
+                                            <button name="action_canthiep" type="object" class="k_btn_action btn_canthiep" onclick="event.stopPropagation();">
+                                                <i class="fa fa-play-circle"></i> Dạy &amp; Ghi nhận
                                             </button>
-
-                                            <button name="action_ketthuc_kehoach" type="object"
-                                                    class="btn btn-secondary btn-sm ms-1 px-2"
-                                                    title="Kết thúc đợt can thiệp này"
-                                                    confirm="Bạn chắc chắc muốn kết thúc [Kế hoạch] này để chuyển sang Kế hoạch tiếp theo ?">
-                                                <i class="fa fa-check-circle"/> Kết thúc
+                                            <button name="action_ketthuc_kehoach" type="object" class="k_btn_action btn_ketthuc"
+                                                    confirm="Bạn chắc chắc muốn kết thúc [Kế hoạch] này để chuyển sang Kế hoạch tiếp theo ?"
+                                                    onclick="event.stopPropagation();">
+                                                <i class="fa fa-check-circle"></i> Kết thúc
                                             </button>
                                         </t>
 
