@@ -21,6 +21,12 @@
         <field name="model">ekids.hocsinh</field>
         <field name="arch" type="xml">
             <list create="false" delete="false" limit="200" default_order="id asc">
+                <field name="is_tao_ketluan" column_invisible="True"/>
+                <field name="is_lap_kehoach" column_invisible="True"/>
+                <field name="is_sua_kehoach" column_invisible="True"/>
+                <field name="is_kiemduyet" column_invisible="True"/>
+                <field name="is_canthiep" column_invisible="True"/>
+
                 <field name="sequence" width="25"/>
                 <field name="name" width="170"/>
                 <field name="gioitinh" width="50"/>
@@ -103,7 +109,7 @@
                         type="object"
                         class="btn-success btn-sm fw-bold text-uppercase"
                         icon="fa-play-circle"
-                        invisible="trangthai_kehoach not in ['1']"
+                        invisible="is_canthiep==False"
                         title="Bấm vào đây để mở bảng đánh giá và ghi nhận kết quả học tập hàng ngày của trẻ"
                 />
 

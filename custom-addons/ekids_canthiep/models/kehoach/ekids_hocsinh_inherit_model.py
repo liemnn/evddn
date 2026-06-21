@@ -52,11 +52,11 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
              "hocsinh_id", string="Các kế hoạch can thệp của học sinh")
 
 
-    is_tao_ketluan = fields.Boolean(compute="_compute_is_tao_ketluan")
-    is_lap_kehoach = fields.Boolean(compute="_compute_is_lap_kehoach")
-    is_sua_kehoach = fields.Boolean(compute="_compute_is_sua_kehoach")
-    is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
-    is_canthiep = fields.Boolean(compute="_compute_is_canthiep")
+    is_tao_ketluan = fields.Boolean(compute="_compute_is_tao_ketluan",compute_sudo=False)
+    is_lap_kehoach = fields.Boolean(compute="_compute_is_lap_kehoach",compute_sudo=False)
+    is_sua_kehoach = fields.Boolean(compute="_compute_is_sua_kehoach",compute_sudo=False)
+    is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet",compute_sudo=False)
+    is_canthiep = fields.Boolean(compute="_compute_is_canthiep",compute_sudo=False)
 
 
     def _compute_is_tao_ketluan(self):
@@ -137,7 +137,8 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
         for hs in self:
-            kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs,kehoach_util.KEHOACH_DANG_PHEDUYET)
+            trangthais =[kehoach_util.KEHOACH_DANG_PHEDUYET]
+            kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs,trangthais)
             if not kehoach:
                 hs.is_kiemduyet = False
             else:
@@ -161,13 +162,13 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
         today = date.today()
         user = self.env.user
         is_admin = user.has_group('base.group_system')
-
+        today =date.today()
         for hs in self:
             # LƯU Ý SỐNG CÒN: Luôn gán mặc định False đầu vòng lặp cho từng học sinh
             # để tránh lỗi lọt điều kiện không gán dữ liệu của Odoo Compute
             hs.is_canthiep = False
-
-            kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs, kehoach_util.KEHOACH_DANG_CANTHIEP)
+            trangthais=[kehoach_util.KEHOACH_DANG_CANTHIEP]
+            kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai_ngay(self,hs, trangthais,today)
 
             if kehoach:
                 # --- ÉP KIỂU NGÀY AN TOÀN TUYỆT ĐỐI (DATE VS DATETIME) ---
@@ -313,9 +314,13 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
         trangthais=[kehoach_util.KEHOACH_DANG_LAP,kehoach_util.KEHOACH_DANG_PHEDUYET]
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthais)
         if not kehoach:
+            tu_ngay = self.func_get_default_kehoach_tu_ngay()
+            den_ngay = self.func_get_default_kehoach_den_ngay(tu_ngay)
             data ={
                 "hocsinh_id":self.id,
                 "ketluan_id": ketluan.id,
+                "tu_ngay": tu_ngay,
+                "den_ngay": den_ngay
             }
             kehoach = self.env['ekids.kehoach'].create(data)
             if kehoach:
@@ -330,6 +335,25 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
                     self.env['ekids.kehoach_linhvuc'].create(data2)
                 return  kehoach
         return kehoach
+
+
+    def func_get_default_kehoach_tu_ngay(self):
+        kehoach_gan_nhat = self.env['ekids.kehoach'].search([("hocsinh_id","=",self.id)], order='den_ngay desc', limit=1)
+        tu_ngay = fields.Date.context_today(self)
+        if kehoach_gan_nhat and kehoach_gan_nhat.den_ngay:
+            # 2. Bốc được ngày kết thúc, tiến hành cộng thêm 1 ngày tịnh tiến
+            tu_ngay = fields.Date.to_date(kehoach_gan_nhat.den_ngay)
+            tu_ngay =tu_ngay + timedelta(days=1)
+           
+        return tu_ngay
+
+    # Default = Hôm nay + 31 ngày (Dùng hàm lambda để tính toán nhanh)
+
+    def func_get_default_kehoach_den_ngay(self,tu_ngay):
+        if tu_ngay:
+            return fields.Date.to_date(tu_ngay) + timedelta(days=30)
+        return False
+
 
     def action_sua_kehoach(self):
         self.ensure_one()  # Đảm bảo hàm chỉ chạy trên 1 dòng học sinh duy nhất, tránh lỗi sập hệ thống
@@ -428,9 +452,10 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
 
     def action_canthiep(self):
         self.ensure_one()
+        today = date.today()
         # Kiểm tra phân quyền lâm sàng nâng cao nếu cần
         trangthai=[kehoach_util.KEHOACH_DANG_CANTHIEP]
-        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthai)
+        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai_ngay(self,self,trangthai,today)
         if kehoach:
             return {
                 'type': 'ir.actions.client',

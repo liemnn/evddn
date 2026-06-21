@@ -1,7 +1,7 @@
 from odoo import models, fields, api
 from datetime import  timedelta,date
 
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, AccessError
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -56,16 +56,19 @@ class KeHoach(models.Model):
 
     ], string="Trạng thái phê duyệt", default=kehoach_util.PHEDUYET_DOI_DUYET)
 
+
     tu_ngay = fields.Date(
         string="Từ ngày",
-        default=fields.Date.context_today
+        required=True,
     )
 
     # Default = Hôm nay + 31 ngày (Dùng hàm lambda để tính toán nhanh)
+
     den_ngay = fields.Date(
         string="Đến ngày",
-        default=lambda self: fields.Date.context_today(self) + timedelta(days=30)
+        required=True,
     )
+
     songay = fields.Integer(string="Số ngày",default=30)
 
     kehoach_muctieu_ids = fields.Many2many(comodel_name="ekids.kehoach_muctieu"
@@ -78,6 +81,8 @@ class KeHoach(models.Model):
 
     is_gui_pheduyet = fields.Boolean(compute="_compute_is_gui_pheduyet")
     is_pheduyet = fields.Boolean(compute="_compute_is_pheduyet")
+
+
 
     def _compute_is_gui_pheduyet(self):
         user = self.env.user
@@ -150,6 +155,11 @@ class KeHoach(models.Model):
         for vals in vals_list:
             result = super(KeHoach, self).create(vals)
             if result:
+                is_trung = result.func_kiemtra_kehoach_trung_thoigian()
+                if is_trung:
+                    raise UserError(
+                        "Kế hoạch của Học sinh [" + result.hocsinh_id.name + "] Được lập trong khoản thời gian trên đang bị trùng với thời gian của kế hoạch khác !")
+
                 # Tinh toan so ca trong
                 result.func_tao_macdinh_kehoach_muctieu()
                 records.append(result)
@@ -158,9 +168,43 @@ class KeHoach(models.Model):
     @api.model
     def write(self, vals):
         result = super().write(vals)
-        if result and "kehoach_linhvuc_ids" in vals:
-            self.func_tao_macdinh_kehoach_muctieu()
+        if result:
+            is_trung = self.func_kiemtra_kehoach_trung_thoigian()
+            if is_trung:
+                raise UserError("Kế hoạch của Học sinh [" + result.hocsinh_id.name +"] Được lập trong khoản thời gian trên đang bị trùng với thời gian của kế hoạch khác !")
+            if "kehoach_linhvuc_ids" in vals:
+                self.func_tao_macdinh_kehoach_muctieu()
         return result
+
+    def func_kiemtra_kehoach_trung_thoigian(self):
+        self.ensure_one()
+
+        # Chốt chặn an toàn: Nếu chưa điền đủ ngày thì không kiểm tra để tránh lỗi
+        if not self.tu_ngay or not self.den_ngay:
+            return False
+
+        # 1. Khởi tạo Domain lọc các kế hoạch có khoảng thời gian giao nhau
+        domain = [
+            ('tu_ngay', '<=', fields.Date.to_date(self.den_ngay)),
+            ('den_ngay', '>=', fields.Date.to_date(self.tu_ngay)),
+        ]
+
+        # 2. Định hướng nghiệp vụ bổ sung (Tùy chọn gom cụm dữ liệu):
+        # Thông thường sẽ chỉ xét trùng lịch trên cùng 1 Học sinh hoặc cùng 1 Cơ sở.
+        # Nếu anh muốn xét trùng lịch của riêng học sinh đó, hãy mở comment dòng dưới:
+        if self.hocsinh_id:
+            domain.append(('hocsinh_id', '=', self.hocsinh_id.id))
+
+        # 3. CHỐT CHẶN CHÍ MẠNG: Nếu là kế hoạch đã có ID (hành động sửa/ghi lại)
+        # thì phải loại trừ chính bản ghi hiện tại ra khỏi danh sách tìm kiếm, tránh tự trùng với chính mình.
+        if self.id:
+            domain.append(('id', '!=', self.id))
+
+        # 4. Sử dụng search_count để đếm số bản ghi trùng lặp (Tối ưu hiệu năng, không tốn RAM load dữ liệu)
+        trung_lich_count = self.env['ekids.kehoach'].search_count(domain)
+
+        # Trả về True nếu số lượng > 0 (Có trùng), ngược lại trả về False
+        return trung_lich_count > 0
 
 
     def func_tao_macdinh_kehoach_muctieu(self):

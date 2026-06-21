@@ -62,11 +62,19 @@ def func_get_kehoach_hocsinh(self, hocsinh):
     return kehoach
 
 
+
 def func_get_kehoach_hocsinh_trangthai(self, hocsinh, trangthais):
-    kehoach = self.env['ekids.kehoach'].search([
-        ('hocsinh_id', '=', hocsinh.id),
-        ('trangthai', 'in', trangthais),
-    ]
+    return func_get_kehoach_hocsinh_trangthai_ngay(self, hocsinh, trangthais,None)
+
+
+def func_get_kehoach_hocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
+    domain =[ ('hocsinh_id', '=', hocsinh.id),
+                ('trangthai', 'in', trangthais)]
+    if ngay:
+        domain.append(("tu_ngay","<=",ngay))
+        domain.append(("den_ngay", ">=", ngay))
+
+    kehoach = self.env['ekids.kehoach'].search(domain
         , order="id desc", limit=1)
     return kehoach
 

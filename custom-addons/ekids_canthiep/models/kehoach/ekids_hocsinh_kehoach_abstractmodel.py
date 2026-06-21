@@ -25,10 +25,11 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
 
     def get_owl_canthiep_data(self):
         self.ensure_one()
+        today =date.today()
 
         # 1. Lấy kế hoạch đang can thiệp của học sinh
-        trangthai = [kehoach_util.KEHOACH_DANG_CANTHIEP]
-        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, trangthai)
+        trangthais = [kehoach_util.KEHOACH_DANG_CANTHIEP]
+        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai_ngay(self, self, trangthais,today)
 
         if not kehoach:
             return {
