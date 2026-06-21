@@ -117,7 +117,7 @@ class MucTieu(models.Model):
                     # Truy vấn chính xác Lĩnh vực thuộc Chương trình tương ứng
                     linhvuc = self.env['ekids.ct_linhvuc'].search([
                         ('name', '=', linhvuc_name),
-                        ('chuongtrinh_id.name', '=', ct_name)
+                        ('chuongtrinh_id.name', 'ilike', ct_name)  # Đổi từ '=' sang 'ilike'
                     ], limit=1)
 
 
@@ -131,7 +131,7 @@ class MucTieu(models.Model):
 
                     tuoi = self.env['ekids.ct_tuoi'].search([
                         ('name', '=', tuoi_name),
-                        ('chuongtrinh_id.name', '=', ct_name)
+                        ('chuongtrinh_id.name', 'ilike', ct_name)  # Đổi từ '=' sang 'ilike'
                     ], limit=1)
 
                     if tuoi:

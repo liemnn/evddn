@@ -69,26 +69,25 @@ class KeHoach(models.Model):
         required=True,
     )
 
+    songay = fields.Integer(string="Số ngày", default=31)
+
     gv_lapkehoach_id = fields.Many2one('ekids.giaovien'
                                        , string="Giáo viên [Lập kế hoạch]"
-                                       , required=True
                                        , compute="_compute_gv_lapkehoach_id"
-                                       , store=True)
+                                       , store=False)
 
     gv_kiemduyet_id = fields.Many2one('ekids.giaovien'
                                       , string="Giáo viên [Kiểm duyệt chuyên môn]"
-                                      , required=True
                                       , compute="_compute_gv_kiemduyet_id"
-                                      , store=True)
+                                      , store=False)
 
     gv_canthiep_id = fields.Many2one('ekids.giaovien'
                                      , string="Giáo viên [Can thiệp]"
-                                     , required=True
                                      , compute="_compute_gv_canthiep_id"
-                                     , store=True)
+                                     , store=False)
 
 
-    songay = fields.Integer(string="Số ngày",default=30)
+
 
     kehoach_muctieu_ids = fields.Many2many(comodel_name="ekids.kehoach_muctieu"
                                    , relation="ekids_kehoach_muctieu4kehoach_rel"
