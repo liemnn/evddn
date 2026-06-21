@@ -29,6 +29,7 @@ class KeHoach(models.Model):
     # 1. THÔNG TIN HỌC SINH
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True)  # [cite: 2]
 
+    name = fields.Char(string="Tên",compute="_compute_name")
     kehoach_linhvuc_ids = fields.One2many("ekids.kehoach_linhvuc",
                                           inverse_name="kehoach_id",
                                           string="Lĩnh vực và độ tuổi thuộc kết luận")
@@ -100,7 +101,17 @@ class KeHoach(models.Model):
     is_gui_pheduyet = fields.Boolean(compute="_compute_is_gui_pheduyet")
     is_pheduyet = fields.Boolean(compute="_compute_is_pheduyet")
 
+    @api.depends("tu_ngay")
+    def _compute_name(self):
+        today =date.today()
+        today.month
+        for record in self:
+            tu_ngay =record.tu_ngay
+            name =""
+            if tu_ngay:
+                name = "Tháng "+ str(tu_ngay.month) +"/" + str(tu_ngay.year)
 
+            record.name = name
     @api.depends("ketluan_id")
     def _compute_gv_lapkehoach_id(self):
         for record in self:
@@ -173,7 +184,7 @@ class KeHoach(models.Model):
         for record in self:
             if record.tu_ngay and record.den_ngay:
                 # Đóng ngoặc và thêm .days để lấy số nguyên
-                record.songay = (record.den_ngay - record.tu_ngay).days
+                record.songay = (record.den_ngay - record.tu_ngay).days +1
             else:
                 # Nếu 1 trong 2 ô ngày bị trống, set số ngày về 0
                 record.songay = 0

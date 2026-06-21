@@ -327,6 +327,7 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
                 linhvucs = ketluan.linhvuc_ids
                 for linhvuc in linhvucs:
                     data2={
+                        'sequence':linhvuc.sequence,
                         'kehoach_id':kehoach.id,
                         'chuongtrinh_id': linhvuc.linhvuc_id.chuongtrinh_id.id,
                         'linhvuc_id': linhvuc.linhvuc_id.id,

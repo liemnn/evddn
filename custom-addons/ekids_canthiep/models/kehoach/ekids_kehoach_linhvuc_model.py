@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 class KeHoach2LinhVuc(models.Model):
     _name = 'ekids.kehoach_linhvuc'
     _description = 'Các mục tiêu cho kế hoạch'
-    _order = 'id desc'
+    _order = "sequence asc"
 
     sequence = fields.Integer(string="STT", default=1)
     kehoach_id = fields.Many2one("ekids.kehoach", string="Thuộc kế hoạch nào",
@@ -31,6 +31,9 @@ class KeHoach2LinhVuc(models.Model):
 
     # TRƯỜNG MỚI: Tự động biên dịch danh sách bài học thành giao diện hàng lối sang trọng
     muctieu_html = fields.Html(string="Giao diện danh sách bài học", compute="_compute_muctieu_html", store=False)
+
+
+
 
     @api.depends('kehoach_muctieu_ids')
     def _compute_muctieu_html(self):

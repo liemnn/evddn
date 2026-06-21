@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 class KetLuan2LinhVuc(models.Model):
     _name = 'ekids.kehoach_ketluan2linhvuc'
     _description = 'Các lĩnh vực thuộc kết luận'
-    _order = 'id desc'
+    _order = 'sequence asc,id desc'
 
     sequence = fields.Integer(string="STT", default=1)
     ketluan_id = fields.Many2one("ekids.kehoach_ketluan", string="Thuộc kết luận nào",
