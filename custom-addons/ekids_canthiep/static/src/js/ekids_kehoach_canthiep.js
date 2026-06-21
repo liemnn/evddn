@@ -68,20 +68,6 @@ export class KeHoachCanthiepComponent extends Component {
         }
     }
 
-    toggleGoalDetails(goalId, ev) {
-        ev.stopPropagation();
-        this.state.expandedGoals[goalId] = !this.state.expandedGoals[goalId];
-    }
-
-    async actionGhiNhanKetQua(goalId, ev) {
-        ev.stopPropagation();
-        alert("Ghi nhận kết quả cho mục tiêu ID: " + goalId);
-    }
-
-    actionQuayLai(ev) {
-        ev.stopPropagation();
-        this.actionService.doAction({ type: "ir.actions.act_window_close" });
-    }
 
     async goiMucTieuAction(tenAction,muctieu_id,ev) {
         ev.stopPropagation();
@@ -111,6 +97,26 @@ export class KeHoachCanthiepComponent extends Component {
         } catch (error) {
             console.error(`Lỗi khi thực thi hàm ${tenAction} từ hệ thống:`, error);
         }
+    }
+
+    async goiKetThucKeHoachAction(tenAction, ev) {
+        ev.stopPropagation();
+        const hoanthanh = confirm("Bạn chắc chắc muốn kết thúc [Kế hoạch] này để chuyển sang Kế hoạch tiếp theo ?");
+        if (hoanthanh) {
+            const kehoach_id = this.props.action.context.kehoach_id || this.props.action.context.active_id;
+            if (!kehoach_id) return;
+
+            try {
+                const actionWindow = await this.orm.call("ekids.kehoach", tenAction, [kehoach_id]);
+                if (actionWindow) {
+                    await this.actionService.doAction(actionWindow);
+                }
+            } catch (error) {
+                console.error(`Lỗi khi thực thi hàm ${tenAction} từ hệ thống:`, error);
+            }
+
+        }
+
     }
 }
 

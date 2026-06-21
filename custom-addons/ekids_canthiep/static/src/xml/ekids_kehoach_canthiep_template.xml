@@ -105,7 +105,10 @@
                 <button class="btn-back-plans" t-on-click="(ev) => this.goiKeHoachAction('action_xem_kehoachs', ev)">
                     <i class="fa fa-arrow-left"></i> Quay lại danh sách kế hoạch
                 </button>
-                <button class="btn-view-conclusion" t-on-click="(ev) => this.goiKeHoachAction('action_xem_ketluan', ev)">
+                <button class="btn-view-conclusion" t-on-click="(ev) => this.goiKetThucKeHoachAction('action_ketthuc_kehoach', ev)">
+                    <i class="fa fa-save"></i> Hoàn thành và Kết thúc [Kế hoạch] này
+                </button>
+                <button class="btn-back-plans" t-on-click="(ev) => this.goiKeHoachAction('action_xem_ketluan', ev)">
                     <i class="fa fa-file-text"></i> Xem thông tin kết luận
                 </button>
             </div>

@@ -302,6 +302,33 @@ class KeHoach(models.Model):
             },
         }
 
+    def action_ketthuc_kehoach(self):
+        self.ensure_one()
+        if self.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+            kehoach = self.env['ekids.kehoach'].browse(self.id)
+            if kehoach:
+                kehoach._write({"trangthai":kehoach_util.KEHOACH_HET_HIEULUC})
+
+
+        list_view_id = self.env.ref('ekids_canthiep.kehoach_hocsinh_inherit_list').id
+        hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro(self)
+        domain =[('coso_id', '=', self.coso_id.id)]
+        if hocsinh_ids:
+            domain = [('coso_id', '=', self.coso_id.id),('id','in',hocsinh_ids)]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH SÁCH',
+            'res_model': 'ekids.hocsinh',
+            'view_mode': 'list',
+            'views': [(list_view_id, 'list')],
+            'target': 'current',
+            'domain': domain,
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'search_default_trangthai': '1',
+            },
+        }
+
 
 
     def action_xem_kehoach(self):
