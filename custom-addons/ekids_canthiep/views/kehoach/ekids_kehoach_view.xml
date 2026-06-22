@@ -9,7 +9,7 @@
 
                     <field name="index" string="STT" />
                     <field name="hocsinh_id" string="Học sinh" />
-
+                    <field name="name" string="Kế hoạch" />
                     <field name="tu_ngay" string="Từ ngày" />
                     <field name="den_ngay" string="Đến ngày" />
                     <field name="songay" string="Số ngày" />
@@ -24,13 +24,6 @@
                            decoration-danger="trangthai == '-1'"
                            />
 
-                     <field name="trangthai_pheduyet" string="Phê duyệt" width="140"
-                           widget="badge"
-                           decoration-warning="trangthai_pheduyet == '0'"
-                           decoration-danger="trangthai_pheduyet == '-1'"
-                           decoration-success="trangthai_pheduyet == '1'"
-
-                           optional="show"/>
 
 
 

@@ -208,7 +208,7 @@ class KeHoach2MucTieu(models.Model):
             mt.tieuchi_dat =mt.muctieu_id.tieuchi_dat
 
     def action_canthiep(self):
-        form_view_id = self.env.ref('ekids_canthiep.lap_kehoach_muctieu_form').id
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_capnhat_ketqua_form').id
 
         self.func_khoitao_ketqua2muctieu()
         return {
