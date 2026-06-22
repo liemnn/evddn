@@ -32,11 +32,11 @@
                         create="true" edit="true" delete="true" multi_edit="true">
 
                     <field name="sequence" widget="handle"/>
-                    <field name="index_list"/>
+                    <field name="index_list" string="STT"/>
                     <field name="linhvuc_id" string="Lĩnh vực" options="{'no_open': True, 'no_create': True}"/>
                     <field name="tuoi_id" string="Độ tuổi" options="{'no_open': True, 'no_create': True}"/>
 
-                    <field name="name" string="Nội dung mục tiêu / Chỉ số hành vi mẫu" decoration-bf="True"/>
+                    <field name="name" string="Mục tiêu" decoration-bf="True"/>
                     <field name="trangthai"
                            decoration-success="trangthai == '1'"
                            decoration-danger="trangthai == '0'"/>

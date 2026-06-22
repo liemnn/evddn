@@ -165,11 +165,9 @@
                                        nolabel="1"
                                 >
                                     <list create="false" delete="false" edit="false" class="m-0 border-0">
-                                            <field name="index"/>
-                                            <field name="linhvuc_id" string="Lĩnh vực" options="{'no_open': True, 'no_create': True}"/>
-                                            <field name="tuoi_id" string="Độ tuổi" options="{'no_open': True, 'no_create': True}"/>
+                                            <field name="index" string="STT" width="50"/>
 
-                                            <field name="name" string="Nội dung mục tiêu / Chỉ số hành vi mẫu" decoration-bf="True"/>
+                                            <field name="name" string="Mục tiêu"/>
                                             <field name="trangthai"
                                                    decoration-success="trangthai == '1'"
                                                    decoration-danger="trangthai == '0'"/>
