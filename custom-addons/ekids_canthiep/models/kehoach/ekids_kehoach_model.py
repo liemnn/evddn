@@ -321,6 +321,8 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
 
 
+
+
     def action_gui_pheduyet(self):
         if (self.trangthai == kehoach_util.KEHOACH_DANG_LAP
                 or self.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):

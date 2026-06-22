@@ -132,7 +132,7 @@
                                        options="{'no_open': True, 'no_create': True, 'no_delete': True}"
                                        nolabel="1">
 
-                                    <list create="0" edit="0" delete="0" class="m-0 border-0" default_order="sequence asc">
+                                    <list create="1" edit="0" delete="0" class="m-0 border-0" default_order="sequence asc">
 
                                         <field name="index_list" string="STT" width="50"/>
                                         <field name="sequence" string="sequence" width="50"/>

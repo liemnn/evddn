@@ -126,7 +126,7 @@ class KeHoach2LinhVuc(models.Model):
                 'default_muctieu_thangtruoc_ids':muctieu_thangtruoc_ids,
 
                 'edit': False,
-                'create': False,
+                'create': True,
                 'delete': False,
             },
         }
