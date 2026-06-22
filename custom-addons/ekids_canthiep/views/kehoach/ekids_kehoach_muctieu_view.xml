@@ -197,6 +197,7 @@
       <record model="ir.ui.view" id="ekids_canthiep.kehoach_muctieu_form">
             <field name="name">Thêm mới mục tiêu - Premium Super Compact UI</field>
             <field name="model">ekids.kehoach_muctieu</field>
+            <field name="priority" eval="1"/>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
@@ -467,6 +468,7 @@
      <record id="ekids_canthiep.kehoach_muctieu_capnhat_ketqua_form" model="ir.ui.view">
             <field name="name">ekids.kehoach_muctieu.form</field>
             <field name="model">ekids.kehoach_muctieu</field>
+            <field name="priority" eval="2"/>
             <field name="arch" type="xml">
                 <form string="Kết quả can thiệp">
                     <sheet class="p-2">

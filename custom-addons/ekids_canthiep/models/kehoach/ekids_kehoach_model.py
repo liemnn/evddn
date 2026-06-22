@@ -100,6 +100,15 @@ class KeHoach(models.Model):
 
     is_gui_pheduyet = fields.Boolean(compute="_compute_is_gui_pheduyet")
     is_pheduyet = fields.Boolean(compute="_compute_is_pheduyet")
+    is_readonly = fields.Boolean(compute="_compute_is_readonly")
+
+    def _compute_is_readonly(self):
+        for record in self:
+            is_readonly= True
+            if (record.trangthai == kehoach_util.KEHOACH_DANG_LAP
+                or record.trangthai == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                is_readonly = False
+            record.is_readonly = is_readonly
 
     @api.depends("tu_ngay")
     def _compute_name(self):

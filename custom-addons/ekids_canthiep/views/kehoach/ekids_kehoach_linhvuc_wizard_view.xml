@@ -125,7 +125,7 @@
                                        domain="[('linhvuc_id','=',linhvuc_id),('tuoi_id','=',tuoi_id)]"
                                        nolabel="1"
                                 >
-                                    <list create="false" delete="false" edit="false" class="m-0 border-0">
+                                    <list create="0" delete="0" edit="0" class="m-0 border-0">
                                             <field name="index_list" string="STT" width="50"/>
 
                                             <field name="name" string="Mục tiêu"/>

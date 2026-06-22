@@ -32,8 +32,11 @@ class KeHoach2LinhVuc(models.Model):
     # TRƯỜNG MỚI: Tự động biên dịch danh sách bài học thành giao diện hàng lối sang trọng
     muctieu_html = fields.Html(string="Giao diện danh sách bài học", compute="_compute_muctieu_html", store=False)
 
+    is_readonly = fields.Boolean(compute="_compute_is_readonly")
 
-
+    def _compute_is_readonly(self):
+        for record in self:
+            record.is_readonly = record.kehoach_id.is_readonly
 
     @api.depends('kehoach_muctieu_ids')
     def _compute_muctieu_html(self):

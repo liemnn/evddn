@@ -362,6 +362,7 @@
                 <form string="Kế hoạch Can thiệp">
                     <field name="is_pheduyet" invisible="1"/>
                     <field name="is_gui_pheduyet" invisible="1"/>
+                    <field name="is_readonly" invisible="1"/>
 
                     <!-- CONTROL HEADER BAR -->
                     <header>
@@ -559,13 +560,13 @@
                                             </span>
                                             <span class="fw-bold text-secondary" style="font-size: 13px;">
                                                 Thời gian của [Kế hoạch]:</span>
-                                            <field name="tu_ngay" class="compact_date_field"/>
+                                            <field name="tu_ngay" readonly="is_readonly" class="compact_date_field"/>
                                             <i class="fa fa-long-arrow-right text-muted mx-0.5" style="font-size:11px;"></i>
-                                            <field name="den_ngay" class="compact_date_field"/>
+                                            <field name="den_ngay" readonly="is_readonly" class="compact_date_field"/>
 
                                             <span class="badge ekids_red_compact_badge shadow-sm">
                                                 <i class="fa fa-clock-o"></i>
-                                                <strong><field name="songay"/></strong> ngày
+                                                <strong><field name="songay" readonly="is_readonly"/></strong> ngày
                                             </span>
                                         </div>
                                     </div>
@@ -591,7 +592,7 @@
                         <!-- TẦNG 3: HỆ THỐNG TABS QUẢN LÝ GIÁO ÁN CAN THIỆP            -->
                         <!-- ========================================================== -->
                         <notebook>
-                            <page string="MỤC TIÊU TRONG LĨNH VỰC CỦA KẾ HOẠCH" icon="fa-graduation-cap">
+                            <page string="MỤC TIÊU TRONG LĨNH VỰC CỦA KẾ HOẠCH" icon="fa-graduation-cap" >
                                 <div class="ekids_inner_kanban_container mt-3">
                                     <field name="kehoach_linhvuc_ids" mode="kanban" nolabel="1" options="{'no_open': True}">
 
@@ -631,7 +632,9 @@
 
                                                                 <button type="object" name="action_xem_danhsach_ct_muctieu"
                                                                         context="{'default_kehoach_linhvuc_id':id}"
-                                                                        class="btn_add_muctieu_mini">
+                                                                        class="btn_add_muctieu_mini"
+                                                                        invisible="is_readonly== True"
+                                                                        >
                                                                     <i class="fa fa-plus-circle me-1"></i>Thêm/xóa [mục tiêu]
                                                                 </button>
                                                             </div>
