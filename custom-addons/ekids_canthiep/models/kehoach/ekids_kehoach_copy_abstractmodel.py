@@ -68,7 +68,7 @@ class KeHoachCopyAbstractModel(models.AbstractModel):
                         data ={
                             "kehoach_linhvuc_id":linhvuc.id,
                             "kehoach_muctieu_thangtruoc_id": mt_thangtruoc.id,
-                            "muctieu_id": kehoach_muctieu.muctieu_id.id,
+                            "muctieu_id": mt_thangtruoc.muctieu_id.id,
                             "trangthai":"0"
                         }
                         kehoach_muctieu = self.env['ekids.kehoach_muctieu'].create(data)

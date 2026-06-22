@@ -61,6 +61,9 @@ class KeHoach2LinhVuc(models.Model):
                             <span style="font-size: 13px; font-weight: 600; color: #334155; line-height: 1.4; white-space: normal;">
                                 {target.muctieu_id.name}
                             </span>
+                            <span style="font-size: 13px; font-weight: 600; color: #334155; line-height: 1.4; white-space: normal;">
+                                Tháng trước chuyển sang
+                            </span>
                         </div>
                         """
 
