@@ -68,6 +68,11 @@ export class KeHoachCanthiepComponent extends Component {
         }
     }
 
+    toggleGoalDetails(goalId, ev) {
+        ev.stopPropagation();
+        this.state.expandedGoals[goalId] = !this.state.expandedGoals[goalId];
+    }
+
 
     async goiMucTieuAction(tenAction,muctieu_id,ev) {
         ev.stopPropagation();

@@ -184,7 +184,7 @@ class KeHoach(models.Model):
         for record in self:
             if record.tu_ngay and record.den_ngay:
                 # Đóng ngoặc và thêm .days để lấy số nguyên
-                record.songay = (record.den_ngay - record.tu_ngay).days +1
+                record.songay = (record.den_ngay - record.tu_ngay).days + 1
             else:
                 # Nếu 1 trong 2 ô ngày bị trống, set số ngày về 0
                 record.songay = 0

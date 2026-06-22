@@ -316,11 +316,13 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
         if not kehoach:
             tu_ngay = self.func_get_default_kehoach_tu_ngay()
             den_ngay = self.func_get_default_kehoach_den_ngay(tu_ngay)
+            songay = (den_ngay - tu_ngay).days + 1
             data ={
                 "hocsinh_id":self.id,
                 "ketluan_id": ketluan.id,
                 "tu_ngay": tu_ngay,
-                "den_ngay": den_ngay
+                "den_ngay": den_ngay,
+                "songay": songay
             }
             kehoach = self.env['ekids.kehoach'].create(data)
             if kehoach:
@@ -352,7 +354,9 @@ class HocSinhInherit(models.Model,HocSinhKeHoachAbstractModel):
 
     def func_get_default_kehoach_den_ngay(self,tu_ngay):
         if tu_ngay:
-            return fields.Date.to_date(tu_ngay) + timedelta(days=30)
+            songay_str = coso_util.func_cauhinh_canthiep(self,self.coso_id,"macdinh_songay_kehoach","30")
+            songay =int(songay_str)-1
+            return fields.Date.to_date(tu_ngay) + timedelta(days=songay)
         return False
 
 
