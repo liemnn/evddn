@@ -41,33 +41,55 @@ class KeHoach2LinhVuc(models.Model):
     @api.depends('kehoach_muctieu_ids')
     def _compute_muctieu_html(self):
         for rec in self:
-            html_str =""
+            html_str = ""
 
-            # KIỂM TRA: Nếu có dữ liệu thật thì render thật, nếu trống thì đổ dữ liệu giả lập DEMO
+            # KIỂM TRA: Nếu có dữ liệu thật thì render thật
             if rec.kehoach_muctieu_ids:
                 html_str = '<div class="d-flex flex-column gap-2 mt-1">'
                 targets = rec.kehoach_muctieu_ids
 
                 # Vòng lặp tự động sinh số thứ tự tuyến tính 1, 2, 3...
                 for idx, target in enumerate(targets, 1):
+
+                    # 🌟 LOGIC TỰ ĐỘNG ĐỔ BADGE THEO NGUỒN GỐC MỤC TIÊU
+                    if target.kehoach_muctieu_thangtruoc_id:
+                        # Nhãn Đỏ Pastel cho mục tiêu cũ tháng trước chuyển sang
+                        badge_nguon_goc = """
+                        <span style="display: inline-block; padding: 2px 6px; font-size: 11px; font-weight: 700; 
+                                     color: #DC2626; background-color: #FEF2F2; border: 1px solid #FCA5A5; 
+                                     border-radius: 6px; white-space: nowrap; margin-left: auto;">
+                            <i class="fa fa-history" style="margin-right: 2px; font-size: 10px;"></i>Tháng trước chuyển sang
+                        </span>
+                        """
+                    else:
+                        # Nhãn Xanh Lá Pastel cho mục tiêu mới lập của tháng này
+                        badge_nguon_goc = """
+                        <span style="display: inline-block; padding: 2px 6px; font-size: 11px; font-weight: 700; 
+                                     color: #16A34A; background-color: #F0FDF4; border: 1px solid #BBF7D0; 
+                                     border-radius: 6px; white-space: nowrap; margin-left: auto;">
+                            <i class="fa fa-star" style="margin-right: 2px; font-size: 10px;"></i>Mới
+                        </span>
+                        """
+
                     html_str += f"""
-                        <div class="d-flex align-items-start gap-2 p-2 rounded-2" 
+                        <div class="d-flex align-items-center gap-2 p-2 rounded-2" 
                              style="background-color: #F8FAFC; border: 1px solid #F1F5F9; margin-bottom: 4px;">
                             <span class="d-flex align-items-center justify-content-center font-monospace" 
                                   style="width: 22px; height: 22px; background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%); 
-                                         color: white; font-weight: 900; font-size: 11px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;">
+                                         color: white; font-weight: 900; font-size: 11px; border-radius: 50%; flex-shrink: 0;">
                                 {idx}
                             </span>
-                            <span style="font-size: 13px; font-weight: 600; color: #334155; line-height: 1.4; white-space: normal;">
-                                {target.muctieu_id.name}
+
+                            <span style="font-size: 13px; font-weight: 600; color: #334155; line-height: 1.4; white-space: normal; max-width: 70%;">
+                                {target.muctieu_id.name or ''}
                             </span>
-                            <span style="font-size: 13px; font-weight: 600; color: #334155; line-height: 1.4; white-space: normal;">
-                                Tháng trước chuyển sang
-                            </span>
+
+                            {badge_nguon_goc}
                         </div>
                         """
 
                 html_str += '</div>'
+
             rec.muctieu_html = html_str
 
     def action_xem_danhsach_ct_muctieu(self):
