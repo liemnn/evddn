@@ -574,7 +574,9 @@
 
                                 <div class="col-xl-4 col-12 d-flex flex-column align-items-end justify-content-center gap-2">
                                      <div class="p-1.5 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
-                                        <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
+                                        <field name="trangthai_pheduyet" widget="statusbar"
+                                               invisible="trangthai=='0'"
+                                               statusbar_visible="0,1,-1" options="{'clickable': false}"/>
                                     </div>
                                     <button name="action_xem_ketluan"
                                             string="Xem kết luận đánh giá"

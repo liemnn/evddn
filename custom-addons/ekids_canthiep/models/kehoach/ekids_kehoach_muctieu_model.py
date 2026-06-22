@@ -31,6 +31,8 @@ class KeHoach2MucTieu(models.Model):
                                  required=True,
                                  ondelete="cascade")
 
+
+
     kehoach_linhvuc_id = fields.Many2one("ekids.kehoach_linhvuc",
                                  string=" Thuộc Kế hoạch Lĩnh vực nào",
                                  required=True,
@@ -55,6 +57,10 @@ class KeHoach2MucTieu(models.Model):
         'ekids.kehoach_muctieu',
         string='Muc tiêu đứng trước',
     )
+    kehoach_muctieu_thangtruoc_id = fields.Many2one(
+        'ekids.kehoach_muctieu',
+        string='Muc tiêu của tháng trước chuyển sang do không đạt',
+    )
 
     trangthai = fields.Selection([
         ("0", "Chưa can thiệp"),
@@ -64,6 +70,7 @@ class KeHoach2MucTieu(models.Model):
     ], string="Trạng thái", default="0")
 
     is_chophep_canthiep = fields.Boolean(string="cho phép can thiệp hay không",compute="_compute_is_chophep_canthiep")
+
 
     ketqua2muctieu_ids = fields.One2many("ekids.kehoach_ketqua2muctieu", "kehoach_muctieu_id"
                                         , string="Thuộc kế hoạch mục tiêu nào")

@@ -3,6 +3,10 @@ from datetime import  timedelta,date
 
 from odoo.exceptions import UserError, AccessError
 
+from .ekids_kehoach_copy_abstractmodel import KeHoachCopyAbstractModel
+
+
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -18,10 +22,10 @@ except ImportError as e:
 
 
 
-class KeHoach(models.Model):
+class KeHoach(models.Model,KeHoachCopyAbstractModel):
     _name = 'ekids.kehoach'
     _description = 'Kết luận Đánh giá & Định hướng Kế hoạch'
-    _order = 'id desc'
+    _order = 'tu_ngay desc, id desc'
 
     coso_id = fields.Many2one("ekids.coso", related="hocsinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
