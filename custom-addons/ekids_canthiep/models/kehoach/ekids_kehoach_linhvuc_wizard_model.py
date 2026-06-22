@@ -2,6 +2,23 @@ from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
 
+import logging
+_logger = logging.getLogger(__name__)
+
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import kehoach_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
+
+
+
 class KeHoach2LinhVucWizard(models.TransientModel):
     _name = 'ekids.kehoach_linhvuc_wizard'
     _description = 'Bảng tạm bổ sung mục tiêu'
@@ -12,6 +29,7 @@ class KeHoach2LinhVucWizard(models.TransientModel):
     # 🌟 SỬA TẠI ĐÂY: Gỡ bỏ hoàn toàn thuộc tính required=True thừa thãi gây bẫy lỗi chặn lưu
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', related="kehoach_linhvuc_id.linhvuc_id", string='Lĩnh vực')
     tuoi_id = fields.Many2one('ekids.ct_tuoi', related="kehoach_linhvuc_id.tuoi_id", string='Độ tuổi')
+
 
     muctieu_ids = fields.Many2many(
         comodel_name="ekids.ct_muctieu",
@@ -30,7 +48,11 @@ class KeHoach2LinhVucWizard(models.TransientModel):
             if kehoach_linhvuc.exists():
                 existing_mau_ids = kehoach_linhvuc.kehoach_muctieu_ids.mapped('muctieu_id').ids
                 res['muctieu_ids'] = [(6, 0, existing_mau_ids)]
+
+
         return res
+
+
 
     def action_xac_nhan_luu(self):
         self.ensure_one()

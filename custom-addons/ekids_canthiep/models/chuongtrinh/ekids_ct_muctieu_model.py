@@ -3,6 +3,22 @@ from odoo.exceptions import ValidationError
 import re
 from bs4 import BeautifulSoup
 
+import logging
+_logger = logging.getLogger(__name__)
+
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import kehoach_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
+
+
 
 class MucTieu(models.Model):
     _name = "ekids.ct_muctieu"
@@ -31,6 +47,8 @@ class MucTieu(models.Model):
     trangthai = fields.Selection([("0", "Không hoạt động")
                                      , ("1", "Đang hoạt động")], default="1", required=True)
 
+    is_thangtruoc = fields.Boolean(string="Dữ liệu từ tháng trước",compute="_compute_is_thangtruoc",store=False)
+
     @api.depends('linhvuc_id', 'sequence')
     def _compute_index(self):
         # 1. Gom nhóm các bản ghi thực tế đang hiển thị trên màn hình theo từng Lĩnh vực
@@ -45,6 +63,16 @@ class MucTieu(models.Model):
 
             for idx, rec in enumerate(sorted_list, 1):
                 rec.index = idx
+
+    def _compute_is_thangtruoc(self):
+        hocsinh_id = self.env.context.get('default_hocsinh_id')
+        muctieu_thangtruoc_ids = self.env.context.get('default_muctieu_thangtruoc_ids')
+        for record in self:
+            is_thangtruoc = False
+            if (muctieu_thangtruoc_ids and record.id in muctieu_thangtruoc_ids):
+                is_thangtruoc = True
+            record.is_thangtruoc = is_thangtruoc
+
 
 
     def _compute_index_list(self):
