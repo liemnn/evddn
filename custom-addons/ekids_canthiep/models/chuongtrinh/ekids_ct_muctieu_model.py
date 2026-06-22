@@ -23,7 +23,7 @@ except ImportError as e:
 class MucTieu(models.Model):
     _name = "ekids.ct_muctieu"
     _description = "Lĩnh vực"
-    _order = "sequence asc"
+    _order = "sequence asc,id desc"
 
     coso_id = fields.Many2one("ekids.coso", related="linhvuc_id.coso_id", string="Cơ sở", required=True,ondelete="restrict")
     chuongtrinh_id = fields.Many2one("ekids.ct_chuongtrinh", related="linhvuc_id.chuongtrinh_id", string="Chương trình", required=True,
@@ -65,7 +65,6 @@ class MucTieu(models.Model):
                 rec.index = idx
 
     def _compute_is_thangtruoc(self):
-        hocsinh_id = self.env.context.get('default_hocsinh_id')
         muctieu_thangtruoc_ids = self.env.context.get('default_muctieu_thangtruoc_ids')
         for record in self:
             is_thangtruoc = False
@@ -73,6 +72,33 @@ class MucTieu(models.Model):
                 is_thangtruoc = True
             record.is_thangtruoc = is_thangtruoc
 
+    def action_xoa_muctieu_khoi_wizard(self):
+        """
+        Nút bấm chạy tại model con, nhưng xử lý gỡ liên kết trên model cha Wizard
+        """
+        self.ensure_one()
+
+        # 🌟 BƯỚC 1: Bốc ID của Form cha Wizard đang mở ngoài màn hình từ Context
+        wizard_id = self.env.context.get('default_wizard_id')
+        # Kiểm tra phòng hờ xem nút này có đúng là được bấm từ giao diện Wizard cha không
+        if wizard_id:
+            wizard = self.env['ekids.kehoach_linhvuc_wizard'].browse(wizard_id)
+
+            if wizard.exists():
+                # 🌟 BƯỚC 2: Ra lệnh cho Wizard gỡ liên kết Many2many của mục tiêu hiện tại (self.id)
+                # Lệnh (3, self.id) chỉ gỡ mối quan hệ Many2many trên RAM/Giao diện ảo, không xóa DB
+                wizard.write({
+                    'muctieu_ids': [(3, self.id, 0)]  # 3 có nghĩa là: Chỉ gỡ mối quan hệ này ngoài UI, không xóa vật lý
+                })
+
+                # 🌟 BƯỚC 3: Trả về Action nạp lại chính Wizard để làm tươi (Refresh) lưới giao diện phẳng mịn
+                kehoach_linhvuc= wizard.kehoach_linhvuc_id
+                if kehoach_linhvuc:
+                    url_back= kehoach_linhvuc.action_xem_danhsach_ct_muctieu()
+                    if url_back:
+                        return url_back
+
+        return True
 
 
     def _compute_index_list(self):

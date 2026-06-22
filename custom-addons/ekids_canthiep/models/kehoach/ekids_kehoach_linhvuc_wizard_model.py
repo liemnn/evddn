@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 import logging
@@ -43,12 +43,21 @@ class KeHoach2LinhVucWizard(models.TransientModel):
     def default_get(self, fields_list):
         res = super(KeHoach2LinhVucWizard, self).default_get(fields_list)
         kehoach_linhvuc_id = self.env.context.get('default_kehoach_linhvuc_id')
+
         if kehoach_linhvuc_id:
             kehoach_linhvuc = self.env['ekids.kehoach_linhvuc'].browse(kehoach_linhvuc_id)
             if kehoach_linhvuc.exists():
-                existing_mau_ids = kehoach_linhvuc.kehoach_muctieu_ids.mapped('muctieu_id').ids
-                res['muctieu_ids'] = [(6, 0, existing_mau_ids)]
+                # 1. Bốc toàn bộ các bản ghi mục tiêu mẫu gốc (ekids.ct_muctieu) hiện tại trong kế hoạch
+                muctieu_mau_records = kehoach_linhvuc.kehoach_muctieu_ids.mapped('muctieu_id')
 
+                # 2. 🌟 CHỐT CHẶN: Ép sắp xếp mảng bản ghi theo đúng trường sequence tăng dần ngay từ RAM Backend
+                muctieu_mau_sorted = muctieu_mau_records.sorted(key=lambda r: r.sequence or 0)
+
+                # 3. Trích xuất mảng ID dạng số nguyên đã được sắp xếp ngay ngắn
+                existing_mau_ids = muctieu_mau_sorted.ids
+
+                # Nạp lệnh (6, 0, ...) đưa ra ngoài giao diện Popup Dialog
+                res['muctieu_ids'] = [(6, 0, existing_mau_ids)]
 
         return res
 
@@ -110,3 +119,4 @@ class KeHoach2LinhVucWizard(models.TransientModel):
 
 
         return {'type': 'ir.actions.act_window_close'}
+

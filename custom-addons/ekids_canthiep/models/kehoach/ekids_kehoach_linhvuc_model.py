@@ -95,6 +95,7 @@ class KeHoach2LinhVuc(models.Model):
     def action_xem_danhsach_ct_muctieu(self):
         self.ensure_one()
 
+        wizard_id = self.env.context.get('default_wizard_id')
         # Tìm ID của Form View của bảng tạm Wizard anh em mình vừa tạo ở Bước 2
         wizard_form_id = self.env.ref('ekids_canthiep.kehoach_linhvuc_wizard_form').id
         muctieu_thangtruoc_ids=[]
@@ -104,7 +105,7 @@ class KeHoach2LinhVuc(models.Model):
                 if kehoach_muctieu.kehoach_muctieu_thangtruoc_id:
                     muctieu_thangtruoc_ids.append(kehoach_muctieu.muctieu_id.id)
 
-        return {
+        url= {
             'type': 'ir.actions.act_window',
             'name': 'CÁC MỤC TRONG LĨNH VỰC CỦA KẾ HOẠCH',
             'res_model': 'ekids.kehoach_linhvuc_wizard',
@@ -129,3 +130,6 @@ class KeHoach2LinhVuc(models.Model):
                 'delete': False,
             },
         }
+        if wizard_id:
+            url["res_id"]= wizard_id
+        return url
