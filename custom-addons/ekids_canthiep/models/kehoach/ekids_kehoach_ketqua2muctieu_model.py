@@ -118,12 +118,15 @@ class KeHoachKetQua2MucTieu(models.Model):
         }
 
     def func_get_url_back(self):
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_capnhat_ketqua_form').id  # chú ý id chính xác
+
         return {
             'type': 'ir.actions.act_window',
             'name': 'KẾT QUẢ CAN THIỆP',
             'res_model': 'ekids.kehoach_muctieu',
             'res_id': self.kehoach_muctieu_id.id,  # Trỏ chính xác vào ID của dòng đang click
             'view_mode': 'form',
+            'views': [(form_view_id, 'form')],
             'target': 'new',
 
         }
