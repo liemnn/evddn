@@ -24,8 +24,8 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
         self.ensure_one()
         today = date.today()
 
-        # 1. Lấy kế hoạch đang can thiệp của học sinh
-        trangthais = [kehoach_util.KEHOACH_DANG_CANTHIEP]
+        # 1. Lấy kế hoạch đang can thiệp của học sinh (Giai đoạn trạng thái = '1')
+        trangthais = [kehoach_util.KEHOACH_DANG_CANTHIEP]  # '1'
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai_ngay(self, self, trangthais, today)
 
         if not kehoach:
@@ -34,17 +34,20 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                 'message': 'Không tìm thấy kế hoạch ở trạng thái Đang can thiệp cho học sinh này.'
             }
 
+        # Đóng gói dữ liệu đối tượng kế hoạch tổng quát
         kehoach_obj = {
             'hocsinh': self.name,
+            'trangthai': str(kehoach.trangthai),  # Ép chuỗi trạng thái kế hoạch gốc ('1')
+            'trangthai_canthiep': str(kehoach.trangthai_canthiep),  # Ép chuỗi trạng thái can thiệp kiểm duyệt ('1')
             'tu_ngay': kehoach.tu_ngay.strftime('%d/%m/%Y') if kehoach.tu_ngay else '',
             'den_ngay': kehoach.den_ngay.strftime('%d/%m/%Y') if kehoach.den_ngay else '',
-            'songay': f"{kehoach.songay} ngày" if kehoach.songay else '30 ngày',
+            'songay': f"{kehoach.songay} ngày" if kehoach.songay else '31 ngày',
             'gv_lap': kehoach.gv_lapkehoach_id.name or 'Chưa phân công',
             'gv_canthiep': kehoach.gv_canthiep_id.name or 'Chưa phân công',
             'gv_chuyenmon': kehoach.gv_kiemduyet_id.name or 'Chưa phân công'
         }
 
-        # 🌟 TÍNH TOÁN DẢI NGÀY THỰC TẾ THEO LỊCH TRÌNH CỦA KẾ HOẠCH
+        # Tính toán dải ngày thực tế theo lịch trình của kế hoạch
         start_date = kehoach.tu_ngay
         end_date = kehoach.den_ngay
 
@@ -79,7 +82,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                         tong_str = f"{tong_canthiep}/{len(muctieu.ketqua2muctieu_ids)}"
                         muctieu._compute_is_chophep_canthiep()
 
-                        # 🌟 MAP DỮ LIỆU KẾT QUẢ ĐÚNG THEO TỪNG Ô NGÀY TRÊN LỊCH
+                        # HIỆU NĂNG CAO: Chỉ tính toán dải ô vuông lịch biểu nếu mục tiêu đã có điểm can thiệp
                         history_days = []
                         if muctieu.trangthai and muctieu.trangthai != '0':
                             existing_results = {kq.ngay: kq for kq in muctieu.ketqua2muctieu_ids if kq.ngay}
@@ -104,12 +107,16 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                                 history_days.append(day_data)
                                 day_seq += 1
 
+                        # Đọc trường kiểm duyệt chuyên môn gốc từ Model ('0', '1', '-1')
+                        trangthai_duyet = getattr(muctieu, 'trangthai_duyet', '0')
+
                         muctieu_json = {
                             "id": muctieu.id,
                             "index": index,
                             "is_canthiep": muctieu.is_chophep_canthiep,
                             "name": muctieu.name or '',
-                            "trangthai": muctieu.trangthai,
+                            "trangthai": str(muctieu.trangthai),  # Trạng thái học tập của mục tiêu
+                            "trangthai_duyet": str(trangthai_duyet),  # Trạng thái duyệt của chuyên môn
                             "chucnang": muctieu.muctieu_id.chucnang or '',
                             "thietke": muctieu.muctieu_id.thietke or '',
                             "tieuchi_dat": getattr(muctieu, 'tieuchi_dat', ''),
@@ -120,8 +127,6 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                             "cnt_ok": str(muctieu.ketqua_dat),
                             "cnt_half": str(muctieu.ketqua_hinhthanh),
                             "cnt_fail": str(muctieu.ketqua_khongdat),
-
-                            # Mảng cấu trúc timeline động đẩy ra cho OWL render
                             "history_days": history_days
                         }
                         muctieus_json_list.append(muctieu_json)

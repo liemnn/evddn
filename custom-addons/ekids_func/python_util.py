@@ -108,9 +108,10 @@ def get_vars(text: str):
 
 # Test
 text = """
-IF 3.1<1 KQ =((2.0*70000)+(1.0*100000)) 
-ELSE KQ =((2.0*100000)+(1.0*150000))
+IF (0.5<=0) KQ=500000
+ELSE IF (0.5<1) KQ=250000
+ELSE KQ=0
 """
-ctx = {'LCB':4000000}
+ctx = {}
 print(eval_formula(text, ctx))   # -> 1000000
 #print(get_vars(text))            # -> ['A', 'B', 'C']

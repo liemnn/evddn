@@ -4,7 +4,7 @@ from datetime import datetime, timedelta,date
 
 from odoo.exceptions import UserError
 
-from . import  string_util,python_util
+from . import  python_util
 
 import logging
 _logger = logging.getLogger(__name__)
