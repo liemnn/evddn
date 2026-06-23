@@ -47,6 +47,8 @@ export class KeHoachCanthiepComponent extends Component {
             linhvucs: [],
             expandedGoals: {},
             collapsedDomains: {},
+            show_header_detail: false,
+
         });
 
         onWillStart(async () => {

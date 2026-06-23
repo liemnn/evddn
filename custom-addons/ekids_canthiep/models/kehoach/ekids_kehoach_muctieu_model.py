@@ -69,6 +69,17 @@ class KeHoach2MucTieu(models.Model):
 
     ], string="Trạng thái", default="0")
 
+    # Thêm vào Model: ekids.kehoach_muctieu
+    trangthai_duyet = fields.Selection([
+        ('0', 'Chờ duyệt'),
+        ('1', 'Đã duyệt đạt (+)'),
+        ('-1', 'Từ chối chưa đạt(-)')
+    ], string="Trạng thái kiểm duyệt chuyên môn", default='0')
+
+    # Hàm RPC cho GV chuyên môn click duyệt nhanh từ OWL
+
+
+
     is_chophep_canthiep = fields.Boolean(string="cho phép can thiệp hay không",compute="_compute_is_chophep_canthiep")
 
 
@@ -79,6 +90,17 @@ class KeHoach2MucTieu(models.Model):
     ketqua_hinhthanh= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_hinhthanh")
     ketqua_khongdat = fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_khongdat")
     ketqua_dat_lientiep = fields.Integer(string="Kết quả Đạt liên tiếp", compute="_compute_ketqua_dat_lientiep")
+
+
+    def action_owl_review_approve(self):
+        for rec in self:
+            rec.state_review = 'approved'
+        return True
+
+    def action_owl_review_reject(self):
+        for rec in self:
+            rec.state_review = 'rejected'
+        return True
 
     @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
     def _compute_ketqua_dat_lientiep(self):
