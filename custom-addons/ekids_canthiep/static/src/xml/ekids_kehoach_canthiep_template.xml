@@ -4,7 +4,7 @@
         <div class="p-3 p-md-4 w-100 h-100 overflow-auto bg-light">
 
             <style>
-                /* NÚT THAO TÁC HỆ THỐNG */
+                /* NÚT THAO TÁC HỆ THỐNG TRÊN HEADER */
                 .btn-back-plans { background-color: #FFFFFF; color: #475569; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; border: 1px solid #CBD5E1; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.01); height: 32px; }
                 .btn-back-plans:hover { background-color: #F8FAFC; color: #1E40AF; border-color: #94A3B8; }
 
@@ -14,7 +14,7 @@
                 .btn-conclusion-right { background-color: #FFFFFF; color: #475569; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; border: 1px solid #CBD5E1; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; height: 32px; }
                 .btn-conclusion-right:hover { background-color: #F8FAFC; color: #0F766E; border-color: #94A3B8; }
 
-                /* CORE TOGGLE ĐÓNG MỞ CSS VIA CHECKBOX */
+                /* CẤU TRÚC ĐÓNG MỞ HEADER CHUNG VIA CHECKBOX CSS */
                 .mobile-toggle-checkbox { display: none; }
                 .ws-master-header-block { background-color: #E2E8F0 !important; border: 1px solid #CBD5E1; border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 0px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
                 .ws-header-inner-divider { height: 1px; background-color: #CBD5E1; width: 100%; margin: 8px 0; }
@@ -36,7 +36,7 @@
                 .badge-canthiep { border-color: #FFEDD5; color: #C2410C; }
                 .badge-chuyenmon { border-color: #CCFBF1; color: #0F766E; }
 
-                /* INPUT PASTEL */
+                /* INPUT FIELD */
                 .ws-info-row-inputs { display: flex; gap: 14px; flex-wrap: wrap; width: 100%; }
                 .ws-field { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 5px; }
                 .ws-label { font-weight: 700; color: #475569; font-size: 0.8rem; text-transform: uppercase; display: flex; align-items: center; gap: 5px; letter-spacing: 0.2px; }
@@ -55,25 +55,53 @@
                 .domain-age-badge { font-size: 0.9rem !important; font-weight: 800 !important; background: #F3E8FF !important; color: #6B21A8 !important; padding: 4px 10px !important; border-radius: 6px !important; border: 1px solid #E9D5FF !important; display: inline-block; }
                 .domain-progress-badge { background: #E0F2FE; color: #0369A1; font-size: 0.8rem; font-weight: 800; padding: 5px 12px; border-radius: 20px; border: 1px solid #BAE6FD; display: inline-flex; align-items: center; gap: 6px; }
 
-                .goals-table-wrapper { width: 100%; overflow-x: auto; }
-                .goals-table { width: 100%; border-collapse: collapse; min-width: 950px; table-layout: fixed; }
-                .goals-table td { padding: 12px 14px; border-bottom: 1px solid #F1F5F9; vertical-align: middle; font-size: 0.98rem !important; color: #0F172A;}
-                .goal-name-text { font-weight: 600 !important; color: #1E293B !important; line-height: 1.4; }
-                .goal-index-circle { background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%); color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; justify-content: center; align-items: center; font-size: 0.8rem; font-weight: 800; }
+                /* CẤU TRÚC BẢNG TRÊN MÁY TÍNH - PHẲNG LÌ KHÔNG SINH SCROLLBAR RÁC */
+                .goals-table-wrapper { width: 100%; overflow: hidden; }
+                .goals-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+                .goals-table td { padding: 10px 14px; border-bottom: 1px solid #F1F5F9; vertical-align: middle; font-size: 0.98rem !important; color: #0F172A; }
 
-                /* KHỐI DUYỆT NHANH TẠI DÒNG CHÍNH CHUẨN SAAS */
-                .review-zone-box { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 20px; border: 1px solid #E2E8F0; background: #F8FAFC; }
-                .btn-review-action { border: none; background: #FFFFFF; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; cursor: pointer; border: 1px solid #CBD5E1; transition: all 0.15s; }
-                .btn-review-action.btn-approve:hover { background-color: #DCFCE7; color: #16A34A; border-color: #BBF7D0; }
-                .btn-review-action.btn-reject:hover { background-color: #FEE2E2; color: #DC2626; border-color: #FECACA; }
+                /* NÚT VUÔNG COMPACT, CO THEO TEXT CHỮ + ICON (PADDING CHỈ 4PX) */
+                .btn-action-canthiep-core, .btn-expert-confirm-trigger {
+                    font-weight: 800;
+                    font-size: 0.72rem;
+                    height: 24px;
+                    padding: 2px 6px !important;
+                    border-radius: 0px !important;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 4px;
+                    border: 1px solid transparent;
+                    transition: all 0.15s ease-in-out;
+                    cursor: pointer;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.01);
+                    user-select: none;
+                    white-space: nowrap;
+                    width: 100%;
+                }
 
-                /* BADGE REVIEW CHỮ ĐEN */
-                .badge-review-status { font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 12px; display: inline-block; color: #000000 !important; }
-                .review-draft { background-color: #F1F5F9; border: 1px solid #E2E8F0; color: #475569 !important; }
-                .review-approved { background-color: #DCFCE7; border: 1px solid #BBF7D0; color: #15803D !important; }
-                .review-rejected { background-color: #FFEDD5; border: 1px solid #FFD8A8; color: #C2410C !important; }
+                /* PHỐI MÀU NÚT CAN THIỆP */
+                .canthiep-yellow { background-color: #FBBF24 !important; color: #0F172A !important; border-color: #F59E0B !important; }
+                .canthiep-yellow:hover { background-color: #F59E0B !important; }
+                .canthiep-green { background-color: #10B981 !important; color: #FFFFFF !important; border-color: #059669 !important; }
+                .canthiep-green:hover { background-color: #059669 !important; }
+                .canthiep-gray { background-color: #E2E8F0 !important; color: #94A3B8 !important; border-color: #CBD5E1 !important; cursor: not-allowed !important; pointer-events: none !important; box-shadow: none !important; }
 
-                /* TIMELINE NHẬT KÝ 2 HÀNG NGANG TỐI ƯU KHÔNG GIAN */
+                /* PHỐI MÀU NÚT XÁC NHẬN CHUYÊN MÔN */
+                .confirm-gray { background-color: #F1F5F9 !important; color: #475569 !important; border-color: #CBD5E1 !important; }
+                .confirm-gray:hover { background-color: #E2E8F0 !important; }
+                .confirm-green { background-color: #DCFCE7 !important; color: #15803D !important; border-color: #A7F3D0 !important; }
+                .confirm-green:hover { background-color: #BBF7D0 !important; }
+                .confirm-orange { background-color: #FEF3C7 !important; color: #B45309 !important; border-color: #FDE68A !important; }
+                .confirm-orange:hover { background-color: #FDE68A !important; }
+
+                /* ICON ĐÓNG MỞ CHI TIẾT */
+                .btn-toggle-goal-flat { background: none; border: none; font-size: 1.05rem; color: #64748B; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; transition: background-color 0.2s, color 0.15s; }
+                .btn-toggle-goal-flat:hover { background-color: #F1F5F9; color: #1E40AF; }
+                .icon-rotate-effect { transition: transform 0.2s ease; }
+                .summary-row.active-view .icon-rotate-effect { transform: rotate(180deg); }
+
+                /* TIMELINE NHẬT KÝ */
                 .clinical-timeline-container { display: flex; flex-direction: column; gap: 10px; background-color: #F8FAFC; padding: 12px 14px; border-radius: 8px; border: 1px solid #E2E8F0; margin-bottom: 14px; width: 100%; }
                 .timeline-header-row { display: flex; align-items: center; justify-content: space-between; width: 100%; flex-wrap: wrap; gap: 8px; }
                 .timeline-grid-row { width: 100%; }
@@ -101,14 +129,7 @@
                 .badge-half { background-color: #FFFBEB; color: #D97706; border-color: #FDE68A; }
                 .badge-fail { background-color: #FEF2F2; color: #DC2626; border-color: #FECACA; }
 
-                /* GIỮ MÀU VÀNG NGUYÊN BẢN CỦA NÚT CAN THIỆP KỂ CẢ KHI DISABLED */
-                .btn-record-mini { background-color: #FBBF24 !important; color: #0F172A !important; font-weight: 700; font-size: 0.8rem; padding: 6px 14px; border-radius: 5px; border: 1px solid #F59E0B !important; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; opacity: 1 !important; }
-                .btn-record-mini:hover:not(:disabled) { background-color: #F59E0B !important; }
-                .btn-record-mini:disabled { cursor: not-allowed !important; opacity: 0.55 !important; box-shadow: none !important; }
-
-                /* CARD Ý KIẾN PHẢN HỒI CHUYÊN MÔN */
                 .expert-review-comment-card { background-color: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 6px; padding: 12px 16px; margin-top: 10px; width: 100%; display: flex; flex-direction: column; gap: 6px; }
-
                 .detail-info-container { padding: 16px 20px; display: flex; flex-direction: column; gap: 14px; border-left: 4px solid #2563EB; background: #FFFFFF; margin: 4px 12px 14px 12px; border-radius: 0 8px 8px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.01); }
                 .info-label-premium { font-weight: 700; font-size: 0.88rem; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
                 .criteria-flex-layout { display: flex; gap: 14px; width: 100%; flex-wrap: wrap; }
@@ -117,6 +138,7 @@
                 .criteria-card-item.success { border-color: #BBF7D0; background-color: #F0FDF4; }
                 .criteria-box-desc-text { font-size: 0.92rem !important; margin-top: 4px; line-height: 1.4; }
 
+                /* TẦNG CƠ CHẾ RESPONSIVE ĐỘT PHÁ: GIẢI QUYẾT TRIỆT ĐỂ MOBILE LAYOUT */
                 @media (max-width: 768px) {
                     .btn-back-plans, .btn-view-conclusion-header { width: 100% !important; justify-content: center; }
                     .ws-master-header-block { padding: 10px; gap: 6px; }
@@ -126,9 +148,71 @@
                     .micro-gv-badge { width: 100% !important; justify-content: center; }
                     .ws-field { flex: 1 1 100% !important; }
                     .days-grid-track-compact { gap: 2px; }
-                    .goals-table { min-width: 100% !important; }
                     .timeline-header-row { flex-direction: column; align-items: flex-start; }
                     .clinical-counts-box { width: 100%; justify-content: flex-start; }
+
+                    /* CHỈ PHÁ CẤU TRÚC BẢNG TRÊN DÒNG TÓM TẮT (SUMMARY ROW) */
+                    .goals-table-wrapper { overflow: hidden; }
+                    .goals-table, .goals-table tbody { display: block; width: 100% !important; }
+
+                    /* Chỉ can thiệp vào hàng tóm tắt tiêu đề */
+                    .goals-table tr.summary-row {
+                        display: flex !important;
+                        flex-direction: row !important;
+                        flex-wrap: wrap !important;
+                        padding: 10px 6px !important;
+                        border-bottom: 1px solid #E2E8F0 !important;
+                        align-items: flex-start !important;
+                        width: 100% !important;
+                    }
+
+                    .goals-table tr.summary-row td { display: block !important; padding: 0 !important; border: none !important; }
+
+                    /* Ô 1: Số thứ tự (Bên trái hàng 1) */
+                    .goals-table tr.summary-row td:nth-child(1) { width: 25px !important; order: 1; margin-top: 2px; }
+
+                    /* Ô 2: TÊN MỤC TIÊU */
+                    .goals-table tr.summary-row td:nth-child(2) {
+                        width: calc(100% - 60px) !important;
+                        order: 2;
+                        padding-left: 4px !important;
+                        text-align: left !important;
+                    }
+
+                    /* Ô 5: Icon mũi tên chevron đóng mở (Bên phải hàng 1) */
+                    .goals-table tr.summary-row td:nth-child(5) { width: 35px !important; order: 3; text-align: right !important; margin-top: -2px; }
+
+                    /* Ô 3 và Ô 4 (Chứa nút Can thiệp và nút Xác nhận) gom cụm lại góc phải phía dưới */
+                    .goals-table tr.summary-row td:nth-child(3),
+                    .goals-table tr.summary-row td:nth-child(4) {
+                        width: auto !important;
+                        order: 4;
+                        margin-top: 8px !important;
+                    }
+
+                    /* Ô 3 (Can thiệp) đứng trước, dịch chuyển dạt hẳn về góc phải */
+                    .goals-table tr.summary-row td:nth-child(3) {
+                        margin-left: auto !important;
+                        padding-right: 6px !important;
+                    }
+
+                    /* ÉP NÚT BẤM KHÔNG BỊ TRÀN 100%, CO GỌN THEO TEXT CỦA ICON CHUẨN ĐẸP */
+                    .goals-table tr.summary-row .btn-action-canthiep-core,
+                    .goals-table tr.summary-row .btn-expert-confirm-trigger {
+                        width: auto !important;
+                        min-width: unset !important;
+                        padding: 2px 10px !important;
+                    }
+
+                    /* 🌟 GIỮ NGUYÊN VẸN CẤU TRÚC GỐC CHO DÒNG CHI TIẾT MỞ RỘNG (FIX LỖI) */
+                    .goals-table tr.detail-expanded-row {
+                        display: table-row !important; /* Trả về cấu trúc bảng mặc định của HTML */
+                        width: 100% !important;
+                    }
+                    .goals-table tr.detail-expanded-row td {
+                        display: table-cell !important; /* Trả về ô bảng mặc định */
+                        padding: 0 !important;
+                    }
                 }
             </style>
 
@@ -206,7 +290,7 @@
                             <tbody>
                                 <t t-foreach="linhvuc.muctieus" t-as="muctieu" t-key="muctieu.id">
 
-                                    <tr t-attf-class="summary-row #{state.expandedGoals[muctieu.id] ? 'active-view' : ''} #{!muctieu.is_unlocked ? 'row-goal-disabled' : ''}"
+                                    <tr t-attf-class="summary-row #{state.expandedGoals[muctieu.id] ? 'active-view' : ''}"
                                         t-on-click="(ev) => this.toggleGoalDetails(muctieu.id, ev)"
                                         style="cursor: pointer;">
 
@@ -218,58 +302,51 @@
 
                                         <td style="text-align: left;"><span class="goal-name-text"><t t-esc="muctieu.name"></t></span></td>
 
-                                        <td style="width: 190px; text-align: center;">
-                                            <div class="d-flex flex-column align-items-center justify-content-center gap-1">
-
-                                                <t t-if="state.kehoach.trangthai == '1'">
-                                                    <t t-if="muctieu.trangthai == '1'">
-                                                        <span style="color:#000000 !important; font-weight:800; background-color:#DCFCE7; padding:2px 8px; border-radius:5px; border:1px solid #BBF7D0; font-size:0.8rem; display:inline-block; min-width:115px;">Đã đạt</span>
-                                                    </t>
-                                                    <t t-elif="muctieu.trangthai == '2'">
-                                                        <span style="color: #000000 !important; font-weight:800; background-color:#EFF6FF; padding:2px 8px; border-radius:5px; border:1px solid #BFDBFE; font-size:0.8rem; display:inline-block; min-width:115px;">Đang can thiệp</span>
-                                                    </t>
-                                                    <t t-elif="muctieu.trangthai == '-1'">
-                                                        <span style="color: #000000 !important; font-weight:800; background-color:#FEF2F2; padding:2px 8px; border-radius:5px; border:1px solid #FECACA; font-size:0.8rem; display:inline-block; min-width:115px;">Chưa đạt</span>
-                                                    </t>
-                                                    <t t-else="">
-                                                        <span style="color: #64748B !important; font-weight:800; font-size:0.8rem; display:inline-block; min-width:115px;">Chưa can thiệp</span>
-                                                    </t>
+                                        <td style="width: 140px; text-align: right; padding-right: 4px;">
+                                            <div t-on-click="(ev) => ev.stopPropagation()">
+                                                <t t-if="!muctieu.is_canthiep">
+                                                    <button class="btn-action-canthiep-core canthiep-gray" disabled="1">
+                                                        <i class="fa fa-lock"></i> Can thiệp
+                                                    </button>
                                                 </t>
-
-                                                <t t-if="state.kehoach.trangthai == '1' and state.kehoach.trangthai_canthiep == '1'">
-                                                    <div class="review-zone-box mt-1" t-on-click="(ev) => ev.stopPropagation()">
-                                                        <t t-if="muctieu.trangthai_duyet == '1'">
-                                                            <span class="badge-review-status review-approved" style="font-size:0.72rem; padding:2px 6px;"><i class="fa fa-check-circle"></i> CM Duyệt đạt (+)</span>
-                                                        </t>
-                                                        <t t-elif="muctieu.trangthai_duyet == '-1'">
-                                                            <span class="badge-review-status review-rejected" style="font-size:0.72rem; padding:2px 6px;"><i class="fa fa-times-circle"></i> CM Từ chối (-)</span>
-                                                        </t>
-                                                        <t t-else="">
-                                                            <span class="badge-review-status review-draft" style="font-size:0.72rem; padding:2px 6px;">CM Chờ duyệt</span>
-                                                            <button class="btn-review-action btn-approve" title="Duyệt Đạt (+)" t-on-click="(ev) => this.goiMucTieuAction('action_owl_review_approve', muctieu.id, ev)">
-                                                                <i class="fa fa-check text-success"></i>
-                                                            </button>
-                                                            <button class="btn-review-action btn-reject" title="Từ chối Chưa đạt (-)" t-on-click="(ev) => this.goiMucTieuAction('action_owl_review_reject', muctieu.id, ev)">
-                                                                <i class="fa fa-remove text-danger"></i>
-                                                            </button>
-                                                        </t>
-                                                    </div>
+                                                <t t-elif="muctieu.trangthai == '1'">
+                                                    <button class="btn-action-canthiep-core canthiep-green" t-on-click="(ev) => this.goiMucTieuAction('action_canthiep', muctieu.id, ev)">
+                                                        <i class="fa fa-check"></i> Đã đạt
+                                                    </button>
                                                 </t>
-
+                                                <t t-else="">
+                                                    <button class="btn-action-canthiep-core canthiep-yellow" t-att-disabled="muctieu.trangthai_duyet == '1'" t-on-click="(ev) => this.goiMucTieuAction('action_canthiep', muctieu.id, ev)">
+                                                        <i class="fa fa-bolt"></i> Can thiệp
+                                                    </button>
+                                                </t>
                                             </div>
                                         </td>
 
-                                        <td style="width: 110px; text-align: right;">
-                                            <button class="btn-record-mini"
-                                                    t-att-disabled="!muctieu.is_canthiep || muctieu.trangthai_duyet == '1'"
-                                                    t-on-click="(ev) => { ev.stopPropagation(); this.goiMucTieuAction('action_canthiep', muctieu.id, ev); }">
-                                                <i class="fa fa-bolt"></i> Can thiệp
-                                            </button>
+                                        <td style="width: 140px; text-align: left; padding-left: 4px;">
+                                            <t t-if="state.kehoach.trangthai == '1' and state.kehoach.trangthai_canthiep == '1'">
+                                                <div t-on-click="(ev) => ev.stopPropagation()">
+                                                    <t t-if="muctieu.trangthai_duyet == '1'">
+                                                        <button class="btn-expert-confirm-trigger confirm-green" t-on-click="(ev) => this.goiMucTieuAction('action_owl_review_approve', muctieu.id, ev)">
+                                                            <i class="fa fa-check-circle"></i> Đã duyệt đạt
+                                                        </button>
+                                                    </t>
+                                                    <t t-elif="muctieu.trangthai_duyet == '-1'">
+                                                        <button class="btn-expert-confirm-trigger confirm-orange" t-on-click="(ev) => this.goiMucTieuAction('action_owl_review_reject', muctieu.id, ev)">
+                                                            <i class="fa fa-times-circle"></i> Cần sửa lại
+                                                        </button>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <button class="btn-expert-confirm-trigger confirm-gray" t-on-click="(ev) => this.goiMucTieuAction('action_owl_review_approve', muctieu.id, ev)">
+                                                            <i class="fa fa-shield"></i> Xác nhận
+                                                        </button>
+                                                    </t>
+                                                </div>
+                                            </t>
                                         </td>
 
                                         <td style="width: 45px; text-align: center;">
-                                            <button class="btn-more-info">
-                                                <i t-attf-class="fa #{state.expandedGoals[muctieu.id] ? 'fa-chevron-up' : 'fa-chevron-down'}"></i>
+                                            <button class="btn-toggle-goal-flat">
+                                                <i class="fa fa-chevron-down icon-rotate-effect"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -279,7 +356,6 @@
                                             <div class="detail-info-container">
 
                                                 <div class="clinical-timeline-container" t-if="muctieu.history_days and muctieu.history_days.length > 0">
-
                                                     <div class="timeline-header-row">
                                                         <span class="fw-bold small" style="text-transform: uppercase; font-size:0.72rem; letter-spacing:0.2px; color:#16A34A;">
                                                             <i class="fa fa-history"></i> Nhật ký tiến độ can thiệp (Trên: Ngày thứ | Dưới: Kết quả):
@@ -303,7 +379,6 @@
                                                             </t>
                                                         </div>
                                                     </div>
-
                                                 </div>
 
                                                 <t t-if="muctieu.trangthai_duyet == '-1'">
@@ -324,7 +399,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="w-100 mt-1">
+                                                <div class="w-100 mt-3">
                                                     <span class="info-label-premium text-secondary"><i class="fa fa-check-square"></i> Tiêu chí đánh giá lâm sàng phân cấp:</span>
                                                     <div class="criteria-flex-layout">
                                                         <div class="criteria-card-item">
