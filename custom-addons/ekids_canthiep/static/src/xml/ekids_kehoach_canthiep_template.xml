@@ -134,7 +134,7 @@
                         <button class="btn-back-plans" t-on-click="(ev) => this.goiKeHoachAction('action_xem_kehoachs', ev)">
                             <i class="fa fa-arrow-left"></i> Quay lại
                         </button>
-                        <button class="btn-view-conclusion-header" t-on-click="(ev) => this.goiKetThucKeHoachAction('action_ketthuc_kehoach', ev)">
+                        <button class="btn-view-conclusion-header" t-on-click="(ev) => this.goiGuiDuyetKeHoachAction('action_gui_duyet_ketqua_kehoach', ev)">
                             <i class="fa fa-paper-plane"></i>  Hoàn thành Gửi duyệt
                         </button>
                     </div>
@@ -253,7 +253,10 @@
 
                                                 <div class="clinical-timeline-container" t-if="muctieu.history_days and muctieu.history_days.length > 0">
                                                     <div class="d-flex flex-column gap-1" style="max-width: calc(100% - 320px); min-width: 280px;">
-                                                        <span class="fw-bold text-secondary small" style="text-transform: uppercase; font-size:0.72rem; letter-spacing:0.2px;"><i class="fa fa-history"></i> Nhật ký tiến độ can thiệp (Trên: Ngày thứ | Dưới: Kết quả):</span>
+                                                        <span class="fw-bold small"
+                                                              style="text-transform: uppercase; font-size:0.72rem; letter-spacing:0.2px;color:#16A34A;">
+                                                            <i class="fa fa-history"></i> Nhật ký tiến độ can thiệp (Trên: Ngày thứ | Dưới: Kết quả):
+                                                        </span>
 
                                                         <div class="days-grid-track-compact">
                                                             <t t-foreach="muctieu.history_days" t-as="day" t-key="day_index">
@@ -267,9 +270,9 @@
 
                                                     <div class="clinical-counts-box align-self-end ms-auto">
                                                         <div class="count-badge badge-all" title="Tổng số ngày đã dạy"><i class="fa fa-chart-bar"></i> <t t-esc="muctieu.cnt_all"></t></div>
-                                                        <div class="count-badge badge-ok"><t t-esc="muctieu.dat_lientiep"/>/<t t-esc="muctieu.cnt_ok"></t> Đạt (+)</div>
-                                                        <div class="count-badge badge-half"><t t-esc="muctieu.cnt_half"></t> H.Thành (+/-)</div>
-                                                        <div class="count-badge badge-fail"><t t-esc="muctieu.cnt_fail"></t> C.Đạt (-)</div>
+                                                        <div class="count-badge badge-ok"><t t-esc="muctieu.dat_lientiep"/>/<t t-esc="muctieu.cnt_ok"></t> (+)</div>
+                                                        <div class="count-badge badge-half"><t t-esc="muctieu.cnt_half"></t> (+/-)</div>
+                                                        <div class="count-badge badge-fail"><t t-esc="muctieu.cnt_fail"></t> (-)</div>
                                                     </div>
                                                 </div>
 

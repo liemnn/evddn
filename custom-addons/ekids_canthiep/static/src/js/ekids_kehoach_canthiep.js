@@ -106,9 +106,9 @@ export class KeHoachCanthiepComponent extends Component {
         }
     }
 
-    async goiKetThucKeHoachAction(tenAction, ev) {
+    async goiGuiDuyetKeHoachAction(tenAction, ev) {
         ev.stopPropagation();
-        const hoanthanh = confirm("Bạn chắc chắc muốn kết thúc [Kế hoạch] này để chuyển sang Kế hoạch tiếp theo ?");
+        const hoanthanh = confirm("Bạn chắc chắc muốn kết thúc [Gửi duyệt kết quả] kế hoạch này ?");
         if (hoanthanh) {
             const kehoach_id = this.props.action.context.kehoach_id || this.props.action.context.active_id;
             if (!kehoach_id) return;

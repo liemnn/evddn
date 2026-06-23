@@ -48,6 +48,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         (kehoach_util.KEHOACH_DANG_LAP, "Đang lập"),
         (kehoach_util.KEHOACH_DANG_PHEDUYET, "Đợi duyệt"),
         (kehoach_util.KEHOACH_DANG_CANTHIEP, "Đang can thiệp"),
+        (kehoach_util.KEHOACH_DOI_DUYET_KQ, "Đợi duyệt kết quả"),
         (kehoach_util.KEHOACH_HET_HIEULUC, "Hết hiệu lực"),
 
 
@@ -362,12 +363,12 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             },
         }
 
-    def action_ketthuc_kehoach(self):
+    def action_gui_duyet_ketqua_kehoach(self):
         self.ensure_one()
         if self.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
             kehoach = self.env['ekids.kehoach'].browse(self.id)
             if kehoach:
-                kehoach._write({"trangthai":kehoach_util.KEHOACH_HET_HIEULUC})
+                kehoach._write({"trangthai":kehoach_util.KEHOACH_DOI_DUYET_KQ})
 
 
         list_view_id = self.env.ref('ekids_canthiep.kehoach_hocsinh_inherit_list').id
