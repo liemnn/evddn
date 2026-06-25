@@ -67,6 +67,8 @@
                     height: 24px;
                     padding: 2px 6px !important;
                     border-radius: 0px !important;
+                    min-width: unset !important;
+                    width: 100%;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
@@ -77,15 +79,17 @@
                     box-shadow: 0 1px 2px rgba(0,0,0,0.01);
                     user-select: none;
                     white-space: nowrap;
-                    width: 100%;
                 }
 
-                /* PHỐI MÀU NÚT CAN THIỆP */
+                /* PHỐI MÀU NÚT CAN THIỆP CHUẨN QUY TRÌNH MỚI */
                 .canthiep-yellow { background-color: #FBBF24 !important; color: #0F172A !important; border-color: #F59E0B !important; }
                 .canthiep-yellow:hover { background-color: #F59E0B !important; }
                 .canthiep-green { background-color: #10B981 !important; color: #FFFFFF !important; border-color: #059669 !important; }
                 .canthiep-green:hover { background-color: #059669 !important; }
                 .canthiep-gray { background-color: #E2E8F0 !important; color: #94A3B8 !important; border-color: #CBD5E1 !important; cursor: not-allowed !important; pointer-events: none !important; box-shadow: none !important; }
+                /* 🌟 BỔ SUNG: Class cấu hình nút khi can thiệp thất bại / Chưa đạt */
+                .canthiep-red { background-color: #EF4444 !important; color: #FFFFFF !important; border-color: #DC2626 !important; }
+                .canthiep-red:hover { background-color: #DC2626 !important; }
 
                 /* PHỐI MÀU NÚT XÁC NHẬN CHUYÊN MÔN */
                 .confirm-gray { background-color: #F1F5F9 !important; color: #475569 !important; border-color: #CBD5E1 !important; }
@@ -204,13 +208,13 @@
                         padding: 2px 10px !important;
                     }
 
-                    /* 🌟 GIỮ NGUYÊN VẸN CẤU TRÚC GỐC CHO DÒNG CHI TIẾT MỞ RỘNG (FIX LỖI) */
+                    /* GIỮ NGUYÊN VẸN CẤU TRÚC GỐC CHO DÒNG CHI TIẾT MỞ RỘNG (FIX LỖI) */
                     .goals-table tr.detail-expanded-row {
-                        display: table-row !important; /* Trả về cấu trúc bảng mặc định của HTML */
+                        display: table-row !important;
                         width: 100% !important;
                     }
                     .goals-table tr.detail-expanded-row td {
-                        display: table-cell !important; /* Trả về ô bảng mặc định */
+                        display: table-cell !important;
                         padding: 0 !important;
                     }
                 }
@@ -218,6 +222,7 @@
 
             <input type="checkbox" id="globalHeaderToggler" class="mobile-toggle-checkbox" />
 
+            <!-- KHỐI HEADER MASTER -->
             <div class="ws-master-header-block">
                 <div class="ws-action-staff-row">
                     <div class="d-flex align-items-center gap-2 flex-wrap" style="flex: 1;">
@@ -270,6 +275,7 @@
                 </div>
             </div>
 
+            <!-- VÒNG LẶP DANH SÁCH LĨNH VỰC -->
             <t t-foreach="state.linhvucs" t-as="linhvuc" t-key="linhvuc.id">
                 <div class="domain-block-card">
                     <div class="domain-block-title" t-on-click="(ev) => this.toggleDomain(linhvuc.id, ev)">
@@ -302,26 +308,37 @@
 
                                         <td style="text-align: left;"><span class="goal-name-text"><t t-esc="muctieu.name"></t></span></td>
 
+                                        <!-- 🌟 VÙNG NÚT THAO TÁC CAN THIỆP ĐÃ ĐƯỢC PHÂN RÃ THEO CHÍNH XÁC 4 ĐIỀU KIỆN MỚI CỦA ANH -->
                                         <td style="width: 140px; text-align: right; padding-right: 4px;">
                                             <div t-on-click="(ev) => ev.stopPropagation()">
-                                                <t t-if="!muctieu.is_canthiep">
+
+                                                <!-- 1. muctieu.trangthai == '0' -> Can thiệp (Màu xám, Khóa sổ) -->
+                                                <t t-if="muctieu.trangthai == '0'">
                                                     <button class="btn-action-canthiep-core canthiep-gray" disabled="1">
                                                         <i class="fa fa-lock"></i> Can thiệp
                                                     </button>
                                                 </t>
-                                                <t t-elif="muctieu.trangthai == '1'">
-                                                    <button class="btn-action-canthiep-core canthiep-green" t-on-click="(ev) => this.goiMucTieuAction('action_canthiep', muctieu.id, ev)">
-                                                        <i class="fa fa-check"></i> Đã đạt
-                                                    </button>
-                                                </t>
-                                                <t t-else="">
+
+                                                <!-- 2. muctieu.trangthai == '2' -> Can thiệp (Màu vàng) -->
+                                                <t t-elif="muctieu.trangthai == '-1'">
                                                     <button class="btn-action-canthiep-core canthiep-yellow" t-att-disabled="muctieu.trangthai_duyet == '1'" t-on-click="(ev) => this.goiMucTieuAction('action_canthiep', muctieu.id, ev)">
                                                         <i class="fa fa-bolt"></i> Can thiệp
                                                     </button>
                                                 </t>
+
+                                                <!-- 3. muctieu.trangthai == '1' -> Đạt (Màu xanh lá) -->
+                                                <t t-elif="muctieu.trangthai == '1'">
+                                                    <button class="btn-action-canthiep-core canthiep-green" t-on-click="(ev) => this.goiMucTieuAction('action_canthiep', muctieu.id, ev)">
+                                                        <i class="fa fa-check"></i> Đạt
+                                                    </button>
+                                                </t>
+
+
+
                                             </div>
                                         </td>
 
+                                        <!-- VÙNG NÚT XÁC NHẬN KIỂM DUYỆT CHUYÊN MÔN (Đã dọn sạch comment thô Python tránh lỗi biên dịch) -->
                                         <td style="width: 140px; text-align: left; padding-left: 4px;">
                                             <t t-if="state.kehoach.trangthai == '1' and state.kehoach.trangthai_canthiep == '1'">
                                                 <div t-on-click="(ev) => ev.stopPropagation()">
@@ -351,6 +368,7 @@
                                         </td>
                                     </tr>
 
+                                    <!-- CHI TIẾT TIẾN ĐỘ BÊN TRONG -->
                                     <tr t-if="state.expandedGoals[muctieu.id]" class="detail-expanded-row">
                                         <td colspan="5" style="padding: 0;">
                                             <div class="detail-info-container">
@@ -363,9 +381,9 @@
 
                                                         <div class="clinical-counts-box">
                                                             <div class="count-badge badge-all" title="Tổng số ngày đã dạy"><i class="fa fa-chart-bar"></i> <t t-esc="muctieu.cnt_all"></t></div>
-                                                            <div class="count-badge badge-ok"><t t-esc="muctieu.dat_lientiep"/>/<t t-esc="muctieu.cnt_ok"></t> Đạt (+)</div>
-                                                            <div class="count-badge badge-half"><t t-esc="muctieu.cnt_half"></t> H.Thành (+/-)</div>
-                                                            <div class="count-badge badge-fail"><t t-esc="muctieu.cnt_fail"></t> C.Đạt (-)</div>
+                                                            <div class="count-badge badge-ok"><t t-esc="muctieu.dat_lientiep"/>/<t t-esc="muctieu.cnt_ok"></t>(+)</div>
+                                                            <div class="count-badge badge-half"><t t-esc="muctieu.cnt_half"></t>(+/-)</div>
+                                                            <div class="count-badge badge-fail"><t t-esc="muctieu.cnt_fail"></t>(-)</div>
                                                         </div>
                                                     </div>
 

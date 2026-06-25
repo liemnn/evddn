@@ -61,11 +61,6 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
     ], string="Trạng thái phê duyệt", default=kehoach_util.PHEDUYET_DOI_DUYET)
 
-    trangthai_canthiep = fields.Selection([
-        (kehoach_util.CANTHIEP_DANG_THUCHIEN, "Đợi phê duyệt"),
-        (kehoach_util.CANTHIEP_DOI_DUYET, "Cần điều chỉnh"),
-
-    ], string="Trạng thái phê duyệt Kết quả can thiệp", default=kehoach_util.CANTHIEP_DANG_THUCHIEN)
 
     tu_ngay = fields.Date(
         string="Từ ngày",
@@ -372,7 +367,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         if self.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
             kehoach = self.env['ekids.kehoach'].browse(self.id)
             if kehoach:
-                kehoach._write({"trangthai_canthiep":kehoach_util.CANTHIEP_DOI_DUYET})
+                kehoach._write({"trangthai":kehoach_util.KEHOACH_HET_HIEULUC})
 
 
         list_view_id = self.env.ref('ekids_canthiep.kehoach_hocsinh_inherit_list').id

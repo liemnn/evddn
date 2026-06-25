@@ -65,9 +65,9 @@ class KeHoach2MucTieu(models.Model):
     trangthai = fields.Selection([
         ("0", "Chưa can thiệp"),
         ("1", "Đạt (+)"),
-        ("-1", "Chưa đạt (-)"),
+        ("-1", "Đang can thiệp"),
 
-    ], string="Trạng thái", default="0")
+    ], string="Trạng thái", default="0",compute="_compute_trangthai",store=False)
 
     # Thêm vào Model: ekids.kehoach_muctieu
     trangthai_duyet = fields.Selection([
@@ -79,17 +79,38 @@ class KeHoach2MucTieu(models.Model):
     # Hàm RPC cho GV chuyên môn click duyệt nhanh từ OWL
 
 
-
-    is_chophep_canthiep = fields.Boolean(string="cho phép can thiệp hay không",compute="_compute_is_chophep_canthiep")
-
-
     ketqua2muctieu_ids = fields.One2many("ekids.kehoach_ketqua2muctieu", "kehoach_muctieu_id"
                                         , string="Thuộc kế hoạch mục tiêu nào")
 
     ketqua_dat= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_dat")
     ketqua_hinhthanh= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_hinhthanh")
     ketqua_khongdat = fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_khongdat")
-    ketqua_dat_lientiep = fields.Integer(string="Kết quả Đạt liên tiếp", compute="_compute_ketqua_dat_lientiep")
+
+    @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
+    def _compute_trangthai(self):
+        today = date.today()
+        for mt in self:
+            kehoach = mt.kehoach_id
+            is_chophep_canthiep = False
+            if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                if today >= kehoach.tu_ngay and today <= kehoach.den_ngay:
+                    soluong_str = coso_util.func_cauhinh_canthiep(self, kehoach.coso_id, "muctieu_soluong_mo", "2")
+                    is_chophep_canthiep = mt.func_is_chophep_canthiep(int(soluong_str))
+
+            if is_chophep_canthiep == False:
+                #TH1: Chua cho can thiep
+                mt.trangthai = "0"
+            else:
+                #TH2: Da cho can thiep
+                soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, kehoach.coso_id, "muctieu_soluong_dat_lientiep", "6")
+
+                ketqua_dat_lientiep= mt.func_ketqua_dat_lientiep()
+                if ketqua_dat_lientiep >= int(soluong_dat_lientiep_str):
+                    mt.trangthai="1"
+                else:
+                    mt.trangthai = "-1  "
+
+
 
 
     def action_owl_review_approve(self):
@@ -102,39 +123,47 @@ class KeHoach2MucTieu(models.Model):
             rec.state_review = 'rejected'
         return True
 
-    @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
-    def _compute_ketqua_dat_lientiep(self):
+
+    def func_ketqua_dat_lientiep(self):
         today =date.today()
-        for mt in self:
-            max = 0
-            current_max = 0
+        max = 0
+        current_max = 0
 
-            # 🌟 BƯỚC QUY HOẠCH CHÍ MẠNG: Ép sắp xếp danh sách kết quả tịnh tiến theo ngày tăng dần
-            # Sử dụng sorted() của Python giúp chạy mượt mà trên RAM mà không cần Re-query SQL
-            ketquas = mt.ketqua2muctieu_ids
-            if ketquas:
-                for kq in ketquas:
-                    if kq.ngay > today:
-                        continue
-                    # Nếu trạng thái bằng '1' (Đạt) dạng chuỗi hoặc số nguyên tùy cấu hình database của anh
-                    if kq.trangthai == '1':
-                        current_max += 1
-                        # Cập nhật lại chuỗi dài nhất nếu chuỗi hiện tại vượt mốc cũ
-                        if current_max > max:
-                            max = current_max
-                    else:
-                        # Đứt gãy chuỗi đạt liên tiếp -> Reset bộ đếm tạm thời về 0
-                        current_max = 0
+        # 🌟 BƯỚC QUY HOẠCH CHÍ MẠNG: Ép sắp xếp danh sách kết quả tịnh tiến theo ngày tăng dần
+        # Sử dụng sorted() của Python giúp chạy mượt mà trên RAM mà không cần Re-query SQL
+        ketquas = self.ketqua2muctieu_ids
+        if ketquas:
+            for kq in ketquas:
+                if kq.ngay > today:
+                    continue
+                # Nếu trạng thái bằng '1' (Đạt) dạng chuỗi hoặc số nguyên tùy cấu hình database của anh
+                if kq.trangthai == '1':
+                    current_max += 1
+                    # Cập nhật lại chuỗi dài nhất nếu chuỗi hiện tại vượt mốc cũ
+                    if current_max > max:
+                        max = current_max
+                else:
+                    # Đứt gãy chuỗi đạt liên tiếp -> Reset bộ đếm tạm thời về 0
+                    current_max = 0
 
-                # Gán kết quả chuỗi kỷ lục tìm được vào trường compute
-            mt.ketqua_dat_lientiep = max
-            soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, mt.kehoach_id.coso_id, "muctieu_soluong_dat_lientiep","6")
-            if max >= int(soluong_dat_lientiep_str):
-                mt.trangthai ="1"
-            else:
-                mt.trangthai = "-1"
+        return max
 
 
+    def func_ketqua_tyle_canthiep(self):
+        today = date.today()
+        kqs = self.ketqua2muctieu_ids
+        tyle=0
+        if kqs:
+            tong =len(kqs)
+            tong_ct =0
+            for kq in kqs:
+                if (kq.trangthai !="0"
+                        and kq.ngay<=today):
+                    tong_ct +=1
+            tyle = int((tong_ct/tong)*100)
+        return tyle
+
+    @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
     def _compute_ketqua_dat(self):
         for mt in self:
             tong = 0
@@ -146,6 +175,7 @@ class KeHoach2MucTieu(models.Model):
                         tong += 1
             mt.ketqua_dat=tong
 
+    @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
     def _compute_ketqua_khongdat(self):
         for mt in self:
             tong = 0
@@ -157,6 +187,7 @@ class KeHoach2MucTieu(models.Model):
                         tong += 1
             mt.ketqua_khongdat=tong
 
+    @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
     def _compute_ketqua_hinhthanh(self):
         for mt in self:
             tong = 0
@@ -173,35 +204,28 @@ class KeHoach2MucTieu(models.Model):
         for mt in self:
             mt.sequence =mt.muctieu_id.sequence
 
-    def _compute_is_chophep_canthiep(self):
-        today =date.today()
-
-        for mt in self:
-            kehoach =mt.kehoach_id
-            is_chophep_canthiep = False
-            if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                if today >= kehoach.tu_ngay and today <=kehoach.den_ngay:
-                    soluong_str = coso_util.func_cauhinh_canthiep(self,kehoach.coso_id,"muctieu_soluong_mo","2")
-                    is_chophep_canthiep = mt.func_is_chophep_canthiep(int(soluong_str))
-            mt.is_chophep_canthiep = is_chophep_canthiep
-            if is_chophep_canthiep and mt.trangthai=="0":
-                mt.trangthai="-1"
 
     def func_is_chophep_canthiep(self,index):
-        if not self.kehoach_muctieu_truoc_id:
+        muctieu_truoc = self.kehoach_muctieu_truoc_id
+        coso = muctieu_truoc.kehoach_id.coso_id
+
+        if not muctieu_truoc:
             return True
-        elif self.kehoach_muctieu_truoc_id.trangthai=="1":
+        elif muctieu_truoc.trangthai=="1":
             # trang thai truoc đã đạt
             return True
         else:
-            if index <=1:
+            if index <= 1:
                 return False
-            elif self.trangthai == "1":
-                return True
             else:
-                index = index -1
-                muctieu= self.kehoach_muctieu_truoc_id
-                return muctieu.func_is_chophep_canthiep(index)
+                tyle_dat_str = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_tyle_dat", "80")
+                ketqua_tyle_canthiep = muctieu_truoc.func_ketqua_tyle_canthiep()
+                if ketqua_tyle_canthiep >= int(tyle_dat_str):
+                    return True
+                else:
+                    index = index -1
+                    muctieu= self.kehoach_muctieu_truoc_id
+                    return muctieu.func_is_chophep_canthiep(index)
 
 
 

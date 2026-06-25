@@ -18,18 +18,19 @@ class KeHoachKetQua2MucTieu(models.Model):
     ngay = fields.Date(string="Ngày",required=True)
 
     trangthai = fields.Selection([
+        ("0", "Không can thiệp"),
         ("1", "Đạt (+)"),
         ("-1", "Chưa đạt (-)"),
-        ("0", "Đang hình thành (+/-)"),
+        ("10", "Đang hình thành (+/-)"),
 
 
-    ], string="Trạng thái")
+    ], string="Trạng thái",default="0")
 
     desc = fields.Html(string="Mô tả")
 
     is_readonly = fields.Boolean(string="Các trạng thái được phép sửa",compute="_compute_is_readonly")
 
-    is_system = fields.Boolean(string="cập nhật do máy tính tạo ra",default=True)
+
 
     def _compute_is_readonly(self):
         # Dùng context_today để lấy ngày chuẩn theo múi giờ của giáo viên
@@ -67,24 +68,21 @@ class KeHoachKetQua2MucTieu(models.Model):
     def action_set_chuadat(self):
         for rec in self:
             if not rec.is_readonly:
-                rec.trangthai = '-1'
-                rec.is_system = False
+                setattr(rec,"trangthai","-1")
         url = self.func_get_url_back()
         return url
 
     def action_set_hinhthanh(self):
         for rec in self:
             if not rec.is_readonly:
-                rec.trangthai = '0'
-                rec.is_system = False
+                setattr(rec,"trangthai","0")
         url = self.func_get_url_back()
         return url
 
     def action_set_dat(self):
         for rec in self:
             if not rec.is_readonly:
-                rec.trangthai = '1'
-                rec.is_system = False
+                setattr(rec, "trangthai", "1")
         url =self.func_get_url_back()
         return url
 

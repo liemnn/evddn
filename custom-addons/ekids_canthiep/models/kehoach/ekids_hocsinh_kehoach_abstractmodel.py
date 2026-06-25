@@ -35,10 +35,11 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
             }
 
         # Đóng gói dữ liệu đối tượng kế hoạch tổng quát
+
         kehoach_obj = {
             'hocsinh': self.name,
             'trangthai': str(kehoach.trangthai),  # Ép chuỗi trạng thái kế hoạch gốc ('1')
-            'trangthai_canthiep': str(kehoach.trangthai_canthiep),  # Ép chuỗi trạng thái can thiệp kiểm duyệt ('1')
+            'trangthai_canthiep': "1",
             'tu_ngay': kehoach.tu_ngay.strftime('%d/%m/%Y') if kehoach.tu_ngay else '',
             'den_ngay': kehoach.den_ngay.strftime('%d/%m/%Y') if kehoach.den_ngay else '',
             'songay': f"{kehoach.songay} ngày" if kehoach.songay else '31 ngày',
@@ -80,7 +81,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                     for muctieu in muctieus:
                         tong_canthiep = muctieu.ketqua_dat + muctieu.ketqua_hinhthanh + muctieu.ketqua_khongdat
                         tong_str = f"{tong_canthiep}/{len(muctieu.ketqua2muctieu_ids)}"
-                        muctieu._compute_is_chophep_canthiep()
+                        muctieu._compute_trangthai()
 
                         # HIỆU NĂNG CAO: Chỉ tính toán dải ô vuông lịch biểu nếu mục tiêu đã có điểm can thiệp
                         history_days = []
@@ -109,11 +110,11 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
 
                         # Đọc trường kiểm duyệt chuyên môn gốc từ Model ('0', '1', '-1')
                         trangthai_duyet = getattr(muctieu, 'trangthai_duyet', '0')
+                        ketqua_dat_lientiep = muctieu.func_ketqua_dat_lientiep()
 
                         muctieu_json = {
                             "id": muctieu.id,
                             "index": index,
-                            "is_canthiep": muctieu.is_chophep_canthiep,
                             "name": muctieu.name or '',
                             "trangthai": str(muctieu.trangthai),  # Trạng thái học tập của mục tiêu
                             "trangthai_duyet": str(trangthai_duyet),  # Trạng thái duyệt của chuyên môn
@@ -122,7 +123,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                             "tieuchi_dat": getattr(muctieu, 'tieuchi_dat', ''),
                             "tieuchi_hinhthanh": getattr(muctieu, 'tieuchi_hinhthanh', ''),
                             "tieuchi_chuadat": getattr(muctieu, 'tieuchi_chuadat', ''),
-                            "dat_lientiep": str(muctieu.ketqua_dat_lientiep),
+                            "dat_lientiep": str(ketqua_dat_lientiep),
                             "cnt_all": tong_str,
                             "cnt_ok": str(muctieu.ketqua_dat),
                             "cnt_half": str(muctieu.ketqua_hinhthanh),
