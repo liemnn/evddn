@@ -70,11 +70,15 @@ class KeHoach2MucTieu(models.Model):
     ], string="Trạng thái", default="0",compute="_compute_trangthai",store=False)
 
     # Thêm vào Model: ekids.kehoach_muctieu
-    trangthai_duyet = fields.Selection([
+    trangthai_kiemduyet = fields.Selection([
         ('0', 'Chờ duyệt'),
-        ('1', 'Đã duyệt đạt (+)'),
-        ('-1', 'Từ chối chưa đạt(-)')
+        ('1', 'Đạt'),
+        ('-1', 'Không đạt [Chuyển]'),
+        ('-2', 'Không đạt [Dừng]')
     ], string="Trạng thái kiểm duyệt chuyên môn", default='0')
+
+    # ghi chú kiểm duyet
+    ghichu = fields.Html(string="Nội dung kiểm duyệt")
 
     # Hàm RPC cho GV chuyên môn click duyệt nhanh từ OWL
 
@@ -270,6 +274,19 @@ class KeHoach2MucTieu(models.Model):
             'res_model': 'ekids.kehoach_muctieu',
             'view_mode': 'form',
             'res_id':self.id,
+            'views': [(form_view_id, 'form')],
+            'target': 'new',
+
+        }
+
+    def action_kiemduyet(self):
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_kiemduyet_ketqua_form').id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'KẾT QUẢ CAN THIỆP',
+            'res_model': 'ekids.kehoach_muctieu',
+            'view_mode': 'form',
+            'res_id': self.id,
             'views': [(form_view_id, 'form')],
             'target': 'new',
 

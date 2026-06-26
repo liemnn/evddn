@@ -342,20 +342,20 @@
 
                                         <!-- VÙNG NÚT XÁC NHẬN KIỂM DUYỆT CHUYÊN MÔN (Đã dọn sạch comment thô Python tránh lỗi biên dịch) -->
                                         <td style="width: 140px; text-align: left; padding-left: 4px;">
-                                            <t t-if="state.kehoach.trangthai == '1' and state.kehoach.trangthai_canthiep == '1'">
+                                            <t t-if="state.kehoach.is_kiemduyet">
                                                 <div t-on-click="(ev) => ev.stopPropagation()">
                                                     <t t-if="muctieu.trangthai_duyet == '1'">
-                                                        <button class="btn-expert-confirm-trigger confirm-green" t-on-click="(ev) => this.goiMucTieuAction('action_owl_review_approve', muctieu.id, ev)">
+                                                        <button class="btn-expert-confirm-trigger confirm-green" t-on-click="(ev) => this.goiMucTieuAction('action_kiemduyet', muctieu.id, ev)">
                                                             <i class="fa fa-check-circle"></i> Đã duyệt đạt
                                                         </button>
                                                     </t>
                                                     <t t-elif="muctieu.trangthai_duyet == '-1'">
-                                                        <button class="btn-expert-confirm-trigger confirm-orange" t-on-click="(ev) => this.goiMucTieuAction('action_owl_review_reject', muctieu.id, ev)">
+                                                        <button class="btn-expert-confirm-trigger confirm-orange" t-on-click="(ev) => this.goiMucTieuAction('action_kiemduyet', muctieu.id, ev)">
                                                             <i class="fa fa-times-circle"></i> Cần sửa lại
                                                         </button>
                                                     </t>
-                                                    <t t-else="">
-                                                        <button class="btn-expert-confirm-trigger confirm-gray" t-on-click="(ev) => this.goiMucTieuAction('action_owl_review_approve', muctieu.id, ev)">
+                                                    <t t-if="muctieu.trangthai == '1'">
+                                                        <button class="btn-expert-confirm-trigger confirm-gray" t-on-click="(ev) => this.goiMucTieuAction('action_kiemduyet', muctieu.id, ev)">
                                                             <i class="fa fa-shield"></i> Xác nhận
                                                         </button>
                                                     </t>

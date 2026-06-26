@@ -479,7 +479,7 @@
                                 <field name="ngay"/>
                                 <field name="trangthai"/>
                                 <field name="desc"/>
-                                <field name="is_readonly"/>
+
                                 <templates>
                                     <t t-name="kanban-box">
                                         <style>
@@ -546,6 +546,118 @@
             </field>
      </record>
 
+
+     <record id="ekids_canthiep.kehoach_muctieu_kiemduyet_ketqua_form" model="ir.ui.view">
+        <field name="name">ekids.kehoach_muctieu.form</field>
+        <field name="model">ekids.kehoach_muctieu</field>
+        <field name="arch" type="xml">
+            <form string="Chi tiết Can thiệp">
+
+               <style>
+                 /* =================================================== */
+                 /* CSS TÔ MÀU VÀ ĐỒNG BỘ NÚT BẤM DẠNG VUÔNG COMPACT    */
+                 /* =================================================== */
+
+                 /* Cấu hình chung cho tất cả nút bấm trong vùng chuyên môn */
+                 .custom_ketqua_badge .o_selection_badge {
+                     margin-right: 12px !important;
+                     margin-bottom: 8px !important;
+                     border-radius: 0px !important;        /* ÉP NÚT PHẲNG VUÔNG THEO YÊU CẦU */
+                     padding: 10px 20px !important;        /* Tăng padding giúp nút trông to, khỏe và ấn tượng hơn */
+                     font-size: 14px !important;           /* 🌟 Chữ to hơn chút (từ 13px lên 14px) dễ đọc, rõ ràng */
+                     font-weight: bold !important;         /* 🌟 Mặc định chữ đậm cho tất cả trạng thái */
+                     border: 2px solid #cbd5e1 !important; /* Viền mặc định xám nhạt tinh tế */
+                     background-color: #f8fafc !important; /* Nền mặc định xám trắng dịu mắt */
+                     color: #475569 !important;            /* Màu chữ mặc định xám tối */
+                     cursor: pointer;
+                     transition: all 0.2s ease-in-out !important; /* Hiệu ứng chuyển đổi màu mượt mà */
+                 }
+
+                 /* 🌟 HÀNH ĐỘNG CHÍ MẠNG: ẨN TRẠNG THÁI '0' (CHỜ DUYỆT) KHÔNG CHO HIỂN THỊ ĐỂ CHỌN */
+                 .custom_ketqua_badge span.o_selection_badge[value='"0"'] {
+                     display: none !important;
+                 }
+
+                 /* =================================================== */
+                 /* 🌟 1. ĐẠT (VALUE = "1") -> Tone Xanh Lá Emerald     */
+                 /* =================================================== */
+                 /* Trạng thái Hover hoặc được chọn Active */
+                 .custom_ketqua_badge span.o_selection_badge[value='"1"']:hover,
+                 .custom_ketqua_badge span.o_selection_badge[value='"1"'].active {
+                     background-color: #10b981 !important; /* Xanh lá hiện đại */
+                     border-color: #059669 !important;     /* Viền xanh đậm tạo chiều sâu */
+                     color: #ffffff !important;            /* Chữ trắng tương phản cao */
+                     box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3) !important; /* Đổ bóng nhẹ theo tone màu */
+                 }
+
+                 /* =================================================== */
+                 /* 🌟 2. KHÔNG ĐẠT [CHUYỂN] (VALUE = "-1") -> Tone Vàng Hổ Phách */
+                 /* =================================================== */
+                 /* Trạng thái Hover hoặc được chọn Active */
+                 .custom_ketqua_badge span.o_selection_badge[value='"-1"']:hover,
+                 .custom_ketqua_badge span.o_selection_badge[value='"-1"'].active {
+                     background-color: #f59e0b !important; /* Vàng hổ phách (thay cho màu yellow nguyên bản bị chói) */
+                     border-color: #d97706 !important;     /* Viền vàng đậm */
+                     color: #ffffff !important;            /* Chữ trắng nổi bật, sang trọng */
+                     box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3) !important;
+                 }
+
+                 /* =================================================== */
+                 /* 🌟 3. KHÔNG ĐẠT [DỪNG] (VALUE = "-2") -> Tone Đỏ Toàn Phần */
+                 /* =================================================== */
+                 /* Trạng thái Hover hoặc được chọn Active */
+                 .custom_ketqua_badge span.o_selection_badge[value='"-2"']:hover,
+                 .custom_ketqua_badge span.o_selection_badge[value='"-2"'].active {
+                     background-color: #ef4444 !important; /* Đỏ tươi rực rỡ mang tính báo động dừng */
+                     border-color: #dc2626 !important;     /* Viền đỏ đậm cứng cáp */
+                     color: #ffffff !important;            /* Chữ trắng tương phản tuyệt đối */
+                     box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3) !important;
+                 }
+            </style>
+
+                <sheet class="p-4">
+                    <div class="row g-3">
+
+                        <div class="col-12 mb-2">
+                            <div class="p-3 shadow-sm" style="background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px;">
+                                <h5 class="fw-bold d-flex align-items-center mb-2" style="color: #1E293B; font-size: 15px;">
+                                    <i class="fa fa-gavel text-primary me-2 fs-5"></i> Quyết định đánh giá kết quả kiểm duyệt
+                                </h5>
+                                <p class="text-muted mb-3" style="font-size: 13px;">Giáo viên quản lý chuyên môn lựa chọn chính xác kết quả lâm sàng của trẻ:</p>
+
+                                <div class="custom_ketqua_badge">
+                                    <field name="trangthai_kiemduyet" widget="selection_badge" nolabel="1"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="p-3 shadow-sm" style="background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="fw-bold d-flex align-items-center mb-0" style="color: #1E293B; font-size: 15px;">
+                                        <i class="fa fa-pencil-square-o text-warning me-2 fs-5"></i> Ghi chú của giáo viên chuyên môn kiểm duyệt kết quả
+                                    </h5>
+                                </div>
+                                <p class="text-muted mb-3" style="font-size: 13px;">Hãy nhập chi tiết về kết quả thực tế sau khi đánh giá lại</p>
+
+                                <field name="ghichu"
+                                       nolabel="1"
+                                       placeholder="Ví dụ: Bé hôm nay rất chú ý lắng nghe, tuy nhiên còn rụt rè khi phát âm..."
+                                       style="width: 100%; min-height: 120px; border: 1px solid #CBD5E1; border-radius: 8px; padding: 12px; font-size: 14px; background-color: #FFFFFF; transition: border-color 0.2s;"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </sheet>
+
+                <footer class="d-flex justify-content-end gap-2" style="background-color: #F8FAFC; border-top: 1px solid #E2E8F0; padding: 12px 20px;">
+                    <button string="Lưu ghi chú &amp; Đóng" name="action_donglai_ve_kehoach" type="object" class="btn btn-primary fw-bold shadow-sm" icon="fa-save" style="border-radius: 6px; padding-left: 20px; padding-right: 20px;"/>
+                    <button string="Hủy bỏ" special="cancel" class="btn btn-light fw-bold" icon="fa-times" style="border: 1px solid #CBD5E1; color: #475569;"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
 
   </data>
 </odoo>
