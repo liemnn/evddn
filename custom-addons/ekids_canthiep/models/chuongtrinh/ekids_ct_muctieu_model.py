@@ -40,9 +40,9 @@ class MucTieu(models.Model):
     name = fields.Char(string="Tên",required=True)
     chucnang = fields.Html(string="Chức năng phát triển cốt lõi & Lập luận lâm sàng")
     thietke = fields.Html(string="Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)")
-    tieuchi_chuadat = fields.Char(string="Chưa đạt (-)",required=True)
-    tieuchi_hinhthanh = fields.Char(string="Đang hình thành (+/-)",required=True)
-    tieuchi_dat = fields.Char(string="Đạt (+)",required=True)
+    tieuchi_chuadat = fields.Char(string="Chưa đạt (-)")
+    tieuchi_hinhthanh = fields.Char(string="Đang hình thành (+/-)")
+    tieuchi_dat = fields.Char(string="Đạt (+)")
 
     trangthai = fields.Selection([("0", "Không hoạt động")
                                      , ("1", "Đang hoạt động")], default="1", required=True)
