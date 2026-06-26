@@ -78,7 +78,12 @@ export class KeHoachCanthiepComponent extends Component {
 
     async goiMucTieuAction(tenAction,muctieu_id,ev) {
         ev.stopPropagation();
-        if (!muctieu_id) return;
+
+        if (!muctieu_id) {
+            console.error("Không thấy muctieu_id để mở form");
+            return;
+        }
+
 
         try {
 
