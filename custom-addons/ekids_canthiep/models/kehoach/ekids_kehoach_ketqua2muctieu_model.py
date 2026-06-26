@@ -53,7 +53,7 @@ class KeHoachKetQua2MucTieu(models.Model):
                     # Tính khoảng cách số ngày từ ngày can thiệp đến hôm nay
                     khoang_cach_ngay = (today - record.ngay).days
 
-                    if khoang_cach_ngay > 3:
+                    if khoang_cach_ngay > 30:
                         # Đã quá 3 ngày -> Khóa sổ
                         record.is_readonly = True
                     else:
