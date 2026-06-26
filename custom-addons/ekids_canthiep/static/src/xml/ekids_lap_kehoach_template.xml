@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="ekids_canthiep.PlanManagerTemplate">
+        <div class="w-100 d-flex flex-column gap-3 mt-2 px-0">
+
+            <style>
+                .o_field_widget[name="kehoach_linhvuc_ids"] { width: 100% !important; max-width: 100% !important; display: block !important; }
+                .custom-folder-bar { background-color: #F8FAFC !important; border: 1px solid #E2E8F0 !important; border-radius: 12px !important; }
+                .badge-purple-light { background-color: #F3E8FF !important; color: #6B21A8 !important; border: 1px solid #E9D5FF !important; }
+
+                /* Định dạng ô ngày nhật ký tiến độ */
+                .day-box { width: 24px; height: 28px; font-size: 10px; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #CBD5E1; border-radius: 4px; background-color: #FFF; }
+                .day-box.warning { background-color: #FEF3C7; color: #D97706; border-color: #FCD34D; }
+                .day-box.danger { background-color: #FEF2F2; color: #DC2626; border-color: #FCA5A5; }
+                .day-box.success { background-color: #DCFCE7; color: #16A34A; border-color: #BBF7D0; }
+                .day-box.empty { background-color: #F8FAFC; color: #94A3B8; border-color: #E2E8F0; }
+
+                /* Hiệu ứng di chuột vào dòng mục tiêu để giáo viên biết có thể click */
+                .target-header-row { cursor: pointer; transition: background-color 0.15s ease; }
+                .target-header-row:hover { background-color: #F1F5F9 !important; }
+
+                /* Cấu trúc Box Tiêu chí đánh giá phân cấp lâm sàng */
+                .crit-box { flex: 1; min-width: 250px; padding: 12px; border-radius: 6px; font-size: 12.5px; line-height: 1.5; text-align: justify; }
+                .crit-box.danger { background-color: #FEF2F2; border: 1px solid #FCA5A5; color: #1E293B; }
+                .crit-box.warning { background-color: #FFFDF2; border: 1px solid #FDE047; color: #1E293B; }
+                .crit-box.success { background-color: #F0FDF4; border: 1px solid #BBF7D0; color: #1E293B; }
+            </style>
+
+            <!-- VÒNG LẶP DUYỆT CÁC LĨNH VỰC -->
+            <t t-foreach="state.groupedData" t-as="lv" t-key="lv.lineId">
+                <div class="w-100 custom-folder-bar overflow-hidden mb-2">
+
+                    <!-- THANH HEADER LĨNH VỰC -->
+                    <div class="d-flex align-items-center justify-content-between py-2 px-3 w-100" style="min-height: 46px; cursor: pointer;"
+                         t-on-click="() => this.toggleLinhVucCollapse(lv.lineId)">
+
+                        <div class="d-flex align-items-center gap-2">
+                            <i t-attf-class="fa #{state.collapsedLinhVuc[lv.lineId] ? 'fa-chevron-right' : 'fa-chevron-down'} text-muted opacity-75" style="font-size: 12px; margin-right: 2px;"></i>
+                            <i class="fa fa-folder text-warning" style="font-size: 17px; color: #EAB308 !important;"></i>
+                            <span class="fw-bold text-dark ms-1" style="font-size: 14.5px; color: #1E293B !important;"><t t-esc="lv.linhVucName"/></span>
+
+                            <span class="mx-1 text-muted opacity-50">|</span>
+
+                            <span t-if="lv.tuoiName" class="badge badge-purple-light rounded px-2 py-0.5 fw-bold" style="font-size: 11px;">
+                                <t t-esc="lv.tuoiName"/>
+                            </span>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2" t-on-click.stop="">
+                            <span class="badge px-2.5 py-1 fw-bold" style="font-size: 11.5px; background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; border-radius: 20px;">
+                                Có <t t-esc="lv.total"/> mục tiêu
+                            </span>
+
+                            <button type="button" class="btn btn-sm btn-primary d-flex align-items-center gap-1 py-1 px-2.5 fw-bold"
+                                    style="font-size: 11.5px; background-color: #2563EB !important; border-color: #2563EB !important;"
+                                    t-on-click="() => this.openAddTargetWizard(lv.lineId)">
+                                <i class="fa fa-plus-circle"></i> Thêm/xóa [Mục tiêu]
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KHỐI CHỨA CÁC MỤC TIÊU -->
+                    <div t-if="!state.collapsedLinhVuc[lv.lineId]" class="p-0 bg-white border-top w-100 shadow-inner">
+                        <div class="d-flex flex-column w-100">
+
+                            <t t-foreach="lv.targets" t-as="target" t-key="target.id">
+                                <div class="w-100 p-0 border-bottom d-flex flex-column">
+
+                                    <!-- HÀNG CHÍNH: CLICK VÀO ĐÂU CŨNG ĐÓNG MỞ ĐƯỢC CHI TIẾT (Trừ các nút hành động) -->
+                                    <div class="d-flex align-items-center justify-content-between w-100 p-3 target-header-row"
+                                         t-on-click="() => this.toggleTargetDetail(target.id)">
+
+                                        <!-- Số thứ tự rõ ràng ngay trước tên mục tiêu -->
+                                        <div class="d-flex align-items-start gap-3" style="max-width: 75%;">
+                                            <span class="fw-bold text-opacity-75 font-monospace" style="font-size: 14px; min-width: 15px;">
+                                                <t t-esc="target_index + 1"/>
+                                            </span>
+                                            <span class="fw-semibold text-slate-800" style="font-size: 13.5px; color: #1E293B;">
+                                                <t t-esc="target.muctieu_id[1]"/>
+                                            </span>
+                                        </div>
+
+                                        <!-- Khối bên phải: Nút hành động + Mũi tên trạng thái -->
+                                        <div class="d-flex align-items-center gap-3" t-on-click.stop="">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span t-if="target.kehoach_muctieu_thangtruoc_id" class="badge fw-bold px-2 py-0.5"
+                                                      style="font-size: 10.5px; color: #EF4444; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px;">
+                                                    <i class="fa fa-history me-0.5"></i>Tháng trước chuyển sang
+                                                </span>
+                                                <span t-else="" class="badge fw-bold px-2 py-0.5"
+                                                      style="font-size: 10.5px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px;">
+                                                    <i class="fa fa-star me-0.5"></i>Mới
+                                                </span>
+                                            </div>
+
+                                            <!-- 🌟 1. SỬA ĐỔI NÚT GHI CHÚ: Nhẹ nhàng, không nền, đổi màu icon động mượt mà -->
+                                            <button type="button" class="btn btn-link p-1 text-decoration-none shadow-none d-flex align-items-center gap-1"
+                                                    t-on-click="() => this.toggleNoteInline(target.id)"
+                                                    style="height: 24px; cursor: pointer;">
+                                                <i class="fa fa-commenting" t-attf-style="font-size: 16px; color: #{target.ghichu ? '#10B981' : '#94A3B8'};"></i>
+                                                <span style="font-size: 12px; color: #475569; font-weight: 600;">Ghi chú</span>
+                                            </button>
+
+                                            <!-- Icon mũi tên hiển thị trạng thái khối chi tiết bên dưới -->
+                                            <button type="button" class="btn btn-link p-0 text-decoration-none text-muted"
+                                                    t-on-click="() => this.toggleTargetDetail(target.id)">
+                                                <i t-attf-class="fa #{state.expandedTargets[target.id] ? 'fa-chevron-up' : 'fa-chevron-down'}" style="font-size: 13px;"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- KHỐI CHI TIẾT -->
+                                    <div t-if="state.expandedTargets[target.id]" class="w-100 p-3 border-top d-flex flex-column gap-3"
+                                         style="background-color: #FAFAFA; border-color: #E2E8F0;">
+
+                                        <!-- Ô SOẠN THẢO TEXTAREA GHI CHÚ BỔ SUNG -->
+                                        <div t-if="state.activeNotes[target.id]" class="w-100 p-3 bg-white rounded-3 border inline-note-box shadow-sm mb-1">
+                                            <div class="fw-bold text-dark mb-1" style="font-size: 12px;"><i class="fa fa-pencil-square-o text-primary"></i> Ghi chú nội dung cho mục tiêu/kế hoạch:</div>
+                                            <textarea class="form-control form-control-sm note-textarea mb-2"
+                                                      t-att-value="target.ghichu || ''" rows="2" style="font-size: 12.5px;" placeholder="Nhập tiến trình hoặc ghi chú cụ thể..."></textarea>
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <button type="button" class="btn btn-xs btn-light border" t-on-click="() => this.toggleNoteInline(target.id)">Hủy</button>
+                                                <button type="button" class="btn btn-xs btn-primary" style="background-color: #2563EB !important;" t-on-click="(ev) => this.saveNoteInline(target, ev)">Lưu ghi chú</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- PHẦN THÔNG TIN 2 CỘT: CỐT LÕI & THIẾT KẾ HOẠT ĐỘNG -->
+                                        <div class="row g-3 w-100 m-0 pt-1">
+                                            <div class="col-md-6 ps-0 pe-md-3 text-start">
+                                                <div class="fw-bold text-success mb-1" style="font-size: 12px; letter-spacing: 0.3px;">
+                                                    <i class="fa fa-star"></i> CHỨC NĂNG PHÁT TRIỂN CỐT LÕI:
+                                                </div>
+                                                <div style="font-size: 12.5px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                    (1) Chức năng: Dung nạp không gian xã hội. (2) Vì sao dạy: Chịu đựng được việc có người ngồi cạnh mà không cảm thấy đe dọa không gian. (3) Hệ quả: Nếu không dạy, trẻ sẽ Cách ly, không thể vào lớp mầm non. (4) Lợi ích: Tiền đề chơi song song. (5) Lâm sàng: Người lớn ngồi cạnh nhưng chơi đồ riêng.
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 pe-0 ps-md-3 text-start" style="border-left: 1px dashed #E2E8F0;">
+                                                <div class="fw-bold text-warning mb-1" style="font-size: 12px; letter-spacing: 0.3px; color: #EA580C !important;">
+                                                    <i class="fa fa-magic"></i> THIẾT KẾ HOẠT ĐỘNG CHO GIÁO VIÊN:
+                                                </div>
+                                                <div style="font-size: 12.5px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                    Tiền đề (A): Trẻ đang tự chơi đồ chơi của mình. Cô (hoặc một bạn học) chủ động đi đến và ngồi cách trẻ khoảng 60cm, nhưng tự chơi đồ chơi riêng của mình (không can thiệp vào đồ của trẻ). Hành vi/ kỹ năng cần dạy trẻ (B): Trẻ tiếp tục tập trung vào đồ chơi của mình, không bỏ chạy, không ném đồ và không thể hiện sự hoảng hốt. Kèm theo hệ quả (C) xử lý nhanh...
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 🌟 2. BỔ SUNG: KHỐI TIÊU CHÍ ĐÁNH GIÁ LÂM SÀNG PHÂN CẤP (Layout 3 cột chuẩn như hình ảnh image_e6c2fd.png) -->
+                                        <div class="w-100 d-flex flex-column gap-2 mt-2">
+                                            <div class="fw-bold text-uppercase" style="font-size: 11px; color: #94A3B8; letter-spacing: 0.5px;">
+                                                <i class="fa fa-check-square-o"></i> Tiêu chí đánh giá lâm sàng phân cấp:
+                                            </div>
+                                            <div class="d-flex flex-wrap gap-3 w-100 m-0">
+                                                <!-- Cột Chưa Đạt (-) -->
+                                                <div class="crit-box danger d-flex flex-column gap-1">
+                                                    <span class="fw-bold text-danger" style="font-size: 11.5px;">(-) Chưa đạt:</span>
+                                                    <t t-esc="target.tieuchi_chuadat || 'Chưa định nghĩa tiêu chí chưa đạt.'"/>
+                                                </div>
+
+                                                <!-- Cột Đang Hình Thành (+/-) -->
+                                                <div class="crit-box warning d-flex flex-column gap-1">
+                                                    <span class="fw-bold" style="font-size: 11.5px; color: #B45309;">(+/-) Đang hình thành:</span>
+                                                    <t t-esc="target.tieuchi_hinhthanh || 'Chưa định nghĩa tiêu chí đang hình thành.'"/>
+                                                </div>
+
+                                                <!-- Cột Đạt (+) -->
+                                                <div class="crit-box success d-flex flex-column gap-1">
+                                                    <span class="fw-bold text-success" style="font-size: 11.5px;">(+) Đạt:</span>
+                                                    <t t-esc="target.tieuchi_dat || 'Chưa định nghĩa tiêu chí đạt.'"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Đáy khối con: Nút cấu hình gỡ bỏ mục tiêu -->
+                                       <div class="w-100 d-flex justify-content-between align-items-center border-top pt-2 mt-2">
+
+                                            <t t-if="target.kehoach_muctieu_thangtruoc_id">
+                                                <span class="text-muted" style="font-size: 11px; font-style: italic; color: #94A3B8 !important;">
+                                                    <i class="fa fa-lock"></i> Mục tiêu tháng trước (Không thể xóa)
+                                                </span>
+                                            </t>
+
+                                            <t t-else="">
+                                                <button type="button" class="btn btn-xs btn-outline-danger" style="font-size: 11px;"
+                                                        t-on-click="() => this.removeTargetFromPlan(target.id)">
+                                                    <i class="fa fa-trash-o"></i> Xóa khỏi kế hoạch
+                                                </button>
+                                            </t>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </t>
+
+                        </div>
+                    </div>
+
+                </div>
+            </t>
+
+        </div>
+    </t>
+</templates>

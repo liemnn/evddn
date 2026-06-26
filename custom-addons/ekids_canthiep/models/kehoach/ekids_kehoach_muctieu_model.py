@@ -44,6 +44,7 @@ class KeHoach2MucTieu(models.Model):
                               related="muctieu_id.tuoi_id", required=True, ondelete="cascade")
 
     name = fields.Char("Tên",compute="_compute_name")
+    ghichu = fields.Html(string="Ghi chú")
 
     chucnang = fields.Html(string="Chức năng phát triển cốt lõi & Lập luận lâm sàng",compute="_compute_chucnang")
     thietke = fields.Html(string="Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)",compute="_compute_thietke")
@@ -394,6 +395,29 @@ class KeHoach2MucTieu(models.Model):
         # 5. Bulk Create: Đẩy toàn bộ mảng vào Database trong 1 câu query duy nhất
         if vals_list:
             self.env['ekids.kehoach_ketqua2muctieu'].create(vals_list)
+
+    def action_open_target_note(self):
+        """ Hàm xử lý mở Popup khi click vào nút ghi chú từ HTML """
+        # Lấy target_id được truyền từ context bên trong mã HTML
+        target_id = self.env.context.get('target_id')
+        if not target_id:
+            return False
+
+        # Khởi tạo bản ghi mục tiêu cụ thể
+        target_record = self.env['ekids.kehoach_muctieu'].browse(target_id)
+
+        # Trả về action dạng popup ('target': 'new')
+        return {
+            'name': f"Ghi chú mục tiêu: {target_record.muctieu_id.name or ''}",
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach_muctieu',
+            'res_id': target_record.id,
+            'view_mode': 'form',
+            # Điền ID của form view nhỏ gọn dùng để nhập ghi chú (Xem ở bước 3)
+            'views': [(self.env.ref('ekids_canthiep.kehoach_muctieu_form_view_compact').id, 'form')],
+            'target': 'new',
+            'context': self.env.context,
+        }
 
 
 
