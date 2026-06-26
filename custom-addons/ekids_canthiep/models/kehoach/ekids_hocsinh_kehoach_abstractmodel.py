@@ -111,7 +111,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                                 day_seq += 1
 
                         # Đọc trường kiểm duyệt chuyên môn gốc từ Model ('0', '1', '-1')
-                        trangthai_duyet = getattr(muctieu, 'trangthai_duyet', '0')
+                        trangthai_kiemduyet = getattr(muctieu, 'trangthai_kiemduyet', '0')
                         ketqua_dat_lientiep = muctieu.func_ketqua_dat_lientiep()
 
                         muctieu_json = {
@@ -119,7 +119,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                             "index": index,
                             "name": muctieu.name or '',
                             "trangthai": str(muctieu.trangthai),  # Trạng thái học tập của mục tiêu
-                            "trangthai_duyet": str(trangthai_duyet),  # Trạng thái duyệt của chuyên môn
+                            "trangthai_kiemduyet": str(trangthai_kiemduyet),  # Trạng thái duyệt của chuyên môn
                             "chucnang": muctieu.muctieu_id.chucnang or '',
                             "thietke": muctieu.muctieu_id.thietke or '',
                             "tieuchi_dat": getattr(muctieu, 'tieuchi_dat', ''),

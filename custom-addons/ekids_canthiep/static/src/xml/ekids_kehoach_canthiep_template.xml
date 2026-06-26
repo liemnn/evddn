@@ -81,23 +81,64 @@
                     white-space: nowrap;
                 }
 
-                /* PHỐI MÀU NÚT CAN THIỆP CHUẨN QUY TRÌNH MỚI */
+                /* =================================================== */
+                /* 🌟 PHỐI MÀU NÚT CAN THIỆP CHUẨN QUY TRÌNH MỚI       */
+                /* =================================================== */
                 .canthiep-yellow { background-color: #FBBF24 !important; color: #0F172A !important; border-color: #F59E0B !important; }
                 .canthiep-yellow:hover { background-color: #F59E0B !important; }
+
                 .canthiep-green { background-color: #10B981 !important; color: #FFFFFF !important; border-color: #059669 !important; }
                 .canthiep-green:hover { background-color: #059669 !important; }
+
                 .canthiep-gray { background-color: #E2E8F0 !important; color: #94A3B8 !important; border-color: #CBD5E1 !important; cursor: not-allowed !important; pointer-events: none !important; box-shadow: none !important; }
-                /* 🌟 BỔ SUNG: Class cấu hình nút khi can thiệp thất bại / Chưa đạt */
+
                 .canthiep-red { background-color: #EF4444 !important; color: #FFFFFF !important; border-color: #DC2626 !important; }
                 .canthiep-red:hover { background-color: #DC2626 !important; }
 
-                /* PHỐI MÀU NÚT XÁC NHẬN CHUYÊN MÔN */
-                .confirm-gray { background-color: #F1F5F9 !important; color: #475569 !important; border-color: #CBD5E1 !important; }
-                .confirm-gray:hover { background-color: #E2E8F0 !important; }
-                .confirm-green { background-color: #DCFCE7 !important; color: #15803D !important; border-color: #A7F3D0 !important; }
-                .confirm-green:hover { background-color: #BBF7D0 !important; }
-                .confirm-orange { background-color: #FEF3C7 !important; color: #B45309 !important; border-color: #FDE68A !important; }
-                .confirm-orange:hover { background-color: #FDE68A !important; }
+
+                /* =================================================== */
+                /* 🌟 PHỐI MÀU NÚT XÁC NHẬN CHUYÊN MÔN (THIẾT KẾ MỚI)  */
+                /* =================================================== */
+
+                /* 1. Trạng thái Xám mặc định/Vô hiệu hóa (Giống hoàn toàn .canthiep-gray) */
+                .confirm-gray {
+                    background-color: #E2E8F0 !important;
+                    color: #94A3B8 !important;
+                    border-color: #CBD5E1 !important;
+                }
+                .confirm-gray:hover {
+                    background-color: #CBD5E1 !important;
+                }
+
+                /* 2. Trạng thái Xanh thành công/Đạt (Giống hoàn toàn .canthiep-green) */
+                .confirm-green {
+                    background-color: #10B981 !important;
+                    color: #FFFFFF !important;
+                    border-color: #059669 !important;
+                }
+                .confirm-green:hover {
+                    background-color: #059669 !important;
+                }
+
+                /* 3. Trạng thái Vàng/Cam Cảnh báo/Chuyển (Giống hoàn toàn .canthiep-yellow) */
+                .confirm-orange {
+                    background-color: #FBBF24 !important;
+                    color: #0F172A !important;
+                    border-color: #F59E0B !important;
+                }
+                .confirm-orange:hover {
+                    background-color: #F59E0B !important;
+                }
+
+                /* 4. Trạng thái Đỏ Nguy hiểm/Dừng (Sửa lỗi chói mắt - Giống hoàn toàn .canthiep-red) */
+                .confirm-red {
+                    background-color: #EF4444 !important;
+                    color: #FFFFFF !important;
+                    border-color: #DC2626 !important;
+                }
+                .confirm-red:hover {
+                    background-color: #DC2626 !important;
+                }
 
                 /* ICON ĐÓNG MỞ CHI TIẾT */
                 .btn-toggle-goal-flat { background: none; border: none; font-size: 1.05rem; color: #64748B; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; transition: background-color 0.2s, color 0.15s; }
@@ -344,17 +385,22 @@
                                         <td style="width: 140px; text-align: left; padding-left: 4px;">
                                             <t t-if="state.kehoach.is_kiemduyet">
                                                 <div t-on-click="(ev) => ev.stopPropagation()">
-                                                    <t t-if="muctieu.trangthai_duyet == '1'">
+                                                    <t t-if="muctieu.trangthai_kiemduyet == '1'">
                                                         <button class="btn-expert-confirm-trigger confirm-green" t-on-click="(ev) => this.goiMucTieuAction('action_kiemduyet', muctieu.id, ev)">
-                                                            <i class="fa fa-check-circle"></i> Đã duyệt đạt
+                                                            <i class="fa fa-check-circle"></i> Đạt(+)
                                                         </button>
                                                     </t>
-                                                    <t t-elif="muctieu.trangthai_duyet == '-1'">
+                                                    <t t-elif="muctieu.trangthai_kiemduyet == '-1'">
                                                         <button class="btn-expert-confirm-trigger confirm-orange" t-on-click="(ev) => this.goiMucTieuAction('action_kiemduyet', muctieu.id, ev)">
-                                                            <i class="fa fa-times-circle"></i> Cần sửa lại
+                                                            <i class="fa fa-times-circle"></i> Chuyển(-)
                                                         </button>
                                                     </t>
-                                                    <t t-if="muctieu.trangthai == '1'">
+                                                    <t t-elif="muctieu.trangthai_kiemduyet == '-2'">
+                                                        <button class="btn-expert-confirm-trigger confirm-red" t-on-click="(ev) => this.goiMucTieuAction('action_kiemduyet', muctieu.id, ev)">
+                                                            <i class="fa fa-times-circle"></i> Dừng(-)
+                                                        </button>
+                                                    </t>
+                                                    <t t-if="muctieu.trangthai == '1' and muctieu.trangthai_kiemduyet == '0'">
                                                         <button class="btn-expert-confirm-trigger confirm-gray" t-on-click="(ev) => this.goiMucTieuAction('action_kiemduyet', muctieu.id, ev)">
                                                             <i class="fa fa-shield"></i> Xác nhận
                                                         </button>
