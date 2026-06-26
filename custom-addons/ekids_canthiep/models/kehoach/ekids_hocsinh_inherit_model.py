@@ -190,6 +190,12 @@ class HocSinhInherit(models.Model
                         # Phòng thủ kiểm tra chắc chắn để tránh lỗi sập hệ thống (Null Pointer) khi chưa chọn giáo viên
                         if giaovien and giaovien.user_id and giaovien.user_id.id == user.id:
                             hs.is_canthiep = True
+                        else:
+                            giaovien = kehoach.ketluan_id.gv_kiemduyet_id
+                            if giaovien and giaovien.user_id and giaovien.user_id.id == user.id:
+                                # cho phép giáo viên vào kiểm duyệt
+                                hs.is_canthiep = True
+
 
 
 

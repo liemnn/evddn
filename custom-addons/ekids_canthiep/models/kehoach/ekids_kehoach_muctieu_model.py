@@ -108,7 +108,7 @@ class KeHoach2MucTieu(models.Model):
                 if ketqua_dat_lientiep >= int(soluong_dat_lientiep_str):
                     mt.trangthai="1"
                 else:
-                    mt.trangthai = "-1  "
+                    mt.trangthai = "-1"
 
 
 
@@ -301,6 +301,7 @@ class KeHoach2MucTieu(models.Model):
 
     def func_khoitao_ketqua2muctieu(self):
         # 1. Chuẩn hóa ngày hiện tại (Nên dùng context_today để đúng múi giờ người dùng Odoo)
+        coso = self.kehoach_id.coso_id
         today = fields.Date.context_today(self)
 
         # 2. Ép kiểu an toàn về Date, triệt tiêu hoàn toàn lỗi Datetime vs Date
@@ -314,7 +315,7 @@ class KeHoach2MucTieu(models.Model):
             raise UserError("Kế hoạch chưa đến thời gian can thiệp")
 
         # 3. Tìm ngày bắt đầu chạy vòng lặp (Dùng max() thay cho if-else cho ngắn gọn)
-        current_date = max(tu_ngay, today)
+        current_date = tu_ngay
 
         # =========================================================================
         # BƯỚC TỐI ƯU HIỆU SUẤT (Senior Level):
@@ -335,12 +336,41 @@ class KeHoach2MucTieu(models.Model):
         vals_list = []
 
         # 4. Quét vòng lặp để lọc ra các ngày chưa có
+        so_ngay_conlai = (den_ngay -today).days
+        chuadat_str = coso_util.func_cauhinh_canthiep(self, coso,
+                                                                   "muctieu_tyle_macdinh_chuadat", "6")
+        hinhthanh_str = coso_util.func_cauhinh_canthiep(self, coso,
+                                                                   "muctieu_tyle_macdinh_hinhthanh", "6")
+        dat_str = coso_util.func_cauhinh_canthiep(self, coso,
+                                                                   "muctieu_tyle_macdinh_dat", "6")
+
+        index_chuadat = int((so_ngay_conlai/100) * int(chuadat_str))
+        index_hinhthanh = int((so_ngay_conlai/100) * int(hinhthanh_str))
+
+
         while current_date <= den_ngay:
             if current_date not in danh_sach_ngay_da_co:
-                vals_list.append({
-                    "kehoach_muctieu_id": self.id,
-                    "ngay": current_date,
-                })
+                if current_date <today:
+                    vals_list.append({
+                        "kehoach_muctieu_id": self.id,
+                        "ngay": current_date,
+                        "trangthai": "0"
+                    })
+                else:
+                    if index_chuadat >0:
+                        trangthai="-1"
+                        index_chuadat -=1
+                    elif index_hinhthanh >0:
+                        trangthai="2"
+                        index_hinhthanh -=1
+                    else:
+                        trangthai = "1"
+                    vals_list.append({
+                        "kehoach_muctieu_id": self.id,
+                        "ngay": current_date,
+                        "trangthai": trangthai
+                    })
+
             current_date += timedelta(days=1)
 
         # 5. Bulk Create: Đẩy toàn bộ mảng vào Database trong 1 câu query duy nhất

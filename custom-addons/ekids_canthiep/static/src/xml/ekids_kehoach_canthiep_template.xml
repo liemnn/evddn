@@ -229,9 +229,11 @@
                         <button class="btn-back-plans" t-on-click="(ev) => this.goiKeHoachAction('action_xem_kehoachs', ev)">
                             <i class="fa fa-arrow-left"></i> Quay lại
                         </button>
-                        <button class="btn-view-conclusion-header" t-on-click="(ev) => this.goiGuiDuyetKeHoachAction('action_gui_duyet_ketqua_kehoach', ev)">
-                            <i class="fa fa-paper-plane"></i> Hoàn thành Gửi duyệt
-                        </button>
+                         <t t-if="state.kehoach.is_kiemduyet">
+                            <button class="btn-view-conclusion-header" t-on-click="(ev) => this.goiGuiDuyetKeHoachAction('action_gui_duyet_ketqua_kehoach', ev)">
+                                <i class="fa fa-paper-plane"></i> Hoàn thành Gửi duyệt
+                            </button>
+                         </t>
                     </div>
 
                     <label for="globalHeaderToggler" class="btn-toggle-header-all-view mb-0">

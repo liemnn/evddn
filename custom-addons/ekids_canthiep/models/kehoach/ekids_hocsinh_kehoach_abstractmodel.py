@@ -39,13 +39,14 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
         kehoach_obj = {
             'hocsinh': self.name,
             'trangthai': str(kehoach.trangthai),  # Ép chuỗi trạng thái kế hoạch gốc ('1')
-            'trangthai_canthiep': "1",
+            'is_kiemduyet':kehoach.is_kiemduyet,
             'tu_ngay': kehoach.tu_ngay.strftime('%d/%m/%Y') if kehoach.tu_ngay else '',
             'den_ngay': kehoach.den_ngay.strftime('%d/%m/%Y') if kehoach.den_ngay else '',
             'songay': f"{kehoach.songay} ngày" if kehoach.songay else '31 ngày',
             'gv_lap': kehoach.gv_lapkehoach_id.name or 'Chưa phân công',
             'gv_canthiep': kehoach.gv_canthiep_id.name or 'Chưa phân công',
             'gv_chuyenmon': kehoach.gv_kiemduyet_id.name or 'Chưa phân công'
+
         }
 
         # Tính toán dải ngày thực tế theo lịch trình của kế hoạch
@@ -80,7 +81,8 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                     index = 1
                     for muctieu in muctieus:
                         tong_canthiep = muctieu.ketqua_dat + muctieu.ketqua_hinhthanh + muctieu.ketqua_khongdat
-                        tong_str = f"{tong_canthiep}/{len(muctieu.ketqua2muctieu_ids)}"
+                        tyle =muctieu.func_ketqua_tyle_canthiep()
+                        tong_str = str(tong_canthiep)+"/"+str(len(muctieu.ketqua2muctieu_ids)) +" (Đạt "+str(tyle)+"% )"
                         muctieu._compute_trangthai()
 
                         # HIỆU NĂNG CAO: Chỉ tính toán dải ô vuông lịch biểu nếu mục tiêu đã có điểm can thiệp

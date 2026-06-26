@@ -21,7 +21,7 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("0", "Không can thiệp"),
         ("1", "Đạt (+)"),
         ("-1", "Chưa đạt (-)"),
-        ("10", "Đang hình thành (+/-)"),
+        ("2", "Đang hình thành (+/-)"),
 
 
     ], string="Trạng thái",default="0")

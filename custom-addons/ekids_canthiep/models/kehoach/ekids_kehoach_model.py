@@ -104,7 +104,9 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
     is_gui_pheduyet = fields.Boolean(compute="_compute_is_gui_pheduyet")
     is_pheduyet = fields.Boolean(compute="_compute_is_pheduyet")
+    is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
+
 
     def _compute_is_readonly(self):
         for record in self:
@@ -167,6 +169,18 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                     kehoach.is_pheduyet = False
             else:
                 kehoach.is_pheduyet = False
+
+    def _compute_is_kiemduyet(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for kehoach in self:
+            if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.user_id.id == user.id):
+                    kehoach.is_kiemduyet = True
+                else:
+                    kehoach.is_kiemduyet = False
+            else:
+                kehoach.is_kiemduyet = False
 
 
 
