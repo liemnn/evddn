@@ -44,6 +44,7 @@ class KeHoach2MucTieu(models.Model):
                               related="muctieu_id.tuoi_id", required=True, ondelete="cascade")
 
     name = fields.Char("Tên",compute="_compute_name")
+
     chucnang = fields.Html(string="Chức năng phát triển cốt lõi & Lập luận lâm sàng",compute="_compute_chucnang")
     thietke = fields.Html(string="Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)",compute="_compute_thietke")
     tieuchi_chuadat = fields.Char(string="Chưa đạt (-)",compute="_compute_tieuchi_chuadat")
