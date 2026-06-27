@@ -114,10 +114,15 @@
                                          style="background-color: #FAFAFA; border-color: #E2E8F0;">
 
                                         <!-- Ô SOẠN THẢO TEXTAREA GHI CHÚ BỔ SUNG -->
-                                        <div t-if="state.activeNotes[target.id]" class="w-100 p-3 bg-white rounded-3 border inline-note-box shadow-sm mb-1">
+                                       <div t-if="state.activeNotes[target.id]" class="w-100 p-3 bg-white rounded-3 border inline-note-box shadow-sm mb-1">
                                             <div class="fw-bold text-dark mb-1" style="font-size: 12px;"><i class="fa fa-pencil-square-o text-primary"></i> Ghi chú cho mục tiêu:</div>
+
                                             <textarea class="form-control form-control-sm note-textarea mb-2"
-                                                      t-att-value="target.ghichu || ''" rows="2" style="font-size: 12.5px;" placeholder="Nhập tiến trình hoặc ghi chú cụ thể..."></textarea>
+                                                      t-att-value="target.ghichu_clean || ''"
+                                                      rows="6"
+                                                      style="font-size: 14px;"
+                                                      placeholder="Nhập tiến trình hoặc ghi chú cụ thể..."></textarea>
+
                                             <div class="d-flex justify-content-end gap-2">
                                                 <button type="button" class="btn btn-xs btn-light border" t-on-click="() => this.toggleNoteInline(target.id)">Hủy</button>
                                                 <button type="button" class="btn btn-xs btn-primary" style="background-color: #2563EB !important;" t-on-click="(ev) => this.saveNoteInline(target, ev)">Lưu ghi chú</button>
