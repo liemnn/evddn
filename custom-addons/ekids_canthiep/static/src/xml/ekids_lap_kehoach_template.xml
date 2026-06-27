@@ -115,7 +115,7 @@
 
                                         <!-- Ô SOẠN THẢO TEXTAREA GHI CHÚ BỔ SUNG -->
                                         <div t-if="state.activeNotes[target.id]" class="w-100 p-3 bg-white rounded-3 border inline-note-box shadow-sm mb-1">
-                                            <div class="fw-bold text-dark mb-1" style="font-size: 12px;"><i class="fa fa-pencil-square-o text-primary"></i> Ghi chú nội dung cho mục tiêu/kế hoạch:</div>
+                                            <div class="fw-bold text-dark mb-1" style="font-size: 12px;"><i class="fa fa-pencil-square-o text-primary"></i> Ghi chú cho mục tiêu:</div>
                                             <textarea class="form-control form-control-sm note-textarea mb-2"
                                                       t-att-value="target.ghichu || ''" rows="2" style="font-size: 12.5px;" placeholder="Nhập tiến trình hoặc ghi chú cụ thể..."></textarea>
                                             <div class="d-flex justify-content-end gap-2">
