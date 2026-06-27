@@ -106,13 +106,21 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     is_pheduyet = fields.Boolean(compute="_compute_is_pheduyet")
     is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
+    is_header_open = fields.Boolean(compute="_compute_is_header_open")
 
+    def _compute_is_header_open(self):
+        for record in self:
+            is_header_open = False
+            if (record.trangthai == kehoach_util.KEHOACH_DANG_LAP
+                    or record.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                is_header_open = True
+            record.is_header_open = is_header_open
 
     def _compute_is_readonly(self):
         for record in self:
             is_readonly= True
             if (record.trangthai == kehoach_util.KEHOACH_DANG_LAP
-                or record.trangthai == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                or record.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
                 is_readonly = False
             record.is_readonly = is_readonly
 
