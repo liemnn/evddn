@@ -642,8 +642,10 @@
                                               <div class="flat-field-value-holder"><field name="den_ngay" readonly="is_readonly" class="compact_editable_date w-100"/></div>
                                           </div>
                                           <div class="flat-input-column v-duration">
-                                              <span class="flat-input-label-text"><i class="fa fa-hourglass-half"></i> Số ngày kế hoạch</span>
-                                              <div class="flat-field-value-holder"><span class="badge ekids_red_compact_badge"><strong><field name="songay" readonly="is_readonly"/></strong> ngày</span></div>
+                                              <span class="flat-input-label-text"><i class="fa fa-hourglass-half"></i> Số ngày</span>
+                                              <div class="flat-field-value-holder">
+                                                    <strong><field name="songay" readonly="is_readonly"/> ngày</strong>
+                                              </div>
                                           </div>
                                       </div>
 
