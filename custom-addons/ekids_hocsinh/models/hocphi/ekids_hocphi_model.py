@@ -159,6 +159,10 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
         days = ngay_util.func_get_cacngay_trong_thang(int(self.nam_id.name), int(self.thang_id.name))
         ngay_dauthang = days[0]
         ngay_cuoithang = days[-1]  # Tối ưu: Dùng chỉ số -1 để lấy ngày cuối tháng nhanh gọn
+        hocsinh = self.hocsinh_id
+        if ngay_cuoithang > hocsinh.ngay_nghihoc:
+            ngay_cuoithang = hocsinh.ngay_nghihoc
+
         coso = self.coso_id
         hocsinh = self.hocsinh_id
         nghiles_thangtruoc = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, coso, ['0'],

@@ -71,6 +71,13 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
 
     is_dong_hocphi_theoky = fields.Boolean(compute="_compute_is_dong_hocphi_theoky")
 
+    @api.onchange("trangthai")
+    def _onchage_trangthai(self):
+        for record in self:
+            if record.trangthai == "1":
+                if record.ngay_nghihoc:
+                    record.ngay_nghihoc =None
+
     def _compute_is_dong_hocphi_theoky(self):
         for record in self:
             if record.coso_id.is_dong_hocphi_theoky == True:
