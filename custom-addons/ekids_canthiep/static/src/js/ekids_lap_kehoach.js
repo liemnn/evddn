@@ -79,7 +79,7 @@ export class PlanManagerWidget extends Component {
                 }
 
                 return {
-                    kehoach_id: line.id,
+                    kehoach_linhvuc_id: line.id,
                     linhvuc: line.linhvuc_id ? line.linhvuc_id[1] : "",
                     tuoi: line.tuoi_id ? line.tuoi_id[1] : "",
                     chuongtrinh: line.chuongtrinh_id ? line.chuongtrinh_id[1] : "",

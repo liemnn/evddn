@@ -27,15 +27,15 @@
             </style>
 
             <!-- VÒNG LẶP DUYỆT CÁC LĨNH VỰC -->
-            <t t-foreach="state.groupedData" t-as="lv" t-key="lv.lineId">
+            <t t-foreach="state.groupedData" t-as="lv" t-key="lv.kehoach_linhvuc_id">
                 <div class="w-100 custom-folder-bar overflow-hidden mb-2">
 
                     <!-- THANH HEADER LĨNH VỰC -->
                     <div class="d-flex align-items-center justify-content-between py-2 px-3 w-100" style="min-height: 46px; cursor: pointer;"
-                         t-on-click="() => this.toggleLinhVucCollapse(lv.lineId)">
+                         t-on-click="() => this.toggleLinhVucCollapse(lv.kehoach_linhvuc_id)">
 
                         <div class="d-flex align-items-center gap-2">
-                            <i t-attf-class="fa #{state.collapsedLinhVuc[lv.lineId] ? 'fa-chevron-right' : 'fa-chevron-down'} text-muted opacity-75" style="font-size: 12px; margin-right: 2px;"></i>
+                            <i t-attf-class="fa #{state.collapsedLinhVuc[lv.kehoach_linhvuc_id] ? 'fa-chevron-right' : 'fa-chevron-down'} text-muted opacity-75" style="font-size: 12px; margin-right: 2px;"></i>
                             <i class="fa fa-folder text-warning" style="font-size: 17px; color: #EAB308 !important;"></i>
                             <span class="fw-bold text-dark ms-1" style="font-size: 14.5px; color: #1E293B !important;">
                                 <t t-esc="lv.linhvuc"/>
@@ -59,14 +59,14 @@
 
                             <button type="button" class="btn btn-sm btn-primary d-flex align-items-center gap-1 py-1 px-2.5 fw-bold"
                                     style="font-size: 11.5px; background-color: #2563EB !important; border-color: #2563EB !important;"
-                                    t-on-click="() => this.openAddTargetWizard(lv.lineId)">
+                                    t-on-click="() => this.openAddTargetWizard(lv.kehoach_linhvuc_id)">
                                 <i class="fa fa-plus-circle"></i> Thêm/xóa [Mục tiêu]
                             </button>
                         </div>
                     </div>
 
                     <!-- KHỐI CHỨA CÁC MỤC TIÊU -->
-                    <div t-if="!state.collapsedLinhVuc[lv.lineId]" class="p-0 bg-white border-top w-100 shadow-inner">
+                    <div t-if="!state.collapsedLinhVuc[lv.kehoach_linhvuc_id]" class="p-0 bg-white border-top w-100 shadow-inner">
                         <div class="d-flex flex-column w-100">
 
                             <t t-foreach="lv.muctieus" t-as="muctieu" t-key="muctieu.id">
