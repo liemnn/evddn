@@ -56,8 +56,10 @@ Long description of module's purpose
             'ekids_canthiep/static/src/css/ekids_style.css',
             'ekids_canthiep/static/src/css/ekids_canthiep.css',
             'ekids_canthiep/static/src/js/ekids_canthiep_kehoach.js',
+            'ekids_canthiep/static/src/js/ekids_canthiep_kehoach_owl.js',
             'ekids_canthiep/static/src/js/ekids_lap_kehoach.js',
             'ekids_canthiep/static/src/xml/ekids_canthiep_kehoach_template.xml',
+            'ekids_canthiep/static/src/xml/ekids_canthiep_kehoach_owl.xml',
             'ekids_canthiep/static/src/xml/ekids_lap_kehoach_template.xml',
             
         ],

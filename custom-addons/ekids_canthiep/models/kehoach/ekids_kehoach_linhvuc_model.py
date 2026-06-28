@@ -39,6 +39,20 @@ class KeHoach2LinhVuc(models.Model):
 
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
 
+    tong_muctieu_dat= fields.Integer(compute="_compute_tong_muctieu_dat")
+
+
+    @api.depends("kehoach_muctieu_ids","kehoach_muctieu_ids.trangthai")
+    def _compute_tong_muctieu_dat(self):
+        for record in self:
+            tong=0
+            kehoach_muctieus = record.kehoach_muctieu_ids
+            if kehoach_muctieus:
+                for kehoach_muctieu in kehoach_muctieus:
+                    if kehoach_muctieu.trangthai=="1":
+                        tong +=1
+            record.tong_muctieu_dat=tong
+
     def _compute_is_readonly(self):
         for record in self:
             record.is_readonly = record.kehoach_id.is_readonly

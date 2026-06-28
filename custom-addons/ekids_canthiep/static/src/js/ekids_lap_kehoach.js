@@ -1,12 +1,13 @@
 /** @odoo-module **/
 
-import { Component, useState, onWillStart } from "@odoo/owl";
+// 🌟 BỔ SUNG: Import thêm 'markup' để OWL Component chịu render định dạng HTML giàu định dạng
+import { Component, useState, onWillStart, markup } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
-export class PlanManagerWidget extends Component {
-    static template = "ekids_canthiep.PlanManagerTemplate";
+export class LapKehoachWidget extends Component {
+    static template = "ekids_canthiep.LapKeHoachWidgetTemplate";
     static props = { ...standardFieldProps };
 
     setup() {
@@ -24,6 +25,27 @@ export class PlanManagerWidget extends Component {
         onWillStart(async () => {
             await this.loadAllPlanData();
         });
+    }
+
+    /* 🌟 HÀM PHỤ TRỢ CHUẨN: Giải mã các ký tự thực thể HTML lồng nhau */
+    decodeHtmlText(htmlTrack) {
+        if (!htmlTrack) return "";
+        let decoded = htmlTrack
+            .replace(/&amp;lt;/g, "<")
+            .replace(/&amp;gt;/g, ">")
+            .replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">")
+            .replace(/&amp;/g, "&")
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+
+        try {
+            const parser = new DOMParser();
+            const dom = parser.parseFromString(decoded, 'text/html');
+            return dom.body.innerHTML || decoded;
+        } catch (e) {
+            return decoded;
+        }
     }
 
     async loadAllPlanData() {
@@ -65,10 +87,18 @@ export class PlanManagerWidget extends Component {
             this.state.groupedData = linhVucLines.map(line => {
                 const muctieus = muctieus_returns.filter(t => t.kehoach_linhvuc_id[0] === line.id);
 
-                // XỬ LÝ MẤU CHỐT: Lọc sạch thẻ <p> hoặc tag HTML còn sót lại dưới DB trước khi render lên textarea
                 muctieus.forEach(t => {
+                    // 🌟 MẤU CHỐT: Bọc hàm decode vào markup() để thông báo cho OWL render đúng format HTML
+                    t.chucnang = markup(this.decodeHtmlText(t.chucnang) || 'Không có');
+                    t.thietke = markup(this.decodeHtmlText(t.thietke) || 'Không có');
+                    t.tieuchi_chuadat = markup(this.decodeHtmlText(t.tieuchi_chuadat) || 'Chưa định nghĩa tiêu chí chưa đạt.');
+                    t.tieuchi_hinhthanh = markup(this.decodeHtmlText(t.tieuchi_hinhthanh) || 'Chưa định nghĩa tiêu chí đang hình thành.');
+                    t.tieuchi_dat = markup(this.decodeHtmlText(t.tieuchi_dat) || 'Chưa định nghĩa tiêu chí đạt.');
+
                     if (t.ghichu) {
-                        t.ghichu_clean = t.ghichu.replace(/<[^>]*>/g, '').replace(/&lt;[^&gt;]*&gt;/g, '').trim();
+                        t.ghichu_clean = this.decodeHtmlText(t.ghichu)
+                            .replace(/<[^>]*>/g, '')
+                            .trim();
                     } else {
                         t.ghichu_clean = '';
                     }
@@ -126,7 +156,6 @@ export class PlanManagerWidget extends Component {
             const textarea = event.target.closest('.inline-note-box').querySelector('.note-textarea');
             let newNote = textarea.value;
 
-            // XỬ LÝ: Dùng RegEx quét sạch sẽ mọi thẻ phát sinh ngoài ý muốn trước khi ghi nhận xuống database thuần Text
             if (newNote) {
                 newNote = newNote.replace(/<\/?[^>]+(>|$)/g, "").trim();
             }
@@ -159,6 +188,6 @@ export class PlanManagerWidget extends Component {
 }
 
 registry.category("fields").add("ekids_lap_kehoach", {
-    component: PlanManagerWidget,
+    component: LapKehoachWidget,
     supportedTypes: ["one2many"],
 });

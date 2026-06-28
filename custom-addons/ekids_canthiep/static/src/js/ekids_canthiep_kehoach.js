@@ -1,135 +1,194 @@
 /** @odoo-module **/
-// 🌟 ĐÃ CẢI TIẾN: Import thêm thẻ "xml" của OWL để viết giao diện trực tiếp trong JS
-import { Component, useState, onWillStart, useRef, onMounted, onWillUpdateProps, xml } from "@odoo/owl";
+
+// 🌟 BỔ SUNG: Import thêm 'markup' để OWL Component chịu render định dạng HTML giàu định dạng
+import { Component, useState, onWillStart, markup } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
-// Sub-Component chuyên trách render Rich Text với template INLINE (Tuyệt đối không lo thiếu template)
-class HtmlContent extends Component {
-    // 🌟 KHẮC PHỤC LỖI CHÍ MẠNG: Khai báo giao diện trực tiếp tại đây, Odoo sẽ nạp tức thì
-    static template = xml`
-        <div class="text-muted text-justify clinical-desc-p" style="line-height:1.6; font-size: 0.95rem;" t-ref="htmlRoot"/>
-    `;
-
-    setup() {
-        const rootRef = useRef("htmlRoot");
-
-        const renderHtml = (props) => {
-            if (rootRef.el) {
-                let rawHtml = props.value || "";
-                // Tự động giải mã nếu chuỗi bị dính thực thể mã hóa thô (&lt;p&gt;)
-                if (typeof rawHtml === 'string' && (rawHtml.includes("&lt;") || rawHtml.includes("&gt;") || rawHtml.includes("&amp;"))) {
-                    const doc = new DOMParser().parseFromString(rawHtml, "text/html");
-                    rawHtml = doc.documentElement.textContent || "";
-                }
-                // Ép trình duyệt thực thi chạy định dạng format HTML giàu thuộc tính
-                rootRef.el.innerHTML = rawHtml;
-            }
-        };
-
-        onMounted(() => renderHtml(this.props));
-        onWillUpdateProps((nextProps) => renderHtml(nextProps));
-    }
-}
-
-export class KeHoachCanthiepComponent extends Component {
-    static template = "ekids_canthiep.kehoach_canthiep";
-
-    // Đăng ký Sub-Component vào bộ nạp của màn hình chính
-    static components = { HtmlContent };
+export class CanThiepKehoachWidget extends Component {
+    static template = "ekids_canthiep.CanThiepKeHoachWidgetTemplate";
+    static props = { ...standardFieldProps };
 
     setup() {
         this.orm = useService("orm");
+        this.notification = useService("notification");
         this.actionService = useService("action");
 
         this.state = useState({
-            kehoach: {},
-            linhvucs: [],
-            expandedGoals: {},
-            collapsedDomains: {},
-            show_header_detail: false,
-
+            groupedData: [],
+            activeNotes: {},
+            collapsedLinhVuc: {},
+            expandedTargets: {},
         });
 
         onWillStart(async () => {
-            await this._loadData();
+            await this.loadAllPlanData();
         });
     }
 
-    toggleDomain(domainId, ev) {
-        ev.stopPropagation();
-        this.state.collapsedDomains[domainId] = !this.state.collapsedDomains[domainId];
-    }
-
-    async _loadData() {
-        const planId = this.props.action.context.active_id || this.props.action.context.kehoach_id;
-        const result = await this.orm.call("ekids.hocsinh", "get_owl_canthiep_data", [planId]);
-        if (result && result.status === "success") {
-            this.state.kehoach = result.kehoach;
-            this.state.linhvucs = result.linhvucs;
-        }
-    }
-
-    toggleGoalDetails(goalId, ev) {
-        ev.stopPropagation();
-        this.state.expandedGoals[goalId] = !this.state.expandedGoals[goalId];
-    }
-
-
-    async goiMucTieuAction(tenAction,muctieu_id,ev) {
-        ev.stopPropagation();
-
-        if (!muctieu_id) {
-            console.error("Không thấy muctieu_id để mở form");
-            return;
-        }
-
+    /* 🌟 HÀM PHỤ TRỢ CHUẨN: Giải mã các ký tự thực thể HTML lồng nhau */
+    decodeHtmlText(htmlTrack) {
+        if (!htmlTrack) return "";
+        let decoded = htmlTrack
+            .replace(/&amp;lt;/g, "<")
+            .replace(/&amp;gt;/g, ">")
+            .replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">")
+            .replace(/&amp;/g, "&")
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
 
         try {
-
-            const actionWindow = await this.orm.call("ekids.kehoach_muctieu", tenAction, [muctieu_id]);
-            if (actionWindow) {
-                await this.actionService.doAction(actionWindow);
-            }
-        } catch (error) {
-            console.error(`Lỗi khi thực thi hàm ${tenAction} từ hệ thống:`, error);
+            const parser = new DOMParser();
+            const dom = parser.parseFromString(decoded, 'text/html');
+            return dom.body.innerHTML || decoded;
+        } catch (e) {
+            return decoded;
         }
     }
 
-    async goiKeHoachAction(tenAction, ev) {
-        ev.stopPropagation();
-        const kehoach_id = this.props.action.context.kehoach_id || this.props.action.context.active_id;
-        if (!kehoach_id) return;
+    async loadAllPlanData() {
+        const kehoachId = this.props.record.resId;
+        if (!kehoachId) return;
 
         try {
-            const actionWindow = await this.orm.call("ekids.kehoach", tenAction, [kehoach_id]);
-            if (actionWindow) {
-                await this.actionService.doAction(actionWindow);
+            const linhVucLines = await this.orm.searchRead(
+                "ekids.kehoach_linhvuc",
+                [["kehoach_id", "=", kehoachId]],
+                ["id", "linhvuc_id", "tuoi_id", "chuongtrinh_id","tong_muctieu_dat"]
+            );
+
+            if (!linhVucLines.length) {
+                this.state.groupedData = [];
+                return;
             }
-        } catch (error) {
-            console.error(`Lỗi khi thực thi hàm ${tenAction} từ hệ thống:`, error);
-        }
-    }
 
-    async goiGuiDuyetKeHoachAction(tenAction, ev) {
-        ev.stopPropagation();
-        const hoanthanh = confirm("Bạn chắc chắc muốn kết thúc [Gửi duyệt kết quả] kế hoạch này ?");
-        if (hoanthanh) {
-            const kehoach_id = this.props.action.context.kehoach_id || this.props.action.context.active_id;
-            if (!kehoach_id) return;
+            const linhVucLineIds = linhVucLines.map(line => line.id);
 
-            try {
-                const actionWindow = await this.orm.call("ekids.kehoach", tenAction, [kehoach_id]);
-                if (actionWindow) {
-                    await this.actionService.doAction(actionWindow);
+            const muctieus_returns = await this.orm.searchRead(
+                "ekids.kehoach_muctieu",
+                [["kehoach_linhvuc_id", "in", linhVucLineIds]],
+                ["id"
+                ,"index"
+                ,"muctieu_id"
+                ,"ghichu"
+                ,"kehoach_muctieu_thangtruoc_id"
+                ,"sothang_da_chuyenttiep"
+                ,"kehoach_linhvuc_id"
+                ,"chucnang"
+                ,"thietke"
+                ,"tieuchi_chuadat"
+                ,"tieuchi_hinhthanh"
+                ,"tieuchi_dat"],
+                { order: "sequence asc" }
+            );
+
+            this.state.groupedData = linhVucLines.map(line => {
+                const muctieus = muctieus_returns.filter(t => t.kehoach_linhvuc_id[0] === line.id);
+
+                muctieus.forEach(t => {
+                    // 🌟 MẤU CHỐT: Bọc hàm decode vào markup() để thông báo cho OWL render đúng format HTML
+                    t.chucnang = markup(this.decodeHtmlText(t.chucnang) || 'Không có');
+                    t.thietke = markup(this.decodeHtmlText(t.thietke) || 'Không có');
+                    t.tieuchi_chuadat = markup(this.decodeHtmlText(t.tieuchi_chuadat) || 'Chưa định nghĩa tiêu chí chưa đạt.');
+                    t.tieuchi_hinhthanh = markup(this.decodeHtmlText(t.tieuchi_hinhthanh) || 'Chưa định nghĩa tiêu chí đang hình thành.');
+                    t.tieuchi_dat = markup(this.decodeHtmlText(t.tieuchi_dat) || 'Chưa định nghĩa tiêu chí đạt.');
+
+                    if (t.ghichu) {
+                        t.ghichu_clean = this.decodeHtmlText(t.ghichu)
+                            .replace(/<[^>]*>/g, '')
+                            .trim();
+                    } else {
+                        t.ghichu_clean = '';
+                    }
+                });
+
+                if (this.state.collapsedLinhVuc[line.id] === undefined) {
+                    this.state.collapsedLinhVuc[line.id] = false;
                 }
-            } catch (error) {
-                console.error(`Lỗi khi thực thi hàm ${tenAction} từ hệ thống:`, error);
+
+                return {
+                    kehoach_linhvuc_id: line.id,
+                    linhvuc: line.linhvuc_id ? line.linhvuc_id[1] : "",
+                    tuoi: line.tuoi_id ? line.tuoi_id[1] : "",
+                    chuongtrinh: line.chuongtrinh_id ? line.chuongtrinh_id[1] : "",
+                    tong_muctieu: muctieus.length,
+                    tong_muctieu_dat: line.tong_muctieu_dat,
+                    muctieus: muctieus
+                };
+            });
+
+        } catch (error) {
+            console.error("Lỗi đồng bộ cấu trúc dữ liệu phẳng:", error);
+        }
+    }
+
+    toggleLinhVucCollapse(lineId) {
+        this.state.collapsedLinhVuc[lineId] = !this.state.collapsedLinhVuc[lineId];
+    }
+
+    toggleTargetDetail(targetId) {
+        this.state.expandedTargets[targetId] = !this.state.expandedTargets[targetId];
+    }
+
+    async openAddTargetWizard(lineId) {
+        try {
+            const action = await this.orm.call("ekids.kehoach_linhvuc", "action_xem_danhsach_ct_muctieu", [lineId]);
+            if (action) {
+                this.actionService.doAction(action, {
+                    onClose: async () => { await this.loadAllPlanData(); }
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    toggleNoteInline(targetId) {
+        this.state.activeNotes[targetId] = !this.state.activeNotes[targetId];
+        if (this.state.activeNotes[targetId]) {
+            this.state.expandedTargets[targetId] = true;
+        }
+    }
+
+    async saveNoteInline(target, event) {
+        try {
+            const textarea = event.target.closest('.inline-note-box').querySelector('.note-textarea');
+            let newNote = textarea.value;
+
+            if (newNote) {
+                newNote = newNote.replace(/<\/?[^>]+(>|$)/g, "").trim();
             }
 
-        }
+            await this.orm.write("ekids.kehoach_muctieu", [target.id], { ghichu: newNote });
 
+            target.ghichu = newNote;
+            target.ghichu_clean = newNote;
+
+            this.state.activeNotes[target.id] = false;
+            this.notification.add("Đã cập nhật nhật ký tiến độ mục tiêu thô sạch!", { type: "success" });
+
+            await this.loadAllPlanData();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async removeTargetFromPlan(targetId) {
+        if (confirm("Bạn có chắc chắn muốn bỏ chọn mục tiêu này khỏi kế hoạch không?")) {
+            try {
+                await this.orm.unlink("ekids.kehoach_muctieu", [targetId]);
+                this.notification.add("Đã gỡ mục tiêu.", { type: "info" });
+                await this.loadAllPlanData();
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
 }
 
-registry.category("actions").add("ekids_canthiep.kehoach_canthiep_action", KeHoachCanthiepComponent);
+registry.category("fields").add("ekids_canthiep_kehoach", {
+    component: CanThiepKehoachWidget,
+    supportedTypes: ["one2many"],
+});

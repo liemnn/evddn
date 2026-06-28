@@ -203,7 +203,6 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                     'default_hocsinh_id': self.id
                 },
             }
-
     def action_canthiep(self):
         self.ensure_one()
         today = date.today()
@@ -211,6 +210,35 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         trangthai = [kehoach_util.KEHOACH_DANG_CANTHIEP]
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai_ngay(self, self, trangthai, today)
         if kehoach:
+            form_view_id = self.env.ref('ekids_canthiep.canthiep_kehoach_form').id
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'LẬP KẾ HOẠCH',
+                'res_model': 'ekids.kehoach',
+                'view_mode': 'form',
+                'res_id': kehoach.id,
+                'views': [(form_view_id, 'form')],
+                'target': 'current',
+                'domain': [('coso_id', '=', self.coso_id.id)],
+                'context': {
+                    'default_coso_id': self.coso_id.id,
+                    'default_hocsinh_id': self.id
+                },
+            }
+        else:
+            raise UserError(
+                f"Học sinh [{self.name}] hiện không có Kế hoạch nào ở trạng thái có thể Can thiệp"
+
+            )
+
+    def action_canthiep_backup(self):
+        self.ensure_one()
+        today = date.today()
+        # Kiểm tra phân quyền lâm sàng nâng cao nếu cần
+        trangthai = [kehoach_util.KEHOACH_DANG_CANTHIEP]
+        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai_ngay(self, self, trangthai, today)
+        if kehoach:
+
             return {
                 'type': 'ir.actions.client',
                 # 🌟 BỔ SUNG DÒNG NÀY: Định nghĩa tiêu đề xuất hiện trên Breadcrumbs
