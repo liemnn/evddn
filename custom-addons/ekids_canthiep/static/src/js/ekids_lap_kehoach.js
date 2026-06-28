@@ -44,18 +44,29 @@ export class PlanManagerWidget extends Component {
 
             const linhVucLineIds = linhVucLines.map(line => line.id);
 
-            const allTargets = await this.orm.searchRead(
+            const muctieus_returns = await this.orm.searchRead(
                 "ekids.kehoach_muctieu",
                 [["kehoach_linhvuc_id", "in", linhVucLineIds]],
-                ["id", "muctieu_id", "ghichu", "kehoach_muctieu_thangtruoc_id", "kehoach_linhvuc_id", "tieuchi_chuadat", "tieuchi_hinhthanh", "tieuchi_dat"],
-                { order: "id asc" }
+                ["id"
+                ,"index"
+                ,"muctieu_id"
+                ,"ghichu"
+                ,"kehoach_muctieu_thangtruoc_id"
+                ,"sothang_da_chuyenttiep"
+                ,"kehoach_linhvuc_id"
+                ,"chucnang"
+                ,"thietke"
+                ,"tieuchi_chuadat"
+                ,"tieuchi_hinhthanh"
+                ,"tieuchi_dat"],
+                { order: "sequence asc" }
             );
 
             this.state.groupedData = linhVucLines.map(line => {
-                const targetsOfLine = allTargets.filter(t => t.kehoach_linhvuc_id[0] === line.id);
+                const muctieus = muctieus_returns.filter(t => t.kehoach_linhvuc_id[0] === line.id);
 
                 // XỬ LÝ MẤU CHỐT: Lọc sạch thẻ <p> hoặc tag HTML còn sót lại dưới DB trước khi render lên textarea
-                targetsOfLine.forEach(t => {
+                muctieus.forEach(t => {
                     if (t.ghichu) {
                         t.ghichu_clean = t.ghichu.replace(/<[^>]*>/g, '').replace(/&lt;[^&gt;]*&gt;/g, '').trim();
                     } else {
@@ -68,12 +79,12 @@ export class PlanManagerWidget extends Component {
                 }
 
                 return {
-                    lineId: line.id,
-                    linhVucName: line.linhvuc_id ? line.linhvuc_id[1] : "",
-                    tuoiName: line.tuoi_id ? line.tuoi_id[1] : "",
-                    chuongTrinhCode: line.chuongtrinh_id ? line.chuongtrinh_id[1] : "",
-                    total: targetsOfLine.length,
-                    targets: targetsOfLine
+                    kehoach_id: line.id,
+                    linhvuc: line.linhvuc_id ? line.linhvuc_id[1] : "",
+                    tuoi: line.tuoi_id ? line.tuoi_id[1] : "",
+                    chuongtrinh: line.chuongtrinh_id ? line.chuongtrinh_id[1] : "",
+                    tong_muctieu: muctieus.length,
+                    muctieus: muctieus
                 };
             });
 

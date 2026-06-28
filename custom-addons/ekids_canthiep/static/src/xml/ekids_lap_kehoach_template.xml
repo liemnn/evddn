@@ -37,18 +37,24 @@
                         <div class="d-flex align-items-center gap-2">
                             <i t-attf-class="fa #{state.collapsedLinhVuc[lv.lineId] ? 'fa-chevron-right' : 'fa-chevron-down'} text-muted opacity-75" style="font-size: 12px; margin-right: 2px;"></i>
                             <i class="fa fa-folder text-warning" style="font-size: 17px; color: #EAB308 !important;"></i>
-                            <span class="fw-bold text-dark ms-1" style="font-size: 14.5px; color: #1E293B !important;"><t t-esc="lv.linhVucName"/></span>
+                            <span class="fw-bold text-dark ms-1" style="font-size: 14.5px; color: #1E293B !important;">
+                                <t t-esc="lv.linhvuc"/>
+                            </span>
 
                             <span class="mx-1 text-muted opacity-50">|</span>
 
-                            <span t-if="lv.tuoiName" class="badge badge-purple-light rounded px-2 py-0.5 fw-bold" style="font-size: 11px;">
-                                <t t-esc="lv.tuoiName"/>
+                            <span t-if="lv.tuoi" class="badge badge-purple-light rounded px-2 py-0.5 fw-bold" style="font-size: 11px;">
+                                <t t-esc="lv.tuoi"/>
+                            </span>
+                            <span class="mx-1 text-muted opacity-50">|</span>
+                            <span t-if="lv.chuongtrinh" class="badge badge-purple-light rounded px-2 py-0.5 fw-bold" style="font-size: 11px;">
+                                <t t-esc="lv.chuongtrinh"/>
                             </span>
                         </div>
 
                         <div class="d-flex align-items-center gap-2" t-on-click.stop="">
                             <span class="badge px-2.5 py-1 fw-bold" style="font-size: 11.5px; background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; border-radius: 20px;">
-                                Có <t t-esc="lv.total"/> mục tiêu
+                                Có <t t-esc="lv.tong_muctieu"/> mục tiêu
                             </span>
 
                             <button type="button" class="btn btn-sm btn-primary d-flex align-items-center gap-1 py-1 px-2.5 fw-bold"
@@ -63,29 +69,33 @@
                     <div t-if="!state.collapsedLinhVuc[lv.lineId]" class="p-0 bg-white border-top w-100 shadow-inner">
                         <div class="d-flex flex-column w-100">
 
-                            <t t-foreach="lv.targets" t-as="target" t-key="target.id">
+                            <t t-foreach="lv.muctieus" t-as="muctieu" t-key="muctieu.id">
                                 <div class="w-100 p-0 border-bottom d-flex flex-column">
 
                                     <!-- HÀNG CHÍNH: CLICK VÀO ĐÂU CŨNG ĐÓNG MỞ ĐƯỢC CHI TIẾT (Trừ các nút hành động) -->
                                     <div class="d-flex align-items-center justify-content-between w-100 p-3 target-header-row"
-                                         t-on-click="() => this.toggleTargetDetail(target.id)">
+                                         t-on-click="() => this.toggleTargetDetail(muctieu.id)">
 
                                         <!-- Số thứ tự rõ ràng ngay trước tên mục tiêu -->
                                         <div class="d-flex align-items-start gap-3" style="max-width: 75%;">
                                             <span class="fw-bold text-opacity-75 font-monospace" style="font-size: 14px; min-width: 15px;">
-                                                <t t-esc="target_index + 1"/>
+                                                <t t-esc="muctieu_index+1"/>
                                             </span>
                                             <span class="fw-semibold text-slate-800" style="font-size: 13.5px; color: #1E293B;">
-                                                <t t-esc="target.muctieu_id[1]"/>
+                                                <t t-esc="muctieu.muctieu_id[1]"/>
                                             </span>
                                         </div>
 
                                         <!-- Khối bên phải: Nút hành động + Mũi tên trạng thái -->
                                         <div class="d-flex align-items-center gap-3" t-on-click.stop="">
                                             <div class="d-flex align-items-center gap-2">
-                                                <span t-if="target.kehoach_muctieu_thangtruoc_id" class="badge fw-bold px-2 py-0.5"
+                                                <span t-if="muctieu.kehoach_muctieu_thangtruoc_id" class="badge fw-bold px-2 py-0.5"
                                                       style="font-size: 10.5px; color: #EF4444; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px;">
                                                     <i class="fa fa-history me-0.5"></i>Tháng trước chuyển sang
+                                                    ( <span  style="font-weight:bold;" >
+                                                        <t t-esc="muctieu.sothang_da_chuyenttiep"/>
+                                                    </span> )
+
                                                 </span>
                                                 <span t-else="" class="badge fw-bold px-2 py-0.5"
                                                       style="font-size: 10.5px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px;">
@@ -95,37 +105,43 @@
 
                                             <!-- 🌟 1. SỬA ĐỔI NÚT GHI CHÚ: Nhẹ nhàng, không nền, đổi màu icon động mượt mà -->
                                             <button type="button" class="btn btn-link p-1 text-decoration-none shadow-none d-flex align-items-center gap-1"
-                                                    t-on-click="() => this.toggleNoteInline(target.id)"
+                                                    t-on-click="() => this.toggleNoteInline(muctieu.id)"
                                                     style="height: 24px; cursor: pointer;">
-                                                <i class="fa fa-commenting" t-attf-style="font-size: 16px; color: #{target.ghichu ? '#10B981' : '#94A3B8'};"></i>
+                                                <i class="fa fa-commenting" t-attf-style="font-size: 16px; color: #{muctieu.ghichu ? '#10B981' : '#94A3B8'};"></i>
                                                 <span style="font-size: 12px; color: #475569; font-weight: 600;">Ghi chú</span>
                                             </button>
 
                                             <!-- Icon mũi tên hiển thị trạng thái khối chi tiết bên dưới -->
                                             <button type="button" class="btn btn-link p-0 text-decoration-none text-muted"
-                                                    t-on-click="() => this.toggleTargetDetail(target.id)">
-                                                <i t-attf-class="fa #{state.expandedTargets[target.id] ? 'fa-chevron-up' : 'fa-chevron-down'}" style="font-size: 13px;"></i>
+                                                    t-on-click="() => this.toggleTargetDetail(muctieu.id)">
+                                                <i t-attf-class="fa #{state.expandedTargets[muctieu.id] ? 'fa-chevron-up' : 'fa-chevron-down'}" style="font-size: 13px;"></i>
                                             </button>
                                         </div>
                                     </div>
 
                                     <!-- KHỐI CHI TIẾT -->
-                                    <div t-if="state.expandedTargets[target.id]" class="w-100 p-3 border-top d-flex flex-column gap-3"
+                                    <div t-if="state.expandedTargets[muctieu.id]" class="w-100 p-3 border-top d-flex flex-column gap-3"
                                          style="background-color: #FAFAFA; border-color: #E2E8F0;">
 
                                         <!-- Ô SOẠN THẢO TEXTAREA GHI CHÚ BỔ SUNG -->
-                                       <div t-if="state.activeNotes[target.id]" class="w-100 p-3 bg-white rounded-3 border inline-note-box shadow-sm mb-1">
-                                            <div class="fw-bold text-dark mb-1" style="font-size: 12px;"><i class="fa fa-pencil-square-o text-primary"></i> Ghi chú cho mục tiêu:</div>
+                                       <div t-if="state.activeNotes[muctieu.id]" class="w-100 p-3 bg-white rounded-3 border inline-note-box shadow-sm mb-1">
+                                            <div class="fw-bold text-dark mb-1" style="font-size: 12px;">
+                                                <i class="fa fa-pencil-square-o text-primary"></i> Ghi chú cho mục tiêu:</div>
 
                                             <textarea class="form-control form-control-sm note-textarea mb-2"
-                                                      t-att-value="target.ghichu_clean || ''"
+                                                      t-att-value="muctieu.ghichu_clean || ''"
                                                       rows="6"
                                                       style="font-size: 14px;"
                                                       placeholder="Nhập tiến trình hoặc ghi chú cụ thể..."></textarea>
 
                                             <div class="d-flex justify-content-end gap-2">
-                                                <button type="button" class="btn btn-xs btn-light border" t-on-click="() => this.toggleNoteInline(target.id)">Hủy</button>
-                                                <button type="button" class="btn btn-xs btn-primary" style="background-color: #2563EB !important;" t-on-click="(ev) => this.saveNoteInline(target, ev)">Lưu ghi chú</button>
+                                                <button type="button" class="btn btn-xs btn-light border"
+                                                        t-on-click="() => this.toggleNoteInline(muctieu.id)">Hủy
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-primary"
+                                                        style="background-color: #2563EB !important;"
+                                                        t-on-click="(ev) => this.saveNoteInline(muctieu, ev)">Lưu ghi chú
+                                                </button>
                                             </div>
                                         </div>
 
@@ -136,7 +152,7 @@
                                                     <i class="fa fa-star"></i> CHỨC NĂNG PHÁT TRIỂN CỐT LÕI:
                                                 </div>
                                                 <div style="font-size: 12.5px; color: #4A5568; line-height: 1.6; text-align: justify;">
-                                                    (1) Chức năng: Dung nạp không gian xã hội. (2) Vì sao dạy: Chịu đựng được việc có người ngồi cạnh mà không cảm thấy đe dọa không gian. (3) Hệ quả: Nếu không dạy, trẻ sẽ Cách ly, không thể vào lớp mầm non. (4) Lợi ích: Tiền đề chơi song song. (5) Lâm sàng: Người lớn ngồi cạnh nhưng chơi đồ riêng.
+                                                    <t t-esc="muctieu.chucnang || 'Không có'"/>
                                                 </div>
                                             </div>
 
@@ -145,7 +161,7 @@
                                                     <i class="fa fa-magic"></i> THIẾT KẾ HOẠT ĐỘNG CHO GIÁO VIÊN:
                                                 </div>
                                                 <div style="font-size: 12.5px; color: #4A5568; line-height: 1.6; text-align: justify;">
-                                                    Tiền đề (A): Trẻ đang tự chơi đồ chơi của mình. Cô (hoặc một bạn học) chủ động đi đến và ngồi cách trẻ khoảng 60cm, nhưng tự chơi đồ chơi riêng của mình (không can thiệp vào đồ của trẻ). Hành vi/ kỹ năng cần dạy trẻ (B): Trẻ tiếp tục tập trung vào đồ chơi của mình, không bỏ chạy, không ném đồ và không thể hiện sự hoảng hốt. Kèm theo hệ quả (C) xử lý nhanh...
+                                                    <t t-esc="muctieu.thietke || 'Không có'"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -159,19 +175,19 @@
                                                 <!-- Cột Chưa Đạt (-) -->
                                                 <div class="crit-box danger d-flex flex-column gap-1">
                                                     <span class="fw-bold text-danger" style="font-size: 11.5px;">(-) Chưa đạt:</span>
-                                                    <t t-esc="target.tieuchi_chuadat || 'Chưa định nghĩa tiêu chí chưa đạt.'"/>
+                                                    <t t-esc="muctieu.tieuchi_chuadat || 'Chưa định nghĩa tiêu chí chưa đạt.'"/>
                                                 </div>
 
                                                 <!-- Cột Đang Hình Thành (+/-) -->
                                                 <div class="crit-box warning d-flex flex-column gap-1">
                                                     <span class="fw-bold" style="font-size: 11.5px; color: #B45309;">(+/-) Đang hình thành:</span>
-                                                    <t t-esc="target.tieuchi_hinhthanh || 'Chưa định nghĩa tiêu chí đang hình thành.'"/>
+                                                    <t t-esc="muctieu.tieuchi_hinhthanh || 'Chưa định nghĩa tiêu chí đang hình thành.'"/>
                                                 </div>
 
                                                 <!-- Cột Đạt (+) -->
                                                 <div class="crit-box success d-flex flex-column gap-1">
                                                     <span class="fw-bold text-success" style="font-size: 11.5px;">(+) Đạt:</span>
-                                                    <t t-esc="target.tieuchi_dat || 'Chưa định nghĩa tiêu chí đạt.'"/>
+                                                    <t t-esc="muctieu.tieuchi_dat || 'Chưa định nghĩa tiêu chí đạt.'"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -179,15 +195,15 @@
                                         <!-- Đáy khối con: Nút cấu hình gỡ bỏ mục tiêu -->
                                        <div class="w-100 d-flex justify-content-between align-items-center border-top pt-2 mt-2">
 
-                                            <t t-if="target.kehoach_muctieu_thangtruoc_id">
+                                            <t t-if="muctieu.kehoach_muctieu_thangtruoc_id">
                                                 <span class="text-muted" style="font-size: 11px; font-style: italic; color: #94A3B8 !important;">
-                                                    <i class="fa fa-lock"></i> Mục tiêu tháng trước (Không thể xóa)
+                                                    <i class="fa fa-lock"></i> Mục tiêu chuyển từ tháng trước sang (Không thể xóa)
                                                 </span>
                                             </t>
 
                                             <t t-else="">
                                                 <button type="button" class="btn btn-xs btn-outline-danger" style="font-size: 11px;"
-                                                        t-on-click="() => this.removeTargetFromPlan(target.id)">
+                                                        t-on-click="() => this.removeTargetFromPlan(muctieu.id)">
                                                     <i class="fa fa-trash-o"></i> Xóa khỏi kế hoạch
                                                 </button>
                                             </t>

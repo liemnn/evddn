@@ -59,6 +59,7 @@ class KeHoach2MucTieu(models.Model):
         'ekids.kehoach_muctieu',
         string='Muc tiêu đứng trước',
     )
+    sothang_da_chuyenttiep = fields.Integer(string="Số tháng đã được chuyển tiếp sang",compute="_compute_sothang_da_chuyenttiep")
     kehoach_muctieu_thangtruoc_id = fields.Many2one(
         'ekids.kehoach_muctieu',
         string='Muc tiêu của tháng trước chuyển sang do không đạt',
@@ -91,6 +92,15 @@ class KeHoach2MucTieu(models.Model):
     ketqua_dat= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_dat")
     ketqua_hinhthanh= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_hinhthanh")
     ketqua_khongdat = fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_khongdat")
+
+
+    def _compute_sothang_da_chuyenttiep(self):
+        today = date.today()
+        for mt in self:
+            so_thang =0
+            if mt.kehoach_muctieu_thangtruoc_id:
+                so_thang = mt.kehoach_muctieu_thangtruoc_id.sothang_da_chuyenttiep +1
+            mt.sothang_da_chuyenttiep=so_thang
 
     @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
     def _compute_trangthai(self):
