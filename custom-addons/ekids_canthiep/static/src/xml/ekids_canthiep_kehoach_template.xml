@@ -24,6 +24,51 @@
                 .crit-box.danger { background-color: #FEF2F2; border: 1px solid #FCA5A5; color: #1E293B; }
                 .crit-box.warning { background-color: #FFFDF2; border: 1px solid #FDE047; color: #1E293B; }
                 .crit-box.success { background-color: #F0FDF4; border: 1px solid #BBF7D0; color: #1E293B; }
+
+                /* --- CSS MỚI BỔ SUNG CHO TRẠNG THÁI MỤC TIÊU --- */
+                /* Số thứ tự hình tròn chuẩn đối xứng tuyệt đối mang màu sắc trạng thái */
+                .muctieu-circle-index {
+                    width: 26px;
+                    height: 26px;
+                    border-radius: 50%;
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    font-weight: 800;
+                    font-size: 12.5px;
+                    color: #FFFFFF !important;
+                    flex-shrink: 0;
+                    line-height: 1 !important;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                }
+
+                /* Các Class màu nền tương ứng trangthai */
+                .bg-status-grey { background-color: #94A3B8 !important; }  /* trangthai = 0: Nền xám */
+                .bg-status-green { background-color: #10B981 !important; } /* trangthai = 1: Màu nền xanh */
+                .bg-status-yellow { background-color: #F59E0B !important; } /* trangthai = -1: Màu vàng */
+
+                /* Tùy biến nút Can thiệp đồng bộ màu sắc */
+                .btn-canthiep-status {
+                    font-size: 12px !important;
+                    font-weight: 700 !important;
+                    padding: 4px 12px !important;
+                    border-radius: 6px !important;
+                    color: #FFFFFF !important;
+                    border: none !important;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 5px;
+                    height: 28px;
+                    transition: all 0.2s ease;
+                }
+                .btn-canthiep-status:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed !important;
+                }
+                .btn-canthiep-status:not(:disabled):hover {
+                    filter: brightness(0.85);
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
             </style>
 
             <t t-foreach="state.groupedData" t-as="lv" t-key="lv.kehoach_linhvuc_id">
@@ -52,10 +97,8 @@
 
                         <div class="d-flex align-items-center gap-2" t-on-click.stop="">
                             <span class="badge px-2.5 py-1 fw-bold" style="font-size: 11.5px; background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; border-radius: 20px;">
-                                Tiến độ đạt <t t-esc="lv.tong_muctieu_dat"/>/<t t-esc="lv.tong_muctieu"/>mục tiêu
+                                Tiến độ đạt <t t-esc="lv.tong_muctieu_dat"/>/<t t-esc="lv.tong_muctieu"/> mục tiêu
                             </span>
-
-
                         </div>
                     </div>
 
@@ -68,29 +111,35 @@
                                     <div class="d-flex align-items-center justify-content-between w-100 p-3 target-header-row"
                                          t-on-click="() => this.toggleTargetDetail(muctieu.id)">
 
-                                        <div class="d-flex align-items-start gap-3" style="max-width: 75%;">
-                                            <span class="fw-bold text-opacity-75 font-monospace" style="font-size: 14px; min-width: 15px;">
-                                                <t t-esc="muctieu_index+1"/>
+                                        <div class="d-flex align-items-center gap-3" style="max-width: 65%;">
+                                            <span t-attf-class="muctieu-circle-index #{muctieu.trangthai === '1' ? 'bg-status-green' : (muctieu.trangthai === '-1' ? 'bg-status-yellow' : 'bg-status-grey')}">
+                                                <t t-esc="muctieu_index + 1"/>
                                             </span>
                                             <span class="fw-semibold text-slate-800" style="font-size: 13.5px; color: #1E293B;">
                                                 <t t-esc="muctieu.muctieu_id[1]"/>
                                             </span>
                                         </div>
 
-                                        <div class="d-flex align-items-center gap-3" t-on-click.stop="">
-                                            <div class="d-flex align-items-center gap-2">
+                                        <div class="d-flex align-items-center gap-2" t-on-click.stop="">
+
+                                            <div class="d-flex align-items-center me-1">
                                                 <span t-if="muctieu.kehoach_muctieu_thangtruoc_id" class="badge fw-bold px-2 py-0.5"
                                                       style="font-size: 10.5px; color: #EF4444; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px;">
-                                                    <i class="fa fa-history me-0.5"></i>Tháng trước chuyển sang
-                                                    ( <span  style="font-weight:bold;" >
-                                                        <t t-esc="muctieu.sothang_da_chuyenttiep"/>
-                                                    </span> )
+                                                    <i class="fa fa-history me-0.5"></i>Tháng trước chuyển sang ( <t t-esc="muctieu.sothang_da_chuyenttiep"/> )
                                                 </span>
                                                 <span t-else="" class="badge fw-bold px-2 py-0.5"
                                                       style="font-size: 10.5px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px;">
                                                     <i class="fa fa-star me-0.5"></i>Mới
                                                 </span>
                                             </div>
+
+                                            <button type="button"
+                                                    t-att-disabled="muctieu.trangthai === 0"
+                                                    t-attf-class="btn-canthiep-status #{muctieu.trangthai === '1' ? 'bg-status-green' : (muctieu.trangthai === '-1' ? 'bg-status-yellow' : 'bg-status-grey')}"
+                                                    t-on-click="(ev) => this.onCanThiepClick(muctieu, ev)">
+                                                <i t-attf-class="fa #{muctieu.trangthai === 1 ? 'fa-check-circle' : 'fa-bolt'}"></i>
+                                                <span t-out="muctieu.trangthai === 1 ? 'Đạt' : 'Can thiệp'"/>
+                                            </button>
 
                                             <button type="button" class="btn btn-link p-1 text-decoration-none shadow-none d-flex align-items-center gap-1"
                                                     t-on-click="() => this.toggleNoteInline(muctieu.id)"

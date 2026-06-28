@@ -80,7 +80,10 @@ export class CanThiepKehoachWidget extends Component {
                 ,"thietke"
                 ,"tieuchi_chuadat"
                 ,"tieuchi_hinhthanh"
-                ,"tieuchi_dat"],
+                ,"tieuchi_dat"
+                ,"trangthai"
+                ,"trangthai_kiemduyet"
+                ],
                 { order: "sequence asc" }
             );
 
@@ -184,6 +187,23 @@ export class CanThiepKehoachWidget extends Component {
             } catch (error) {
                 console.error(error);
             }
+        }
+    }
+    // Thêm hàm này vào trong class CanThiepKehoachWidget phối hợp với template mới
+    async onCanThiepClick(muctieu, event) {
+        if (muctieu.trangthai === 0) {
+            // Chống click tuyệt đối bằng code nếu bypass giao diện
+            return;
+        }
+        try {
+            // Thao tác logic can thiệp của bạn tại đây (Ví dụ: Mở wizard hoặc gọi một action object)
+            this.notification.add(`Đang xử lý can thiệp cho mục tiêu: ${muctieu.name}`, { type: "info" });
+
+            // Nếu muốn gọi một hàm Python cụ thể trên model:
+            // await this.orm.call("ekids.kehoach_muctieu", "action_xu_ly_can_thiep", [muctieu.id]);
+            // await this.loadAllPlanData();
+        } catch (error) {
+            console.error(error);
         }
     }
 }
