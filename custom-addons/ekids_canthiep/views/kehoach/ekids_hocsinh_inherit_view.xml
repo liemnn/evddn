@@ -30,9 +30,14 @@
 
                 <field name="sequence" width="25"/>
                 <field name="name" width="170"/>
-                <field name="gioitinh" width="50"/>
-                <field name="ngaysinh" width="100"/>
-                <field name="tuoi" width="100"/>
+                <field name="bietdanh" string="Biệt danh" optional="hide"/>
+                <field name="gioitinh"/>
+                <field name="ngaysinh" optional="hide"/>
+                <field name="tuoi"/>
+                <field name="ngay_nhaphoc" string="Nhập học" width="100"/>
+                <field name="thoigian_hoc" string="Thời gian học" optional="hide"/>
+
+                <field name="dm_xa_id" optional="hide"/>
                 <field name="trangthai" string="Trạng thái"
                         decoration-success="trangthai == '1'"
                         decoration-info="trangthai == '2'"
@@ -115,14 +120,7 @@
                         title="Bấm vào đây để mở bảng đánh giá và ghi nhận kết quả học tập hàng ngày của trẻ"
                 />
 
-                <button name="action_canthiep_backup"
-                        string="Can thiệp cũ"
-                        type="object"
-                        class="btn-success btn-sm fw-bold text-uppercase"
-                        icon="fa-play-circle"
-                        invisible="is_canthiep==False"
-                        title="Bấm vào đây để mở bảng đánh giá và ghi nhận kết quả học tập hàng ngày của trẻ"
-                />
+
 
 
 
