@@ -378,10 +378,10 @@
                                 class="btn-secondary"/>
 
                         <button name="action_ketthuc_kehoach"
-                                string="Kết thúc kế hoạch"
+                                string="Kết thúc"
                                 type="object"
                                 icon="fa-archive"
-                                class="btn-warning fw-bold"
+                                class="btn-secondary"
                                 invisible="is_kiemduyet==False"
                                 confirm="Bạn có chắc chắn muốn [KẾT THÚC] kế hoạch can thiệp này không? Kế hoạch sẽ được chuyển sang trạng thái lưu trữ."/>
 

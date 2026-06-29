@@ -260,7 +260,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         if result:
             is_trung = self.func_kiemtra_kehoach_trung_thoigian()
             if is_trung:
-                raise UserError("Kế hoạch của Học sinh [" + result.hocsinh_id.name +"] Được lập trong khoản thời gian trên đang bị trùng với thời gian của kế hoạch khác !")
+                raise UserError("Thời gian của [Kế hoạch] đang trùng với kế hoạch khác")
             if "kehoach_linhvuc_ids" in vals:
                 self.func_tao_macdinh_kehoach_muctieu()
         return result
@@ -457,7 +457,6 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         if is_chophep_ketthuc:
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
             url = self.action_quaylai_kehoachs()
-            return url
 
     def action_quaylai_kehoachs(self):
         list_view_id = self.env.ref('ekids_canthiep.kehoach_hocsinh_inherit_list').id
