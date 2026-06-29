@@ -12,6 +12,7 @@
                 <field name="ten"/>
                 <field name="bietdanh"/>
                 <field name="gioitinh"/>
+
             </search>
         </field>
     </record>
@@ -31,6 +32,7 @@
                 <field name="name" width="170"/>
                 <field name="gioitinh" width="50"/>
                 <field name="ngaysinh" width="100"/>
+                <field name="tuoi" width="100"/>
                 <field name="trangthai" string="Trạng thái"
                         decoration-success="trangthai == '1'"
                         decoration-info="trangthai == '2'"

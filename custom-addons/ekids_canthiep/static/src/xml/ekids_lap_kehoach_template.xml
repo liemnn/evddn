@@ -3,14 +3,14 @@
     <t t-name="ekids_canthiep.LapKeHoachWidgetTemplate">
         <div class="w-100 d-flex flex-column gap-3 mt-2 px-0">
 
-            <!-- RESPONSIVE CSS HIỆN ĐẠI - PHẲNG MỊN CHUẨN UX -->
+            <!-- RESPONSIVE CSS HIỆN ĐẠI - PHẲNG MỊN CHUẨN UX CHO CẢ WEB VÀ MOBILE -->
             <style>
                 .o_field_widget[name="kehoach_linhvuc_ids"] { width: 100% !important; max-width: 100% !important; display: block !important; }
                 .custom-folder-bar { background-color: #F8FAFC !important; border: 1px solid #E2E8F0 !important; border-radius: 12px !important; }
                 .badge-purple-light { background-color: #F3E8FF !important; color: #6B21A8 !important; border: 1px solid #E9D5FF !important; white-space: nowrap; flex-shrink: 0 !important; }
 
                 /* Cấu trúc Box Tiêu chí đánh giá phân cấp lâm sàng */
-                .crit-box { flex: 1; min-width: 250px; padding: 12px; border-radius: 6px; font-size: 12.5px; line-height: 1.5; text-align: justify; }
+                .crit-box { flex: 1; min-width: 250px; padding: 12px; border-radius: 6px; font-size: 14px; line-height: 1.5; text-align: justify; }
                 .crit-box.danger { background-color: #FEF2F2; border: 1px solid #FCA5A5; color: #1E293B; }
                 .crit-box.warning { background-color: #FFFDF2; border: 1px solid #FDE047; color: #1E293B; }
                 .crit-box.success { background-color: #F0FDF4; border: 1px solid #BBF7D0; color: #1E293B; }
@@ -24,31 +24,42 @@
                     align-items: center !important;
                     justify-content: center !important;
                     font-weight: 800;
-                    font-size: 12px;
+                    font-size: 13px;
                     background-color: #E2E8F0 !important;
                     color: #1E293B !important;
                     flex-shrink: 0;
                     line-height: 1 !important;
                 }
 
-                /* Cấu trúc phân lớp khối cha bảo vệ form */
-                .folder-main-layout { display: flex; flex-direction: column; width: 100%; padding: 10px 14px; gap: 8px; cursor: pointer; }
-                .folder-top-info-line { display: flex; align-items: center; gap: 8px; width: 100%; flex-wrap: wrap; }
-                .folder-title-text { font-size: 14.5px; font-weight: bold; color: #1E293B !important; }
-                .folder-bottom-actions-line { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 10px; }
+                /* 🌟 TỐI ƯU WEB: Mặc định trên Web gom chung về 1 hàng duy nhất phẳng lỳ */
+                .folder-main-layout {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    padding: 10px 14px;
+                    gap: 12px;
+                    cursor: pointer;
+                }
+                .folder-top-info-line { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; flex-wrap: wrap; }
+                .folder-title-text { font-size: 16px; font-weight: bold; color: #1E293B !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+                /* Đẩy cụm hành động bao gồm cả Badge tiến độ lên cùng hàng bên phải trên Web */
+                .folder-bottom-actions-line { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
                 .target-left-block { display: flex; align-items: start; gap: 12px; flex: 1; min-width: 0; }
                 .target-text-wrap { font-size: 13.5px; color: #1E293B; text-align: left; word-break: break-word; line-height: 1.5; }
 
                 /* Nút hành động thêm mục tiêu thô sạch tinh tế */
                 .btn-add-target-clean {
-                    font-size: 11.5px !important;
+                    font-size: 13px !important;
                     font-weight: 700 !important;
                     height: 28px;
                     padding: 0 12px !important;
                     white-space: nowrap;
                     border-radius: 6px;
-                    width: auto !important; /* Ngăn chặn tràn full màn hình */
+                    width: auto !important;
                     flex-shrink: 0 !important;
                 }
 
@@ -67,10 +78,22 @@
                 }
                 .btn-quick-delete-icon:hover { transform: scale(1.15); color: #DC2626; }
 
-                /* 🌟 THIẾT KẾ ĐÁP ỨNG TRÊN MOBILE CHỐNG CO QUẮP CHỮ */
+                /* 🌟 ĐỊNH DẠNG ĐÁP ỨNG TRÊN MOBILE CHỐNG CO QUẮP LAYOUT */
                 @media (max-width: 768px) {
-                    .folder-top-info-line { gap: 6px !important; }
-                    .folder-title-text { font-size: 14px; }
+                    /* Trên Mobile chuyển thành trục dọc 2 dòng giúp các trường không bị đè gãy chữ */
+                    .folder-main-layout { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; padding: 12px !important; }
+                    .folder-top-info-line { gap: 6px !important; width: 100%; }
+                    .folder-title-text { white-space: normal; overflow: visible; text-overflow: clip; width: 100%; display: block; font-size: 14px; }
+
+                    .folder-bottom-actions-line {
+                        width: 100%;
+                        display: flex !important;
+                        justify-content: space-between !important;
+                        align-items: center !important;
+                        border-top: 1px dashed #E2E8F0;
+                        padding-top: 8px;
+                    }
+                    .btn-add-target-clean { flex: 0 1 auto; height: 32px !important; justify-content: center; }
 
                     .target-header-row { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; padding: 12px !important; }
                     .target-left-block { width: 100%; }
@@ -91,10 +114,10 @@
             <t t-foreach="state.groupedData" t-as="lv" t-key="lv.kehoach_linhvuc_id">
                 <div class="w-100 custom-folder-bar overflow-hidden mb-2">
 
-                    <!-- MỚI: TOÀN BỘ KHỐI FOLDER CHA ĐƯỢC CHIA LÀM 2 DÒNG ĐỘNG -->
+                    <!-- KHỐI FOLDER CHA ĐIỀU HƯỚNG LINH HOẠT WEB/MOBILE -->
                     <div class="folder-main-layout" t-on-click="() => this.toggleLinhVucCollapse(lv.kehoach_linhvuc_id)">
 
-                        <!-- DÒNG 1: ICON + TÊN LĨNH VỰC + ĐỘ TUỔI + CHƯƠNG TRÌNH -->
+                        <!-- CỤM THÔNG TIN: ICON + TÊN LĨNH VỰC + ĐỘ TUỔI + CHƯƠNG TRÌNH -->
                         <div class="folder-top-info-line">
                             <i t-attf-class="fa #{state.collapsedLinhVuc[lv.kehoach_linhvuc_id] ? 'fa-chevron-right' : 'fa-chevron-down'} text-muted opacity-75" style="font-size: 11px; margin-right: 2px;"></i>
                             <i class="fa fa-folder text-warning" style="font-size: 17px; color: #EAB308 !important;"></i>
@@ -103,20 +126,20 @@
                                 <t t-esc="lv.linhvuc"/>
                             </span>
 
-                            <span class="text-muted opacity-40 mx-0.5">|</span>
+                            <span class="text-muted opacity-40 mx-0.5 d-none d-md-inline">|</span>
 
-                            <span t-if="lv.tuoi" class="badge badge-purple-light rounded px-2 py-0.5 fw-bold" style="font-size: 11px;">
+                            <span t-if="lv.tuoi" class="badge badge-purple-light rounded px-2 py-0.5 fw-bold" style="font-size: 13px;">
                                 <t t-esc="lv.tuoi"/>
                             </span>
 
-                            <span t-if="lv.chuongtrinh" class="badge badge-purple-light rounded px-2 py-0.5 fw-bold" style="font-size: 11px;">
+                            <span t-if="lv.chuongtrinh" class="badge badge-purple-light rounded px-2 py-0.5 fw-bold" style="font-size: 13px;">
                                 <t t-esc="lv.chuongtrinh"/>
                             </span>
                         </div>
 
-                        <!-- DÒNG 2: TIẾN ĐỘ + BUTTON THÊM XÓA (GỌN GÀNG THEO ĐỘ RỘNG CHỮ) -->
+                        <!-- CỤM HÀNH ĐỘNG: BADGE SỐ MỤC TIÊU ĐỨNG TRƯỚC BUTTON THÊM XÓA TRÊN WEB -->
                         <div class="folder-bottom-actions-line" t-on-click.stop="">
-                            <span class="badge px-2.5 py-1 fw-bold flex-shrink-0" style="font-size: 11.5px; background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; border-radius: 20px; white-space: nowrap;">
+                            <span class="badge px-2.5 py-1 fw-bold flex-shrink-0" style="font-size: 13px; background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; border-radius: 20px; white-space: nowrap;">
                                 Có <t t-esc="lv.tong_muctieu"/> mục tiêu
                             </span>
 
@@ -137,7 +160,7 @@
                                 <div class="w-100 p-0 border-bottom d-flex flex-column">
 
                                     <!-- DÒNG MỤC TIÊU TIÊU ĐỀ -->
-                                    <div class="target-header-row d-flex align-items-center justify-content-between w-100 p-3 target-header-row"
+                                    <div class="target-header-row d-flex align-items-center justify-content-between w-100 p-3"
                                          t-on-click="() => this.toggleTargetDetail(muctieu.id)">
 
                                         <!-- Vòng tròn số thứ tự xám chữ đen chuẩn nét -->
@@ -154,11 +177,11 @@
                                         <div class="target-right-actions-block d-flex align-items-center gap-2 justify-content-end" t-on-click.stop="">
                                             <div class="d-flex align-items-center flex-shrink-0">
                                                 <span t-if="muctieu.kehoach_muctieu_thangtruoc_id" class="badge fw-bold px-2 py-0.5"
-                                                      style="font-size: 10.5px; color: #EF4444; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px; white-space: nowrap;">
+                                                      style="font-size: 12px; color: #EF4444; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px; white-space: nowrap;">
                                                     <i class="fa fa-history me-0.5"></i>Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)
                                                 </span>
                                                 <span t-else="" class="badge fw-bold px-2 py-0.5"
-                                                      style="font-size: 10.5px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
+                                                      style="font-size: 12px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
                                                     <i class="fa fa-star me-0.5"></i>Mới
                                                 </span>
                                             </div>
@@ -167,10 +190,10 @@
                                                     t-on-click="() => this.toggleNoteInline(muctieu.id)"
                                                     style="height: 24px; cursor: pointer; white-space: nowrap;">
                                                 <i class="fa fa-commenting" t-attf-style="font-size: 16px; color: #{muctieu.ghichu ? '#10B981' : '#94A3B8'};"></i>
-                                                <span style="font-size: 12px; color: #475569; font-weight: 600;">Ghi chú</span>
+                                                <span style="font-size: 13px; color: #475569; font-weight: 600;">Ghi chú</span>
                                             </button>
 
-                                            <!-- 🌟 MỚI: ICON XÓA NHANH NẰM BÊN PHẢI NGOÀI CÙNG TIỆN LỢI -->
+                                            <!-- ICON XÓA NHANH NẰM BÊN PHẢI NGOÀI CÙNG TIỆN LỢI -->
                                             <t t-if="!props.readonly and !muctieu.kehoach_muctieu_thangtruoc_id">
                                                 <button type="button" class="btn-quick-delete-icon flex-shrink-0" title="Xóa khỏi kế hoạch"
                                                         t-on-click="() => this.removeTargetFromPlan(muctieu.id)">
@@ -185,12 +208,12 @@
                                         </div>
                                     </div>
 
-                                    <!-- KHỐI MỞ RỘNG CHI TIẾT MỤC TIÊU (GIỮ NGUYÊN) -->
+                                    <!-- KHỐI MỞ RỘNG CHI TIẾT MỤC TIÊU -->
                                     <div t-if="state.expandedTargets[muctieu.id]" class="w-100 p-3 border-top d-flex flex-column gap-3"
                                          style="background-color: #FAFAFA; border-color: #E2E8F0;">
 
                                         <div t-if="state.activeNotes[muctieu.id]" class="w-100 p-3 bg-white rounded-3 border inline-note-box shadow-sm mb-1">
-                                            <div class="fw-bold text-dark mb-1" style="font-size: 12px;">
+                                            <div class="fw-bold text-dark mb-1" style="font-size: 13px;">
                                                 <i class="fa fa-pencil-square-o text-primary"></i> Ghi chú cho mục tiêu:</div>
 
                                             <textarea class="form-control form-control-sm note-textarea mb-2"
@@ -213,41 +236,41 @@
 
                                         <div class="row g-3 w-100 m-0 pt-1">
                                             <div class="col-md-6 ps-0 pe-md-3 text-start">
-                                                <div class="fw-bold text-success mb-1" style="font-size: 12px; letter-spacing: 0.3px;">
+                                                <div class="fw-bold text-success mb-1" style="font-size: 13px; letter-spacing: 0.3px;">
                                                     <i class="fa fa-star"></i> CHỨC NĂNG PHÁT TRIỂN CỐT LÕI:
                                                 </div>
-                                                <div style="font-size: 12.5px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
                                                     <t t-out="muctieu.chucnang || 'Không có'"/>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6 pe-0 ps-md-3 text-start" style="border-left: 1px dashed #E2E8F0;">
-                                                <div class="fw-bold text-warning mb-1" style="font-size: 12px; letter-spacing: 0.3px; color: #EA580C !important;">
+                                                <div class="fw-bold text-warning mb-1" style="font-size: 14px; letter-spacing: 0.3px; color: #EA580C !important;">
                                                     <i class="fa fa-magic"></i> THIẾT KẾ HOẠT ĐỘNG CHO GIÁO VIÊN:
                                                 </div>
-                                                <div style="font-size: 12.5px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
                                                     <t t-out="muctieu.thietke || 'Không có'"/>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="w-100 d-flex flex-column gap-2 mt-2">
-                                            <div class="fw-bold text-uppercase" style="font-size: 11px; color: #94A3B8; letter-spacing: 0.5px;">
+                                            <div class="fw-bold text-uppercase" style="font-size: 14px; color: #94A3B8; letter-spacing: 0.5px;">
                                                 <i class="fa fa-check-square-o"></i> Tiêu chí đánh giá lâm sàng phân cấp:
                                             </div>
                                             <div class="d-flex flex-wrap gap-3 w-100 m-0">
                                                 <div class="crit-box danger d-flex flex-column gap-1">
-                                                    <span class="fw-bold text-danger" style="font-size: 11.5px;">(-) Chưa đạt:</span>
+                                                    <span class="fw-bold text-danger" style="font-size: 14px;">(-) Chưa đạt:</span>
                                                     <t t-out="muctieu.tieuchi_chuadat || 'Chưa định nghĩa tiêu chí chưa đạt.'"/>
                                                 </div>
 
                                                 <div class="crit-box warning d-flex flex-column gap-1">
-                                                    <span class="fw-bold" style="font-size: 11.5px; color: #B45309;">(+/-) Đang hình thành:</span>
+                                                    <span class="fw-bold" style="font-size: 14px; color: #B45309;">(+/-) Đang hình thành:</span>
                                                     <t t-out="muctieu.tieuchi_hinhthanh || 'Chưa định nghĩa tiêu chí đang hình thành.'"/>
                                                 </div>
 
                                                 <div class="crit-box success d-flex flex-column gap-1">
-                                                    <span class="fw-bold text-success" style="font-size: 11.5px;">(+) Đạt:</span>
+                                                    <span class="fw-bold text-success" style="font-size: 14px;">(+) Đạt:</span>
                                                     <t t-out="muctieu.tieuchi_dat || 'Chưa định nghĩa tiêu chí đạt.'"/>
                                                 </div>
                                             </div>
@@ -256,18 +279,18 @@
                                         <!-- FOOTER BÊN TRONG CỦA DÒNG CHI TIẾT -->
                                         <div class="w-100 d-flex justify-content-between align-items-center border-top pt-2 mt-2">
                                             <t t-if="props.readonly">
-                                                <span class="text-muted" style="font-size: 11px; font-style: italic; color: #94A3B8 !important;">
+                                                <span class="text-muted" style="font-size: 13px; font-style: italic; color: #94A3B8 !important;">
                                                     <i class="fa fa-lock"></i> Kế hoạch ở chế độ chỉ đọc (Không thể chỉnh sửa mục tiêu)
                                                 </span>
                                             </t>
                                             <t t-else="">
                                                 <t t-if="muctieu.kehoach_muctieu_thangtruoc_id">
-                                                    <span class="text-muted" style="font-size: 11px; font-style: italic; color: #94A3B8 !important;">
+                                                    <span class="text-muted" style="font-size: 13px; font-style: italic; color: #94A3B8 !important;">
                                                         <i class="fa fa-lock"></i> Mục tiêu chuyển từ tháng trước sang (Không thể xóa)
                                                     </span>
                                                 </t>
                                                 <t t-else="">
-                                                    <button type="button" class="btn btn-xs btn-outline-danger" style="font-size: 11px;"
+                                                    <button type="button" class="btn btn-xs btn-outline-danger" style="font-size: 13px;"
                                                             t-on-click="() => this.removeTargetFromPlan(muctieu.id)">
                                                         <i class="fa fa-trash-o"></i> Xóa khỏi kế hoạch
                                                     </button>

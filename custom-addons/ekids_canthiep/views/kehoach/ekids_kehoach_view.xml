@@ -368,9 +368,7 @@
                      <field name="is_header_open" invisible="1"/>
                      <field name="is_show_wiget_canthiep" invisible="1"/>
 
-
                      <header>
-
                          <button name="action_quaylai_kehoachs"
                                 string="Quay lại"
                                 type="object"
@@ -572,7 +570,7 @@
                              .ekids_red_compact_badge { background-color: #FEF2F2 !important; color: #DC2626 !important; border: 1px solid #FCA5A5 !important; font-size: 12px !important; padding: 2px 8px !important; border-radius: 4px !important; font-weight: 900 !important; display: inline-flex !important; align-items: center; }
                              .ekids_red_compact_badge span, .ekids_red_compact_badge input { color: #DC2626 !important; font-weight: 900 !important; background: transparent !important; border: none !important; padding: 0 !important; width: auto !important; }
 
-                             /* TẦNG RESPONSIVE MOBILE ĐỘT PHÁ - KHÔNG LO VỠ CHỮ GIÁO VIÊN */
+                             /* RESPONSIVE MOBILE */
                              @media (max-width: 768px) {
                                  .flat-assignment-detail-panel {
                                      flex-direction: column !important;
@@ -590,13 +588,6 @@
                              }
                          </style>
 
-                         <style invisible="is_header_open == True">
-                             #collapseHeaderAccentZone_Main:not(.show):not(.collapsing) { display: none; }
-                         </style>
-                         <style invisible="is_header_open == False">
-                             #collapseHeaderAccentZone_Main:not(.show):not(.collapsing) { display: block; }
-                         </style>
-
                          <div class="flat-accent-master-block">
 
                              <div class="flat-header-top-row">
@@ -609,6 +600,7 @@
                                      </span>
                                  </div>
 
+                                 <!-- NÚT ĐIỀU HƯỚNG TRIGGER ĐÓNG MỞ -->
                                  <a class="lbl-flat-toggler text-decoration-none"
                                     data-bs-toggle="collapse"
                                     href="#collapseHeaderAccentZone_Main"
@@ -618,16 +610,17 @@
                                  </a>
                              </div>
 
-                             <div class="collapse w-100" id="collapseHeaderAccentZone_Main">
-                                 <div class="w-100 pt-2 border-top Regal-divider mt-2" style="border-color: #CBD5E1 !important;">
+                             <!-- 🌟 GIẢI PHÁP ĐỒNG BỘ: Sử dụng 2 khối div riêng biệt kiểm soát bằng thuộc tính invisible của Odoo
+                                  để render class ban đầu chuẩn xác (.show hoặc không có .show), trao quyền đóng mở mượt mà lại cho Bootstrap JS -->
 
+                             <!-- Khối hiển thị MỞ SẴN khi is_header_open == True -->
+                             <div invisible="is_header_open == False" class="collapse w-100 show" id="collapseHeaderAccentZone_Main">
+                                 <div class="w-100 pt-2 border-top Regal-divider mt-2" style="border-color: #CBD5E1 !important;">
                                       <div class="flat-header-middle-row">
                                           <a class="flat-assignment-menu-trigger text-decoration-none" data-bs-toggle="collapse" href="#collapseStaffDetailPanel_Core" role="button">
                                               <i class="fa fa-users me-1.5"></i> Phân công giáo viên <i class="fa fa-caret-down text-muted ms-1" style="font-size: 11px;"></i>
                                           </a>
-
                                           <button name="action_xem_ketluan" string="Xem kết luận" type="object" icon="fa-file-text-o" class="btn-flat-conclusion"/>
-
                                           <div class="p-1.5 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
                                               <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
                                           </div>
@@ -665,7 +658,54 @@
                                               </div>
                                           </div>
                                       </div>
+                                 </div>
+                             </div>
 
+                             <!-- Khối hiển thị ĐÓNG SẴN (Không có class .show) khi is_header_open == False -->
+                             <div invisible="is_header_open == True" class="collapse w-100" id="collapseHeaderAccentZone_Main">
+                                 <div class="w-100 pt-2 border-top Regal-divider mt-2" style="border-color: #CBD5E1 !important;">
+                                      <div class="flat-header-middle-row">
+                                          <a class="flat-assignment-menu-trigger text-decoration-none" data-bs-toggle="collapse" href="#collapseStaffDetailPanel_Core" role="button">
+                                              <i class="fa fa-users me-1.5"></i> Phân công giáo viên <i class="fa fa-caret-down text-muted ms-1" style="font-size: 11px;"></i>
+                                          </a>
+                                          <button name="action_xem_ketluan" string="Xem kết luận" type="object" icon="fa-file-text-o" class="btn-flat-conclusion"/>
+                                          <div class="p-1.5 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
+                                              <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
+                                          </div>
+                                      </div>
+
+                                      <div class="collapse w-100" id="collapseStaffDetailPanel_Core">
+                                          <div class="flat-assignment-detail-panel">
+                                               <div class="flat-gv-track-layout">
+                                                   <span class="flat-gv-badge c-lap-purple b-lap-purple"><span class="badge-bold-title"><i class="fa fa-pencil-square-o"></i> Lập: </span><field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/></span>
+                                                   <span class="flat-vertical-divider flat-gv-divider">|</span>
+                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange"><span class="badge-bold-title"><i class="fa fa-user-md"></i> Can thiệp: </span><field name="gv_canthiep_id" readonly="1" options="{'no_open': True}"/></span>
+                                                   <span class="flat-vertical-divider flat-gv-divider">|</span>
+                                                   <span class="flat-gv-badge c-chuyenmon-teal b-chuyenmon-teal"><span class="badge-bold-title"><i class="fa fa-graduation-cap"></i> Chuyên môn: </span><field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/></span>
+                                               </div>
+                                          </div>
+                                      </div>
+
+                                      <div class="flat-inputs-grid">
+                                          <div class="flat-input-column v-student">
+                                              <span class="flat-input-label-text"><i class="fa fa-user-circle"></i> Học sinh</span>
+                                              <div class="flat-field-value-holder"><field name="hocsinh_id" readonly="1" options="{'no_open': True}"/></div>
+                                          </div>
+                                          <div class="flat-input-column v-from">
+                                              <span class="flat-input-label-text"><i class="fa fa-calendar-minus-o"></i> Từ ngày</span>
+                                              <div class="flat-field-value-holder"><field name="tu_ngay" readonly="is_readonly" class="compact_editable_date w-100"/></div>
+                                          </div>
+                                          <div class="flat-input-column v-to">
+                                              <span class="flat-input-label-text"><i class="fa fa-calendar-check-o"></i> Đến ngày</span>
+                                              <div class="flat-field-value-holder"><field name="den_ngay" readonly="is_readonly" class="compact_editable_date w-100"/></div>
+                                          </div>
+                                          <div class="flat-input-column v-duration">
+                                              <span class="flat-input-label-text"><i class="fa fa-hourglass-half"></i> Số ngày</span>
+                                              <div class="flat-field-value-holder">
+                                                    <strong><field name="songay" readonly="is_readonly"/> ngày</strong>
+                                              </div>
+                                          </div>
+                                      </div>
                                  </div>
                              </div>
 
