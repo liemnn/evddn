@@ -113,6 +113,15 @@
                         title="Bấm vào đây để mở bảng đánh giá và ghi nhận kết quả học tập hàng ngày của trẻ"
                 />
 
+                <button name="action_canthiep_backup"
+                        string="Can thiệp cũ"
+                        type="object"
+                        class="btn-success btn-sm fw-bold text-uppercase"
+                        icon="fa-play-circle"
+                        invisible="is_canthiep==False"
+                        title="Bấm vào đây để mở bảng đánh giá và ghi nhận kết quả học tập hàng ngày của trẻ"
+                />
+
 
 
 

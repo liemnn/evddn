@@ -97,7 +97,6 @@ class KeHoach2MucTieu(models.Model):
 
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
 
-
     def _compute_is_readonly(self):
         for record in self:
             record.is_readonly = record.kehoach_linhvuc_id.is_readonly
@@ -326,6 +325,7 @@ class KeHoach2MucTieu(models.Model):
         # 2. Ép kiểu an toàn về Date, triệt tiêu hoàn toàn lỗi Datetime vs Date
         tu_ngay = fields.Date.to_date(self.kehoach_id.tu_ngay)
         den_ngay = fields.Date.to_date(self.kehoach_id.den_ngay)
+
 
         if not tu_ngay or not den_ngay:
             raise UserError("Kế hoạch chưa thiết lập đủ Từ ngày và Đến ngày.")

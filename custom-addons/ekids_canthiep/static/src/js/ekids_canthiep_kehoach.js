@@ -193,7 +193,7 @@ export class CanThiepKehoachWidget extends Component {
 
     // Thêm hàm này vào trong class CanThiepKehoachWidget phối hợp với template mới
     async onCanThiepClick(muctieu, event) {
-        if (muctieu.trangthai === '-1') {
+        if (muctieu.trangthai !='0') {
             try {
                 console.log("Kích hoạt can thiệp cho mục tiêu ID:", muctieu.id);
 

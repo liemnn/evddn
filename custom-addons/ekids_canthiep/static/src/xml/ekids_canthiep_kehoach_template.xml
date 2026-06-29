@@ -134,23 +134,25 @@
                                             </div>
 
                                             <button type="button"
-                                                    t-att-disabled="muctieu.trangthai === 0"
+                                                    t-att-disabled="muctieu.trangthai === '0'"
                                                     t-attf-class="btn-canthiep-status #{muctieu.trangthai === '1' ? 'bg-status-green' : (muctieu.trangthai === '-1' ? 'bg-status-yellow' : 'bg-status-grey')}"
                                                     t-on-click="(ev) => this.onCanThiepClick(muctieu, ev)">
                                                 <i t-attf-class="fa #{muctieu.trangthai === 1 ? 'fa-check-circle' : 'fa-bolt'}"></i>
                                                 <span t-out="muctieu.trangthai === 1 ? 'Đạt' : 'Can thiệp'"/>
                                             </button>
 
+
                                             <button type="button" class="btn btn-link p-1 text-decoration-none shadow-none d-flex align-items-center gap-1"
                                                     t-on-click="() => this.toggleNoteInline(muctieu.id)"
                                                     style="height: 24px; cursor: pointer;">
-                                                <i class="fa fa-commenting" t-attf-style="font-size: 16px; color: #{muctieu.ghichu ? '#10B981' : '#94A3B8'};"></i>
+                                                <i class="fa fa-commenting" t-attf-style="color: #{muctieu.ghichu ? '#10B981' : '#94A3B8'};"></i>
                                                 <span style="font-size: 12px; color: #475569; font-weight: 600;">Ghi chú</span>
                                             </button>
 
                                             <button type="button" class="btn btn-link p-0 text-decoration-none text-muted"
                                                     t-on-click="() => this.toggleTargetDetail(muctieu.id)">
-                                                <i t-attf-class="fa #{state.expandedTargets[muctieu.id] ? 'fa-chevron-up' : 'fa-chevron-down'}" style="font-size: 13px;"></i>
+                                                <i t-attf-class="fa #{state.expandedTargets[muctieu.id] ? 'fa-chevron-up' : 'fa-chevron-down'}"
+                                                   style="font-size: 13px;"></i>
                                             </button>
                                         </div>
                                     </div>
