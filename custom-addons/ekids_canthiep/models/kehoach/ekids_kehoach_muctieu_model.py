@@ -83,6 +83,8 @@ class KeHoach2MucTieu(models.Model):
     # ghi chú kiểm duyet
     ghichu = fields.Html(string="Nội dung kiểm duyệt")
 
+
+
     # Hàm RPC cho GV chuyên môn click duyệt nhanh từ OWL
 
 
@@ -93,6 +95,12 @@ class KeHoach2MucTieu(models.Model):
     ketqua_hinhthanh= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_hinhthanh")
     ketqua_khongdat = fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_khongdat")
 
+    is_readonly = fields.Boolean(compute="_compute_is_readonly")
+
+
+    def _compute_is_readonly(self):
+        for record in self:
+            record.is_readonly = record.kehoach_linhvuc_id.is_readonly
 
     def _compute_sothang_da_chuyenttiep(self):
         today = date.today()

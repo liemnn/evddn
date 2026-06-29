@@ -676,12 +676,14 @@
                                     widget="ekids_lap_kehoach"
                                     nolabel="1"
                                     colspan="2"
+                                    readonly="is_readonly"
                                     invisible="is_show_wiget_canthiep == True"
                                     class="w-100 m-0 p-0"/>
                              <field name="kehoach_linhvuc_ids"
                                     widget="ekids_canthiep_kehoach"
                                     nolabel="1"
                                     colspan="2"
+                                    readonly="is_readonly"
                                     invisible="is_show_wiget_canthiep == False"
                                     class="w-100 m-0 p-0"/>
                          </group>

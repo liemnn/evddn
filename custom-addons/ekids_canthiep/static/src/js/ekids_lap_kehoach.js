@@ -80,7 +80,9 @@ export class LapKehoachWidget extends Component {
                 ,"thietke"
                 ,"tieuchi_chuadat"
                 ,"tieuchi_hinhthanh"
-                ,"tieuchi_dat"],
+                ,"tieuchi_dat"
+                ,"is_readonly"
+                ],
                 { order: "sequence asc" }
             );
 
@@ -113,6 +115,7 @@ export class LapKehoachWidget extends Component {
                     linhvuc: line.linhvuc_id ? line.linhvuc_id[1] : "",
                     tuoi: line.tuoi_id ? line.tuoi_id[1] : "",
                     chuongtrinh: line.chuongtrinh_id ? line.chuongtrinh_id[1] : "",
+                    is_readonly: line.is_readonly,
                     tong_muctieu: muctieus.length,
                     muctieus: muctieus
                 };
@@ -132,6 +135,12 @@ export class LapKehoachWidget extends Component {
     }
 
     async openAddTargetWizard(lineId) {
+        // 🌟 CHỐT CHẶN 1: Nếu form đang readonly, chặn không cho mở Wizard thêm/xóa mục tiêu
+        if (this.props.readonly) {
+            this.notification.add("Kế hoạch đã khóa (Read-only), không thể thay đổi danh sách mục tiêu!", { type: "danger" });
+            return;
+        }
+
         try {
             const action = await this.orm.call("ekids.kehoach_linhvuc", "action_xem_danhsach_ct_muctieu", [lineId]);
             if (action) {
@@ -152,6 +161,12 @@ export class LapKehoachWidget extends Component {
     }
 
     async saveNoteInline(target, event) {
+        // 🌟 CHỐT CHẶN 2: Chặn tuyệt đối hành động ghi đè dữ liệu Note nếu đang xem bản ghi dạng chỉ đọc
+        if (this.props.readonly) {
+            this.notification.add("Không thể lưu ghi chú do kế hoạch đã ở trạng thái chỉ đọc!", { type: "danger" });
+            return;
+        }
+
         try {
             const textarea = event.target.closest('.inline-note-box').querySelector('.note-textarea');
             let newNote = textarea.value;
@@ -175,6 +190,12 @@ export class LapKehoachWidget extends Component {
     }
 
     async removeTargetFromPlan(targetId) {
+        // 🌟 CHỐT CHẶN 3: Chặn hành động xóa mục tiêu ra khỏi kế hoạch khi form đang khóa
+        if (this.props.readonly) {
+            this.notification.add("Kế hoạch đã khóa, không cho phép xóa mục tiêu!", { type: "danger" });
+            return;
+        }
+
         if (confirm("Bạn có chắc chắn muốn bỏ chọn mục tiêu này khỏi kế hoạch không?")) {
             try {
                 await this.orm.unlink("ekids.kehoach_muctieu", [targetId]);

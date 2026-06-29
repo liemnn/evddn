@@ -55,7 +55,8 @@
                                 Có <t t-esc="lv.tong_muctieu"/> mục tiêu
                             </span>
 
-                            <button type="button" class="btn btn-sm btn-primary d-flex align-items-center gap-1 py-1 px-2.5 fw-bold"
+                            <button t-if="!props.readonly"
+                                    type="button" class="btn btn-sm btn-primary d-flex align-items-center gap-1 py-1 px-2.5 fw-bold"
                                     style="font-size: 11.5px; background-color: #2563EB !important; border-color: #2563EB !important;"
                                     t-on-click="() => this.openAddTargetWizard(lv.kehoach_linhvuc_id)">
                                 <i class="fa fa-plus-circle"></i> Thêm/xóa [Mục tiêu]
@@ -118,12 +119,13 @@
                                                 <i class="fa fa-pencil-square-o text-primary"></i> Ghi chú cho mục tiêu:</div>
 
                                             <textarea class="form-control form-control-sm note-textarea mb-2"
+                                                      t-att-disabled="props.readonly"
                                                       t-att-value="muctieu.ghichu_clean || ''"
                                                       rows="6"
                                                       style="font-size: 14px;"
                                                       placeholder="Nhập tiến trình hoặc ghi chú cụ thể..."></textarea>
 
-                                            <div class="d-flex justify-content-end gap-2">
+                                            <div t-if="!props.readonly" class="d-flex justify-content-end gap-2">
                                                 <button type="button" class="btn btn-xs btn-light border"
                                                         t-on-click="() => this.toggleNoteInline(muctieu.id)">Hủy
                                                 </button>
@@ -131,6 +133,10 @@
                                                         style="background-color: #2563EB !important;"
                                                         t-on-click="(ev) => this.saveNoteInline(muctieu, ev)">Lưu ghi chú
                                                 </button>
+                                            </div>
+
+                                            <div t-else="" class="text-end text-muted font-italic" style="font-size: 11px;">
+                                                <i class="fa fa-lock"></i> Kế hoạch đã khóa, không thể sửa nhật ký.
                                             </div>
                                         </div>
 
@@ -177,16 +183,23 @@
                                         </div>
 
                                         <div class="w-100 d-flex justify-content-between align-items-center border-top pt-2 mt-2">
-                                            <t t-if="muctieu.kehoach_muctieu_thangtruoc_id">
+                                            <t t-if="props.readonly">
                                                 <span class="text-muted" style="font-size: 11px; font-style: italic; color: #94A3B8 !important;">
-                                                    <i class="fa fa-lock"></i> Mục tiêu chuyển từ tháng trước sang (Không thể xóa)
+                                                    <i class="fa fa-lock"></i> Kế hoạch ở chế độ chỉ đọc (Không thể chỉnh sửa mục tiêu)
                                                 </span>
                                             </t>
                                             <t t-else="">
-                                                <button type="button" class="btn btn-xs btn-outline-danger" style="font-size: 11px;"
-                                                        t-on-click="() => this.removeTargetFromPlan(muctieu.id)">
-                                                    <i class="fa fa-trash-o"></i> Xóa khỏi kế hoạch
-                                                </button>
+                                                <t t-if="muctieu.kehoach_muctieu_thangtruoc_id">
+                                                    <span class="text-muted" style="font-size: 11px; font-style: italic; color: #94A3B8 !important;">
+                                                        <i class="fa fa-lock"></i> Mục tiêu chuyển từ tháng trước sang (Không thể xóa)
+                                                    </span>
+                                                </t>
+                                                <t t-else="">
+                                                    <button type="button" class="btn btn-xs btn-outline-danger" style="font-size: 11px;"
+                                                            t-on-click="() => this.removeTargetFromPlan(muctieu.id)">
+                                                        <i class="fa fa-trash-o"></i> Xóa khỏi kế hoạch
+                                                    </button>
+                                                </t>
                                             </t>
                                         </div>
 

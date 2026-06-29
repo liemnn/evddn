@@ -82,8 +82,8 @@
                         type="object"
                         class="btn-info btn-sm text-white"
                         icon="fa-paper-plane"
-                        invisible="trangthai_kehoach not in ['4']"
-                        title="Gửi bản kế hoạch này lên cấp Quản lý để xin xét duyệt trước khi dạy"
+                        invisible="is_kiemduyet == False"
+                        title="Kế hoạch này cần Duyệt để đưa vào can thiệp"
                 />
 
                 <button name="action_xem_danhsach_kehoach"

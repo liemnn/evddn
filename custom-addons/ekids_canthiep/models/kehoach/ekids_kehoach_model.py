@@ -126,11 +126,32 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             record.is_header_open = is_header_open
 
     def _compute_is_readonly(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
         for record in self:
             is_readonly= True
-            if (record.trangthai == kehoach_util.KEHOACH_DANG_LAP
-                or record.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+            if is_admin:
                 is_readonly = False
+            else:
+                if (record.trangthai == kehoach_util.KEHOACH_DANG_LAP
+                    or record.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                    giaovien = self.ketluan_id.gv_lapkehoach_id
+                    if giaovien.user_id.id == user.id:
+                        is_readonly = False
+                else:
+                    if (record.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
+                        and record.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET):
+                        giaovien = self.ketluan_id.gv_kiemduyet_id
+                        if giaovien.user_id.id == user.id:
+                            is_readonly= False
+                    elif record.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                        gv_canthiep = self.ketluan_id.gv_canthiep_id
+                        gv_kiemduyet = self.ketluan_id.gv_kiemduyet_id
+                        if (gv_canthiep.user_id.id == user.id
+                                or gv_kiemduyet.user_id.id == user.id):
+                            is_readonly = False
+
             record.is_readonly = is_readonly
 
     @api.depends("tu_ngay")
