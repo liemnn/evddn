@@ -24,14 +24,25 @@ export class CanThiepKetQuaWidget extends Component {
         onWillUpdateProps(async () => { await this.buildKehoachKetQua2MucTieu(); });
     }
 
+    // 🌟 BỔ SUNG: Hàm Helper bóc tách loại bỏ thẻ <p> hoặc bất kỳ thẻ HTML nào để lấy Plain Text
+    _extractPlainText(htmlString) {
+        if (!htmlString) return "";
+        try {
+            const doc = new DOMParser().parseFromString(htmlString, 'text/html');
+            return doc.body.textContent || doc.body.innerText || "";
+        } catch (e) {
+            // Trường hợp trình duyệt cũ không hỗ trợ DOMParser, dùng regex dự phòng
+            return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
+        }
+    }
+
     async buildKehoachKetQua2MucTieu() {
         const ketqua2muctieu = this.props.record.data[this.props.name].records || [];
 
-        // Sắp xếp tăng dần theo trường 'ngay' để các ô chạy đúng tuyến tính tự nhiên
         let sortedRecords = [...ketqua2muctieu].sort((a, b) => {
-            if (!a.data.ngay) return 1;
-            if (!b.data.ngay) return -1;
-            return a.data.ngay.localeCompare(b.data.ngay);
+            let dateA = a.data.ngay ? (typeof a.data.ngay === 'object' ? a.data.ngay.toISODate() : String(a.data.ngay)) : '';
+            let dateB = b.data.ngay ? (typeof b.data.ngay === 'object' ? b.data.ngay.toISODate() : String(b.data.ngay)) : '';
+            return dateA.localeCompare(dateB);
         });
 
         let tempGrid = [];
@@ -40,49 +51,33 @@ export class CanThiepKetQuaWidget extends Component {
         sortedRecords.forEach((rec, index) => {
             const d = index + 1;
             const currentDateStr = rec.data.ngay;
-            const resId = rec.resId;
-            const currentComment = rec.data.desc || "";
             const rawStatusValue = rec.data.trangthai;
 
-            // 🌟 LẤY TRỰC TIẾP GIÁ TRỊ ĐÃ TÍNH TOÁN TỪ PYTHON MODEL (Không lo lệch múi giờ)
-            const mốcThờiGian = rec.data.is_date_status;
-
-            let statusClass = "empty";
-            let symbol = "";
-            let isFutureDay = (mốcThờiGian === "1");
-            let isToday = (mốcThờiGian === "0");
+            if (rawStatusValue === "1") countDat++;
+            else if (rawStatusValue === "-1") countChuaDat++;
+            else if (rawStatusValue === "2") countHinhThanh++;
 
             let dateDisplayStr = "";
             if (currentDateStr) {
-                const parts = currentDateStr.split('-');
-                dateDisplayStr = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                if (typeof currentDateStr === 'object' && currentDateStr.toFormat) {
+                    dateDisplayStr = currentDateStr.toFormat('dd/MM/yyyy');
+                } else {
+                    const parts = String(currentDateStr).split('-');
+                    dateDisplayStr = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : String(currentDateStr);
+                }
             }
 
-            // ĐIỀU HƯỚNG HIỂN THỊ MÀU SẮC ĐỒNG BỘ 100% THEO CHỈ THỊ
-            if (isFutureDay) {
-                statusClass = "bg-future-gray"; // 1. Tương lai: màu xám nhẹ, không ký hiệu
-                symbol = "";
-            } else if (isToday) {
-                statusClass = "today-marker";   // 2. Today: màu xám đậm định vị
-                symbol = "";
-            } else {
-                // 3. Quá khứ: Hiển thị theo kết quả
-                if (rawStatusValue === "1") { statusClass = "success"; symbol = "+"; countDat++; }
-                else if (rawStatusValue === "-1") { statusClass = "danger"; symbol = "-"; countChuaDat++; }
-                else if (rawStatusValue === "2") { statusClass = "warning"; symbol = "+/-"; countHinhThanh++; }
-                else if (rawStatusValue === "0") { statusClass = "none-canthiep"; symbol = "0"; }
-            }
+            // 🌟 SỬA ĐỔI TẠI ĐÂY: Làm sạch phần comment bằng hàm bóc tách HTML trước khi lưu vào State
+            const cleanComment = this._extractPlainText(rec.data.desc);
 
             tempGrid.push({
                 dayNum: d,
-                resId: resId,
-                statusClass: statusClass,
-                symbol: symbol,
-                comment: currentComment,
+                resId: rec.resId,
+                rawRecord: rec,
                 trangthaiValue: rawStatusValue,
+                is_date_status: rec.data.is_date_status,
+                comment: cleanComment, // Lưu chữ thuần "cON THIẾU TẬP TRUNG" thay vì chứa thẻ <p>
                 dateDisplayStr: dateDisplayStr,
-                isToday: isToday,
-                isFuture: isFutureDay,
                 tooltipText: dateDisplayStr
             });
         });
@@ -111,30 +106,32 @@ export class CanThiepKetQuaWidget extends Component {
     }
 
     selectQuickStatus(statusValue) {
-        if (!this.state.selectedDay || this.state.selectedDay.isFuture) return;
+        if (!this.state.selectedDay || this.state.selectedDay.is_date_status === "1") return;
         this.state.selectedDay.trangthaiValue = statusValue;
     }
 
     async saveInlineData() {
-        if (this.props.readonly || this.state.selectedDay.isFuture) return;
+        if (this.props.readonly || this.state.selectedDay.is_date_status === "1") return;
         const day = this.state.selectedDay;
         const commentElem = document.getElementById("matrix_quick_desc");
         const nextStatus = day.trangthaiValue;
         const nextComment = commentElem.value.trim();
 
         try {
-            if (day.resId) {
-                await this.orm.write("ekids.kehoach_ketqua2muctieu", [day.resId], {
+            if (day.rawRecord) {
+                // Khi lưu, Odoo sẽ tự động bọc lại nội dung văn bản này thành HTML hợp lệ ở backend
+                await day.rawRecord.update({
                     trangthai: nextStatus,
                     desc: nextComment
                 });
-
-                this.notification.add(`Đã lưu nhật ký Ngày thứ ${day.dayNum}`, { type: "success" });
-                this.state.selectedDay = null;
-                await this.buildKehoachKetQua2MucTieu();
+                await day.rawRecord.save();
             }
+
+            this.notification.add(`Đã lưu nhật ký Ngày thứ ${day.dayNum}`, { type: "success" });
+            this.state.selectedDay = null;
+            await this.buildKehoachKetQua2MucTieu();
         } catch (error) {
-            console.error(error);
+            console.error("Lỗi ghi nhận dữ liệu can thiệp:", error);
         }
     }
 }

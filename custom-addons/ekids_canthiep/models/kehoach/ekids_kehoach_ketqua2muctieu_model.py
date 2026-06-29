@@ -34,9 +34,9 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("-1", "Quá khứ"),
         ("0", "Hôm nay"),
         ("1", "Tương lai")
-    ], string="Mốc thời gian", compute="_compute_is_date_status")
+    ], string="Mốc thời gian", compute="_compute_is_date_status",default="1")
 
-    @api.depends('ngay')
+
     def _compute_is_date_status(self):
         # Lấy ngày hôm nay chuẩn theo múi giờ local của giáo viên đăng nhập
         today = fields.Date.context_today(self)
