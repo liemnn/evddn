@@ -370,6 +370,21 @@
 
 
                      <header>
+
+                         <button name="action_quaylai_kehoachs"
+                                string="Quay lại"
+                                type="object"
+                                icon="fa-chevron-left"
+                                class="btn-secondary"/>
+
+                        <button name="action_ketthuc_kehoach"
+                                string="Kết thúc kế hoạch"
+                                type="object"
+                                icon="fa-archive"
+                                class="btn-warning fw-bold"
+                                invisible="is_kiemduyet==False"
+                                confirm="Bạn có chắc chắn muốn [KẾT THÚC] kế hoạch can thiệp này không? Kế hoạch sẽ được chuyển sang trạng thái lưu trữ."/>
+
                          <button name="action_gui_pheduyet"
                                  string="Gửi phê duyệt"
                                  type="object"

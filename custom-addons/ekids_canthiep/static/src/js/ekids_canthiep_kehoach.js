@@ -192,17 +192,32 @@ export class CanThiepKehoachWidget extends Component {
 
     // Thêm hàm này vào trong class CanThiepKehoachWidget phối hợp với template mới
     async onCanThiepClick(muctieu, event) {
-        // 🌟 LƯU Ý: Nếu Python trả về Integer, hãy kiểm tra muctieu.trangthai === 1 thay vì chuỗi '1'
         if (muctieu.trangthai === '-1') {
             try {
-                print("can thiệp cho mục tiêu===" + muctieu.id);
-                await this.orm.call("ekids.kehoach_muctieu", "action_canthiep", [muctieu.id]);
-                await this.loadAllPlanData(); // Nên reload lại data sau khi hành động thành công
+                console.log("Kích hoạt can thiệp cho mục tiêu ID:", muctieu.id);
+
+                // 1. Hứng lấy Action Object do hàm Python return về
+                const action = await this.orm.call(
+                    "ekids.kehoach_muctieu",
+                    "action_canthiep",
+                    [muctieu.id]
+                );
+
+                // 2. Kiểm tra nếu Python trả về một Action hợp lệ, dùng Action Service để ép mở Popup
+                if (action) {
+                    this.actionService.doAction(action, {
+                        onClose: async () => {
+                            // Hàm này tự trigger khi giáo viên đóng popup hoặc bấm lưu trên popup
+                            await this.loadAllPlanData();
+                        }
+                    });
+                }
+
             } catch (error) {
-                console.error(error);
+                console.error("Lỗi thực thi Action Can Thiệp:", error);
             }
         } else {
-            alert("Kế hoạch chưa thể can thiệp ! với trạng thái="+muctieu.trangthai);
+            alert("Kế hoạch chưa thể can thiệp !");
         }
     }
 } // 🌟 ĐÃ BỔ SUNG DẤU ĐÓNG NGOẶC CỦA CLASS TẠI ĐÂY!

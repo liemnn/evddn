@@ -307,26 +307,8 @@ class KeHoach2MucTieu(models.Model):
     def action_donglai_ve_kehoach(self):
         """ Hàm nằm ở chân Form View giúp đóng popup và ép màn hình OWL cha reload dữ liệu """
         self.ensure_one()
+        return {'type': 'ir.actions.act_window_close'}
 
-        # Phòng hờ bốc ID kế hoạch từ trường dữ liệu hoặc từ context ẩn của hệ thống
-        hocsinh = self.kehoach_id.hocsinh_id
-
-        if not hocsinh:
-            # Nếu không tìm thấy ID kế hoạch, đóng popup đơn thuần để tránh sập trang
-            return {'type': 'ir.actions.act_window_close'}
-
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'ekids_canthiep.kehoach_canthiep_action',
-
-            # 🌟 THAM SỐ CHÍ MẠNG: Ép phá vỡ Modal Dialog để làm mới không gian làm việc chính
-            'target': 'main',
-
-            'context': {
-                'active_id': hocsinh.id,
-                'kehoach_id': hocsinh.id,
-            }
-        }
 
     def func_khoitao_ketqua2muctieu(self):
         # 1. Chuẩn hóa ngày hiện tại (Nên dùng context_today để đúng múi giờ người dùng Odoo)
