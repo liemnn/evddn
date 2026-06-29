@@ -189,24 +189,23 @@ export class CanThiepKehoachWidget extends Component {
             }
         }
     }
+
     // Thêm hàm này vào trong class CanThiepKehoachWidget phối hợp với template mới
     async onCanThiepClick(muctieu, event) {
-        if (muctieu.trangthai === 0) {
-            // Chống click tuyệt đối bằng code nếu bypass giao diện
-            return;
-        }
-        try {
-            // Thao tác logic can thiệp của bạn tại đây (Ví dụ: Mở wizard hoặc gọi một action object)
-            this.notification.add(`Đang xử lý can thiệp cho mục tiêu: ${muctieu.name}`, { type: "info" });
-
-            // Nếu muốn gọi một hàm Python cụ thể trên model:
-            // await this.orm.call("ekids.kehoach_muctieu", "action_xu_ly_can_thiep", [muctieu.id]);
-            // await this.loadAllPlanData();
-        } catch (error) {
-            console.error(error);
+        // 🌟 LƯU Ý: Nếu Python trả về Integer, hãy kiểm tra muctieu.trangthai === 1 thay vì chuỗi '1'
+        if (muctieu.trangthai === '-1') {
+            try {
+                print("can thiệp cho mục tiêu===" + muctieu.id);
+                await this.orm.call("ekids.kehoach_muctieu", "action_canthiep", [muctieu.id]);
+                await this.loadAllPlanData(); // Nên reload lại data sau khi hành động thành công
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            alert("Kế hoạch chưa thể can thiệp ! với trạng thái="+muctieu.trangthai);
         }
     }
-}
+} // 🌟 ĐÃ BỔ SUNG DẤU ĐÓNG NGOẶC CỦA CLASS TẠI ĐÂY!
 
 registry.category("fields").add("ekids_canthiep_kehoach", {
     component: CanThiepKehoachWidget,

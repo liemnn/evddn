@@ -107,6 +107,15 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
     is_header_open = fields.Boolean(compute="_compute_is_header_open")
+    is_show_wiget_canthiep = fields.Boolean(compute="_compute_is_show_wiget_canthiep")
+
+    def _compute_is_show_wiget_canthiep(self):
+        for record in self:
+            is_show_wiget_canthiep = False
+            if (record.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP
+                or record.trangthai == kehoach_util.KEHOACH_HET_HIEULUC):
+                is_show_wiget_canthiep =True
+            record.is_show_wiget_canthiep = is_show_wiget_canthiep
 
     def _compute_is_header_open(self):
         for record in self:
@@ -414,7 +423,6 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
 
     def action_xem_kehoach(self):
-        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
 
         return {
             'type': 'ir.actions.act_window',
@@ -422,7 +430,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             'res_model': 'ekids.kehoach',
             'view_mode': 'form',
             'res_id': self.id,
-            'views': [(form_view_id, 'form')],
+
             'target': 'current',
             'domain': [('coso_id', '=', self.coso_id.id)],
             'context': {

@@ -57,7 +57,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         }
 
     def action_lap_kehoach(self):
-        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
+
         trangthais = [kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]
         ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,self,trangthais)
         if ketluan:
@@ -68,7 +68,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                     'name': 'LẬP KẾ HOẠCH',
                     'res_model': 'ekids.kehoach',
                     'view_mode': 'form',
-                    'views': [(form_view_id, 'form')],
+
                     'res_id': kehoach.id,
                     'target': 'current',
                     'domain': [('coso_id', '=', self.coso_id.id)],
@@ -112,7 +112,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
     def action_sua_kehoach(self):
         self.ensure_one()  # Đảm bảo hàm chỉ chạy trên 1 dòng học sinh duy nhất, tránh lỗi sập hệ thống
-        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
+
 
         user = self.env.user
         is_admin = user.has_group('base.group_system')
@@ -145,7 +145,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 'name': 'LẬP KẾ HOẠCH',
                 'res_model': 'ekids.kehoach',
                 'view_mode': 'form',
-                'views': [(form_view_id, 'form')],
+
                 'res_id': target_kehoach.id,  # Ghim đúng ID của kế hoạch vào form view
                 'target': 'current',
                 'domain': [('coso_id', '=', self.coso_id.id)],
@@ -162,7 +162,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         )
 
     def action_duyet_kehoach(self):
-        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
+
         trangthais = [kehoach_util.KEHOACH_DANG_PHEDUYET]
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, trangthais)
         if kehoach:
@@ -172,7 +172,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 'res_model': 'ekids.kehoach',
                 'view_mode': 'form',
                 'res_id': kehoach.id,
-                'views': [(form_view_id, 'form')],
+
                 'target': 'current',
                 'domain': [('coso_id', '=', self.coso_id.id)],
                 'context': {
@@ -186,7 +186,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             }
 
     def action_xem_kehoach(self):
-        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
+
         kehoach = kehoach_util.func_get_kehoach_hocsinh(self, self)
         if kehoach:
             return {
@@ -195,7 +195,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 'res_model': 'ekids.kehoach',
                 'view_mode': 'form',
                 'res_id': kehoach.id,
-                'views': [(form_view_id, 'form')],
+
                 'target': 'current',
                 'domain': [('coso_id', '=', self.coso_id.id)],
                 'context': {
@@ -210,14 +210,12 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         trangthai = [kehoach_util.KEHOACH_DANG_CANTHIEP]
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai_ngay(self, self, trangthai, today)
         if kehoach:
-            form_view_id = self.env.ref('ekids_canthiep.canthiep_kehoach_form').id
             return {
                 'type': 'ir.actions.act_window',
                 'name': 'LẬP KẾ HOẠCH',
                 'res_model': 'ekids.kehoach',
                 'view_mode': 'form',
                 'res_id': kehoach.id,
-                'views': [(form_view_id, 'form')],
                 'target': 'current',
                 'domain': [('coso_id', '=', self.coso_id.id)],
                 'context': {

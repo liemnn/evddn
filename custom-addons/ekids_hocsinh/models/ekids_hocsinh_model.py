@@ -335,7 +335,6 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
     def action_view_kehoach_hocsinh(self):
         self.ensure_one()
         kanban_view_id = self.env.ref('ekids_hocsinh.kehoach_kanban_view').id
-        form_view_id = self.env.ref('ekids_hocsinh.kehoach_form').id  # chú ý id chính xác
 
         return {
             'type': 'ir.actions.act_window',
@@ -343,8 +342,8 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
             'res_model': 'ekids.kehoach',
             'view_mode': 'kanban,form',
             'views': [
-                (kanban_view_id, 'kanban'),
-                (form_view_id, 'form')
+                (kanban_view_id, 'kanban')
+
             ],
             'target': 'current',
             'context': dict(
