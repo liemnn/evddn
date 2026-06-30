@@ -98,6 +98,37 @@ class KeHoach2MucTieu(models.Model):
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
     is_delete = fields.Boolean(compute="_compute_is_delete")
 
+    is_canthiep = fields.Boolean(compute="_compute_is_canthiep")
+    is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
+
+    @api.depends("kehoach_linhvuc_id.is_readonly")
+    def _compute_is_canthiep(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for record in self:
+            is_canthiep = False
+            if is_admin:
+                is_canthiep = True
+            else:
+                giaovien =  record.kehoach_id.ketluan_id.gv_canthiep_id
+                if giaovien.user_id.id == user.id:
+                    is_canthiep = True
+            record.is_canthiep = is_canthiep
+
+    @api.depends("kehoach_linhvuc_id.is_readonly")
+    def _compute_is_kiemduyet(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for record in self:
+            is_kiemduyet = False
+            if is_admin:
+                is_kiemduyet = True
+            else:
+                giaovien = record.kehoach_id.ketluan_id.gv_kiemduyet_id
+                if giaovien.user_id.id == user.id:
+                    is_kiemduyet = True
+            record.is_kiemduyet = is_kiemduyet
+
     @api.depends("kehoach_linhvuc_id.is_readonly")
     def _compute_is_delete(self):
         user = self.env.user
