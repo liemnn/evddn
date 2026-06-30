@@ -107,6 +107,14 @@ class KetLuan(models.Model):
     kehoach_ids = fields.One2many("ekids.kehoach", "ketluan_id"
                                 , string="Các kế hoạch")
 
+    tong_kehoach = fields.Integer(string="Tổng kế hoạch",compute="_compute_tong_kehoach")
+
+    def _compute_tong_kehoach(self):
+        for record in self:
+            if record.kehoach_ids:
+                record.tong_kehoach = len(record.kehoach_ids)
+            else:
+                record.tong_kehoach = 0
     def _compute_is_readonly(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')

@@ -23,6 +23,7 @@
                     <field name="gv_canthiep_id"/>
                     <field name="linhvuc_ids"/>
                     <field name="trangthai"/>
+                    <field name="tong_kehoach"/>
 
                     <templates>
                         <t t-name="kanban-box">
@@ -217,7 +218,9 @@
                                             <div>
                                                 <h4 class="k_student_name"><field name="hocsinh_id"/></h4>
                                                 <div class="text-muted font-monospace mt-0.5" style="font-size: 11.5px;">
-                                                    <i class="fa fa-calendar me-1"></i><field name="ngay_danhgia"/>
+                                                    <i class="fa fa-calendar me-1"></i>
+                                                    Ngày kết luận:
+                                                    <field name="ngay_danhgia"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -296,11 +299,12 @@
                                     </div>
 
 
-                                    <button type="object" name="action_lap_kehoach"
-                                            invisible="not trangthai=='1'"
-                                            class="k_btn_action" onclick="event.stopPropagation();">
-                                        <i class="fa fa-calendar-plus-o"></i> Lập kế hoạch
-                                    </button>
+
+                                      <span>
+                                          Đã lập <strong><field name="tong_kehoach"/> </strong> kế hoạch
+                                      </span>
+
+
                                 </div>
 
                             </div>
