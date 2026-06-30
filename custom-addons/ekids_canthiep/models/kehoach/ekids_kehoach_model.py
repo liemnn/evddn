@@ -145,12 +145,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                         giaovien = self.ketluan_id.gv_kiemduyet_id
                         if giaovien.user_id.id == user.id:
                             is_readonly= False
-                    elif record.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                        gv_canthiep = self.ketluan_id.gv_canthiep_id
-                        gv_kiemduyet = self.ketluan_id.gv_kiemduyet_id
-                        if (gv_canthiep.user_id.id == user.id
-                                or gv_kiemduyet.user_id.id == user.id):
-                            is_readonly = False
+
 
             record.is_readonly = is_readonly
 

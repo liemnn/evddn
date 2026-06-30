@@ -83,6 +83,7 @@ export class CanThiepKehoachWidget extends Component {
                 ,"tieuchi_dat"
                 ,"trangthai"
                 ,"trangthai_kiemduyet"
+                ,"is_readonly"
 
                 ],
                 { order: "sequence asc" }

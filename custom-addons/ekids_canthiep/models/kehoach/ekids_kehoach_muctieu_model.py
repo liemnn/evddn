@@ -96,6 +96,32 @@ class KeHoach2MucTieu(models.Model):
     ketqua_khongdat = fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_khongdat")
 
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
+    is_delete = fields.Boolean(compute="_compute_is_delete")
+
+    @api.depends("kehoach_linhvuc_id.is_readonly")
+    def _compute_is_delete(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for record in self:
+            is_delete = False
+            if is_admin:
+                is_delete = True
+            else:
+                kehoach = record.kehoach_id
+                #TH1: Đang lập kế hoạch và ko phải là tháng trước chuyển sang thì cho phép xoa
+                if (kehoach.trangthai == kehoach_util.KEHOACH_DANG_LAP
+                        or kehoach.trangthai_pheduyet==kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                    if not record.kehoach_muctieu_truoc_id:
+                        giaovien = kehoach.ketluan_id.gv_lapkehoach_id
+                        if giaovien.user_id.id == user.id:
+                            is_delete = True
+                # TH2: Đagn phê duyệt thì người duoc xóa thoải mái
+                if kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
+                    giaovien = kehoach.ketluan_id.gv_kiemduyet_id
+                    if giaovien.user_id.id == user.id:
+                        is_delete = True
+
+            record.is_delete = is_delete
 
     def _compute_is_readonly(self):
         for record in self:

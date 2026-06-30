@@ -82,6 +82,7 @@ export class LapKehoachWidget extends Component {
                 ,"tieuchi_hinhthanh"
                 ,"tieuchi_dat"
                 ,"is_readonly"
+                ,"is_delete"
                 ],
                 { order: "sequence asc" }
             );

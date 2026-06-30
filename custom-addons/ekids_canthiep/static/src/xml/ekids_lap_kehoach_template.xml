@@ -194,7 +194,7 @@
                                             </button>
 
                                             <!-- ICON XÓA NHANH NẰM BÊN PHẢI NGOÀI CÙNG TIỆN LỢI -->
-                                            <t t-if="!props.readonly and !muctieu.kehoach_muctieu_thangtruoc_id">
+                                            <t t-if="muctieu.is_delete">
                                                 <button type="button" class="btn-quick-delete-icon flex-shrink-0" title="Xóa khỏi kế hoạch"
                                                         t-on-click="() => this.removeTargetFromPlan(muctieu.id)">
                                                     <i class="fa fa-trash-o"></i>
@@ -284,16 +284,17 @@
                                                 </span>
                                             </t>
                                             <t t-else="">
-                                                <t t-if="muctieu.kehoach_muctieu_thangtruoc_id">
-                                                    <span class="text-muted" style="font-size: 13px; font-style: italic; color: #94A3B8 !important;">
-                                                        <i class="fa fa-lock"></i> Mục tiêu chuyển từ tháng trước sang (Không thể xóa)
-                                                    </span>
-                                                </t>
-                                                <t t-else="">
-                                                    <button type="button" class="btn btn-xs btn-outline-danger" style="font-size: 13px;"
+                                                <t t-if="muctieu.is_delete">
+                                                     <button type="button" class="btn btn-xs btn-outline-danger" style="font-size: 13px;"
                                                             t-on-click="() => this.removeTargetFromPlan(muctieu.id)">
                                                         <i class="fa fa-trash-o"></i> Xóa khỏi kế hoạch
                                                     </button>
+
+                                                </t>
+                                                <t t-else="">
+                                                     <span class="text-muted" style="font-size: 13px; font-style: italic; color: #94A3B8 !important;">
+                                                        <i class="fa fa-lock"></i> Mục tiêu chuyển từ tháng trước sang (Không thể xóa)
+                                                    </span>
                                                 </t>
                                             </t>
                                         </div>
