@@ -72,9 +72,16 @@ class CoSo(models.Model):
         }
 
     def action_danhsach_hocsinh_lap_kehoach(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
         list_view_id = self.env.ref('ekids_canthiep.hocsinh_lap_kehoach_inherit_list').id
-        hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_lap_kehoach(self)
-        domain = [('coso_id', '=', self.id),('id','in',hocsinh_ids)]
+        domain = [('coso_id', '=', self.id)]
+
+        if is_admin == False:
+            hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_lap_kehoach(self)
+            domain = [('coso_id', '=', self.id),('id','in',hocsinh_ids)]
+
         return {
             'type': 'ir.actions.act_window',
             'name': 'DANH SÁCH',
@@ -90,9 +97,14 @@ class CoSo(models.Model):
         }
 
     def action_danhsach_hocsinh_duyet_kehoach(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
         list_view_id = self.env.ref('ekids_canthiep.hocsinh_duyet_kehoach_inherit_list').id
-        hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_duyet_kehoach(self)
-        domain = [('coso_id', '=', self.id),('id','in',hocsinh_ids)]
+        domain = [('coso_id', '=', self.id)]
+        if is_admin == False:
+            hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_duyet_kehoach(self)
+            domain = [('coso_id', '=', self.id),('id','in',hocsinh_ids)]
 
         return {
             'type': 'ir.actions.act_window',
@@ -109,9 +121,14 @@ class CoSo(models.Model):
         }
 
     def action_danhsach_hocsinh_canthiep(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
         list_view_id = self.env.ref('ekids_canthiep.hocsinh_ketluan_inherit_list').id
-        hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self)
-        domain = [('coso_id', '=', self.id),('id','in',hocsinh_ids)]
+        domain = [('coso_id', '=', self.id)]
+        if is_admin == False:
+            hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self)
+            domain = [('coso_id', '=', self.id), ('id', 'in', hocsinh_ids)]
         return {
             'type': 'ir.actions.act_window',
             'name': 'DANH SÁCH',

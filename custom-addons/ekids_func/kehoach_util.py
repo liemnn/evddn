@@ -117,13 +117,6 @@ def func_get_ids_hocsinh_theo_vaitro(self):
 
 def func_get_ids_hocsinh_theo_vaitro_lap_kehoach(self):
     user = self.env.user
-    is_admin = user.has_group('base.group_system')
-    is_role_ketluan = user.has_group('ekids_core.ketluan')
-
-    if is_admin or is_role_ketluan:
-        return None
-
-
     giaovien = (self.env['ekids.giaovien']
                 .search([('user_id', '=', user.id)], limit=1))
     if giaovien:
@@ -132,47 +125,33 @@ def func_get_ids_hocsinh_theo_vaitro_lap_kehoach(self):
 
 
         # 3. Tìm kiếm
-        kehoachs = self.env['ekids.kehoach_ketluan'].search(domain)
-        if kehoachs:
+        ketluans = self.env['ekids.kehoach_ketluan'].search(domain)
+        if ketluans:
             hocsinh_ids=[]
-            for kh in kehoachs:
-                hocsinh_ids.append(kh.hocsinh_id.id)
+            for kl in ketluans:
+                hocsinh_ids.append(kl.hocsinh_id.id)
             return hocsinh_ids
     return None
 
 def func_get_ids_hocsinh_theo_vaitro_duyet_kehoach(self):
     user = self.env.user
-    is_admin = user.has_group('base.group_system')
-    is_role_ketluan = user.has_group('ekids_core.ketluan')
-
-    if is_admin or is_role_ketluan:
-        return None
-
-
     giaovien = (self.env['ekids.giaovien']
                 .search([('user_id', '=', user.id)], limit=1))
     if giaovien:
         # 1. Khai báo các điều kiện độc lập cho rõ ràng
         domain = [('gv_kiemduyet_id', '=', giaovien.id)]
 
-
         # 3. Tìm kiếm
-        kehoachs = self.env['ekids.kehoach_ketluan'].search(domain)
-        if kehoachs:
-            hocsinh_ids=[]
-            for kh in kehoachs:
-                hocsinh_ids.append(kh.hocsinh_id.id)
+        ketluans = self.env['ekids.kehoach_ketluan'].search(domain)
+        if ketluans:
+            hocsinh_ids = []
+            for kl in ketluans:
+                hocsinh_ids.append(kl.hocsinh_id.id)
             return hocsinh_ids
     return None
 
 def func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self):
     user = self.env.user
-    is_admin = user.has_group('base.group_system')
-    is_role_ketluan = user.has_group('ekids_core.ketluan')
-
-    if is_admin or is_role_ketluan:
-        return None
-
 
     giaovien = (self.env['ekids.giaovien']
                 .search([('user_id', '=', user.id)], limit=1))
@@ -180,16 +159,14 @@ def func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self):
         # 1. Khai báo các điều kiện độc lập cho rõ ràng
         domain = [('gv_canthiep_id', '=', giaovien.id)]
 
-
         # 3. Tìm kiếm
-        kehoachs = self.env['ekids.kehoach_ketluan'].search(domain)
-        if kehoachs:
-            hocsinh_ids=[]
-            for kh in kehoachs:
-                hocsinh_ids.append(kh.hocsinh_id.id)
+        ketluans = self.env['ekids.kehoach_ketluan'].search(domain)
+        if ketluans:
+            hocsinh_ids = []
+            for kl in ketluans:
+                hocsinh_ids.append(kl.hocsinh_id.id)
             return hocsinh_ids
     return None
-
 
 
 

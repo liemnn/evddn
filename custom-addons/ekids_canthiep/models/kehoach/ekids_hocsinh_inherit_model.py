@@ -160,22 +160,19 @@ class HocSinhInherit(models.Model
         user = self.env.user
         is_admin = user.has_group('base.group_system')
         for hs in self:
+            is_kiemduyet = False
             trangthais =[kehoach_util.KEHOACH_DANG_PHEDUYET]
             kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs,trangthais)
-            if not kehoach:
-                hs.is_kiemduyet = False
-            else:
+            if kehoach:
                 if kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET:
                     if is_admin:
-                        hs.is_kiemduyet = True
+                        is_kiemduyet = True
                     else:
                         giaovien = kehoach.ketluan_id.gv_kiemduyet_id
                         if giaovien.user_id.id == user.id:
-                            hs.is_kiemduyet = True
-                        else:
-                            hs.is_kiemduyet = False
-                else:
-                    hs.is_kiemduyet = False
+                            is_kiemduyet = True
+            hs.is_kiemduyet = is_kiemduyet
+
 
 
 

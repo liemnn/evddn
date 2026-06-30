@@ -5,6 +5,8 @@
         <field name="model">ekids.hocsinh</field>
         <field name="arch" type="xml">
             <list create="false" delete="false" limit="200" default_order="id asc">
+                <field name="is_kiemduyet" invisible="1"/>
+
                 <field name="sequence" width="25"/>
                 <field name="name" width="170"/>
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
@@ -22,14 +24,7 @@
                 <field name="trangthai_kehoach" string="Kế hoạch"/>
                 <field name="tong_kehoach" string="Tổng số kế hoạch"/>
 
-                <button name="action_taomoi_ketluan"
-                        string="Tạo kết luận"
-                        type="object"
-                        class="btn-dark btn-sm"
-                        icon="fa-flag-checkered"
-                        invisible="is_tao_ketluan == False"
-                        title="Kết thúc đợt can thiệp, tiến hành viết đánh giá tổng kết sự tiến bộ của học sinh"
-                />
+
 
                 <button name="action_xem_danhsach_kehoach"
                         string=""

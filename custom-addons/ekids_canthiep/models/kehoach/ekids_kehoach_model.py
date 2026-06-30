@@ -46,12 +46,14 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
     trangthai = fields.Selection([
         (kehoach_util.KEHOACH_DANG_LAP, "Đang lập"),
-        (kehoach_util.KEHOACH_DANG_PHEDUYET, "Đợi duyệt"),
+        (kehoach_util.KEHOACH_DANG_PHEDUYET, "Đang kiểm duyệt"),
         (kehoach_util.KEHOACH_DANG_CANTHIEP, "Đang can thiệp"),
         (kehoach_util.KEHOACH_HET_HIEULUC, "Hết hiệu lực"),
 
 
     ], string="Trạng thái",default=kehoach_util.KEHOACH_DANG_LAP)
+
+
 
     trangthai_pheduyet = fields.Selection([
         (kehoach_util.PHEDUYET_DOI_DUYET, "Đợi phê duyệt"),
