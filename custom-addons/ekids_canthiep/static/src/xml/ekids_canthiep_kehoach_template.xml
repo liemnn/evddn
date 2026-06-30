@@ -3,6 +3,7 @@
     <t t-name="ekids_canthiep.CanThiepKeHoachWidgetTemplate">
         <div class="w-100 d-flex flex-column gap-3 mt-2 px-0">
 
+            <!-- RESPONSIVE CSS PREMIUM SOFT LIGHT - CO GIÃN THÔNG MINH -->
             <style>
                 .o_field_widget[name="kehoach_linhvuc_ids"] { width: 100% !important; max-width: 100% !important; display: block !important; }
                 .custom-folder-bar { background-color: #F8FAFC !important; border: 1px solid #E2E8F0 !important; border-radius: 12px !important; }
@@ -35,33 +36,47 @@
                 .bg-status-green { background-color: #10B981 !important; }
                 .bg-status-yellow { background-color: #F59E0B !important; }
 
-                /* 🌟 TỐI ƯU MỚI: BỎ VIỀN, LÀM DIỆU MÀU NÚT CAN THIỆP/ĐẠT PHẲNG MỊN */
+                /* NÚT BẤM CAN THIỆP / XÁC NHẬN PHẲNG MỊN KHÔNG VIỀN */
                 .btn-canthiep-status {
-                    font-size: 13px !important;
+                    font-size: 11.5px !important;
                     font-weight: 700 !important;
                     padding: 0 !important;
-                    border-radius: 0px !important;
+                    border-radius: 6px !important;
                     color: #FFFFFF !important;
-                    border: none !important; /* Triệt tiêu hoàn toàn viền cứng */
+                    border: none !important;
                     outline: none !important;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
                     gap: 4px;
-                    height: 27px;
-                    width: 95px !important; /* Khóa cứng size chống sô lệch */
+                    height: 28px;
+                    width: 95px !important;
                     flex-shrink: 0 !important;
                     transition: all 0.2s ease;
                     white-space: nowrap;
-                    box-shadow: none !important; /* Bỏ đổ bóng nặng */
+                    box-shadow: none !important;
                 }
                 .btn-canthiep-status:disabled { opacity: 0.5; cursor: not-allowed !important; }
-
-                /* Hiệu ứng lướt qua nhẹ nhàng thay vì đổi tông màu quá gắt */
                 .btn-canthiep-status:not(:disabled):hover {
                     filter: brightness(0.9);
                     transform: translateY(-0.5px);
                 }
+
+                /* Khung chứa cố định kích thước bổ sung - Sẽ tự động ẩn thu gọn bằng flexbox nếu không được render */
+                .fixed-kiemduyet-slot {
+                    width: 95px !important;
+                    height: 28px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0 !important;
+                }
+
+                /* Bảng màu bổ sung cho cấu trúc nút xác duyệt theo trangthai_kiemduyet */
+                .btn-kd-grey { background-color: #64748B !important; color: #FFFFFF !important; }
+                .btn-kd-green { background-color: #10B981 !important; color: #FFFFFF !important; }
+                .btn-kd-yellow { background-color: #F59E0B !important; color: #FFFFFF !important; }
+                .btn-kd-red { background-color: #EF4444 !important; color: #FFFFFF !important; }
 
                 /* Khối cha bảo vệ layout */
                 .folder-left-content { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
@@ -88,6 +103,7 @@
                         gap: 8px !important;
                         border-top: 1px dashed #E2E8F0;
                         padding-top: 8px;
+                        flex-wrap: wrap;
                     }
                 }
             </style>
@@ -132,7 +148,7 @@
                             <t t-foreach="lv.muctieus" t-as="muctieu" t-key="muctieu.id">
                                 <div class="w-100 p-0 border-bottom d-flex flex-column">
 
-                                    <!-- DÒNG MỤC TIÊU -->
+                                    <!-- DÒNG MỤC TIÊU TIÊU ĐỀ -->
                                     <div class="target-header-row d-flex align-items-center justify-content-between w-100 p-3"
                                          t-on-click="() => this.toggleTargetDetail(muctieu.id)">
 
@@ -145,21 +161,21 @@
                                             </span>
                                         </div>
 
-                                        <!-- HÀNG THAO TÁC KHÔNG VIỀN PHẲNG MỊN -->
+                                        <!-- HÀNG THAO TÁC THÔNG MINH CHỐNG KHOẢNG TRỐNG THỪA -->
                                         <div class="target-right-actions d-flex align-items-center gap-2 justify-content-end" t-on-click.stop="">
 
-                                            <div class="d-flex align-items-center flex-shrink-0">
+                                            <div class="d-flex align-items-center flex-shrink-0" style="min-width: 90px; justify-content: flex-end;">
                                                 <span t-if="muctieu.kehoach_muctieu_thangtruoc_id" class="badge fw-bold px-2 py-0.5"
-                                                      style="font-size: 12px; color: #EF4444; background-color: #FEF2F2; border: 1px solid #FEEE2E2; border-radius: 4px; white-space: nowrap;">
+                                                      style="font-size: 12px; color: #EF4444; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px; white-space: nowrap;">
                                                     <i class="fa fa-history me-0.5"></i>Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)
                                                 </span>
                                                 <span t-else="" class="badge fw-bold px-2 py-0.5"
                                                       style="font-size: 12px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
-                                                    <i class="fa fa-star me-0.5"></i>
+                                                    <i class="fa fa-star me-0.5"></i>Mới
                                                 </span>
                                             </div>
 
-                                            <!-- Nút bấm đã được loại bỏ hoàn toàn border viền -->
+                                            <!-- Ô 1 CỐ ĐỊNH: Nút bấm Can thiệp -->
                                             <button type="button"
                                                     t-att-disabled="muctieu.trangthai === '0'"
                                                     t-attf-class="btn-canthiep-status #{muctieu.trangthai === '1' ? 'bg-status-green' : (muctieu.trangthai === '-1' ? 'bg-status-yellow' : 'bg-status-grey')}"
@@ -168,6 +184,27 @@
                                                 <span t-out="muctieu.trangthai === '1' ? 'Đạt' : 'Can thiệp'"/>
                                             </button>
 
+                                            <!-- Ô 2 ĐỘNG: 🌟 CHỈ bật khung slot 95px khi trong màn hình có mục tiêu đạt cần kiểm duyệt -->
+                                            <t t-if="state.hasAnyTargetDone">
+                                                <div class="fixed-kiemduyet-slot">
+                                                    <t t-if="muctieu.trangthai === '1'">
+                                                        <button t-if="muctieu.trangthai_kiemduyet === '0'" type="button" class="btn-canthiep-status btn-kd-grey" t-on-click="(ev) => this.onCanThiepClick(muctieu, ev)">
+                                                            <i class="fa fa-gavel"/> Xác nhận
+                                                        </button>
+                                                        <button t-if="muctieu.trangthai_kiemduyet === '1'" type="button" class="btn-canthiep-status btn-kd-green" t-on-click="(ev) => this.onCanThiepClick(muctieu, ev)">
+                                                            <i class="fa fa-check-circle"/> Đạt
+                                                        </button>
+                                                        <button t-if="muctieu.trangthai_kiemduyet === '-1'" type="button" class="btn-canthiep-status btn-kd-yellow" t-on-click="(ev) => this.onCanThiepClick(muctieu, ev)">
+                                                            <i class="fa fa-arrow-circle-right"/> Chuyển (-)
+                                                        </button>
+                                                        <button t-if="muctieu.trangthai_kiemduyet === '-2'" type="button" class="btn-canthiep-status btn-kd-red" t-on-click="(ev) => this.onCanThiepClick(muctieu, ev)">
+                                                            <i class="fa fa-minus-circle"/> Dừng (-)
+                                                        </button>
+                                                    </t>
+                                                </div>
+                                            </t>
+
+                                            <!-- Nút tiện ích Ghi chú dạt lề -->
                                             <button type="button" class="btn btn-link p-1 text-decoration-none shadow-none d-flex align-items-center gap-1 flex-shrink-0"
                                                     t-on-click="() => this.toggleNoteInline(muctieu.id)"
                                                     style="height: 24px; cursor: pointer; white-space: nowrap;">
@@ -197,8 +234,6 @@
                                                       rows="6"
                                                       style="font-size: 14px;"
                                                       placeholder="Nhập tiến trình hoặc ghi chú cụ thể..."></textarea>
-
-
                                         </div>
 
                                         <div class="row g-3 w-100 m-0 pt-1">
@@ -242,8 +277,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
 
                                     </div>
 

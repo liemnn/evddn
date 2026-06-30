@@ -20,6 +20,7 @@ export class CanThiepKehoachWidget extends Component {
             activeNotes: {},
             collapsedLinhVuc: {},
             expandedTargets: {},
+            hasAnyTargetDone: false, // 🌟 MỚI: Biến kiểm tra trạng thái xem có mục tiêu nào đạt (trangthai === '1') chưa
         });
 
         onWillStart(async () => {
@@ -56,11 +57,12 @@ export class CanThiepKehoachWidget extends Component {
             const linhVucLines = await this.orm.searchRead(
                 "ekids.kehoach_linhvuc",
                 [["kehoach_id", "=", kehoachId]],
-                ["id", "linhvuc_id", "tuoi_id", "chuongtrinh_id","tong_muctieu_dat"]
+                ["id", "linhvuc_id", "tuoi_id", "chuongtrinh_id", "tong_muctieu_dat"]
             );
 
             if (!linhVucLines.length) {
                 this.state.groupedData = [];
+                this.state.hasAnyTargetDone = false;
                 return;
             }
 
@@ -86,10 +88,12 @@ export class CanThiepKehoachWidget extends Component {
                 ,"is_readonly"
                 ,"is_canthiep"
                 ,"is_kiemduyet"
-
                 ],
                 { order: "sequence asc" }
             );
+
+            // 🌟 MỚI: Kiểm tra xem trong toàn bộ danh sách trả về, có bất kỳ mục tiêu nào đã đạt (trangthai === '1') chưa
+            this.state.hasAnyTargetDone = muctieus_returns.some(t => t.trangthai === '1');
 
             this.state.groupedData = linhVucLines.map(line => {
                 const muctieus = muctieus_returns.filter(t => t.kehoach_linhvuc_id[0] === line.id);
@@ -194,7 +198,6 @@ export class CanThiepKehoachWidget extends Component {
         }
     }
 
-    // Thêm hàm này vào trong class CanThiepKehoachWidget phối hợp với template mới
     async onCanThiepClick(muctieu, event) {
         if (muctieu.trangthai !='0') {
             try {
@@ -224,7 +227,7 @@ export class CanThiepKehoachWidget extends Component {
             alert("Kế hoạch chưa thể can thiệp !");
         }
     }
-} // 🌟 ĐÃ BỔ SUNG DẤU ĐÓNG NGOẶC CỦA CLASS TẠI ĐÂY!
+}
 
 registry.category("fields").add("ekids_canthiep_kehoach", {
     component: CanThiepKehoachWidget,
