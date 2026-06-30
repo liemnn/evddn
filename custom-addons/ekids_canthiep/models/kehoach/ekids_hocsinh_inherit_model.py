@@ -54,12 +54,32 @@ class HocSinhInherit(models.Model
     kehoach_ids = fields.One2many("ekids.kehoach",
              "hocsinh_id", string="Các kế hoạch can thệp của học sinh")
 
+    ketluan_ids = fields.One2many("ekids.kehoach_ketluan",
+                                  "hocsinh_id", string="Kết luận")
+
 
     is_tao_ketluan = fields.Boolean(compute="_compute_is_tao_ketluan",compute_sudo=False)
     is_lap_kehoach = fields.Boolean(compute="_compute_is_lap_kehoach",compute_sudo=False)
     is_sua_kehoach = fields.Boolean(compute="_compute_is_sua_kehoach",compute_sudo=False)
     is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet",compute_sudo=False)
     is_canthiep = fields.Boolean(compute="_compute_is_canthiep",compute_sudo=False)
+
+    tong_ketluan = fields.Integer(compute="_compute_tong_ketluan", string="Số lượng")
+    tong_kehoach = fields.Integer(compute="_compute_tong_kehoach",string="Số lượng")
+
+    def _compute_tong_ketluan(self):
+        for hs in self:
+            if hs.ketluan_ids:
+                hs.tong_ketluan = len(hs.ketluan_ids)
+            else:
+                hs.tong_ketluan = 0
+
+    def _compute_tong_kehoach(self):
+        for hs in self:
+            if hs.kehoach_ids:
+                hs.tong_kehoach = len(hs.kehoach_ids)
+            else:
+                hs.tong_kehoach = 0
 
 
     def _compute_is_tao_ketluan(self):
