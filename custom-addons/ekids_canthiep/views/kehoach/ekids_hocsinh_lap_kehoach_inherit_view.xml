@@ -1,23 +1,6 @@
 <odoo>
   <data>
-    <record id="ekids_canthiep.hocsinh_search" model="ir.ui.view">
-        <field name="name">hocsinh.search</field>
-        <field name="model">ekids.hocsinh</field>
-        <field name="arch" type="xml">
-            <search>
-                <filter string="Đang theo học" name="trangthai" domain="[('trangthai','=','1')]"/>
-                <filter string="Đã nghỉ" name="trangthai-nghi" domain="[('trangthai','=','3')]"/>
-                <filter string="Đợi đánh giá" name="trangthai-doidanhgia" domain="[('trangthai','=','2')]"/>
-                <field name="name"/>
-                <field name="ten"/>
-                <field name="bietdanh"/>
-                <field name="gioitinh"/>
-
-            </search>
-        </field>
-    </record>
-
-    <record id="ekids_canthiep.kehoach_hocsinh_inherit_list" model="ir.ui.view">
+    <record id="ekids_canthiep.hocsinh_lap_kehoach_inherit_list" model="ir.ui.view">
         <field name="name">Kế hoạch can thiệp</field>
         <field name="model">ekids.hocsinh</field>
         <field name="arch" type="xml">
@@ -102,15 +85,6 @@
                         title="Xem lịch sử danh sách [Kế hoạch] đã can thiệp cho trẻ"
                 />
 
-
-
-
-
-
-
-
-
-
                 <button name="action_canthiep"
                         string="Can thiệp"
                         type="object"
@@ -119,15 +93,6 @@
                         invisible="is_canthiep==False"
                         title="Bấm vào đây để mở bảng đánh giá và ghi nhận kết quả học tập hàng ngày của trẻ"
                 />
-
-
-
-
-
-
-
-
-
 
             </list>
         </field>

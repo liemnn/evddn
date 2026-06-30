@@ -111,7 +111,7 @@ class KeHoach2MucTieu(models.Model):
                 #TH1: Đang lập kế hoạch và ko phải là tháng trước chuyển sang thì cho phép xoa
                 if (kehoach.trangthai == kehoach_util.KEHOACH_DANG_LAP
                         or kehoach.trangthai_pheduyet==kehoach_util.PHEDUYET_CAN_DIEUCHINH):
-                    if not record.kehoach_muctieu_truoc_id:
+                    if not record.kehoach_muctieu_thangtruoc_id:
                         giaovien = kehoach.ketluan_id.gv_lapkehoach_id
                         if giaovien.user_id.id == user.id:
                             is_delete = True

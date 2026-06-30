@@ -17,6 +17,20 @@ except ImportError as e:
 class CoSo(models.Model):
     _inherit = "ekids.coso"
 
+    is_ketluan = fields.Boolean(compute="_compute_is_ketluan")
+
+    def _compute_is_ketluan(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_role_ketluan = user.has_group('ekids_core.ketluan')
+
+        for record in self:
+           if (is_admin
+               or is_role_ketluan):
+               record.is_ketluan = True
+           else:
+               record.is_ketluan = False
+
 
     def action_xem_chuongtrinh_kanban(self):
 
@@ -40,9 +54,66 @@ class CoSo(models.Model):
             'context': {'default_coso_id': self.id},
         }
 
-    def action_xem_kehoachs(self):
-        list_view_id = self.env.ref('ekids_canthiep.kehoach_hocsinh_inherit_list').id
-        hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro(self)
+    def action_danhsach_hocsinh_ketluan(self):
+        list_view_id = self.env.ref('ekids_canthiep.hocsinh_ketluan_inherit_list').id
+        domain = [('coso_id', '=', self.id)]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH SÁCH',
+            'res_model': 'ekids.hocsinh',
+            'view_mode': 'list',
+            'views': [(list_view_id, 'list')],
+            'target': 'current',
+            'domain': domain,
+            'context': {
+                'default_coso_id': self.id,
+                'search_default_trangthai': '1',
+            },
+        }
+
+    def action_danhsach_hocsinh_lap_kehoach(self):
+        list_view_id = self.env.ref('ekids_canthiep.hocsinh_ketluan_inherit_list').id
+        hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_lap_kehoach(self)
+        domain =[('coso_id', '=', self.id)]
+        if hocsinh_ids:
+            domain = [('coso_id', '=', self.id),('id','in',hocsinh_ids)]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH SÁCH',
+            'res_model': 'ekids.hocsinh',
+            'view_mode': 'list',
+            'views': [(list_view_id, 'list')],
+            'target': 'current',
+            'domain': domain,
+            'context': {
+                'default_coso_id': self.id,
+                'search_default_trangthai': '1',
+            },
+        }
+
+    def action_danhsach_hocsinh_duyet_kehoach(self):
+        list_view_id = self.env.ref('ekids_canthiep.hocsinh_ketluan_inherit_list').id
+        hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_duyet_kehoach(self)
+        domain =[('coso_id', '=', self.id)]
+        if hocsinh_ids:
+            domain = [('coso_id', '=', self.id),('id','in',hocsinh_ids)]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH SÁCH',
+            'res_model': 'ekids.hocsinh',
+            'view_mode': 'list',
+            'views': [(list_view_id, 'list')],
+            'target': 'current',
+            'domain': domain,
+            'context': {
+                'default_coso_id': self.id,
+                'search_default_trangthai': '1',
+            },
+        }
+
+    def action_danhsach_hocsinh_canthiep(self):
+        list_view_id = self.env.ref('ekids_canthiep.hocsinh_ketluan_inherit_list').id
+        hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self)
         domain =[('coso_id', '=', self.id)]
         if hocsinh_ids:
             domain = [('coso_id', '=', self.id),('id','in',hocsinh_ids)]
