@@ -474,26 +474,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
             url = self.action_quaylai_kehoachs()
 
-    def action_quaylai_kehoachs(self):
-        list_view_id = self.env.ref('ekids_canthiep.kehoach_hocsinh_inherit_list').id
-        hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro(self)
-        coso = self.coso_id
-        domain =[('coso_id', '=', coso.id)]
-        if hocsinh_ids:
-            domain = [('coso_id', '=', coso.id),('id','in',hocsinh_ids)]
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'DANH SÁCH',
-            'res_model': 'ekids.hocsinh',
-            'view_mode': 'list',
-            'views': [(list_view_id, 'list')],
-            'target': 'current',
-            'domain': domain,
-            'context': {
-                'default_coso_id': coso.id,
-                'search_default_trangthai': '1',
-            },
-        }
+
 
 
 
