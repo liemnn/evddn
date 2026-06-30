@@ -227,6 +227,36 @@ export class CanThiepKehoachWidget extends Component {
             alert("Kế hoạch chưa thể can thiệp !");
         }
     }
+
+    async onMucTieuClick(muctieu,actionName, event) {
+        if (muctieu.trangthai !='0') {
+            try {
+                console.log("Kích hoạt can thiệp cho mục tiêu ID:", muctieu.id);
+
+                // 1. Hứng lấy Action Object do hàm Python return về
+                const action = await this.orm.call(
+                    "ekids.kehoach_muctieu",
+                     actionName,
+                    [muctieu.id]
+                );
+
+                // 2. Kiểm tra nếu Python trả về một Action hợp lệ, dùng Action Service để ép mở Popup
+                if (action) {
+                    this.actionService.doAction(action, {
+                        onClose: async () => {
+                            // Hàm này tự trigger khi giáo viên đóng popup hoặc bấm lưu trên popup
+                            await this.loadAllPlanData();
+                        }
+                    });
+                }
+
+            } catch (error) {
+                console.error("Lỗi thực thi Action Can Thiệp:", error);
+            }
+        } else {
+            alert("Kế hoạch chưa thể can thiệp !");
+        }
+    }
 }
 
 registry.category("fields").add("ekids_canthiep_kehoach", {

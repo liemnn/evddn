@@ -75,13 +75,13 @@ class KeHoach2MucTieu(models.Model):
     # Thêm vào Model: ekids.kehoach_muctieu
     trangthai_kiemduyet = fields.Selection([
         ('0', 'Chờ duyệt'),
-        ('1', 'Đạt'),
-        ('-1', 'Không đạt [Chuyển]'),
-        ('-2', 'Không đạt [Dừng]')
+        ('1', 'Đạt (+)'),
+        ('-1', 'Chuyển (-)'),
+        ('-2', 'Dừng (-)')
     ], string="Trạng thái kiểm duyệt chuyên môn", default='0')
 
     # ghi chú kiểm duyet
-    ghichu = fields.Html(string="Nội dung kiểm duyệt")
+    ghichu_kiemduyet = fields.Html(string="Nội dung kiểm duyệt")
 
 
 
@@ -359,7 +359,7 @@ class KeHoach2MucTieu(models.Model):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_kiemduyet_ketqua_form').id
         return {
             'type': 'ir.actions.act_window',
-            'name': 'KẾT QUẢ CAN THIỆP',
+            'name': 'XÁC NHẬN KẾT QUẢ CAN THIỆP',
             'res_model': 'ekids.kehoach_muctieu',
             'view_mode': 'form',
             'res_id': self.id,
