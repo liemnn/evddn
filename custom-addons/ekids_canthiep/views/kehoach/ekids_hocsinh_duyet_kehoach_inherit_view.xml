@@ -5,7 +5,7 @@
         <field name="model">ekids.hocsinh</field>
         <field name="arch" type="xml">
             <list create="false" delete="false" limit="200" default_order="id asc">
-                <field name="is_kiemduyet" invisible="1"/>
+
 
                 <field name="sequence" width="25"/>
                 <field name="name" width="170"/>
@@ -42,6 +42,15 @@
                         icon="fa-paper-plane"
                         invisible="is_kiemduyet == False"
                         title="Kế hoạch này cần Duyệt để đưa vào can thiệp"
+                />
+
+                <button name="action_canthiep"
+                        string="Kết quả"
+                        type="object"
+                        class="btn-success btn-sm fw-bold text-uppercase"
+                        icon="fa-play-circle"
+                        invisible="is_canthiep==False"
+                        title="Vào xác nhận kết quả can thiệp của kế hoạch"
                 />
 
 

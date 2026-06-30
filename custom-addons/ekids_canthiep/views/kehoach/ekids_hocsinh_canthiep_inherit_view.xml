@@ -5,7 +5,7 @@
         <field name="model">ekids.hocsinh</field>
         <field name="arch" type="xml">
             <list create="false" delete="false" limit="200" default_order="id asc">
-                <field name="is_canthiep" invisible="1"/>
+
 
                 <field name="sequence" width="25"/>
                 <field name="name" width="170"/>

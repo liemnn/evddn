@@ -124,7 +124,7 @@ class CoSo(models.Model):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
 
-        list_view_id = self.env.ref('ekids_canthiep.hocsinh_ketluan_inherit_list').id
+        list_view_id = self.env.ref('ekids_canthiep.hocsinh_canthiep_inherit_list').id
         domain = [('coso_id', '=', self.id)]
         if is_admin == False:
             hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self)
