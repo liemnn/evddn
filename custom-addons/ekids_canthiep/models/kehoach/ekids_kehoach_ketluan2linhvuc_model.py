@@ -16,8 +16,8 @@ class KetLuan2LinhVuc(models.Model):
         'ekids.ct_chuongtrinh',
         string='Chương trình',
         required=True,
-        ondelete="cascade",
-        default=lambda self: self.env['ekids.ct_chuongtrinh'].search([], limit=1, order='id asc').id
+        ondelete="cascade"
+
     )
 
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực', required=True, ondelete="cascade")
