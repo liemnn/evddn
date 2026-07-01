@@ -41,7 +41,10 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
     ketluan_id = fields.Many2one('ekids.kehoach_ketluan', string="Kết luận", required=True)  # [cite: 2]
 
-
+    kehoach_truoc_id = fields.Many2one(
+        'ekids.kehoach',
+        string='Kế hoạch trước nó',
+    )
 
 
     trangthai = fields.Selection([
@@ -96,11 +99,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
 
 
-    kehoach_muctieu_ids = fields.Many2many(comodel_name="ekids.kehoach_muctieu"
-                                   , relation="ekids_kehoach_muctieu4kehoach_rel"
-                                   , column1="kehoach_id"
-                                   , column2="kehoach_muctieu_id"
-                                   , string="Các mục tiêu cho kế hoạch")
+
 
     desc = fields.Html(string="Ý kiến phê duyệt")
 

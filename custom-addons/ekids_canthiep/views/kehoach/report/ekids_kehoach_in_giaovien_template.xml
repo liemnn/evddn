@@ -2,7 +2,7 @@
 <odoo>
     <template id="ekids_canthiep.in_kehoach_cho_giaovien_template">
         <t t-call="web.html_container">
-            <div class="btn-print-container" style="text-align:right; margin-bottom: 20px;">
+            <div class="btn-print-container" style="text-align:right; margin-bottom: 15px;">
                 <button onclick="window.print()"
                         style="width:30px; height:auto; border:0px; background:transparent;"
                         title="In báo cáo" type="button">
@@ -13,53 +13,80 @@
                 <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
 
                     <style>
+                        /* 1. THIẾT LẬP IN FULL TOÀN BỘ TRANG GIẤY KHÔNG CĂN LỀ */
+                        @page {
+                            size: A4 landscape;
+                            margin: 5mm !important;
+                        }
+
                         * { box-sizing: border-box; margin: 0; padding: 0; }
+
                         .o_compact_print_body {
                             font-family: 'Times New Roman', Times, serif !important;
                             color: #000000;
-                            font-size: 13px; /* 🌟 ĐÃ NÂNG: Cỡ chữ toàn trang tối thiểu 13px */
-                            line-height: 1.5; /* Tăng khoảng cách dòng giúp dễ đọc hơn */
+                            font-size: 13px;
+                            line-height: 1.4;
                             width: 100%;
+                            padding: 4mm !important;
                         }
-                        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; border-bottom: 2px solid #000000; }
-                        .header-table td { border: none; vertical-align: middle; padding-bottom: 8px; }
+
+                        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; border-bottom: 2px solid #000000; }
+                        .header-table td { border: none; vertical-align: middle; padding-bottom: 6px; }
                         .logo-title-area { width: 45%; text-align: left; }
-                        .logo-placeholder { display: inline-block; vertical-align: middle; width: 55px; height: 55px; border: 1px solid #000000; border-radius: 50%; text-align: center; line-height: 55px; font-size: 11px; font-weight: bold; margin-right: 8px; }
-                        .institution-name { display: inline-block; vertical-align: middle; font-size: 13px; font-weight: bold; text-transform: uppercase; line-height: 1.3; }
+                        .logo-placeholder { display: inline-block; vertical-align: middle; width: 55px; height: 55px; border: 1px solid #000000; border-radius: 50%; text-align: center; line-height: 55px; font-size: 13px; font-weight: bold; margin-right: 8px; }
+                        .institution-name { display: inline-block; vertical-align: middle; font-size: 13px; font-weight: bold; text-transform: uppercase; line-height: 1.2; }
                         .document-title-area { width: 55%; text-align: right; }
                         .main-subject-title { font-size: 18px; font-weight: bold; text-transform: uppercase; }
-                        .date-sub-title { font-size: 13px; font-style: italic; margin-top: 4px; }
+                        .date-sub-title { font-size: 13px; font-style: italic; margin-top: 2px; }
 
-                        .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
-                        .profile-grid-table td { border: 1px solid #000000; padding: 6px 8px; font-size: 13px; vertical-align: top; }
+                        .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+                        .profile-grid-table td { border: 1px solid #000000; padding: 5px 8px; font-size: 13px; vertical-align: top; }
                         .label-cell { font-weight: bold; background-color: #f2f2f2; width: 14%; }
                         .value-cell { width: 19%; }
 
-                        .print-container { width: 100%; border: 1px solid #000000; padding: 14px; margin-bottom: 18px; page-break-inside: avoid; }
-                        .print-title-section { border-bottom: 1.5px solid #000000; padding-bottom: 6px; margin-bottom: 10px; }
-                        .print-main-title { font-size: 14px; font-weight: bold; }
-                        .print-meta-text { font-size: 13px; margin-top: 3px; }
+                        /* Khối container ngắt trang */
+                        .print-container {
+                            width: 100%;
+                            border: 1px solid #000000;
+                            padding: 12px;
+                            margin-bottom: 14px;
+                            page-break-before: always;
+                            page-break-inside: avoid;
+                        }
 
-                        .top-row-grid { display: table; width: 100%; border-bottom: 1px solid #000000; padding-bottom: 10px; margin-bottom: 10px; }
-                        .left-sub-block { display: table-cell; width: 45%; padding-right: 12px; border-right: 1px dashed #000000; vertical-align: top; }
-                        .right-sub-block { display: table-cell; width: 55%; padding-left: 12px; vertical-align: top; }
+                        .print-title-section { display: table; width: 100%; border-bottom: 1.5px solid #000000; padding-bottom: 4px; margin-bottom: 8px; }
+                        .print-main-title { display: table-cell; width: 55%; font-size: 14px; font-weight: bold; vertical-align: bottom; text-align: left; }
+                        .print-meta-text { display: table-cell; width: 45%; font-size: 13px; vertical-align: bottom; text-align: right; color: #334155; }
 
-                        .section-header-title { font-size: 13px; font-weight: bold; text-transform: uppercase; text-decoration: underline; margin-bottom: 6px; }
+                        /* 🌟 SỬA CHIẾM LĨNH TOÀN DIỆN: Ép vertical-align: top cho tất cả các khối cột */
+                        .top-row-grid { display: table; width: 100%; border-bottom: 1px solid #000000; padding-bottom: 8px; margin-bottom: 8px; }
+                        .left-sub-block { display: table-cell; width: 55%; padding-right: 12px; border-right: 1px dashed #000000; vertical-align: top !important; }
+                        .right-sub-block { display: table-cell; width: 45%; padding-left: 12px; vertical-align: top !important; }
+
+                        .section-header-title { font-size: 13px; font-weight: bold; text-transform: uppercase; text-decoration: underline; margin-bottom: 4px; }
                         .criteria-table { width: 100%; border-collapse: collapse; }
-                        .criteria-table th, .criteria-table td { border: 1px solid #000000; padding: 6px; font-size: 13px; vertical-align: top; }
+                        .criteria-table th, .criteria-table td { border: 1px solid #000000; padding: 5px; font-size: 13px; vertical-align: top !important; }
                         .criteria-table th { background-color: #f2f2f2; font-weight: bold; }
 
+                        /* HOẠT ĐỘNG ABC CHIẾM 90% - KHAY THEO DÕI NÉN GỌN 10% */
                         .bottom-row-grid { display: table; width: 100%; }
-                        .abc-procedure-content { display: table-cell; width: 82%; padding-right: 12px; border-right: 1px dashed #000000; text-align: justify; vertical-align: top; }
-                        .tracking-diary-content { display: table-cell; width: 18%; padding-left: 12px; vertical-align: top; }
+                        .abc-procedure-content { display: table-cell; width: 90%; padding-right: 12px; border-right: 1px dashed #000000; text-align: justify; vertical-align: top !important; }
+                        .tracking-diary-content { display: table-cell; width: 10%; padding-left: 12px; vertical-align: top !important; }
 
-                        .text-paragraph { margin-bottom: 6px; font-size: 13px; }
-                        .indent-block { margin-left: 14px; padding-left: 6px; border-left: 1.5px solid #000000; margin-top: 4px; margin-bottom: 4px; }
+                        .text-paragraph { margin-bottom: 4px; font-size: 13px; }
+                        .indent-block { margin-left: 12px; padding-left: 6px; border-left: 1.5px solid #000000; margin-top: 3px; margin-bottom: 3px; }
 
-                        /* Lưới ô vuông bám dính 6 ô trên một hàng phẳng mịn */
-                        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
-                        .matrix-table td { border: 1px solid #000000; width: 16.66%; height: 38px; padding: 4px; vertical-align: top; }
-                        .cell-number { font-size: 12px; font-weight: bold; color: #000000; display: block; }
+                        /* 🌟 SỬA ĐỒNG BỘ MA TRẬN THEO DÕI LÂM SÀNG: Chia đúng 3 ô một hàng để cân đối tỉ lệ 10% */
+                        .matrix-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+                        .matrix-table td {
+                            border: 1px solid #000000;
+                            width: 33.33% !important;
+                            height: 35px; /* Tăng chiều cao để cô giáo tích dấu thoải mái */
+                            padding: 2px 2px 2px 2px;
+                            vertical-align: top !important; /* Số ngày ghim cứng đỉnh ô */
+                            text-align: center;
+                        }
+                        .cell-number { font-size: 11px; font-weight: bold; color: #777777; display: block; line-height: 1; }
                         .text-bold { font-weight: bold; }
 
                         /* NÚT BẤM PRINT NỔI TRÊN WEB */
@@ -82,15 +109,10 @@
                             z-index: 99999;
                             transition: all 0.2s;
                         }
-                        .btn-floating-print:hover {
-                            background-color: #1D4ED8;
-                            transform: translateY(-1px);
-                            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
-                        }
+                        .btn-floating-print:hover { background-color: #1D4ED8; transform: translateY(-1px); }
 
-                        /* Ẩn hoàn toàn nút bấm khi in ra giấy/PDF */
                         @media print {
-                            .btn-floating-print {
+                            .btn-floating-print, .btn-print-container {
                                 display: none !important;
                             }
                         }
@@ -102,13 +124,14 @@
                     </button>
 
                     <div class="o_compact_print_body">
+
                         <table class="header-table">
                             <tr>
                                 <td class="logo-title-area">
                                     <div class="logo-placeholder">LOGO</div>
                                     <div class="institution-name">
                                         SỞ GIÁO DỤC VÀ ĐÀO TẠO TỈNH BẮC NINH<br/>
-                                        <span style="font-size: 12px;">Trung tâm HTGD Hoà nhập Từ Sơn</span>
+                                        <span style="font-size: 13px;">Trung tâm HTGD Hoà nhập Từ Sơn</span>
                                     </div>
                                 </td>
                                 <td class="document-title-area">
@@ -173,12 +196,15 @@
                             <t t-foreach="lv.kehoach_muctieu_ids" t-as="muctieu">
 
                                 <div class="print-container">
+
                                     <div class="print-title-section">
-                                        <div class="print-main-title">Mục tiêu <span t-esc="muctieu_index + 1"/>: <span t-field="muctieu.muctieu_id.name"/></div>
+                                        <div class="print-main-title">
+                                            Mục tiêu <span t-esc="muctieu_index + 1"/>: <span t-field="muctieu.muctieu_id.name"/>
+                                        </div>
                                         <div class="print-meta-text">
-                                            <strong>[Lĩnh vực]:</strong> <span t-field="lv.linhvuc_id.name"/> |
-                                            <strong>[Độ tuổi]:</strong> <span t-field="lv.tuoi_id.name"/> |
-                                            <strong>[CHƯƠNG TRÌNH]:</strong> <span t-field="lv.chuongtrinh_id.name"/>
+                                            Lĩnh vực: <span t-field="lv.linhvuc_id.name"/> |
+                                            Tuổi: <span t-field="lv.tuoi_id.name"/> |
+                                            Chương trình: <span t-field="lv.chuongtrinh_id.name"/>
                                         </div>
                                     </div>
 
@@ -216,32 +242,29 @@
                                         </div>
 
                                         <div class="tracking-diary-content">
-                                            <div class="section-header-title">IV. Theo dõi hàng ngày</div>
+                                            <div class="section-header-title">IV. Theo dõi</div>
 
                                             <table class="matrix-table">
                                                 <t t-set="total_days" t-value="int(o.songay or 30)"/>
-
                                                 <tr>
                                                     <t t-foreach="range(1, total_days + 1)" t-as="day_num">
                                                         <td>
                                                             <span class="cell-number" t-esc="day_num"/>
                                                         </td>
-
-                                                        <t t-if="day_num % 6 == 0 and day_num != total_days">
+                                                        <t t-if="day_num % 3 == 0 and day_num != total_days">
                                                             <t t-out="raw_space"/> &lt;/tr&gt;&lt;tr&gt;
                                                         </t>
                                                     </t>
-
-                                                    <t t-if="total_days % 6 != 0">
-                                                        <t t-foreach="range(6 - (total_days % 6))" t-as="empty_cell">
+                                                    <t t-if="total_days % 3 != 0">
+                                                        <t t-foreach="range(3 - (total_days % 3))" t-as="empty_cell">
                                                             <td style="background:#f2f2f2;"></td>
                                                         </t>
                                                     </t>
                                                 </tr>
                                             </table>
 
-                                            <div style="margin-top: 8px; border-top: 1px solid #000000; padding-top: 4px; font-size: 11px;">
-                                                <span class="text-bold">TỔNG KẾT:</span> Đạt: .... / <span t-esc="o.songay"/> ngày.
+                                            <div style="margin-top: 6px; border-top: 1px solid #000000; padding-top: 4px; font-size: 13px; text-align: center;">
+                                                <span class="text-bold">Đạt:</span>.../<span t-esc="o.songay"/>n.
                                             </div>
                                         </div>
                                     </div>

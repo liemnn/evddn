@@ -95,28 +95,48 @@ class KeHoach2LinhVucWizard(models.TransientModel):
         vals_list = []
         for muctieu in self.muctieu_ids:
             if muctieu.id not in kehoach_muctieu_old_ids:
-                vals_list.append({
+                data = {
                     'kehoach_linhvuc_id': self.kehoach_linhvuc_id.id,
                     'muctieu_id': muctieu.id,
                     'sequence': muctieu.sequence,
                     'trangthai': '0',
-                })
+                }
+                muctieu_thangtruoc = self.func_get_muctieu_thangtruoc(muctieu)
+                if muctieu_thangtruoc:
+                    data["kehoach_muctieu_thangtruoc_id"]= muctieu_thangtruoc.id
+                vals_list.append(data)
+
 
         if vals_list:
             self.env['ekids.kehoach_muctieu'].create(vals_list)
 
-        #CẬP NHẬT TRẠNG THÁI TRƯỚC
+        # CẬP NHẬT TRẠNG THÁI TRƯỚC SAU CỦA MỤC TIÊU TRONG MỘT LĨNH VỰC KẾ HOẠCH
         muctieus = self.env['ekids.kehoach_muctieu'].search([
             ('kehoach_linhvuc_id', '=', self.kehoach_linhvuc_id.id)
-        ],order="sequence asc, id desc")
+        ], order="sequence asc, id desc")
         if muctieus:
             muctieu_truoc = None
             for muctieu in muctieus:
-                setattr(muctieu,"kehoach_muctieu_truoc_id",muctieu_truoc)
+                setattr(muctieu, "kehoach_muctieu_truoc_id", muctieu_truoc)
                 muctieu_truoc = muctieu
 
 
-
-
         return {'type': 'ir.actions.act_window_close'}
+
+
+    def func_get_muctieu_thangtruoc(self,muctieu):
+        kehoach = self.kehoach_linhvuc_id.kehoach_id
+        if kehoach:
+            kehoach_thangtruoc = kehoach.kehoach_truoc_id
+            if kehoach_thangtruoc:
+
+                kehoach_linhvucs=kehoach_thangtruoc.kehoach_linhvuc_ids
+                if kehoach_linhvucs:
+                    for kehoach_linhvuc in kehoach_linhvucs:
+                        kehoach_muctieus = kehoach_linhvuc.kehoach_muctieu_ids
+                        if kehoach_muctieus:
+                            for kehoach_muctieu in kehoach_muctieus:
+                                if kehoach_muctieu.muctieu_id.id == muctieu.id:
+                                    return kehoach_muctieu
+
 

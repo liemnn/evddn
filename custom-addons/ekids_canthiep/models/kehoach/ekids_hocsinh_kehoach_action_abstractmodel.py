@@ -85,7 +85,8 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         trangthais=[kehoach_util.KEHOACH_DANG_LAP,kehoach_util.KEHOACH_DANG_PHEDUYET]
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthais)
         if not kehoach:
-            tu_ngay = self.func_get_default_kehoach_tu_ngay()
+            kehoach_gannhat = kehoach_util.func_get_kehoach_hocsinh_gannhat(self,self)
+            tu_ngay = self.func_get_default_kehoach_tu_ngay(kehoach_gannhat)
             den_ngay = self.func_get_default_kehoach_den_ngay(tu_ngay)
             songay = (den_ngay - tu_ngay).days + 1
             data ={
@@ -95,6 +96,9 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 "den_ngay": den_ngay,
                 "songay": songay
             }
+            if kehoach_gannhat:
+                data["kehoach_truoc_id"] =kehoach_gannhat.id
+
             kehoach = self.env['ekids.kehoach'].create(data)
             if kehoach:
                 linhvucs = ketluan.linhvuc_ids
@@ -229,29 +233,6 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
             )
 
-    def action_canthiep_backup(self):
-        self.ensure_one()
-        today = date.today()
-        # Kiểm tra phân quyền lâm sàng nâng cao nếu cần
-        trangthai = [kehoach_util.KEHOACH_DANG_CANTHIEP]
-        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai_ngay(self, self, trangthai, today)
-        if kehoach:
-
-            return {
-                'type': 'ir.actions.client',
-                # 🌟 BỔ SUNG DÒNG NÀY: Định nghĩa tiêu đề xuất hiện trên Breadcrumbs
-                'name': 'KẾ HOẠCH CAN THIỆP:' + self.name,
-                'tag': 'ekids_canthiep.kehoach_canthiep_action',  # Thẻ tag đăng ký trùng khớp với file JS Registry
-                'target': 'current',  # Mở tràn màn hình làm việc hiện tại
-                'context': {
-                    'kehoach_id': kehoach.id,  # Gửi ID phiếu kế hoạch sang cấu phần Frontend
-                },
-            }
-        else:
-            raise UserError(
-                f"Học sinh [{self.name}] hiện không có Kế hoạch nào ở trạng thái có thể Can thiệp"
-
-            )
 
     def action_xem_danhsach_kehoach(self):
         return {

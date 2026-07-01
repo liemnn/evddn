@@ -283,8 +283,7 @@ class HocSinhInherit(models.Model
 
 
 
-    def func_get_default_kehoach_tu_ngay(self):
-        kehoach_gan_nhat = self.env['ekids.kehoach'].search([("hocsinh_id","=",self.id)], order='den_ngay desc', limit=1)
+    def func_get_default_kehoach_tu_ngay(self,kehoach_gan_nhat):
         tu_ngay = fields.Date.context_today(self)
         if kehoach_gan_nhat and kehoach_gan_nhat.den_ngay:
             # 2. Bốc được ngày kết thúc, tiến hành cộng thêm 1 ngày tịnh tiến

@@ -58,8 +58,9 @@ def func_get_kehoach_hocsinh(self, hocsinh):
     ]
         , order="id desc", limit=1)
     return kehoach
-
-
+def func_get_kehoach_hocsinh_gannhat(self, hocsinh):
+    kehoach_gan_nhat = self.env['ekids.kehoach'].search([("hocsinh_id","=",hocsinh.id)], order='den_ngay desc', limit=1)
+    return kehoach_gan_nhat
 
 def func_get_kehoach_hocsinh_trangthai(self, hocsinh, trangthais):
     return func_get_kehoach_hocsinh_trangthai_ngay(self, hocsinh, trangthais,None)
