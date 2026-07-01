@@ -143,7 +143,7 @@ export class LapKehoachWidget extends Component {
         }
 
         try {
-            const action = await this.orm.call("ekids.kehoach_linhvuc", "action_xem_danhsach_ct_muctieu", [lineId]);
+            const action = await this.orm.call("ekids.kehoach_linhvuc", "action_them_muctieu_vao_kehoach_linhvuc", [lineId]);
             if (action) {
                 this.actionService.doAction(action, {
                     onClose: async () => { await this.loadAllPlanData(); }

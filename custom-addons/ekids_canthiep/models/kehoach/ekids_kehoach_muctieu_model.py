@@ -58,6 +58,7 @@ class KeHoach2MucTieu(models.Model):
     kehoach_muctieu_truoc_id = fields.Many2one(
         'ekids.kehoach_muctieu',
         string='Muc tiêu đứng trước',
+        ondelete='set null'  # Chí mạng giúp triệt tiêu lỗi hệ thống
     )
     sothang_da_chuyenttiep = fields.Integer(string="Số tháng đã được chuyển tiếp sang",compute="_compute_sothang_da_chuyenttiep")
     kehoach_muctieu_thangtruoc_id = fields.Many2one(
@@ -475,6 +476,28 @@ class KeHoach2MucTieu(models.Model):
             'target': 'new',
             'context': self.env.context,
         }
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = []
+        for vals in vals_list:
+            result = super(KeHoach2MucTieu, self).create(vals)
+            if result:
+                kehoach_linhvuc = result.kehoach_linhvuc_id
+                if kehoach_linhvuc:
+                    kehoach_linhvuc.func_capnhat_kehoach_muctieu_truoc()
+        return records[0] if len(records) == 1 else records
+
+
+
+    def unlink(self):
+        kehoach_linhvuc = self.kehoach_linhvuc_id
+        result= super().unlink()
+
+        if kehoach_linhvuc:
+            kehoach_linhvuc.func_capnhat_kehoach_muctieu_truoc()
+        return result
+
 
 
 

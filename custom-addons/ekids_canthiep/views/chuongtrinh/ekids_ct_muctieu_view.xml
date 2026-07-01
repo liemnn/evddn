@@ -26,6 +26,7 @@
         <record id="ekids_canthiep.ct_muctieu_list" model="ir.ui.view">
             <field name="name">ekids.ct_muctieu.list</field>
             <field name="model">ekids.ct_muctieu</field>
+            <field name="priority" eval="1"/>
             <field name="arch" type="xml">
                 <list
                         default_order="linhvuc_id desc,sequence asc"
@@ -45,6 +46,28 @@
                     <field name="tieuchi_dat" string="Đạt" optional="hide" decoration-success="True"/>
 
 
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_canthiep.ct_muctieu_lap_kehoach_list" model="ir.ui.view">
+            <field name="name">ekids.ct_muctieu.list</field>
+            <field name="model">ekids.ct_muctieu</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <list default_order="linhvuc_id desc,sequence asc"
+                      create="0" edit="0" delete="0" multi_edit="0">
+
+                    <field name="index_list" string="STT" width="60px"/>
+                    <field name="name" string="Mục tiêu" decoration-bf="True"/>
+
+                    <button string="Chọn"
+                            name="action_chon_muctieu_vao_kehoach"
+                            type="object"
+                            class="btn-primary"
+                            icon="fa-plus"
+                            context="{'default_kehoach_linhvuc_id': context.get('default_kehoach_linhvuc_id')}"
+                            title="Lựa chọn mục tiêu này bổ sung vào kế hoạch"/>
                 </list>
             </field>
         </record>

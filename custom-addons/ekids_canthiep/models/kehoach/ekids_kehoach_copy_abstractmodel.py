@@ -66,6 +66,7 @@ class KeHoachCopyAbstractModel(models.AbstractModel):
                 else:
                     if not kehoach_muctieu:
                         data ={
+                            "sequence": mt_thangtruoc.muctieu_id.sequence,
                             "kehoach_linhvuc_id":linhvuc.id,
                             "kehoach_muctieu_thangtruoc_id": mt_thangtruoc.id,
                             "muctieu_id": mt_thangtruoc.muctieu_id.id,

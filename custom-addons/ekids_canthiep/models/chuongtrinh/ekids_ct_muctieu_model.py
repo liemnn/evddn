@@ -142,8 +142,19 @@ class MucTieu(models.Model):
         }
 
 
-    def func_chon_muctieu_vao_kehoach(self,kehoach_linhvuc_id):
+    def action_chon_muctieu_vao_kehoach(self):
+        kehoach_linhvuc_id = self.env.context.get("default_kehoach_linhvuc_id")
+        if kehoach_linhvuc_id:
+            kehoach_linhvuc =self.env['ekids.kehoach_linhvuc'].browse(kehoach_linhvuc_id)
+            if kehoach_linhvuc:
+               kehoach_linhvuc.func_tao_kehoach_muctieu(self)
+               url = kehoach_linhvuc.action_them_muctieu_vao_kehoach_linhvuc()
+               if url:
+                   return url
+
+
         return None
+
 
     @api.model
     def load(self, fields_list, data):
@@ -208,19 +219,5 @@ class MucTieu(models.Model):
         return super(MucTieu, self).load(fields_list, data)
 
 
-    def func_giulai_format_exel_to_html(self,text):
-        formatted_value = text.replace('\r\n', '\n').replace('\n', '<br/>')
 
-        # 2. XỬ LÝ BÔI ĐẬM TỰ ĐỘNG BẰNG REGEX (Theo quy ước dấu *)
-        # Biến đổi cấu trúc *Chữ bôi đậm* thành <b>Chữ bôi đậm</b>
-        formatted_value = re.sub(r'\*(.*?)\*', r'<b>\1</b>', formatted_value)
-
-        # 3. THÊM XỬ LÝ IN NGHIÊNG TỰ ĐỘNG BẰNG REGEX (Theo quy ước dấu _)
-        # Biến đổi cấu trúc _Chữ in nghiêng_ thành <i>Chữ in nghiêng</i>
-        formatted_value = re.sub(r'_(.*?)_', r'<i>\1</i>', formatted_value)
-
-        # 4. TỰ ĐỘNG BÔI ĐẬM CÁC TIÊU ĐỀ ĐẦU DÒNG (Phần trước dấu hai chấm)
-        formatted_value = re.sub(r'(^|<br/>)([^:\n<]+:)', r'\1<b>\2</b>', formatted_value)
-
-        return formatted_value
 
