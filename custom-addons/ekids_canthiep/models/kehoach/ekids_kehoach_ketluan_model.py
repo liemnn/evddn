@@ -62,6 +62,7 @@ class KetLuan(models.Model):
                                       , column1="ketluan_id"
                                       , column2="chuongtrinh_id"
                                       , string="Chương trình can thiệp")
+    chuongtrinh = fields.Char(string="Tên chương trình",compute="_compute_chuongtrinh")
 
 
     phuongphap = fields.Selection([
@@ -108,6 +109,20 @@ class KetLuan(models.Model):
                                 , string="Các kế hoạch")
 
     tong_kehoach = fields.Integer(string="Tổng kế hoạch",compute="_compute_tong_kehoach")
+
+
+
+    def _compute_chuongtrinh(self):
+        for record in self:
+            name =""
+            chuongtrinh_ids = record.chuongtrinh_ids
+            if chuongtrinh_ids:
+                for ct in chuongtrinh_ids:
+                    if name == "":
+                        name = ct.title
+                    else:
+                        name = name +", "+ct.title
+            record.chuongtrinh = name
 
     def _compute_tong_kehoach(self):
         for record in self:
