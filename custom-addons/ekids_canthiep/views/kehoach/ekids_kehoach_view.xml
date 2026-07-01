@@ -410,6 +410,12 @@
                                  class="btn-danger fw-bold"
                                  invisible="not is_pheduyet"/>
 
+                         <button name="%(ekids_canthiep.in_kehoach_cho_giaovien_action)d"
+                            string="In"
+                            type="action"
+                            icon="fa-print"
+                            class="btn-secondary"/>
+
                          <field name="trangthai" widget="statusbar" statusbar_visible="0,2,1,-1" options="{'clickable': false}"/>
                      </header>
 

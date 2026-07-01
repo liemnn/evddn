@@ -42,6 +42,10 @@ Long description of module's purpose
         'views/kehoach/ekids_hocsinh_canthiep_inherit_view.xml',
         'views/kehoach/ekids_kehoach_ketluan_view.xml',
 
+        'views/kehoach/report/ekids_kehoach_in_giaovien_template.xml',
+        'views/kehoach/report/ekids_kehoach_in_giaovien_action.xml',
+
+
         'views/kehoach/ekids_kehoach_view.xml',
         'views/kehoach/ekids_kehoach_linhvuc_view.xml',
         'views/kehoach/ekids_kehoach_linhvuc_wizard_view.xml',
