@@ -60,6 +60,12 @@
 
                     <field name="index_list" string="STT" width="60px"/>
                     <field name="name" string="Mục tiêu" decoration-bf="True"/>
+                    <field name="linhvuc_id" string="Lĩnh vực" options="{'no_open': True, 'no_create': True}" optional="hide"/>
+                    <field name="tuoi_id" string="Độ tuổi" options="{'no_open': True, 'no_create': True}" optional="hide"/>
+                    <field name="tieuchi_chuadat" string="Chưa đạt" optional="hide" decoration-danger="True"/>
+                    <field name="tieuchi_hinhthanh" string="hình thành" optional="hide" decoration-warning="True"/>
+                    <field name="tieuchi_dat" string="Đạt" optional="hide" decoration-success="True"/>
+
 
                     <button string="Chọn"
                             name="action_chon_muctieu_vao_kehoach"
