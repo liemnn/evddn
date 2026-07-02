@@ -351,6 +351,15 @@
             <field name="arch" type="xml">
                 <form class="o_premium_layout">
                     <header>
+                        <button name="action_copy_ketluan"
+                            string="Copy từ [Kết luận] khác"
+                            type="object"
+                            class="btn-secondary"
+                            icon="fa-copy"
+                            context="{'default_hocsinh_id': id}"
+                            invisible="not is_tao_ketluan"
+                            title="Có thể copy từ [Kết luận] Học sinh khác"
+                        />
                         <field name="trangthai" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': true}"/>
                     </header>
                     <sheet class="p-2 p-md-3 bg-light-smooth">

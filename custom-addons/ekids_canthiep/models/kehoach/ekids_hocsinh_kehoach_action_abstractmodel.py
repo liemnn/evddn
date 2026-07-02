@@ -67,7 +67,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             'type': 'ir.actions.act_window',
             'name': 'CHƯƠNG TRÌNH CAN THIỆP',
             'res_model': 'ekids.kehoach_ketluan',
-            'view_mode': 'list,kanban,form',
+            'view_mode': 'list',
             'target': 'new',  # Vẫn giữ nguyên mở dạng Pop-up
             'domain': [('coso_id', '=', self.coso_id.id)],
             'context': {
