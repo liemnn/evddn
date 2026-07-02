@@ -88,8 +88,6 @@ def func_count_kehoach_hocsinh_trangthai(self, hocsinh, trangthais):
             ('gv_lapkehoach_id', '=', giaovien.id),
         ])
         return count
-    return 0
-
 
 
 def func_get_ids_hocsinh_theo_vaitro(self):
@@ -141,9 +139,7 @@ def func_get_ids_hocsinh_theo_vaitro_lap_kehoach(self):
     return None
 
 def func_get_ids_hocsinh_theo_vaitro_duyet_kehoach(self):
-    user = self.env.user
-    giaovien = (self.env['ekids.giaovien']
-                .search([('user_id', '=', user.id)], limit=1))
+    giaovien = giaovien_util.func_get_giaovien_tu_user(self)
     if giaovien:
         # 1. Khai báo các điều kiện độc lập cho rõ ràng
         domain = [('gv_kiemduyet_id', '=', giaovien.id)]
@@ -158,20 +154,18 @@ def func_get_ids_hocsinh_theo_vaitro_duyet_kehoach(self):
     return None
 
 def func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self):
-    user = self.env.user
-
-    giaovien = (self.env['ekids.giaovien']
-                .search([('user_id', '=', user.id)], limit=1))
+    giaovien =giaovien_util.func_get_giaovien_tu_user(self)
     if giaovien:
+        #TH1:
         # 1. Khai báo các điều kiện độc lập cho rõ ràng
-        domain = [('gv_canthiep_ids', 'in', [giaovien.id])]
+        domain = [('gv_lapkehoach_id', '=', giaovien.id)]
 
         # 3. Tìm kiếm
-        ketluans = self.env['ekids.kehoach_ketluan'].search(domain)
-        if ketluans:
+        kehoachs = self.env['ekids.kehoach'].search(domain)
+        if kehoachs:
             hocsinh_ids = []
-            for kl in ketluans:
-                hocsinh_ids.append(kl.hocsinh_id.id)
+            for kh in kehoachs:
+                hocsinh_ids.append(kh.hocsinh_id.id)
             return hocsinh_ids
     return None
 

@@ -126,33 +126,36 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
     def _compute_is_chot_hocphi(self):
         for record in self:
-            # 1. Gán giá trị mặc định ban đầu là False để xóa bớt các nhánh else rườm rà
-            record.is_chot_hocphi = False
 
-            # 2. Chốt chặn an toàn: Tránh lỗi sập hệ thống (Crash) nếu dữ liệu bị trống
-            if not record.hocsinh_id or not record.nam_id or not record.thang_id:
-                continue
+            if  record.trangthai =='-1':
+                record.is_chot_hocphi = False
 
-            ngay_nghihoc = record.hocsinh_id.ngay_nghihoc
-            if not ngay_nghihoc:
-                continue
-
-            try:
-                # Gọi hàm lấy danh sách ngày (ép kiểu int an toàn)
-                days = ngay_util.func_get_cacngay_trong_thang(int(record.nam_id.name), int(record.thang_id.name))
-                if not days:
+                # 2. Chốt chặn an toàn: Tránh lỗi sập hệ thống (Crash) nếu dữ liệu bị trống
+                if not record.hocsinh_id or not record.nam_id or not record.thang_id:
                     continue
 
-                ngay_dauthang = days[0]
-                ngay_cuoithang = days[-1]  # Tối ưu: Dùng chỉ số -1 để lấy ngày cuối tháng nhanh gọn
+                ngay_nghihoc = record.hocsinh_id.ngay_nghihoc
+                if not ngay_nghihoc:
+                    continue
 
-                # 3. Sử dụng cú pháp so sánh chuỗi liên tiếp (Chỉ có ở Python cực kỳ trực quan)
-                if ngay_dauthang <= ngay_nghihoc <= ngay_cuoithang:
-                    record.is_chot_hocphi = True
+                try:
+                    # Gọi hàm lấy danh sách ngày (ép kiểu int an toàn)
+                    days = ngay_util.func_get_cacngay_trong_thang(int(record.nam_id.name), int(record.thang_id.name))
+                    if not days:
+                        continue
 
-            except (ValueError, TypeError, IndexError):
-                # Bỏ qua nếu có lỗi tính toán hoặc ép kiểu sai định dạng ngày tháng
-                continue
+                    ngay_dauthang = days[0]
+                    ngay_cuoithang = days[-1]  # Tối ưu: Dùng chỉ số -1 để lấy ngày cuối tháng nhanh gọn
+
+                    # 3. Sử dụng cú pháp so sánh chuỗi liên tiếp (Chỉ có ở Python cực kỳ trực quan)
+                    if ngay_dauthang <= ngay_nghihoc <= ngay_cuoithang:
+                        record.is_chot_hocphi = True
+
+                except (ValueError, TypeError, IndexError):
+                    # Bỏ qua nếu có lỗi tính toán hoặc ép kiểu sai định dạng ngày tháng
+                    continue
+            else:
+                record.is_chot_hocphi = False
 
     def action_chot_hocphi_khi_hocsinh_nghi(self):
         self.action_xacthuc_tinhlai_hocphi_hocsinh()

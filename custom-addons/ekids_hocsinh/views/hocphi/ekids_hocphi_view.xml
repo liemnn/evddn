@@ -215,6 +215,7 @@
         <field name="model">ekids.hocphi</field>
         <field name="arch" type="xml">
             <form string="Quản lý Học phí học sinh">
+                <field name="is_chot_hocphi" invisible="1"/>
                 <header>
                     <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary" string="In phiếu thu"/>
                     <button name="action_xacthuc_tinhlai_hocphi_hocsinh" invisible="is_show_tinhtoan_lai == False" type="object" confirm="Bạn chắc chắn muốn tính toán lại chứ?" class="btn btn-secondary" string="Tính lại [Học phí]"/>

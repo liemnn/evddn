@@ -6,10 +6,8 @@ from odoo.osv import expression
 
 def func_get_giaovien_tu_user(self):
     user = self.env.user
-    domain =[("user_id","=",user.id)]
-
-    giaovien = self.env['ekids.giaovien'].search(domain)
-
+    giaovien = (self.env['ekids.giaovien']
+                .search([('user_id', '=', user.id)], limit=1))
     return giaovien
 
 def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,tu_ngay, den_ngay):
