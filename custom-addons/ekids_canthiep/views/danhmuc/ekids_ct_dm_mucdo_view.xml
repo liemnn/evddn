@@ -1,0 +1,110 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="ekids_canthiep.ct_dm_mucdo_list">
+            <field name="name">ct_dm_mucdo</field>
+            <field name="model">ekids.ct_dm_mucdo</field>
+            <field name="arch" type="xml">
+               <list editable="bottom" default_order="sequence">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name" width="300"/>
+                    <field name="desc"/>
+                    <field name="trangthai"
+                        decoration-success="trangthai == '1'"
+                        decoration-danger="trangthai == '0'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_canthiep.ct_dm_mucdo_kanban" model="ir.ui.view">
+            <field name="name">ct_dm_mucdo</field>
+            <field name="model">ekids.ct_dm_mucdo</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false">
+                    <field name="name"/>
+                    <field name="desc"/>
+                    <field name="trangthai"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
+                                <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
+                                    <i class="fa fa-ellipsis-v fa-lg"></i>
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item text-primary">
+                                        <i class="fa fa-pencil me-2"></i> Chỉnh sửa
+                                    </a>
+                                    <a role="menuitem" type="delete"
+                                       confirm="Xóa bản ghi này sẽ làm mất dữ liệu. Bạn có chắc chắn không?"
+                                       class="dropdown-item text-danger">
+                                        <i class="fa fa-trash-o me-2"></i> Xóa
+                                    </a>
+                                </div>
+                            </div>
+                            <div t-attf-class="oe_kanban_global_click o_kanban_record d-flex flex-column p-0 book-card"
+                                 style="border: 1px solid #e2e8f0; border-left: 12px solid #28a745; border-radius: 4px 12px 12px 4px; box-shadow: 6px 8px 15px rgba(0,0,0,0.06); background-color: #fdfbf7; overflow: hidden; position: relative;">
+
+                                <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 15px; background: linear-gradient(to right, rgba(0,0,0,0.08), transparent);"></div>
+
+                                <div class="p-4 d-flex flex-column h-100" style="position: relative; z-index: 1;">
+
+                                    <div class="book-ribbon" style="position: absolute; top: -10px; right: 20px; width: 30px; height: 40px; background-color: #3b82f6; clip-path: polygon(100% 0, 100% 100%, 50% 75%, 0 100%, 0 0); box-shadow: 2px 2px 5px rgba(0,0,0,0.1);"></div>
+
+                                    <div class="d-flex justify-content-between align-items-start mb-3" style="border-bottom: 2px solid #cbd5e1; padding-bottom: 12px;">
+                                        <h3 class="fw-bolder m-0" style="color: #0f172a; font-size: 1.25rem; letter-spacing: 0.5px; padding-right: 35px;">
+
+                                            <field name="name"/>
+                                        </h3>
+                                    </div>
+
+                                    <div style="font-size: 0.9rem;font-style: italic; color: #475569;">
+                                        <field name="desc"/>
+                                    </div>
+                                    <div style="font-size: 1.0rem; font-weight: 300; color: #e11d48; line-height: 1;">
+                                        <field name="trangthai"/>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+         <record id="ekids_canthiep.ct_dm_mucdo_form" model="ir.ui.view">
+            <field name="name">Form</field>
+            <field name="model">ekids.ct_dm_mucdo</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="coso_id" invisible="1"/>
+                        <group>
+                             <div class="row">
+                                <div class="col-md-10">
+                                  <h3>
+                                      <field name="name" placeholder="Tên"/>
+                                  </h3>
+                                </div>
+                              </div>
+                        </group>
+                        <group>
+                            <field name="desc"/>
+                            <field name="trangthai"/>
+
+                        </group>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

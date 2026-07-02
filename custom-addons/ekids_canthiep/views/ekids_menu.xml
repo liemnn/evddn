@@ -24,6 +24,11 @@
           action="ekids_canthiep.coso_chuongtrinh_action_window"
           groups="base.group_system,ekids_core.ql_ct_canthiep,ekids_core.giaovien" sequence="3"/>
 
+    <menuitem name="Danh mục" id="ekids_canthiep.danhmuc_menu" parent="ekids_canthiep.menu_root"
+          action="ekids_canthiep.coso_danhmuc_action_window"
+          groups="base.group_system,ekids_core.ketluan" sequence="4"/>
+
+
 
 
 

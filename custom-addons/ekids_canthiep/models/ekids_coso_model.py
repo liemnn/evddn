@@ -47,8 +47,44 @@ class CoSo(models.Model):
     def action_xem_danhmuc_roiloan(self):
         return {
             'type': 'ir.actions.act_window',
-            'name': 'DANH MỤC RỐI LOẠN',
+            'name': 'DANH MỤC [RỐI LOẠN]',
             'res_model': 'ekids.ct_dm_roiloan',
+            'view_mode': 'list,kanban,form',
+
+            'target': 'current',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {'default_coso_id': self.id},
+        }
+
+    def action_xem_danhmuc_lieuluong(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH MỤC [LIỀU LƯỢNG]',
+            'res_model': 'ekids.ct_dm_lieuluong',
+            'view_mode': 'list,kanban,form',
+
+            'target': 'current',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {'default_coso_id': self.id},
+        }
+
+    def action_xem_danhmuc_mucdo(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH MỤC [MỨC ĐỘ]',
+            'res_model': 'ekids.ct_dm_mucdo',
+            'view_mode': 'list,kanban,form',
+
+            'target': 'current',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {'default_coso_id': self.id},
+        }
+
+    def action_xem_danhmuc_phuongphap(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH MỤC [PHƯƠNG PHÁP]',
+            'res_model': 'ekids.ct_dm_phuongphap',
             'view_mode': 'list,kanban,form',
 
             'target': 'current',
