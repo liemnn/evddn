@@ -150,11 +150,14 @@ class HocSinhInherit(models.Model
 
             # Bước 3: Nếu tìm thấy kế hoạch hợp lệ, tiến hành kiểm tra quyền hạn của người dùng
             if target_kehoach:
-                giaovien_lap = target_kehoach.ketluan_id.gv_lapkehoach_id
 
-                # So sánh trực tiếp Recordset (giaovien_lap.user_id == user) cực kỳ an toàn, không lo crash
-                if is_admin or (giaovien_lap and giaovien_lap.user_id == user):
+                if is_admin:
                     rec.is_sua_kehoach = True
+                else:
+                    giaoviens = target_kehoach.ketluan_id.gv_canthiep_ids
+                    user_ids = giaoviens.mapped('user_id').ids
+                    if giaoviens and user.id in user_ids:
+                        rec.is_sua_kehoach = True
 
     def _compute_is_kiemduyet(self):
         user = self.env.user
@@ -203,10 +206,13 @@ class HocSinhInherit(models.Model
                     if is_admin:
                         hs.is_canthiep = True
                     else:
-                        giaovien = kehoach.ketluan_id.gv_canthiep_id
+
+                        giaoviens = kehoach.ketluan_id.gv_canthiep_ids
                         # Phòng thủ kiểm tra chắc chắn để tránh lỗi sập hệ thống (Null Pointer) khi chưa chọn giáo viên
-                        if giaovien and giaovien.user_id and giaovien.user_id.id == user.id:
-                            hs.is_canthiep = True
+                        if giaoviens:
+                            user_ids = giaoviens.mapped('user_id').ids
+                            if user_ids and user.id in user_ids:
+                                hs.is_canthiep = True
                         else:
                             giaovien = kehoach.ketluan_id.gv_kiemduyet_id
                             if giaovien and giaovien.user_id and giaovien.user_id.id == user.id:

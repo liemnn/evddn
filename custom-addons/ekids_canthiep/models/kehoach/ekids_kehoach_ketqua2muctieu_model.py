@@ -80,10 +80,12 @@ class KeHoachKetQua2MucTieu(models.Model):
                 is_readonly = False
             else:
                 if is_readonly == False:
-                    giaovien = self.kehoach_muctieu_id.kehoach_linhvuc_id.kehoach_id.ketluan_id.gv_canthiep_id
-                    if giaovien.user_id.id != user.id:
-                        is_readonly = True
-
+                    giaoviens = self.kehoach_muctieu_id.kehoach_linhvuc_id.kehoach_id.ketluan_id.gv_canthiep_ids
+                    if giaoviens:
+                        user_ids = giaoviens.mapped('user_id').ids
+                        if user_ids and user.id in user_ids:
+                            is_readonly = True
+                   
 
 
             record.is_readonly = is_readonly

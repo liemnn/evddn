@@ -99,12 +99,12 @@ def func_get_ids_hocsinh_theo_vaitro(self):
                 .search([('user_id', '=', user.id)], limit=1))
     if giaovien:
         # 1. Khai báo các điều kiện độc lập cho rõ ràng
-        domain_lap = [('gv_lapkehoach_id', '=', giaovien.id)]
+
         domain_duyet = [('gv_kiemduyet_id', '=', giaovien.id)]
-        domain_canthiep = [('gv_canthiep_id', '=', giaovien.id)]
+        domain_canthiep = [('gv_canthiep_ids', 'in', [giaovien.id])]
 
         # 2. Gộp chúng lại bằng expression.OR (nhận vào một mảng chứa các domain)
-        domain = expression.OR([domain_lap, domain_duyet, domain_canthiep])
+        domain = expression.OR([domain_duyet, domain_canthiep])
 
         # 3. Tìm kiếm
         kehoachs = self.env['ekids.kehoach_ketluan'].search(domain)
@@ -122,7 +122,7 @@ def func_get_ids_hocsinh_theo_vaitro_lap_kehoach(self):
                 .search([('user_id', '=', user.id)], limit=1))
     if giaovien:
         # 1. Khai báo các điều kiện độc lập cho rõ ràng
-        domain = [('gv_lapkehoach_id', '=', giaovien.id)]
+        domain = [('gv_canthiep_ids', 'in', [giaovien.id])]
 
 
         # 3. Tìm kiếm
@@ -158,7 +158,7 @@ def func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self):
                 .search([('user_id', '=', user.id)], limit=1))
     if giaovien:
         # 1. Khai báo các điều kiện độc lập cho rõ ràng
-        domain = [('gv_canthiep_id', '=', giaovien.id)]
+        domain = [('gv_canthiep_ids', 'in', [giaovien.id])]
 
         # 3. Tìm kiếm
         ketluans = self.env['ekids.kehoach_ketluan'].search(domain)

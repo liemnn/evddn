@@ -191,40 +191,6 @@ class CoSo(models.Model):
 
         }
 
-    # KEHOACH --> CLICK LỰA CHỌN COSO ra kanban học sinh
-    def action_view_ekid_hocsinh_canthiep_kehoach_hocsinh(self):
-        self.ensure_one()
-        user = self.env.user
-        view_id = self.env.ref('ekids_hocsinh.kehoach_hocsinh_kanban_view').id
-
-        domain = [('id', '=', -1)]  # default rỗng
-
-        gv = self.env['ekids.giaovien'].search([('user_id', '=', user.id)], limit=1)
-        if gv:
-            ketluans = self.env['ekids.ketluan'].search([
-                ('gv_lapkehoach_id', '=', gv.id),
-                ('trangthai', '=', '0')
-            ])
-            if ketluans:
-                hocsinh_ids = ketluans.mapped('hocsinh_id.id')
-                domain = [('id', 'in', hocsinh_ids)]
-
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('HỌC SINH'),
-            'res_model': 'ekids.hocsinh',
-            'view_mode': 'kanban',
-            'views': [(view_id, 'kanban')],
-            'target': 'current',
-            'domain': domain,
-            'context': {
-                'default_coso_id': self.id,
-            },
-            'flags': {
-                'kanban': {'create': False}
-            }
-        }
-
 
 
 

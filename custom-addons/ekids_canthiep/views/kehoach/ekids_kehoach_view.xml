@@ -13,9 +13,8 @@
                     <field name="tu_ngay" string="Từ ngày" />
                     <field name="den_ngay" string="Đến ngày" />
                     <field name="songay" string="Số ngày" />
-                    <field name="gv_lapkehoach_id" string="Lập kế hoạch"/>
                     <field name="gv_kiemduyet_id" string="Chuyên môn"/>
-                    <field name="gv_canthiep_id" string="Can thiệp"/>
+                    <field name="gv_canthiep_ids" widget="many2many_tags" string="Can thiệp"/>
                     <field name="trangthai" string="Trạng thái" width="130"
                            widget="badge"
                            decoration-warning="trangthai == '0'"
@@ -47,9 +46,8 @@
                     <field name="id"/>
                     <field name="index"/>
                     <field name="hocsinh_id"/>
-                    <field name="gv_lapkehoach_id"/>
                     <field name="gv_kiemduyet_id"/>
-                    <field name="gv_canthiep_id"/>
+                    <field name="gv_canthiep_ids"/>
                     <field name="trangthai"/>
                     <field name="trangthai_pheduyet"/>
                     <field name="tu_ngay"/>
@@ -282,17 +280,16 @@
                                 <div class="k-col-3 k_inner_pod">
                                     <div class="k_pod_title"><i class="fa fa-users text-info"></i> Ban nhân sự phụ trách</div>
                                     <div class="d-flex flex-column gap-1">
-                                        <div class="k_teacher_row">
-                                            <span class="text-muted" style="font-size:11.5px;"><i class="fa fa-pencil text-muted me-1"></i>Người lập:</span>
-                                            <span class="text-slate-800 fw-semibold"><field name="gv_lapkehoach_id"/></span>
-                                        </div>
+
                                         <div class="k_teacher_row">
                                             <span class="text-muted" style="font-size:11.5px;"><i class="fa fa-shield text-muted me-1"></i>Người duyệt:</span>
                                             <span class="text-slate-800 fw-semibold"><field name="gv_kiemduyet_id"/></span>
                                         </div>
                                         <div class="k_teacher_row">
                                             <span class="text-muted" style="font-size:11.5px;"><i class="fa fa-graduation-cap text-muted me-1"></i>Can thiệp:</span>
-                                            <span class="text-primary font-weight-bold" style="font-weight: 700;"><field name="gv_canthiep_id"/></span>
+                                            <span class="text-primary font-weight-bold" style="font-weight: 700;">
+                                                <field name="gv_canthiep_ids" widget="many2many_tags"/>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -638,9 +635,9 @@
                                       <div class="collapse w-100" id="collapseStaffDetailPanel_Core">
                                           <div class="flat-assignment-detail-panel">
                                                <div class="flat-gv-track-layout">
-                                                   <span class="flat-gv-badge c-lap-purple b-lap-purple"><span class="badge-bold-title"><i class="fa fa-pencil-square-o"></i> Lập: </span><field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/></span>
-                                                   <span class="flat-vertical-divider flat-gv-divider">|</span>
-                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange"><span class="badge-bold-title"><i class="fa fa-user-md"></i> Can thiệp: </span><field name="gv_canthiep_id" readonly="1" options="{'no_open': True}"/></span>
+                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange"><span class="badge-bold-title"><i class="fa fa-user-md"></i> Can thiệp: </span>
+                                                       <field name="gv_canthiep_ids" readonly="1" widget="many2many_tags" options="{'no_open': True}"/>
+                                                   </span>
                                                    <span class="flat-vertical-divider flat-gv-divider">|</span>
                                                    <span class="flat-gv-badge c-chuyenmon-teal b-chuyenmon-teal"><span class="badge-bold-title"><i class="fa fa-graduation-cap"></i> Chuyên môn: </span><field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/></span>
                                                </div>
@@ -686,9 +683,9 @@
                                       <div class="collapse w-100" id="collapseStaffDetailPanel_Core">
                                           <div class="flat-assignment-detail-panel">
                                                <div class="flat-gv-track-layout">
-                                                   <span class="flat-gv-badge c-lap-purple b-lap-purple"><span class="badge-bold-title"><i class="fa fa-pencil-square-o"></i> Lập: </span><field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/></span>
-                                                   <span class="flat-vertical-divider flat-gv-divider">|</span>
-                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange"><span class="badge-bold-title"><i class="fa fa-user-md"></i> Can thiệp: </span><field name="gv_canthiep_id" readonly="1" options="{'no_open': True}"/></span>
+
+                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange"><span class="badge-bold-title"><i class="fa fa-user-md"></i> Can thiệp: </span>
+                                                       <field name="gv_canthiep_ids" widget="many2many_tags" readonly="1" options="{'no_open': True}"/></span>
                                                    <span class="flat-vertical-divider flat-gv-divider">|</span>
                                                    <span class="flat-gv-badge c-chuyenmon-teal b-chuyenmon-teal"><span class="badge-bold-title"><i class="fa fa-graduation-cap"></i> Chuyên môn: </span><field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/></span>
                                                </div>

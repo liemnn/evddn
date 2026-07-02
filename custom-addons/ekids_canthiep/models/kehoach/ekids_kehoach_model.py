@@ -81,20 +81,20 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
     songay = fields.Integer(string="Số ngày", default=31)
 
-    gv_lapkehoach_id = fields.Many2one('ekids.giaovien'
-                                       , string="Giáo viên [Lập kế hoạch]"
-                                       , compute="_compute_gv_lapkehoach_id"
-                                       , store=False)
+
 
     gv_kiemduyet_id = fields.Many2one('ekids.giaovien'
                                       , string="Giáo viên [Kiểm duyệt chuyên môn]"
                                       , compute="_compute_gv_kiemduyet_id"
                                       , store=False)
 
-    gv_canthiep_id = fields.Many2one('ekids.giaovien'
-                                     , string="Giáo viên [Can thiệp]"
-                                     , compute="_compute_gv_canthiep_id"
-                                     , store=False)
+   # Đổi sang Many2many để nhận diện đúng tập hợp nhiều giáo viên
+    gv_canthiep_ids = fields.Many2many(
+        'ekids.giaovien',
+        string="Giáo viên [Can thiệp]",
+        compute="_compute_gv_canthiep_ids",
+        store=False  # Không lưu trữ dưới DB, tính toán động theo Kết luận
+    )
 
 
 
@@ -161,21 +161,23 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                 name = "Tháng "+ str(tu_ngay.month) +"/" + str(tu_ngay.year)
 
             record.name = name
-    @api.depends("ketluan_id")
-    def _compute_gv_lapkehoach_id(self):
-        for record in self:
-            record.gv_lapkehoach_id =record.ketluan_id.gv_lapkehoach_id
+
 
     @api.depends("ketluan_id")
     def _compute_gv_kiemduyet_id(self):
         for record in self:
             record.gv_kiemduyet_id = record.ketluan_id.gv_kiemduyet_id
 
-    @api.depends("ketluan_id")
-    def _compute_gv_canthiep_id(self):
-        for record in self:
-            record.gv_canthiep_id = record.ketluan_id.gv_canthiep_id
-
+    @api.depends('ketluan_id', 'ketluan_id.gv_canthiep_ids')
+    def _compute_gv_canthiep_ids(self):
+        for rec in self:
+            # Nếu có kết luận con và kết luận đó đã chọn giáo viên can thiệp
+            if rec.ketluan_id and rec.ketluan_id.gv_canthiep_ids:
+                # Gán thẳng recordset Many2many từ kết luận sang kế hoạch
+                rec.gv_canthiep_ids = rec.ketluan_id.gv_canthiep_ids
+            else:
+                # Nếu không có, gán tập hợp rỗng bằng cách lệnh [(5, 0, 0)] hoặc lệnh clear của Odoo
+                rec.gv_canthiep_ids = [(5, 0, 0)]
 
 
     def _compute_is_gui_pheduyet(self):
