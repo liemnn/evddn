@@ -137,8 +137,9 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             else:
                 if (record.trangthai == kehoach_util.KEHOACH_DANG_LAP
                     or record.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
-                    giaovien = self.ketluan_id.gv_lapkehoach_id
-                    if giaovien.user_id.id == user.id:
+                    giaoviens = self.ketluan_id.gv_canthiep_ids
+                    user_ids = giaoviens.mapped('user_id').ids
+                    if user.id in user_ids:
                         is_readonly = False
                 else:
                     if (record.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
@@ -186,7 +187,9 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         for kehoach in self:
             if (kehoach.trangthai== kehoach_util.KEHOACH_DANG_LAP or
                 kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
-                if (is_admin or kehoach.ketluan_id.gv_lapkehoach_id.user_id.id == user.id):
+                giaoviens =kehoach.ketluan_id.gv_canthiep_ids
+                user_ids = giaoviens.mapped('user_id').ids
+                if (is_admin or user.id in user_ids):
                     kehoach.is_gui_pheduyet = True
                 else:
                     kehoach.is_gui_pheduyet = False

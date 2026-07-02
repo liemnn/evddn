@@ -155,8 +155,9 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         # 🌟 BƯỚC 2: ĐIỀU HƯỚNG MỞ FORM HOẶC BÁO LỖI CHẶN QUYỀN
         if target_kehoach:
             # Phòng thủ tầng sâu (Backend Security Check): Đảm bảo người dùng thực sự có quyền sửa
-            giaovien_lap = target_kehoach.ketluan_id.gv_lapkehoach_id
-            if not (is_admin or (giaovien_lap and giaovien_lap.user_id == user)):
+            giaoviens= target_kehoach.ketluan_id.gv_canthiep_ids
+            user_ids = giaoviens.mapped('user_id').ids
+            if not (is_admin or (giaoviens and user.id in user_ids)):
                 raise UserError(
                     "Bạn không có quyền chỉnh sửa kế hoạch này! Chỉ Giáo viên lập kế hoạch này hoặc Quản trị viên mới có quyền.")
 

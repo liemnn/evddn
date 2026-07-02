@@ -111,8 +111,9 @@ class KeHoach2MucTieu(models.Model):
             if is_admin:
                 is_canthiep = True
             else:
-                giaovien =  record.kehoach_id.ketluan_id.gv_canthiep_id
-                if giaovien.user_id.id == user.id:
+                giaoviens =  record.kehoach_id.ketluan_id.gv_canthiep_ids
+                user_ids = giaoviens.mapped('user_id').ids
+                if user.id in user_ids:
                     is_canthiep = True
             record.is_canthiep = is_canthiep
 
@@ -144,8 +145,9 @@ class KeHoach2MucTieu(models.Model):
                 if (kehoach.trangthai == kehoach_util.KEHOACH_DANG_LAP
                         or kehoach.trangthai_pheduyet==kehoach_util.PHEDUYET_CAN_DIEUCHINH):
                     if not record.kehoach_muctieu_thangtruoc_id:
-                        giaovien = kehoach.ketluan_id.gv_lapkehoach_id
-                        if giaovien.user_id.id == user.id:
+                        giaoviens = kehoach.ketluan_id.gv_canthiep_ids
+                        user_ids = giaoviens.mapped('user_id').ids
+                        if user.id in user_ids:
                             is_delete = True
                 # TH2: Đagn phê duyệt thì người duoc xóa thoải mái
                 if kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
