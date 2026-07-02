@@ -41,6 +41,26 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             },
         }
 
+    def action_sua_ketluan(self):
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
+        ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self, self,
+                                                                          [kehoach_util.KETLUAN_DANG_TAO])
+        if ketluan:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'CHƯƠNG TRÌNH CAN THIỆP',
+                'res_model': 'ekids.kehoach_ketluan',
+                'view_mode': 'form',
+                'views': [(form_view_id, 'form')],
+                "res_id":ketluan.id,
+                'target': 'current',
+                'domain': [('coso_id', '=', self.id)],
+                'context': {
+                    'default_coso_id': self.coso_id.id,
+                    'default_hocsinh_id': self.id
+                },
+            }
+
     def action_copy_ketluan(self):
         return {
             'type': 'ir.actions.act_window',

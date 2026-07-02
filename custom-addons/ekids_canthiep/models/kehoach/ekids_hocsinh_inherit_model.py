@@ -59,6 +59,7 @@ class HocSinhInherit(models.Model
 
 
     is_tao_ketluan = fields.Boolean(compute="_compute_is_tao_ketluan",compute_sudo=False)
+    is_sua_ketluan = fields.Boolean(compute="_compute_is_sua_ketluan", compute_sudo=False)
     is_lap_kehoach = fields.Boolean(compute="_compute_is_lap_kehoach",compute_sudo=False)
     is_sua_kehoach = fields.Boolean(compute="_compute_is_sua_kehoach",compute_sudo=False)
     is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet",compute_sudo=False)
@@ -99,6 +100,26 @@ class HocSinhInherit(models.Model
 
             else:
                 hs.is_tao_ketluan = is_taomoi
+
+
+    def _compute_is_sua_ketluan(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
+        for rec in self:
+            # Bước 1: Mặc định ban đầu là không cho sửa
+            is_sua_ketluan = False
+
+            ketluan_danglap = kehoach_util.func_get_ketluan_hocsinh_trangthai(self, rec,
+                                                                          [kehoach_util.KETLUAN_DANG_TAO])
+            if ketluan_danglap:
+                if is_admin:
+                    is_sua_ketluan = True
+                else:
+                    is_ketluan = user.has_group('ekids_core.ketluan')
+                    if is_ketluan:
+                        is_sua_ketluan =True
+            rec.is_sua_ketluan =is_sua_ketluan
 
 
     def _compute_is_lap_kehoach(self):

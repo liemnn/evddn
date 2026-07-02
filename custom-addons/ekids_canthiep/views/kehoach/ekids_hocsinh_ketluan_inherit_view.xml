@@ -57,6 +57,14 @@
                         invisible="is_tao_ketluan == False"
                         title="Có thể tạo mới [Kết luận]"
                 />
+                <button name="action_sua_ketluan"
+                        string="Sửa"
+                        type="object"
+                        class="btn-warning btn-sm text-dark fw-bold"
+                        icon="fa-pencil-square-o"
+                        invisible="is_sua_ketluan == False"
+                        title="Sửa lại [Kết luận] đang soạn thảo"
+                />
                 <button name="action_copy_ketluan"
                             string="Copy"
                             type="object"
