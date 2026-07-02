@@ -89,6 +89,9 @@ class KetLuan(models.Model):
         'ketluan_id',
         string="Các lĩnh vực thuộc kết luận"
     )  #
+
+
+
     gv_danhgia = fields.Char(string="Chuyên gia đánh giá")
     ngay_danhgia= fields.Date(string="Ngày đánh giá")
     desc = fields.Html(string="Ghi chú")
@@ -110,7 +113,24 @@ class KetLuan(models.Model):
 
     tong_kehoach = fields.Integer(string="Tổng kế hoạch",compute="_compute_tong_kehoach")
 
+    # Đổi kiểu dữ liệu từ Char sang Html
+    linhvucs = fields.Html(string="Lĩnh vực can thiệp", compute="_compute_linhvucs")
 
+    # Giữ nguyên trường kiểu Text để không bị sinh thẻ <p> rác
+    linhvucs = fields.Text(string="Lĩnh vực can thiệp", compute="_compute_linhvucs")
+
+    def _compute_linhvucs(self):
+        for record in self:
+            lines = []
+            if record.linhvuc_ids:
+                for lv in record.linhvuc_ids:
+                    name = lv.linhvuc_id.name if lv.linhvuc_id else ""
+                    tuoi = lv.tuoi_id.name if lv.tuoi_id else ""
+                    # Thêm dấu gạch đầu dòng vào định dạng cấu trúc chuỗi
+                    lines.append(f"- {name} ({tuoi})")
+
+            # Nối các dòng lại với nhau bằng ký tự xuống dòng \n
+            record.linhvucs = "\n".join(lines) if lines else ""
 
     def _compute_chuongtrinh(self):
         for record in self:
@@ -250,3 +270,9 @@ class KetLuan(models.Model):
                     "Không cho phép xóa [Kết luận] khi đang lập kế hoạch hoặc hết hiệu lực")
 
         return super(KetLuan, self).unlink()
+
+
+
+    def action_chon_copy_ketluan(self):
+        default_hocsinh_id = self.env.context.get("default_hocsinh_id")
+        return None

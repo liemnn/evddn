@@ -1,6 +1,35 @@
 <odoo>
   <data>
 
+      <record id="ekids_canthiep.kehoach_ketluan_list" model="ir.ui.view">
+            <field name="name">ekids.kehoach_ketluan</field>
+            <field name="model">ekids.kehoach_ketluan</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <list default_order="id desc"
+                      create="0" edit="0" delete="0" multi_edit="0" limit="200">
+
+                    <field name="index"/>
+                    <field name="hocsinh_id" string="Học sinh" width="150"/>
+                    <field name="ngay_danhgia" width="100"/>
+                    <field name="gv_danhgia" string="Chuyên gia" width="100"/>
+                    <field name="dm_roiloan_ids" widget="many2many_tags" />
+                    <field name="chuongtrinh_ids" widget="many2many_tags" string="Chương trình"/>
+                    <field name="linhvucs" class="text"/>
+                    <button string="Chọn"
+                            name="action_chon_copy_ketluan"
+                            type="object"
+                            class="btn-primary"
+                            icon="fa-plus"
+                            context="{'default_kehoach_linhvuc_id': context.get('default_kehoach_linhvuc_id')}"
+                            title="Lựa chọn mục tiêu này bổ sung vào kế hoạch"/>
+
+
+
+                </list>
+            </field>
+        </record>
+
 
         <record id="ekids_canthiep.kehoach_ketluan_kanban" model="ir.ui.view">
             <field name="name">Phiếu Kết luận - Premium SaaS Design V2</field>

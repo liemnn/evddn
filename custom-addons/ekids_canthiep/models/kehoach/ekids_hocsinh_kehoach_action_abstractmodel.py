@@ -41,6 +41,23 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             },
         }
 
+    def action_copy_ketluan(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'CHƯƠNG TRÌNH CAN THIỆP',
+            'res_model': 'ekids.kehoach_ketluan',
+            'view_mode': 'list,kanban,form',
+            'target': 'new',  # Vẫn giữ nguyên mở dạng Pop-up
+            'domain': [('coso_id', '=', self.coso_id.id)],
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'default_hocsinh_id': self.id,
+                'create': False,
+                'edit': False,
+                'delete': False,
+                'dialog_size': 'extra-large',  # 🌟 GIẢI PHÁP: Giúp phóng cực đại bề ngang Pop-up
+            },
+        }
     def action_xem_danhsach_ketluan(self):
           return {
             'type': 'ir.actions.act_window',
@@ -247,6 +264,8 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 'default_hocsinh_id': self.id
             },
         }
+
+
 
 
 

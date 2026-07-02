@@ -27,14 +27,17 @@
 
                     <field name="sequence" width="25"/>
                     <field name="name" width="170"/>
-
-                    <field name="bietdanh" string="Biệt danh"/>
+                     <field name="cccd" string="CCCD"  optional="hide"/>
+                    <field name="bietdanh" string="Biệt danh"  optional="hide"/>
                     <field name="gioitinh"/>
                     <field name="ngaysinh"/>
                     <field name="tuoi"/>
                     <field name="ngay_nhaphoc" string="Nhập học" width="100"/>
                     <field name="thoigian_hoc" string="Thời gian học"/>
                     <field name="ngay_nghihoc" string="Ngày nghỉ" optional="hide"/>
+                    <field name="thoigian_hoc" string="Thời gian học" optional="hide"/>
+                    <field name="hinhthuc_theohoc" string="Hình thức" optional="hide"/>
+
                     <field name="dm_xa_id"/>
                     <field name="is_hoanthien_hoso" width="70"
                            widget="boolean_toggle" readonly="true"/>
