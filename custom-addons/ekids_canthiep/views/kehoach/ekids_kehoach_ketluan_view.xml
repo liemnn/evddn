@@ -351,15 +351,7 @@
             <field name="arch" type="xml">
                 <form class="o_premium_layout">
                     <header>
-                        <button name="action_copy_ketluan"
-                            string="Copy từ [Kết luận] khác"
-                            type="object"
-                            class="btn-secondary"
-                            icon="fa-copy"
-                            context="{'default_hocsinh_id': id}"
-                            invisible="not is_tao_ketluan"
-                            title="Có thể copy từ [Kết luận] Học sinh khác"
-                        />
+
                         <field name="trangthai" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': true}"/>
                     </header>
                     <sheet class="p-2 p-md-3 bg-light-smooth">
@@ -579,7 +571,7 @@
                                 <div class="row mb-2 mx-0">
                                     <div class="col-12 p-0">
                                         <group col="12" class="p-0 m-0">
-                                            <field name="chuongtrinh_ids" readonly="is_readonly" string="Chương trình can thiệp được sử dụng" widget="many2many_tags" options="{'no_create': True}" placeholder="Bấm chọn các Khung chương trình can thiệp lớn áp dụng..." colspan="12"/>
+                                            <field name="chuongtrinh_ids" readonly="true" string="Chương trình can thiệp được sử dụng" widget="many2many_tags" options="{'no_create': True}" placeholder="Bấm chọn các Khung chương trình can thiệp lớn áp dụng..." colspan="12"/>
                                         </group>
                                     </div>
                                 </div>
@@ -589,7 +581,7 @@
                                         <list editable="bottom" class="o_list_premium m-0 border-0">
                                             <field name="sequence" widget="handle"/>
                                             <field name="sequence" width="50"/>
-                                            <field name="chuongtrinh_id" string="Chương trình" readonly="parent.is_readonly" domain="[('id', 'in', parent.chuongtrinh_ids)]" options="{'no_create': True}" width="300"/>
+                                            <field name="chuongtrinh_id" string="Chương trình" readonly="parent.is_readonly" options="{'no_create': True}" width="300"/>
                                             <field name="linhvuc_id" string="Lĩnh vực" readonly="parent.is_readonly" domain="[('chuongtrinh_id', '=', chuongtrinh_id)]" options="{'no_create': True}" width="300"/>
                                             <field name="tuoi_id" string="Độ tuổi" readonly="parent.is_readonly" domain="[('chuongtrinh_id', '=', chuongtrinh_id)]" options="{'no_create': True}"/>
                                         </list>

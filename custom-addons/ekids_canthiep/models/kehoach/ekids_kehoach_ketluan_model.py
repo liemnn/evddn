@@ -58,13 +58,8 @@ class KetLuan(models.Model):
 
 
 
-    # Gợi ý: Nếu bạn có model ekids.ct_chuongtrinh, hãy đổi thành Many2one. Ở đây dùng Char theo doc.
-    chuongtrinh_ids = fields.Many2many(comodel_name="ekids.ct_chuongtrinh"
-                                      , relation="ekids_kehoach_ketluan2chuongtrinh_rel"
-                                      , column1="ketluan_id"
-                                      , column2="chuongtrinh_id"
-                                      , string="Chương trình can thiệp")
-    chuongtrinh = fields.Char(string="Tên chương trình",compute="_compute_chuongtrinh")
+
+
 
 
     phuongphap = fields.Selection([
@@ -120,6 +115,43 @@ class KetLuan(models.Model):
 
     # Giữ nguyên trường kiểu Text để không bị sinh thẻ <p> rác
     linhvucs = fields.Text(string="Lĩnh vực can thiệp", compute="_compute_linhvucs")
+
+    # 1. Định nghĩa lại trường Many2many kèm theo thuộc tính compute và store=True
+    chuongtrinh_ids = fields.Many2many(
+        comodel_name="ekids.ct_chuongtrinh",
+        relation="ekids_kehoach_ketluan2chuongtrinh_rel",
+        column1="ketluan_id",
+        column2="chuongtrinh_id",
+        string="Chương trình can thiệp",
+        compute="_compute_chuongtrinh_ids",
+        store=False  # Lưu vào DB để bộ lọc (Filter) và Bản in QWeb truy xuất nhanh hơn
+    )
+
+    chuongtrinh = fields.Char(string="Tên chương trình", compute="_compute_chuongtrinh")
+
+    # 2. Viết hàm tính toán tự động phụ thuộc vào bảng chi tiết
+    @api.depends('linhvuc_ids.chuongtrinh_id')
+    def _compute_chuongtrinh_ids(self):
+        for record in self:
+            # Lấy toàn bộ text tên chương trình từ bảng chi tiết, dùng set() để lọc trùng
+            chuongtrinh_ids = set()
+            if record.linhvuc_ids:
+                for line in record.linhvuc_ids:
+                    if line.chuongtrinh_id:
+                        # strip() để xóa khoảng trắng thừa nếu chuyên gia gõ tay bị lệch
+                        chuongtrinh_ids.add(line.chuongtrinh_id.id)
+
+            if chuongtrinh_ids:
+                # Tìm kiếm các bản ghi danh mục chương trình tương ứng với tập hợp tên trên
+                # Dùng toán tử 'in' để tìm kiếm hàng loạt, tối ưu tốc độ xử lý phần cứng
+                chuongtrinh_records = self.env['ekids.ct_chuongtrinh'].search([
+                    ('id', 'in', list(chuongtrinh_ids))
+                ])
+                # Gán trực tiếp Recordset tìm được vào trường Many2many
+                record.chuongtrinh_ids = chuongtrinh_records
+            else:
+                # Nếu bảng chi tiết trống, làm sạch trường Many2many (xóa hết tag)
+                record.chuongtrinh_ids = [(5, 0, 0)]
 
     def _compute_linhvucs(self):
         for record in self:
