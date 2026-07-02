@@ -12,16 +12,18 @@
                     <field name="index"/>
                     <field name="hocsinh_id" string="Học sinh" width="150"/>
                     <field name="ngay_danhgia" width="100"/>
-                    <field name="gv_danhgia" string="Chuyên gia" width="100"/>
-                    <field name="dm_roiloan_ids" widget="many2many_tags" />
-                    <field name="chuongtrinh_ids" widget="many2many_tags" string="Chương trình"/>
-                    <field name="linhvucs" class="text"/>
+                    <field name="gv_danhgia" string="Chuyên gia" width="100" optional="show"/>
+                    <field name="dm_roiloan_ids" widget="many2many_tags"  width="100"/>
+                    <field name="chuongtrinh_ids" widget="many2many_tags" string="Chương trình"  width="100"/>
+                    <field name="linhvucs" class="text" width="300" />
+                    <field name="gv_canthiep_ids" widget="many2many_tags" string="Giáo viên" width="100" optional="hide"/>
+                    <field name="gv_kiemduyet_id" string="Kiểm duyệt" width="100" optional="hide"/>
                     <button string="Chọn"
                             name="action_chon_copy_ketluan"
                             type="object"
                             class="btn-primary"
                             icon="fa-plus"
-                            context="{'default_kehoach_linhvuc_id': context.get('default_kehoach_linhvuc_id')}"
+                            context="{'default_hocsinh_id': context.get('default_hocsinh_id'),'default_ketluan_id':id}"
                             title="Lựa chọn mục tiêu này bổ sung vào kế hoạch"/>
 
 
@@ -47,9 +49,8 @@
                     <field name="mucdo"/>
                     <field name="lieuluong"/>
                     <field name="lichhen"/>
-                    <field name="gv_lapkehoach_id"/>
                     <field name="gv_kiemduyet_id"/>
-                    <field name="gv_canthiep_id"/>
+                    <field name="gv_canthiep_ids"/>
                     <field name="linhvuc_ids"/>
                     <field name="trangthai"/>
                     <field name="tong_kehoach"/>
@@ -264,7 +265,8 @@
                                         <field name="dm_roiloan_ids" widget="many2many_tags"/>
                                     </div>
                                     <div class="text-muted" style="font-size: 12px;">
-                                        <i class="fa fa-user-md me-1 text-primary"></i>Chuyên gia: <span class="text-dark font-weight-bold" style="font-weight:600;"><field name="gv_danhgia"/></span>
+                                        <i class="fa fa-user-md me-1 text-primary"></i>Chuyên gia: <span class="text-dark font-weight-bold" style="font-weight:600;">
+                                        <field name="gv_danhgia"/></span>
                                     </div>
                                 </div>
 
@@ -291,17 +293,16 @@
                                 <div class="k-col-3 k_inner_pod">
                                     <div class="k_pod_title"><i class="fa fa-users text-info"></i> Ban nhân sự phụ trách</div>
                                     <div class="d-flex flex-column gap-1">
-                                        <div class="k_teacher_row">
-                                            <span class="text-muted" style="font-size:11.5px;"><i class="fa fa-pencil text-muted me-1"></i>Lập kế hoạch:</span>
-                                            <span class="text-slate-800 font-weight-bold" style="font-weight:600;"><field name="gv_lapkehoach_id"/></span>
-                                        </div>
+
                                         <div class="k_teacher_row">
                                             <span class="text-muted" style="font-size:11.5px;"><i class="fa fa-shield text-muted me-1"></i>Kiểm duyệt:</span>
                                             <span class="text-slate-800 font-weight-bold" style="font-weight:600;"><field name="gv_kiemduyet_id"/></span>
                                         </div>
                                         <div class="k_teacher_row">
                                             <span class="text-muted" style="font-size:11.5px;"><i class="fa fa-graduation-cap text-muted me-1"></i>Dạy can thiệp:</span>
-                                            <span class="text-primary font-weight-bold" style="font-weight:700;"><field name="gv_canthiep_id"/></span>
+                                            <span class="text-primary font-weight-bold" style="font-weight:700;">
+                                                <field name="gv_canthiep_ids" widget="many2many_tags"/>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -474,7 +475,6 @@
                                     <div class="ws-index-circle">
                                         <field name="index"/>
                                     </div>
-
                                 </div>
 
                                 <div class="ws-field field-student">
@@ -515,14 +515,20 @@
                                 </div>
 
                                 <div class="row border-top pt-2 mx-0" style="border-style: dashed !important; border-color: #F1F5F9 !important;">
-                                    <div class="col-md-6 ps-0 pe-0 pe-md-3">
+
+                                    <div class="col-md-4 pe-0 ps-0 px-md-2 border-separator-md">
                                         <group col="12" class="p-0 m-0">
                                             <field name="mucdo" readonly="is_readonly" string="Mức độ" colspan="12"/>
                                         </group>
                                     </div>
-                                    <div class="col-md-6 pe-0 ps-0 ps-md-3 border-separator-md">
+                                    <div class="col-md-4 pe-0 ps-0 ps-md-2 border-separator-md">
                                         <group col="12" class="p-0 m-0">
                                             <field name="lieuluong" readonly="is_readonly" string="Liều lượng can thiệp" colspan="12" placeholder="Ví dụ: 2 giờ/ngày, 5 ngày/tuần..."/>
+                                        </group>
+                                    </div>
+                                     <div class="col-md-4 ps-0 pe-0 pe-md-2">
+                                        <group col="12" class="p-0 m-0">
+                                            <field name="hinhthuc" readonly="is_readonly" string="Hình thức" placeholder="Ví dụ: Cá nhân, nhóm..." colspan="12"/>
                                         </group>
                                     </div>
                                 </div>
@@ -587,19 +593,25 @@
                                     <span>Phân công giáo viên</span>
                                 </div>
                                 <div class="row mx-0">
-                                    <div class="col-md-4 ps-0 pe-0 pe-md-2">
+                                    <div class="col-md-7 ps-0 pe-0 pe-md-3">
                                         <group col="12" class="p-0 m-0">
-                                            <field name="gv_lapkehoach_id" string="Lập kế hoạch" readonly="is_readonly" options="{'no_open': True}" domain="[('coso_id','=',coso_id)]" colspan="12"/>
+                                            <field name="gv_canthiep_ids"
+                                                   string="Giáo viên [Lập kế hoạch/Can thiệp]"
+                                                   widget="many2many_tags"
+                                                   readonly="is_readonly"
+                                                   options="{'no_create': True}"
+                                                   domain="[('coso_id','=',coso_id)]"
+                                                   colspan="12"/>
                                         </group>
                                     </div>
-                                    <div class="col-md-4 pe-0 ps-0 px-md-2 border-separator-md">
+                                    <div class="col-md-5 pe-0 ps-0 ps-md-3 border-separator-md">
                                         <group col="12" class="p-0 m-0">
-                                            <field name="gv_kiemduyet_id" string="Phê duyệt [chuyên môn]" readonly="is_readonly" options="{'no_open': True}" domain="[('coso_id','=',coso_id)]" colspan="12"/>
-                                        </group>
-                                    </div>
-                                    <div class="col-md-4 pe-0 ps-0 ps-md-2 border-separator-md">
-                                        <group col="12" class="p-0 m-0">
-                                            <field name="gv_canthiep_id" string="Can thiệp" readonly="is_readonly" options="{'no_open': True}" domain="[('coso_id','=',coso_id)]" colspan="12"/>
+                                            <field name="gv_kiemduyet_id"
+                                                   string="Phê duyệt [chuyên môn]"
+                                                   readonly="is_readonly"
+                                                   options="{'no_open': True}"
+                                                   domain="[('coso_id','=',coso_id)]"
+                                                   colspan="12"/>
                                         </group>
                                     </div>
                                 </div>

@@ -62,8 +62,9 @@
                             type="object"
                             class="btn-secondary"
                             icon="fa-copy"
-                            context="{'default_hocsinh_id': context.get('default_hocsinh_id'),'default_ketluan_id': id}"
+                            context="{'default_hocsinh_id': id}"
                             invisible="not is_tao_ketluan"
+                            confirm="Bạn chắc chắn muốn copy [Kế hoạch] này cho học sinh]"
                             title="Có thể copy từ [Kết luận] Học sinh khác"
                     />
 

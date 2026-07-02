@@ -54,6 +54,8 @@ class KetLuan(models.Model):
         ('4', 'Trên 3 giờ/ ngày')  # [cite: 15]
     ], string="Liều lượng", required=True, default="1")
 
+    hinhthuc= fields.Char(string="Hình thức [Can thiệp]")
+
 
 
     # Gợi ý: Nếu bạn có model ekids.ct_chuongtrinh, hãy đổi thành Many2one. Ở đây dùng Char theo doc.
@@ -96,15 +98,15 @@ class KetLuan(models.Model):
     ngay_danhgia= fields.Date(string="Ngày đánh giá")
     desc = fields.Html(string="Ghi chú")
 
-    gv_lapkehoach_id = fields.Many2one('ekids.giaovien'
-                                       , string="Giáo viên [Lập kế hoạch]", required=True)
 
     gv_kiemduyet_id = fields.Many2one('ekids.giaovien'
                                       , string="Giáo viên [Kiểm duyệt chuyên môn]", required=True)
 
-
-    gv_canthiep_id = fields.Many2one('ekids.giaovien'
-                                       , string="Giáo viên [Can thiệp]", required=True)
+    gv_canthiep_ids = fields.Many2many(comodel_name="ekids.giaovien"
+                                       , relation="ekids_kehoach_giaovien2ketluan_rel"
+                                       , column1="ketluan_id"
+                                       , column2="giaovien_id"
+                                       , string="Phân công [Lập kế hoạch/Can thiệp]")
 
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
 
@@ -275,4 +277,65 @@ class KetLuan(models.Model):
 
     def action_chon_copy_ketluan(self):
         default_hocsinh_id = self.env.context.get("default_hocsinh_id")
+        default_ketluan_id = self.env.context.get("default_ketluan_id")
+        self.func_copy_ketluan_tu_nguon(default_ketluan_id,default_hocsinh_id)
         return None
+
+    def func_copy_ketluan_tu_nguon(self, ketluan_nguon_id, hocsinh_id):
+        """
+        Hàm copy thông tin từ một kết luận nguồn sang một kết luận mới cho học sinh chỉ định.
+        :param ketluan_nguon_id: ID hoặc record của kết luận gốc (nguon)
+        :param hocsinh_id: ID của học sinh nhận kết luận mới
+        :return: Record kết luận mới được tạo ra
+        """
+        # 1. Đảm bảo lấy đúng bản ghi nguồn (Hỗ trợ truyền vào dạng ID hoặc Bản ghi)
+        source = self.browse(ketluan_nguon_id) if isinstance(ketluan_nguon_id, int) else ketluan_nguon_id
+        if not source.exists():
+            raise UserError("Không tìm thấy dữ liệu kết luận nguồn để sao chép!")
+
+        if not hocsinh_id:
+            raise UserError("Vui lòng chỉ định Học sinh nhận dữ liệu sao chép!")
+
+        # 2. Chuẩn bị dữ liệu cho các trường cơ bản và trường Selection/Many2one/Many2many
+        # Các trường Many2many được nạp dưới dạng lệnh [(6, 0, ids)] để map dữ liệu chuẩn của Odoo
+        vals = {
+            'hocsinh_id': hocsinh_id,
+            'trangthai': '0',  # Luôn để trạng thái mặc định ban đầu là 'Đang soạn thảo'
+            'mucdo': source.mucdo,
+            'lieuluong': source.lieuluong,
+            'hinhthuc': source.hinhthuc,
+            'phuongphap': source.phuongphap,
+            'kythuat': source.kythuat,
+            'lichhen': source.lichhen,
+            'gv_danhgia': source.gv_danhgia,
+            'ngay_danhgia': source.ngay_danhgia or fields.Date.today(),  # Nếu nguồn trống thì lấy ngày hôm nay
+            'desc': source.desc,
+            'gv_kiemduyet_id': source.gv_kiemduyet_id.id if source.gv_kiemduyet_id else False,
+
+            # Copy các quan hệ Many2many bằng Command SET (6)
+            'dm_roiloan_ids': [(6, 0, source.dm_roiloan_ids.ids)],
+            'chuongtrinh_ids': [(6, 0, source.chuongtrinh_ids.ids)],
+            'gv_canthiep_ids': [(6, 0, source.gv_canthiep_ids.ids)],
+        }
+
+        # 3. Nhân bản dữ liệu chi tiết của bảng One2many (linhvuc_ids)
+        # Sử dụng lệnh [(0, 0, values)] để tạo mới hoàn toàn các dòng chi tiết phụ thuộc vào bản ghi cha mới
+        linhvuc_lines = []
+        for line in source.linhvuc_ids:
+            linhvuc_lines.append((0, 0, {
+                'sequence': line.sequence,
+                'chuongtrinh_id': line.chuongtrinh_id.id if line.chuongtrinh_id else False,
+                'linhvuc_id': line.linhvuc_id.id if line.linhvuc_id else False,
+                'tuoi_id': line.tuoi_id.id if line.tuoi_id else False,
+            }))
+
+        if linhvuc_lines:
+            vals['linhvuc_ids'] = linhvuc_lines
+
+        # 4. Thực hiện tạo mới kết luận (Sẽ tự động đi qua hàm chặn trùng `create` có sẵn của bạn)
+        try:
+            new_ketluan = self.create(vals)
+            return new_ketluan
+        except Exception as e:
+            _logger.error(f"Lỗi xảy ra khi thực hiện copy kết luận: {str(e)}")
+            raise UserError(f"Quá trình sao chép kết luận thất bại: {str(e)}")
