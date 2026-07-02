@@ -12,6 +12,7 @@ try:
     from odoo.addons.ekids_func import kehoach_util
     from odoo.addons.ekids_func import coso_util
     from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import giaovien_util
 
 except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
@@ -122,6 +123,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         trangthais=[kehoach_util.KEHOACH_DANG_LAP,kehoach_util.KEHOACH_DANG_PHEDUYET]
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthais)
         if not kehoach:
+            giaovien = giaovien_util.func_get_giaovien_tu_user(self)
             kehoach_gannhat = kehoach_util.func_get_kehoach_hocsinh_gannhat(self,self)
             tu_ngay = self.func_get_default_kehoach_tu_ngay(kehoach_gannhat)
             den_ngay = self.func_get_default_kehoach_den_ngay(tu_ngay)
@@ -129,6 +131,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             data ={
                 "hocsinh_id":self.id,
                 "ketluan_id": ketluan.id,
+                "gv_lapkehoach_id": giaovien.id,
                 "tu_ngay": tu_ngay,
                 "den_ngay": den_ngay,
                 "songay": songay

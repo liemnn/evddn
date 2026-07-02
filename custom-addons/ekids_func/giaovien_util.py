@@ -3,6 +3,15 @@ from datetime import datetime, timedelta,date
 from dateutil.relativedelta import relativedelta
 from . import  coso_util,ngay_util,string_util
 from odoo.osv import expression
+
+def func_get_giaovien_tu_user(self):
+    user = self.env.user
+    domain =[("user_id","=",user.id)]
+
+    giaovien = self.env['ekids.giaovien'].search(domain)
+
+    return giaovien
+
 def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,tu_ngay, den_ngay):
     domain =[
                 ('giaovien_id', '=', giaovien.id),

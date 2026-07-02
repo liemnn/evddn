@@ -96,10 +96,8 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         store=False  # Không lưu trữ dưới DB, tính toán động theo Kết luận
     )
 
-
-
-
-
+    gv_lapkehoach_id = fields.Many2one('ekids.giaovien'
+                                      , string="Giáo viên [Lập kế hoạch/Can thiệp]", required=True)
 
     desc = fields.Html(string="Ý kiến phê duyệt")
 

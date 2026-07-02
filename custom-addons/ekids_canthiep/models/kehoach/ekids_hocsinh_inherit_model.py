@@ -2,7 +2,7 @@ from odoo import models, fields, api, exceptions
 from datetime import  timedelta,date,datetime
 from odoo.exceptions import UserError
 
-from .ekids_hocsinh_kehoach_abstractmodel import HocSinhKeHoachAbstractModel
+
 from .ekids_hocsinh_kehoach_action_abstractmodel import HocSinhKeHoachActionAbstractModel
 
 import logging
@@ -20,7 +20,6 @@ except ImportError as e:
 
 
 class HocSinhInherit(models.Model
-    ,HocSinhKeHoachAbstractModel
     ,HocSinhKeHoachActionAbstractModel):
     _inherit = "ekids.hocsinh"
 
@@ -128,15 +127,14 @@ class HocSinhInherit(models.Model
         for hs in self:
             trangthais = [kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]
             ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,hs,trangthais)
-            if not ketluan:
-                hs.is_lap_kehoach = False
-            else:
+            is_lap_kehoach = False
+            if ketluan:
                 trangthais =[kehoach_util.KEHOACH_DANG_LAP
                                 ,kehoach_util.KEHOACH_DANG_PHEDUYET]
                 kehoach_count = kehoach_util.func_count_kehoach_hocsinh_trangthai(self,hs,trangthais)
                 if kehoach_count <=0:
                     if is_admin:
-                        hs.is_lap_kehoach = True
+                        is_lap_kehoach = True
                     else:
                         giaovien = ketluan.gv_lapkehoach_id
                         if giaovien.user_id.id == user.id:

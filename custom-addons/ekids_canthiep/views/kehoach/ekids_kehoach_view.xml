@@ -47,7 +47,7 @@
                     <field name="index"/>
                     <field name="hocsinh_id"/>
                     <field name="gv_kiemduyet_id"/>
-                    <field name="gv_canthiep_ids"/>
+                    <field name="gv_lapkehoach_id"/>
                     <field name="trangthai"/>
                     <field name="trangthai_pheduyet"/>
                     <field name="tu_ngay"/>
@@ -288,7 +288,7 @@
                                         <div class="k_teacher_row">
                                             <span class="text-muted" style="font-size:11.5px;"><i class="fa fa-graduation-cap text-muted me-1"></i>Can thiệp:</span>
                                             <span class="text-primary font-weight-bold" style="font-weight: 700;">
-                                                <field name="gv_canthiep_ids" widget="many2many_tags"/>
+                                                <field name="gv_lapkehoach_id"/>
                                             </span>
                                         </div>
                                     </div>
@@ -685,7 +685,7 @@
                                                <div class="flat-gv-track-layout">
 
                                                    <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange"><span class="badge-bold-title"><i class="fa fa-user-md"></i> Can thiệp: </span>
-                                                       <field name="gv_canthiep_ids" widget="many2many_tags" readonly="1" options="{'no_open': True}"/></span>
+                                                       <field name="gv_lapkehoach_id"  readonly="1" options="{'no_open': True}"/></span>
                                                    <span class="flat-vertical-divider flat-gv-divider">|</span>
                                                    <span class="flat-gv-badge c-chuyenmon-teal b-chuyenmon-teal"><span class="badge-bold-title"><i class="fa fa-graduation-cap"></i> Chuyên môn: </span><field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/></span>
                                                </div>

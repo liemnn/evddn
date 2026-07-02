@@ -570,7 +570,7 @@
                                 <div class="row mb-2 mx-0">
                                     <div class="col-12 p-0">
                                         <group col="12" class="p-0 m-0">
-                                            <field name="chuongtrinh_ids" readonly="is_readonly" string="Bộ khung áp dụng" widget="many2many_tags" options="{'no_create': True}" placeholder="Bấm chọn các Khung chương trình can thiệp lớn áp dụng..." colspan="12"/>
+                                            <field name="chuongtrinh_ids" readonly="is_readonly" string="Chương trình can thiệp được sử dụng" widget="many2many_tags" options="{'no_create': True}" placeholder="Bấm chọn các Khung chương trình can thiệp lớn áp dụng..." colspan="12"/>
                                         </group>
                                     </div>
                                 </div>
@@ -580,9 +580,9 @@
                                         <list editable="bottom" class="o_list_premium m-0 border-0">
                                             <field name="sequence" widget="handle"/>
                                             <field name="sequence" width="50"/>
-                                            <field name="chuongtrinh_id" string="Khung Chương trình" readonly="parent.is_readonly" domain="[('id', 'in', parent.chuongtrinh_ids)]" options="{'no_create': True}" width="300"/>
-                                            <field name="linhvuc_id" string="Lĩnh vực phát triển" readonly="parent.is_readonly" domain="[('chuongtrinh_id', '=', chuongtrinh_id)]" options="{'no_create': True}" width="300"/>
-                                            <field name="tuoi_id" string="Độ tuổi mốc" readonly="parent.is_readonly" domain="[('chuongtrinh_id', '=', chuongtrinh_id)]" options="{'no_create': True}"/>
+                                            <field name="chuongtrinh_id" string="Chương trình" readonly="parent.is_readonly" domain="[('id', 'in', parent.chuongtrinh_ids)]" options="{'no_create': True}" width="300"/>
+                                            <field name="linhvuc_id" string="Lĩnh vực" readonly="parent.is_readonly" domain="[('chuongtrinh_id', '=', chuongtrinh_id)]" options="{'no_create': True}" width="300"/>
+                                            <field name="tuoi_id" string="Độ tuổi" readonly="parent.is_readonly" domain="[('chuongtrinh_id', '=', chuongtrinh_id)]" options="{'no_create': True}"/>
                                         </list>
                                     </field>
                                 </div>
