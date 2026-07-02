@@ -635,8 +635,8 @@
                                       <div class="collapse w-100" id="collapseStaffDetailPanel_Core">
                                           <div class="flat-assignment-detail-panel">
                                                <div class="flat-gv-track-layout">
-                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange"><span class="badge-bold-title"><i class="fa fa-user-md"></i> Can thiệp: </span>
-                                                       <field name="gv_canthiep_ids" readonly="1" widget="many2many_tags" options="{'no_open': True}"/>
+                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange"><span class="badge-bold-title"><i class="fa fa-user-md"></i> Giáo viên: </span>
+                                                       <field name="gv_lapkehoach_id" readonly="1"  options="{'no_open': True}"/>
                                                    </span>
                                                    <span class="flat-vertical-divider flat-gv-divider">|</span>
                                                    <span class="flat-gv-badge c-chuyenmon-teal b-chuyenmon-teal"><span class="badge-bold-title"><i class="fa fa-graduation-cap"></i> Chuyên môn: </span><field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/></span>
@@ -684,7 +684,8 @@
                                           <div class="flat-assignment-detail-panel">
                                                <div class="flat-gv-track-layout">
 
-                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange"><span class="badge-bold-title"><i class="fa fa-user-md"></i> Can thiệp: </span>
+                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange">
+                                                       <span class="badge-bold-title"><i class="fa fa-user-md"></i> Giáo viên: </span>
                                                        <field name="gv_lapkehoach_id"  readonly="1" options="{'no_open': True}"/></span>
                                                    <span class="flat-vertical-divider flat-gv-divider">|</span>
                                                    <span class="flat-gv-badge c-chuyenmon-teal b-chuyenmon-teal"><span class="badge-bold-title"><i class="fa fa-graduation-cap"></i> Chuyên môn: </span><field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/></span>

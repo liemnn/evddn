@@ -136,13 +136,14 @@ class HocSinhInherit(models.Model
                     if is_admin:
                         is_lap_kehoach = True
                     else:
-                        giaovien = ketluan.gv_lapkehoach_id
-                        if giaovien.user_id.id == user.id:
-                            hs.is_lap_kehoach = True
-                        else:
-                            hs.is_lap_kehoach = False
-                else:
-                    hs.is_lap_kehoach = False
+                        giaoviens = ketluan.gv_canthiep_ids
+                        if giaoviens:
+                            user_ids = giaoviens.mapped('user_id').ids
+                            if user.id in user_ids:
+                                is_lap_kehoach = True
+            hs.is_lap_kehoach = is_lap_kehoach
+
+
 
     def _compute_is_sua_kehoach(self):
         user = self.env.user

@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta,date
 from odoo.osv import expression
 
+from . import  giaovien_util
+
 KETLUAN_CHUA_CO='-2'
 KETLUAN_DANG_TAO='0'
 KETLUAN_CHOPHEP_LAP_KEHOACH='1'
@@ -78,11 +80,15 @@ def func_get_kehoach_hocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
     return kehoach
 
 def func_count_kehoach_hocsinh_trangthai(self, hocsinh, trangthais):
-    count = self.env['ekids.kehoach'].search_count([
-        ('hocsinh_id', '=', hocsinh.id),
-        ('trangthai', 'in', trangthais),
-    ])
-    return count
+    giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+    if giaovien:
+        count = self.env['ekids.kehoach'].search_count([
+            ('hocsinh_id', '=', hocsinh.id),
+            ('trangthai', 'in', trangthais),
+            ('gv_lapkehoach_id', '=', giaovien.id),
+        ])
+        return count
+    return 0
 
 
 

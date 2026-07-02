@@ -200,9 +200,7 @@
                                 <td class="col-lbl-left">Quản lý chuyên môn:</td>
                                 <td class="col-val-left"><span t-field="o.gv_kiemduyet_id.name"/></td>
                                 <td class="col-lbl-left" style="text-align:right;" colspan="2">Giáo viên dạy:</td>
-                                <td colspan="2" class="text-bold">
-                                    <span t-out="', '.join(o.gv_canthiep_ids.mapped('name'))"/>
-                                </td>
+                                <td colspan="2" class="text-bold"><span t-field="o.gv_lapkehoach_id.name"/></td>
                             </tr>
                             <tr>
                                 <td class="col-lbl-left">Tâm lý hành vi:</td>
