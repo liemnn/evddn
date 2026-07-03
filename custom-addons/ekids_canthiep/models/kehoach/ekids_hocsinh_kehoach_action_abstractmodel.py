@@ -1,6 +1,7 @@
 from odoo import api, fields, models
 from datetime import datetime,date, timedelta
 from odoo.exceptions import UserError
+from odoo.osv import expression
 from odoo.tools import json  # 🌟 BẮT BUỘC: Sử dụng bộ Json an toàn của Odoo
 
 import logging
@@ -253,7 +254,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         today = date.today()
         # Kiểm tra phân quyền lâm sàng nâng cao nếu cần
         trangthai = [kehoach_util.KEHOACH_DANG_CANTHIEP]
-        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai_ngay(self, self, trangthai, today)
+        kehoach = kehoach_util.func_get_kehoach_can_canthiep_ocsinh_trangthai_ngay(self, self, trangthai, today)
         if kehoach:
             return {
                 'type': 'ir.actions.act_window',
@@ -281,6 +282,9 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
     def action_xem_danhsach_kehoach(self):
         context_type = self.env.context.get("default_context_type")
+        context_trangthai = self.env.context.get("default_context_trangthai")
+        context_trangthai_pheduyet = self.env.context.get("default_context_trangthai_pheduyet")
+
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
         if giaovien:
             url= {
@@ -301,6 +305,13 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             elif context_type=="2":
                 # danh sách phê duyệt
                 domain = [('hocsinh_id', '=', self.id)]
+                if context_trangthai:
+                    domain_trangthai =[('trangthai', 'in', context_trangthai)]
+                    domain = expression.AND([domain, domain_trangthai])
+                if context_trangthai_pheduyet:
+                    domain_trangthai = [('trangthai_pheduyet', 'in', context_trangthai)]
+                    domain = expression.AND([domain, domain_trangthai])
+
                 url["domain"] = domain
             else:
                 # danh sách can thiệp

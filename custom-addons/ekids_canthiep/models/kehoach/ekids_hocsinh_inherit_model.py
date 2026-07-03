@@ -69,6 +69,7 @@ class HocSinhInherit(models.Model
     tong_kehoach = fields.Integer(compute="_compute_tong_kehoach",string="Số lượng")
     tong_kehoach_doiduyet = fields.Integer(compute="_compute_tong_kehoach_doiduyet", string="Số lượng đợi duyệt")
     tong_kehoach_taomoi = fields.Integer(compute="_compute_tong_kehoach_taomoi", string="Số lượng đã tạo")
+    tong_kehoach_dang_canthiep = fields.Integer(compute="_compute_tong_kehoach_dang_canthiep", string="Số lượng đang can thiêp")
 
     def _compute_tong_ketluan(self):
         for hs in self:
@@ -109,6 +110,20 @@ class HocSinhInherit(models.Model
                 hs.tong_kehoach_taomoi = tong
             else:
                 hs.tong_kehoach_taomoi = 0
+
+    def _compute_tong_kehoach_dang_canthiep(self):
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        for hs in self:
+            if hs.kehoach_ids:
+                tong =0
+                if hs.kehoach_ids:
+                    for kh in hs.kehoach_ids:
+                        if (kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP
+                                and kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id):
+                            tong +=1
+                hs.tong_kehoach_dang_canthiep = tong
+            else:
+                hs.tong_kehoach_dang_canthiep = 0
 
 
     def _compute_is_tao_ketluan(self):
@@ -240,7 +255,7 @@ class HocSinhInherit(models.Model
             # để tránh lỗi lọt điều kiện không gán dữ liệu của Odoo Compute
             hs.is_canthiep = False
             trangthais=[kehoach_util.KEHOACH_DANG_CANTHIEP]
-            kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai_ngay(self,hs, trangthais,today)
+            kehoach = kehoach_util.func_get_kehoach_can_canthiep_ocsinh_trangthai_ngay(self,hs, trangthais,today)
 
             if kehoach:
                 # --- ÉP KIỂU NGÀY AN TOÀN TUYỆT ĐỐI (DATE VS DATETIME) ---

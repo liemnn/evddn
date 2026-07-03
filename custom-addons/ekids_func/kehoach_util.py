@@ -92,6 +92,30 @@ def func_get_kehoach_hocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
     else:
         return None
 
+def func_get_kehoach_can_canthiep_ocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
+    giaovien =giaovien_util.func_get_giaovien_tu_user(self)
+    if giaovien:
+        domain =[ ('hocsinh_id', '=', hocsinh.id),
+                    ('trangthai', 'in', trangthais)]
+        if ngay:
+            domain.append(("tu_ngay","<=",ngay))
+            domain.append(("den_ngay", ">=", ngay))
+
+        if giaovien:
+            domain_lap =[('gv_lapkehoach_id', '=', giaovien.id)]
+            domain_kiemduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
+            domain_gv = expression.OR([domain_lap, domain_kiemduyet])
+            domain = expression.AND([domain, domain_gv])
+
+
+
+        kehoach = self.env['ekids.kehoach'].search(domain
+            , order="id desc", limit=1)
+        return kehoach
+    else:
+        return None
+
+
 def func_get_kehoach_can_kiemduyet_hocsinh_trangthai(self, hocsinh, trangthais):
     giaovien = giaovien_util.func_get_giaovien_tu_user(self)
     if giaovien:
