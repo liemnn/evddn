@@ -33,6 +33,7 @@
                         type="object"
                         class="btn-info btn-sm text-white"
                         icon="fa-list-ul"
+                        invisible="tong_kehoach_doiduyet==0"
                         context="{'default_context_type':'2','default_context_trangthai':['2'],'default_context_trangthai_pheduyet':['0']}"
                         title="Danh sách [Kế hoạch] Cần duyệt"
                 />
@@ -48,24 +49,18 @@
                 <field name="tong_kehoach_dang_canthiep" string="Cần xác nhận" width="70"/>
 
                  <button name="action_xem_danhsach_kehoach"
-                        string=""
+                        string="Xác nhận"
                         type="object"
                         class="btn-success btn-sm fw-bold text-uppercase"
-                        icon="fa-list-ul"
+                        icon="fa-check-square-o"
+                        invisible="tong_kehoach_dang_canthiep==0"
                         context="{'default_context_type':'2','default_context_trangthai':['1']}"
                         title="Danh sách [Kế hoạch] Có thể xác nhận kết quả"
                 />
 
 
 
-                <button name="action_canthiep"
-                        string="Kết quả"
-                        type="object"
-                        class="btn-success btn-sm fw-bold text-uppercase"
-                        icon="fa-play-circle"
-                        invisible="is_canthiep==False"
-                        title="Vào xác nhận kết quả can thiệp của kế hoạch"
-                />
+
 
 
 

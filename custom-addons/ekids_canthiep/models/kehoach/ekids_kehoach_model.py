@@ -171,8 +171,6 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             name =""
             if tu_ngay:
                 name = "Tháng "+ str(tu_ngay.month) +"/" + str(tu_ngay.year)
-            if record.gv_lapkehoach_id:
-                name = name +"- Giáo viên lập:"+record.gv_lapkehoach_id.name
 
             record.name = name
 
