@@ -14,7 +14,7 @@
                     <field name="den_ngay" string="Đến ngày" />
                     <field name="songay" string="Số ngày" />
                     <field name="gv_kiemduyet_id" string="Chuyên môn"/>
-                    <field name="gv_canthiep_ids" widget="many2many_tags" string="Can thiệp"/>
+                    <field name="gv_lapkehoach_id" string="Giáo viên"/>
                     <field name="trangthai" string="Trạng thái" width="130"
                            widget="badge"
                            decoration-warning="trangthai == '0'"

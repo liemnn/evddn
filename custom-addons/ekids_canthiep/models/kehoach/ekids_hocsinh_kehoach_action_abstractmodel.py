@@ -280,20 +280,35 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
 
     def action_xem_danhsach_kehoach(self):
+        context_type = self.env.context.get("default_context_type")
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
         if giaovien:
-            return {
+            url= {
                 'type': 'ir.actions.act_window',
                 'name': 'DANH SÁCH',
                 'res_model': 'ekids.kehoach',
                 'view_mode': 'list,kanban,form',
                 'target': 'current',
-                'domain': [('hocsinh_id', '=', self.id),('gv_lapkehoach_id','=',giaovien.id)],
                 'context': {
                     'default_coso_id': self.coso_id.id,
                     'default_hocsinh_id': self.id
                 },
             }
+            if context_type =="1":
+                # danh sách lập kế hoạch
+                domain =[('hocsinh_id', '=', self.id),('gv_lapkehoach_id','=',giaovien.id)]
+                url["domain"]=domain
+            elif context_type=="2":
+                # danh sách phê duyệt
+                domain = [('hocsinh_id', '=', self.id)]
+                url["domain"] = domain
+            else:
+                # danh sách can thiệp
+                domain = [('hocsinh_id', '=', self.id), ('gv_lapkehoach_id', '=', giaovien.id)]
+                url["domain"] = domain
+            return url
+
+
 
 
 
