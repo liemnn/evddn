@@ -1,6 +1,7 @@
 from odoo import models, fields, api, _
 from datetime import datetime, timedelta,date
 import logging
+import logging
 _logger = logging.getLogger(__name__)
 
 try:
@@ -8,6 +9,7 @@ try:
     from odoo.addons.ekids_func import kehoach_util
     from odoo.addons.ekids_func import coso_util
     from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import giaovien_util
 
 except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
@@ -18,6 +20,22 @@ class CoSo(models.Model):
     _inherit = "ekids.coso"
 
     is_ketluan = fields.Boolean(compute="_compute_is_ketluan")
+    is_duyet_kehoach = fields.Boolean(compute="_compute_is_duyet_kehoach")
+
+    def _compute_is_duyet_kehoach(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
+        for record in self:
+            is_duyet_kehoach = False
+            if is_admin:
+                is_duyet_kehoach = True
+            else:
+                hocsinh_ids = kehoach_util.func_get_ids_hocsinh_theo_vaitro_duyet_kehoach(self)
+                if hocsinh_ids and len(hocsinh_ids)>0:
+                    is_duyet_kehoach = True
+            record.is_duyet_kehoach = is_duyet_kehoach
+
 
     def _compute_is_ketluan(self):
         user = self.env.user

@@ -107,7 +107,7 @@ class HocSinhInherit(models.Model
                 tong =0
                 if hs.kehoach_ids:
                     for kh in hs.kehoach_ids:
-                        if kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id:
+                        if kh.gv_lapkehoach_id.id == giaovien.id:
                             tong +=1
                 hs.tong_kehoach_taomoi = tong
             else:
@@ -307,45 +307,52 @@ class HocSinhInherit(models.Model
     def _compute_trangthai_kehoach(self):
         # Lấy ngày hôm nay chuẩn dạng date
         today = date.today()
+        context_type = self.env.context.get("default_context_type")
 
         for hs in self:
             kehoach = kehoach_util.func_get_kehoach_hocsinh(self,hs)
             trangthai = ""
 
-            if not kehoach:
-                trangthai = kehoach_util.HOCSINH_CHUA_CO_KEHOACH
-            else:
-                # --- ÉP KIỂU NGÀY AN TOÀN TRÁNH LỖI DATETIME VS DATE ---
-                tu_ngay = kehoach.tu_ngay.date() if isinstance(kehoach.tu_ngay, datetime) else kehoach.tu_ngay
-                den_ngay = kehoach.den_ngay.date() if isinstance(kehoach.den_ngay, datetime) else kehoach.den_ngay
-
-                # Khối 1: Tính toán các trạng thái ban đầu và phê duyệt
-                if kehoach.trangthai == kehoach_util.KEHOACH_DANG_LAP:
-                    trangthai = kehoach_util.HOCSINH_DANG_LAP_KEHOACH
-
-                elif kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
-                    if kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET:
-                        trangthai = kehoach_util.HOCSINH_DOI_DUYET
-                    elif kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH:
-                        trangthai = kehoach_util.HOCSINH_CAN_DIEUCHINH
+            if context_type == "1":
+                # TH1: Lập kế hoạch:
+                if not kehoach:
+                    trangthai = kehoach_util.HOCSINH_CHUA_CO_KEHOACH
+                else:
+                    if not kehoach:
+                        trangthai = kehoach_util.HOCSINH_CHUA_CO_KEHOACH
                     else:
-                        # Đã duyệt -> Chuyển trạng thái học sinh thành ĐÃ DUYỆT
-                        trangthai = kehoach_util.HOCSINH_DA_DUYET
-                        # Cập nhật trạng thái của chính bản ghi kế hoạch sang ĐANG CAN THIỆP
-                        kehoach.trangthai = kehoach_util.KEHOACH_DANG_CANTHIEP
+                        # --- ÉP KIỂU NGÀY AN TOÀN TRÁNH LỖI DATETIME VS DATE ---
+                        tu_ngay = kehoach.tu_ngay.date() if isinstance(kehoach.tu_ngay, datetime) else kehoach.tu_ngay
+                        den_ngay = kehoach.den_ngay.date() if isinstance(kehoach.den_ngay,
+                                                                         datetime) else kehoach.den_ngay
 
-                # Khối 2: ĐƯA VÀO TRONG ELSE - Tính toán thời hạn riêng cho trạng thái ĐANG CAN THIỆP
-                # (Sử dụng luôn giá trị vừa cập nhật từ Khối 1 nếu có)
-                if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                    if den_ngay and den_ngay < today:
-                        trangthai = kehoach_util.HOCSINH_HET_HIEULUC
-                        kehoach.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
-                    elif tu_ngay and den_ngay and tu_ngay <= today <= den_ngay:
-                        trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
-                    else:
-                        trangthai = kehoach_util.HOCSINH_DA_DUYET
+                        # Khối 1: Tính toán các trạng thái ban đầu và phê duyệt
+                        if kehoach.trangthai == kehoach_util.KEHOACH_DANG_LAP:
+                            trangthai = kehoach_util.HOCSINH_DANG_LAP_KEHOACH
 
-            # Gán giá trị cuối cùng cho học sinh
+                        elif kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
+                            if kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET:
+                                trangthai = kehoach_util.HOCSINH_DOI_DUYET
+                            elif kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH:
+                                trangthai = kehoach_util.HOCSINH_CAN_DIEUCHINH
+                            else:
+                                # Đã duyệt -> Chuyển trạng thái học sinh thành ĐÃ DUYỆT
+                                trangthai = kehoach_util.HOCSINH_DA_DUYET
+                                # Cập nhật trạng thái của chính bản ghi kế hoạch sang ĐANG CAN THIỆP
+                                kehoach.trangthai = kehoach_util.KEHOACH_DANG_CANTHIEP
+
+                        # Khối 2: ĐƯA VÀO TRONG ELSE - Tính toán thời hạn riêng cho trạng thái ĐANG CAN THIỆP
+                        # (Sử dụng luôn giá trị vừa cập nhật từ Khối 1 nếu có)
+                        if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                            if den_ngay and den_ngay < today:
+                                trangthai = kehoach_util.HOCSINH_HET_HIEULUC
+                                kehoach.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
+                            elif tu_ngay and den_ngay and tu_ngay <= today <= den_ngay:
+                                trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
+                            else:
+                                trangthai = kehoach_util.HOCSINH_DA_DUYET
+
+
             hs.trangthai_kehoach = trangthai
 
 

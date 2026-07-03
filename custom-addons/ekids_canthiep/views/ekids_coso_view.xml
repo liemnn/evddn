@@ -68,7 +68,7 @@
                                             name="action_xem_danhmuc_roiloan"
                                             type="object">
                                         <i class="fa fa-bars"/>
-                                        Danh mục RỐI LOẠN
+                                        Danh mục [RỐI LOẠN]
                                     </button>
                                     <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                             name="action_xem_danhmuc_lieuluong"
@@ -266,12 +266,16 @@
 
                                      <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                              name="action_danhsach_hocsinh_lap_kehoach"
+                                             context="{'default_context_type':'1'}"
                                              type="object">
                                          <i class="fa fa-pencil-square-o"></i>
                                          <span>Lập [Kế hoạch] can thiệp</span>
                                      </button>
+
                                       <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                              name="action_danhsach_hocsinh_duyet_kehoach"
+                                             invisible="is_duyet_kehoach== False"
+                                              context="{'default_context_type':'2'}"
                                              type="object">
                                          <i class="fa fa-check-square-o"></i>
                                          <span>Duyệt [Kế hoạch/Kết quả]</span>
