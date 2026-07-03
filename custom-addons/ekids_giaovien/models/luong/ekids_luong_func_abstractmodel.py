@@ -234,13 +234,25 @@ class LuongFuncAbstractModel(models.AbstractModel):
         giaovien2thang = giaovien_util.func_get_chamcong_giaovien2thang(self, giaovien, nam, thang)
         parameters['duoc_chamcongs'] = giaovien2thang
 
+        # xu ly tinh huong giao vien nghi giua thang
+        songay_nghi =0
+        if giaovien.dilam_denngay:
+           if (giaovien.dilam_denngay >= ngay_dauthang
+               and  giaovien.dilam_denngay<= ngay_cuoithang):
+               batdau = fields.Date.add(giaovien.dilam_denngay, days=1)
+               ngay_nghis= giaovien_util.func_get_ngay_dilam_theo_kehoach(self,coso,coso_nghiles,batdau,ngay_cuoithang)
+               songay_nghi= len(ngay_nghis)
 
-        parameters["$NGAY_DILAM"] = str(dilam_chamcong)
+
+        dilam_duoc_chamcong = int(dilam_chamcong) - songay_nghi
+        parameters["$NGAY_DILAM"] = str(dilam_duoc_chamcong)
 
 
         ngaynghi = dilam_nghi + (dilam_nuabuoi * 0.5) + len(gv_coso_chonghi_truluongs) + len(nghipheps)
 
-        parameters["$NGAY_NGHI"] = str(ngaynghi)
+        # chu y trường hợp giáo viên nghỉ giữa tháng
+        ngaynghi_tong = ngaynghi+songay_nghi
+        parameters["$NGAY_NGHI"] = str(ngaynghi_tong)
         #luong.so_ngaynghi = chamcong_nghi
 
         ngay_cong_tinhluong =gv_dilam_kehoach - ngaynghi
@@ -252,7 +264,7 @@ class LuongFuncAbstractModel(models.AbstractModel):
         parameters["$NHATRUONG_NGHI"] = str(len(coso_chonghis))
         parameters["$NGHIPHEP"] = str(len(nghipheps))
 
-        tong_ngaynghi =ngaynghi + len(coso_nghiles) +len(coso_chonghis)
+        tong_ngaynghi =ngaynghi + len(coso_nghiles) +len(coso_chonghis) +songay_nghi
         parameters["$TONG_NGAYNGHI"] = str(tong_ngaynghi)
         luong.so_ngaynghi = tong_ngaynghi
 

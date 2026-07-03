@@ -416,16 +416,6 @@ class KeHoach2MucTieu(models.Model):
 
         # 4. Quét vòng lặp để lọc ra các ngày chưa có
         so_ngay_conlai = (den_ngay -today).days
-        chuadat_str = coso_util.func_cauhinh_canthiep(self, coso,
-                                                                   "muctieu_tyle_macdinh_chuadat", "6")
-        hinhthanh_str = coso_util.func_cauhinh_canthiep(self, coso,
-                                                                   "muctieu_tyle_macdinh_hinhthanh", "6")
-        dat_str = coso_util.func_cauhinh_canthiep(self, coso,
-                                                                   "muctieu_tyle_macdinh_dat", "6")
-
-        index_chuadat = int((so_ngay_conlai/100) * int(chuadat_str))
-        index_hinhthanh = int((so_ngay_conlai/100) * int(hinhthanh_str))
-
 
         while current_date <= den_ngay:
             if current_date not in danh_sach_ngay_da_co:
