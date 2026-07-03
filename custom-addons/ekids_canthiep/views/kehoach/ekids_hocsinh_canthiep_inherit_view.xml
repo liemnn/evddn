@@ -22,8 +22,16 @@
                         decoration-info="trangthai == '2'"
                         decoration-danger="trangthai == '3'" width="100"/>
                 <field name="trangthai_kehoach" string="Kế hoạch"/>
-                <field name="tong_kehoach" string="Tổng số kế hoạch"/>
+                <field name="tong_kehoach_da_canthiep" string="Kế hoạch đã can thiệp"/>
+                 <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-info btn-sm text-white"
+                        icon="fa-list-ul"
 
+                        context="{'default_context_type':'3'}"
+                        title="Danh sách [Kế hoạch] Đã can thiệp"
+                />
 
                 <button name="action_canthiep"
                         string="Can thiệp"

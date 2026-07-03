@@ -275,7 +275,7 @@
                                       <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                              name="action_danhsach_hocsinh_duyet_kehoach"
                                              invisible="is_duyet_kehoach== False"
-                                              context="{'default_context_type':'2'}"
+                                             context="{'default_context_type':'2'}"
                                              type="object">
                                          <i class="fa fa-check-square-o"></i>
                                          <span>Duyệt [Kế hoạch/Kết quả]</span>
@@ -283,7 +283,7 @@
 
                                      <button class="oe_kanban_action kh-btn-action kh-btn-main"
                                              name="action_danhsach_hocsinh_canthiep"
-                                             invisible="is_thu_hocphi_dauthang == False"
+                                             context="{'default_context_type':'3'}"
                                              type="object">
                                          <i class="fa fa-play-circle"></i>
                                          <span>Can thiệp [Hàng ngày]</span>

@@ -70,6 +70,7 @@ class HocSinhInherit(models.Model
     tong_kehoach_doiduyet = fields.Integer(compute="_compute_tong_kehoach_doiduyet", string="Số lượng đợi duyệt")
     tong_kehoach_taomoi = fields.Integer(compute="_compute_tong_kehoach_taomoi", string="Số lượng đã tạo")
     tong_kehoach_dang_canthiep = fields.Integer(compute="_compute_tong_kehoach_dang_canthiep", string="Số lượng đang can thiêp")
+    tong_kehoach_da_canthiep = fields.Integer(compute="_compute_tong_kehoach_da_canthiep",string="Số [Kế hoạch] Đã can thiệp")
 
     def _compute_tong_ketluan(self):
         for hs in self:
@@ -138,6 +139,21 @@ class HocSinhInherit(models.Model
                 hs.tong_kehoach_dang_canthiep = tong
             else:
                 hs.tong_kehoach_dang_canthiep = 0
+
+    def _compute_tong_kehoach_da_canthiep(self):
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        for hs in self:
+            if hs.kehoach_ids:
+                tong =0
+                if hs.kehoach_ids:
+                    for kh in hs.kehoach_ids:
+                        if (kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP
+                                or kh.trangthai == kehoach_util.KEHOACH_HET_HIEULUC):
+                            if kh.gv_lapkehoach_id.id == giaovien.id:
+                                tong += 1
+                hs.tong_kehoach_da_canthiep = tong
+            else:
+                hs.tong_kehoach_da_canthiep = 0
 
 
     def _compute_is_tao_ketluan(self):
@@ -363,6 +379,18 @@ class HocSinhInherit(models.Model
                                 trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
                             else:
                                 trangthai = kehoach_util.HOCSINH_DA_DUYET
+            elif context_type == "3":
+                if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                    if (today>= kehoach.tu_ngay
+                            and today<= kehoach.den_ngay):
+                        trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
+                    else:
+                        trangthai = kehoach_util.HOCSINH_DA_DUYET
+                elif kehoach.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
+                    trangthai = kehoach_util.HOCSINH_HET_HIEULUC
+                else:
+                    trangthai = kehoach_util.HOCSINH_DANG_LAP_KEHOACH
+
 
 
             hs.trangthai_kehoach = trangthai
