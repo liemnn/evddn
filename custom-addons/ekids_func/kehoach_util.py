@@ -92,7 +92,7 @@ def func_get_kehoach_hocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
     else:
         return None
 
-def func_get_kehoach_can_canthiep_ocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
+def func_get_kehoach_can_canthiep_hocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
     giaovien =giaovien_util.func_get_giaovien_tu_user(self)
     if giaovien:
         domain =[ ('hocsinh_id', '=', hocsinh.id),
