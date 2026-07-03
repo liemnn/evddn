@@ -287,11 +287,20 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
         if giaovien:
+            list_view_id = self.env.ref('ekids_canthiep.kehoach_list').id
+            form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
+            kanban_view_id = self.env.ref('ekids_canthiep.kehoach_kanban').id
+            if context_type =="1":
+                #lap ke hoach
+                list_view_id = self.env.ref('ekids_canthiep.lap_kehoach_list').id
+
+
             url= {
                 'type': 'ir.actions.act_window',
                 'name': 'DANH SÁCH',
                 'res_model': 'ekids.kehoach',
                 'view_mode': 'list,kanban,form',
+                'views': [(list_view_id, 'list'),(kanban_view_id, 'kanban'),(form_view_id, 'form')],
                 'target': 'current',
                 'context': {
                     'default_coso_id': self.coso_id.id,
