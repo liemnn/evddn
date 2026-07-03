@@ -209,7 +209,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
     def action_duyet_kehoach(self):
 
         trangthais = [kehoach_util.KEHOACH_DANG_PHEDUYET]
-        kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, trangthais)
+        kehoach = kehoach_util.func_get_kehoach_can_kiemduyet_hocsinh_trangthai(self, self, trangthais)
         if kehoach:
             return {
                 'type': 'ir.actions.act_window',
@@ -265,7 +265,11 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 'domain': [('coso_id', '=', self.coso_id.id)],
                 'context': {
                     'default_coso_id': self.coso_id.id,
-                    'default_hocsinh_id': self.id
+                    'default_hocsinh_id': self.id,
+                    # 🌟 THÊM 3 DÒNG CHỐT CHẶN DƯỚI ĐÂY ĐỂ KHÓA ĐỂN FORM VIEW
+                    'edit': True,  # 🚫 Tắt hoàn toàn tính năng và ẩn nút [Sửa]
+                    'create': False,  # 🚫 Tắt tính năng và ẩn nút [Tạo mới]
+                    'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
                 },
             }
         else:
@@ -276,18 +280,20 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
 
     def action_xem_danhsach_kehoach(self):
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'DANH SÁCH',
-            'res_model': 'ekids.kehoach',
-            'view_mode': 'list,kanban,form',
-            'target': 'current',
-            'domain': [('hocsinh_id', '=', self.id)],
-            'context': {
-                'default_coso_id': self.coso_id.id,
-                'default_hocsinh_id': self.id
-            },
-        }
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        if giaovien:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'DANH SÁCH',
+                'res_model': 'ekids.kehoach',
+                'view_mode': 'list,kanban,form',
+                'target': 'current',
+                'domain': [('hocsinh_id', '=', self.id),('gv_lapkehoach_id','=',giaovien.id)],
+                'context': {
+                    'default_coso_id': self.coso_id.id,
+                    'default_hocsinh_id': self.id
+                },
+            }
 
 
 

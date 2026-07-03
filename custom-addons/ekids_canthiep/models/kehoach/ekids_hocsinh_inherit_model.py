@@ -13,6 +13,7 @@ try:
     from odoo.addons.ekids_func import kehoach_util
     from odoo.addons.ekids_func import coso_util
     from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import giaovien_util
 
 except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
@@ -66,6 +67,8 @@ class HocSinhInherit(models.Model
 
     tong_ketluan = fields.Integer(compute="_compute_tong_ketluan", string="Số lượng")
     tong_kehoach = fields.Integer(compute="_compute_tong_kehoach",string="Số lượng")
+    tong_kehoach_doiduyet = fields.Integer(compute="_compute_tong_kehoach_doiduyet", string="Số lượng đợi duyệt")
+    tong_kehoach_taomoi = fields.Integer(compute="_compute_tong_kehoach_taomoi", string="Số lượng đã tạo")
 
     def _compute_tong_ketluan(self):
         for hs in self:
@@ -80,6 +83,32 @@ class HocSinhInherit(models.Model
                 hs.tong_kehoach = len(hs.kehoach_ids)
             else:
                 hs.tong_kehoach = 0
+
+    def _compute_tong_kehoach_doiduyet(self):
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        for hs in self:
+            if hs.kehoach_ids:
+                tong =0
+                if hs.kehoach_ids:
+                    for kh in hs.kehoach_ids:
+                        if kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id:
+                            tong +=1
+                hs.tong_kehoach_doiduyet = tong
+            else:
+                hs.tong_kehoach_doiduyet = 0
+
+    def _compute_tong_kehoach_taomoi(self):
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        for hs in self:
+            if hs.kehoach_ids:
+                tong =0
+                if hs.kehoach_ids:
+                    for kh in hs.kehoach_ids:
+                        if kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id:
+                            tong +=1
+                hs.tong_kehoach_taomoi = tong
+            else:
+                hs.tong_kehoach_taomoi = 0
 
 
     def _compute_is_tao_ketluan(self):
@@ -185,7 +214,7 @@ class HocSinhInherit(models.Model
         for hs in self:
             is_kiemduyet = False
             trangthais =[kehoach_util.KEHOACH_DANG_PHEDUYET]
-            kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,hs,trangthais)
+            kehoach = kehoach_util.func_get_kehoach_can_kiemduyet_hocsinh_trangthai(self,hs,trangthais)
             if kehoach:
                 if kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET:
                     if is_admin:

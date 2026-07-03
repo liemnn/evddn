@@ -15,6 +15,7 @@ try:
     from odoo.addons.ekids_func import kehoach_util
     from odoo.addons.ekids_func import coso_util
     from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import giaovien_util
 
 except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
@@ -170,6 +171,8 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             name =""
             if tu_ngay:
                 name = "Tháng "+ str(tu_ngay.month) +"/" + str(tu_ngay.year)
+            if record.gv_lapkehoach_id:
+                name = name +"- Giáo viên lập:"+record.gv_lapkehoach_id.name
 
             record.name = name
 
@@ -298,11 +301,14 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         return result
 
     def func_kiemtra_kehoach_trung_thoigian(self):
+
         self.ensure_one()
 
         # Chốt chặn an toàn: Nếu chưa điền đủ ngày thì không kiểm tra để tránh lỗi
         if not self.tu_ngay or not self.den_ngay:
             return False
+
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
 
         # 1. Khởi tạo Domain lọc các kế hoạch có khoảng thời gian giao nhau
         domain = [
@@ -310,11 +316,15 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             ('den_ngay', '>=', fields.Date.to_date(self.tu_ngay)),
         ]
 
+        if giaovien:
+            domain.append(('gv_lapkehoach_id', '=', giaovien.id))
+
         # 2. Định hướng nghiệp vụ bổ sung (Tùy chọn gom cụm dữ liệu):
         # Thông thường sẽ chỉ xét trùng lịch trên cùng 1 Học sinh hoặc cùng 1 Cơ sở.
         # Nếu anh muốn xét trùng lịch của riêng học sinh đó, hãy mở comment dòng dưới:
         if self.hocsinh_id:
             domain.append(('hocsinh_id', '=', self.hocsinh_id.id))
+
 
         # 3. CHỐT CHẶN CHÍ MẠNG: Nếu là kế hoạch đã có ID (hành động sửa/ghi lại)
         # thì phải loại trừ chính bản ghi hiện tại ra khỏi danh sách tìm kiếm, tránh tự trùng với chính mình.
@@ -508,19 +518,21 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
             url = self.action_quaylai_kehoachs()
 
-    @api.model
+    # 🌟 BỎ HOÀN TOÀN decorator @api.model ở đây
     def unlink(self):
+        # 1. Nếu là Admin tối cao thì cho qua luôn, không cần duyệt qua vòng lặp
         if self.env.user._is_admin():
-            return super().unlink()
-        else:
-            if (self.trangthai == kehoach_util.KEHOACH_DANG_LAP
-                or self.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
-                return super().unlink()
-            else:
-                raise  UserError ("Kế hoạch đang ở trạng thái không cho phép xóa")
+            return super(KeHoach, self).unlink()
 
+        # 2. Duyệt qua từng bản ghi được chọn xóa để kiểm tra điều kiện trạng thái
+        for rec in self:
+            # Kiểm tra nếu thỏa mãn điều kiện Đang lập HOẶC Cần điều chỉnh thì cho phép qua, ngược lại chặn đứng
+            if not (rec.trangthai == kehoach_util.KEHOACH_DANG_LAP or
+                    rec.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                raise UserError(f"Kế hoạch [{rec.name or ''}] đang ở trạng thái không cho phép xóa!")
 
-
+        # 3. Gọi hàm super() duy nhất một lần cuối cùng để thực thi xóa dưới DB
+        return super(KeHoach, self).unlink()
 
 
 
