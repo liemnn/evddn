@@ -32,6 +32,8 @@ Long description of module's purpose
         'views/danhmuc/ekids_ct_dm_lieuluong_view.xml',
         'views/danhmuc/ekids_ct_dm_mucdo_view.xml',
         'views/danhmuc/ekids_ct_dm_phuongphap_view.xml',
+        'views/danhmuc/ekids_ct_dm_lichhen_view.xml',
+        'views/danhmuc/ekids_ct_dm_cg_danhgia_view.xml',
 
 
 

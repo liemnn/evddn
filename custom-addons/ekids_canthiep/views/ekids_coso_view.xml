@@ -60,7 +60,7 @@
 
                                 <div class="kh-premium-body">
                                     <div class="kh-premium-desc">
-                                        (Quản lý Các Danh mục)
+                                        (Quản lý Các Danh mục và Chuyên gia đánh giá)
                                     </div>
 
 
@@ -68,25 +68,37 @@
                                             name="action_xem_danhmuc_roiloan"
                                             type="object">
                                         <i class="fa fa-bars"/>
-                                        DANH MỤC RỐI LOẠN
+                                        Danh mục RỐI LOẠN
                                     </button>
                                     <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                             name="action_xem_danhmuc_lieuluong"
                                             type="object">
                                         <i class="fa fa-bars"/>
-                                        DANH MỤC [LIỀU LƯỢNG]
+                                        Danh mục [LIỀU LƯỢNG]
                                     </button>
                                      <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                             name="action_xem_danhmuc_mucdo"
                                             type="object">
                                         <i class="fa fa-bars"/>
-                                        DANH MỤC [MỨC ĐỘ]
+                                        Danh mục [MỨC ĐỘ]
                                     </button>
                                      <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                             name="action_xem_danhmuc_phuongphap"
                                             type="object">
                                         <i class="fa fa-bars"/>
-                                        DANH MỤC [PHƯƠNG PHÁP]
+                                        Danh mục [PHƯƠNG PHÁP]
+                                    </button>
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_xem_danhmuc_lichhen"
+                                            type="object">
+                                        <i class="fa fa-bars"/>
+                                        Danh mục [LỊCH HẸN]
+                                    </button>
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_xem_danhmuc_cg_danhgia"
+                                            type="object">
+                                        <i class="fa fa-bars"/>
+                                        Danh sách [Chuyên gia Đánh giá]
                                     </button>
                                 </div>
 

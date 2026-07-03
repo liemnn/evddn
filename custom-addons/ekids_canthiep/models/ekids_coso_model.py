@@ -92,6 +92,30 @@ class CoSo(models.Model):
             'context': {'default_coso_id': self.id},
         }
 
+    def action_xem_danhmuc_lichhen(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH MỤC [LICH HẸN]',
+            'res_model': 'ekids.ct_dm_lichhen',
+            'view_mode': 'list,kanban,form',
+
+            'target': 'current',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {'default_coso_id': self.id},
+        }
+
+    def action_xem_danhmuc_cg_danhgia(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH SACHS [CHUYÊN GIA ĐÁNH GIÁ]',
+            'res_model': 'ekids.ct_dm_cg_danhgia',
+            'view_mode': 'list,kanban,form',
+
+            'target': 'current',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {'default_coso_id': self.id},
+        }
+
     def action_danhsach_hocsinh_ketluan(self):
         list_view_id = self.env.ref('ekids_canthiep.hocsinh_ketluan_inherit_list').id
         domain = [('coso_id', '=', self.id)]

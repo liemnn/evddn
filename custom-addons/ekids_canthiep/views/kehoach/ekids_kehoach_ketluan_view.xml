@@ -12,7 +12,7 @@
                     <field name="index"/>
                     <field name="hocsinh_id" string="Học sinh" width="150"/>
                     <field name="ngay_danhgia" width="100"/>
-                    <field name="gv_danhgia" string="Chuyên gia" width="100" optional="show"/>
+                    <field name="dm_gv_danhgia_id" string="Chuyên gia" width="100" optional="show"/>
                     <field name="dm_roiloan_ids" widget="many2many_tags"  width="100"/>
                     <field name="chuongtrinh_ids" widget="many2many_tags" string="Chương trình"  width="100"/>
                     <field name="linhvucs" class="text" width="300" />
@@ -45,11 +45,11 @@
                     <field name="name"/>
                     <field name="hocsinh_id"/>
                     <field name="ngay_danhgia"/>
-                    <field name="gv_danhgia"/>
+                    <field name="dm_gv_danhgia_id"/>
                     <field name="dm_roiloan_ids"/>
-                    <field name="mucdo"/>
-                    <field name="lieuluong"/>
-                    <field name="lichhen"/>
+                    <field name="dm_mucdo_id"/>
+                    <field name="dm_lieuluong_id"/>
+                    <field name="dm_lichhen_id"/>
                     <field name="gv_kiemduyet_id"/>
                     <field name="gv_canthiep_ids"/>
                     <field name="linhvuc_ids"/>
@@ -267,7 +267,7 @@
                                     </div>
                                     <div class="text-muted" style="font-size: 12px;">
                                         <i class="fa fa-user-md me-1 text-primary"></i>Chuyên gia: <span class="text-dark font-weight-bold" style="font-weight:600;">
-                                        <field name="gv_danhgia"/></span>
+                                        <field name="dm_gv_danhgia_id"/></span>
                                     </div>
                                 </div>
 
@@ -275,18 +275,16 @@
                                     <div class="k_pod_title"><i class="fa fa-compass text-warning"></i> Định hướng can thiệp</div>
                                     <div class="d-flex flex-column gap-1.5" style="font-size: 13px;">
                                         <div>
-                                            <span class="text-muted">Mức độ:</span>
-                                            <t t-if="record.mucdo.raw_value == '1'"><b class="text-primary" style="font-weight:700;">Cần can thiệp</b></t>
-                                            <t t-elif="record.mucdo.raw_value == '2'"><b class="text-warning" style="font-weight:700;">Can thiệp nhiều</b></t>
-                                            <t t-else=""><b class="text-danger" style="font-weight:700;">Can thiệp rất nhiều</b></t>
+                                            <span class="text-muted">Mức độ:<field name="dm_mucdo_id"/> </span>
+
                                         </div>
                                         <div>
-                                            <span class="text-muted">Tần suất:</span> <span class="text-dark font-weight-bold" style="font-weight:700;"><field name="lieuluong"/></span>
+                                            <span class="text-muted">Tần suất:</span> <span class="text-dark font-weight-bold" style="font-weight:700;">
+                                            <field name="dm_lieuluong_id"/></span>
                                         </div>
                                         <div>
-                                            <span class="text-muted">Lịch hẹn:</span>
-                                            <t t-if="record.lichhen.raw_value"><span class="text-danger font-weight-bold" style="font-weight:700;"><i class="fa fa-clock-o me-1"></i><field name="lichhen"/></span></t>
-                                            <t t-else=""><span class="text-slate-400 font-italic">Chưa hẹn</span></t>
+                                            <span class="text-muted">Lịch hẹn:<field name="dm_lichhen_id"/> </span>
+
                                         </div>
                                     </div>
                                 </div>
@@ -496,7 +494,7 @@
                                 <div class="ws-field field-doctor">
                                     <span class="ws-label"><i class="fa fa-user-md"></i> Chuyên gia đánh giá</span>
                                     <div class="ws-field-box">
-                                        <field name="gv_danhgia" readonly="is_readonly" options="{'no_open': True}"/>
+                                        <field name="dm_gv_danhgia_id" readonly="is_readonly" options="{'no_open': True}"/>
                                     </div>
                                 </div>
 
@@ -520,12 +518,12 @@
 
                                     <div class="col-md-4 pe-0 ps-0 px-md-2 border-separator-md">
                                         <group col="12" class="p-0 m-0">
-                                            <field name="mucdo" readonly="is_readonly" string="Mức độ" colspan="12"/>
+                                            <field name="dm_mucdo_id" readonly="is_readonly" string="Mức độ" colspan="12"/>
                                         </group>
                                     </div>
                                     <div class="col-md-4 pe-0 ps-0 ps-md-2 border-separator-md">
                                         <group col="12" class="p-0 m-0">
-                                            <field name="lieuluong" readonly="is_readonly" string="Liều lượng can thiệp" colspan="12" placeholder="Ví dụ: 2 giờ/ngày, 5 ngày/tuần..."/>
+                                            <field name="dm_lieuluong_id" readonly="is_readonly" string="Liều lượng can thiệp" colspan="12"/>
                                         </group>
                                     </div>
                                      <div class="col-md-4 ps-0 pe-0 pe-md-2">
@@ -544,8 +542,8 @@
                                             <span>Phương pháp can thiệp</span>
                                         </div>
                                         <group col="12" class="p-0 m-0">
-                                            <field name="phuongphap" readonly="is_readonly" nolabel="1"
-                                                   placeholder="Ví dụ: Ứng dụng PECS giao tiếp, can thiệp hành vi ABA..." colspan="12"/>
+                                            <field name="dm_phuongphap_id" readonly="is_readonly" nolabel="1"
+                                                   colspan="12"/>
                                         </group>
                                     </div>
                                 </div>
@@ -635,7 +633,7 @@
                                         <span>Lịch hẹn lần sau</span>
                                     </div>
                                     <group col="12" class="p-0 m-0">
-                                        <field name="lichhen" readonly="is_readonly" nolabel="1"
+                                        <field name="dm_lichhen_id" readonly="is_readonly" nolabel="1"
                                                string="Lịch hẹn lần sau"
                                                colspan="12"/>
                                     </group>

@@ -40,45 +40,23 @@ class KetLuan(models.Model):
                                       , column2="dm_roiloan_id"
                                       , string="Các vấn đề của trẻ")
 
-    mucdo = fields.Selection([
-        ('1', 'Cần can thiệp'),  # [cite: 12, 13]
-        ('2', 'Cần can thiệp nhiều'),  # [cite: 14]
-        ('3', 'Cần can thiệp rất nhiều')  # [cite: 15]
-    ], string="Mức độ", required=True, default="1")
+    dm_mucdo_id = fields.Many2one('ekids.ct_dm_mucdo', string='Mức độ', ondelete="restrict")
 
+
+    dm_lieuluong_id = fields.Many2one('ekids.ct_dm_lieuluong', string='Liều lượng', ondelete="restrict")
     # 3. ĐỊNH HƯỚNG CAN THIỆP
-    lieuluong = fields.Selection([
-        ('1', '1 giờ/ ngày'),  # [cite: 12, 13]
-        ('2', '2 giờ/ ngày'),  # [cite: 14]
-        ('3', '3 giờ/ ngày'),  # [cite: 15]
-        ('4', 'Trên 3 giờ/ ngày')  # [cite: 15]
-    ], string="Liều lượng", required=True, default="1")
 
-    hinhthuc= fields.Char(string="Hình thức [Can thiệp]")
+    hinhthuc = fields.Char(string="Hình thức [Can thiệp]")
 
+    dm_phuongphap_id = fields.Many2one('ekids.ct_dm_phuongphap', string='Phương pháp', ondelete="restrict")
 
-
-
-
-
-
-    phuongphap = fields.Selection([
-        ('1', 'ABA'),  # [cite: 12, 13]
-        ('2', 'AAC'),  # [cite: 14]
-        ('3', 'TEACCH')  # [cite: 15]
-
-    ], string="Phương pháp", default="1")
 
     kythuat = fields.Char(string="Kỹ thuật can thiệp")
 
     # 4. LỊCH HẸN
 
-    lichhen = fields.Selection([
-        ('1', 'Đánh giá lại sau 6 tháng can thiệp'),  # [cite: 12, 13]
-        ('2', 'Đánh giá lại sau 12 tháng can thiệp'),  # [cite: 14]
-        ('3', 'Đánh giá lại khi trẻ đủ 4 tuổi'), # [cite: 15]
-        ('4', 'Đánh giá lại khi trẻ đủ 6 tuổi')  # [cite: 15]
-    ], string="Lịch hẹn lần sau", default="1")
+    dm_lichhen_id = fields.Many2one('ekids.ct_dm_lichhen', string='Lịch hẹn', ondelete="restrict")
+
 
     # 5. BẢNG CHI TIẾT ĐỘ TUỔI PHÁT TRIỂN
     linhvuc_ids = fields.One2many(
@@ -89,7 +67,8 @@ class KetLuan(models.Model):
 
 
 
-    gv_danhgia = fields.Char(string="Chuyên gia đánh giá")
+    dm_gv_danhgia_id = fields.Many2one('ekids.ct_dm_cg_danhgia', string='Chuyên gia đánh giá', ondelete="restrict")
+
     ngay_danhgia= fields.Date(string="Ngày đánh giá")
     desc = fields.Html(string="Ghi chú")
 
@@ -200,8 +179,10 @@ class KetLuan(models.Model):
 
     def _compute_name(self):
         for record in self:
-            record.name = string_util.date2string(record.ngay_danhgia) +"-"+ record.gv_danhgia
-
+            name = string_util.date2string(record.ngay_danhgia)
+            if record.dm_gv_danhgia_id:
+                name= name +"-" + record.dm_gv_danhgia_id.name
+            record.name=name
     def _compute_index(self):
         index = len(self)
         for record in self:
@@ -316,6 +297,7 @@ class KetLuan(models.Model):
     def func_copy_ketluan_tu_nguon(self, ketluan_nguon_id, hocsinh_id):
         """
         Hàm copy thông tin từ một kết luận nguồn sang một kết luận mới cho học sinh chỉ định.
+        Cập nhật: Tương thích hoàn toàn với các trường danh mục Many2one và cơ chế compute tự động.
         :param ketluan_nguon_id: ID hoặc record của kết luận gốc (nguon)
         :param hocsinh_id: ID của học sinh nhận kết luận mới
         :return: Record kết luận mới được tạo ra
@@ -328,26 +310,31 @@ class KetLuan(models.Model):
         if not hocsinh_id:
             raise UserError("Vui lòng chỉ định Học sinh nhận dữ liệu sao chép!")
 
-        # 2. Chuẩn bị dữ liệu cho các trường cơ bản và trường Selection/Many2one/Many2many
-        # Các trường Many2many được nạp dưới dạng lệnh [(6, 0, ids)] để map dữ liệu chuẩn của Odoo
+        # 2. Chuẩn bị dữ liệu cho các trường cơ bản và trường Many2one / Many2many mới
         vals = {
             'hocsinh_id': hocsinh_id,
-            'trangthai': '0',  # Luôn để trạng thái mặc định ban đầu là 'Đang soạn thảo'
-            'mucdo': source.mucdo,
-            'lieuluong': source.lieuluong,
+            'trangthai': '0',  # Luôn để trạng thái mặc định ban đầu là 'Đang soạn thảo' (KETLUAN_DANG_TAO)
+
+            # --- CẬP NHẬT: Ánh xạ chuẩn sang các trường Many2one mới ---
+            'dm_mucdo_id': source.dm_mucdo_id.id if source.dm_mucdo_id else False,
+            'dm_lieuluong_id': source.dm_lieuluong_id.id if source.dm_lieuluong_id else False,
+            'dm_phuongphap_id': source.dm_phuongphap_id.id if source.dm_phuongphap_id else False,
+            'dm_lichhen_id': source.dm_lichhen_id.id if source.dm_lichhen_id else False,
+            'dm_gv_danhgia_id': source.dm_gv_danhgia_id.id if source.dm_gv_danhgia_id else False,
+
+            # --- Giữ nguyên các trường Text/Html/Char cơ bản ---
             'hinhthuc': source.hinhthuc,
-            'phuongphap': source.phuongphap,
             'kythuat': source.kythuat,
-            'lichhen': source.lichhen,
-            'gv_danhgia': source.gv_danhgia,
-            'ngay_danhgia': source.ngay_danhgia or fields.Date.today(),  # Nếu nguồn trống thì lấy ngày hôm nay
             'desc': source.desc,
+            'ngay_danhgia': source.ngay_danhgia or fields.Date.today(),  # Nếu nguồn trống thì lấy ngày hôm nay
             'gv_kiemduyet_id': source.gv_kiemduyet_id.id if source.gv_kiemduyet_id else False,
 
-            # Copy các quan hệ Many2many bằng Command SET (6)
+            # --- Copy các quan hệ Many2many bằng Command SET (6) ---
             'dm_roiloan_ids': [(6, 0, source.dm_roiloan_ids.ids)],
-            'chuongtrinh_ids': [(6, 0, source.chuongtrinh_ids.ids)],
             'gv_canthiep_ids': [(6, 0, source.gv_canthiep_ids.ids)],
+
+            # Ghi chú: Bỏ qua chuongtrinh_ids vì trường này là compute store=False,
+            # hệ thống sẽ tự sinh thông qua bảng chi tiết linhvuc_ids phía dưới.
         }
 
         # 3. Nhân bản dữ liệu chi tiết của bảng One2many (linhvuc_ids)
@@ -355,7 +342,8 @@ class KetLuan(models.Model):
         linhvuc_lines = []
         for line in source.linhvuc_ids:
             linhvuc_lines.append((0, 0, {
-                'sequence': line.sequence,
+                # Giữ nguyên trường ẩn nếu có hoặc bỏ sequence nếu không sử dụng
+                'sequence': getattr(line, 'sequence', 0),
                 'chuongtrinh_id': line.chuongtrinh_id.id if line.chuongtrinh_id else False,
                 'linhvuc_id': line.linhvuc_id.id if line.linhvuc_id else False,
                 'tuoi_id': line.tuoi_id.id if line.tuoi_id else False,
@@ -364,10 +352,10 @@ class KetLuan(models.Model):
         if linhvuc_lines:
             vals['linhvuc_ids'] = linhvuc_lines
 
-        # 4. Thực hiện tạo mới kết luận (Sẽ tự động đi qua hàm chặn trùng `create` có sẵn của bạn)
+        # 4. Thực hiện tạo mới kết luận (Sẽ đi qua hàm chặn trùng create đã có sẵn của bạn)
         try:
-            new_ketluan = self.create(vals)
+            new_ketluan = self.create([vals])  # Bọc dạng list để tối ưu hóa theo phương thức @api.model_create_multi
             return new_ketluan
         except Exception as e:
-            _logger.error(f"Lỗi xảy ra khi thực hiện copy kết luận: {str(e)}")
+            _logger.error(f"Lỗi xảy ra khi thực hiện sao chép kết luận: {str(e)}")
             raise UserError(f"Quá trình sao chép kết luận thất bại: {str(e)}")
