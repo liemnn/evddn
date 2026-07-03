@@ -157,7 +157,7 @@
                                     </t>
                                     <t t-if="idx == 3">
                                         <td class="col-lbl-left">Liều lượng CT:</td>
-                                        <td class="col-val-left"><span t-field="o.ketluan_id.lieuluong"/></td>
+                                        <td class="col-val-left"><span t-field="o.ketluan_id.dm_lieuluong_id"/></td>
                                     </t>
                                     <t t-if="idx == 4">
                                         <td class="col-lbl-left" rowspan="2">Dạng rối loạn:</td>
@@ -167,7 +167,7 @@
                                         </t>
                                     <t t-if="idx == 6">
                                         <td class="col-lbl-left">Mức độ:</td>
-                                        <td class="col-val-left"><span t-field="o.ketluan_id.mucdo"/></td>
+                                        <td class="col-val-left"><span t-field="o.ketluan_id.dm_mucdo_id"/></td>
                                     </t>
                                     <t t-if="idx == 7">
                                         <td class="col-lbl-left">Hình thức CT:</td>

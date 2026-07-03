@@ -17,11 +17,24 @@
         </record>
 
         <record id="ekids_canthiep.in_kehoach_cho_giaovien_action" model="ir.actions.report">
-            <field name="name">In kế hoạch can thiệp (A4 Ngang)</field>
+            <field name="name">In bản [kế hoạch] Đầy đủ thiết kế chi tiết (A4 Ngang)</field>
             <field name="model">ekids.kehoach</field>
             <field name="report_type">qweb-html</field>
             <field name="report_name">ekids_canthiep.in_kehoach_cho_giaovien_template</field>
             <field name="report_file">ekids_canthiep.in_kehoach_cho_giaovien_template</field>
+            <field name="print_report_name">'Ke_hoach_Can_thiep_' + (object.hocsinh_id.name or '')</field>
+            <field name="binding_model_id" ref="model_ekids_kehoach"/>
+            <field name="binding_type">report</field>
+            <!-- Khóa cứng khổ giấy A4 Ngang (Landscape) trơn tru -->
+            <field name="paperformat_id" ref="ekids_canthiep.paperformat_a4_landscape"/>
+        </record>
+
+        <record id="ekids_canthiep.in_kehoach_cho_giaovien_gon_action" model="ir.actions.report">
+            <field name="name">In bản [kế hoạch] Tóm tắt- Chỉ có tên [mục tiêu] (A4 Ngang)</field>
+            <field name="model">ekids.kehoach</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_canthiep.in_kehoach_cho_giaovien_gon_template</field>
+            <field name="report_file">ekids_canthiep.in_kehoach_cho_giaovien_gon_template</field>
             <field name="print_report_name">'Ke_hoach_Can_thiep_' + (object.hocsinh_id.name or '')</field>
             <field name="binding_model_id" ref="model_ekids_kehoach"/>
             <field name="binding_type">report</field>

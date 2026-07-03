@@ -5,18 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/danhmuc/ekids_ct_dm_cg_danhgia_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/danhmuc/ekids_ct_dm_lichhen_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/danhmuc/ekids_ct_dm_cg_danhgia_view.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/danhmuc/ekids_ct_dm_lichhen_view.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_gon_template.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/danhmuc/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/danhmuc/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_ketluan_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_ketluan_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/security/ir.model.access.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/ekids_coso_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/ekids_coso_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_kehoach_ketluan_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_kehoach_ketluan_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_action.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_action.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_template.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,17 +57,17 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_canthiep/views/danhmuc",
+    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_canthiep/views/kehoach/report",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\views\kehoach\report" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\views\danhmuc" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\models\danhmuc" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\views\kehoach" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\static\src\xml" />
-      <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\static\src\js" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_hdsd\static\src\html\giaovien" />
@@ -172,14 +165,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00274" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1782561721932</created>
-      <option name="number" value="00274" />
-      <option name="presentableId" value="LOCAL-00274" />
-      <option name="project" value="LOCAL" />
-      <updated>1782561721932</updated>
     </task>
     <task id="LOCAL-00275" summary="liemnn">
       <option name="closed" value="true" />
@@ -565,7 +550,15 @@
       <option name="project" value="LOCAL" />
       <updated>1783005962619</updated>
     </task>
-    <option name="localTasksCounter" value="323" />
+    <task id="LOCAL-00323" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1783041378653</created>
+      <option name="number" value="00323" />
+      <option name="presentableId" value="LOCAL-00323" />
+      <option name="project" value="LOCAL" />
+      <updated>1783041378653</updated>
+    </task>
+    <option name="localTasksCounter" value="324" />
     <servers />
   </component>
   <component name="UnknownFeatures">
