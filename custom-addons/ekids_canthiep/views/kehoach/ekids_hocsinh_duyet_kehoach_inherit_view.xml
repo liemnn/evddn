@@ -34,7 +34,7 @@
                         class="btn-info btn-sm text-white"
                         icon="fa-list-ul"
                         context="{'default_context_type':'2','default_context_trangthai':['2'],'default_context_trangthai_pheduyet':['0']}"
-                        title="Xem lịch sử danh sách [Kế hoạch] đã can thiệp cho trẻ"
+                        title="Danh sách [Kế hoạch] Cần duyệt"
                 />
                 <button name="action_duyet_kehoach"
                         string="Duyệt"
@@ -45,7 +45,7 @@
                         title="Kế hoạch này cần Duyệt để đưa vào can thiệp"
                 />
 
-                <field name="tong_kehoach_dang_canthiep" string="Xác nhận" width="70"/>
+                <field name="tong_kehoach_dang_canthiep" string="Cần xác nhận" width="70"/>
 
                  <button name="action_xem_danhsach_kehoach"
                         string=""
@@ -53,7 +53,7 @@
                         class="btn-success btn-sm fw-bold text-uppercase"
                         icon="fa-list-ul"
                         context="{'default_context_type':'2','default_context_trangthai':['1']}"
-                        title="Xem lịch sử danh sách [Kế hoạch] đã can thiệp cho trẻ"
+                        title="Danh sách [Kế hoạch] Có thể xác nhận kết quả"
                 />
 
 

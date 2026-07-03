@@ -92,8 +92,10 @@ class HocSinhInherit(models.Model
                 tong =0
                 if hs.kehoach_ids:
                     for kh in hs.kehoach_ids:
-                        if kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id:
-                            tong +=1
+                        if (kh.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
+                            and kh.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET):
+                            if kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id:
+                                tong +=1
                 hs.tong_kehoach_doiduyet = tong
             else:
                 hs.tong_kehoach_doiduyet = 0
