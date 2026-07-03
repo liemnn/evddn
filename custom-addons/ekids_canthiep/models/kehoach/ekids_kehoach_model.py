@@ -107,7 +107,19 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
     is_header_open = fields.Boolean(compute="_compute_is_header_open")
     is_show_wiget_canthiep = fields.Boolean(compute="_compute_is_show_wiget_canthiep")
+    is_xoa = fields.Boolean(compute="_compute_is_xoa")
 
+    def _compute_is_xoa(self):
+        for record in self:
+            is_xoa = False
+            if self.env.user._is_admin():
+                is_xoa = True
+            else:
+                if (self.trangthai == kehoach_util.KEHOACH_DANG_LAP
+                        or self.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                    is_xoa = True
+
+            record.is_xoa = is_xoa
     def _compute_is_show_wiget_canthiep(self):
         for record in self:
             is_show_wiget_canthiep = False
@@ -391,6 +403,24 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def action_pheduyet_khongdat(self):
         if self.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
             self.trangthai_pheduyet = kehoach_util.PHEDUYET_CAN_DIEUCHINH
+    def action_xoa(self):
+        coso =self.coso_id
+        if self.env.user._is_admin():
+            self.unlink()
+        else:
+            if (self.trangthai == kehoach_util.KEHOACH_DANG_LAP
+                or self.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                self.unlink()
+            else:
+                raise UserError ("Kế hoạch đang ở trạng thái không cho phép xóa")
+
+        if coso:
+            url = coso.action_danhsach_hocsinh_lap_kehoach()
+            if url:
+                return url
+
+
+
 
     def action_xem_kehoachs(self):
 
@@ -477,6 +507,21 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         if is_chophep_ketthuc:
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
             url = self.action_quaylai_kehoachs()
+
+    @api.model
+    def unlink(self):
+        if self.env.user._is_admin():
+            return super().unlink()
+        else:
+            if (self.trangthai == kehoach_util.KEHOACH_DANG_LAP
+                or self.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                return super().unlink()
+            else:
+                raise  UserError ("Kế hoạch đang ở trạng thái không cho phép xóa")
+
+
+
+
 
 
 

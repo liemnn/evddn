@@ -406,6 +406,13 @@
                                  confirm="Bạn xác nhận [Kế hoạch] chưa đạt cần trả về cho giáo viên lập kế hoạch chỉnh sửa lại ?"
                                  class="btn-danger fw-bold"
                                  invisible="not is_pheduyet"/>
+                         <button name="action_xoa"
+                                 string="Xóa"
+                                 type="object"
+                                 icon="fa-times-circle"
+                                 confirm="Bạn chắc chắn muốn xóa [Kế hoạch] chứ ?"
+                                 class="btn-secondary"
+                                 invisible="not is_xoa"/>
 
                          <button name="%(ekids_canthiep.in_kehoach_cho_giaovien_action)d"
                             string="In"
