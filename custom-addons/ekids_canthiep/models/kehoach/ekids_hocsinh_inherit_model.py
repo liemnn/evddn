@@ -379,7 +379,7 @@ class HocSinhInherit(models.Model
                                 trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
                             else:
                                 trangthai = kehoach_util.HOCSINH_DA_DUYET
-            elif context_type == "3":
+            else:
                 if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
                     if (today>= kehoach.tu_ngay
                             and today<= kehoach.den_ngay):

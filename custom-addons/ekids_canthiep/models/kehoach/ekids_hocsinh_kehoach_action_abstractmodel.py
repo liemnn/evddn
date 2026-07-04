@@ -328,7 +328,36 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 url["domain"] = domain
             return url
 
+    def action_xem_danhsach_kehoach_can_kiemduyet_ketqua(self):
+        self._compute_tong_kehoach_dang_canthiep()
+        tong_kehoach_dang_canthiep =  self.tong_kehoach_dang_canthiep
+        if tong_kehoach_dang_canthiep >1:
+            url =self.action_xem_danhsach_kehoach()
+            return url
+        else:
+           trangthais =[kehoach_util.KEHOACH_DANG_CANTHIEP]
+           kehoach =kehoach_util.func_get_kehoach_can_kiemduyet_hocsinh_trangthai(self, self, trangthais)
+           if kehoach:
+               url= {
+                   'type': 'ir.actions.act_window',
+                   'name': 'LẬP KẾ HOẠCH',
+                   'res_model': 'ekids.kehoach',
+                   'view_mode': 'form',
+                   'res_id': kehoach.id,
+                   'target': 'current',
+                   'domain': [('coso_id', '=', self.coso_id.id)],
+                   'context': {
+                       'default_coso_id': self.coso_id.id,
+                       'default_hocsinh_id': self.id,
+                       # 🌟 THÊM 3 DÒNG CHỐT CHẶN DƯỚI ĐÂY ĐỂ KHÓA ĐỂN FORM VIEW
+                       'edit': True,  # 🚫 Tắt hoàn toàn tính năng và ẩn nút [Sửa]
+                       'create': False,  # 🚫 Tắt tính năng và ẩn nút [Tạo mới]
+                       'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
+                   },
+               }
+               return url
 
+        return  None
 
 
 
