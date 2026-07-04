@@ -93,6 +93,8 @@ def func_get_kehoach_hocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
         return None
 
 def func_get_kehoach_can_canthiep_hocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
+    user = self.env.user
+    is_admin = user.has_group('base.group_system')
     giaovien =giaovien_util.func_get_giaovien_tu_user(self)
     if giaovien:
         domain =[ ('hocsinh_id', '=', hocsinh.id),
@@ -102,10 +104,11 @@ def func_get_kehoach_can_canthiep_hocsinh_trangthai_ngay(self, hocsinh, trangtha
             domain.append(("den_ngay", ">=", ngay))
 
         if giaovien:
-            domain_lap =[('gv_lapkehoach_id', '=', giaovien.id)]
-            domain_kiemduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
-            domain_gv = expression.OR([domain_lap, domain_kiemduyet])
-            domain = expression.AND([domain, domain_gv])
+            if is_admin == False:
+                domain_lap = [('gv_lapkehoach_id', '=', giaovien.id)]
+                domain_kiemduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
+                domain_gv = expression.OR([domain_lap, domain_kiemduyet])
+                domain = expression.AND([domain, domain_gv])
 
 
 

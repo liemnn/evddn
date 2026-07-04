@@ -159,6 +159,8 @@ class HocSinhInherit(models.Model
                 hs.tong_kehoach_dang_canthiep = 0
 
     def _compute_tong_kehoach_da_canthiep(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
         for hs in self:
             if hs.kehoach_ids:
@@ -167,7 +169,9 @@ class HocSinhInherit(models.Model
                     for kh in hs.kehoach_ids:
                         if (kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP
                                 or kh.trangthai == kehoach_util.KEHOACH_HET_HIEULUC):
-                            if kh.gv_lapkehoach_id.id == giaovien.id:
+                            if is_admin:
+                                tong += 1
+                            elif (kh.gv_lapkehoach_id.id == giaovien.id):
                                 tong += 1
                 hs.tong_kehoach_da_canthiep = tong
             else:
