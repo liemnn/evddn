@@ -10,6 +10,7 @@ try:
     from odoo.addons.ekids_func import kehoach_util
     from odoo.addons.ekids_func import coso_util
     from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import giaovien_util
 
 except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
@@ -107,15 +108,22 @@ class KeHoach2MucTieu(models.Model):
     def _compute_is_canthiep(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+
         for record in self:
             is_canthiep = False
             if is_admin:
                 is_canthiep = True
             else:
-                giaoviens =  record.kehoach_id.ketluan_id.gv_canthiep_ids
-                user_ids = giaoviens.mapped('user_id').ids
-                if user.id in user_ids:
-                    is_canthiep = True
+                kehoach = record.kehoach_id
+                if kehoach:
+                    gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
+                    gv_lap = kehoach.gv_lapkehoach_id
+                    if gv_kiemduyet.user_id.id == user.id:
+                        if record.trangthai == '1':
+                            is_canthiep = True
+                    elif gv_lap.user_id.id == user.id:
+                        is_canthiep = True
+
             record.is_canthiep = is_canthiep
 
     @api.depends("kehoach_linhvuc_id.is_readonly")
@@ -127,9 +135,17 @@ class KeHoach2MucTieu(models.Model):
             if is_admin:
                 is_kiemduyet = True
             else:
-                giaovien = record.kehoach_id.ketluan_id.gv_kiemduyet_id
-                if giaovien.user_id.id == user.id:
-                    is_kiemduyet = True
+                kehoach = record.kehoach_id
+                if kehoach:
+                    gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
+                    gv_lap = kehoach.gv_lapkehoach_id
+                    if gv_kiemduyet.user_id.id == user.id:
+                        if record.trangthai == "1":
+                            is_kiemduyet = True
+                    elif gv_lap.user_id.id == user.id:
+                        if record.trangthai_kiemduyet != "0":
+                            is_kiemduyet = True
+
             record.is_kiemduyet = is_kiemduyet
 
     @api.depends("kehoach_linhvuc_id.is_readonly")

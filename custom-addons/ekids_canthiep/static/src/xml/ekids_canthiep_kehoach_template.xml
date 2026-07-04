@@ -176,18 +176,20 @@
                                             </div>
 
                                             <!-- Ô 1 CỐ ĐỊNH: Nút bấm Can thiệp -->
-                                            <button type="button"
-                                                    t-att-disabled="muctieu.trangthai === '0'"
-                                                    t-attf-class="btn-canthiep-status #{muctieu.trangthai === '1' ? 'bg-status-green' : (muctieu.trangthai === '-1' ? 'bg-status-yellow' : 'bg-status-grey')}"
-                                                    t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_canthiep', ev)">
-                                                <i t-attf-class="fa #{muctieu.trangthai === '1' ? 'fa-check-circle' : 'fa-bolt'}"></i>
-                                                <span t-out="muctieu.trangthai === '1' ? 'Đạt' : 'Can thiệp'"/>
-                                            </button>
+                                            <t t-if="muctieu.is_canthiep">
+                                                <button type="button"
+                                                        t-att-disabled="muctieu.trangthai === '0'"
+                                                        t-attf-class="btn-canthiep-status #{muctieu.trangthai === '1' ? 'bg-status-green' : (muctieu.trangthai === '-1' ? 'bg-status-yellow' : 'bg-status-grey')}"
+                                                        t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_canthiep', ev)">
+                                                    <i t-attf-class="fa #{muctieu.trangthai === '1' ? 'fa-check-circle' : 'fa-bolt'}"></i>
+                                                    <span t-out="muctieu.trangthai === '1' ? 'Đạt' : 'Can thiệp'"/>
+                                                </button>
+                                            </t>
 
                                             <!-- Ô 2 ĐỘNG: 🌟 CHỈ bật khung slot 95px khi trong màn hình có mục tiêu đạt cần kiểm duyệt -->
                                             <t t-if="state.hasAnyTargetDone">
                                                 <div class="fixed-kiemduyet-slot">
-                                                    <t t-if="muctieu.trangthai === '1'">
+                                                    <t t-if="muctieu.is_kiemduyet">
                                                         <button t-if="muctieu.trangthai_kiemduyet === '0'"
                                                                 type="button" class="btn-canthiep-status btn-kd-grey"
                                                                 t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
