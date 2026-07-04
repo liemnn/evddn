@@ -281,6 +281,8 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
 
     def action_xem_danhsach_kehoach(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
         context_type = self.env.context.get("default_context_type")
         context_trangthai = self.env.context.get("default_context_trangthai")
         context_trangthai_pheduyet = self.env.context.get("default_context_trangthai_pheduyet")
@@ -309,17 +311,23 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             }
             if context_type =="1":
                 # danh sách lập kế hoạch
-                domain =[('hocsinh_id', '=', self.id),('gv_lapkehoach_id','=',giaovien.id)]
+                domain =[('hocsinh_id', '=', self.id)]
+                if is_admin == False:
+                    domain_gv= [('gv_lapkehoach_id','=',giaovien.id)]
+                    domain = expression.AND([domain, domain_gv])
                 url["domain"]=domain
             elif context_type=="2":
-                # danh sách phê duyệt
+                # danh sách cần phê duyệt
                 domain = [('hocsinh_id', '=', self.id)]
                 if context_trangthai:
                     domain_trangthai =[('trangthai', 'in', context_trangthai)]
                     domain = expression.AND([domain, domain_trangthai])
                 if context_trangthai_pheduyet:
-                    domain_trangthai = [('trangthai_pheduyet', 'in', context_trangthai)]
+                    domain_trangthai = [('trangthai_pheduyet', 'in', context_trangthai_pheduyet)]
                     domain = expression.AND([domain, domain_trangthai])
+                if is_admin == False:
+                    domain_gv_pheduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
+                    domain = expression.AND([domain, domain_gv_pheduyet])
 
                 url["domain"] = domain
             else:

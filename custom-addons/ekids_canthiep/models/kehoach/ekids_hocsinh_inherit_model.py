@@ -87,6 +87,8 @@ class HocSinhInherit(models.Model
                 hs.tong_kehoach = 0
 
     def _compute_tong_kehoach_doiduyet(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
         for hs in self:
             if hs.kehoach_ids:
@@ -95,27 +97,38 @@ class HocSinhInherit(models.Model
                     for kh in hs.kehoach_ids:
                         if (kh.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
                             and kh.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET):
-                            if kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id:
+                            if is_admin:
+                                tong +=1
+                            elif (kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id):
                                 tong +=1
                 hs.tong_kehoach_doiduyet = tong
             else:
                 hs.tong_kehoach_doiduyet = 0
 
     def _compute_tong_kehoach_taomoi(self):
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self
+                                                           )
         for hs in self:
             if hs.kehoach_ids:
-                tong =0
-                if hs.kehoach_ids:
-                    for kh in hs.kehoach_ids:
-                        if kh.gv_lapkehoach_id.id == giaovien.id:
-                            tong +=1
+                tong = 0
+                if is_admin:
+                    tong = len(hs.kehoach_ids)
+                else:
+                    if hs.kehoach_ids:
+                        for kh in hs.kehoach_ids:
+                            if kh.gv_lapkehoach_id.id == giaovien.id:
+                                tong +=1
                 hs.tong_kehoach_taomoi = tong
             else:
                 hs.tong_kehoach_taomoi = 0
 
     def _compute_tong_kehoach_dang_canthiep(self):
         today = date.today()
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
         context_type = self.env.context.get("default_context_type","-1")
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
         for hs in self:
@@ -126,13 +139,18 @@ class HocSinhInherit(models.Model
                         if kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
                             if (today>= kh.tu_ngay
                                 and today<= kh.den_ngay):
+
                                 if context_type =="2":
                                     #TH: Kiem duyet
-                                    if kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id:
+                                    if is_admin:
+                                        tong += 1
+                                    elif (kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id):
                                         tong += 1
                                 elif context_type =="3":
                                     #TH can thiep
-                                    if kh.gv_lapkehoach_id.id == giaovien.id:
+                                    if is_admin:
+                                        tong += 1
+                                    elif (kh.gv_lapkehoach_id.id == giaovien.id):
                                         tong +=1
 
 

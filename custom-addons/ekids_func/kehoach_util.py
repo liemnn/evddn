@@ -117,11 +117,15 @@ def func_get_kehoach_can_canthiep_hocsinh_trangthai_ngay(self, hocsinh, trangtha
 
 
 def func_get_kehoach_can_kiemduyet_hocsinh_trangthai(self, hocsinh, trangthais):
+    user = self.env.user
+    is_admin = user.has_group('base.group_system')
     giaovien = giaovien_util.func_get_giaovien_tu_user(self)
     if giaovien:
         domain = [('hocsinh_id', '=', hocsinh.id),
-                  ('ketluan_id.gv_kiemduyet_id', '=', giaovien.id),
                   ('trangthai', 'in', trangthais)]
+        if is_admin == False:
+            domain_gv =[('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
+            domain = expression.AND([domain, domain_gv])
 
 
         kehoach = self.env['ekids.kehoach'].search(domain
