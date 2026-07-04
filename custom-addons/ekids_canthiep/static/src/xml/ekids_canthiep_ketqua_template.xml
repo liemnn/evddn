@@ -180,18 +180,20 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-2 fw-bold" style="font-size: 16px;">
-                    <span class="badge bg-slate-100 text-slate-700 border px-3 py-1.5 rounded" style="background-color: #E2E8F0 !important; color: #334155 !important;">
+
+                    <span class="badge px-2.5 py-1.5 rounded" style="background-color: #FEEFEE !important; color: #991B1B !important; border: 1px solid #EF4444 !important;">
+                        <t t-esc="state.summary.chuadat"/>(-)
+                    </span>
+                    <span class="badge px-2.5 py-1.5 rounded" style="background-color: #FEF9E6 !important; color: #B45309 !important; border: 1px solid #EAB308 !important;">
+                        <t t-esc="state.summary.hinhthanh"/>(+/-)
+                    </span>
+                     <span class="badge bg-slate-100 text-slate-700 border px-3 py-1.5 rounded" style="background-color: #E2E8F0 !important; color: #334155 !important;">
                         <t t-esc="state.summary.dat"/>/<t t-esc="state.summary.total"/> (Đạt <t t-esc="state.summary.phantram"/>%)
                     </span>
                     <span class="badge px-2.5 py-1.5 rounded" style="background-color: #E8FBF0 !important; color: #15803D !important; border: 1px solid #22C55E !important;">
                         <t t-esc="state.summary.dat"/>(+)
                     </span>
-                    <span class="badge px-2.5 py-1.5 rounded" style="background-color: #FEF9E6 !important; color: #B45309 !important; border: 1px solid #EAB308 !important;">
-                        <t t-esc="state.summary.hinhthanh"/>(+/-)
-                    </span>
-                    <span class="badge px-2.5 py-1.5 rounded" style="background-color: #FEEFEE !important; color: #991B1B !important; border: 1px solid #EF4444 !important;">
-                        <t t-esc="state.summary.chuadat"/>(-)
-                    </span>
+
                 </div>
             </div>
 

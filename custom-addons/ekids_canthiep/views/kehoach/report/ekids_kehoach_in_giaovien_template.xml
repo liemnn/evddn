@@ -248,16 +248,17 @@
                                             <table class="criteria-table">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width: 33.33%;">ĐẠT (+)</th>
-                                                        <th style="width: 33.33%;">ĐANG HÌNH THÀNH (+/-)</th>
-                                                        <th style="width: 33.33%;">CHƯA ĐẠT (-)</th>
+
+                                                         <th style="width: 33.33%;">CHƯA ĐẠT (-)</th>
+                                                         <th style="width: 33.33%;">ĐANG HÌNH THÀNH (+/-)</th>
+                                                         <th style="width: 33.33%;">ĐẠT (+)</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td><span t-raw="muctieu.tieuchi_dat"/></td>
-                                                        <td><span t-raw="muctieu.tieuchi_hinhthanh"/></td>
                                                         <td><span t-raw="muctieu.tieuchi_chuadat"/></td>
+                                                        <td><span t-raw="muctieu.tieuchi_hinhthanh"/></td>
+                                                        <td><span t-raw="muctieu.tieuchi_dat"/></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
