@@ -6,7 +6,7 @@ from odoo.exceptions import ValidationError
 class KeHoachKetQua2MucTieu(models.Model):
     _name = 'ekids.kehoach_ketqua2muctieu'
     _description = 'Kết quả thực hiện can thiệp'
-    _order = 'id desc'
+    _order = 'ngay asc, id asc'
 
 
 

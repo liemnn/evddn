@@ -24,6 +24,7 @@
                     <field name="den_ngay"/>
                     <field name="songay"/>
                     <field name="loai"/>
+                    <field name="is_chuyencan" widget="boolean_toggle" string="Chuyên cần"/>
                     <field name="desc"/>
                     <field name="trangthai"
                         decoration-success="trangthai == '1'"
@@ -57,6 +58,7 @@
                             <field name="loai"/>
                        </group>
                         <group>
+                            <field name="is_chuyencan" widget="boolean_toggle"/>
                             <field name="desc"/>
                             <field name="trangthai"/>
                         </group>

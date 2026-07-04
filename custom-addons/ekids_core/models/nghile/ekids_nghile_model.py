@@ -26,6 +26,8 @@ class NghiLe(models.Model):
                                 , ("1", "Đưa vào áp dụng")
                                 ],
                             string="Trạng thái",default='1',required=True)
+    is_chuyencan =fields.Boolean(string="Giáo viên vẫn được tính [Chuyên cần]",default=False)
+
     desc = fields.Html(string="Mô tả")
 
     @api.constrains('tu_ngay', 'den_ngay')

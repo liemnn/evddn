@@ -89,7 +89,8 @@ class KeHoach2MucTieu(models.Model):
     # Hàm RPC cho GV chuyên môn click duyệt nhanh từ OWL
 
 
-    ketqua2muctieu_ids = fields.One2many("ekids.kehoach_ketqua2muctieu", "kehoach_muctieu_id"
+    ketqua2muctieu_ids = fields.One2many("ekids.kehoach_ketqua2muctieu",
+                                         "kehoach_muctieu_id"
                                         , string="Thuộc kế hoạch mục tiêu nào")
 
     ketqua_dat= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_dat")
@@ -379,72 +380,50 @@ class KeHoach2MucTieu(models.Model):
 
     def func_khoitao_ketqua2muctieu(self):
         # 1. Chuẩn hóa ngày hiện tại (Nên dùng context_today để đúng múi giờ người dùng Odoo)
+        ketqua2muctieus =self.ketqua2muctieu_ids
         coso = self.kehoach_id.coso_id
-        today = fields.Date.context_today(self)
+        today =fields.Date.today()
+        # TH1: Đã tạo kết quả trước đây:
+        if ketqua2muctieus:
+            last_ketqua2muctieu = None
+            for ketqua2muctieu in ketqua2muctieus:
+                ngay =  fields.Date.to_date(ketqua2muctieu.ngay)
+                if (ngay <today and ketqua2muctieu.trangthai in ['1','-1','2']):
+                    last_ketqua2muctieu = ketqua2muctieu
+            #TON TAI ban ghi cuoi co ngay:
+            if last_ketqua2muctieu:
+                last_ngay =fields.Date.to_date(last_ketqua2muctieu.ngay)
+                for ketqua2muctieu in ketqua2muctieus:
+                    ngay = fields.Date.to_date(ketqua2muctieu.ngay)
+                    if (ngay >last_ngay
+                        and ngay<= today):
+                       if ketqua2muctieu.trangthai == '0':
+                           setattr(ketqua2muctieu,'trangthai',last_ketqua2muctieu.trangthai)
 
-        # 2. Ép kiểu an toàn về Date, triệt tiêu hoàn toàn lỗi Datetime vs Date
-        tu_ngay = fields.Date.to_date(self.kehoach_id.tu_ngay)
-        den_ngay = fields.Date.to_date(self.kehoach_id.den_ngay)
 
+        else:
+            #TH2: Lần đầu click
 
-        if not tu_ngay or not den_ngay:
-            raise UserError("Kế hoạch chưa thiết lập đủ Từ ngày và Đến ngày.")
+            today = fields.Date.context_today(self)
+            # 2. Ép kiểu an toàn về Date, triệt tiêu hoàn toàn lỗi Datetime vs Date
+            tu_ngay = fields.Date.to_date(self.kehoach_id.tu_ngay)
+            den_ngay = fields.Date.to_date(self.kehoach_id.den_ngay)
 
-        if today <tu_ngay:
-            raise UserError("Kế hoạch chưa đến thời gian can thiệp")
+            datas = []
+            current_date =tu_ngay
 
-        # 3. Tìm ngày bắt đầu chạy vòng lặp (Dùng max() thay cho if-else cho ngắn gọn)
-        current_date = tu_ngay
+            while current_date <= den_ngay:
+                data ={
+                    "kehoach_muctieu_id": self.id,
+                    "ngay": current_date,
+                    "trangthai": "0"
+                }
+                datas.append(data)
+                current_date += timedelta(days=1)
 
-        # =========================================================================
-        # BƯỚC TỐI ƯU HIỆU SUẤT (Senior Level):
-        # Thay vì query Database mỗi ngày trong vòng lặp, ta lấy hết 1 lần.
-        # =========================================================================
-
-        # Tìm tất cả các kết quả đã sinh ra trong khoảng thời gian này (Chỉ tốn 1 query)
-        ketqua_da_co = self.env['ekids.kehoach_ketqua2muctieu'].search_read([
-            ('kehoach_muctieu_id', '=', self.id),
-            ('ngay', '>=', current_date),
-            ('ngay', '<=', den_ngay)
-        ], ['ngay'])
-
-        # Tạo một mảng chứa các ngày đã tồn tại để đối chiếu
-        danh_sach_ngay_da_co = [fields.Date.to_date(kq['ngay']) for kq in ketqua_da_co]
-
-        # Khởi tạo mảng trống để chứa data chuẩn bị tạo mới
-        vals_list = []
-
-        # 4. Quét vòng lặp để lọc ra các ngày chưa có
-        so_ngay_conlai = (den_ngay -today).days
-
-        while current_date <= den_ngay:
-            if current_date not in danh_sach_ngay_da_co:
-                if current_date <today:
-                    vals_list.append({
-                        "kehoach_muctieu_id": self.id,
-                        "ngay": current_date,
-                        "trangthai": "0"
-                    })
-                else:
-                    if index_chuadat >0:
-                        trangthai="-1"
-                        index_chuadat -=1
-                    elif index_hinhthanh >0:
-                        trangthai="2"
-                        index_hinhthanh -=1
-                    else:
-                        trangthai = "1"
-                    vals_list.append({
-                        "kehoach_muctieu_id": self.id,
-                        "ngay": current_date,
-                        "trangthai": trangthai
-                    })
-
-            current_date += timedelta(days=1)
-
-        # 5. Bulk Create: Đẩy toàn bộ mảng vào Database trong 1 câu query duy nhất
-        if vals_list:
-            self.env['ekids.kehoach_ketqua2muctieu'].create(vals_list)
+            # 5. Bulk Create: Đẩy toàn bộ mảng vào Database trong 1 câu query duy nhất
+            if datas and len(datas)>0:
+                self.env['ekids.kehoach_ketqua2muctieu'].create(datas)
 
     def action_open_target_note(self):
         """ Hàm xử lý mở Popup khi click vào nút ghi chú từ HTML """

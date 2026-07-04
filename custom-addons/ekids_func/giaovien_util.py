@@ -131,6 +131,14 @@ def func_get_dulieu_chamcong_thucte_giaovien(self
 
     duoc_chamcong = len(dilam_cangay)  + (len(dilam_nuabuoi) * 0.5)
 
+    #TINH TOAN CHUYEN CAN:
+    nghi_vantinh_chuyencan = 0
+    if nghiles:
+        for key in nghiles:
+            nghile = nghiles.get(key)
+            if nghile.is_chuyencan == True:
+                nghi_vantinh_chuyencan +=1
+
     data ={
         'dilam_muon':len(dilam_muon),
         'dilam_nuabuoi':len(dilam_nuabuoi),
@@ -138,7 +146,9 @@ def func_get_dulieu_chamcong_thucte_giaovien(self
         'dilam_chamcong':duoc_chamcong,
         'gv_dilam_kehoach':gv_dilam_kehoachs,
         'gv_nghiles': gv_nghiles,
+        'nghi_vantinh_chuyencan': nghi_vantinh_chuyencan,
         'gv_coso_chonghi_truluongs': gv_coso_chonghi_truluongs
+
 
     }
 
