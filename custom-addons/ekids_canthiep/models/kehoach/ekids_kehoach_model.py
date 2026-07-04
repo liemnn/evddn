@@ -514,7 +514,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                    is_chophep_ketthuc = True
         if is_chophep_ketthuc:
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
-            url = self.action_quaylai_kehoachs()
+
 
     # 🌟 BỎ HOÀN TOÀN decorator @api.model ở đây
     def unlink(self):

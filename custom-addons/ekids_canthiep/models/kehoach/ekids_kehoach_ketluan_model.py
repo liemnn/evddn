@@ -243,6 +243,8 @@ class KetLuan(models.Model):
 
     def write(self, vals):
         # 1. Chốt chặn an toàn: Chỉ tính toán nếu trường 'trangthai' thực sự nằm trong danh sách thay đổi
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
         if 'trangthai' in vals:
             user = self.env.user
             is_admin = user.has_group('base.group_system')
@@ -260,13 +262,15 @@ class KetLuan(models.Model):
                     if trangthai_cu == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH:
                         if trangthai_moi == kehoach_util.KETLUAN_DANG_TAO:
                             # Mẹo Odoo: Chỉ cần check 'if rec.kehoach_ids' thay vì dùng len() > 0 để tối ưu tốc độ
-                            if rec.kehoach_ids:  # Thay bằng tên trường kế hoạch chính xác trên model của bạn
-                                raise UserError(
-                                    "Đã tồn tại [Kế hoạch] gắn với kết luận này, không thể chuyển ngược về trạng thái [Đang lập]!"
-                                )
+                            if is_admin == False:
+                                if rec.kehoach_ids:  # Thay bằng tên trường kế hoạch chính xác trên model của bạn
+                                    raise UserError(
+                                        "Đã tồn tại [Kế hoạch] gắn với kết luận này, không thể chuyển ngược về trạng thái [Đang lập]!"
+                                    )
 
                     # TH2: Phiếu đã [Hết hiệu lực] -> Cấm tuyệt đối không cho bẻ lái sang trạng thái khác
                     elif trangthai_cu == kehoach_util.KETLUAN_HET_HIEULUC:
+
                         if is_admin == False:
                             raise UserError(
                                 "Hồ sơ kết luận này đã hết hiệu lực, không thể thay đổi [Trạng thái]!"
@@ -278,11 +282,14 @@ class KetLuan(models.Model):
 
 
     def unlink(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
         for rec in self:
-            if (rec.trangthai == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH
-                    or rec.trangthai == kehoach_util.KETLUAN_HET_HIEULUC):
-                raise UserError(
-                    "Không cho phép xóa [Kết luận] khi đang lập kế hoạch hoặc hết hiệu lực")
+            if is_admin == False:
+                if (rec.trangthai == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH
+                        or rec.trangthai == kehoach_util.KETLUAN_HET_HIEULUC):
+                    raise UserError(
+                        "Không cho phép xóa [Kết luận] khi đang lập kế hoạch hoặc hết hiệu lực")
 
         return super(KetLuan, self).unlink()
 
