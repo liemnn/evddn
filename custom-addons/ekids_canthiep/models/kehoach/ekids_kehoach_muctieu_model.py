@@ -103,6 +103,42 @@ class KeHoach2MucTieu(models.Model):
 
     is_canthiep = fields.Boolean(compute="_compute_is_canthiep")
     is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
+    is_canthiep_readonly = fields.Boolean(compute="_compute_is_canthiep_readonly")
+    is_kiemduyet_readonly = fields.Boolean(compute="_compute_is_kiemduyet_readonly")
+
+    def _compute_is_kiemduyet_readonly(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for record in self:
+            is_kiemduyet_readonly = True
+            if is_admin:
+                is_kiemduyet_readonly = False
+            else:
+                kehoach = record.kehoach_id
+                if kehoach:
+                    gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
+
+                    if gv_kiemduyet.user_id.id == user.id:
+                        is_kiemduyet_readonly= False
+
+            record.is_kiemduyet_readonly = is_kiemduyet_readonly
+
+    def _compute_is_canthiep_readonly(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
+        for record in self:
+            is_canthiep_readonly = True
+            if is_admin:
+                is_canthiep_readonly = False
+            else:
+                kehoach = record.kehoach_id
+                if kehoach:
+                    gv_lap = kehoach.gv_lapkehoach_id
+                    if gv_lap.user_id.id == user.id:
+                        is_canthiep_readonly = False
+
+            record.is_canthiep_readonly = is_canthiep_readonly
 
     @api.depends("kehoach_linhvuc_id.is_readonly")
     def _compute_is_canthiep(self):
@@ -362,9 +398,10 @@ class KeHoach2MucTieu(models.Model):
 
     def action_canthiep(self):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_capnhat_ketqua_form').id
-
+        self._compute_is_canthiep_readonly()
+        is_canthiep_readonly = self.is_canthiep_readonly
         self.func_khoitao_ketqua2muctieu()
-        return {
+        url= {
             'type': 'ir.actions.act_window',
             'name': 'KẾT QUẢ CAN THIỆP',
             'res_model': 'ekids.kehoach_muctieu',
@@ -374,10 +411,20 @@ class KeHoach2MucTieu(models.Model):
             'target': 'new',
 
         }
+        if is_canthiep_readonly == True:
+            url["context"] = {
+                'create': False,
+                'edit': False,  # Ẩn hoặc vô hiệu hóa hoàn toàn nút "Sửa" (Edit) ngoài giao diện
+                'delete': False,  # Ẩn nút "Xóa"
+            }
+        return url
+
 
     def action_kiemduyet(self):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_kiemduyet_ketqua_form').id
-        return {
+        self._compute_is_kiemduyet_readonly()
+        is_kiemduyet_readonly = self.is_kiemduyet_readonly
+        url ={
             'type': 'ir.actions.act_window',
             'name': 'XÁC NHẬN KẾT QUẢ CAN THIỆP',
             'res_model': 'ekids.kehoach_muctieu',
@@ -387,6 +434,13 @@ class KeHoach2MucTieu(models.Model):
             'target': 'new',
 
         }
+        if is_kiemduyet_readonly == True:
+            url["context"] = {
+                    'create': False,
+                    'edit': False,   # Ẩn hoặc vô hiệu hóa hoàn toàn nút "Sửa" (Edit) ngoài giao diện
+                    'delete': False, # Ẩn nút "Xóa"
+                }
+        return  url
 
     def action_donglai_ve_kehoach(self):
         """ Hàm nằm ở chân Form View giúp đóng popup và ép màn hình OWL cha reload dữ liệu """
