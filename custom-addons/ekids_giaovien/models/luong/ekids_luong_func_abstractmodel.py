@@ -237,13 +237,7 @@ class LuongFuncAbstractModel(models.AbstractModel):
         parameters['duoc_chamcongs'] = giaovien2thang
 
         # xu ly tinh huong giao vien nghi giua thang
-        songay_do_giaovien_nghilam =0
-        if giaovien.dilam_denngay:
-           if (giaovien.dilam_denngay >= ngay_dauthang
-               and  giaovien.dilam_denngay<= ngay_cuoithang):
-               batdau = fields.Date.add(giaovien.dilam_denngay, days=1)
-               ngay_nghis= giaovien_util.func_get_ngay_dilam_theo_kehoach(self,coso,coso_nghiles,batdau,ngay_cuoithang)
-               songay_do_giaovien_nghilam= len(ngay_nghis)
+        songay_do_giaovien_nghilam = self.func_get_songay_nghi_do_thoigian_dilam_giaovien(coso,coso_nghiles,giaovien,ngay_dauthang,ngay_cuoithang)
 
 
         dilam_duoc_chamcong = int(dilam_chamcong) - songay_do_giaovien_nghilam
@@ -286,6 +280,24 @@ class LuongFuncAbstractModel(models.AbstractModel):
 
 
         return parameters
+
+
+    def func_get_songay_nghi_do_thoigian_dilam_giaovien(self,coso,nghiles,giaovien,ngay_dauthang,ngay_cuoithang):
+        songay_do_giaovien_nghilam=0
+        if giaovien.dilam_denngay:
+           if (giaovien.dilam_denngay >= ngay_dauthang
+               and  giaovien.dilam_denngay<= ngay_cuoithang):
+               batdau = fields.Date.add(giaovien.dilam_denngay, days=1)
+               ngay_nghis= giaovien_util.func_get_ngay_dilam_theo_kehoach(self,coso,nghiles,batdau,ngay_cuoithang)
+               songay_do_giaovien_nghilam= songay_do_giaovien_nghilam+ len(ngay_nghis)
+
+        #if giaovien.dilam_tungay:
+         #   if giaovien.dilam_tungay >ngay_dauthang:
+          #      ketthuc = fields.Date.add(giaovien.dilam_tungay, days=-1)
+           #     ngay_nghis = giaovien_util.func_get_ngay_dilam_theo_kehoach(self, coso, nghiles, ngay_dauthang, ketthuc)
+            #    songay_do_giaovien_nghilam = songay_do_giaovien_nghilam + len(ngay_nghis)
+
+        return songay_do_giaovien_nghilam
 
 
 
