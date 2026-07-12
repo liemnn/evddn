@@ -146,6 +146,12 @@ def func_is_chuyen_trangthai(self,coso,tt_hientai,tt_dich):
         return False
 
 def func_cauhinh_canthiep(self,coso,thamso,default):
+    return func_cauhinh(self, coso, "KEHOACH_CANTHIEP", thamso, default)
+
+def func_cauhinh_luong(self,coso,thamso,default):
+    return func_cauhinh(self,coso,"LUONG",thamso,default)
+
+def func_cauhinh(self,coso,loai,thamso,default):
     json_string = coso.cauhinh
     if not json_string:
         return None
@@ -153,17 +159,23 @@ def func_cauhinh_canthiep(self,coso,thamso,default):
     try:
         config_data = json.loads(json_string)
     except Exception:
-        raise UserError("Quản trị phần mềm Chưa cấu hình cho phần can thiệp của Cơ sở["+coso.name+"] vui lòng liên hệ ! ")
+        if default:
+            return default
+        else:
+            raise UserError("Quản trị phần mềm Chưa cấu hình cho phần can thiệp của Cơ sở["+coso.name+"] vui lòng liên hệ ! ")
 
 
 
     # 2. Nếu trạng thái hiện tại không có trong cấu hình JSON
-    if "KEHOACH_CANTHIEP" not in config_data:
+    if loai not in config_data:
         # Tùy nghiệp vụ: có thể cho qua hoặc chặn lại. Ở đây tôi chọn cho qua nếu chưa định nghĩa.
-        raise UserError(
-            "Không thây tham số [KEHOACH_CANTHIEP] của cơ sở[" + coso.name + "] vui lòng liên hệ quản trị phần mềm ! ")
+        if default:
+            return default
+        else:
+            raise UserError(
+                "Không thây tham số "+loai+ "của cơ sở[" + coso.name + "] vui lòng liên hệ quản trị phần mềm ! ")
     else:
-        result = config_data["KEHOACH_CANTHIEP"].get(thamso,[])
+        result = config_data[loai].get(thamso,[])
         if result:
             return result
         else:

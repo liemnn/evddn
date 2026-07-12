@@ -2,6 +2,7 @@ from odoo import api, fields, models
 from datetime import datetime
 from odoo.exceptions import UserError, ValidationError
 import calendar
+import ast
 import uuid
 from .ekids_luong_func_abstractmodel import LuongFuncAbstractModel
 from .ekids_luong_formula_abstractmodel import LuongFolmulaAbstractModel
@@ -80,6 +81,7 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     tong_tru = fields.Float(string='Bị trừ(-)', digits=(10, 0), compute="compute_tong_tru", store=True)
     tong_thongtin = fields.Float(string='Thông tin', digits=(10, 0), compute="compute_tong_thongtin", store=True)
     tong_thongtin_2 = fields.Float(string='Thông tin', digits=(10, 0), compute="compute_tong_thongtin_2", store=True)
+    tong_thuong = fields.Float(string='Thưởng', digits=(10, 0), compute="compute_tong_thuong")
 
 
 
@@ -206,6 +208,39 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
                     luong.tong_thongtin_2= tong
             else:
                 luong.tong_thongtin_2 = 0
+
+    import json
+
+    def compute_tong_thuong(self):
+        # Tránh crash nếu self trống
+        if not self:
+            return
+
+        # 1. Lấy cấu hình chung (Ép kiểu tỷ lệ thưởng sang số thực float)
+        coso = self[0].coso_id
+
+        # Lấy cấu hình dm_luong, giả sử hàm trả về chuỗi JSON hoặc list.
+        # Nếu hàm trả về chuỗi JSON, ta cần dùng json.loads để parse thành mảng Python
+        dm_luong_raw = coso_util.func_cauhinh_luong(self, coso,"dm_luong", "[]")
+        try:
+            dm_luongs = ast.literal_eval(dm_luong_raw)
+        except Exception:
+            dm_luongs = []
+
+        for rec in self:
+            tong_tien = 0.0
+            if dm_luongs and len(dm_luongs)>0:
+
+                # Đổi tên biến vòng lặp con thành 'line' để tránh đè biến 'rec' (luong cũ) của vòng lặp cha
+                if rec.luong_cong_ids:
+                    for luong_cong_id in rec.luong_cong_ids:
+                        if luong_cong_id.name:
+                            for dm_luong in dm_luongs:
+                                if dm_luong.lower() in luong_cong_id.name.lower() :
+                                    tong_tien += luong_cong_id.tien
+
+                # 3. Áp công thức và gán giá trị cho trường compute
+            rec.tong_thuong = tong_tien
 
 
     def _get_report_values(self, docids, data=None):

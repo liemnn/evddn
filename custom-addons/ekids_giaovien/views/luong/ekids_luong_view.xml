@@ -112,13 +112,16 @@
                 <field name="tong_nhatruong_chi" sum="Total" widget="integer" string="6.Tổng chi=4+5" width="100"/>
 
 
+
+
                 <field name="trangthai" width="150"
                        decoration-warning="trangthai == '-1'"
                        decoration-info="trangthai == '0'"
                        decoration-success="trangthai == '1'"
 
                 />
-                <field name="tong_thongtin_2" sum="Total" widget="integer" string="6.Thông tin" width="100" optional="hide"/>
+                 <field name="tong_thuong" sum="Total" widget="integer" string="LCB"   optional="hide"/>
+                <field name="tong_thongtin_2" sum="Total" widget="integer" string="Thông tin"  optional="hide"/>
 
             </list>
         </field>
