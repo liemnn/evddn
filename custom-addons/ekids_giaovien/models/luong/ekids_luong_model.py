@@ -236,7 +236,7 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
                     for luong_cong_id in rec.luong_cong_ids:
                         if luong_cong_id.name:
                             for dm_luong in dm_luongs:
-                                if dm_luong.lower() in luong_cong_id.name.lower() :
+                                if dm_luong == luong_cong_id.name:
                                     tong_tien += luong_cong_id.tien
 
                 # 3. Áp công thức và gán giá trị cho trường compute

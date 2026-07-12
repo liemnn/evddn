@@ -106,7 +106,8 @@ class LuongFolmulaAbstractModel(models.AbstractModel):
                 'name': cautruc_luong.name,
                 'desc':desc,
                 'tien': tien,
-                'loai': loai
+                'loai': loai,
+                'dm_chitra_id': cautruc_luong.id
             }
             self.env['ekids.luong_hangmuc'].create(data)
             return tien
@@ -131,7 +132,8 @@ class LuongFolmulaAbstractModel(models.AbstractModel):
                         'name': name,
                         'tien': tien,
                         'desc':desc,
-                        'loai': loai
+                        'loai': loai,
+                        'dm_chitra_id': cautruc_luong.id
                     }
                     self.env['ekids.luong_hangmuc'].create(data)
                     return tien
@@ -189,7 +191,8 @@ class LuongFolmulaAbstractModel(models.AbstractModel):
                         'name': name,
                         'tien': tien,
                         'desc':desc,
-                        'loai': loai
+                        'loai': loai,
+                        'dm_chitra_id': cautruc_luong.id
                     }
                     self.env['ekids.luong_hangmuc'].create(data)
                     return tien
@@ -227,7 +230,8 @@ class LuongFolmulaAbstractModel(models.AbstractModel):
                 'name': name,
                 'tien': tien,
                 'desc':desc,
-                'loai': loai
+                'loai': loai,
+                'dm_chitra_id': cautruc_luong.id,
             }
             self.env['ekids.luong_hangmuc'].create(data)
             return tien
@@ -299,7 +303,8 @@ class LuongFolmulaAbstractModel(models.AbstractModel):
                 'name': name,
                 'desc':desc,
                 'tien': tien,
-                'loai': loai
+                'loai': loai,
+                'dm_chitra_id': cautruc_luong.id,
             }
             self.env['ekids.luong_hangmuc'].create(data)
             return tien
@@ -317,7 +322,8 @@ class LuongFolmulaAbstractModel(models.AbstractModel):
                 'name': cautruc_luong.name,
                 'tien': tien,
                 'desc':desc,
-                'loai': loai
+                'loai': loai,
+                'dm_chitra_id': cautruc_luong.id
             }
             self.env['ekids.luong_hangmuc'].create(data)
             return tien
