@@ -83,29 +83,96 @@
                         <notebook>
                             <page name="chi_ids" string="CÁC KHOẢN [CHI]">
                                 <field name="chi_ids" context="{'default_coso_id': coso_id}" readonly="is_dl_locked">
-                                    <list editable="bottom" limit="300" default_order="ngaychi asc">
+
+                                    <list editable="bottom" limit="300"  default_order="ngaychi asc">
                                         <field name="sequence" widget="handle"/>
-                                        <field name="ngaychi" width="120"/>
-                                        <field name="dm_loaichi_id" domain="[('trangthai','=','1'),('loai','=','0')]"/>
+                                        <field name="ngaychi" width="150"/>
+                                        <field name="tien" sum="Total" width="150" widget="integer" class="fw-bold text-success"/>
+                                        <field name="dm_loaichi_id" width="150"
+                                               domain="[('trangthai','=','1'),('loai','=','0')]"
+                                               context="{'default_coso_id':context.get('default_coso_id')}"/>
                                         <field name="desc"/>
-                                        <field name="tien" sum="Total" widget="integer" class="fw-bold text-danger" width="150"/>
-                                         <field name="loai"  decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
-                                    </list>
+                                        <field name="loai"  decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
+                                        <field name="create_uid" string="Người tạo"/>
+                                        <field name="create_date" string="Ngày tạo"/>
+                                     </list>
+
+                                    <kanban>
+                                        <field name="ngaychi"/>
+                                        <field name="dm_loaichi_id"/>
+                                        <field name="tien"/>
+                                        <field name="loai"  decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
+
+
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div class="oe_kanban_global_click d-flex justify-content-between align-items-center p-3 border-bottom shadow-sm mb-2 rounded bg-white">
+                                                    <div>
+                                                        <strong class="o_kanban_record_title text-dark mb-1 d-block" style="font-size: 1rem;">
+                                                            <field name="dm_loaichi_id"/>
+                                                        </strong>
+                                                        <div class="text-muted small">
+                                                            <i class="fa fa-calendar me-1"/> <field name="ngaychi"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <strong class="text-danger" style="font-size: 1.1rem;">
+                                                            <field name="tien"/>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
                                 </field>
                             </page>
 
-                            <page name="thu_ids" string="CÁC KHOẢN [THU KHÁC]">
+                            <page name="thu_ids" string="CÁC KHOẢN [THU KHÁC] NGOÀI HỌC PHÍ">
                                 <field name="thu_ids" context="{'default_coso_id': coso_id}" readonly="is_dl_locked">
+
                                     <list editable="bottom" limit="300" default_order="ngaychi asc">
-                                        <field name="ngaychi" width="120"/>
-                                        <field name="dm_loaichi_id" domain="[('trangthai','=','1'),('loai','=','1')]"/>
+                                        <field name="ngaychi" width="150"/>
+                                        <field name="tien" sum="Total" width="150" widget="integer" class="fw-bold text-success"/>
+                                        <field name="dm_loaichi_id" width="150"
+                                               domain="[('trangthai','=','1'),('loai','=','1')]"
+                                               context="{'default_coso_id':context.get('default_coso_id')}"/>
                                         <field name="desc"/>
-                                        <field name="tien" sum="Total" widget="integer" class="fw-bold text-success" width="150"/>
-                                         <field name="loai" decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
-                                    </list>
+                                        <field name="loai"  decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
+                                        <field name="create_uid" string="Người tạo"/>
+                                        <field name="create_date" string="Ngày tạo"/>
+                                     </list>
+
+                                    <kanban>
+                                        <field name="ngaychi"/>
+                                        <field name="dm_loaichi_id"/>
+                                        <field name="tien"/>
+                                        <field name="loai"  decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
+
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div class="oe_kanban_global_click d-flex justify-content-between align-items-center p-3 border-bottom shadow-sm mb-2 rounded bg-white">
+                                                    <div>
+                                                        <strong class="o_kanban_record_title text-dark mb-1 d-block" style="font-size: 1rem;">
+                                                            <field name="dm_loaichi_id"/>
+                                                        </strong>
+                                                        <div class="text-muted small">
+                                                            <i class="fa fa-calendar me-1"/> <field name="ngaychi"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <strong class="text-success" style="font-size: 1.1rem;">
+                                                            <field name="tien"/>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
                                 </field>
                             </page>
                         </notebook>
+
+
                     </sheet>
                 </form>
             </field>
