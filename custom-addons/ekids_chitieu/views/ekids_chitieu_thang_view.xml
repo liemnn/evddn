@@ -88,8 +88,8 @@
                                         <field name="ngaychi" width="120"/>
                                         <field name="dm_loaichi_id" domain="[('trangthai','=','1'),('loai','=','0')]"/>
                                         <field name="desc"/>
-                                        <field name="loai" widget="badge" decoration-success="loai == '1'" decoration-danger="loai == '0'"/>
-                                        <field name="tien" sum="Total" widget="integer" class="fw-bold text-danger"/>
+                                        <field name="tien" sum="Total" widget="integer" class="fw-bold text-danger" width="150"/>
+                                         <field name="loai"  decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
                                     </list>
                                 </field>
                             </page>
@@ -100,8 +100,8 @@
                                         <field name="ngaychi" width="120"/>
                                         <field name="dm_loaichi_id" domain="[('trangthai','=','1'),('loai','=','1')]"/>
                                         <field name="desc"/>
-                                        <field name="loai" widget="badge" decoration-success="loai == '1'" decoration-danger="loai == '0'"/>
-                                        <field name="tien" sum="Total" widget="integer" class="fw-bold text-success"/>
+                                        <field name="tien" sum="Total" widget="integer" class="fw-bold text-success" width="150"/>
+                                         <field name="loai" decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
                                     </list>
                                 </field>
                             </page>

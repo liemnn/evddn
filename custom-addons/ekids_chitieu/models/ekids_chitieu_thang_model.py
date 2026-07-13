@@ -95,7 +95,7 @@ class ChiTieuThang(models.Model):
             tong = 0.0
             if thang.chi_ids:
                 for chi in thang.chi_ids:
-                    if chi.loai=='1':
+                    if chi.loai !='0':
                         tong += chi.tien
             thang.tong_chi_ck = tong
 
