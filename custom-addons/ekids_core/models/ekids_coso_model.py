@@ -54,6 +54,15 @@ class CoSo(models.Model):
     ghichu_thu_hocphi = fields.Html(string="Ghi chú [Phần cuối] Phiếu [Học phí]")
     qrcode_thu_hocphi = fields.Binary(string="QR-Code [Chuyển khoản] thu Học phí")
 
+
+    bank_bin = fields.Selection(
+        selection='_get_vietnam_banks',
+        string="Ngân hàng thụ hưởng",
+        required=True
+    )
+    bank_acc_number = fields.Char("Số tài khoản")
+
+
     is_thu_hocphi_dauthang =fields.Boolean(string="Thiết lập thu [Học phí] đầu tháng",default=True)
     is_dong_hocphi_theoky= fields.Boolean(string="Đóng học phí theo kỳ/Gộp kỳ", default=False)
 
@@ -80,6 +89,33 @@ class CoSo(models.Model):
 
     cauhinh = fields.Text(string="Thiết lập cấu hình cho Cơ sở", default="")
 
+    def _get_vietnam_banks(self):
+        return [
+            ('970436', 'Vietcombank (VCB)'),
+            ('970407', 'Techcombank (TCB)'),
+            ('970422', 'MB Bank (MB)'),
+            ('970415', 'VietinBank (CTG)'),
+            ('970418', 'BIDV'),
+            ('970416', 'ACB'),
+            ('970405', 'Agribank (VBA)'),
+            ('970432', 'VPBank (VPB)'),
+            ('970448', 'OCB'),
+            ('970403', 'Sacombank (STB)'),
+            ('970423', 'TPBank (TPB)'),
+            ('970431', 'Eximbank (EIB)'),
+            ('970441', 'VIB'),
+            ('970427', 'DongA Bank (DAB)'),
+            ('970454', 'VietCapital Bank (BVBank)'),  # Đã đổi tên thương hiệu
+            ('970433', 'VietABank (VAB)'),
+            ('970437', 'HDBank (HDB)'),
+            ('970406', 'ABBank (ABB)'),
+            ('970438', 'BaovietBank (BVB)'),
+            ('970443', 'SHB'),  # SỬA LẠI: SHB dùng 970443 cho VietQR
+            ('970440', 'SeABank (SSB)'),
+            ('970446', 'LienVietPostBank (LPBank)'),  # Bổ sung (quan trọng)
+            ('970425', 'ABBANK'),
+            ('970458', 'United Overseas Bank (UOB)'),
+        ]
 
 
     @api.depends('thue_tungay', 'thue_denngay')

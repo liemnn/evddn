@@ -4,6 +4,7 @@ from odoo.exceptions import UserError
 from odoo.exceptions import ValidationError
 from .ekids_hocphi_thang_abstractmodel import HocPhiThangAbstractModel
 
+
 import uuid
 import calendar
 
@@ -122,6 +123,19 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
 
     is_chot_hocphi = fields.Boolean(compute="_compute_is_chot_hocphi")
+
+
+
+    qr_code_image = fields.Binary("QR Code Chuyển Khoản", compute="_compute_qr_code")
+
+
+
+    def _compute_qr_code(self):
+        for rec in self:
+            rec.qr_code_image = hocsinh_util.func_build_qr_code(self)
+
+
+
 
 
     def _compute_is_chot_hocphi(self):

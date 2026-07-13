@@ -1,4 +1,5 @@
 from datetime import datetime,date
+import unicodedata
 def number2string(total):
     total = "{:,.0f}".format(total)
     return total
@@ -25,3 +26,9 @@ def string2date(datestr):
         return datetime.strptime(datestr,"%Y-%m-%d")
     else:
         return False
+
+def xoa_tiengviet_codau(s):
+    # Loại bỏ dấu tiếng Việt
+    s = unicodedata.normalize('NFD', s)
+    s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
+    return s.replace('đ', 'd').replace('Đ', 'D')
