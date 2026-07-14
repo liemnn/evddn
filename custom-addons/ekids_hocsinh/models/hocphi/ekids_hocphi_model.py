@@ -132,7 +132,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
     def _compute_qr_code(self):
         for rec in self:
-            rec.qr_code_image = hocsinh_util.func_build_qr_code(self)
+            rec.qr_code_image = hocsinh_util.func_build_qr_code(rec)
 
 
 

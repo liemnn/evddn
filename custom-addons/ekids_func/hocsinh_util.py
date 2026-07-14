@@ -438,77 +438,82 @@ def func_crc16_vietqr(data: str):
 
 def func_build_qr_code(hp):
     try:
+
         coso = hp.coso_id
-        amount = str(int(round(float(hp.hocphi_phaidong))))  # Bỏ .00, làm tròn số
-        bin_code = "".join(filter(str.isdigit, str(coso.bank_bin or "")))
-        acc = "".join(filter(str.isdigit, str(coso.bank_acc_number or "")))
+        if (coso.bank_bin
+            and coso.bank_acc_number):
+            amount = str(int(round(float(hp.hocphi_phaidong))))  # Bỏ .00, làm tròn số
+            bin_code = "".join(filter(str.isdigit, str(coso.bank_bin or "")))
+            acc = "".join(filter(str.isdigit, str(coso.bank_acc_number or "")))
 
-        # [Tag 38] - Phân cấp chuẩn Napas
-        guid = "A000000727"
-        service = "QRIBFTTA"
+            # [Tag 38] - Phân cấp chuẩn Napas
+            guid = "A000000727"
+            service = "QRIBFTTA"
 
-        # Lớp 01: Chứa BIN và ACC
-        consumer = f"00{len(bin_code):02d}{bin_code}01{len(acc):02d}{acc}"
+            # Lớp 01: Chứa BIN và ACC
+            consumer = f"00{len(bin_code):02d}{bin_code}01{len(acc):02d}{acc}"
 
-        # Lớp 38: Chứa GUID, CONSUMER và SERVICE
-        merchant_info = (
-            f"00{len(guid):02d}{guid}"
-            f"01{len(consumer):02d}{consumer}"
-            f"02{len(service):02d}{service}"
-        )
-        tag_38 = f"38{len(merchant_info):02d}{merchant_info}"
+            # Lớp 38: Chứa GUID, CONSUMER và SERVICE
+            merchant_info = (
+                f"00{len(guid):02d}{guid}"
+                f"01{len(consumer):02d}{consumer}"
+                f"02{len(service):02d}{service}"
+            )
+            tag_38 = f"38{len(merchant_info):02d}{merchant_info}"
 
-        # Các thông tin bổ sung (Tag 59, 60 - Bắt buộc cho Zalo)
-        merchant_name = "EVDDN"  # Viết hoa không dấu
-        merchant_city = "HANOI"
-        tag_59 = f"59{len(merchant_name):02d}{merchant_name}"
-        tag_60 = f"60{len(merchant_city):02d}{merchant_city}"
-
-
-        # 1. Chuẩn bị nội dung (Tối đa 25 ký tự để tránh lỗi độ dài)
-        # Ví dụ: "NGUYENVANA HP 06/2026"
-        ten_hs = string_util.xoa_tiengviet_codau(hp.hocsinh_id.name or "HOC SINH").upper()
-        thang = string_util.xoa_tiengviet_codau(hp.thang_id.name or "").upper()
-        nam = string_util.xoa_tiengviet_codau(hp.nam_id.name or "").upper()
-
-        # 2. Kết hợp nội dung: "TRAN VIET THANG HP THANG 06 2026"
-        # Sử dụng f-string để ghép nối, giữ nguyên đầy đủ, giới hạn 25 ký tự an toàn
-        noi_dung = f"{ten_hs} HP {thang}/{nam}".strip()[:25]
-
-        # 3. Xây dựng Tag 62
-        sub_tag_08 = f"08{len(noi_dung):02d}{noi_dung}"
-        tag_62 = f"62{len(sub_tag_08):02d}{sub_tag_08}"
-
-        # 3. Ghép vào Payload (Đặt Tag 62 trước Tag 63)
-        data = (
-                "000201"
-                "010212"
-                + tag_38 +
-                "5303704"
-                + f"54{len(amount):02d}{amount}"
-                + "5802VN"
-                + tag_59
-                + tag_60
-                + tag_62  # <--- THÊM VÀO ĐÂY
-                + "6304"
-        )
+            # Các thông tin bổ sung (Tag 59, 60 - Bắt buộc cho Zalo)
+            merchant_name = "EVDDN"  # Viết hoa không dấu
+            merchant_city = "HANOI"
+            tag_59 = f"59{len(merchant_name):02d}{merchant_name}"
+            tag_60 = f"60{len(merchant_city):02d}{merchant_city}"
 
 
+            # 1. Chuẩn bị nội dung (Tối đa 25 ký tự để tránh lỗi độ dài)
+            # Ví dụ: "NGUYENVANA HP 06/2026"
+            ten_hs = string_util.xoa_tiengviet_codau(hp.hocsinh_id.name or "HOC SINH").upper()
+            thang = string_util.xoa_tiengviet_codau(hp.thang_id.name or "").upper()
+            nam = string_util.xoa_tiengviet_codau(hp.nam_id.name or "").upper()
 
-        # Tính CRC
-        payload = data + func_crc16_vietqr(data)
+            # 2. Kết hợp nội dung: "TRAN VIET THANG HP THANG 06 2026"
+            # Sử dụng f-string để ghép nối, giữ nguyên đầy đủ, giới hạn 25 ký tự an toàn
+            noi_dung = f"{ten_hs} HP {thang}/{nam}".strip()
 
-        #_logger.info("PAYLOAD_READY: %s", payload)  # Log để anh check
+            # 3. Xây dựng Tag 62
+            sub_tag_08 = f"08{len(noi_dung):02d}{noi_dung}"
+            tag_62 = f"62{len(sub_tag_08):02d}{sub_tag_08}"
 
-        # Tạo ảnh QR
-        qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)
-        qr.add_data(payload)
-        qr.make(fit=True)
+            # 3. Ghép vào Payload (Đặt Tag 62 trước Tag 63)
+            data = (
+                    "000201"
+                    "010212"
+                    + tag_38 +
+                    "5303704"
+                    + f"54{len(amount):02d}{amount}"
+                    + "5802VN"
+                    + tag_59
+                    + tag_60
+                    + tag_62  # <--- THÊM VÀO ĐÂY
+                    + "6304"
+            )
 
 
-        buffer = io.BytesIO()
-        qr.make_image(fill_color="black", back_color="white").save(buffer, format="PNG")
-        return base64.b64encode(buffer.getvalue())
+
+            # Tính CRC
+            payload = data + func_crc16_vietqr(data)
+
+            #_logger.info("PAYLOAD_READY: %s", payload)  # Log để anh check
+
+            # Tạo ảnh QR
+            qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)
+            qr.add_data(payload)
+            qr.make(fit=True)
+
+
+            buffer = io.BytesIO()
+            qr.make_image(fill_color="black", back_color="white").save(buffer, format="PNG")
+            return base64.b64encode(buffer.getvalue())
+        else:
+            return False
     except Exception as e:
         _logger.error("Lỗi sinh QR với định dạng số tiền .00: %s", e)
         return False

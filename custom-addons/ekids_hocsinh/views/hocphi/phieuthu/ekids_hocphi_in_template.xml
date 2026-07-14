@@ -168,16 +168,16 @@
                                     <span t-field="o.coso_id.ghichu_thu_hocphi" style="font-size:13px;"/>
                                 </td>
                                 <td width="20%" style="text-align:center;">
-                                    <t t-if="o.qr_code_image">
+                                    <t t-if="o.coso_id.bank_bin and o.coso_id.bank_bin != ''">
                                         <img t-att-src="'data:image/png;base64,' + o.qr_code_image.decode('utf-8')"
                                              alt="QR VietQR"
-                                             style="height:150px; width:150px; display:block; margin:auto;"/>
+                                             style="height:150px; width:170px; display:block; margin:auto;"/>
                                         <div style="font-size: 11px; font-weight: bold; margin-top: 5px;">Quét để chuyển khoản</div>
                                     </t>
                                     <!-- Nếu không có QR động thì vẫn hiển thị ảnh tĩnh -->
                                     <t t-else="">
                                         <img t-att-src="'data:image/png;base64,' + o.coso_id.qrcode_thu_hocphi.decode('utf-8')"
-                                             style="height:150px; width:150px;"/>
+                                             style="height:150px; width:170px;"/>
                                     </t>
                                 </td>
                             </tr>

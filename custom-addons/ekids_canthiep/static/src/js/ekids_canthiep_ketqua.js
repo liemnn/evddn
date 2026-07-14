@@ -24,14 +24,12 @@ export class CanThiepKetQuaWidget extends Component {
         onWillUpdateProps(async () => { await this.buildKehoachKetQua2MucTieu(); });
     }
 
-    // 🌟 BỔ SUNG: Hàm Helper bóc tách loại bỏ thẻ <p> hoặc bất kỳ thẻ HTML nào để lấy Plain Text
     _extractPlainText(htmlString) {
         if (!htmlString) return "";
         try {
             const doc = new DOMParser().parseFromString(htmlString, 'text/html');
             return doc.body.textContent || doc.body.innerText || "";
         } catch (e) {
-            // Trường hợp trình duyệt cũ không hỗ trợ DOMParser, dùng regex dự phòng
             return htmlString.replace(/<\/?[^>]+(>|$)/g, "");
         }
     }
@@ -58,16 +56,26 @@ export class CanThiepKetQuaWidget extends Component {
             else if (rawStatusValue === "2") countHinhThanh++;
 
             let dateDisplayStr = "";
+            let dateShortStr = ""; // 🌟 BỔ SUNG: Biến chứa ngày tháng rút gọn dd/MM
+
             if (currentDateStr) {
                 if (typeof currentDateStr === 'object' && currentDateStr.toFormat) {
                     dateDisplayStr = currentDateStr.toFormat('dd/MM/yyyy');
+                    dateShortStr = currentDateStr.toFormat('dd/MM'); // Cắt dạng 13/07
                 } else {
-                    const parts = String(currentDateStr).split('-');
-                    dateDisplayStr = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : String(currentDateStr);
+                    const parts = String(currentDateStr).split('-'); // YYYY-MM-DD
+                    if (parts.length === 3) {
+                        dateDisplayStr = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                        dateShortStr = `${parts[2]}/${parts[1]}`; // Cắt dạng DD/MM
+                    } else {
+                        dateDisplayStr = String(currentDateStr);
+                        dateShortStr = String(currentDateStr);
+                    }
                 }
+            } else {
+                dateShortStr = `N ${d}`; // Dự phòng nếu trường ngày trống
             }
 
-            // 🌟 SỬA ĐỔI TẠI ĐÂY: Làm sạch phần comment bằng hàm bóc tách HTML trước khi lưu vào State
             const cleanComment = this._extractPlainText(rec.data.desc);
 
             tempGrid.push({
@@ -76,8 +84,9 @@ export class CanThiepKetQuaWidget extends Component {
                 rawRecord: rec,
                 trangthaiValue: rawStatusValue,
                 is_date_status: rec.data.is_date_status,
-                comment: cleanComment, // Lưu chữ thuần "cON THIẾU TẬP TRUNG" thay vì chứa thẻ <p>
+                comment: cleanComment,
                 dateDisplayStr: dateDisplayStr,
+                dateShortStr: dateShortStr, // 🌟 BỔ SUNG: Đẩy ra State để XML dùng
                 tooltipText: dateDisplayStr
             });
         });
@@ -119,7 +128,6 @@ export class CanThiepKetQuaWidget extends Component {
 
         try {
             if (day.rawRecord) {
-                // Khi lưu, Odoo sẽ tự động bọc lại nội dung văn bản này thành HTML hợp lệ ở backend
                 await day.rawRecord.update({
                     trangthai: nextStatus,
                     desc: nextComment
@@ -127,7 +135,7 @@ export class CanThiepKetQuaWidget extends Component {
                 await day.rawRecord.save();
             }
 
-            this.notification.add(`Đã lưu nhật ký Ngày thứ ${day.dayNum}`, { type: "success" });
+            this.notification.add(`Đã lưu nhật ký ngày ${day.dateDisplayStr}`, { type: "success" });
             this.state.selectedDay = null;
             await this.buildKehoachKetQua2MucTieu();
         } catch (error) {

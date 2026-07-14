@@ -411,7 +411,7 @@
 
                                             <!-- Nhập thông tin ngân hàng kiểu danh sách dọc gọn gàng -->
                                             <div class="mb-4">
-                                                <field name="bank_bin" widget="selection" class="mb-2"/>
+                                                <field name="bank_bin" widget="many2one_selection" class="mb-2"/>
                                                 <field name="bank_acc_number" placeholder="Nhập số tài khoản..." class="w-100"/>
                                             </div>
 
