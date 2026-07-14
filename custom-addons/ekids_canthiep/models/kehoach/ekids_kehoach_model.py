@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from datetime import  timedelta,date
+import uuid
 
 from odoo.exceptions import UserError, AccessError
 
@@ -110,6 +111,18 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     is_show_wiget_canthiep = fields.Boolean(compute="_compute_is_show_wiget_canthiep")
     is_xoa = fields.Boolean(compute="_compute_is_xoa")
 
+    access_token = fields.Char(string="Thẻ truy cập nhanh", readonly=True, copy=False)
+    share_full_url = fields.Char("Chia sẻ full", compute="_compute_urls")
+    share_short_url = fields.Char("Chia sẻ short", compute="_compute_urls")
+
+    @api.depends('access_token')
+    def _compute_urls(self):
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        for rec in self:
+            token = rec.access_token or str(uuid.uuid4())  # Fallback an toàn
+            rec.share_short_url = f"{base_url}/kehoach/0/{token}"
+            rec.share_full_url = f"{base_url}/kehoach/1/{token}"
+
     def _compute_is_xoa(self):
         for record in self:
             is_xoa = False
@@ -142,6 +155,9 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         is_admin = user.has_group('base.group_system')
 
         for record in self:
+            if not record.access_token:
+                record.access_token=str(uuid.uuid4())
+
             is_readonly= True
             if is_admin:
                 is_readonly = False
@@ -531,6 +547,10 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
         # 3. Gọi hàm super() duy nhất một lần cuối cùng để thực thi xóa dưới DB
         return super(KeHoach, self).unlink()
+
+
+
+
 
 
 

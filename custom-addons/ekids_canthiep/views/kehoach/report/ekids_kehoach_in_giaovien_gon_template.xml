@@ -2,14 +2,20 @@
 <odoo>
     <template id="ekids_canthiep.in_kehoach_cho_giaovien_gon_template">
         <t t-call="web.html_container">
-            <div class="btn-print-container" style="text-align:right; margin-bottom: 15px;">
-                <button onclick="window.print()"
-                        style="width:30px; height:auto; border:0px; background:transparent;"
-                        title="In báo cáo" type="button">
-                    <i class="fa fa-print" style="font-size: 20px; color: #333;"></i>
-                </button>
-            </div>
+
             <t t-foreach="docs" t-as="o">
+                 <div class="btn-print-container" style="text-align:right; margin-bottom: 15px;">
+                    <button onclick="window.print()"
+                            style="width:30px; height:auto; border:0px; background:transparent;"
+                            title="In báo cáo" type="button">
+                        <i class="fa fa-print" style="font-size: 20px; color: #333;"></i>
+                    </button>
+                     <button t-att-data-url="o.share_short_url"
+                            style="width:30px; height:auto;border:0px"
+                            onclick="navigator.clipboard.writeText(this.dataset.url); alert('Đã copy link để chia sẻ [Kế hoạch]!')">
+                        <i class="fa fa-copy"></i>
+                    </button>
+                </div>
                 <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
 
                     <style>
@@ -86,6 +92,16 @@
                             font-weight: bold;
                             line-height: 1.35;
                             display: inline-block;
+                        }
+
+                        /* Style định dạng cho phần ghi chú hiển thị dưới tên mục tiêu */
+                        .goal-note-text {
+                            font-size: 14px;
+                            font-weight: normal;
+                            font-style: italic;
+                            color: darkblue;
+                            margin-top: 4px;
+                            display: block;
                         }
 
                         .goal-meta-cell {
@@ -330,6 +346,11 @@
                                             <!-- Khối Tên mục tiêu -->
                                             <div class="goal-title-cell">
                                                 Mục tiêu <t t-esc="muctieu_index + 1"/>: <span t-field="muctieu.muctieu_id.name"/>
+
+                                                <!-- ĐOẠN THÊM MỚI: Hiển thị phần "ghichu" phía dưới tên mục tiêu nếu có dữ liệu -->
+                                                <t t-if="muctieu.ghichu">
+                                                    <span class="goal-note-text">Ghi chú: <span t-field="muctieu.ghichu"/></span>
+                                                </t>
                                             </div>
 
                                             <!-- Khối Tag: Thiết kế nét đứt nhạt, trong suốt, tinh tế theo image_bf1667.png -->
