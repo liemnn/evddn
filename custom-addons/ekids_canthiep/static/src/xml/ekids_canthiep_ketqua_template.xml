@@ -166,7 +166,7 @@
                             <t t-if="day.is_date_status === '1'"></t>
                             <t t-else="">
                                 <t t-if="day.trangthaiValue === '1'"><i class="fa fa-plus small"/></t>
-                                <t t-if="day.trangthaiValue === '2'"><i class="fa fa-adjust"/></t>
+                                <t t-if="day.trangthaiValue === '2'">+/-</t>
                                 <t t-if="day.trangthaiValue === '-1'"><i class="fa fa-minus small"/></t>
                             </t>
                         </div>

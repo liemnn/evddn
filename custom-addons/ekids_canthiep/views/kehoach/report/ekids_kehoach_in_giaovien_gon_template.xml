@@ -19,7 +19,7 @@
                 <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id">
 
                     <style>
-                        /* 1. THIẾT LẬP IN TRANG GIẤY KHỔ A4 NGÀY TRỰC QUAN */
+                        /* 1. THIẾT LẬP IN TRANG GIẤY KHỔ A4 TRỰC QUAN */
                         @page {
                             size: A4 landscape;
                             margin: 6mm 8mm !important;
@@ -49,10 +49,10 @@
                         .col-linhvuc   { width: 25%; }
 
                         /* ======================================================== */
-                        /* 🌟 GIAO DIỆN CÁC TRANG SAU (HỆ THỐNG MỤC TIÊU CO GIÃN ĐỘNG) */
+                        /* GIAO DIỆN CÁC TRANG SAU (HỆ THỐNG MỤC TIÊU CO GIÃN ĐỘNG) */
                         /* ======================================================== */
                         .tracking-page-section {
-                            page-break-before: always; /* Tách biệt hoàn toàn sang trang thứ 2 */
+                            page-break-before: always;
                             width: 100%;
                         }
 
@@ -72,7 +72,7 @@
                             border: 1px solid #000000;
                             padding: 10px 12px;
                             margin-bottom: 10px;
-                            page-break-inside: avoid; /* Ngăn tình trạng vỡ/gãy khối khi sang trang */
+                            page-break-inside: avoid;
                             background-color: #ffffff;
                         }
 
@@ -80,21 +80,20 @@
                         .goal-top-row {
                             width: 100%;
                             display: flex;
-                            flex-wrap: wrap; /* Tự động xuống hàng khi và chỉ khi hết không gian trống */
+                            flex-wrap: wrap;
                             align-items: center;
                             justify-content: flex-start;
                             margin-bottom: 8px;
-                            gap: 12px; /* Khoảng cách thông thoáng chữ với cụm tag */
+                            gap: 12px;
                         }
 
                         .goal-title-cell {
-                            font-size: 15px; /* Cỡ chữ tên mục tiêu lớn dễ đọc */
+                            font-size: 15px;
                             font-weight: bold;
                             line-height: 1.35;
                             display: inline-block;
                         }
 
-                        /* Style định dạng cho phần ghi chú hiển thị dưới tên mục tiêu */
                         .goal-note-text {
                             font-size: 14px;
                             font-weight: normal;
@@ -108,20 +107,19 @@
                             display: flex;
                             flex-wrap: wrap;
                             gap: 6px;
-                            margin-left: auto; /* Thỏi nam châm đẩy trọn vẹn cụm tag về sát biên phải */
+                            margin-left: auto;
                         }
 
-                        /* 🌟 TỐI ƯU THEO IMAGE_BF1667.PNG: NHẸ NHÀNG, TINH TẾ, KHÔNG NỔI BẬT */
                         .meta-label-tag {
                             display: inline-block;
-                            background: transparent !important; /* Loại bỏ màu nền đậm */
-                            border: 1px dashed #94a3b8 !important; /* Đổi sang viền nét đứt mảnh màu xám nhạt */
+                            background: transparent !important;
+                            border: 1px dashed #94a3b8 !important;
                             padding: 2px 8px;
                             border-radius: 4px;
-                            font-weight: normal !important; /* Bỏ bôi đậm chữ để thanh mảnh dịu mắt */
+                            font-weight: normal !important;
                             font-size: 13px;
-                            color: #475569 !important; /* Màu chữ xám vừa phải đóng vai trò thông tin phụ */
-                            white-space: nowrap; /* Giữ nguyên tag phẳng, cấm gãy chữ bên trong tag */
+                            color: #475569 !important;
+                            white-space: nowrap;
                         }
 
                         /* HÀNG DƯỚI: Nhật ký ô ngày rộng rãi */
@@ -149,31 +147,56 @@
                             gap: 4px;
                         }
 
-                        /* Thiết kế cấu trúc ô vuông chấm điểm */
+                        /* 🌟 TỐI ƯU Ô CHẤM ĐIỂM SẮC NÉT TƯƠNG PHẢN CAO THEO NGÀY THỰC TẾ */
                         .day-tracking-box {
-                            width: 26px;
-                            height: 30px; /* Chiều cao tối ưu cho giáo viên đặt bút ghi kết quả */
+                            width: 32px; /* Tăng nhẹ để chứa text ngày tháng dd/MM */
+                            height: 34px;
                             border: 1px solid #000000;
-                            border-radius: 3px;
+                            border-radius: 4px;
                             display: flex;
                             flex-direction: column;
                             justify-content: space-between;
                             align-items: center;
                             background-color: #ffffff;
-                            padding: 2px 0;
+                            overflow: hidden;
                         }
 
                         .day-num-indicator {
-                            font-size: 10.5px;
+                            font-size: 9px;
                             font-weight: bold;
-                            color: #334155;
-                            line-height: 1;
+                            color: #1e293b;
+                            line-height: 1.2;
+                            background-color: #f1f5f9;
+                            width: 100%;
+                            text-align: center;
+                            padding: 1px 0;
+                            border-bottom: 1px solid #e2e8f0;
                         }
 
-                        /* Khoảng trắng ghi nhận điểm số: +, -, +/- */
+                        /* Ô hiển thị kết quả can thiệp thực tế */
                         .day-write-space {
-                            height: 16px;
+                            height: 18px;
                             width: 100%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 11px;
+                            font-weight: bold;
+                            color: #0f172a;
+                        }
+
+                        /* Lớp tô xám nhẹ cho ngày nghỉ */
+                        .box-print-rest {
+                            background-color: #f1f5f9 !important;
+                        }
+                        .box-print-rest .day-num-indicator {
+                            background-color: #e2e8f0 !important;
+                            color: #475569 !important;
+                        }
+                        .box-print-rest .day-write-space {
+                            color: #64748b !important;
+                            font-size: 9px !important;
+                            font-weight: 800 !important;
                         }
 
                         /* Khối badge kết quả chung */
@@ -193,7 +216,7 @@
                             .btn-print-container { display: none !important; }
                             .goal-block-item { border: 1px solid #000000 !important; }
                             .day-tracking-box { border: 1px solid #000000 !important; }
-                            /* Khi in ra giấy, nâng nhẹ độ đậm nét đứt để mực bám rõ ràng nhưng không bị thô */
+                            .box-print-rest { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                             .meta-label-tag {
                                 border: 1px dashed #777777 !important;
                                 color: #555555 !important;
@@ -336,24 +359,19 @@
                             <t t-foreach="o.kehoach_linhvuc_ids" t-as="lv">
 
                                 <!-- Vòng lặp con: Quét qua từng Mục tiêu con thuộc lĩnh vực -->
-                                <!-- Logic muctieu_index + 1 giúp STT tự động khởi tạo lại từ 1 khi đổi Lĩnh vực -->
                                 <t t-foreach="lv.kehoach_muctieu_ids" t-as="muctieu">
 
                                     <div class="goal-block-item">
 
-                                        <!-- HÀNG TRÊN: Thiết kế theo giải pháp co giãn dòng chảy động Flex-wrap -->
+                                        <!-- HÀNG TRÊN -->
                                         <div class="goal-top-row">
-                                            <!-- Khối Tên mục tiêu -->
                                             <div class="goal-title-cell">
                                                 Mục tiêu <t t-esc="muctieu_index + 1"/>: <span t-field="muctieu.muctieu_id.name"/>
-
-                                                <!-- ĐOẠN THÊM MỚI: Hiển thị phần "ghichu" phía dưới tên mục tiêu nếu có dữ liệu -->
                                                 <t t-if="muctieu.ghichu">
                                                     <span class="goal-note-text">Ghi chú: <span t-field="muctieu.ghichu"/></span>
                                                 </t>
                                             </div>
 
-                                            <!-- Khối Tag: Thiết kế nét đứt nhạt, trong suốt, tinh tế theo image_bf1667.png -->
                                             <div class="goal-meta-cell">
                                                 <span class="meta-label-tag">Lĩnh vực: <span t-field="lv.linhvuc_id.name"/></span>
                                                 <span class="meta-label-tag">Tuổi: <span t-field="lv.tuoi_id.name"/></span>
@@ -361,24 +379,61 @@
                                             </div>
                                         </div>
 
-                                        <!-- HÀNG DƯỚI: Hệ thống dải ô chấm điểm phẳng ngang rộng rãi -->
+                                        <!-- HÀNG DƯỚI: ĐỒNG BỘ HIỂN THỊ DỮ LIỆU CAN THIỆP THỰC TẾ CHUẨN XÁC -->
                                         <div class="goal-bottom-row">
                                             <div class="tracking-label">Theo dõi:</div>
 
                                             <div class="day-boxes-horizontal-flow">
-                                                <t t-set="total_days" t-value="int(o.songay or 30)"/>
-                                                <t t-foreach="range(total_days)" t-as="day_idx">
-                                                    <!-- Ô vuông chấm điểm to, rõ, cao ráo -->
-                                                    <div class="day-tracking-box">
-                                                        <span class="day-num-indicator"><t t-esc="day_idx + 1"/></span>
-                                                        <div class="day-write-space"></div>
+                                                <!-- 🌟 ĐỘT PHÁ: Quét trực tiếp qua các bản ghi thực tế của model ekids.kehoach_ketqua2muctieu -->
+                                                <t t-foreach="muctieu.ketqua2muctieu_ids" t-as="kq">
+                                                    <!-- Đột phá: Tự động phân loại cấu trúc hiển thị ngày thường vs ngày nghỉ -->
+
+                                                    <!-- A. Xử lý định nghĩa Ngày nghỉ (Chủ nhật hoặc cấu hình nghỉ đặc biệt) -->
+                                                    <t t-set="is_rest" t-value="False"/>
+                                                    <t t-set="rest_lbl" t-value="''"/>
+                                                    <t t-if="kq.ngay">
+                                                        <!-- Nhận diện Chủ Nhật bằng Python Date weekday() (0=Thứ 2, 6=Chủ nhật) -->
+                                                        <t t-if="kq.ngay.weekday() == 6">
+                                                            <t t-set="is_rest" t-value="True"/>
+                                                            <t t-set="rest_lbl" t-value="'CN'"/>
+                                                        </t>
+                                                        <t t-if="kq.raw_record and kq.raw_record.data and kq.raw_record.data.loai_ngay_nghi == 'le'">
+                                                            <t t-set="is_rest" t-value="True"/>
+                                                            <t t-set="rest_lbl" t-value="'LỄ'"/>
+                                                        </t>
+                                                        <t t-if="kq.raw_record and kq.raw_record.data and kq.raw_record.data.loai_ngay_nghi == 'nghi'">
+                                                            <t t-set="is_rest" t-value="True"/>
+                                                            <t t-set="rest_lbl" t-value="'NGHỈ'"/>
+                                                        </t>
+                                                    </t>
+
+                                                    <!-- Render cấu trúc ô chấm điểm phẳng -->
+                                                    <div t-attf-class="day-tracking-box #{is_rest and 'box-print-rest' or ''}">
+                                                        <!-- Hiển thị ngày/tháng dạng dd/MM chuẩn chỉ -->
+                                                        <span class="day-num-indicator">
+                                                            <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
+                                                        </span>
+
+                                                        <div class="day-write-space">
+                                                            <t t-if="is_rest">
+                                                                <t t-esc="rest_lbl"/>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <t t-if="kq.trangthai == '1'">+</t>
+                                                                <t t-if="kq.trangthai == '2'">+/-</t>
+                                                                <t t-if="kq.trangthai == '-1'">-</t>
+                                                                <t t-if="kq.trangthai == '0' or not kq.trangthai"></t>
+                                                            </t>
+                                                        </div>
                                                     </div>
                                                 </t>
                                             </div>
 
-                                            <!-- Khối badge kết quả tổng kết -->
+                                            <!-- Khối badge kết quả tổng kết kết quả can thiệp -->
                                             <div class="goal-summary-badge">
-                                                Tổng đạt: ..... / <span t-esc="o.songay"/> ngày
+                                                Đạt: <span t-field="muctieu.ketqua_dat"/> |
+                                                Dần đạt: <span t-field="muctieu.ketqua_hinhthanh"/> |
+                                                Chưa đạt: <span t-field="muctieu.ketqua_khongdat"/>
                                             </div>
                                         </div>
 

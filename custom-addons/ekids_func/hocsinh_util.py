@@ -476,7 +476,7 @@ def func_build_qr_code(hp):
 
             # 2. Kết hợp nội dung: "TRAN VIET THANG HP THANG 06 2026"
             # Sử dụng f-string để ghép nối, giữ nguyên đầy đủ, giới hạn 25 ký tự an toàn
-            noi_dung = f"{ten_hs} HP {thang}/{nam}".strip()
+            noi_dung = f"{ten_hs} HP {thang} {nam}".strip()
 
             # 3. Xây dựng Tag 62
             sub_tag_08 = f"08{len(noi_dung):02d}{noi_dung}"

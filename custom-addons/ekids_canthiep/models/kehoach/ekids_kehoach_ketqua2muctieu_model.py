@@ -26,6 +26,7 @@ class KeHoachKetQua2MucTieu(models.Model):
 
     ], string="Trạng thái",default="0")
 
+
     desc = fields.Html(string="Mô tả")
 
     is_readonly = fields.Boolean(string="Các trạng thái được phép sửa",compute="_compute_is_readonly")
@@ -36,6 +37,18 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("1", "Tương lai")
     ], string="Mốc thời gian", compute="_compute_is_date_status",default="1")
 
+    loai = fields.Selection([
+        ("0", "Học sinh có đi học"),
+        ("1", "Các ngày trong tuần nhà trường nghỉ"),
+        ("2", "Học sinh nghỉ vắng mặt"),
+        ("3", "Nghỉ lễ,tết"),
+
+    ], string="Phân loại", default="0", compute="_compute_loai")
+
+    def _compute_loai(self):
+        for record in self:
+            loai =0
+            record.loai = loai
 
     def _compute_is_date_status(self):
         # Lấy ngày hôm nay chuẩn theo múi giờ local của giáo viên đăng nhập

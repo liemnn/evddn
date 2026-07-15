@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta,date
 from odoo.osv import expression
 
-from . import  giaovien_util
+from . import  giaovien_util,coso_util
 
 KETLUAN_CHUA_CO='-2'
 KETLUAN_DANG_TAO='0'
@@ -231,6 +231,11 @@ def func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self):
                 hocsinh_ids.append(kh.hocsinh_id.id)
             return hocsinh_ids
     return None
+
+
+def func_kehoach_ketqua2muctieu(self,hocsinh,ngay):
+    coso = hocsinh.coso_id
+    coso_util.func_is_coso_hoatdong(coso,ngay)
 
 
 
