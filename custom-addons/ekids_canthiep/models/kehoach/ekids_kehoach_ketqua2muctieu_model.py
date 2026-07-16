@@ -2,6 +2,18 @@ from odoo import models, fields, api
 from datetime import  timedelta,date
 from odoo.exceptions import ValidationError
 
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import kehoach_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import giaovien_util
+
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
 
 class KeHoachKetQua2MucTieu(models.Model):
     _name = 'ekids.kehoach_ketqua2muctieu'
@@ -38,17 +50,24 @@ class KeHoachKetQua2MucTieu(models.Model):
     ], string="Mốc thời gian", compute="_compute_is_date_status",default="1")
 
     loai = fields.Selection([
-        ("0", "Học sinh có đi học"),
-        ("1", "Các ngày trong tuần nhà trường nghỉ"),
-        ("2", "Học sinh nghỉ vắng mặt"),
-        ("3", "Nghỉ lễ,tết"),
-
-    ], string="Phân loại", default="0", compute="_compute_loai")
+        ("1", "Đi học"),
+        ("0", "Ngày trong tương lai"),
+        ("-1", "Ngày không đi hoc"),
+    ], string="Phân loại", default="1", compute="_compute_loai")
 
     def _compute_loai(self):
         for record in self:
-            loai =0
-            record.loai = loai
+            hocsinh = record.kehoach_muctieu_id.kehoach_id.hocsinh_id
+
+            loai = kehoach_util.func_kehoach_ketqua2muctieu(self,hocsinh,record.ngay)
+            if loai in ['1','11']:
+                record.loai ='1'
+            elif loai in ['0']:
+                record.loai = '0'
+            else:
+                record.loai = '-1'
+
+
 
     def _compute_is_date_status(self):
         # Lấy ngày hôm nay chuẩn theo múi giờ local của giáo viên đăng nhập

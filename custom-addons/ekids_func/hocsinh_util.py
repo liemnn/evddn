@@ -9,6 +9,26 @@ from odoo.osv import expression
 
 import logging
 _logger = logging.getLogger(__name__)
+
+
+def func_get_dihoc_diemdanh(self,hocsinh,ngay):
+
+    nam =ngay.year
+    thang = ngay.month
+    hocsinh2thang = self.env['ekids.diemdanh_hocsinh2thang'].search([
+        ('hocsinh_id', '=', hocsinh.id),
+        ('diemdanh_id.thang', '=', str(thang)),
+        ('diemdanh_id.nam', '=', str(nam))
+    ],limit=1)
+    if hocsinh2thang:
+        field_name = "d" + str(ngay.day)
+        giatri = getattr(hocsinh2thang, field_name, '-1')
+        return giatri
+    else:
+        return "1"
+    return None
+
+
 def func_get_nghipheps_trong_khoang_thoigian(self,coso, hocsinh, nghiles,nhatruong_nghis, tu_ngay, den_ngay):
     nghipheps = self.env['ekids.hocsinh_nghiphep'].search([
         ('hocsinh_id', '=', hocsinh.id),
@@ -122,6 +142,20 @@ def func_get_ngay_dihoc_cua_coso(coso, nghiles,tu_ngay, den_ngay):
 
 
 def func_is_co_ca_trong_ngay(hocsinh,ngay):
+    week = ngay.weekday() + 2
+    field_name = "hd_t" + str(week)
+    if hocsinh.is_ngaydihoc_rieng ==True:
+        is_hoc = getattr(hocsinh,field_name)
+        if is_hoc == True:
+            return True
+    else:
+        coso =hocsinh.coso_id
+        is_hoc = getattr(coso, field_name)
+        if is_hoc == True:
+            return True
+    return False
+
+def func_is_dangky_hoc(hocsinh,ngay):
     week = ngay.weekday() + 2
     field_name = "hd_t" + str(week)
     if hocsinh.is_ngaydihoc_rieng ==True:

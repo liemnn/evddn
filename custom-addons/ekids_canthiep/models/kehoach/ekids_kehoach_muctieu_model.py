@@ -307,7 +307,8 @@ class KeHoach2MucTieu(models.Model):
             if ketquas:
 
                 for ketqua in ketquas:
-                    if ketqua.trangthai =="1":
+                    if (ketqua.trangthai == "1"
+                            and ketqua.loai =='1'):
                         tong += 1
             mt.ketqua_dat=tong
 
@@ -319,7 +320,8 @@ class KeHoach2MucTieu(models.Model):
             if ketquas:
 
                 for ketqua in ketquas:
-                    if ketqua.trangthai =="-1":
+                    if (ketqua.trangthai =="-1"
+                            and ketqua.loai =='1'):
                         tong += 1
             mt.ketqua_khongdat=tong
 
@@ -331,7 +333,8 @@ class KeHoach2MucTieu(models.Model):
             if ketquas:
 
                 for ketqua in ketquas:
-                    if ketqua.trangthai =="0":
+                    if (ketqua.trangthai == "2"
+                            and ketqua.loai =='1'):
                         tong += 1
             mt.ketqua_hinhthanh=tong
 
