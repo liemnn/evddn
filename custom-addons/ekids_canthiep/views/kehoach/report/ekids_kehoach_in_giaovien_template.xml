@@ -8,7 +8,7 @@
                     <button onclick="window.print()"
                             style="width:30px; height:auto; border:0px; background:transparent;"
                             title="In báo cáo" type="button">
-                        <i class="fa fa-print" style="font-size: 18px; color: #555;"></i>
+                        <i class="fa fa-print" style="font-size: 20px; color: #333;"></i>
                     </button>
                     <button t-att-data-url="o.share_full_url"
                             style="width:30px; height:auto;border:0px"
@@ -25,114 +25,102 @@
                             margin: 5mm !important;
                         }
 
-                        * { box-sizing: border-box; margin: 0; padding: 0; }
+                        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
+                        /* TẤT CẢ FONT VÀ MÀU ĐỀU ÉP ĐEN (#000000) VÀ FONT TO 15PX ĐỂ IN SẮC NÉT */
                         .o_compact_print_body {
-                            font-family: 'Times New Roman', Times, serif !important;
-                            color: #000000;
-                            font-size: 13px;
+                            font-family: "Times New Roman", "Arial", serif !important;
+                            color: #000000 !important;
+                            font-size: 15px !important;
                             line-height: 1.4;
                             width: 100%;
                             padding: 4mm !important;
                         }
 
-                        /* Khối Header trên cùng (Logo  Tiêu đề) */
+                        /* Khối Header trên cùng */
                         .header-main-table { width: 100%; margin-bottom: 12px; }
-                        .header-main-table td {padding: 6px 10px; vertical-align: middle; }
-                        .top-logo-area { width: 45%; text-align: left; font-size: 13px; font-weight: bold; }
+                        .header-main-table td { padding: 6px 10px; vertical-align: middle; color: #000000 !important; font-size: 15px !important; }
+                        .top-logo-area { width: 45%; text-align: left; font-size: 15px !important; font-weight: bold !important; color: #000000 !important; }
                         .top-title-area { width: 55%; text-align: center; }
-                        .top-main-title { font-size: 16px; font-weight: bold; text-transform: uppercase; }
-                        .top-sub-title { font-size: 13px; font-style: italic; margin-top: 2px; }
+                        .top-main-title { font-size: 20px !important; font-weight: bold !important; text-transform: uppercase; color: #000000 !important; }
+                        .top-sub-title { font-size: 15px !important; font-style: italic; margin-top: 2px; color: #000000 !important; }
 
                         /* STYLE MA TRẬN BẢNG PROFILE HỢP NHẤT */
                         .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; table-layout: fixed; }
-                        .profile-grid-table td { border: 1px solid #000000; padding: 5px 6px; font-size: 14px; vertical-align: middle; color: #000000; }
+                        .profile-grid-table td { border: 1px solid #000000 !important; padding: 7px 9px; font-size: 15px !important; vertical-align: middle; color: #000000 !important; font-weight: bold !important; }
 
-                        .col-lbl-left  { width: 11%; font-weight: bold; }
+                        .col-lbl-left  { width: 11%; font-weight: bold !important; background-color: #eeeeee !important; }
                         .col-val-left  { width: 22%; }
-                        .col-stt       { width: 3% !important; text-align: center; font-weight: bold; padding: 5px 2px !important; }
+                        .col-stt       { width: 3% !important; text-align: center; font-weight: bold !important; padding: 5px 2px !important; }
                         .col-linhvuc   { width: 25%; }
                         .col-val-right { width: 39%; font-style: italic; text-align: center; }
 
                         /* Khối container mục tiêu */
                         .print-container {
                             width: 100%;
-                            border: 1px solid #000000;
+                            border: 1px solid #000000 !important;
                             padding: 12px;
                             margin-bottom: 14px;
                             page-break-before: always;
                             page-break-inside: avoid;
+                            background-color: #ffffff !important;
                         }
 
-                        .print-title-section { display: table; width: 100%; border-bottom: 1.5px solid #000000; padding-bottom: 4px; margin-bottom: 8px; }
-                        .print-main-title { display: table-cell; width: 55%; font-size: 14px; font-weight: bold; vertical-align: bottom; text-align: left; }
+                        .print-title-section { display: table; width: 100%; border-bottom: 1px solid #000000 !important; padding-bottom: 4px; margin-bottom: 8px; }
+                        .print-main-title { display: table-cell; width: 55%; font-size: 16px !important; font-weight: bold !important; vertical-align: bottom; text-align: left; color: #000000 !important; }
 
-                        /* Style định dạng cho phần ghi chú hiển thị dưới tên mục tiêu */
                         .goal-note-text {
-                            font-size: 13px;
-                            font-weight: normal;
+                            font-size: 15px !important;
+                            font-weight: normal !important;
                             font-style: italic;
-                            color: #475569;
+                            color: #000000 !important;
                             margin-top: 4px;
                             display: block;
                         }
 
-                        .print-meta-text { display: table-cell; width: 45%; font-size: 13px; vertical-align: bottom; text-align: right; color: #334155; }
+                        .print-meta-text { display: table-cell; width: 45%; font-size: 14px !important; font-weight: bold !important; vertical-align: bottom; text-align: right; color: #000000 !important; }
 
-                        .top-row-grid { display: table; width: 100%; border-bottom: 1px solid #000000; padding-bottom: 8px; margin-bottom: 8px; }
-                        .left-sub-block { display: table-cell; width: 50%; padding-right: 12px; border-right: 1px dashed #000000; vertical-align: top !important; }
+                        .top-row-grid { display: table; width: 100%; border-bottom: 1px dashed #000000 !important; padding-bottom: 8px; margin-bottom: 8px; }
+                        .left-sub-block { display: table-cell; width: 50%; padding-right: 12px; border-right: 1px dashed #000000 !important; vertical-align: top !important; }
                         .right-sub-block { display: table-cell; width: 50%; padding-left: 12px; vertical-align: top !important; }
 
-                        .section-header-title { font-size: 11px; font-weight: bold; text-transform: uppercase; text-decoration: underline; margin-bottom: 4px; }
+                        .section-header-title { font-size: 15px !important; font-weight: bold !important; text-transform: uppercase; text-decoration: underline; margin-bottom: 4px; color: #000000 !important; }
+                        .text-paragraph { margin-bottom: 4px; font-size: 15px !important; color: #000000 !important; }
+
                         .criteria-table { width: 100%; border-collapse: collapse; }
-                        .criteria-table th, .criteria-table td { border: 1px solid #000000; padding: 5px; font-size: 13px; vertical-align: top !important; }
-                        .criteria-table th { background-color: #f2f2f2; font-weight: bold; }
+                        .criteria-table th, .criteria-table td { border: 1px solid #000000 !important; padding: 5px; font-size: 14px !important; vertical-align: top !important; color: #000000 !important; }
+                        .criteria-table th { background-color: #eeeeee !important; font-weight: bold !important; }
 
                         /* ĐƯỜNG CHIA TUYỆT ĐỐI CHO HÀNG BAO QUANH PHẦN THIẾT KẾ ABC */
-                        .bottom-row-grid { width: 100%; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #000000; }
+                        .bottom-row-grid { width: 100%; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #000000 !important; }
                         .abc-procedure-content { width: 100%; text-align: justify; }
 
                         /* Khối Theo dõi chạy phẳng hàng ngang rộng rãi trọn biên dưới */
-                        .tracking-diary-content {
-                            width: 100%;
-                            margin-top: 8px;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 6px;
-                        }
+                        .tracking-diary-content { width: 100%; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+                        .day-boxes-horizontal-flow { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
 
-                        /* Layout Flexbox ngang cho dải ô vuông */
-                        .day-boxes-horizontal-flow {
-                            display: flex;
-                            flex-wrap: wrap;
-                            gap: 4px;
-                            width: 100%;
-                        }
-
-                        .text-paragraph { margin-bottom: 4px; font-size: 13px; }
-
-                        /* Ô TIẾN TRÌNH VUÔNG VẮN KHÔNG BỊ BÓP MÉO */
+                        /* TỐI ƯU Ô CHẤM ĐIỂM SẮC NÉT THEO NGÀY THỰC TẾ */
                         .day-tracking-box {
                             width: 32px;
-                            height: 34px;
-                            border: 1px solid #000000;
+                            height: 38px;
+                            border: 1px solid #000000 !important;
                             border-radius: 4px;
                             display: flex;
                             flex-direction: column;
                             justify-content: space-between;
                             align-items: center;
-                            background-color: #ffffff;
+                            background-color: #ffffff !important;
                             overflow: hidden;
                         }
 
                         .cell-number {
-                            font-size: 9px;
-                            font-weight: bold;
-                            color: #1e293b;
+                            font-size: 11px !important;
+                            font-weight: bold !important;
+                            color: #000000 !important;
                             display: block;
                             line-height: 1.2;
-                            background-color: #f1f5f9;
-                            border-bottom: 1px solid #e2e8f0;
+                            background-color: #ffffff !important; /* 🌟 SỬA NỀN TRẮNG CHO NGÀY ĐI HỌC */
+                            border-bottom: 1px solid #000000 !important;
                             padding: 1px 0;
                             width: 100%;
                             text-align: center;
@@ -144,49 +132,41 @@
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 14px;
-                            font-weight: bold;
-                            color: #000000;
+                            font-size: 16px !important;
+                            font-weight: bold !important;
+                            color: #000000 !important;
                         }
 
                         /* Lớp bôi xám nền cho ngày nghỉ, ngày tương lai hoặc vắng */
-                        .box-print-rest {
-                            background-color: #f1f5f9 !important;
-                        }
-                        .box-print-rest .cell-number {
-                            background-color: #e2e8f0 !important;
-                            color: #475569 !important;
-                        }
-                        .box-print-rest .cell-write-space {
-                            color: #64748b !important;
-                            font-size: 10px !important;
-                            font-weight: 800 !important;
-                        }
+                        .box-print-rest { background-color: #dddddd !important; }
+                        .box-print-rest .cell-number { background-color: #cccccc !important; color: #000000 !important; }
+                        .box-print-rest .cell-write-space { color: #000000 !important; font-size: 14px !important; font-weight: bold !important; }
 
-                        /* 🎨 ĐỒNG BỘ BỘ MÀU PASTEL HIỂN THỊ VÀ IN ẤN */
-                        .box-print-dat { background-color: #f0fdf4 !important; border-color: #16a34a !important; }
-                        .box-print-dat .cell-write-space { color: #15803d !important; }
+                        /* BỎ MÀU PASTEL -> CHUYỂN SANG NỀN TRẮNG, VIỀN ĐEN, CHỮ ĐEN */
+                        .box-print-dat { background-color: #ffffff !important; border-color: #000000 !important; }
+                        .box-print-dat .cell-write-space { color: #000000 !important; }
 
-                        .box-print-hinhthanh { background-color: #fffbeb !important; border-color: #d97706 !important; }
-                        .box-print-hinhthanh .cell-write-space { color: #b45309 !important; }
+                        .box-print-hinhthanh { background-color: #ffffff !important; border-color: #000000 !important; }
+                        .box-print-hinhthanh .cell-write-space { color: #000000 !important; }
 
-                        .box-print-chuadat { background-color: #fef2f2 !important; border-color: #dc2626 !important; }
-                        .box-print-chuadat .cell-write-space { color: #b91c1c !important; }
+                        .box-print-chuadat { background-color: #ffffff !important; border-color: #000000 !important; }
+                        .box-print-chuadat .cell-write-space { color: #000000 !important; }
 
                         /* Định dạng màu sắc chữ dòng tổng kết kết quả */
-                        .lbl-summary-chuadat { color: #b91c1c !important; font-weight: bold; }
-                        .lbl-summary-hinhthanh { color: #b45309 !important; font-weight: bold; }
-                        .lbl-summary-dat { color: #15803d !important; font-weight: bold; }
+                        .lbl-summary-chuadat { color: #000000 !important; font-weight: bold !important; font-size: 15px !important; }
+                        .lbl-summary-hinhthanh { color: #000000 !important; font-weight: bold !important; font-size: 15px !important; }
+                        .lbl-summary-dat { color: #000000 !important; font-weight: bold !important; font-size: 15px !important; }
 
-                        .text-bold { font-weight: bold; }
+                        .text-bold { font-weight: bold !important; }
 
                         @media print {
                             .btn-print-container { display: none !important; }
+                            .print-container { border: 1px solid #000000 !important; }
                             .day-tracking-box { border: 1px solid #000000 !important; }
-                            .box-print-rest { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-dat { background-color: #f5fcf6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-hinhthanh { background-color: #fffdf5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-chuadat { background-color: #fff5f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-rest { background-color: #eeeeee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-dat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-hinhthanh { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-chuadat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                             .cell-write-space { color: #000000 !important; font-weight: bold !important; }
                         }
                     </style>
@@ -200,7 +180,7 @@
                                        <span t-field="o.coso_id.logo" t-options="{'widget': 'image', 'style': 'max-height: 55px; max-width: 100%; display: block; margin-bottom: 5px;'}"/>
                                     </t>
                                     <t t-if="not (o.coso_id and o.coso_id.logo)">
-                                        <div style="display: inline-block; width: 55px; height: 30px; border: 1px dashed #000; text-align: center; line-height: 30px; font-weight: bold; font-size: 11px; margin-bottom: 5px;">LOGO</div>
+                                        <div style="display: inline-block; width: 55px; height: 30px; border: 1px dashed #000; text-align: center; line-height: 30px; font-weight: bold; font-size: 11px; margin-bottom: 5px; color: #000000;">LOGO</div>
                                     </t>
                                 </td>
                                 <td>
@@ -231,7 +211,7 @@
                             <tr>
                                 <td class="col-lbl-left">Họ và tên HS:</td>
                                 <td class="col-val-left text-bold"><span t-field="o.hocsinh_id.name"/></td>
-                                <td colspan="4" style="font-weight: bold; text-align: center; font-size: 13px; background-color: #ffffff; text-transform: uppercase;">
+                                <td colspan="4" style="font-weight: bold; text-align: center; font-size: 15px; background-color: #eeeeee; text-transform: uppercase; color: #000000;">
                                     LĨNH VỰC CAN THIỆP
                                 </td>
                             </tr>
@@ -395,9 +375,9 @@
                                                     </t>
 
                                                     <div t-attf-class="day-tracking-box #{rest_class} #{color_class}">
-                                                        <!-- 🌟 ĐỔNG BỘ HIỂN THỊ: Thay đổi nhãn tiêu đề ngày/tháng thành SỐ THỨ TỰ (tịnh tiến theo vòng lặp cha) -->
+                                                        <!-- 🌟 ĐÃ TRẢ LẠI HIỂN THỊ NGÀY/THÁNG dd/MM -->
                                                         <span class="cell-number">
-                                                            <span t-out="kq_index + 1"/>
+                                                            <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
                                                         </span>
 
                                                         <div class="cell-write-space">
@@ -427,9 +407,9 @@
                                                     <t t-set="should_fallback_gray" t-value="is_fallback_sunday or is_fallback_future"/>
 
                                                     <div t-attf-class="day-tracking-box #{should_fallback_gray and 'box-print-rest' or ''}">
-                                                        <!-- 🌟 ĐỒNG BỘ HIỂN THỊ: Giữ nguyên số thứ tự 1, 2, 3... -->
+                                                        <!-- 🌟 ĐÃ TRẢ LẠI HIỂN THỊ NGÀY/THÁNG CHO BẢN FALLBACK -->
                                                         <span class="cell-number">
-                                                            <span t-out="day_idx + 1"/>
+                                                            <span t-out="computed_date.strftime('%d/%m')"/>
                                                         </span>
                                                         <div class="cell-write-space">
                                                             <t t-if="is_fallback_future"></t>
@@ -442,7 +422,7 @@
                                         </div>
 
                                         <!-- Khối badge kết quả tổng kết biên dưới phối màu Pastel đồng bộ -->
-                                        <div style="margin-top: 4px; padding-top: 4px; font-size: 13px; text-align: left; color: #1e293b; border-top: 1px dashed #e2e8f0;">
+                                        <div style="margin-top: 4px; padding-top: 4px; font-size: 15px; text-align: left; color: #000000; border-top: 1px dashed #000000; font-weight: bold;">
                                             <span class="text-bold">Kết quả <strong><span t-out="o.songay"/></strong> ngày của kế hoạch:</span>
                                             Chưa đạt (-): <span class="lbl-summary-chuadat"><span t-field="muctieu.ketqua_khongdat"/></span> |
                                             Hình thành (+/-): <span class="lbl-summary-hinhthanh"><span t-field="muctieu.ketqua_hinhthanh"/></span> |

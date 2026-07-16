@@ -201,11 +201,10 @@
             <field name="arch" type="xml">
                 <form string="Kết quả can thiệp">
                     <sheet class="p-2">
-                        <field name="is_readonly" invisible="1"/>
+
 
                         <field name="ketqua2muctieu_ids"
                                widget="ekids_canthiep_ketqua"
-                               readonly="is_readonly"
                                nolabel="1">
                             <list>
                                 <field name="ngay"/>

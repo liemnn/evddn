@@ -25,26 +25,27 @@
                             margin: 6mm 8mm !important;
                         }
 
-                        * { box-sizing: border-box; margin: 0; padding: 0; }
+                        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
+                        /* TẤT CẢ FONT VÀ MÀU ĐỀU ÉP ĐEN (#000000) ĐỂ IN SẮC NÉT */
                         .o_compact_print_body {
                             font-family: 'Times New Roman', Times, serif !important;
-                            color: #0f172a;
-                            font-size: 14px;
+                            color: #000000 !important;
+                            font-size: 15px !important;
                             line-height: 1.4;
                             width: 100%;
                         }
 
                         /* TRANG 1: HÀNH CHÍNH VÀ LĨNH VỰC TỔNG QUAN */
                         .header-main-table { width: 100%; margin-bottom: 15px; }
-                        .header-main-table td { padding: 4px 8px; vertical-align: middle; font-size: 14px; }
+                        .header-main-table td { padding: 4px 8px; vertical-align: middle; font-size: 15px !important; color: #000000 !important; }
                         .top-title-area { width: 50%; text-align: center; }
-                        .top-main-title { font-size: 18px; font-weight: bold; text-transform: uppercase; }
-                        .top-sub-title { font-size: 14px; font-style: italic; margin-top: 2px; color: #334155; }
+                        .top-main-title { font-size: 20px !important; font-weight: bold !important; text-transform: uppercase; color: #000000 !important; }
+                        .top-sub-title { font-size: 15px !important; font-style: italic; margin-top: 2px; color: #000000 !important; }
 
                         .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; table-layout: fixed; }
-                        .profile-grid-table td { border: 1px solid #000000; padding: 7px 9px; font-size: 14.5px; vertical-align: middle; }
-                        .col-lbl-left  { width: 12%; font-weight: bold; background-color: #f8fafc; }
+                        .profile-grid-table td { border: 1px solid #000000 !important; padding: 7px 9px; font-size: 15px !important; vertical-align: middle; color: #000000 !important; font-weight: bold !important; }
+                        .col-lbl-left  { width: 12%; font-weight: bold !important; background-color: #eeeeee !important; }
                         .col-val-left  { width: 21%; }
                         .col-linhvuc   { width: 25%; }
 
@@ -57,23 +58,23 @@
                         }
 
                         .tracking-table-title {
-                            font-size: 15px;
-                            font-weight: bold;
+                            font-size: 16px !important;
+                            font-weight: bold !important;
                             text-transform: uppercase;
-                            color: #1e3a8a;
+                            color: #000000 !important;
                             margin-bottom: 14px;
-                            border-left: 5px solid #1e3a8a;
+                            border-left: 5px solid #000000 !important;
                             padding-left: 8px;
                         }
 
                         /* Khối khung bao quanh mỗi mục tiêu */
                         .goal-block-item {
                             width: 100%;
-                            border: 1px solid #000000;
+                            border: 1px solid #000000 !important;
                             padding: 10px 12px;
                             margin-bottom: 10px;
                             page-break-inside: avoid;
-                            background-color: #ffffff;
+                            background-color: #ffffff !important;
                         }
 
                         /* HÀNG TRÊN: Cơ chế dòng chảy tự động Flexbox bọc dòng động */
@@ -88,17 +89,18 @@
                         }
 
                         .goal-title-cell {
-                            font-size: 15px;
-                            font-weight: bold;
+                            font-size: 16px !important;
+                            font-weight: bold !important;
                             line-height: 1.35;
                             display: inline-block;
+                            color: #000000 !important;
                         }
 
                         .goal-note-text {
-                            font-size: 14px;
-                            font-weight: normal;
+                            font-size: 15px !important;
+                            font-weight: normal !important;
                             font-style: italic;
-                            color: darkblue;
+                            color: #000000 !important;
                             margin-top: 4px;
                             display: block;
                         }
@@ -113,12 +115,12 @@
                         .meta-label-tag {
                             display: inline-block;
                             background: transparent !important;
-                            border: 1px dashed #94a3b8 !important;
+                            border: 1px dashed #000000 !important;
                             padding: 2px 8px;
                             border-radius: 4px;
-                            font-weight: normal !important;
-                            font-size: 13px;
-                            color: #475569 !important;
+                            font-weight: bold !important;
+                            font-size: 14px !important;
+                            color: #000000 !important;
                             white-space: nowrap;
                         }
 
@@ -129,7 +131,7 @@
                             flex-direction: column;
                             gap: 8px;
                             padding-top: 6px;
-                            border-top: 1px dashed #64748b;
+                            border-top: 1px dashed #000000 !important;
                         }
 
                         .tracking-container-row {
@@ -140,10 +142,10 @@
                         }
 
                         .tracking-label {
-                            font-size: 13px;
-                            font-weight: bold;
+                            font-size: 14px !important;
+                            font-weight: bold !important;
                             text-transform: uppercase;
-                            color: #334155;
+                            color: #000000 !important;
                             width: 75px;
                             flex-shrink: 0;
                             margin-top: 6px;
@@ -159,27 +161,27 @@
                         /* TỐI ƯU Ô CHẤM ĐIỂM SẮC NÉT THEO NGÀY THỰC TẾ */
                         .day-tracking-box {
                             width: 32px;
-                            height: 34px;
-                            border: 1px solid #000000;
+                            height: 38px;
+                            border: 1px solid #000000 !important;
                             border-radius: 4px;
                             display: flex;
                             flex-direction: column;
                             justify-content: space-between;
                             align-items: center;
-                            background-color: #ffffff;
+                            background-color: #ffffff !important;
                             overflow: hidden;
                         }
 
                         .day-num-indicator {
-                            font-size: 9px;
-                            font-weight: bold;
-                            color: #1e293b;
+                            font-size: 11px !important;
+                            font-weight: bold !important;
+                            color: #000000 !important;
                             line-height: 1.2;
-                            background-color: #f1f5f9;
+                            background-color: #ffffff !important; /* 🌟 SỬA NỀN TRẮNG CHO NGÀY ĐI HỌC */
                             width: 100%;
                             text-align: center;
                             padding: 1px 0;
-                            border-bottom: 1px solid #e2e8f0;
+                            border-bottom: 1px solid #000000 !important;
                         }
 
                         .day-write-space {
@@ -188,61 +190,62 @@
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 11px;
-                            font-weight: bold;
-                            color: #0f172a;
+                            font-size: 16px !important;
+                            font-weight: bold !important;
+                            color: #000000 !important;
                         }
 
                         /* Lớp tô xám nhẹ cho ngày nghỉ, tương lai */
                         .box-print-rest {
-                            background-color: #f1f5f9 !important;
+                            background-color: #eeeeee !important;
                         }
                         .box-print-rest .day-num-indicator {
-                            background-color: #e2e8f0 !important;
-                            color: #475569 !important;
+                            background-color: #eeeeee !important; /* 🌟 NGÀY TƯƠNG LAI/NGHỈ GIỮ NỀN XÁM NHẠT */
+                            color: #000000 !important;
                         }
                         .box-print-rest .day-write-space {
-                            color: #64748b !important;
-                            font-size: 10px !important;
-                            font-weight: 800 !important;
+                            color: #000000 !important;
+                            font-size: 14px !important;
+                            font-weight: bold !important;
                         }
 
-                        /* 🎨 ĐỒNG BỘ CSS MÀU PASTEL MỚI */
-                        .box-print-dat { background-color: #f0fdf4 !important; border-color: #16a34a !important; }
-                        .box-print-dat .day-write-space { color: #15803d !important; }
+                        /* BỎ MÀU PASTEL -> CHUYỂN SANG NỀN TRẮNG, VIỀN ĐEN, CHỮ ĐEN */
+                        .box-print-dat { background-color: #ffffff !important; border-color: #000000 !important; }
+                        .box-print-dat .day-write-space { color: #000000 !important; }
 
-                        .box-print-hinhthanh { background-color: #fffbeb !important; border-color: #d97706 !important; }
-                        .box-print-hinhthanh .day-write-space { color: #b45309 !important; }
+                        .box-print-hinhthanh { background-color: #ffffff !important; border-color: #000000 !important; }
+                        .box-print-hinhthanh .day-write-space { color: #000000 !important; }
 
-                        .box-print-chuadat { background-color: #fef2f2 !important; border-color: #dc2626 !important; }
-                        .box-print-chuadat .day-write-space { color: #b91c1c !important; }
+                        .box-print-chuadat { background-color: #ffffff !important; border-color: #000000 !important; }
+                        .box-print-chuadat .day-write-space { color: #000000 !important; }
 
-                        .lbl-summary-chuadat { color: #b91c1c !important; font-weight: bold; font-size:14px; }
-                        .lbl-summary-hinhthanh { color: #b45309 !important; font-weight: bold; font-size:14px; }
-                        .lbl-summary-dat { color: #15803d !important; font-weight: bold; font-size:14px; }
+                        .lbl-summary-chuadat { color: #000000 !important; font-weight: bold !important; font-size:15px !important; }
+                        .lbl-summary-hinhthanh { color: #000000 !important; font-weight: bold !important; font-size:15px !important; }
+                        .lbl-summary-dat { color: #000000 !important; font-weight: bold !important; font-size:15px !important; }
 
                         .goal-summary-badge-row {
                             width: 100%;
-                            font-size: 13.5px;
-                            color: #0f172a;
-                            border-top: 1px dashed #e2e8f0;
+                            font-size: 15px !important;
+                            color: #000000 !important;
+                            border-top: 1px dashed #000000 !important;
                             padding-top: 6px;
                             margin-top: 2px;
                             text-align: left;
+                            font-weight: bold !important;
                         }
 
-                        .text-bold { font-weight: bold; }
+                        .text-bold { font-weight: bold !important; }
 
                         @media print {
                             .btn-print-container { display: none !important; }
                             .goal-block-item { border: 1px solid #000000 !important; }
                             .day-tracking-box { border: 1px solid #000000 !important; }
-                            .box-print-rest { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-dat { background-color: #f5fcf6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-hinhthanh { background-color: #fffdf5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-chuadat { background-color: #fff5f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-rest { background-color: #eeeeee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-dat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-hinhthanh { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-chuadat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                             .day-write-space { color: #000000 !important; font-weight: bold !important; }
-                            .meta-label-tag { border: 1px dashed #777777 !important; color: #555555 !important; }
+                            .meta-label-tag { border: 1px dashed #000000 !important; color: #000000 !important; }
                         }
                     </style>
 
@@ -424,9 +427,8 @@
                                                             </t>
 
                                                             <div t-attf-class="day-tracking-box #{rest_class} #{color_class}">
-                                                                <!-- 🌟 ĐỒNG BỘ SỐ THỨ TỰ THAY VÌ NGÀY/THÁNG -->
                                                                 <span class="day-num-indicator">
-                                                                    <span t-out="kq_index + 1"/>
+                                                                    <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
                                                                 </span>
                                                                 <div class="day-write-space">
                                                                     <t t-if="is_future_status"></t>
@@ -455,9 +457,8 @@
                                                             <t t-set="should_fallback_gray" t-value="is_fallback_sunday or is_fallback_future"/>
 
                                                             <div t-attf-class="day-tracking-box #{should_fallback_gray and 'box-print-rest' or ''}">
-                                                                <!-- 🌟 GIỮ NGUYÊN SỐ THỨ TỰ FALLBACK -->
                                                                 <span class="day-num-indicator">
-                                                                    <span t-out="day_idx + 1"/>
+                                                                    <span t-out="computed_date.strftime('%d/%m')"/>
                                                                 </span>
                                                                 <div class="day-write-space">
                                                                     <t t-if="is_fallback_future"></t>
