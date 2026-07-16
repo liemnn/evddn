@@ -50,30 +50,31 @@ export class CanThiepKetQuaWidget extends Component {
             const d = index + 1;
             const currentDateStr = rec.data.ngay;
             const rawStatusValue = rec.data.trangthai;
+            const rawLoaiValue = rec.data.loai; // 🌟 Lấy field loai từ Backend
 
             if (rawStatusValue === "1") countDat++;
             else if (rawStatusValue === "-1") countChuaDat++;
             else if (rawStatusValue === "2") countHinhThanh++;
 
             let dateDisplayStr = "";
-            let dateShortStr = ""; // 🌟 BỔ SUNG: Biến chứa ngày tháng rút gọn dd/MM
+            let dateShortStr = "";
 
             if (currentDateStr) {
                 if (typeof currentDateStr === 'object' && currentDateStr.toFormat) {
                     dateDisplayStr = currentDateStr.toFormat('dd/MM/yyyy');
-                    dateShortStr = currentDateStr.toFormat('dd/MM'); // Cắt dạng 13/07
+                    dateShortStr = currentDateStr.toFormat('dd/MM');
                 } else {
-                    const parts = String(currentDateStr).split('-'); // YYYY-MM-DD
+                    const parts = String(currentDateStr).split('-');
                     if (parts.length === 3) {
                         dateDisplayStr = `${parts[2]}/${parts[1]}/${parts[0]}`;
-                        dateShortStr = `${parts[2]}/${parts[1]}`; // Cắt dạng DD/MM
+                        dateShortStr = `${parts[2]}/${parts[1]}`;
                     } else {
                         dateDisplayStr = String(currentDateStr);
                         dateShortStr = String(currentDateStr);
                     }
                 }
             } else {
-                dateShortStr = `N ${d}`; // Dự phòng nếu trường ngày trống
+                dateShortStr = `${d}`;
             }
 
             const cleanComment = this._extractPlainText(rec.data.desc);
@@ -83,10 +84,11 @@ export class CanThiepKetQuaWidget extends Component {
                 resId: rec.resId,
                 rawRecord: rec,
                 trangthaiValue: rawStatusValue,
+                loai: rawLoaiValue, // 🌟 Đẩy loai vào Grid để template XML xử lý render
                 is_date_status: rec.data.is_date_status,
                 comment: cleanComment,
                 dateDisplayStr: dateDisplayStr,
-                dateShortStr: dateShortStr, // 🌟 BỔ SUNG: Đẩy ra State để XML dùng
+                dateShortStr: dateShortStr,
                 tooltipText: dateDisplayStr
             });
         });
@@ -115,12 +117,12 @@ export class CanThiepKetQuaWidget extends Component {
     }
 
     selectQuickStatus(statusValue) {
-        if (!this.state.selectedDay || this.state.selectedDay.is_date_status === "1") return;
+        if (!this.state.selectedDay || this.state.selectedDay.loai === "0" || this.state.selectedDay.loai === "-1") return;
         this.state.selectedDay.trangthaiValue = statusValue;
     }
 
     async saveInlineData() {
-        if (this.props.readonly || this.state.selectedDay.is_date_status === "1") return;
+        if (this.props.readonly || this.state.selectedDay.loai === "0" || this.state.selectedDay.loai === "-1") return;
         const day = this.state.selectedDay;
         const commentElem = document.getElementById("matrix_quick_desc");
         const nextStatus = day.trangthaiValue;

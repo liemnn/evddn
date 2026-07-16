@@ -55,6 +55,7 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("-1", "Ngày không đi hoc"),
     ], string="Phân loại", default="1", compute="_compute_loai")
 
+    @api.depends("kehoach_muctieu_id.kehoach_id.is_readonly", "ngay")
     def _compute_loai(self):
         for record in self:
             hocsinh = record.kehoach_muctieu_id.kehoach_id.hocsinh_id
