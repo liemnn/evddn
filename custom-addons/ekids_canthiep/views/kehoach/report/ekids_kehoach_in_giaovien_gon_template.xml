@@ -188,7 +188,7 @@
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 14px;
+                            font-size: 11px;
                             font-weight: bold;
                             color: #0f172a;
                         }
@@ -217,9 +217,9 @@
                         .box-print-chuadat { background-color: #fef2f2 !important; border-color: #dc2626 !important; }
                         .box-print-chuadat .day-write-space { color: #b91c1c !important; }
 
-                        .lbl-summary-chuadat { color: #b91c1c !important; font-weight: bold;font-size:14px; }
-                        .lbl-summary-hinhthanh { color: #b45309 !important; font-weight: bold;font-size:14px; }
-                        .lbl-summary-dat { color: #15803d !important; font-weight: bold;font-size:14px; }
+                        .lbl-summary-chuadat { color: #b91c1c !important; font-weight: bold; font-size:14px; }
+                        .lbl-summary-hinhthanh { color: #b45309 !important; font-weight: bold; font-size:14px; }
+                        .lbl-summary-dat { color: #15803d !important; font-weight: bold; font-size:14px; }
 
                         .goal-summary-badge-row {
                             width: 100%;
@@ -413,8 +413,9 @@
                                                         <t t-foreach="muctieu.ketqua2muctieu_ids" t-as="kq">
 
                                                             <t t-set="is_future_status" t-value="kq.is_date_status == '1'"/>
-                                                            <t t-set="rest_class" t-value="kq.loai in ['0', '-1'] or is_future_status and 'box-print-rest' or ''"/>
+                                                            <t t-set="rest_class" t-value="(kq.loai in ['0', '-1'] or is_future_status) and 'box-print-rest' or ''"/>
 
+                                                            <!-- Xác định class màu Pastel động tương ứng cho ngày đi học -->
                                                             <t t-set="color_class" t-value="''"/>
                                                             <t t-if="not is_future_status and kq.loai == '1'">
                                                                 <t t-if="kq.trangthai == '1'"><t t-set="color_class" t-value="'box-print-dat'"/></t>
@@ -423,8 +424,9 @@
                                                             </t>
 
                                                             <div t-attf-class="day-tracking-box #{rest_class} #{color_class}">
+                                                                <!-- 🌟 ĐỒNG BỘ SỐ THỨ TỰ THAY VÌ NGÀY/THÁNG -->
                                                                 <span class="day-num-indicator">
-                                                                    <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
+                                                                    <span t-out="kq_index + 1"/>
                                                                 </span>
                                                                 <div class="day-write-space">
                                                                     <t t-if="is_future_status"></t>
@@ -453,8 +455,9 @@
                                                             <t t-set="should_fallback_gray" t-value="is_fallback_sunday or is_fallback_future"/>
 
                                                             <div t-attf-class="day-tracking-box #{should_fallback_gray and 'box-print-rest' or ''}">
+                                                                <!-- 🌟 GIỮ NGUYÊN SỐ THỨ TỰ FALLBACK -->
                                                                 <span class="day-num-indicator">
-                                                                    <span t-out="computed_date.strftime('%d/%m')"/>
+                                                                    <span t-out="day_idx + 1"/>
                                                                 </span>
                                                                 <div class="day-write-space">
                                                                     <t t-if="is_fallback_future"></t>

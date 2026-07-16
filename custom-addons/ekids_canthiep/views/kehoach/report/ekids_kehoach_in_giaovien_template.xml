@@ -92,7 +92,7 @@
                         .bottom-row-grid { width: 100%; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #000000; }
                         .abc-procedure-content { width: 100%; text-align: justify; }
 
-                        /* 🌟 RE-DESIGN: Khối Theo dõi chạy phẳng hàng ngang rộng rãi trọn biên dưới */
+                        /* Khối Theo dõi chạy phẳng hàng ngang rộng rãi trọn biên dưới */
                         .tracking-diary-content {
                             width: 100%;
                             margin-top: 8px;
@@ -149,7 +149,7 @@
                             color: #000000;
                         }
 
-                        /* Lớp bôi xám nền cho ngày nghỉ, tương lai hoặc vắng */
+                        /* Lớp bôi xám nền cho ngày nghỉ, ngày tương lai hoặc vắng */
                         .box-print-rest {
                             background-color: #f1f5f9 !important;
                         }
@@ -163,12 +163,31 @@
                             font-weight: 800 !important;
                         }
 
+                        /* 🎨 ĐỒNG BỘ BỘ MÀU PASTEL HIỂN THỊ VÀ IN ẤN */
+                        .box-print-dat { background-color: #f0fdf4 !important; border-color: #16a34a !important; }
+                        .box-print-dat .cell-write-space { color: #15803d !important; }
+
+                        .box-print-hinhthanh { background-color: #fffbeb !important; border-color: #d97706 !important; }
+                        .box-print-hinhthanh .cell-write-space { color: #b45309 !important; }
+
+                        .box-print-chuadat { background-color: #fef2f2 !important; border-color: #dc2626 !important; }
+                        .box-print-chuadat .cell-write-space { color: #b91c1c !important; }
+
+                        /* Định dạng màu sắc chữ dòng tổng kết kết quả */
+                        .lbl-summary-chuadat { color: #b91c1c !important; font-weight: bold; }
+                        .lbl-summary-hinhthanh { color: #b45309 !important; font-weight: bold; }
+                        .lbl-summary-dat { color: #15803d !important; font-weight: bold; }
+
                         .text-bold { font-weight: bold; }
 
                         @media print {
                             .btn-print-container { display: none !important; }
                             .day-tracking-box { border: 1px solid #000000 !important; }
                             .box-print-rest { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-dat { background-color: #f5fcf6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-hinhthanh { background-color: #fffdf5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-chuadat { background-color: #fff5f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .cell-write-space { color: #000000 !important; font-weight: bold !important; }
                         }
                     </style>
 
@@ -352,7 +371,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- 🌟 KHỐI IV: ĐÃ ĐẨY XUỐNG DÒNG RIÊNG BIỆT DÀNH TRỌN 100% CHIỀU NGANG -->
+                                    <!-- KHỐI IV: THEO DÕI HÀNG NGANG 100% -->
                                     <div class="tracking-diary-content">
                                         <div class="section-header-title" style="margin-bottom: 2px;">IV. Theo dõi</div>
 
@@ -363,11 +382,22 @@
                                                 <t t-foreach="muctieu.ketqua2muctieu_ids" t-as="kq">
 
                                                     <t t-set="is_future_status" t-value="kq.is_date_status == '1'"/>
-                                                    <t t-set="should_be_gray" t-value="kq.loai in ['0', '-1'] or is_future_status"/>
 
-                                                    <div t-attf-class="day-tracking-box #{should_be_gray and 'box-print-rest' or ''}">
+                                                    <!-- 🌟 ĐỒNG BỘ LOGIC: loai là '0', '-1' hoặc ngày tương lai thực tế đều nhận màu xám -->
+                                                    <t t-set="rest_class" t-value="(kq.loai in ['0', '-1'] or is_future_status) and 'box-print-rest' or ''"/>
+
+                                                    <!-- Xác định class màu Pastel động tương ứng cho ngày đi học -->
+                                                    <t t-set="color_class" t-value="''"/>
+                                                    <t t-if="not is_future_status and kq.loai == '1'">
+                                                        <t t-if="kq.trangthai == '1'"><t t-set="color_class" t-value="'box-print-dat'"/></t>
+                                                        <t t-elif="kq.trangthai == '2'"><t t-set="color_class" t-value="'box-print-hinhthanh'"/></t>
+                                                        <t t-elif="kq.trangthai == '-1'"><t t-set="color_class" t-value="'box-print-chuadat'"/></t>
+                                                    </t>
+
+                                                    <div t-attf-class="day-tracking-box #{rest_class} #{color_class}">
+                                                        <!-- 🌟 ĐỔNG BỘ HIỂN THỊ: Thay đổi nhãn tiêu đề ngày/tháng thành SỐ THỨ TỰ (tịnh tiến theo vòng lặp cha) -->
                                                         <span class="cell-number">
-                                                            <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
+                                                            <span t-out="kq_index + 1"/>
                                                         </span>
 
                                                         <div class="cell-write-space">
@@ -397,8 +427,9 @@
                                                     <t t-set="should_fallback_gray" t-value="is_fallback_sunday or is_fallback_future"/>
 
                                                     <div t-attf-class="day-tracking-box #{should_fallback_gray and 'box-print-rest' or ''}">
+                                                        <!-- 🌟 ĐỒNG BỘ HIỂN THỊ: Giữ nguyên số thứ tự 1, 2, 3... -->
                                                         <span class="cell-number">
-                                                            <span t-out="computed_date.strftime('%d/%m')"/>
+                                                            <span t-out="day_idx + 1"/>
                                                         </span>
                                                         <div class="cell-write-space">
                                                             <t t-if="is_fallback_future"></t>
@@ -410,15 +441,12 @@
 
                                         </div>
 
-                                        <!-- Khối badge kết quả tổng kết biên dưới -->
-                                        <div style="margin-top: 4px; padding-top: 4px; font-size: 13px; text-align: left; color: #1e293b;">
-                                            <span class="text-bold">Kết quả can thiệp <span t-out="o.songay"/> của kế hoạch:
-                                                Chưa đạt (-):<span class="text-bold text-danger" t-field="muctieu.ketqua_khongdat"/> ngày
-                                               | Hình thành (+/-):<span class="text-bold text-warning" t-field="muctieu.ketqua_hinhthanh"/> ngày
-                                               | Đạt(+):<span class="text-bold text-success" t-field="muctieu.ketqua_dat"/> ngày
-
-
-                                            </span>
+                                        <!-- Khối badge kết quả tổng kết biên dưới phối màu Pastel đồng bộ -->
+                                        <div style="margin-top: 4px; padding-top: 4px; font-size: 13px; text-align: left; color: #1e293b; border-top: 1px dashed #e2e8f0;">
+                                            <span class="text-bold">Kết quả <strong><span t-out="o.songay"/></strong> ngày của kế hoạch:</span>
+                                            Chưa đạt (-): <span class="lbl-summary-chuadat"><span t-field="muctieu.ketqua_khongdat"/></span> |
+                                            Hình thành (+/-): <span class="lbl-summary-hinhthanh"><span t-field="muctieu.ketqua_hinhthanh"/></span> |
+                                            Đạt (+): <span class="lbl-summary-dat"><span t-field="muctieu.ketqua_dat"/></span>
                                         </div>
                                     </div>
                                 </div>
