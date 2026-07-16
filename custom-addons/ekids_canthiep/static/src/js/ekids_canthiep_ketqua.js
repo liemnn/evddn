@@ -37,6 +37,7 @@ export class CanThiepKetQuaWidget extends Component {
     async buildKehoachKetQua2MucTieu() {
         const ketqua2muctieu = this.props.record.data[this.props.name].records || [];
 
+        // Sắp xếp bản ghi theo ngày
         let sortedRecords = [...ketqua2muctieu].sort((a, b) => {
             let dateA = a.data.ngay ? (typeof a.data.ngay === 'object' ? a.data.ngay.toISODate() : String(a.data.ngay)) : '';
             let dateB = b.data.ngay ? (typeof b.data.ngay === 'object' ? b.data.ngay.toISODate() : String(b.data.ngay)) : '';
@@ -50,58 +51,52 @@ export class CanThiepKetQuaWidget extends Component {
             const d = index + 1;
             const currentDateStr = rec.data.ngay;
             const rawStatusValue = rec.data.trangthai;
-            const rawLoaiValue = rec.data.loai; // 🌟 Lấy field loai từ Backend
+            const rawLoaiValue = rec.data.loai;
 
-            if (rawStatusValue === "1") countDat++;
-            else if (rawStatusValue === "-1") countChuaDat++;
-            else if (rawStatusValue === "2") countHinhThanh++;
+            // LOGIC TỔNG HỢP KẾT QUẢ: CHỈ TÍNH KHI ĐI HỌC (loai === '1')
+            if (rawLoaiValue === "1") {
+                if (rawStatusValue === "1") countDat++;
+                else if (rawStatusValue === "-1") countChuaDat++;
+                else if (rawStatusValue === "2") countHinhThanh++;
+            }
 
-            let dateDisplayStr = "";
             let dateShortStr = "";
-
             if (currentDateStr) {
                 if (typeof currentDateStr === 'object' && currentDateStr.toFormat) {
-                    dateDisplayStr = currentDateStr.toFormat('dd/MM/yyyy');
                     dateShortStr = currentDateStr.toFormat('dd/MM');
                 } else {
                     const parts = String(currentDateStr).split('-');
-                    if (parts.length === 3) {
-                        dateDisplayStr = `${parts[2]}/${parts[1]}/${parts[0]}`;
-                        dateShortStr = `${parts[2]}/${parts[1]}`;
-                    } else {
-                        dateDisplayStr = String(currentDateStr);
-                        dateShortStr = String(currentDateStr);
-                    }
+                    dateShortStr = parts.length === 3 ? `${parts[2]}/${parts[1]}` : String(currentDateStr);
                 }
             } else {
                 dateShortStr = `${d}`;
             }
-
-            const cleanComment = this._extractPlainText(rec.data.desc);
 
             tempGrid.push({
                 dayNum: d,
                 resId: rec.resId,
                 rawRecord: rec,
                 trangthaiValue: rawStatusValue,
-                loai: rawLoaiValue, // 🌟 Đẩy loai vào Grid để template XML xử lý render
+                loai: rawLoaiValue, // Truyền field loai xuống template
                 is_date_status: rec.data.is_date_status,
-                comment: cleanComment,
-                dateDisplayStr: dateDisplayStr,
+                comment: this._extractPlainText(rec.data.desc),
+                dateDisplayStr: currentDateStr ? (typeof currentDateStr === 'object' ? currentDateStr.toFormat('dd/MM/yyyy') : currentDateStr) : '',
                 dateShortStr: dateShortStr,
-                tooltipText: dateDisplayStr
+                tooltipText: currentDateStr ? String(currentDateStr) : ''
             });
         });
 
         this.state.daysGrid = tempGrid;
 
         const totalEvaluated = countDat + countHinhThanh + countChuaDat;
+
         this.state.summary = {
             total: tempGrid.length,
             dat: countDat,
             hinhthanh: countHinhThanh,
             chuadat: countChuaDat,
-            phantram: totalEvaluated ? Math.round((countDat / totalEvaluated) * 100) : 0
+            totalEvaluated: totalEvaluated,
+            phantram: totalEvaluated ? Math.round((totalEvaluated/ tempGrid.length) * 100) : 0
         };
 
         if (this.state.selectedDay) {
@@ -117,12 +112,12 @@ export class CanThiepKetQuaWidget extends Component {
     }
 
     selectQuickStatus(statusValue) {
-        if (!this.state.selectedDay || this.state.selectedDay.loai === "0" || this.state.selectedDay.loai === "-1") return;
+        if (!this.state.selectedDay || this.state.selectedDay.loai !== "1") return;
         this.state.selectedDay.trangthaiValue = statusValue;
     }
 
     async saveInlineData() {
-        if (this.props.readonly || this.state.selectedDay.loai === "0" || this.state.selectedDay.loai === "-1") return;
+        if (this.props.readonly || this.state.selectedDay.loai !== "1") return;
         const day = this.state.selectedDay;
         const commentElem = document.getElementById("matrix_quick_desc");
         const nextStatus = day.trangthaiValue;

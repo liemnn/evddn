@@ -101,10 +101,10 @@
                     <i class="fa fa-calendar text-primary"></i> LỊCH TIẾN TRÌNH CAN THIỆP
                 </div>
                 <div class="d-flex align-items-center gap-1.5">
-                    <span class="badge-flat b-danger"><t t-esc="state.summary.chuadat"/> (-)</span>
-                    <span class="badge-flat b-warning"><t t-esc="state.summary.hinhthanh"/> (+/-)</span>
-                    <span class="badge-flat b-success"><t t-esc="state.summary.dat"/> (+)</span>
-                    <span class="badge-flat b-total"><t t-esc="state.summary.dat"/>/<t t-esc="state.summary.total"/> (<t t-esc="state.summary.phantram"/>%)</span>
+                    <span class="badge-flat b-danger">Chưa đạt (-): <t t-esc="state.summary.chuadat"/></span>
+                    <span class="badge-flat b-warning">Hình thành (+/-): <t t-esc="state.summary.hinhthanh"/></span>
+                    <span class="badge-flat b-success">Đạt (+): <t t-esc="state.summary.dat"/></span>
+                    <span class="badge-flat b-total"><t t-esc="state.summary.totalEvaluated"/>/<t t-esc="state.summary.total"/> (<t t-esc="state.summary.phantram"/>%)</span>
                 </div>
             </div>
 

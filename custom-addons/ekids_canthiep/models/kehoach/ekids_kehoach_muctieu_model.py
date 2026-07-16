@@ -97,6 +97,7 @@ class KeHoach2MucTieu(models.Model):
     ketqua_dat= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_dat")
     ketqua_hinhthanh= fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_hinhthanh")
     ketqua_khongdat = fields.Integer(string="Kết quả Đạt", compute="_compute_ketqua_khongdat")
+    tong_ngay_cothe_canthiep = fields.Integer(string="Kết quả Đạt", compute="_compute_tong_ngay_cothe_canthiep")
 
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
     is_delete = fields.Boolean(compute="_compute_is_delete")
@@ -337,6 +338,11 @@ class KeHoach2MucTieu(models.Model):
                             and ketqua.loai =='1'):
                         tong += 1
             mt.ketqua_hinhthanh=tong
+
+    @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
+    def _compute_tong_ngay_cothe_canthiep(self):
+        for mt in self:
+            mt.tong_ngay_cothe_canthiep = mt.kehoach_id.songay
 
 
     def _compute_sequence(self):
