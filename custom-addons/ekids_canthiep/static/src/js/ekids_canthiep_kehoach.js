@@ -91,7 +91,7 @@ export class CanThiepKehoachWidget extends Component {
                 ,"is_canthiep"
                 ,"is_kiemduyet"
                 ],
-                { order: "sequence asc" }
+                { order: "sequence asc,id asc" }
             );
 
             // 🌟 MỚI: Kiểm tra xem trong toàn bộ danh sách trả về, có bất kỳ mục tiêu nào đã đạt (trangthai === '1') chưa
