@@ -70,6 +70,8 @@ class KeHoachCopyAbstractModel(models.AbstractModel):
                             "kehoach_linhvuc_id":linhvuc.id,
                             "kehoach_muctieu_thangtruoc_id": mt_thangtruoc.id,
                             "muctieu_id": mt_thangtruoc.muctieu_id.id,
+                            "muctieu_them": mt_thangtruoc.muctieu_them,
+                            "ghichu": mt_thangtruoc.ghichu,
                             "trangthai":"0"
                         }
                         kehoach_muctieu = self.env['ekids.kehoach_muctieu'].create(data)
