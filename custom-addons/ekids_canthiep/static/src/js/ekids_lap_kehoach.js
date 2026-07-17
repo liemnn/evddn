@@ -83,6 +83,7 @@ export class LapKehoachWidget extends Component {
                 ,"tieuchi_chuadat"
                 ,"tieuchi_hinhthanh"
                 ,"tieuchi_dat"
+                ,'is_bientap_temp'
                 ,"is_readonly"
                 ,"is_delete"
                 ],
@@ -174,6 +175,29 @@ export class LapKehoachWidget extends Component {
             console.error(error);
         }
     }
+
+    async open_GV_BienTap_NoiDung_MucTieu(targetId) {
+    // 🌟 CHỐT CHẶN: Nếu form đang readonly, chặn không cho mở form biên tập chuyên môn
+    if (this.props.readonly) {
+        this.notification.add("Kế hoạch đã khóa (Read-only), không thể biên tập nội dung chuyên môn!", { type: "danger" });
+        return;
+    }
+
+    try {
+        // Gọi hàm Python từ model ekids.kehoach_muctieu để xin cấu hình Action popup
+        const action = await this.orm.call("ekids.kehoach_muctieu", "action_giaovien_bientap_thietke_muctieu", [targetId]);
+        if (action) {
+            this.actionService.doAction(action, {
+                onClose: async () => {
+                    // Tự động load lại dữ liệu phẳng để cập nhật nội dung HTML vừa sửa lên widget
+                    await this.loadAllPlanData();
+                }
+            });
+        }
+    } catch (error) {
+        console.error("Lỗi khi gọi action biên tập mục tiêu từ backend:", error);
+    }
+}
 
     toggleNoteInline(targetId) {
         this.state.activeNotes[targetId] = !this.state.activeNotes[targetId];

@@ -40,9 +40,9 @@ class KeHoach2MucTieu(models.Model):
                                  ondelete="cascade")
 
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc',
-                                 related="muctieu_id.linhvuc_id", string='Lĩnh vực', required=True, ondelete="cascade")
+                                 related="kehoach_linhvuc_id.linhvuc_id", string='Lĩnh vực', required=True, ondelete="cascade")
     tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi',
-                              related="muctieu_id.tuoi_id", required=True, ondelete="cascade")
+                              related="kehoach_linhvuc_id.tuoi_id", required=True, ondelete="cascade")
 
     name = fields.Char("Tên",compute="_compute_name")
     muctieu_them = fields.Char("Tên")
@@ -59,6 +59,15 @@ class KeHoach2MucTieu(models.Model):
     tieuchi_dat = fields.Char(string="Đạt (+)",compute="_compute_tieuchi_dat")
 
     muctieu_id = fields.Many2one('ekids.ct_muctieu', string='Mục tiêu', ondelete="cascade")
+
+    chucnang_temp = fields.Html(string="Chức năng phát triển cốt lõi & Lập luận lâm sàng")
+    thietke_temp = fields.Html(string="Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)")
+    tieuchi_chuadat_temp = fields.Char(string="Chưa đạt (-)")
+    tieuchi_hinhthanh_temp = fields.Char(string="Đang hình thành (+/-)")
+    tieuchi_dat_temp = fields.Char(string="Đạt (+)")
+
+    is_bientap_temp = fields.Boolean(compute="_compute_is_is_bientap_temp")
+
 
     # 🌟 1. TRƯỜNG ĐỨNG TRƯỚC (Predecessor - Many2one về chính mình)
     kehoach_muctieu_truoc_id = fields.Many2one(
@@ -111,6 +120,19 @@ class KeHoach2MucTieu(models.Model):
     is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
     is_canthiep_readonly = fields.Boolean(compute="_compute_is_canthiep_readonly")
     is_kiemduyet_readonly = fields.Boolean(compute="_compute_is_kiemduyet_readonly")
+
+
+    def _compute_is_is_bientap_temp(self):
+
+        for record in self:
+            is_is_bientap_temp = False
+            if not record.muctieu_id:
+                is_is_bientap_temp = True
+            else:
+                if (string_util._is_html_empty(record.muctieu_id.chucnang)
+                    or string_util._is_html_empty(record.muctieu_id.thietke)):
+                    is_is_bientap_temp = True
+            record.is_bientap_temp = is_is_bientap_temp
 
     def _compute_is_kiemduyet_readonly(self):
         user = self.env.user
@@ -406,22 +428,63 @@ class KeHoach2MucTieu(models.Model):
 
     def _compute_chucnang(self):
         for mt in self:
-            mt.chucnang =mt.muctieu_id.chucnang
+            if mt.muctieu_id and mt.muctieu_id.chucnang:
+                mt.chucnang =mt.muctieu_id.chucnang
+            else:
+                mt.chucnang = mt.chucnang_temp
+
+
+
+
+    # 1. COMPUTE CHỨC NĂNG (Kiểu HTML)
+    @api.depends('muctieu_id', 'muctieu_id.chucnang', 'chucnang_temp')
+    def _compute_chucnang(self):
+        for mt in self:
+            if (mt.muctieu_id
+                    and not string_util._is_html_empty(mt.muctieu_id.chucnang)):
+                mt.chucnang = mt.muctieu_id.chucnang
+            else:
+                mt.chucnang = mt.chucnang_temp or ''
+
+    # 2. COMPUTE THIẾT KẾ (Kiểu HTML)
+    @api.depends('muctieu_id', 'muctieu_id.thietke', 'thietke_temp')
     def _compute_thietke(self):
         for mt in self:
-            mt.thietke =mt.muctieu_id.thietke
+            if (mt.muctieu_id
+                    and not string_util._is_html_empty(mt.muctieu_id.thietke)):
+                mt.thietke = mt.muctieu_id.thietke
+            else:
+                mt.thietke = mt.thietke_temp or ''
 
+    # 3. COMPUTE TIÊU CHÍ CHƯA ĐẠT (Kiểu Char)
+    @api.depends('muctieu_id', 'muctieu_id.tieuchi_chuadat', 'tieuchi_chuadat_temp')
     def _compute_tieuchi_chuadat(self):
         for mt in self:
-            mt.tieuchi_chuadat =mt.muctieu_id.tieuchi_chuadat
+            if (mt.muctieu_id
+                    and not string_util._is_char_empty(mt.muctieu_id.tieuchi_chuadat)):
+                mt.tieuchi_chuadat = mt.muctieu_id.tieuchi_chuadat
+            else:
+                mt.tieuchi_chuadat = mt.tieuchi_chuadat_temp or ''
 
+    # 4. COMPUTE TIÊU CHÍ ĐANG HÌNH THÀNH (Kiểu Char)
+    @api.depends('muctieu_id', 'muctieu_id.tieuchi_hinhthanh', 'tieuchi_hinhthanh_temp')
     def _compute_tieuchi_hinhthanh(self):
         for mt in self:
-            mt.tieuchi_hinhthanh =mt.muctieu_id.tieuchi_hinhthanh
+            if (mt.muctieu_id
+                    and not string_util._is_char_empty(mt.muctieu_id.tieuchi_hinhthanh)):
+                mt.tieuchi_hinhthanh = mt.muctieu_id.tieuchi_hinhthanh
+            else:
+                mt.tieuchi_hinhthanh = mt.tieuchi_hinhthanh_temp or ''
 
+    # 5. COMPUTE TIÊU CHÍ ĐẠT (Kiểu Char)
+    @api.depends('muctieu_id', 'muctieu_id.tieuchi_dat', 'tieuchi_dat_temp')
     def _compute_tieuchi_dat(self):
         for mt in self:
-            mt.tieuchi_dat =mt.muctieu_id.tieuchi_dat
+            if (mt.muctieu_id
+                    and not string_util._is_char_empty(mt.muctieu_id.tieuchi_dat)):
+                mt.tieuchi_dat = mt.muctieu_id.tieuchi_dat
+            else:
+                mt.tieuchi_dat = mt.tieuchi_dat_temp or ''
 
     def action_canthiep(self):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_capnhat_ketqua_form').id
@@ -543,6 +606,24 @@ class KeHoach2MucTieu(models.Model):
             'views': [(self.env.ref('ekids_canthiep.kehoach_muctieu_form_view_compact').id, 'form')],
             'target': 'new',
             'context': self.env.context,
+        }
+
+    def action_giaovien_bientap_thietke_muctieu(self):
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_bientap_thietke_form').id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'BIÊN TẬP NỘI DUNG THIẾT KÉ CAN THIỆP CHO MỤC TIÊU',
+            'res_model': 'ekids.kehoach_muctieu',
+            'view_mode': 'form',
+            'views': [(form_view_id, 'form')],
+            'res_id': self.id,
+            'target': 'new',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.id,
+                'default_linhvuc_id': self.linhvuc_id.id,
+                'default_tuoi_id': self.tuoi_id.id
+            },
         }
 
     @api.model_create_multi

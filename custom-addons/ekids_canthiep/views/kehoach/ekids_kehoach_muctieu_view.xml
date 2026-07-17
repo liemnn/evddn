@@ -677,5 +677,297 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ekids_canthiep.kehoach_muctieu_bientap_thietke_form">
+        <field name="name">ekids.kehoach_muctieu.form.super.compact</field>
+        <field name="model">ekids.kehoach_muctieu</field>
+        <field name="arch" type="xml">
+            <form string="Cập nhật thông tin mục tiêu">
+                <field name="kehoach_linhvuc_id" invisible="1"/>
+
+                <sheet>
+                    <style>
+                        .o_form_view .o_form_sheet_bg { background-color: #f8fafc !important; padding-top: 0 !important;}
+                        .o_form_sheet { padding: 0 !important; max-width: 100% !important; border: none !important; background: transparent !important; }
+
+                        /* Dải banner mỏng phía trên tạo điểm nhấn chuyên môn */
+                        .kh-hero-banner-mini {
+                            height: 50px;
+                            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+                            border-bottom: 1px solid #c7d2fe;
+                            margin-bottom: 15px;
+                        }
+
+                        .kh-content-wrapper-mini { padding: 0 20px 20px 20px; }
+
+                        /* 🌟 CSS MỚI: TÊN MỤC TIÊU ĐỂ TRẮNG HOÀN TOÀN, KHÔNG HỘP MÀU, KHÔNG RỐI */
+                        .kh-target-name-clean-container {
+                            margin-bottom: 25px;
+                            padding: 5px 0;
+                        }
+                        .kh-target-name-clean-container .lbl-header-clean {
+                            font-size: 11px;
+                            font-weight: 800;
+                            color: #94a3b8; /* Màu chữ tag tiêu đề mờ nhẹ để tôn tên mục tiêu */
+                            text-transform: uppercase;
+                            margin-bottom: 6px;
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                            letter-spacing: 0.5px;
+                        }
+                        .kh-target-name-clean-container .o_field_widget {
+                            font-size: 18px !important; /* Tăng size chữ lên một chút tạo điểm nhấn */
+                            font-weight: 700 !important;
+                            color: #1e293b !important;
+                            line-height: 1.5 !important;
+                            white-space: normal !important;
+                            display: block !important;
+                            border: none !important;
+                            background: transparent !important;
+                            padding: 0 !important;
+                        }
+
+                        /* Card Lĩnh vực &amp; Độ tuổi trên đầu form */
+                        .kh-top-cards-container {
+                            display: flex;
+                            gap: 15px;
+                            margin-bottom: 25px;
+                        }
+                        .kh-card-highlight {
+                            flex: 1;
+                            background: #ffffff;
+                            border: 1px solid #dbe2ef;
+                            border-radius: 12px;
+                            padding: 12px 18px;
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                        }
+                        .kh-card-highlight .lbl {
+                            font-size: 11px;
+                            font-weight: 800;
+                            color: #64748b;
+                            text-transform: uppercase;
+                            margin-bottom: 4px;
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                        }
+                        .kh-card-highlight .o_field_widget {
+                            font-size: 16px !important;
+                            font-weight: 900 !important;
+                            color: #4f46e5 !important;
+                            border: none !important;
+                            background: transparent !important;
+                        }
+
+                        /* KHỐI BIÊN TẬP HTML RỘNG RÃI */
+                        .kh-input-row-html {
+                            margin-bottom: 20px;
+                            border-radius: 10px;
+                            border: 1px solid #e2e8f0;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+                            overflow: hidden;
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        .kh-input-row-html .kh-row-title-bar {
+                            padding: 10px 20px;
+                            font-weight: 850;
+                            font-size: 13px;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                        }
+
+                        /* Tone màu Tím cho Chức năng */
+                        .row-chucnang { border-left: 6px solid #8b5cf6; }
+                        .row-chucnang .kh-row-title-bar { background-color: #f5f3ff; color: #6d28d9; }
+
+                        /* Tone màu Cam cho Thiết kế */
+                        .row-thietke { border-left: 6px solid #f97316; }
+                        .row-thietke .kh-row-title-bar { background-color: #fff7ed; color: #c2410c; }
+
+                        /* Khối soạn thảo bên trong giãn rộng */
+                        .kh-html-editor-container {
+                            padding: 15px 20px;
+                            background: #ffffff;
+                        }
+
+                        /* KHỐI TIÊU CHÍ ĐÁNH GIÁ ĐỒNG HÀNG (3 CỘT TRÊN 1 HÀNG) */
+                        .kh-assessment-panel {
+                            margin-bottom: 20px;
+                            background: #ffffff;
+                            border: 1px solid #e2e8f0;
+                            border-left: 6px solid #10b981;
+                            border-radius: 10px;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+                        }
+                        .kh-assessment-panel .panel-header {
+                            padding: 12px 20px;
+                            background-color: #f0fdf4;
+                            color: #047857;
+                            font-weight: 850;
+                            font-size: 13px;
+                            text-transform: uppercase;
+                            border-bottom: 1px solid #dcfce7;
+                        }
+                        .kh-assessment-body-grid {
+                            display: flex;
+                            gap: 15px;
+                            padding: 20px;
+                        }
+
+                        /* Từng ô tiêu chí nhỏ bên trong */
+                        .kh-criterion-cell {
+                            flex: 1;
+                            padding: 15px;
+                            border-radius: 8px;
+                            background: #ffffff;
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        .kh-criterion-cell .cell-title {
+                            font-size: 12px;
+                            font-weight: 850;
+                            text-transform: uppercase;
+                            text-align: center;
+                            margin-bottom: 12px;
+                            letter-spacing: 0.3px;
+                        }
+
+                        /* Phối màu 3 ô con */
+                        .cell-dat { border: 1px solid #a7f3d0; }
+                        .cell-dat .cell-title { color: #059669; }
+
+                        .cell-hinhthanh { border: 1px solid #fef08a; }
+                        .cell-hinhthanh .cell-title { color: #ca8a04; }
+
+                        .cell-chuadat { border: 1px solid #fecaca; }
+                        .cell-chuadat .cell-title { color: #dc2626; }
+
+                        .o_field_widget {
+                            width: 100% !important;
+                            display: block !important;
+                        }
+
+                        /* Custom ô nhập text thô cho Tiêu chí */
+                        .kh-input-char-box .o_input {
+                            font-size: 13px !important;
+                            font-weight: 600 !important;
+                            color: #475569 !important;
+                            border: none !important;
+                            border-bottom: 1px dashed #cbd5e1 !important;
+                            background: transparent !important;
+                            padding: 6px 0 !important;
+                            box-shadow: none !important;
+                            border-radius: 0 !important;
+                            width: 100% !important;
+                            text-align: center;
+                        }
+                        .kh-input-char-box .o_input:focus {
+                            border-bottom: 1px solid #3b82f6 !important;
+                        }
+
+                        @media (max-width: 992px) {
+                            .kh-assessment-body-grid {
+                                flex-direction: column;
+                                gap: 12px;
+                            }
+                        }
+                    </style>
+
+                    <!-- Banner nhỏ trang trí -->
+                    <div class="kh-hero-banner-mini"></div>
+
+                    <div class="kh-content-wrapper-mini">
+
+                        <!-- 🌟 ĐÃ SỬA: TÊN MỤC TIÊU CHỮ ĐẬM, NỀN TRẮNG PHẲNG TỰ NHIÊN XÓA BỎ VÙNG MÀU RỐI MẮT -->
+                        <div class="kh-target-name-clean-container">
+                            <span class="lbl-header-clean">
+                                <i class="fa fa-caret-right" style="color: #64748b;"></i> Đang biên tập mục tiêu
+                            </span>
+                            <field name="name" readonly="1" options="{'no_open': True}"/>
+                        </div>
+
+                        <!-- PHẦN 1: THÔNG TIN ĐỊNH VỊ LĨNH VỰC &amp; ĐỘ TUỔI -->
+                        <div class="kh-top-cards-container">
+                            <div class="kh-card-highlight">
+                                <span class="lbl">
+                                    <i class="fa fa-cubes" style="font-size: 13px; color: #64748b;"></i> LĨNH VỰC
+                                </span>
+                                <field name="linhvuc_id" readonly="1" options="{'no_open': True}"/>
+                            </div>
+
+                            <div class="kh-card-highlight">
+                                <span class="lbl">
+                                    <i class="fa fa-child" style="font-size: 13px; color: #64748b;"></i> ĐỘ TUỔI
+                                </span>
+                                <field name="tuoi_id" readonly="1" options="{'no_open': True}"/>
+                            </div>
+                        </div>
+
+                        <!-- PHẦN 2: KHỐI BIÊN TẬP HTML RỘNG RÃI -->
+
+                        <!-- Ô Chức năng (Tone Tím) -->
+                        <div class="kh-input-row-html row-chucnang">
+                            <div class="kh-row-title-bar">
+                                <i class="fa fa-tag" style="margin-right: 6px;"></i> Chức năng phát triển cốt lõi và lập luận lâm sàng
+                            </div>
+                            <div class="kh-html-editor-container">
+                                <field name="chucnang_temp" placeholder="Nhập nội dung chức năng cốt lõi và lập luận lâm sàng tại đây..." nolabel="1"/>
+                            </div>
+                        </div>
+
+                        <!-- Ô Thiết kế hoạt động (Tone Cam) -->
+                        <div class="kh-input-row-html row-thietke">
+                            <div class="kh-row-title-bar">
+                                <i class="fa fa-lightbulb-o" style="margin-right: 6px;"></i> Thiết kế hoạt động cho giáo viên theo mô tả (ABC)
+                            </div>
+                            <div class="kh-html-editor-container">
+                                <field name="thietke_temp" placeholder="Mô tả chi tiết thiết kế hoạt động giảng dạy..." nolabel="1"/>
+                            </div>
+                        </div>
+
+                        <!-- PHẦN 3: PANEL TIÊU CHÍ ĐÁNH GIÁ MỨC ĐỘ THÀNH THỰC (ĐỒNG HÀNG 3 CỘT) -->
+                        <div class="kh-assessment-panel">
+                            <div class="panel-header">
+                                <i class="fa fa-check-square-o" style="margin-right: 6px;"></i> Tiêu chí đánh giá mức độ thành thục
+                            </div>
+                            <div class="kh-assessment-body-grid">
+
+                                <!-- Cột Đạt (+) -->
+                                <div class="kh-criterion-cell cell-dat">
+                                    <div class="cell-title">Đạt (+)</div>
+                                    <div class="kh-input-char-box">
+                                        <field name="tieuchi_dat_temp" placeholder="Mô tả tiêu chí Đạt..." nolabel="1"/>
+                                    </div>
+                                </div>
+
+                                <!-- Cột Đang hình thành (+/-) -->
+                                <div class="kh-criterion-cell cell-hinhthanh">
+                                    <div class="cell-title">Đang hình thành (+/-)</div>
+                                    <div class="kh-input-char-box">
+                                        <field name="tieuchi_hinhthanh_temp" placeholder="Mô tả tiêu chí Đang hình thành..." nolabel="1"/>
+                                    </div>
+                                </div>
+
+                                <!-- Cột Chưa đạt (-) -->
+                                <div class="kh-criterion-cell cell-chuadat">
+                                    <div class="cell-title">Chưa đạt (-)</div>
+                                    <div class="kh-input-char-box">
+                                        <field name="tieuchi_chuadat_temp" placeholder="Mô tả tiêu chí Chưa đạt..." nolabel="1"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
   </data>
 </odoo>
