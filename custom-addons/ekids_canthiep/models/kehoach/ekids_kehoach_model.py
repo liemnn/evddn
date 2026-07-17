@@ -421,6 +421,38 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         if self.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
             self.trangthai_pheduyet = kehoach_util.PHEDUYET_DA_DUYET
             self.trangthai = kehoach_util.KEHOACH_DANG_CANTHIEP
+            # cập nhật kết quả mục tiêu biên tập vào chương trình
+            self.func_capnhat_thietke_muctieu_vao_chuongtrinh()
+
+    def func_capnhat_thietke_muctieu_vao_chuongtrinh(self):
+        kehoach_linhvucs = self.kehoach_linhvuc_ids
+        if kehoach_linhvucs:
+            for kehoach_linhvuc in kehoach_linhvucs:
+                kehoach_muctieus = kehoach_linhvuc.kehoach_muctieu_ids
+                if kehoach_muctieus:
+                    for kehoach_muctieu in kehoach_muctieus:
+                        if kehoach_muctieu.muctieu_id:
+                            kehoach_muctieu._compute_is_bientap_temp()
+                            if kehoach_muctieu.is_bientap_temp:
+                                ct_muctieu = kehoach_muctieu.muctieu_id
+                                if ct_muctieu:
+                                    # bat dau cap nhat tung phan tu
+                                    if not string_util._is_html_empty(kehoach_muctieu.chucnang_temp):
+                                        setattr(ct_muctieu,"chucnang",kehoach_muctieu.chucnang_temp)
+
+                                    if not string_util._is_html_empty(kehoach_muctieu.thietke_temp):
+                                        setattr(ct_muctieu,"thietke",kehoach_muctieu.thietke_temp)
+
+                                    if not string_util._is_char_empty(kehoach_muctieu.tieuchi_chuadat_temp):
+                                        setattr(ct_muctieu,"tieuchi_chuadat",kehoach_muctieu.tieuchi_chuadat_temp)
+
+                                    if not string_util._is_char_empty(kehoach_muctieu.tieuchi_hinhthanh_temp):
+                                        setattr(ct_muctieu,"tieuchi_hinhthanh",kehoach_muctieu.tieuchi_hinhthanh_temp)
+
+                                    if not string_util._is_char_empty(kehoach_muctieu.tieuchi_dat_temp):
+                                        setattr(ct_muctieu,"tieuchi_dat",kehoach_muctieu.tieuchi_dat_temp)
+
+
 
 
 

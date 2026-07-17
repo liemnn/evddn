@@ -66,7 +66,7 @@ class KeHoach2MucTieu(models.Model):
     tieuchi_hinhthanh_temp = fields.Char(string="Đang hình thành (+/-)")
     tieuchi_dat_temp = fields.Char(string="Đạt (+)")
 
-    is_bientap_temp = fields.Boolean(compute="_compute_is_is_bientap_temp")
+    is_bientap_temp = fields.Boolean(compute="_compute_is_bientap_temp")
 
 
     # 🌟 1. TRƯỜNG ĐỨNG TRƯỚC (Predecessor - Many2one về chính mình)
@@ -122,17 +122,17 @@ class KeHoach2MucTieu(models.Model):
     is_kiemduyet_readonly = fields.Boolean(compute="_compute_is_kiemduyet_readonly")
 
 
-    def _compute_is_is_bientap_temp(self):
+    def _compute_is_bientap_temp(self):
 
         for record in self:
-            is_is_bientap_temp = False
+            is_bientap_tem = False
             if not record.muctieu_id:
-                is_is_bientap_temp = True
+                is_bientap_tem = True
             else:
                 if (string_util._is_html_empty(record.muctieu_id.chucnang)
                     or string_util._is_html_empty(record.muctieu_id.thietke)):
-                    is_is_bientap_temp = True
-            record.is_bientap_temp = is_is_bientap_temp
+                    is_bientap_tem = True
+            record.is_bientap_temp = is_bientap_tem
 
     def _compute_is_kiemduyet_readonly(self):
         user = self.env.user
