@@ -47,7 +47,7 @@
 
                         /* STYLE MA TRẬN BẢNG PROFILE HỢP NHẤT */
                         .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; table-layout: fixed; }
-                        .profile-grid-table td { border: 1px solid #000000 !important; padding: 7px 9px; font-size: 15px !important; vertical-align: middle; color: #000000 !important; font-weight: bold !important; }
+                        .profile-grid-table td { border: 1px solid #000000 !important; padding: 7px 9px; font-size: 15px !important; vertical-align: middle; color: #000000 !important; }
 
                         .col-lbl-left  { width: 11%; font-weight: bold !important; background-color: #eeeeee !important; }
                         .col-val-left  { width: 22%; }
@@ -67,7 +67,7 @@
                         }
 
                         .print-title-section { display: table; width: 100%; border-bottom: 1px solid #000000 !important; padding-bottom: 4px; margin-bottom: 8px; }
-                        .print-main-title { display: table-cell; width: 55%; font-size: 16px !important; font-weight: bold !important; vertical-align: bottom; text-align: left; color: #000000 !important; }
+                        .print-main-title { display: table-cell; width: 55%; font-size: 16px !important; vertical-align: bottom; text-align: left; color: #000000 !important; }
 
                         .goal-note-text {
                             font-size: 15px !important;
@@ -78,7 +78,7 @@
                             display: block;
                         }
 
-                        .print-meta-text { display: table-cell; width: 45%; font-size: 14px !important; font-weight: bold !important; vertical-align: bottom; text-align: right; color: #000000 !important; }
+                        .print-meta-text { display: table-cell; width: 45%; font-size: 14px !important;vertical-align: bottom; text-align: right; color: #000000 !important; }
 
                         .top-row-grid { display: table; width: 100%; border-bottom: 1px dashed #000000 !important; padding-bottom: 8px; margin-bottom: 8px; }
                         .left-sub-block { display: table-cell; width: 50%; padding-right: 12px; border-right: 1px dashed #000000 !important; vertical-align: top !important; }
@@ -102,8 +102,8 @@
                         /* TỐI ƯU Ô CHẤM ĐIỂM SẮC NÉT THEO NGÀY THỰC TẾ */
                         .day-tracking-box {
                             width: 32px;
-                            height: 38px;
-                            border: 1px solid #000000 !important;
+                            height: 40px;
+                            border: 1px dashed #000000 !important;
                             border-radius: 4px;
                             display: flex;
                             flex-direction: column;
@@ -303,7 +303,7 @@
 
                                     <div class="print-title-section">
                                         <div class="print-main-title">
-                                            Mục tiêu <span t-out="muctieu_index + 1"/>: <span t-field="muctieu.muctieu_id.name"/>
+                                            <strong>Mục tiêu <span t-out="muctieu_index + 1"/>:</strong> <span t-field="muctieu.muctieu_id.name"/>
                                             <t t-if="muctieu.ghichu">
                                                 <span class="goal-note-text">Ghi chú: <span t-field="muctieu.ghichu"/></span>
                                             </t>
@@ -422,7 +422,7 @@
                                         </div>
 
                                         <!-- Khối badge kết quả tổng kết biên dưới phối màu Pastel đồng bộ -->
-                                        <div style="margin-top: 4px; padding-top: 4px; font-size: 15px; text-align: left; color: #000000; border-top: 1px dashed #000000; font-weight: bold;">
+                                        <div style="margin-top: 4px; padding-top: 4px; font-size: 15px; text-align: left; color: #000000; border-top: 1px dashed #000000;">
                                             <span class="text-bold">Kết quả <strong><span t-out="o.songay"/></strong> ngày của kế hoạch:</span>
                                             Chưa đạt (-): <span class="lbl-summary-chuadat"><span t-field="muctieu.ketqua_khongdat"/></span> |
                                             Hình thành (+/-): <span class="lbl-summary-hinhthanh"><span t-field="muctieu.ketqua_hinhthanh"/></span> |

@@ -348,7 +348,16 @@
             <field name="model">ekids.kehoach_ketluan</field>
             <field name="arch" type="xml">
                 <form class="o_premium_layout">
+                    <field name="is_phancong_lai" invisible="1"/>
                     <header>
+                        <button name="action_phancong_lai_giaovien"
+                            string="Phân công lại"
+                            type="object"
+                            icon="fa-share-alt"
+                            invisible="not is_phancong_lai"
+                            class="btn-default"
+                            />
+
 
                         <field name="trangthai" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': true}"/>
                     </header>

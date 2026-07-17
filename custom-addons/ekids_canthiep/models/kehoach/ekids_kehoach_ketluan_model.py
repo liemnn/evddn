@@ -83,6 +83,7 @@ class KetLuan(models.Model):
                                        , string="Phân công [Lập kế hoạch/Can thiệp]")
 
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
+    is_phancong_lai = fields.Boolean(compute="_compute_is_phancong_lai")
 
     kehoach_ids = fields.One2many("ekids.kehoach", "ketluan_id"
                                 , string="Các kế hoạch")
@@ -176,6 +177,14 @@ class KetLuan(models.Model):
                     record.is_readonly = False
                 else:
                     record.is_readonly = True
+
+    def _compute_is_phancong_lai(self):
+
+        for record in self:
+            is_phancong_lai = False
+            if record.trangthai == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH:
+                is_phancong_lai = True
+            record.is_phancong_lai = is_phancong_lai
 
     def _compute_name(self):
         for record in self:
@@ -366,3 +375,50 @@ class KetLuan(models.Model):
         except Exception as e:
             _logger.error(f"Lỗi xảy ra khi thực hiện sao chép kết luận: {str(e)}")
             raise UserError(f"Quá trình sao chép kết luận thất bại: {str(e)}")
+
+
+    def action_phancong_lai_giaovien(self):
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_phancong_lai_wizard_form').id
+        wizard = self.func_tao_macdinh_kehoach_ketluan_phancong_lai_wizard_form()
+        if wizard:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'PHÂN CÔNG LẠI GIÁO VIÊN',
+                'res_model': 'ekids.kehoach_ketluan_phancong_lai_wizard',
+                'view_mode': 'form',
+                'views': [(form_view_id, 'form')],
+                'res_id': wizard.id,
+                'target': 'new',
+                'domain': [('coso_id', '=', self.coso_id.id)],
+                'context': {'default_coso_id': self.coso_id.id},
+            }
+
+    def func_tao_macdinh_kehoach_ketluan_phancong_lai_wizard_form(self):
+        self.ensure_one()
+
+        # Lấy Giáo viên kiểm duyệt tổng thể của Kết luận
+        gv_kiemduyet_id = self.gv_kiemduyet_id.id if self.gv_kiemduyet_id else False
+
+        # 1. Duyệt qua các Kế hoạch thực tế thuộc Kết luận này để tạo các dòng chi tiết tương ứng
+        lines_data = []
+        if self.kehoach_ids:
+            for kh in self.kehoach_ids:
+                # Lấy giáo viên lập kế hoạch/can thiệp hiện tại của từng kế hoạch con
+                gv_hientai_id = kh.gv_lapkehoach_id.id if kh.gv_lapkehoach_id else False
+
+                lines_data.append((0, 0, {
+                    "kehoach_id": kh.id,  # Gán kế hoạch tương ứng (bắt buộc)
+                    "gv_canthiep_id": gv_hientai_id,  # Gán giáo viên đang phụ trách hiện tại để hiển thị mặc định
+                }))
+
+        # 2. Chuẩn bị dữ liệu tạo Wizard cha
+        data = {
+            "ketluan_id": self.id,
+            "gv_kiemduyet_id": gv_kiemduyet_id,
+            # Giữ nguyên danh sách giáo viên can thiệp được chọn tổng thể để làm Domain lọc ở bảng dưới
+            "gv_canthiep_ids": [(6, 0, self.gv_canthiep_ids.ids)] if self.gv_canthiep_ids else False,
+            "gv_canthiep_wizard_ids": lines_data,  # Đổ dữ liệu One2many đã chuẩn bị vào
+        }
+
+        wizard = self.env['ekids.kehoach_ketluan_phancong_lai_wizard'].create(data)
+        return wizard

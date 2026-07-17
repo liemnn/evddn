@@ -44,7 +44,7 @@
                         .top-sub-title { font-size: 15px !important; font-style: italic; margin-top: 2px; color: #000000 !important; }
 
                         .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; table-layout: fixed; }
-                        .profile-grid-table td { border: 1px solid #000000 !important; padding: 7px 9px; font-size: 15px !important; vertical-align: middle; color: #000000 !important; font-weight: bold !important; }
+                        .profile-grid-table td { border: 1px solid #000000 !important; padding: 7px 9px; font-size: 15px !important; vertical-align: middle; color: #000000 !important; }
                         .col-lbl-left  { width: 12%; font-weight: bold !important; background-color: #eeeeee !important; }
                         .col-val-left  { width: 21%; }
                         .col-linhvuc   { width: 25%; }
@@ -90,7 +90,6 @@
 
                         .goal-title-cell {
                             font-size: 16px !important;
-                            font-weight: bold !important;
                             line-height: 1.35;
                             display: inline-block;
                             color: #000000 !important;
@@ -118,7 +117,6 @@
                             border: 1px dashed #000000 !important;
                             padding: 2px 8px;
                             border-radius: 4px;
-                            font-weight: bold !important;
                             font-size: 14px !important;
                             color: #000000 !important;
                             white-space: nowrap;
@@ -143,12 +141,12 @@
 
                         .tracking-label {
                             font-size: 14px !important;
-                            font-weight: bold !important;
                             text-transform: uppercase;
                             color: #000000 !important;
                             width: 75px;
                             flex-shrink: 0;
                             margin-top: 6px;
+
                         }
 
                         .day-boxes-horizontal-flow {
@@ -161,8 +159,8 @@
                         /* TỐI ƯU Ô CHẤM ĐIỂM SẮC NÉT THEO NGÀY THỰC TẾ */
                         .day-tracking-box {
                             width: 32px;
-                            height: 38px;
-                            border: 1px solid #000000 !important;
+                            height: 40px;
+                            border: 1px dashed #000000 !important;
                             border-radius: 4px;
                             display: flex;
                             flex-direction: column;
@@ -231,7 +229,7 @@
                             padding-top: 6px;
                             margin-top: 2px;
                             text-align: left;
-                            font-weight: bold !important;
+
                         }
 
                         .text-bold { font-weight: bold !important; }
@@ -391,7 +389,7 @@
                                         <!-- HÀNG TRÊN -->
                                         <div class="goal-top-row">
                                             <div class="goal-title-cell">
-                                                Mục tiêu <t t-out="muctieu_index + 1"/>: <span t-field="muctieu.muctieu_id.name"/>
+                                                <strong>Mục tiêu <t t-out="muctieu_index + 1"/>:</strong> <span t-field="muctieu.muctieu_id.name"/>
                                                 <t t-if="muctieu.ghichu">
                                                     <span class="goal-note-text">Ghi chú: <span t-field="muctieu.ghichu"/></span>
                                                 </t>
@@ -408,7 +406,6 @@
                                         <div class="goal-bottom-row">
 
                                             <div class="tracking-container-row">
-                                                <div class="tracking-label">Theo dõi:</div>
 
                                                 <div class="day-boxes-horizontal-flow">
                                                     <!-- TRƯỜNG HỢP 1: ĐÃ KHỞI TẠO DỮ LIỆU CAN THIỆP THỰC TẾ -->
