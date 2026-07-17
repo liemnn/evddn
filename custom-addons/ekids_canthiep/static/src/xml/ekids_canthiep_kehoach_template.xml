@@ -157,7 +157,7 @@
                                                 <t t-esc="muctieu_index + 1"/>
                                             </span>
                                             <span class="target-text-wrap fw-semibold">
-                                                <t t-esc="muctieu.muctieu_id[1]"/>
+                                                <t t-esc="muctieu.name"/>
                                             </span>
                                         </div>
 
@@ -169,6 +169,7 @@
                                                       style="font-size: 12px; color: #EF4444; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px; white-space: nowrap;">
                                                     <i class="fa fa-history me-0.5"></i>Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)
                                                 </span>
+
                                                 <span t-else="" class="badge fw-bold px-2 py-0.5"
                                                       style="font-size: 12px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
                                                     <i class="fa fa-star me-0.5"></i>Mới

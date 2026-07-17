@@ -71,7 +71,9 @@ export class LapKehoachWidget extends Component {
                 [["kehoach_linhvuc_id", "in", linhVucLineIds]],
                 ["id"
                 ,"index"
+                ,"name"
                 ,"muctieu_id"
+                ,"muctieu_them"
                 ,"ghichu"
                 ,"kehoach_muctieu_thangtruoc_id"
                 ,"sothang_da_chuyenttiep"
@@ -84,7 +86,7 @@ export class LapKehoachWidget extends Component {
                 ,"is_readonly"
                 ,"is_delete"
                 ],
-                { order: "sequence asc" }
+                { order: "sequence asc, id asc" }
             );
 
             this.state.groupedData = linhVucLines.map(line => {
@@ -144,6 +146,25 @@ export class LapKehoachWidget extends Component {
 
         try {
             const action = await this.orm.call("ekids.kehoach_linhvuc", "action_them_muctieu_vao_kehoach_linhvuc", [lineId]);
+            if (action) {
+                this.actionService.doAction(action, {
+                    onClose: async () => { await this.loadAllPlanData(); }
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async open_GV_TaoMoi_MucTieu(lineId) {
+        // 🌟 CHỐT CHẶN 1: Nếu form đang readonly, chặn không cho mở Wizard thêm/xóa mục tiêu
+        if (this.props.readonly) {
+            this.notification.add("Kế hoạch đã khóa (Read-only), không thể thay đổi danh sách mục tiêu!", { type: "danger" });
+            return;
+        }
+
+        try {
+            const action = await this.orm.call("ekids.kehoach_linhvuc", "action_gv_tu_taomoi_muctieu", [lineId]);
             if (action) {
                 this.actionService.doAction(action, {
                     onClose: async () => { await this.loadAllPlanData(); }

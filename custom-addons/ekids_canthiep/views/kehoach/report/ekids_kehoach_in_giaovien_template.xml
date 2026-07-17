@@ -303,7 +303,7 @@
 
                                     <div class="print-title-section">
                                         <div class="print-main-title">
-                                            <strong>Mục tiêu <span t-out="muctieu_index + 1"/>:</strong> <span t-field="muctieu.muctieu_id.name"/>
+                                            <strong>Mục tiêu <span t-out="muctieu_index + 1"/>:</strong> <span t-field="muctieu.name"/>
                                             <t t-if="muctieu.ghichu">
                                                 <span class="goal-note-text">Ghi chú: <span t-field="muctieu.ghichu"/></span>
                                             </t>

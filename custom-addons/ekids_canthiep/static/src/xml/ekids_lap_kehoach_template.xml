@@ -138,17 +138,35 @@
                         </div>
 
                         <!-- CỤM HÀNH ĐỘNG: BADGE SỐ MỤC TIÊU ĐỨNG TRƯỚC BUTTON THÊM XÓA TRÊN WEB -->
+                        <!-- CỤM HÀNH ĐỘNG: GIỮ NGUYÊN CLASS GỐC ĐỂ KHÔNG BỊ LỆCH KHUNG WEB -->
                         <div class="folder-bottom-actions-line" t-on-click.stop="">
-                            <span class="badge px-2.5 py-1 fw-bold flex-shrink-0" style="font-size: 13px; background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; border-radius: 20px; white-space: nowrap;">
-                                Có <t t-esc="lv.tong_muctieu"/> mục tiêu
-                            </span>
 
-                            <button t-if="!props.readonly"
-                                    type="button" class="btn btn-sm btn-primary btn-add-target-clean d-flex align-items-center gap-1"
-                                    style="background-color: #2563EB !important; border-color: #2563EB !important;"
-                                    t-on-click="() => this.openAddTargetWizard(lv.kehoach_linhvuc_id)">
-                                <i class="fa fa-plus-circle"></i> Thêm/xóa [Mục tiêu]
-                            </button>
+                            <!-- KHUNG ĐIỀU PHỐI PHỤ: Dùng d-flex bên trong để chia lề cực kỳ an toàn -->
+                            <div class="d-flex align-items-center justify-content-between w-100">
+
+                                <!-- 1. Badge số mục tiêu: Nằm sát lề trái -->
+                                <span class="badge px-2.5 py-1 fw-bold flex-shrink-0" style="font-size: 13px; background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; border-radius: 20px; white-space: nowrap; margin-bottom: 0;">
+                                    Có <t t-esc="lv.tong_muctieu"/> mục tiêu
+                                </span>
+
+                                <!-- 2. Cụm nút hành động: Nằm sát lề phải và cách nhau một khoảng gap chuẩn -->
+                                <div class="d-flex align-items-center gap-2">
+                                    <button t-if="!props.readonly"
+                                            type="button" class="btn btn-sm btn-light btn-add-target-clean d-flex align-items-center gap-1"
+                                            style="background-color: #F3F4F6 !important; border-color: #D1D5DB !important; color: #374151 !important;"
+                                            t-on-click="() => this.open_GV_TaoMoi_MucTieu(lv.kehoach_linhvuc_id)">
+                                        <i class="fa fa-pencil-square-o" style="color: #4B5563;"></i> Tự tạo mới
+                                    </button>
+
+                                    <button t-if="!props.readonly"
+                                            type="button" class="btn btn-sm btn-primary btn-add-target-clean d-flex align-items-center gap-1"
+                                            style="background-color: #2563EB !important; border-color: #2563EB !important;"
+                                            t-on-click="() => this.openAddTargetWizard(lv.kehoach_linhvuc_id)">
+                                        <i class="fa fa-plus-circle"></i> Thêm [mục tiêu]
+                                    </button>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
@@ -169,21 +187,36 @@
                                                 <t t-esc="muctieu_index+1"/>
                                             </span>
                                             <span class="target-text-wrap fw-semibold">
-                                                <t t-esc="muctieu.muctieu_id[1]"/>
+                                                <t t-esc="muctieu.name"/>
                                             </span>
                                         </div>
 
                                         <!-- Cụm hành trình điều hướng chân phương dạt phải -->
                                         <div class="target-right-actions-block d-flex align-items-center gap-2 justify-content-end" t-on-click.stop="">
                                             <div class="d-flex align-items-center flex-shrink-0">
-                                                <span t-if="muctieu.kehoach_muctieu_thangtruoc_id" class="badge fw-bold px-2 py-0.5"
-                                                      style="font-size: 12px; color: #EF4444; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px; white-space: nowrap;">
-                                                    <i class="fa fa-history me-0.5"></i>Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)
-                                                </span>
-                                                <span t-else="" class="badge fw-bold px-2 py-0.5"
-                                                      style="font-size: 12px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
-                                                    <i class="fa fa-star me-0.5"></i>Mới
-                                                </span>
+                                                <!-- 1. Loại 1: Mục tiêu chuyển từ tháng trước sang do chưa đạt -->
+                                                <t t-if="muctieu.kehoach_muctieu_thangtruoc_id">
+                                                    <span class="badge fw-bold px-2 py-0.5"
+                                                          style="font-size: 12px; color: #EF4444; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px; white-space: nowrap;">
+                                                        <i class="fa fa-history me-0.5"></i>Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)
+                                                    </span>
+                                                </t>
+
+                                                <!-- 2. Loại 2: Giáo viên tự tạo mới hoàn toàn (Không lấy từ danh mục chuẩn - muctieu_id rỗng) -->
+                                                <t t-elif="!muctieu.muctieu_id">
+                                                    <span class="badge fw-bold px-2 py-0.5"
+                                                          style="font-size: 12px; color: #4F46E5; background-color: #EEF2FF; border: 1px solid #E0E7FF; border-radius: 4px; white-space: nowrap;">
+                                                        <i class="fa fa-pencil-square-o me-0.5"></i>Giáo viên [Tạo]
+                                                    </span>
+                                                </t>
+
+                                                <!-- 3. Loại 3: Mục tiêu mới được lên kế hoạch chuẩn từ thư viện -->
+                                                <t t-else="">
+                                                    <span class="badge fw-bold px-2 py-0.5"
+                                                          style="font-size: 12px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
+                                                        <i class="fa fa-star me-0.5"></i>Mới
+                                                    </span>
+                                                </t>
                                             </div>
 
                                             <button type="button" class="btn btn-link p-1 text-decoration-none shadow-none d-flex align-items-center gap-1 flex-shrink-0"

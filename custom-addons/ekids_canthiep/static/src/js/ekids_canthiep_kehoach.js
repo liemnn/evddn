@@ -73,7 +73,9 @@ export class CanThiepKehoachWidget extends Component {
                 [["kehoach_linhvuc_id", "in", linhVucLineIds]],
                 ["id"
                 ,"index"
+                ,"name"
                 ,"muctieu_id"
+                ,"muctieu_them"
                 ,"ghichu"
                 ,"kehoach_muctieu_thangtruoc_id"
                 ,"sothang_da_chuyenttiep"

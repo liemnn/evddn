@@ -154,6 +154,25 @@ class KeHoach2LinhVuc(models.Model):
 
         }
 
+    def action_gv_tu_taomoi_muctieu(self):
+        self.ensure_one()
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_gv_tu_taomoi_form').id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'TẠO [MỤC TIÊU] CHO KẾ HOẠCH',
+            'res_model': 'ekids.kehoach_muctieu',
+            'view_mode': 'form',
+            'views': [(form_view_id, 'form')],
+            'target': 'new',
+            'context': {
+                'default_kehoach_id': self.kehoach_id.id,
+                'default_kehoach_linhvuc_id': self.id,
+                'default_linhvuc_id': self.linhvuc_id.id,
+                'default_tuoi_id': self.tuoi_id.id
+            }
+
+        }
+
 
     def func_tao_kehoach_muctieu(self,muctieu):
         count = self.env['ekids.kehoach_muctieu'].search_count([

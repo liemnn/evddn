@@ -451,6 +451,231 @@
              </form>
          </field>
     </record>
+    <record model="ir.ui.view" id="ekids_canthiep.kehoach_muctieu_gv_tu_taomoi_form">
+        <field name="name">ekids.kehoach_muctieu.form.super.compact</field>
+        <field name="model">ekids.kehoach_muctieu</field>
+        <field name="arch" type="xml">
+            <form string="Cập nhật thông tin mục tiêu">
+                <field name="kehoach_linhvuc_id" invisible="1"/>
+                <sheet>
+                    <style>
+                        .o_form_view .o_form_sheet_bg { background-color: #f8fafc !important; padding-top: 0 !important;}
+                        .o_form_sheet { padding: 0 !important; max-width: 100% !important; border: none !important; background: transparent !important; }
+
+                        /* Dải banner mỏng phía trên tạo điểm nhấn */
+                        .kh-hero-banner-mini {
+                            height: 50px;
+                            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
+                            border-bottom: 1px solid #e2e8f0;
+                            margin-bottom: 15px;
+                        }
+
+                        .kh-content-wrapper-mini { padding: 0 20px 20px 20px; }
+
+                        /* CSS Thiết kế Card Lĩnh vực &amp; Độ tuổi nằm ngang trên đầu form */
+                        .kh-top-cards-container {
+                            display: flex;
+                            gap: 15px;
+                            margin-bottom: 25px;
+                        }
+                        .kh-card-highlight {
+                            flex: 1;
+                            background: #ffffff;
+                            border: 1px solid #dbe2ef;
+                            border-radius: 12px;
+                            padding: 12px 18px;
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                        }
+                        .kh-card-highlight .lbl {
+                            font-size: 11px;
+                            font-weight: 800;
+                            color: #64748b;
+                            text-transform: uppercase;
+                            margin-bottom: 4px;
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+                        }
+                        .kh-card-highlight .o_field_widget {
+                            font-size: 16px !important;
+                            font-weight: 900 !important;
+                            color: #4f46e5 !important;
+                            border: none !important;
+                            background: transparent !important;
+                        }
+
+                        /* Khối bao bọc các hàng nhập liệu - Ép full-width */
+                        .kh-input-row {
+                            margin-bottom: 20px;
+                            background: #ffffff;
+                            padding: 15px 20px;
+                            border-radius: 10px;
+                            border: 1px solid #e2e8f0;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        .kh-input-row .kh-row-title {
+                            font-weight: 800;
+                            color: #475569;
+                            font-size: 12px;
+                            text-transform: uppercase;
+                            margin-bottom: 8px;
+                            display: block;
+                        }
+
+                        /* 🌟 ÉP TẤT CẢ WIDGET TRONG DÒNG PHẢI GIÃN 100% ĐỘ DÀI MÀN HÌNH */
+                        .kh-input-row .o_field_widget {
+                            width: 100% !important;
+                            display: block !important;
+                        }
+
+                        /* Custom riêng cho ô nhập Tên mục tiêu thêm nổi bật */
+                        .kh-input-name-box {
+                            width: 100%;
+                        }
+                        .kh-input-name-box .o_input {
+                            font-size: 16px !important;
+                            font-weight: 700 !important;
+                            color: #0f172a !important;
+                            border: none !important;
+                            border-bottom: 2px dashed #cbd5e1 !important;
+                            background: transparent !important;
+                            padding: 4px 0 !important;
+                            box-shadow: none !important;
+                            transition: all 0.3s ease;
+                            border-radius: 0 !important;
+                            width: 100% !important;
+                        }
+                        .kh-input-name-box .o_input:focus {
+                            border-bottom: 2px solid #3b82f6 !important;
+                        }
+
+                        /* Ép ô chọn Many2one của mục tiêu trước cũng phải full-width */
+                        .kh-input-row .o_field_many2one {
+                            width: 100% !important;
+                        }
+                        .kh-input-row .o_field_many2one .o_input_dropdown {
+                            width: 100% !important;
+                        }
+
+                        @media (max-width: 768px) {
+                            .kh-top-cards-container {
+                                flex-direction: column;
+                                gap: 10px;
+                            }
+                        }
+
+                        /* Ép các dòng kết quả tìm kiếm Many2one tự động xuống dòng khi text quá dài */
+                        .o-autocomplete--dropdown-item, .ui-menu-item a {
+                            white-space: normal !important;
+                            word-break: break-word !important;
+                            line-height: 1.4 !important;
+                            padding-top: 8px !important;
+                            padding-bottom: 8px !important;
+                            border-bottom: 1px dashed #e2e8f0;
+                        }
+
+                        /* Định dạng lại ô input Many2one cho mượt mà */
+                        .kh-input-row .o_field_many2one .o_input {
+                            border: none !important;
+                            border-bottom: 2px dashed #cbd5e1 !important;
+                            border-radius: 0 !important;
+                            padding: 6px 0 !important;
+                            background: transparent !important;
+                        }
+
+                        /* Làm đẹp danh sách gợi ý khi gõ tìm kiếm mục tiêu */
+                        .o-autocomplete--dropdown-item {
+                            white-space: normal !important;
+                            word-break: break-word !important;
+                            line-height: 1.4 !important;
+                            padding: 10px 15px !important;
+                            border-bottom: 1px dashed #f1f5f9;
+                        }
+                        .o-autocomplete--dropdown-item:hover {
+                            background-color: #f0fdf4 !important; /* Hiệu ứng hover xanh lá nhẹ nhàng */
+                        }
+                    </style>
+
+                    <!-- Banner nhỏ trang trí -->
+                    <div class="kh-hero-banner-mini"></div>
+
+                    <div class="kh-content-wrapper-mini">
+
+                        <!-- PHẦN 1: LĨNH VỰC & ĐỘ TUỔI -->
+                        <div class="kh-top-cards-container">
+                            <div class="kh-card-highlight">
+                                <span class="lbl">
+                                    <i class="fa fa-cubes" style="font-size: 13px; color: #64748b;"></i> LĨNH VỰC
+                                </span>
+                                <field name="linhvuc_id" readonly="1" options="{'no_open': True}"/>
+                            </div>
+
+                            <div class="kh-card-highlight">
+                                <span class="lbl">
+                                    <i class="fa fa-child" style="font-size: 13px; color: #64748b;"></i> ĐỘ TUỔI
+                                </span>
+                                <field name="tuoi_id" readonly="1" options="{'no_open': True}"/>
+                            </div>
+                        </div>
+
+                        <!-- PHẦN 2: TÊN MỤC TIÊU BỔ SUNG (Full-width) -->
+                        <div class="kh-input-row">
+                            <span class="kh-row-title"><i class="fa fa-pencil" style="margin-right: 5px;"></i> Tên [mục tiêu] cần bổ sung</span>
+                            <div class="kh-input-name-box">
+                                <field name="muctieu_them" placeholder="Nhập tên hoặc nội dung mục tiêu bổ sung chi tiết tại đây..." required="1" nolabel="1"/>
+                            </div>
+                        </div>
+
+                        <!-- PHẦN 3: GHI CHÚ (Full-width) -->
+                        <div class="kh-input-row">
+                            <span class="kh-row-title"><i class="fa fa-commenting-o" style="margin-right: 5px;"></i> Ghi chú (nếu có)</span>
+                            <field name="ghichu" placeholder="Nhập các thông tin ghi chú nội bộ, lưu ý lâm sàng tại đây..." nolabel="1" style="min-height: 80px; width: 100%;"/>
+                        </div>
+
+                        <!-- PHẦN 4: MỤC TIÊU ĐỨNG TRƯỚC (Full-width Many2one) -->
+                        <!-- PHẦN 4: MỤC TIÊU ĐỨNG TRƯỚC (Đã sửa lại Domain động chuẩn xác) -->
+                        <div class="kh-input-row">
+                            <span class="kh-row-title">
+                                <i class="fa fa-arrow-circle-right" style="margin-right: 5px;"></i>
+                                Mục tiêu được tạo sẽ đứng sau [Mục tiêu] sau trong kế hoạch:
+                            </span>
+
+                            <!-- 1. Ô chọn Many2one (Đã sửa vế phải domain thành dạng .id để lọc động chính xác) -->
+                            <field name="kehoach_muctieu_truoc_id"
+                               nolabel="1"
+                               domain="[('kehoach_linhvuc_id', '=', kehoach_linhvuc_id)]"
+                               options="{'no_create': True, 'no_open': True}"
+                               placeholder="Chọn mục tiêu đứng trước đợt này..."
+                               style="width: 100%;"/>
+
+                            <!-- 2. Hộp hiển thị nội dung đầy đủ tự động xuống dòng ngay sau khi chọn -->
+                            <div invisible="not kehoach_muctieu_truoc_id"
+                                 class="mt-2 p-2"
+                                 style="background: #f8fafc; border-left: 3px solid #4f46e5; border-radius: 4px; line-height: 1.5;">
+
+                                <span style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 2px;">
+                                    <i class="fa fa-check-square-o"></i> Mục tiêu đã chọn:
+                                </span>
+
+                                <!-- Trường readonly này giúp chữ dài tự động xuống dòng mượt mà -->
+                                <field name="kehoach_muctieu_truoc_id"
+                                       readonly="1"
+                                       nolabel="1"
+                                       options="{'no_open': True}"
+                                       style="font-size: 13px; color: #1e1b4b; font-weight: 600; white-space: normal !important; display: block;"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
   </data>
 </odoo>

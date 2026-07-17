@@ -21,7 +21,7 @@ except ImportError as e:
 class KeHoach2MucTieu(models.Model):
     _name = 'ekids.kehoach_muctieu'
     _description = 'Các mục tiêu cho kế hoạch'
-    _order = 'sequence asc,id desc'
+    _order = 'sequence asc,id asc'
 
     sequence = fields.Integer(string="STT", compute="_compute_sequence",store=True)
     index = fields.Integer(string="STT", default=1,compute="_compute_index")
@@ -45,6 +45,11 @@ class KeHoach2MucTieu(models.Model):
                               related="muctieu_id.tuoi_id", required=True, ondelete="cascade")
 
     name = fields.Char("Tên",compute="_compute_name")
+    muctieu_them = fields.Char("Tên")
+
+
+
+
     ghichu = fields.Text(string="Ghi chú")
 
     chucnang = fields.Html(string="Chức năng phát triển cốt lõi & Lập luận lâm sàng",compute="_compute_chucnang")
@@ -53,7 +58,7 @@ class KeHoach2MucTieu(models.Model):
     tieuchi_hinhthanh = fields.Char(string="Đang hình thành (+/-)",compute="_compute_tieuchi_hinhthanh")
     tieuchi_dat = fields.Char(string="Đạt (+)",compute="_compute_tieuchi_dat")
 
-    muctieu_id = fields.Many2one('ekids.ct_muctieu', string='Mục tiêu', required=True, ondelete="cascade")
+    muctieu_id = fields.Many2one('ekids.ct_muctieu', string='Mục tiêu', ondelete="cascade")
 
     # 🌟 1. TRƯỜNG ĐỨNG TRƯỚC (Predecessor - Many2one về chính mình)
     kehoach_muctieu_truoc_id = fields.Many2one(
@@ -141,7 +146,7 @@ class KeHoach2MucTieu(models.Model):
 
             record.is_canthiep_readonly = is_canthiep_readonly
 
-    @api.depends("kehoach_linhvuc_id.is_readonly")
+    @api.depends("muctieu_id")
     def _compute_is_canthiep(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
@@ -344,10 +349,19 @@ class KeHoach2MucTieu(models.Model):
         for mt in self:
             mt.tong_ngay_cothe_canthiep = mt.kehoach_id.songay
 
-
+        # 🌟 BẮT BUỘC: Khai báo các trường phụ thuộc để kích hoạt compute khi tạo mới/chỉnh sửa
+    @api.depends('muctieu_id','muctieu_them', 'muctieu_id.sequence', 'kehoach_muctieu_truoc_id',
+                 'kehoach_muctieu_truoc_id.sequence')
     def _compute_sequence(self):
         for mt in self:
-            mt.sequence =mt.muctieu_id.sequence
+            if mt.muctieu_id:
+                mt.sequence =mt.muctieu_id.sequence
+            else:
+                if mt.kehoach_muctieu_truoc_id:
+                    mt.sequence = mt.kehoach_muctieu_truoc_id.sequence
+                else:
+                    mt.sequence = 0
+
 
 
     def func_is_chophep_canthiep(self,index):
@@ -382,9 +396,13 @@ class KeHoach2MucTieu(models.Model):
             mt.index =index
             index +=1
 
+
     def _compute_name(self):
         for mt in self:
-            mt.name =mt.muctieu_id.name
+            if mt.muctieu_id:
+                mt.name =mt.muctieu_id.name
+            else:
+                mt.name =mt.muctieu_them
 
     def _compute_chucnang(self):
         for mt in self:
@@ -529,14 +547,17 @@ class KeHoach2MucTieu(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        records = []
-        for vals in vals_list:
-            result = super(KeHoach2MucTieu, self).create(vals)
-            if result:
-                kehoach_linhvuc = result.kehoach_linhvuc_id
-                if kehoach_linhvuc:
-                    kehoach_linhvuc.func_capnhat_kehoach_muctieu_truoc()
-        return records[0] if len(records) == 1 else records
+        # 1. Gọi hàm tạo của super để lấy về toàn bộ recordset được tạo ra
+        records = super(KeHoach2MucTieu, self).create(vals_list)
+
+        # 2. Duyệt qua từng bản ghi vừa tạo thành công để cập nhật nghiệp vụ liên quan
+        if records and len(records)>0:
+            kehoach_linhvuc = records[0].kehoach_linhvuc_id
+            kehoach_linhvuc.func_capnhat_kehoach_muctieu_truoc()
+
+        return records
+
+
 
 
 
