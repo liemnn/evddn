@@ -1,5 +1,5 @@
 from odoo import models, fields, api, exceptions
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, AccessError
 import re
 from bs4 import BeautifulSoup
 
@@ -47,7 +47,13 @@ class MucTieu(models.Model):
     trangthai = fields.Selection([("0", "Không hoạt động")
                                      , ("1", "Đang hoạt động")], default="1", required=True)
 
+    is_gv_bientap = fields.Boolean(string="Giáo viên biên tập nội dung thiết kế",default=False, required=True)
+
     is_thangtruoc = fields.Boolean(string="Dữ liệu từ tháng trước",compute="_compute_is_thangtruoc",store=False)
+
+
+    trangthai_canthiep = fields.Selection([("0", "Chưa can thiệp")
+                                     , ("1", "Đạt(+) từ tháng trước")],compute="_compute_trangthai_canthiep" )
 
     @api.depends('linhvuc_id', 'sequence')
     def _compute_index(self):
@@ -71,6 +77,21 @@ class MucTieu(models.Model):
             if (muctieu_thangtruoc_ids and record.id in muctieu_thangtruoc_ids):
                 is_thangtruoc = True
             record.is_thangtruoc = is_thangtruoc
+
+    def _compute_trangthai_canthiep(self):
+        hocsinh_id = self.env.context.get('default_hocsinh_id')
+        for record in self:
+            trangthai_canthiep = "0"
+            if hocsinh_id:
+                domain =[
+                    ('kehoach_id.hocsinh_id','=',hocsinh_id),
+                    ('muctieu_id', '=', record.id),
+                    ('trangthai_kiemduyet', '=','1'),
+                ]
+                count = self.env['ekids.kehoach_muctieu'].search_count(domain)
+                if count >0:
+                    trangthai_canthiep = "1"
+            record.trangthai_canthiep = trangthai_canthiep
 
     def action_xoa_muctieu_khoi_wizard(self):
         """
@@ -140,6 +161,9 @@ class MucTieu(models.Model):
                 'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
             },
         }
+
+
+
 
 
     def action_chon_muctieu_vao_kehoach(self):
@@ -234,7 +258,5 @@ class MucTieu(models.Model):
         formatted_value = re.sub(r'(^|<br/>)([^:\n<]+:)', r'\1<b>\2</b>', formatted_value)
 
         return formatted_value
-
-
 
 

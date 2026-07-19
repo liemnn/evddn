@@ -308,7 +308,8 @@ class KeHoach2MucTieu(models.Model):
                         max = current_max
                 else:
                     # Đứt gãy chuỗi đạt liên tiếp -> Reset bộ đếm tạm thời về 0
-                    current_max = 0
+                    if kq.trangthai == '1':
+                        current_max = 0
 
         return max
 

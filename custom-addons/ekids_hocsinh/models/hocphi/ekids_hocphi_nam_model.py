@@ -40,7 +40,8 @@ class HocPhiNam(models.Model):
     def _compute_tong_hocsinh(self):
         for nam in self:
             result = self.env['ekids.hocphi'].read_group(
-                [('thang_id.nam_id','=',nam.id)],  # Không lọc gì cả
+                [('thang_id.nam_id','=',nam.id), ('hocphi_phaidong', '>', 0)],  # Không lọc gì cả
+
                 ['id:count'],  # Đếm số lượng bản ghi (COUNT(id))
                 ['hocsinh_id']  # Nhóm theo 'trangthai'
             )

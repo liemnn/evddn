@@ -6,6 +6,23 @@ from .ekids_hocphi_thang_abstractmodel import HocPhiThangAbstractModel
 import calendar
 
 
+
+import logging
+
+_logger = logging.getLogger(__name__)
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import giaovien_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
+
+
 class HocPhiThang(models.Model,HocPhiThangAbstractModel):
     _name = 'ekids.hocphi_thang'
     _description = 'Lương của một thang của trung tâm'
@@ -105,7 +122,7 @@ class HocPhiThang(models.Model,HocPhiThangAbstractModel):
 
     def _compute_tong_hocsinh(self):
         for thang in self:
-            total = self.env['ekids.hocphi'].search_count([('thang_id','=',thang.id)])
+            total = hocsinh_util.sum_tong_hocsinh_trong_thang(self,[thang.coso_id.id], int(thang.nam_id.name), int(thang.name))
             thang.tong_hocsinh = total
     def _compute_tong_hocphi(self):
         for thang in self:

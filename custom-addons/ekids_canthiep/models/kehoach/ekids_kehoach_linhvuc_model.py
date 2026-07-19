@@ -114,6 +114,7 @@ class KeHoach2LinhVuc(models.Model):
 
 
     def action_them_muctieu_vao_kehoach_linhvuc(self):
+
         self.ensure_one()
         ct_muctieu_ids =[]
         kehoach_muctieus = self.kehoach_muctieu_ids
@@ -137,6 +138,7 @@ class KeHoach2LinhVuc(models.Model):
             'domain':domain,
             'context': {
                 'default_kehoach_linhvuc_id': self.id,
+                'default_hocsinh_id': self.kehoach_id.hocsinh_id.id,
                 'create': False,
                 'edit': False,
                 'delete': False,
@@ -153,6 +155,7 @@ class KeHoach2LinhVuc(models.Model):
             }
 
         }
+
 
     def action_gv_tu_taomoi_muctieu(self):
         self.ensure_one()

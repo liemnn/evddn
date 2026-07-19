@@ -66,11 +66,14 @@
                     <field name="tieuchi_hinhthanh" string="hình thành" optional="hide" decoration-warning="True"/>
                     <field name="tieuchi_dat" string="Đạt" optional="hide" decoration-success="True"/>
 
-
+                    <field name="trangthai_canthiep" string="Can thiệp"
+                           decoration-success="trangthai_canthiep == '1'"
+                           decoration-danger="trangthai_canthiep == '0'"/>
                     <button string="Chọn"
                             name="action_chon_muctieu_vao_kehoach"
                             type="object"
                             class="btn-primary"
+                            invisible="trangthai_canthiep=='1'"
                             icon="fa-plus"
                             context="{'default_kehoach_linhvuc_id': context.get('default_kehoach_linhvuc_id')}"
                             title="Lựa chọn mục tiêu này bổ sung vào kế hoạch"/>
@@ -386,6 +389,8 @@
                                                 <div class="kh-status-box">
                                                     <i class="fa fa-toggle-on"></i> TRẠNG THÁI:
                                                     <field name="trangthai" nolabel="1" class="fw-bold"/>
+                                                    Giáo viên biên tập [Thiết kế] trong kế hoạch
+                                                    <field name="is_gv_bientap" widget="boolean_toggle" nolabel="1" class="fw-bold"/>
                                                 </div>
                                             </div>
                                         </div>

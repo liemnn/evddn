@@ -31,6 +31,19 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                               ondelete="restrict")
     sequence = fields.Integer(string="TT", compute="_compute_sequence")
     hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="restrict",index=True)
+    ngay_nhaphoc = fields.Date(string="Ngày bắt đầu(đi học, đánh giá..)", compute="_compute_ngay_nhaphoc")
+    ngay_nghihoc = fields.Date(string="Ngày nghỉ học",compute="_compute_ngay_nghihoc")
+    thoigian_hoc = fields.Char(string="Thời gian theo học", compute="_compute_thoigian_hoc", store=False)
+
+    trangthai_hocsinh = fields.Selection([
+        ("1", "Đang theo học"),
+        ("2", "Đợi đánh giá"),
+        ("3", "Đã nghỉ"),
+        ("4", "Đã đannh giá nhưng không học")
+    ]
+        , string="Trạng thái học sinh theo học",compute="_compute_trangthai_hocsinh")
+
+
     thang_id = fields.Many2one('ekids.hocphi_thang', string='Học phí tháng',readonly=True,ondelete="restrict",index=True)
     nam_id = fields.Many2one('ekids.hocphi_nam', related="thang_id.nam_id", string='Năm', required=True,index=True,
                              ondelete="restrict")
@@ -128,6 +141,23 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
     qr_code_image = fields.Binary("QR Code Chuyển Khoản", compute="_compute_qr_code")
 
+
+    def _compute_ngay_nhaphoc(self):
+        for rec in self:
+            rec.ngay_nhaphoc = rec.hocsinh_id.ngay_nhaphoc
+
+    def _compute_ngay_nghihoc(self):
+        for rec in self:
+            rec.ngay_nghihoc = rec.hocsinh_id.ngay_nghihoc
+
+    def _compute_thoigian_hoc(self):
+        for rec in self:
+            rec.thoigian_hoc = rec.hocsinh_id.thoigian_hoc
+
+
+    def _compute_trangthai_hocsinh(self):
+        for rec in self:
+            rec.trangthai_hocsinh = rec.hocsinh_id.trangthai
 
 
     def _compute_qr_code(self):

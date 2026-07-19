@@ -281,39 +281,6 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             else:
                 # Nếu 1 trong 2 ô ngày bị trống, set số ngày về 0
                 record.songay = 0
-
-
-
-
-
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = []
-        for vals in vals_list:
-            result = super(KeHoach, self).create(vals)
-            if result:
-                is_trung = result.func_kiemtra_kehoach_trung_thoigian()
-                if is_trung:
-                    raise UserError(
-                        "Kế hoạch của Học sinh [" + result.hocsinh_id.name + "] Được lập trong khoản thời gian trên đang bị trùng với thời gian của kế hoạch khác !")
-
-                # Tinh toan so ca trong
-                result.func_tao_macdinh_kehoach_muctieu()
-                records.append(result)
-        return records[0] if len(records) == 1 else records
-
-    @api.model
-    def write(self, vals):
-        result = super().write(vals)
-        if result:
-            is_trung = self.func_kiemtra_kehoach_trung_thoigian()
-            if is_trung:
-                raise UserError("Thời gian của [Kế hoạch] đang trùng với kế hoạch khác")
-            if "kehoach_linhvuc_ids" in vals:
-                self.func_tao_macdinh_kehoach_muctieu()
-        return result
-
     def func_kiemtra_kehoach_trung_thoigian(self):
 
         self.ensure_one()
@@ -425,6 +392,8 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             self.func_capnhat_thietke_muctieu_vao_chuongtrinh()
 
     def func_capnhat_thietke_muctieu_vao_chuongtrinh(self):
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+
         kehoach_linhvucs = self.kehoach_linhvuc_ids
         if kehoach_linhvucs:
             for kehoach_linhvuc in kehoach_linhvucs:
@@ -437,20 +406,29 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                                 ct_muctieu = kehoach_muctieu.muctieu_id
                                 if ct_muctieu:
                                     # bat dau cap nhat tung phan tu
-                                    if not string_util._is_html_empty(kehoach_muctieu.chucnang_temp):
-                                        setattr(ct_muctieu,"chucnang",kehoach_muctieu.chucnang_temp)
+                                    #if not string_util._is_html_empty(kehoach_muctieu.chucnang_temp):
+                                     #   setattr(ct_muctieu,"chucnang",kehoach_muctieu.chucnang_temp)
 
                                     if not string_util._is_html_empty(kehoach_muctieu.thietke_temp):
-                                        setattr(ct_muctieu,"thietke",kehoach_muctieu.thietke_temp)
+                                        coso = ct_muctieu.chuongtrinh_id.coso_id
+                                        if coso.id == giaovien.coso_id.id:
+                                            # Chỉ giáo viên cơ sở đó đang là chủ của chương trình mới được đưa vào
 
-                                    if not string_util._is_char_empty(kehoach_muctieu.tieuchi_chuadat_temp):
-                                        setattr(ct_muctieu,"tieuchi_chuadat",kehoach_muctieu.tieuchi_chuadat_temp)
+                                            data ={
+                                                'thietke': kehoach_muctieu.thietke_temp,
+                                                'is_gv_bientap': True
+                                            }
+                                            ct_muctieu.write(data)
 
-                                    if not string_util._is_char_empty(kehoach_muctieu.tieuchi_hinhthanh_temp):
-                                        setattr(ct_muctieu,"tieuchi_hinhthanh",kehoach_muctieu.tieuchi_hinhthanh_temp)
 
-                                    if not string_util._is_char_empty(kehoach_muctieu.tieuchi_dat_temp):
-                                        setattr(ct_muctieu,"tieuchi_dat",kehoach_muctieu.tieuchi_dat_temp)
+                                    #if not string_util._is_char_empty(kehoach_muctieu.tieuchi_chuadat_temp):
+                                     #   setattr(ct_muctieu,"tieuchi_chuadat",kehoach_muctieu.tieuchi_chuadat_temp)
+
+                                    #if not string_util._is_char_empty(kehoach_muctieu.tieuchi_hinhthanh_temp):
+                                        #setattr(ct_muctieu,"tieuchi_hinhthanh",kehoach_muctieu.tieuchi_hinhthanh_temp)
+
+                                    #if not string_util._is_char_empty(kehoach_muctieu.tieuchi_dat_temp):
+                                     #   setattr(ct_muctieu,"tieuchi_dat",kehoach_muctieu.tieuchi_dat_temp)
 
 
 
@@ -562,6 +540,36 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                    is_chophep_ketthuc = True
         if is_chophep_ketthuc:
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
+
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = []
+        for vals in vals_list:
+            result = super(KeHoach, self).create(vals)
+            if result:
+                is_trung = result.func_kiemtra_kehoach_trung_thoigian()
+                if is_trung:
+                    raise UserError(
+                        "Kế hoạch của Học sinh [" + result.hocsinh_id.name + "] Được lập trong khoản thời gian trên đang bị trùng với thời gian của kế hoạch khác !")
+
+                # Tinh toan so ca trong
+                result.func_tao_macdinh_kehoach_muctieu()
+                records.append(result)
+        return records[0] if len(records) == 1 else records
+
+    @api.model
+    def write(self, vals):
+        result = super().write(vals)
+        if result:
+            is_trung = self.func_kiemtra_kehoach_trung_thoigian()
+            if is_trung:
+                raise UserError("Thời gian của [Kế hoạch] đang trùng với kế hoạch khác")
+            if "kehoach_linhvuc_ids" in vals:
+                self.func_tao_macdinh_kehoach_muctieu()
+        return result
+
+
 
 
     # 🌟 BỎ HOÀN TOÀN decorator @api.model ở đây

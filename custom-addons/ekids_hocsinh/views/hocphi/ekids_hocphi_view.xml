@@ -135,6 +135,16 @@
 
                         />
 
+                <field name="ngay_nhaphoc" string="Ngày học" optional="hide" width="100"/>
+                <field name="ngay_nghihoc" string="Ngày nghỉ" optional="hide" width="100"/>
+                <field name="thoigian_hoc" string="Thời gian" optional="hide" width="100"/>
+                <field name="trangthai_hocsinh" string="Trạng thái học"  optional="hide" width="100"
+                       decoration-success="trangthai_hocsinh == '1'"
+                        decoration-info="trangthai_hocsinh == '2'"
+                        decoration-danger="trangthai_hocsinh == '3'"/>
+
+
+
                 <field name="songay_dihoc" width="30"/>
                 <field name="tien_bantru" sum="Total" widget="integer"/>
                 <field name="tien_ca" sum="Total" widget="integer"/>
