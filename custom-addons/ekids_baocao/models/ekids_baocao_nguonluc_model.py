@@ -156,7 +156,7 @@ class BaoCaoNguonLucWizard(models.TransientModel):
         if sum_data['tong'] <= 0:
             sum_data['tong'] = tong_hs
 
-        sum_data['tong'] = int(sum_data['tong']) + hs_moi - hs_nghi
+        sum_data['tong'] = int(sum_data['tong']) + hs_moi
         sum_data['nghi'] = int(sum_data['nghi']) + hs_nghi
         sum_data['moi'] = int(sum_data['moi']) + hs_moi
         return table_data
