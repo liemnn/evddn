@@ -301,6 +301,7 @@ class KeHoach2MucTieu(models.Model):
                 if kq.ngay > today:
                     continue
                 # Nếu trạng thái bằng '1' (Đạt) dạng chuỗi hoặc số nguyên tùy cấu hình database của anh
+
                 if kq.trangthai == '1':
                     current_max += 1
                     # Cập nhật lại chuỗi dài nhất nếu chuỗi hiện tại vượt mốc cũ
@@ -308,7 +309,7 @@ class KeHoach2MucTieu(models.Model):
                         max = current_max
                 else:
                     # Đứt gãy chuỗi đạt liên tiếp -> Reset bộ đếm tạm thời về 0
-                    if kq.trangthai == '1':
+                    if kq.loai == '1':
                         current_max = 0
 
         return max
