@@ -559,6 +559,10 @@ def sum_tong_hocsinh_trong_thang(self, coso_ids,nam, thang):
         return 0
     tu_ngay = days[0]  # Ngày đầu tiên của tháng
     den_ngay = days[-1]  # Ngày cuối cùng của tháng
+    return sum_tong_hocsinh_trong_khoang_thoigian(self, coso_ids,tu_ngay,den_ngay)
+
+def sum_tong_hocsinh_trong_khoang_thoigian(self, coso_ids,tu_ngay,den_ngay):
+
 
     # 1. Điều kiện cơ bản bắt buộc (Cơ sở, học phí và bắt buộc phải có ngày nhập học hợp lệ)
     domain = [
@@ -611,22 +615,11 @@ def sum_tong_hocsinh_nghi_trong_thang(self,coso_ids, nam, thang):
     # 1. Điều kiện cơ bản bắt buộc (Cơ sở, học phí và bắt buộc phải có ngày nhập học hợp lệ)
     domain = [
         ('coso_id', 'in', coso_ids),
-        ('hocsinh_id.ngay_nhaphoc', '!=', False),
-        ('hocsinh_id.ngay_nhaphoc', '<=', den_ngay)
-    ]
-
-
-
-    # Trạng thái B: Học sinh đã nghỉ nhưng ngày nghỉ nằm trong tháng này (tu_ngay -> den_ngay)
-    domain_nghi_trongthang = [
         ('hocsinh_id.ngay_nghihoc', '!=', False),
         ('hocsinh_id.ngay_nghihoc', '>=', tu_ngay),
         ('hocsinh_id.ngay_nghihoc', '<=', den_ngay)
+
     ]
-
-
-    # 3. Kết hợp điều kiện cơ bản AND với trạng thái hợp lệ
-    domain = expression.AND([domain, domain_nghi_trongthang])
 
     # Tiến hành gom nhóm và đếm dữ liệu theo từng học sinh duy nhất
     result = self.env['ekids.hocphi'].read_group(
@@ -646,7 +639,6 @@ def sum_tong_hocsinh_moi_trong_thang(self, coso_ids,nam, thang):
     # 1. Điều kiện cơ bản bắt buộc (Cơ sở, học phí và bắt buộc phải có ngày nhập học hợp lệ)
     domain = [
         ('coso_id', 'in', coso_ids),
-
         ('hocsinh_id.ngay_nhaphoc', '!=', False),
         ('hocsinh_id.ngay_nhaphoc', '>=', tu_ngay),
         ('hocsinh_id.ngay_nhaphoc', '<=', den_ngay)

@@ -1,7 +1,22 @@
 from odoo import api, fields, models
-from datetime import datetime
+from datetime import datetime,date
 from odoo.exceptions import ValidationError
 import calendar
+
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import hocsinh_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
 class HocPhiNam(models.Model):
     _name = 'ekids.hocphi_nam'
     _description = 'Học phí theo năm Cơ sở'
@@ -38,14 +53,12 @@ class HocPhiNam(models.Model):
                 raise ValidationError("Năm để tính học phí đã tồn tại !")
 
     def _compute_tong_hocsinh(self):
-        for nam in self:
-            result = self.env['ekids.hocphi'].read_group(
-                [('thang_id.nam_id','=',nam.id), ('hocphi_phaidong', '>', 0)],  # Không lọc gì cả
+        for rec in self:
+            tu_ngay = date(int(rec.name), 1, 1)
+            den_ngay = date(int(rec.name), 12, 31)
 
-                ['id:count'],  # Đếm số lượng bản ghi (COUNT(id))
-                ['hocsinh_id']  # Nhóm theo 'trangthai'
-            )
-            nam.tong_hocsinh =len(result)
+            total = hocsinh_util.sum_tong_hocsinh_trong_khoang_thoigian(self, [rec.coso_id.id], tu_ngay,den_ngay)
+            rec.tong_hocsinh =total
 
 
     def _compute_tong_hocphi(self):

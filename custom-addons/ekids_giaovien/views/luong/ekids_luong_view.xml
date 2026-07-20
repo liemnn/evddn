@@ -101,6 +101,12 @@
                             title="In Lương của Giáo viên tháng này"
 
                         />
+                <field name="dilam_tungay" string="Làm từ ngày"  width="100"  optional="hide"/>
+                <field name="dilam_denngay" string="Ngày nghỉ"  width="100" optional="hide"/>
+                <field name="trangthai_giaovien" string="Trạng thái làm"  width="100" optional="hide"
+                       decoration-success="trangthai_giaovien == '1'"
+                        decoration-danger="trangthai_giaovien == '0'"/>
+
                 <field name="tham_nien" width="70" />
                 <field name="ngaycong" width="70" string="Công" />
                 <field name="so_ngaynghi" width="40" />

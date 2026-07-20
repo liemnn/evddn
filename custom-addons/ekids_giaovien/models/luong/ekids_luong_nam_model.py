@@ -2,6 +2,21 @@ from odoo import api, fields, models
 from datetime import datetime,date
 from odoo.exceptions import UserError
 import calendar
+
+import logging
+
+_logger = logging.getLogger(__name__)
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import giaovien_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
 class LuongNam(models.Model):
     _name = 'ekids.luong_nam'
     _description = 'Lương của một năm của trung tâm'
@@ -40,16 +55,10 @@ class LuongNam(models.Model):
 
 
         for rec in self:
-            start_year = date(int(rec.name), 1, 1)
-            end_year = date(int(rec.name), 12, 31)
+            tu_ngay = date(int(rec.name), 1, 1)
+            den_ngay = date(int(rec.name), 12, 31)
+            total = giaovien_util.sum_tong_giaovien_trong_khoang_thoigian(self, [rec.coso_id.id], tu_ngay,den_ngay)
 
-            total = self.env['ekids.giaovien'].search_count([
-                ('coso_id', '<=', rec.coso_id.id),
-                ('dilam_tungay', '<=', end_year),
-                '|',
-                ('dilam_denngay', '=', False),
-                ('dilam_denngay', '>=', start_year)
-            ])
             rec.tong_giaovien= total
 
     def action_form_luong_nam(self):

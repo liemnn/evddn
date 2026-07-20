@@ -146,7 +146,7 @@ class BaoCaoNguonLucWizard(models.TransientModel):
         tong_hs = hocsinh_util.sum_tong_hocsinh_trong_thang(self,self.coso_ids.ids,nam, thang)
         hs_nghi = hocsinh_util.sum_tong_hocsinh_nghi_trong_thang(self,self.coso_ids.ids,nam, thang)
         hs_moi = hocsinh_util.sum_tong_hocsinh_moi_trong_thang(self,self.coso_ids.ids,nam, thang)
-        giaovien = self.sum_tong_giaovien_trong_thang(nam, thang)
+        giaovien = giaovien_util.sum_tong_giaovien_trong_thang(self,self.coso_ids.ids,nam, thang)
 
         table_data.append([
             str(index), 'Tháng ' + str(thang), str(nam),
@@ -167,13 +167,7 @@ class BaoCaoNguonLucWizard(models.TransientModel):
 
 
 
-    def sum_tong_giaovien_trong_thang(self, nam, thang):
-        luong_thangs = self.env['ekids.luong_thang'].search([
-            ('coso_id', 'in', self.coso_ids.ids),
-            ('nam_id.name', '=', str(nam)),
-            ('name', '=', str(thang))
-        ])
-        return sum(luong.tong_giaovien for luong in luong_thangs)
+
 
     def action_xem_baocao(self):
         return self.env.ref('ekids_baocao.action_report_view_nguonluc').report_action(self)

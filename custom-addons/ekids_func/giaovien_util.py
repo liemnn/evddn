@@ -356,6 +356,44 @@ def func_is_dilam_trong_ngay(giaovien, ngay):
 
     return False
 
+def sum_tong_giaovien_trong_thang(self, coso_ids,nam, thang):
+    days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
+    if not days:
+        return 0
+    tu_ngay = days[0]  # Ngày đầu tháng
+    den_ngay = days[-1]  # Ngày cuối tháng
+    return sum_tong_giaovien_trong_khoang_thoigian(self, coso_ids,tu_ngay,den_ngay)
+    # 1. Điều kiện cơ bản bắt buộc của giáo viên
+
+
+def sum_tong_giaovien_trong_khoang_thoigian(self, coso_ids,tu_ngay,den_ngay):
+
+    # 1. Điều kiện cơ bản bắt buộc của giáo viên
+    domain = [
+        ('coso_id', 'in', coso_ids),
+        ('giaovien_id.dilam_tungay', '!=', False),
+        ('giaovien_id.dilam_tungay', '<=', den_ngay)
+    ]
+
+    # 2. Điều kiện trạng thái: Đang làm việc HOẶC nghỉ việc trong chính tháng này
+    domain_danglam = [('giaovien_id.dilam_denngay', '=', False)]
+    domain_nghitrongthang = [
+        ('giaovien_id.dilam_denngay', '!=', False),
+        ('giaovien_id.dilam_denngay', '>=', tu_ngay),
+
+    ]
+
+    domain_trongthang = expression.OR([domain_danglam, domain_nghitrongthang])
+    domain = expression.AND([domain, domain_trongthang])
+
+    # 3. Gom nhóm theo giaovien_id để lọc trùng tuyệt đối
+    result = self.env['ekids.luong'].read_group(
+        domain=domain,
+        fields=['giaovien_id'],
+        groupby=['giaovien_id']
+    )
+    return len(result)
+
 
 
 

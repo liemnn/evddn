@@ -29,6 +29,17 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     coso_id = fields.Many2one("ekids.coso", related="giaovien_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
     giaovien_id = fields.Many2one('ekids.giaovien', string="Giáo viên",required=True,ondelete="restrict")
+
+    dilam_tungay = fields.Date(string="*Ngày đi làm", compute="_compute_dilam_tungay")
+    dilam_denngay = fields.Date(string="Ngày nghỉ làm",compute="_compute_dilam_denngay")
+
+
+    trangthai_giaovien = fields.Selection([
+        ("1", "Đang làm việc"),
+        ("0", "Đã nghỉ làm"),
+        ("2", "Tạm nghỉ hưởng BHXH (Ốm, Đẻ...")
+    ], string="Trạng thái", compute="_compute_trangthai_giaovien")
+
     thang_id = fields.Many2one('ekids.luong_thang', string='Tháng',required=True,ondelete="restrict")
     nam_id = fields.Many2one('ekids.luong_nam',related="thang_id.nam_id", string='Năm', required=True, ondelete="restrict")
 
@@ -92,6 +103,17 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
 
     is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
 
+    def _compute_dilam_tungay(self):
+        for record in self:
+            record.dilam_tungay = record.giaovien_id.dilam_tungay
+
+    def _compute_dilam_denngay(self):
+        for record in self:
+            record.dilam_denngay = record.giaovien_id.dilam_denngay
+
+    def _compute_trangthai_giaovien(self):
+        for record in self:
+            record.trangthai_giaovien = record.giaovien_id.trangthai
 
     def _compute_is_dl_locked(self):
         for record in self:
