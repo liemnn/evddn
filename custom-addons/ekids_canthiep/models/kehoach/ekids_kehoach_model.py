@@ -289,7 +289,9 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         if not self.tu_ngay or not self.den_ngay:
             return False
 
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        giaovien = self.gv_lapkehoach_id
+        if not self.gv_lapkehoach_id:
+            giaovien = giaovien_util.func_get_giaovien_tu_user(self)
 
         # 1. Khởi tạo Domain lọc các kế hoạch có khoảng thời gian giao nhau
         domain = [
@@ -562,9 +564,13 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def write(self, vals):
         result = super().write(vals)
         if result:
-            is_trung = self.func_kiemtra_kehoach_trung_thoigian()
-            if is_trung:
-                raise UserError("Thời gian của [Kế hoạch] đang trùng với kế hoạch khác")
+            if ('tu_ngay' in vals
+                or 'den_ngay' in vals):
+                # nếu có thay đôi về ngày tháng cần kiểm tra trùng
+                is_trung = self.func_kiemtra_kehoach_trung_thoigian()
+                if is_trung:
+                    raise UserError("Thời gian của [Kế hoạch] đang trùng với kế hoạch khác")
+
             if "kehoach_linhvuc_ids" in vals:
                 self.func_tao_macdinh_kehoach_muctieu()
         return result
