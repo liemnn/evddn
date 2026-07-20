@@ -50,6 +50,34 @@
             </field>
         </record>
 
+        <record id="ekids_canthiep.ct_muctieu_vitri_list" model="ir.ui.view">
+            <field name="name">ekids.ct_muctieu.list</field>
+            <field name="model">ekids.ct_muctieu</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <list
+                        default_order="sequence asc"
+                        create="true" edit="true" delete="true" multi_edit="true">
+
+                    <field name="sequence" widget="handle"/>
+                    <field name="index_list" string="STT"/>
+                    <field name="linhvuc_id" string="Lĩnh vực" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="tuoi_id" string="Độ tuổi" options="{'no_open': True, 'no_create': True}"/>
+
+                    <field name="name" string="Mục tiêu" decoration-bf="True"/>
+                    <field name="trangthai"
+                           decoration-success="trangthai == '1'"
+                           decoration-danger="trangthai == '0'"/>
+                    <field name="tieuchi_chuadat" string="Chưa đạt" optional="hide" decoration-danger="True"/>
+                    <field name="tieuchi_hinhthanh" string="hình thành" optional="hide" decoration-warning="True"/>
+                    <field name="tieuchi_dat" string="Đạt" optional="hide" decoration-success="True"/>
+
+
+                </list>
+            </field>
+        </record>
+
+
         <record id="ekids_canthiep.ct_muctieu_lap_kehoach_list" model="ir.ui.view">
             <field name="name">ekids.ct_muctieu.list</field>
             <field name="model">ekids.ct_muctieu</field>

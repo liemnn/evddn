@@ -40,11 +40,13 @@ class LinhVuc(models.Model):
 
 
     def action_xem_muctieu(self):
+        list_view_id = self.env.ref('ekids_canthiep.ct_muctieu_vitri_list').id
         return {
             'type': 'ir.actions.act_window',
             'name': "LĨNH VỰC:"+ self.name,
             'res_model': 'ekids.ct_muctieu',
             'view_mode': 'list,kanban,form',
+            'views': [(list_view_id, 'list')],
             'target': 'current',
             'domain': [('linhvuc_id', '=', self.id)],
             'context': {
