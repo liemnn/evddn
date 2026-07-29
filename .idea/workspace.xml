@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_inherit_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_inherit_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_hocsinh_duyet_kehoach_inherit_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_hocsinh_duyet_kehoach_inherit_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/views/giaovien/ekids_chamcong_kpi2thang_ketqua_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/views/giaovien/ekids_chamcong_kpi2thang_ketqua_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_template.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/cauhinh/ekids_luong_dm_chamcong_kpi_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/cauhinh/ekids_luong_dm_chamcong_kpi_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_func_abstractmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_func_abstractmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/cauhinh/ekids_luong_dm_chamcong_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/cauhinh/ekids_luong_dm_chamcong_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/cauhinh/ekids_luong_dm_chitra_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/views/cauhinh/ekids_luong_dm_chitra_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,14 +166,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00324" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1783043190753</created>
-      <option name="number" value="00324" />
-      <option name="presentableId" value="LOCAL-00324" />
-      <option name="project" value="LOCAL" />
-      <updated>1783043190753</updated>
     </task>
     <task id="LOCAL-00325" summary="liemnn">
       <option name="closed" value="true" />
@@ -558,7 +551,15 @@
       <option name="project" value="LOCAL" />
       <updated>1784522693382</updated>
     </task>
-    <option name="localTasksCounter" value="373" />
+    <task id="LOCAL-00373" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1785297553172</created>
+      <option name="number" value="00373" />
+      <option name="presentableId" value="LOCAL-00373" />
+      <option name="project" value="LOCAL" />
+      <updated>1785297553172</updated>
+    </task>
+    <option name="localTasksCounter" value="374" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -648,11 +649,6 @@
           <option name="timeStamp" value="109" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_kpi2thang_ketqua_model.py</url>
-          <line>55</line>
-          <option name="timeStamp" value="110" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_func/giaovien_util.py</url>
           <line>86</line>
           <option name="timeStamp" value="134" />
@@ -701,11 +697,6 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_kehoach_action_abstractmodel.py</url>
           <line>334</line>
           <option name="timeStamp" value="384" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_func_abstractmodel.py</url>
-          <line>285</line>
-          <option name="timeStamp" value="388" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_ketluan_model.py</url>

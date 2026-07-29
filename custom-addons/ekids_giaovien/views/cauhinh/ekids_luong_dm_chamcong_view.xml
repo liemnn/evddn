@@ -45,6 +45,7 @@
         <field name="model">ekids.luong_dm_chamcong_kpi</field>
         <field name="arch" type="xml">
             <list editable="bottom">
+                <field name="sequence" widget="handle"/>
                 <field name="name" />
                 <field name="loai_kpi"/>
                 <field name="donvi"/>

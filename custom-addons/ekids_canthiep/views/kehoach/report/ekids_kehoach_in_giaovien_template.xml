@@ -25,86 +25,116 @@
                             margin: 5mm !important;
                         }
 
-                        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        * {
+                            box-sizing: border-box;
+                            margin: 0;
+                            padding: 0;
+                            -webkit-print-color-adjust: exact;
+                            print-color-adjust: exact;
+                        }
 
-                        /* TẤT CẢ FONT VÀ MÀU ĐỀU ÉP ĐEN (#000000) VÀ FONT TO 15PX ĐỂ IN SẮC NÉT */
                         .o_compact_print_body {
                             font-family: "Times New Roman", "Arial", serif !important;
                             color: #000000 !important;
-                            font-size: 15px !important;
-                            line-height: 1.4;
+                            font-size: 14px !important;
+                            line-height: 1.3;
                             width: 100%;
-                            padding: 4mm !important;
+                            padding: 2mm !important;
                         }
 
-                        /* Khối Header trên cùng */
-                        .header-main-table { width: 100%; margin-bottom: 12px; }
-                        .header-main-table td { padding: 6px 10px; vertical-align: middle; color: #000000 !important; font-size: 15px !important; }
-                        .top-logo-area { width: 45%; text-align: left; font-size: 15px !important; font-weight: bold !important; color: #000000 !important; }
-                        .top-title-area { width: 55%; text-align: center; }
-                        .top-main-title { font-size: 20px !important; font-weight: bold !important; text-transform: uppercase; color: #000000 !important; }
-                        .top-sub-title { font-size: 15px !important; font-style: italic; margin-top: 2px; color: #000000 !important; }
+                        /* Header  Profile Table */
+                        .header-main-table { width: 100%; margin-bottom: 6px; }
+                        .header-main-table td { padding: 3px 6px; vertical-align: middle; color: #000000 !important; font-size: 14px !important; }
+                        .top-main-title { font-size: 17px !important; font-weight: bold !important; text-transform: uppercase; color: #000000 !important; }
+                        .top-sub-title { font-size: 13px !important; font-style: italic; color: #000000 !important; }
 
-                        /* STYLE MA TRẬN BẢNG PROFILE HỢP NHẤT */
-                        .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; table-layout: fixed; }
-                        .profile-grid-table td { border: 1px solid #000000 !important; padding: 7px 9px; font-size: 15px !important; vertical-align: middle; color: #000000 !important; }
+                        .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; table-layout: fixed; }
+                        .profile-grid-table td { border: 1px solid #000000 !important; padding: 4px 6px; font-size: 13px !important; vertical-align: middle; color: #000000 !important; }
 
                         .col-lbl-left  { width: 11%; font-weight: bold !important; background-color: #eeeeee !important; }
                         .col-val-left  { width: 22%; }
-                        .col-stt       { width: 3% !important; text-align: center; font-weight: bold !important; padding: 5px 2px !important; }
                         .col-linhvuc   { width: 25%; }
-                        .col-val-right { width: 39%; font-style: italic; text-align: center; }
 
-                        /* Khối container mục tiêu */
+                        /* 🌟 TRIỆT HẠ LỖI KÉO TRANG: Cho phép .print-container vỡ dòng tự nhiên lấp đầy khoảng trống */
                         .print-container {
                             width: 100%;
                             border: 1px solid #000000 !important;
-                            padding: 12px;
-                            margin-bottom: 14px;
-                            page-break-before: always;
-                            page-break-inside: avoid;
+                            padding: 6px 8px;
+                            margin-bottom: 8px;
+                            page-break-before: auto !important;
+                            page-break-after: auto !important;
+                            page-break-inside: auto !important; /* 🌟 BỎ AVOID ĐỂ KHÔNG BỊ TRỐNG TRANG */
                             background-color: #ffffff !important;
                         }
 
-                        .print-title-section { display: table; width: 100%; border-bottom: 1px solid #000000 !important; padding-bottom: 4px; margin-bottom: 8px; }
-                        .print-main-title { display: table-cell; width: 55%; font-size: 16px !important; vertical-align: bottom; text-align: left; color: #000000 !important; }
+                        .print-title-section { display: table; width: 100%; border-bottom: 1px solid #000000 !important; padding-bottom: 3px; margin-bottom: 4px; }
+                        .print-main-title { display: table-cell; width: 55%; font-size: 14px !important; vertical-align: bottom; text-align: left; color: #000000 !important; }
 
                         .goal-note-text {
-                            font-size: 15px !important;
+                            font-size: 13px !important;
                             font-weight: normal !important;
                             font-style: italic;
                             color: #000000 !important;
-                            margin-top: 4px;
                             display: block;
                         }
 
-                        .print-meta-text { display: table-cell; width: 45%; font-size: 14px !important;vertical-align: bottom; text-align: right; color: #000000 !important; }
+                        .print-meta-text { display: table-cell; width: 45%; font-size: 12px !important; vertical-align: bottom; text-align: right; color: #000000 !important; }
 
-                        .top-row-grid { display: table; width: 100%; border-bottom: 1px dashed #000000 !important; padding-bottom: 8px; margin-bottom: 8px; }
-                        .left-sub-block { display: table-cell; width: 50%; padding-right: 12px; border-right: 1px dashed #000000 !important; vertical-align: top !important; }
-                        .right-sub-block { display: table-cell; width: 50%; padding-left: 12px; vertical-align: top !important; }
+                        .top-row-grid { display: table; width: 100%; border-bottom: 1px dashed #000000 !important; padding-bottom: 4px; margin-bottom: 4px; }
+                        .left-sub-block { display: table-cell; width: 50%; padding-right: 8px; border-right: 1px dashed #000000 !important; vertical-align: top !important; }
+                        .right-sub-block { display: table-cell; width: 50%; padding-left: 8px; vertical-align: top !important; }
 
-                        .section-header-title { font-size: 15px !important; font-weight: bold !important; text-transform: uppercase; text-decoration: underline; margin-bottom: 4px; color: #000000 !important; }
-                        .text-paragraph { margin-bottom: 4px; font-size: 15px !important; color: #000000 !important; }
+                        .section-header-title {
+                            font-size: 13px !important;
+                            font-weight: bold !important;
+                            text-transform: uppercase;
+                            text-decoration: underline;
+                            margin-bottom: 2px;
+                            color: #000000 !important;
+                            page-break-after: avoid !important; /* Giữ tiêu đề đi liền với nội dung */
+                        }
 
-                        .criteria-table { width: 100%; border-collapse: collapse; }
-                        .criteria-table th, .criteria-table td { border: 1px solid #000000 !important; padding: 5px; font-size: 14px !important; vertical-align: top !important; color: #000000 !important; }
+                        .text-paragraph {
+                            margin-bottom: 2px;
+                            font-size: 13px !important;
+                            color: #000000 !important;
+                        }
+
+                        .criteria-table { width: 100%; border-collapse: collapse; page-break-inside: avoid !important; }
+                        .criteria-table th, .criteria-table td { border: 1px solid #000000 !important; padding: 3px; font-size: 12px !important; vertical-align: top !important; color: #000000 !important; }
                         .criteria-table th { background-color: #eeeeee !important; font-weight: bold !important; }
 
-                        /* ĐƯỜNG CHIA TUYỆT ĐỐI CHO HÀNG BAO QUANH PHẦN THIẾT KẾ ABC */
-                        .bottom-row-grid { width: 100%; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed #000000 !important; }
-                        .abc-procedure-content { width: 100%; text-align: justify; }
+                        .bottom-row-grid {
+                            width: 100%;
+                            margin-bottom: 6px;
+                            padding-bottom: 4px;
+                            border-bottom: 1px dashed #000000 !important;
+                            page-break-inside: auto !important;
+                        }
 
-                        /* Khối Theo dõi chạy phẳng hàng ngang rộng rãi trọn biên dưới */
-                        .tracking-diary-content { width: 100%; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
-                        .day-boxes-horizontal-flow { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
+                        .abc-procedure-content {
+                            width: 100%;
+                            text-align: justify;
+                        }
 
-                        /* TỐI ƯU Ô CHẤM ĐIỂM SẮC NÉT THEO NGÀY THỰC TẾ */
+                        /* 🌟 Khối Theo dõi: Giữ nguyên khối nhỏ này liền nhau */
+                        .tracking-diary-content {
+                            width: 100%;
+                            margin-top: 4px;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 3px;
+                            page-break-inside: avoid !important; /* Giữ bảng theo dõi không bị cắt ngang */
+                        }
+
+                        .day-boxes-horizontal-flow { display: flex; flex-wrap: wrap; gap: 2px; width: 100%; }
+
+                        /* Ô CHẤM ĐIỂM GIẢM KÍCH THƯỚC NHỎ GỌN */
                         .day-tracking-box {
-                            width: 32px;
-                            height: 40px;
+                            width: 28px;
+                            height: 35px;
                             border: 1px dashed #000000 !important;
-                            border-radius: 4px;
+                            border-radius: 2px;
                             display: flex;
                             flex-direction: column;
                             justify-content: space-between;
@@ -114,12 +144,12 @@
                         }
 
                         .cell-number {
-                            font-size: 11px !important;
+                            font-size: 9px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
                             display: block;
-                            line-height: 1.2;
-                            background-color: #ffffff !important; /* 🌟 SỬA NỀN TRẮNG CHO NGÀY ĐI HỌC */
+                            line-height: 1;
+                            background-color: #ffffff !important;
                             border-bottom: 1px solid #000000 !important;
                             padding: 1px 0;
                             width: 100%;
@@ -127,36 +157,25 @@
                         }
 
                         .cell-write-space {
-                            height: 20px;
+                            height: 16px;
                             width: 100%;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 16px !important;
+                            font-size: 13px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
                         }
 
-                        /* Lớp bôi xám nền cho ngày nghỉ, ngày tương lai hoặc vắng */
                         .box-print-rest { background-color: #dddddd !important; }
                         .box-print-rest .cell-number { background-color: #cccccc !important; color: #000000 !important; }
-                        .box-print-rest .cell-write-space { color: #000000 !important; font-size: 14px !important; font-weight: bold !important; }
+                        .box-print-rest .cell-write-space { color: #000000 !important; font-size: 12px !important; font-weight: bold !important; }
 
-                        /* BỎ MÀU PASTEL -> CHUYỂN SANG NỀN TRẮNG, VIỀN ĐEN, CHỮ ĐEN */
                         .box-print-dat { background-color: #ffffff !important; border-color: #000000 !important; }
-                        .box-print-dat .cell-write-space { color: #000000 !important; }
-
                         .box-print-hinhthanh { background-color: #ffffff !important; border-color: #000000 !important; }
-                        .box-print-hinhthanh .cell-write-space { color: #000000 !important; }
-
                         .box-print-chuadat { background-color: #ffffff !important; border-color: #000000 !important; }
-                        .box-print-chuadat .cell-write-space { color: #000000 !important; }
 
-                        /* Định dạng màu sắc chữ dòng tổng kết kết quả */
-                        .lbl-summary-chuadat { color: #000000 !important; font-weight: bold !important; font-size: 15px !important; }
-                        .lbl-summary-hinhthanh { color: #000000 !important; font-weight: bold !important; font-size: 15px !important; }
-                        .lbl-summary-dat { color: #000000 !important; font-weight: bold !important; font-size: 15px !important; }
-
+                        .lbl-summary-chuadat, .lbl-summary-hinhthanh, .lbl-summary-dat { color: #000000 !important; font-weight: bold !important; font-size: 13px !important; }
                         .text-bold { font-weight: bold !important; }
 
                         @media print {
@@ -164,9 +183,7 @@
                             .print-container { border: 1px solid #000000 !important; }
                             .day-tracking-box { border: 1px solid #000000 !important; }
                             .box-print-rest { background-color: #eeeeee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-dat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-hinhthanh { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-chuadat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .box-print-dat, .box-print-hinhthanh, .box-print-chuadat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                             .cell-write-space { color: #000000 !important; font-weight: bold !important; }
                         }
                     </style>
@@ -177,10 +194,10 @@
                             <tr>
                                 <td>
                                     <t t-if="o.coso_id and o.coso_id.logo">
-                                       <span t-field="o.coso_id.logo" t-options="{'widget': 'image', 'style': 'max-height: 55px; max-width: 100%; display: block; margin-bottom: 5px;'}"/>
+                                       <span t-field="o.coso_id.logo" t-options="{'widget': 'image', 'style': 'max-height: 45px; max-width: 100%; display: block; margin-bottom: 2px;'}"/>
                                     </t>
                                     <t t-if="not (o.coso_id and o.coso_id.logo)">
-                                        <div style="display: inline-block; width: 55px; height: 30px; border: 1px dashed #000; text-align: center; line-height: 30px; font-weight: bold; font-size: 11px; margin-bottom: 5px; color: #000000;">LOGO</div>
+                                        <div style="display: inline-block; width: 45px; height: 25px; border: 1px dashed #000; text-align: center; line-height: 25px; font-weight: bold; font-size: 10px; margin-bottom: 2px; color: #000000;">LOGO</div>
                                     </t>
                                 </td>
                                 <td>
@@ -194,7 +211,7 @@
                                 </td>
                                 <td class="top-title-area">
                                     <div class="top-main-title">KẾ HOẠCH CAN THIỆP CÁ NHÂN THÁNG</div>
-                                    <div class="top-main-title" style="font-size: 17px; margin-top: 3px;"><span t-field="o.name"/></div>
+                                    <div class="top-main-title" style="font-size: 15px; margin-top: 1px;"><span t-field="o.name"/></div>
                                     <div class="top-sub-title">
                                         (Từ ngày <span t-field="o.tu_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>
                                         đến ngày <span t-field="o.den_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>)
@@ -211,7 +228,7 @@
                             <tr>
                                 <td class="col-lbl-left">Họ và tên HS:</td>
                                 <td class="col-val-left text-bold"><span t-field="o.hocsinh_id.name"/></td>
-                                <td colspan="4" style="font-weight: bold; text-align: center; font-size: 15px; background-color: #eeeeee; text-transform: uppercase; color: #000000;">
+                                <td colspan="4" style="font-weight: bold; text-align: center; font-size: 13px; background-color: #eeeeee; text-transform: uppercase; color: #000000;">
                                     LĨNH VỰC CAN THIỆP
                                 </td>
                             </tr>
@@ -343,7 +360,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- KHỐI III: CHẠY NGANG HÀNG TÁCH BIỆT -->
+                                    <!-- KHỐI III: THIẾT KẾ ABC -->
                                     <div class="bottom-row-grid">
                                         <div class="abc-procedure-content">
                                             <div class="section-header-title">III. Thiết kế hoạt động cho giáo viên theo mô tả (ABC)</div>
@@ -351,22 +368,18 @@
                                         </div>
                                     </div>
 
-                                    <!-- KHỐI IV: THEO DÕI HÀNG NGANG 100% -->
+                                    <!-- KHỐI IV: THEO DÕI HÀNG NGANG -->
                                     <div class="tracking-diary-content">
                                         <div class="section-header-title" style="margin-bottom: 2px;">IV. Theo dõi</div>
 
                                         <div class="day-boxes-horizontal-flow">
 
-                                            <!-- TRƯỜNG HỢP 1: ĐÃ KHỞI TẠO DỮ LIỆU CAN THIỆP THỰC TẾ -->
                                             <t t-if="muctieu.ketqua2muctieu_ids">
                                                 <t t-foreach="muctieu.ketqua2muctieu_ids" t-as="kq">
 
                                                     <t t-set="is_future_status" t-value="kq.is_date_status == '1'"/>
-
-                                                    <!-- 🌟 ĐỒNG BỘ LOGIC: loai là '0', '-1' hoặc ngày tương lai thực tế đều nhận màu xám -->
                                                     <t t-set="rest_class" t-value="(kq.loai in ['0', '-1'] or is_future_status) and 'box-print-rest' or ''"/>
 
-                                                    <!-- Xác định class màu Pastel động tương ứng cho ngày đi học -->
                                                     <t t-set="color_class" t-value="''"/>
                                                     <t t-if="not is_future_status and kq.loai == '1'">
                                                         <t t-if="kq.trangthai == '1'"><t t-set="color_class" t-value="'box-print-dat'"/></t>
@@ -375,7 +388,6 @@
                                                     </t>
 
                                                     <div t-attf-class="day-tracking-box #{rest_class} #{color_class}">
-                                                        <!-- 🌟 ĐÃ TRẢ LẠI HIỂN THỊ NGÀY/THÁNG dd/MM -->
                                                         <span class="cell-number">
                                                             <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
                                                         </span>
@@ -397,7 +409,6 @@
                                                 </t>
                                             </t>
 
-                                            <!-- TRƯỜNG HỢP 2: FALLBACK KHI CHƯA KHỞI TẠO KẾT QUẢ CAN THIỆP -->
                                             <t t-else="">
                                                 <t t-set="total_days" t-value="int(o.songay or 30)"/>
                                                 <t t-foreach="range(total_days)" t-as="day_idx">
@@ -407,7 +418,6 @@
                                                     <t t-set="should_fallback_gray" t-value="is_fallback_sunday or is_fallback_future"/>
 
                                                     <div t-attf-class="day-tracking-box #{should_fallback_gray and 'box-print-rest' or ''}">
-                                                        <!-- 🌟 ĐÃ TRẢ LẠI HIỂN THỊ NGÀY/THÁNG CHO BẢN FALLBACK -->
                                                         <span class="cell-number">
                                                             <span t-out="computed_date.strftime('%d/%m')"/>
                                                         </span>
@@ -421,8 +431,7 @@
 
                                         </div>
 
-                                        <!-- Khối badge kết quả tổng kết biên dưới phối màu Pastel đồng bộ -->
-                                        <div style="margin-top: 4px; padding-top: 4px; font-size: 15px; text-align: left; color: #000000; border-top: 1px dashed #000000;">
+                                        <div style="margin-top: 3px; padding-top: 3px; font-size: 13px; text-align: left; color: #000000; border-top: 1px dashed #000000;">
                                             <span class="text-bold">Kết quả <strong><span t-out="o.songay"/></strong> ngày của kế hoạch:</span>
                                             Chưa đạt (-): <span class="lbl-summary-chuadat"><span t-field="muctieu.ketqua_khongdat"/></span> |
                                             Hình thành (+/-): <span class="lbl-summary-hinhthanh"><span t-field="muctieu.ketqua_hinhthanh"/></span> |
