@@ -67,7 +67,12 @@ class HocSinhInherit(models.Model
 
     tong_ketluan = fields.Integer(compute="_compute_tong_ketluan", string="Số lượng")
     tong_kehoach = fields.Integer(compute="_compute_tong_kehoach",string="Số lượng")
+
     tong_kehoach_doiduyet = fields.Integer(compute="_compute_tong_kehoach_doiduyet", string="Số lượng đợi duyệt")
+    ngay_guiduyet = fields.Char(string="Ngày [Gửi duyệt]",compute="_compute_tong_kehoach_doiduyet")
+    ngay_duyet = fields.Char(string="Ngày [Duyệt]", compute="_compute_tong_kehoach_doiduyet")
+
+
     tong_kehoach_taomoi = fields.Integer(compute="_compute_tong_kehoach_taomoi", string="Số lượng đã tạo")
     tong_kehoach_dang_canthiep = fields.Integer(compute="_compute_tong_kehoach_dang_canthiep", string="Số lượng đang can thiêp")
     tong_kehoach_da_canthiep = fields.Integer(compute="_compute_tong_kehoach_da_canthiep",string="Số [Kế hoạch] Đã can thiệp")
@@ -93,17 +98,31 @@ class HocSinhInherit(models.Model
         for hs in self:
             if hs.kehoach_ids:
                 tong =0
+                ngay = None
                 if hs.kehoach_ids:
                     for kh in hs.kehoach_ids:
                         if (kh.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
                             and kh.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET):
+                            if kh.ngay_guiduyet:
+                                ngay = kh.ngay_guiduyet
+                            else:
+                                ngay = kh.write_date
+
                             if is_admin:
                                 tong +=1
                             elif (kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id):
                                 tong +=1
+
                 hs.tong_kehoach_doiduyet = tong
+                hs.ngay_guiduyet = string_util.date2string_format(ngay,'%H:%M %d/%m/%Y')
+
             else:
                 hs.tong_kehoach_doiduyet = 0
+                hs.ngay_guiduyet = None
+
+
+   
+
 
     def _compute_tong_kehoach_taomoi(self):
         user = self.env.user

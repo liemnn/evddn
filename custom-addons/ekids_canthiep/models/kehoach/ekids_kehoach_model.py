@@ -76,12 +76,16 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
     # Default = Hôm nay + 31 ngày (Dùng hàm lambda để tính toán nhanh)
 
-    den_ngay = fields.Date(
-        string="Đến ngày",
+    den_ngay = fields.Date(string="Đến ngày",
         required=True,
     )
 
     songay = fields.Integer(string="Số ngày", default=31)
+
+
+    ngay_guiduyet = fields.Datetime(string="Ngày [Gửi duyệt]")
+    ngay_duyet = fields.Datetime(string="Ngày [Duyệt]")
+    ngay_ketthuc = fields.Datetime(string="Ngày [Kết thúc]")
 
 
 
@@ -375,23 +379,27 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                 },
             }
 
-
-
-
-
     def action_gui_pheduyet(self):
-        if (self.trangthai == kehoach_util.KEHOACH_DANG_LAP
-                or self.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
-
-            self.trangthai = kehoach_util.KEHOACH_DANG_PHEDUYET
-            self.trangthai_pheduyet = kehoach_util.PHEDUYET_DOI_DUYET
+        for rec in self:
+            if (rec.trangthai == kehoach_util.KEHOACH_DANG_LAP
+                    or rec.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                data ={
+                    'trangthai': kehoach_util.KEHOACH_DANG_PHEDUYET,
+                    'trangthai_pheduyet': kehoach_util.PHEDUYET_DOI_DUYET,
+                    'ngay_guiduyet': fields.Date.today(),
+                }
+                rec.write(data)
 
     def action_pheduyet_dat(self):
-        if self.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
-            self.trangthai_pheduyet = kehoach_util.PHEDUYET_DA_DUYET
-            self.trangthai = kehoach_util.KEHOACH_DANG_CANTHIEP
-            # cập nhật kết quả mục tiêu biên tập vào chương trình
-            self.func_capnhat_thietke_muctieu_vao_chuongtrinh()
+        for rec in self:
+            if rec.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
+                data={
+                    'trangthai_pheduyet': kehoach_util.PHEDUYET_DA_DUYET,
+                    'trangthai': kehoach_util.KEHOACH_DANG_CANTHIEP,
+                }
+                rec.write(data)
+                # Cập nhật kết quả mục tiêu biên tập vào chương trình cho từng bản ghi
+                rec.func_capnhat_thietke_muctieu_vao_chuongtrinh()
 
     def func_capnhat_thietke_muctieu_vao_chuongtrinh(self):
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
