@@ -571,13 +571,18 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             for dm_ca in ca_canthieps:
                soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca2thus,dm_ca.id,ngay_dihoc_kehoachs)
                if soca > 0:
-                   tien =soca * dm_ca.tien
-                   # tien thu tron goi theo thang
-                   if dm_ca.is_tien_trongoi == True:
-                      # dongia = (dm_ca.tien/len(ngay_dihoc_kehoachs))
-                       tien = dm_ca.tien
+                    tien =soca * dm_ca.tien
+                    # tien thu tron goi theo thang
+                    if dm_ca.is_tien_trongoi == True:
+                        # dongia = (dm_ca.tien/len(ngay_dihoc_kehoachs))
+                        soca_tren_ngay = soca /len(ngay_dihoc_kehoachs)
+                        lamtron =int(soca_tren_ngay)
+                        if lamtron <= 0:
+                            tien = dm_ca.tien
+                        else:
+                            tien = dm_ca.tien * lamtron
 
-                   data = {
+                    data = {
                         'hocphi_id': hocphi.id,
                         'dm_ca_id':dm_ca.id,
                         'soca':soca,
@@ -585,7 +590,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                         'desc': dm_ca.desc,
 
                     }
-                   self.env['ekids.hocphi_ca'].create(data)
+                    self.env['ekids.hocphi_ca'].create(data)
 
 
 
