@@ -49,6 +49,16 @@
 
                 <field name="tong_kehoach_dang_canthiep" string="Xác nhận [Kết quả]"/>
 
+                <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-success btn-sm fw-bold text-uppercase"
+                        icon="fa-list-ul"
+                        invisible="tong_kehoach_dang_canthiep==0"
+                        context="{'default_context_type':'3','default_context_trangthai':['1'],'default_context_trangthai_pheduyet':['1']}"
+                        title="Danh sách [Kế hoạch] Cần đã Duyệt"
+                />
+
                  <button name="action_xem_danhsach_kehoach_can_kiemduyet_ketqua"
                         string="Xác nhận"
                         type="object"

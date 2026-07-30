@@ -24,6 +24,14 @@
                             size: A4 landscape;
                             margin: 6mm 8mm !important;
                         }
+                         h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
+                            margin-top: 0;
+                            margin-bottom: 0.75rem;
+                            font-family: inherit;
+                            font-size: 16px !important;
+                            line-height: 1.2;
+                            color: var(--heading-color);
+                        }
 
                         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 

@@ -331,7 +331,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
                 url["domain"] = domain
             else:
-                # danh sách can thiệp
+                # danh sách đang can thiệp
                 domain = [('hocsinh_id', '=', self.id)]
                 if context_trangthai:
                     domain_trangthai =[('trangthai', 'in', context_trangthai)]
@@ -341,7 +341,10 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                     domain = expression.AND([domain, domain_trangthai])
 
                 if is_admin == False:
-                    domain_gv= [('gv_lapkehoach_id','=',giaovien.id)]
+                    domain_gv_lapkehoach= [('gv_lapkehoach_id','=',giaovien.id)]
+                    domain_gv_kiemduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
+                    domain_gv = expression.OR([domain_gv_lapkehoach, domain_gv_kiemduyet])
+
                     domain = expression.AND([domain, domain_gv])
 
                 url["domain"] = domain

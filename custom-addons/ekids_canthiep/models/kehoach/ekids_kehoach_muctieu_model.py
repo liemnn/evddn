@@ -129,8 +129,7 @@ class KeHoach2MucTieu(models.Model):
             if not record.muctieu_id:
                 is_bientap_tem = True
             else:
-                if (string_util._is_html_empty(record.muctieu_id.chucnang)
-                    or string_util._is_html_empty(record.muctieu_id.thietke)):
+                if string_util._is_html_empty(record.muctieu_id.thietke) == True:
                     is_bientap_tem = True
             record.is_bientap_temp = is_bientap_tem
 
@@ -428,22 +427,13 @@ class KeHoach2MucTieu(models.Model):
             else:
                 mt.name =mt.muctieu_them
 
-    def _compute_chucnang(self):
-        for mt in self:
-            if mt.muctieu_id and mt.muctieu_id.chucnang:
-                mt.chucnang =mt.muctieu_id.chucnang
-            else:
-                mt.chucnang = mt.chucnang_temp
-
-
-
 
     # 1. COMPUTE CHỨC NĂNG (Kiểu HTML)
     @api.depends('muctieu_id', 'muctieu_id.chucnang', 'chucnang_temp')
     def _compute_chucnang(self):
         for mt in self:
             if (mt.muctieu_id
-                    and not string_util._is_html_empty(mt.muctieu_id.chucnang)):
+                    and string_util._is_html_empty(mt.muctieu_id.chucnang) == False):
                 mt.chucnang = mt.muctieu_id.chucnang
             else:
                 mt.chucnang = mt.chucnang_temp or ''
@@ -453,7 +443,7 @@ class KeHoach2MucTieu(models.Model):
     def _compute_thietke(self):
         for mt in self:
             if (mt.muctieu_id
-                    and not string_util._is_html_empty(mt.muctieu_id.thietke)):
+                    and string_util._is_html_empty(mt.muctieu_id.thietke)== False):
                 mt.thietke = mt.muctieu_id.thietke
             else:
                 mt.thietke = mt.thietke_temp or ''
@@ -463,7 +453,7 @@ class KeHoach2MucTieu(models.Model):
     def _compute_tieuchi_chuadat(self):
         for mt in self:
             if (mt.muctieu_id
-                    and not string_util._is_char_empty(mt.muctieu_id.tieuchi_chuadat)):
+                    and string_util._is_char_empty(mt.muctieu_id.tieuchi_chuadat) == False):
                 mt.tieuchi_chuadat = mt.muctieu_id.tieuchi_chuadat
             else:
                 mt.tieuchi_chuadat = mt.tieuchi_chuadat_temp or ''
@@ -473,7 +463,7 @@ class KeHoach2MucTieu(models.Model):
     def _compute_tieuchi_hinhthanh(self):
         for mt in self:
             if (mt.muctieu_id
-                    and not string_util._is_char_empty(mt.muctieu_id.tieuchi_hinhthanh)):
+                    and string_util._is_char_empty(mt.muctieu_id.tieuchi_hinhthanh) == False):
                 mt.tieuchi_hinhthanh = mt.muctieu_id.tieuchi_hinhthanh
             else:
                 mt.tieuchi_hinhthanh = mt.tieuchi_hinhthanh_temp or ''
@@ -483,7 +473,7 @@ class KeHoach2MucTieu(models.Model):
     def _compute_tieuchi_dat(self):
         for mt in self:
             if (mt.muctieu_id
-                    and not string_util._is_char_empty(mt.muctieu_id.tieuchi_dat)):
+                    and string_util._is_char_empty(mt.muctieu_id.tieuchi_dat)==False):
                 mt.tieuchi_dat = mt.muctieu_id.tieuchi_dat
             else:
                 mt.tieuchi_dat = mt.tieuchi_dat_temp or ''

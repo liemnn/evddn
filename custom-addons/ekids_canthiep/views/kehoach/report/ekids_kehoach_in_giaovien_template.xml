@@ -186,6 +186,14 @@
                             .box-print-dat, .box-print-hinhthanh, .box-print-chuadat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                             .cell-write-space { color: #000000 !important; font-weight: bold !important; }
                         }
+                        h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
+                            margin-top: 0;
+                            margin-bottom: 0.75rem;
+                            font-family: inherit;
+                            font-size: 16px !important;
+                            line-height: 1.2;
+                            color: var(--heading-color);
+                        }
                     </style>
 
                     <div class="o_compact_print_body">

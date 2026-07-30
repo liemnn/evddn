@@ -416,29 +416,18 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                                 ct_muctieu = kehoach_muctieu.muctieu_id
                                 if ct_muctieu:
                                     # bat dau cap nhat tung phan tu
-                                    #if not string_util._is_html_empty(kehoach_muctieu.chucnang_temp):
-                                     #   setattr(ct_muctieu,"chucnang",kehoach_muctieu.chucnang_temp)
+                                    if string_util._is_html_empty(ct_muctieu.thietke) == True:
+                                        # Thiết kế chưa có
+                                        if string_util._is_html_empty(kehoach_muctieu.thietke_temp) == False:
+                                            coso = ct_muctieu.chuongtrinh_id.coso_id
+                                            if coso.id == giaovien.coso_id.id:
+                                                # Chỉ giáo viên cơ sở đó đang là chủ của chương trình mới được đưa vào
+                                                data ={
+                                                    'thietke': kehoach_muctieu.thietke_temp,
+                                                    'is_gv_bientap': True
+                                                }
+                                                ct_muctieu.write(data)
 
-                                    if not string_util._is_html_empty(kehoach_muctieu.thietke_temp):
-                                        coso = ct_muctieu.chuongtrinh_id.coso_id
-                                        if coso.id == giaovien.coso_id.id:
-                                            # Chỉ giáo viên cơ sở đó đang là chủ của chương trình mới được đưa vào
-
-                                            data ={
-                                                'thietke': kehoach_muctieu.thietke_temp,
-                                                'is_gv_bientap': True
-                                            }
-                                            ct_muctieu.write(data)
-
-
-                                    #if not string_util._is_char_empty(kehoach_muctieu.tieuchi_chuadat_temp):
-                                     #   setattr(ct_muctieu,"tieuchi_chuadat",kehoach_muctieu.tieuchi_chuadat_temp)
-
-                                    #if not string_util._is_char_empty(kehoach_muctieu.tieuchi_hinhthanh_temp):
-                                        #setattr(ct_muctieu,"tieuchi_hinhthanh",kehoach_muctieu.tieuchi_hinhthanh_temp)
-
-                                    #if not string_util._is_char_empty(kehoach_muctieu.tieuchi_dat_temp):
-                                     #   setattr(ct_muctieu,"tieuchi_dat",kehoach_muctieu.tieuchi_dat_temp)
 
 
 
