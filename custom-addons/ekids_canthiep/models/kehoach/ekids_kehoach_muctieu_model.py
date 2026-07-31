@@ -39,10 +39,30 @@ class KeHoach2MucTieu(models.Model):
                                  required=True,
                                  ondelete="cascade")
 
-    linhvuc_id = fields.Many2one('ekids.ct_linhvuc',
-                                 related="kehoach_linhvuc_id.linhvuc_id", string='Lĩnh vực', required=True, ondelete="cascade")
-    tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi',
-                              related="kehoach_linhvuc_id.tuoi_id", required=True, ondelete="cascade")
+    chuongtrinh_id = fields.Many2one(
+        'ekids.ct_chuongtrinh',
+        related='kehoach_linhvuc_id.linhvuc_id.chuongtrinh_id',
+        string='Chương trình',
+        store=True,
+        readonly=True,
+    )
+
+    linhvuc_id = fields.Many2one(
+        'ekids.ct_linhvuc',
+        related='kehoach_linhvuc_id.linhvuc_id',
+        string='Lĩnh vực',
+        store=True,
+        readonly=True,
+    )
+
+    tuoi_id = fields.Many2one(
+        'ekids.ct_tuoi',
+        related='kehoach_linhvuc_id.tuoi_id',
+        string='Độ tuổi',
+        store=True,
+        readonly=True,
+    )
+
 
     name = fields.Char("Tên",compute="_compute_name")
     muctieu_them = fields.Char("Tên")
@@ -62,11 +82,29 @@ class KeHoach2MucTieu(models.Model):
 
     chucnang_temp = fields.Html(string="Chức năng phát triển cốt lõi & Lập luận lâm sàng")
     thietke_temp = fields.Html(string="Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)")
+
+    trangthai_thietke = fields.Selection([
+        ('0', 'Chưa đánh giá'),
+        ('1', 'Đã đưa vào [Chương trình]'),
+        ('-1', 'Từ chối đưa vào [Chương trình]'),
+    ], string="Trạng thái đưa thiết kế vào [Chương trình]", default='0')
+
+    gv_lapkehoach_id = fields.Many2one(
+        'ekids.giaovien',
+        related='kehoach_id.gv_lapkehoach_id',
+        string='giáo viên lập kế hoạch',
+        store=True,
+        readonly=True,
+    )
+
+
     tieuchi_chuadat_temp = fields.Char(string="Chưa đạt (-)")
     tieuchi_hinhthanh_temp = fields.Char(string="Đang hình thành (+/-)")
     tieuchi_dat_temp = fields.Char(string="Đạt (+)")
 
     is_bientap_temp = fields.Boolean(compute="_compute_is_bientap_temp")
+
+
 
 
     # 🌟 1. TRƯỜNG ĐỨNG TRƯỚC (Predecessor - Many2one về chính mình)
@@ -95,6 +133,8 @@ class KeHoach2MucTieu(models.Model):
         ('-1', 'Chuyển (-)'),
         ('-2', 'Dừng (-)')
     ], string="Trạng thái kiểm duyệt chuyên môn", default='0')
+
+
 
     # ghi chú kiểm duyet
     ghichu_kiemduyet = fields.Html(string="Nội dung kiểm duyệt")

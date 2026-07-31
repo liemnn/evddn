@@ -5,8 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/chuongtrinh/ekids_ct_muctieu_kehoach_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/ekids_coso_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/ekids_coso_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/ekids_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/ekids_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_kpi2thang_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_kpi2thang_model.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,26 +51,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Debug",
-    "Python.formula_util.executor": "Run",
-    "Python.python_util.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_canthiep/models/kehoach",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.evddn.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.formula_util.executor&quot;: &quot;Run&quot;,
+    &quot;Python.python_util.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/odoo/evddn/custom-addons/ekids_canthiep/views/chuongtrinh&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\views\chuongtrinh" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\models\kehoach" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\views\kehoach" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\controllers" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_giaovien\models\luong" />
-      <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\views\kehoach\report" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_hdsd\static\src\html\giaovien" />
@@ -162,14 +168,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00327" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1783056213349</created>
-      <option name="number" value="00327" />
-      <option name="presentableId" value="LOCAL-00327" />
-      <option name="project" value="LOCAL" />
-      <updated>1783056213349</updated>
     </task>
     <task id="LOCAL-00328" summary="liemnn">
       <option name="closed" value="true" />
@@ -555,7 +553,15 @@
       <option name="project" value="LOCAL" />
       <updated>1785398604216</updated>
     </task>
-    <option name="localTasksCounter" value="376" />
+    <task id="LOCAL-00376" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1785420651431</created>
+      <option name="number" value="00376" />
+      <option name="presentableId" value="LOCAL-00376" />
+      <option name="project" value="LOCAL" />
+      <updated>1785420651431</updated>
+    </task>
+    <option name="localTasksCounter" value="377" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -640,11 +646,6 @@
           <option name="timeStamp" value="105" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_kpi2thang_ketqua_model.py</url>
-          <line>40</line>
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_func/giaovien_util.py</url>
           <line>86</line>
           <option name="timeStamp" value="134" />
@@ -656,7 +657,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py</url>
-          <line>582</line>
+          <line>622</line>
           <option name="timeStamp" value="287" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -710,11 +711,6 @@
           <option name="timeStamp" value="410" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_func/giaovien_util.py</url>
-          <line>359</line>
-          <option name="timeStamp" value="413" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py</url>
           <line>577</line>
           <option name="timeStamp" value="416" />
@@ -726,6 +722,7 @@
         <watch expression="ca2ngays" />
         <watch expression="self" />
         <watch expression="muctieus" />
+        <watch expression="kpi" />
       </configuration>
     </watches-manager>
   </component>

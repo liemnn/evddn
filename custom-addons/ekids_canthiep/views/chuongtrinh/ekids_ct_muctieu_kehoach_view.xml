@@ -1,0 +1,59 @@
+<odoo>
+    <data>
+
+        <record id="ekids_canthiep.kehoach_muctieu_kiemduyet_thietke_list" model="ir.ui.view">
+            <field name="name">ekids.kehoach_muctieu.tree</field>
+            <field name="model">ekids.kehoach_muctieu</field>
+            <field name="arch" type="xml">
+                <list string="Danh sách mục tiêu kế hoạch"
+                      default_order="write_date asc" limit="200" create="0" delete="0" edit="0">
+
+                    <!-- 1. STT VÀ SEQUENCE HỖ TRỢ KÉO THẢ -->
+
+                    <field name="index" string="STT" readonly="1" optional="show"/>
+
+                    <!-- 2. THÔNG TIN PHÂN LOẠI (Related Fields) -->
+                    <field name="chuongtrinh_id" string="Chương trình" readonly="1" optional="show"/>
+                    <field name="linhvuc_id" string="Lĩnh vực" readonly="1" optional="show"/>
+                    <field name="tuoi_id" string="Độ tuổi" readonly="1" optional="show"/>
+
+                    <!-- 3. TÊN MỤC TIÊU -->
+                    <field name="name" string="Tên mục tiêu" readonly="1" class="fw-bold"/>
+
+                    <!-- 4. THÔNG TIN GIÁO VIÊN VÀ NGÀY BIÊN TẬP -->
+                    <!-- Lấy giáo viên lập từ Kế hoạch cha -->
+
+                    <field name="gv_lapkehoach_id" string="Giáo viên" widget="many2one_avatar_user" readonly="1" optional="show"/>
+                    <field name="write_date" string="Ngày biên tập" widget="date" readonly="1" optional="show"/>
+
+
+                    <!-- 5. CÁC TRẠNG THÁI KIỂM DUYỆT & CAN THIỆP -->
+                    <field name="trangthai_thietke"
+                           string="Trạng thái"
+                           width="100"
+                           widget="badge"
+                           decoration-success="trangthai_thietke == '1'"
+                           decoration-info="trangthai_thietke == '-1'"
+                           decoration-muted="trangthai_thietke == '0'"
+                          />
+
+
+
+                    <!-- 6. CÁC NÚT ACTION XỬ LÝ NHANH -->
+                    <button name="action_giaovien_bientap_thietke_muctieu"
+                            type="object"
+                            string="Biên tập"
+                            icon="fa-edit"
+                            class="btn-primary btn-sm"/>
+
+
+
+                </list>
+            </field>
+        </record>
+
+
+
+
+    </data>
+</odoo>

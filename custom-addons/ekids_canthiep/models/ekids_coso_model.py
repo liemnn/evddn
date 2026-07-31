@@ -223,6 +223,41 @@ class CoSo(models.Model):
             },
         }
 
+    def action_kiemduyet_noidung_thietke(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+
+        list_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_kiemduyet_thietke_list').id
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_bientap_thietke_form').id
+
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        domain = [
+            ('kehoach_id.coso_id', '=', giaovien.coso_id.id),
+            ('muctieu_id', '!=', False),
+            # 1. Loại trừ giá trị NULL/False và chuỗi rỗng hoàn toàn
+            ('thietke_temp', '!=', False),
+            ('thietke_temp', '!=', ''),
+            # 2. Loại trừ các thẻ HTML rỗng phổ biến của Editor Odoo 18
+            ('thietke_temp', 'not ilike', '<p><br></p>'),
+            ('thietke_temp', 'not ilike', '<p></p>'),
+        ]
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH SÁCH CẦN KIỂM DUYỆT',
+            'res_model': 'ekids.kehoach_muctieu',
+            'view_mode': 'list,form',
+            'views': [(list_view_id, 'list'),(form_view_id, 'form')],
+            'target': 'current',
+            'domain':domain,
+            'context': {
+                'default_coso_id': self.id,
+                'search_default_trangthai': '1',
+            },
+        }
+
+
+
 
 
 

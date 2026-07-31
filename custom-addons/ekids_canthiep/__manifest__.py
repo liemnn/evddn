@@ -27,6 +27,8 @@ Long description of module's purpose
         'views/chuongtrinh/ekids_ct_tuoi_view.xml',
         'views/chuongtrinh/ekids_ct_linhvuc_view.xml',
         'views/chuongtrinh/ekids_ct_muctieu_view.xml',
+        'views/chuongtrinh/ekids_ct_muctieu_kehoach_view.xml',
+
 
         'views/danhmuc/ekids_ct_dm_roiloan_view.xml',
         'views/danhmuc/ekids_ct_dm_lieuluong_view.xml',

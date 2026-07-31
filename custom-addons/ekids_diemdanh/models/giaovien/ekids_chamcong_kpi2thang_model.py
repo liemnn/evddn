@@ -58,9 +58,17 @@ class ChamCongKPI2Thang(models.Model):
             ),
         }
 
+
     def func_tao_macdinh_ketqua_kpi(self):
         dm_chamcong = self.chamcong_loai2thang_id.chamcong_loai_id.dm_chamcong_id
         kpis =dm_chamcong.kpi_ids
+        codes = kpis.mapped('code')
+        kpi2thang_ketquas_cu = self.kpi2thang_ketqua_ids
+        #B1 xoa cac kpi không tồn tại trong phần mới
+        for kpi_old  in kpi2thang_ketquas_cu:
+            if kpi_old.code not in codes:
+                    kpi_old.unlink()
+
         if kpis:
             for kpi in kpis:
                 count =(self.env['ekids.chamcong_kpi2thang_ketqua']
