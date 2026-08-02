@@ -1,8 +1,21 @@
 from odoo import models, fields, api, _
 from datetime import datetime
+from odoo.osv import expression
 from datetime import date
 
 from odoo.exceptions import UserError
+
+import logging
+_logger = logging.getLogger(__name__)
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
 
 class CoSo(models.Model):
     _inherit = "ekids.coso"
@@ -39,22 +52,59 @@ class CoSo(models.Model):
         diemdanh =self.func_tao_macdinh_diemdanh_thang(today.year,today.month)
         if diemdanh:
             name ='THÁNG '+str(today.month)+"/" +str(today.year)
+            domain  = self.func_get_domain_trong_khoang_thoigian(diemdanh)
             return {
                 'type': 'ir.actions.act_window',
                 'name': name,
                 'res_model': 'ekids.diemdanh_hocsinh2thang',
                 'view_mode': 'list',
                 'target': 'current',
-                'domain': [
-                    ('coso_id', '=', self.id),
-                    ('diemdanh_id','=',diemdanh.id)
-                ],
+                'domain':domain,
                 'context': {
                     'default_coso_id': self.id,
                     'default_thang': str(today.month),
                     'default_nam': str(today.year)
                 }
             }
+
+    def func_get_domain_trong_khoang_thoigian(self,diemdanh):
+        today = date.today()
+        thang =today.month
+        nam = today.year
+        ngays = ngay_util.func_get_cacngay_trong_thang(nam, thang)
+        tu_ngay = ngays[0]
+        den_ngay = ngays[len(ngays) - 1]
+
+
+
+        domain_chung = [('coso_id', '=', self.id),
+                       ('diemdanh_id', '=', diemdanh.id),
+                    ('hocsinh_id.ngay_nhaphoc', '<=', den_ngay)
+                 ]
+
+
+
+        # Nhóm 1: Học sinh đang theo học
+        domain_theohoc = [
+            ('hocsinh_id.trangthai', '=', '1'),
+        ]
+
+        # Nhóm 2: Học sinh đã nghỉ nhưng nghỉ trong tháng tìm kiếm
+        domain_danghi = [
+            ('hocsinh_id.ngay_nghihoc', '!=', False),
+            ('hocsinh_id.ngay_nghihoc', '>=', tu_ngay)
+        ]
+
+
+        domain = expression.AND([
+            domain_chung,
+            expression.OR([
+                domain_theohoc,
+                domain_danghi
+            ])
+        ])
+
+        return domain
 
 
     def func_tao_macdinh_diemdanh_thang(self,nam,thang):
