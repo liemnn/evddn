@@ -84,9 +84,9 @@ class KeHoach2MucTieu(models.Model):
     thietke_temp = fields.Html(string="Thiết kế hoạt động cho giáo viên Theo mô tả (ABC)")
 
     trangthai_thietke = fields.Selection([
-        ('0', 'Chưa đánh giá'),
-        ('1', 'Đã đưa vào [Chương trình]'),
-        ('-1', 'Từ chối đưa vào [Chương trình]'),
+        ('0', 'Chưa xem'),
+        ('1', 'Đưa vào [Chương trình]'),
+        ('-1','Không đưa vào'),
     ], string="Trạng thái đưa thiết kế vào [Chương trình]", default='0')
 
     gv_lapkehoach_id = fields.Many2one(
@@ -125,6 +125,8 @@ class KeHoach2MucTieu(models.Model):
         ("-1", "Đang can thiệp"),
 
     ], string="Trạng thái", default="0",compute="_compute_trangthai",store=False)
+
+    is_co_thietke = fields.Boolean(compute="_compute_is_co_thietke")
 
     # Thêm vào Model: ekids.kehoach_muctieu
     trangthai_kiemduyet = fields.Selection([
@@ -658,6 +660,35 @@ class KeHoach2MucTieu(models.Model):
             },
         }
 
+    def action_thietke_muctieu_vao_truongtrinh(self):
+        setattr(self,"trangthai_thietke","1")
+        url = self.kehoach_id.coso_id.action_kiemduyet_noidung_thietke()
+        return url
+
+    def action_thietke_muctieu_khongvao_truongtrinh(self):
+        for record  in self:
+            setattr(record,"trangthai_thietke","-1")
+        url = self.kehoach_id.coso_id.action_kiemduyet_noidung_thietke()
+        return url
+
+    def _compute_is_co_thietke(self):
+        for mt in self:
+            is_co_thietke = False
+            if string_util._is_html_empty(mt.chucnang) == False:
+                is_co_thietke = True
+            if string_util._is_html_empty(mt.thietke) == False:
+               is_co_thietke = True
+            if string_util._is_char_empty(mt.tieuchi_chuadat) == False:
+                is_co_thietke = True
+            if string_util._is_char_empty(mt.tieuchi_hinhthanh) == False:
+                is_co_thietke = True
+            if string_util._is_char_empty(mt.tieuchi_dat) == False:
+                is_co_thietke = True
+
+            mt.is_co_thietke = is_co_thietke
+
+
+
     @api.model_create_multi
     def create(self, vals_list):
         # 1. Gọi hàm tạo của super để lấy về toàn bộ recordset được tạo ra
@@ -670,6 +701,55 @@ class KeHoach2MucTieu(models.Model):
 
         return records
 
+    def write(self, vals):
+        self.func_capnhat_thietke_vao_chuongtrinh(vals)
+        res = super(KeHoach2MucTieu, self).write(vals)
+        return res
+
+
+    def func_capnhat_thietke_vao_chuongtrinh(self,vals):
+
+        context = self.env.context
+        bientap_thietke_muctieu = context.get("default_duyet_bientap_chuongtrinh")
+        if bientap_thietke_muctieu == '1':
+            if 'trangthai_thietke' in vals:
+                if vals['trangthai_thietke'] == '1':
+                    ct_muctieu = self.muctieu_id
+                    if ct_muctieu:
+                        is_update = self.is_role_dua_vao_chuongtrinh()
+                        if (string_util._is_html_empty(self.thietke_temp) == False
+                                and is_update == True):
+                            data = {
+                                'thietke': self.thietke_temp,
+                                'is_gv_bientap': True
+                            }
+                            if string_util._is_html_empty(self.chucnang_temp) == False:
+                                data['chucnang'] = self.chucnang_temp
+
+                            if string_util._is_char_empty(self.tieuchi_chuadat_temp) == False:
+                                data['tieuchi_chuadat'] = self.tieuchi_chuadat_temp
+
+                            if string_util._is_char_empty(self.tieuchi_hinhthanh_temp) == False:
+                                data['tieuchi_hinhthanh'] = self.tieuchi_hinhthanh_temp
+
+                            if string_util._is_char_empty(self.tieuchi_dat_temp) == False:
+                                data['tieuchi_dat'] = self.tieuchi_dat_temp
+
+                            ct_muctieu.write(data)
+
+
+
+    def is_role_dua_vao_chuongtrinh(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_ql_ct = user.has_group('ekids_core.ql_ct_canthiep')
+        is_ketluan = user.has_group('ekids_core.ketluan')
+        if (is_admin == True
+                or is_ql_ct == True
+                or is_ketluan == True):
+            return True
+        else:
+            return False
 
 
 

@@ -228,8 +228,8 @@ class CoSo(models.Model):
         is_admin = user.has_group('base.group_system')
 
         list_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_kiemduyet_thietke_list').id
-        form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_bientap_thietke_form').id
-
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_duyet_thietke_form').id
+        search_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_search').id
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
         domain = [
             ('kehoach_id.coso_id', '=', giaovien.coso_id.id),
@@ -248,11 +248,14 @@ class CoSo(models.Model):
             'res_model': 'ekids.kehoach_muctieu',
             'view_mode': 'list,form',
             'views': [(list_view_id, 'list'),(form_view_id, 'form')],
+            'search_view_id': [search_view_id, 'search'], # 🌟 BẮT BUỘC KHAI BÁO DÒNG NÀY
             'target': 'current',
             'domain':domain,
             'context': {
+                'default_duyet_bientap_chuongtrinh': '1',
                 'default_coso_id': self.id,
-                'search_default_trangthai': '1',
+                'search_default_trangthai_thietke_0': '0',
+
             },
         }
 
