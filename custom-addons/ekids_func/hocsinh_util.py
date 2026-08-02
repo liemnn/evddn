@@ -279,7 +279,8 @@ def func_get_domain_trong_khoang_thoigian(coso_ids, tu_ngay,den_ngay):
     # Nhóm 2: Học sinh đã nghỉ nhưng nghỉ trong tháng tìm kiếm
     domain_danghi = [
         ('ngay_nghihoc', '!=', False),
-        ('ngay_nghihoc', '>=', tu_ngay)
+        ('ngay_nghihoc', '>=', tu_ngay),
+
     ]
 
     domain = expression.AND([

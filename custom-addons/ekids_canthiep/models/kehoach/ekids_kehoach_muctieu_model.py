@@ -671,6 +671,9 @@ class KeHoach2MucTieu(models.Model):
         url = self.kehoach_id.coso_id.action_kiemduyet_noidung_thietke()
         return url
 
+    def action_xem_chitiet_muctieu(self):
+        return None
+
     def _compute_is_co_thietke(self):
         for mt in self:
             is_co_thietke = False

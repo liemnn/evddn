@@ -52,7 +52,7 @@ class CoSo(models.Model):
         diemdanh =self.func_tao_macdinh_diemdanh_thang(today.year,today.month)
         if diemdanh:
             name ='THÁNG '+str(today.month)+"/" +str(today.year)
-            domain  = self.func_get_domain_trong_khoang_thoigian(diemdanh)
+            domain  = self.func_get_domain_trong_khoang_thoigian_diemdanh(diemdanh)
             return {
                 'type': 'ir.actions.act_window',
                 'name': name,
@@ -67,7 +67,7 @@ class CoSo(models.Model):
                 }
             }
 
-    def func_get_domain_trong_khoang_thoigian(self,diemdanh):
+    def func_get_domain_trong_khoang_thoigian_diemdanh(self,diemdanh):
         today = date.today()
         thang =today.month
         nam = today.year
