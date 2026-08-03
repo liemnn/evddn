@@ -54,7 +54,7 @@
                        string="Còn lại(ngày)"
                        width="70"
                        class="fw-bold kh-blink-alert"
-                       decoration-danger="ngay_conlai_kehoach &gt; 0 and ngay_conlai_kehoach &lt;= 2"
+                       decoration-danger="ngay_conlai_kehoach &gt;= 0 and ngay_conlai_kehoach &lt;= 2"
                        decoration-warning="ngay_conlai_kehoach &gt;= 3 and ngay_conlai_kehoach &lt;= 10"
                        decoration-success="ngay_conlai_kehoach &gt; 10"/>
 

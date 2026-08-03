@@ -298,7 +298,7 @@ class KeHoach2MucTieu(models.Model):
             kehoach = mt.kehoach_id
             is_chophep_canthiep = False
             if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                if today >= kehoach.tu_ngay and today <= kehoach.den_ngay:
+                if today >= kehoach.tu_ngay:
                     soluong_str = coso_util.func_cauhinh_canthiep(self, kehoach.coso_id, "muctieu_soluong_mo", "2")
                     is_chophep_canthiep = mt.func_is_chophep_canthiep(int(soluong_str))
 

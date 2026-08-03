@@ -99,9 +99,7 @@ def func_get_kehoach_can_canthiep_hocsinh_trangthai_ngay(self, hocsinh, trangtha
     if giaovien:
         domain =[ ('hocsinh_id', '=', hocsinh.id),
                     ('trangthai', 'in', trangthais)]
-        if ngay:
-            domain.append(("tu_ngay","<=",ngay))
-            domain.append(("den_ngay", ">=", ngay))
+
 
         if giaovien:
             if is_admin == False:

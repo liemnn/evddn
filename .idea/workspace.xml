@@ -7,7 +7,7 @@
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_inherit_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_inherit_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_hocsinh_canthiep_inherit_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_hocsinh_canthiep_inherit_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_hocsinh_duyet_kehoach_inherit_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_hocsinh_duyet_kehoach_inherit_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,7 +50,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Run",
+    "Python.evddn.executor": "Debug",
     "Python.formula_util.executor": "Run",
     "Python.python_util.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
@@ -164,14 +164,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00335" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1783074427899</created>
-      <option name="number" value="00335" />
-      <option name="presentableId" value="LOCAL-00335" />
-      <option name="project" value="LOCAL" />
-      <updated>1783074427899</updated>
     </task>
     <task id="LOCAL-00336" summary="liemnn">
       <option name="closed" value="true" />
@@ -557,7 +549,15 @@
       <option name="project" value="LOCAL" />
       <updated>1785738609211</updated>
     </task>
-    <option name="localTasksCounter" value="384" />
+    <task id="LOCAL-00384" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1785748512245</created>
+      <option name="number" value="00384" />
+      <option name="presentableId" value="LOCAL-00384" />
+      <option name="project" value="LOCAL" />
+      <updated>1785748512247</updated>
+    </task>
+    <option name="localTasksCounter" value="385" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -677,16 +677,6 @@
           <option name="timeStamp" value="374" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_inherit_model.py</url>
-          <line>333</line>
-          <option name="timeStamp" value="381" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_kehoach_action_abstractmodel.py</url>
-          <line>334</line>
-          <option name="timeStamp" value="384" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_ketluan_model.py</url>
           <line>380</line>
           <option name="timeStamp" value="392" />
@@ -715,6 +705,16 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/ekids_coso_model.py</url>
           <line>91</line>
           <option name="timeStamp" value="425" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_inherit_model.py</url>
+          <line>371</line>
+          <option name="timeStamp" value="434" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_hocsinh_inherit_model.py</url>
+          <line>342</line>
+          <option name="timeStamp" value="436" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

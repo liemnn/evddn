@@ -173,8 +173,7 @@ class HocSinhInherit(models.Model
                 if hs.kehoach_ids:
                     for kh in hs.kehoach_ids:
                         if kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                            if (today>= kh.tu_ngay
-                                and today<= kh.den_ngay):
+                            if today>= kh.tu_ngay:
 
                                 if context_type =="2":
                                     #TH: Kiem duyet
@@ -341,7 +340,7 @@ class HocSinhInherit(models.Model
         for hs in self:
             # LƯU Ý SỐNG CÒN: Luôn gán mặc định False đầu vòng lặp cho từng học sinh
             # để tránh lỗi lọt điều kiện không gán dữ liệu của Odoo Compute
-            hs.is_canthiep = False
+            is_canthiep = False
             trangthais=[kehoach_util.KEHOACH_DANG_CANTHIEP]
             kehoach = kehoach_util.func_get_kehoach_can_canthiep_hocsinh_trangthai_ngay(self,hs, trangthais,today)
 
@@ -352,11 +351,11 @@ class HocSinhInherit(models.Model
 
 
                 # Kiểm tra khoảng thời gian hiệu lực (Đảm bảo các ô ngày không bị False/Rỗng)
-                if tu_ngay and den_ngay and tu_ngay <= today <= den_ngay:
+                if tu_ngay and tu_ngay <= today:
 
                     # Phân quyền xử lý gán kết quả True
                     if is_admin:
-                        hs.is_canthiep = True
+                        is_canthiep = True
                     else:
 
                         giaoviens = kehoach.ketluan_id.gv_canthiep_ids
@@ -364,12 +363,13 @@ class HocSinhInherit(models.Model
                         if giaoviens:
                             user_ids = giaoviens.mapped('user_id').ids
                             if user_ids and user.id in user_ids:
-                                hs.is_canthiep = True
+                                is_canthiep = True
                         else:
                             giaovien = kehoach.ketluan_id.gv_kiemduyet_id
                             if giaovien and giaovien.user_id and giaovien.user_id.id == user.id:
                                 # cho phép giáo viên vào kiểm duyệt
-                                hs.is_canthiep = True
+                                is_canthiep = True
+            hs.is_canthiep = is_canthiep
 
 
 
@@ -408,11 +408,6 @@ class HocSinhInherit(models.Model
                         trangthai = kehoach_util.HOCSINH_CHUA_CO_KEHOACH
                     else:
                         # --- ÉP KIỂU NGÀY AN TOÀN TRÁNH LỖI DATETIME VS DATE ---
-                        tu_ngay = kehoach.tu_ngay.date() if isinstance(kehoach.tu_ngay, datetime) else kehoach.tu_ngay
-                        den_ngay = kehoach.den_ngay.date() if isinstance(kehoach.den_ngay,
-                                                                         datetime) else kehoach.den_ngay
-
-                        # Khối 1: Tính toán các trạng thái ban đầu và phê duyệt
                         if kehoach.trangthai == kehoach_util.KEHOACH_DANG_LAP:
                             trangthai = kehoach_util.HOCSINH_DANG_LAP_KEHOACH
 
@@ -423,31 +418,20 @@ class HocSinhInherit(models.Model
                                 trangthai = kehoach_util.HOCSINH_CAN_DIEUCHINH
                             else:
                                 # Đã duyệt -> Chuyển trạng thái học sinh thành ĐÃ DUYỆT
-                                trangthai = kehoach_util.HOCSINH_DA_DUYET
-                                # Cập nhật trạng thái của chính bản ghi kế hoạch sang ĐANG CAN THIỆP
-                                kehoach.trangthai = kehoach_util.KEHOACH_DANG_CANTHIEP
-
-                        # Khối 2: ĐƯA VÀO TRONG ELSE - Tính toán thời hạn riêng cho trạng thái ĐANG CAN THIỆP
-                        # (Sử dụng luôn giá trị vừa cập nhật từ Khối 1 nếu có)
-                        if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                            if den_ngay and den_ngay < today:
-                                trangthai = kehoach_util.HOCSINH_HET_HIEULUC
-                                kehoach.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
-                            elif tu_ngay and den_ngay and tu_ngay <= today <= den_ngay:
                                 trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
-                            else:
-                                trangthai = kehoach_util.HOCSINH_DA_DUYET
+                        else:
+
+                            if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                                trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
+                            elif kehoach.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
+                                trangthai = kehoach_util.HOCSINH_HET_HIEULUC
             else:
                 if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                    if (today>= kehoach.tu_ngay
-                            and today<= kehoach.den_ngay):
-                        trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
-                    else:
+                    if today < kehoach.tu_ngay:
                         trangthai = kehoach_util.HOCSINH_DA_DUYET
-                elif kehoach.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
-                    trangthai = kehoach_util.HOCSINH_HET_HIEULUC
-                else:
-                    trangthai = kehoach_util.HOCSINH_DANG_LAP_KEHOACH
+                    else:
+                        trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
+
 
 
 
