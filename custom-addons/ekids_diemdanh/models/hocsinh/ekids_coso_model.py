@@ -67,6 +67,21 @@ class CoSo(models.Model):
                 }
             }
 
+    def func_xoa_diemdanh_khi_hocsinh_nghi_trongthang(self,diemdanh):
+        hocsinh2thang_ids = diemdanh.hocsinh2thang_ids
+        if hocsinh2thang_ids:
+            today = date.today()
+            thang = today.month
+            nam = today.year
+            ngays = ngay_util.func_get_cacngay_trong_thang(nam, thang)
+            tu_ngay = ngays[0]
+
+            for hocsinh2thang in hocsinh2thang_ids:
+                ngay_nghihoc = hocsinh2thang.hocsinh_id.ngay_nghihoc
+                if ngay_nghihoc:
+                    if ngay_nghihoc < tu_ngay:
+                        hocsinh2thang.unlink()
+
     def func_get_domain_trong_khoang_thoigian_diemdanh(self,diemdanh):
         today = date.today()
         thang =today.month
@@ -75,7 +90,7 @@ class CoSo(models.Model):
         tu_ngay = ngays[0]
         den_ngay = ngays[len(ngays) - 1]
 
-
+        self.func_xoa_diemdanh_khi_hocsinh_nghi_trongthang(diemdanh)
 
         domain_chung = [('coso_id', '=', self.id),
                        ('diemdanh_id', '=', diemdanh.id),
