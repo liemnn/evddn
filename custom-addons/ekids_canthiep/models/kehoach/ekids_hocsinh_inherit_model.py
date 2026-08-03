@@ -77,6 +77,23 @@ class HocSinhInherit(models.Model
     tong_kehoach_dang_canthiep = fields.Integer(compute="_compute_tong_kehoach_dang_canthiep", string="Số lượng đang can thiêp")
     tong_kehoach_da_canthiep = fields.Integer(compute="_compute_tong_kehoach_da_canthiep",string="Số [Kế hoạch] Đã can thiệp")
 
+    ngay_conlai_kehoach = fields.Integer(compute="_compute_ngay_conlai_kehoach",string="Ngày còn lại [Kế hoạch]")
+
+
+    def _compute_ngay_conlai_kehoach(self):
+        today = date.today()
+        for hs in self:
+            so_ngay = 0
+            if hs.kehoach_ids:
+                if hs.kehoach_ids:
+                    for kh in hs.kehoach_ids:
+                        if kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                            so_ngay = (kh.den_ngay - today).days
+                            if so_ngay <= 0:
+                                so_ngay=0
+            hs.ngay_conlai_kehoach = so_ngay
+
+
     def _compute_tong_ketluan(self):
         for hs in self:
             if hs.ketluan_ids:

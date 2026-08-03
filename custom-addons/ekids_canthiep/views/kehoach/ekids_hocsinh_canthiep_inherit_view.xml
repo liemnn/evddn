@@ -22,8 +22,18 @@
                         decoration-info="trangthai == '2'"
                         decoration-danger="trangthai == '3'" width="100"/>
                 <field name="trangthai_kehoach" string="Kế hoạch"/>
-                <field name="tong_kehoach_da_canthiep" string="Kế hoạch đã can thiệp"/>
-                 <button name="action_xem_danhsach_kehoach"
+                <field name="ngay_conlai_kehoach"
+                       string="Còn lại(ngày)"
+                       width="70"
+                       class="fw-bold kh-blink-alert"
+                       decoration-danger="ngay_conlai_kehoach &gt; 0 and ngay_conlai_kehoach &lt;= 2"
+                       decoration-warning="ngay_conlai_kehoach &gt;= 3 and ngay_conlai_kehoach &lt;= 10"
+                       decoration-success="ngay_conlai_kehoach &gt; 10"/>
+
+                <field name="tong_kehoach_da_canthiep" string="Đang can thiệp"/>
+
+
+                <button name="action_xem_danhsach_kehoach"
                         string=""
                         type="object"
                         class="btn-info btn-sm text-white"

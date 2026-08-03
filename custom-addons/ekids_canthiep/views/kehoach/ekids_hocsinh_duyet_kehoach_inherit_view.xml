@@ -24,8 +24,8 @@
                 <field name="trangthai_kehoach" string="Kế hoạch" width="100"/>
                 <field name="tong_kehoach" string="Tổng" width="70"/>
 
-                <field name="tong_kehoach_doiduyet" string="Đợi duyệt"/>
-                <field name="ngay_guiduyet" string="Ngày gửi duyệt" width="120"/>
+                <field name="tong_kehoach_doiduyet" string="Đợi duyệt" width="70"/>
+                <field name="ngay_guiduyet" string="Gửi duyệt" width="100"/>
 
 
 
@@ -38,6 +38,7 @@
                         context="{'default_context_type':'2','default_context_trangthai':['2'],'default_context_trangthai_pheduyet':['0']}"
                         title="Danh sách [Kế hoạch] Cần duyệt"
                 />
+
                 <button name="action_duyet_kehoach"
                         string="Duyệt"
                         type="object"
@@ -47,8 +48,17 @@
                         title="Kế hoạch này cần Duyệt để đưa vào can thiệp"
                 />
 
-                <field name="tong_kehoach_dang_canthiep" string="Xác nhận [Kết quả]"/>
 
+
+               <field name="ngay_conlai_kehoach"
+                       string="Còn lại(ngày)"
+                       width="70"
+                       class="fw-bold kh-blink-alert"
+                       decoration-danger="ngay_conlai_kehoach &gt; 0 and ngay_conlai_kehoach &lt;= 2"
+                       decoration-warning="ngay_conlai_kehoach &gt;= 3 and ngay_conlai_kehoach &lt;= 10"
+                       decoration-success="ngay_conlai_kehoach &gt; 10"/>
+
+                <field name="tong_kehoach_dang_canthiep" string="Xác nhận" width="70"/>
                 <button name="action_xem_danhsach_kehoach"
                         string=""
                         type="object"
