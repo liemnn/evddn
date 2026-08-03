@@ -45,6 +45,11 @@ class HocPhiThang(models.Model,HocPhiThangAbstractModel):
                               ]
                              , string="Khởi tạo học phí của Tháng",required=True,index=True)
 
+    hocphi_ids = fields.One2many("ekids.hocphi",
+                                          inverse_name="thang_id",
+                                          string="Học phí của tháng")
+
+
 
     tong_hocsinh = fields.Integer(string="Tổng học sinh", readonly=True, compute="_compute_tong_hocsinh")
     tong_hocphi = fields.Float(string="Tổng học phí",readonly=True,digits=(10, 0),compute="_compute_tong_hocphi")

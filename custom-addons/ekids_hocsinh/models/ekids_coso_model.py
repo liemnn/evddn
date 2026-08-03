@@ -60,6 +60,7 @@ class CoSo(models.Model):
 
             name = "HỌC PHÍ THÁNG "+str(hocphi2thang.name).upper()+"/"+ str(hocphi2thang.nam_id.name)
             domain = self.func_get_domain_trong_khoang_thoigian(hocphi2thang)
+
             return {
                 'type': 'ir.actions.act_window',
                 'name': name,
@@ -76,6 +77,22 @@ class CoSo(models.Model):
                 }
             }
 
+    def func_xoa_hocphi_khi_hocsinh_nghi_trongthang(self,hocphi2thang):
+        hocphi_ids = hocphi2thang.hocphi_ids
+        if hocphi_ids:
+            nam = int(hocphi2thang.nam_id.name)
+            thang = int(hocphi2thang.name)
+            days = ngay_util.func_get_cacngay_trong_thang(nam,thang)
+            tu_ngay =days[0]
+
+            for hocphi in hocphi_ids:
+                ngay_nghihoc = hocphi.hocsinh_id.ngay_nghihoc
+                if ngay_nghihoc:
+                    if ngay_nghihoc < tu_ngay:
+                        hocphi.unlink()
+
+
+
     def func_get_domain_trong_khoang_thoigian(self,hocphi2thang):
         nam = int(hocphi2thang.nam_id.name)
         thang = int(hocphi2thang.name)
@@ -89,6 +106,8 @@ class CoSo(models.Model):
         domain = [('coso_id', '=', self.id), ('thang_id', '=', hocphi2thang.id)]
         if (thang_today == thang
             and nam_today == nam):
+            # xoa những học sinh đã nghỉ tháng này
+            self.func_xoa_hocphi_khi_hocsinh_nghi_trongthang(hocphi2thang)
 
             domain_chung = [('coso_id', '=', self.id),
                      ('thang_id', '=', hocphi2thang.id),
