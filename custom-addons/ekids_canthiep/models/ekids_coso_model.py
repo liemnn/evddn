@@ -22,6 +22,20 @@ class CoSo(models.Model):
     is_ketluan = fields.Boolean(compute="_compute_is_ketluan")
     is_duyet_kehoach = fields.Boolean(compute="_compute_is_duyet_kehoach")
 
+    is_ql_chuongtrinh = fields.Boolean(compute="_compute_is_ql_chuongtrinh")
+
+    def _compute_is_ql_chuongtrinh(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_ql_ct = user.has_group('ekids_core.ql_ct_canthiep')
+
+        for record in self:
+            is_ql_chuongtrinh = False
+            if (is_admin == True
+                or  is_ql_ct == True):
+                is_ql_chuongtrinh = True
+            record.is_ql_chuongtrinh = is_ql_chuongtrinh
+
     def _compute_is_duyet_kehoach(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')

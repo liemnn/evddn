@@ -672,7 +672,29 @@ class KeHoach2MucTieu(models.Model):
         return url
 
     def action_xem_chitiet_muctieu(self):
-        return None
+        self.ensure_one()
+        ct_muctieu = self.muctieu_id
+        if ct_muctieu:
+            form_view_id = self.env.ref('ekids_canthiep.ct_muctieu_form').id
+
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'NỘI DUNG MỤC TIÊU TRONG CHƯƠNG TRÌNH',
+                'res_model': 'ekids.ct_muctieu',
+                'res_id': ct_muctieu.id,  # 🌟 BẮT BUỘC có res_id để mở đúng bản ghi mục tiêu
+                'view_mode': 'form',
+                'views': [(form_view_id, 'form')],
+                'target': 'new',  # Mở dạng Pop-up
+                'flags': {
+                    'mode': 'readonly',  # 🌟 Ép view mở thẳng ở chế độ Readonly
+                },
+                'context': {
+                    'form_view_initial_mode': 'readonly',  # 🌟 Khóa chế độ khởi tạo form là Readonly
+                    'edit': False,  # 🚫 Tắt nút Edit
+                    'create': False,  # 🚫 Tắt nút Create
+                    'delete': False,  # 🚫 Tắt nút Delete
+                },
+            }
 
     def _compute_is_co_thietke(self):
         for mt in self:

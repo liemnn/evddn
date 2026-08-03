@@ -26,6 +26,7 @@
 
                                     <button class="oe_kanban_action kh-btn-main"
                                             name="action_xem_chuongtrinh_kanban"
+                                            invisible="is_ql_chuongtrinh==False"
                                             type="object">
                                         <i class="fa fa-book"/>
                                         CHƯƠNG TRÌNH CAN THIỆP

@@ -398,35 +398,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                     'trangthai': kehoach_util.KEHOACH_DANG_CANTHIEP,
                 }
                 rec.write(data)
-                # Cập nhật kết quả mục tiêu biên tập vào chương trình cho từng bản ghi
-                rec.func_capnhat_thietke_muctieu_vao_chuongtrinh()
 
-    def func_capnhat_thietke_muctieu_vao_chuongtrinh(self):
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
-
-        kehoach_linhvucs = self.kehoach_linhvuc_ids
-        if kehoach_linhvucs:
-            for kehoach_linhvuc in kehoach_linhvucs:
-                kehoach_muctieus = kehoach_linhvuc.kehoach_muctieu_ids
-                if kehoach_muctieus:
-                    for kehoach_muctieu in kehoach_muctieus:
-                        if kehoach_muctieu.muctieu_id:
-                            kehoach_muctieu._compute_is_bientap_temp()
-                            if kehoach_muctieu.is_bientap_temp:
-                                ct_muctieu = kehoach_muctieu.muctieu_id
-                                if ct_muctieu:
-                                    # bat dau cap nhat tung phan tu
-                                    if string_util._is_html_empty(ct_muctieu.thietke) == True:
-                                        # Thiết kế chưa có
-                                        if string_util._is_html_empty(kehoach_muctieu.thietke_temp) == False:
-                                            coso = ct_muctieu.chuongtrinh_id.coso_id
-                                            if coso.id == giaovien.coso_id.id:
-                                                # Chỉ giáo viên cơ sở đó đang là chủ của chương trình mới được đưa vào
-                                                data ={
-                                                    'thietke': kehoach_muctieu.thietke_temp,
-                                                    'is_gv_bientap': True
-                                                }
-                                                ct_muctieu.write(data)
 
 
 
