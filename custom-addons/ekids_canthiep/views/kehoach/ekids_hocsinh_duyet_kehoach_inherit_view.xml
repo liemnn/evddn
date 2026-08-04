@@ -23,6 +23,15 @@
                         decoration-danger="trangthai == '3'"/>
                 <field name="trangthai_kehoach" string="Kế hoạch" width="100"/>
                 <field name="tong_kehoach" string="Tổng" width="70"/>
+                <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-secondary btn-sm"
+                        icon="fa-list-ul"
+                        invisible="tong_kehoach==0"
+                        context="{'default_context_type':'4'}"
+                        title="Danh sách [Kế hoạch]"
+                />
 
                 <field name="tong_kehoach_doiduyet" string="Đợi duyệt" width="70"/>
                 <field name="ngay_guiduyet" string="Gửi duyệt" width="100"/>

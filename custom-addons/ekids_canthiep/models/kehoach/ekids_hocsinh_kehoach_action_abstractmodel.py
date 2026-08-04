@@ -293,7 +293,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
             kanban_view_id = self.env.ref('ekids_canthiep.kehoach_kanban').id
             if context_type =="1":
-                #lap ke hoach
+                #Danh sách lập kế hoạch
                 list_view_id = self.env.ref('ekids_canthiep.lap_kehoach_list').id
 
 
@@ -330,6 +330,16 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                     domain = expression.AND([domain, domain_gv_pheduyet])
 
                 url["domain"] = domain
+
+            elif context_type == "4":
+                # Danh sách tất cả kế hoạch do mình phê duyệt
+                # danh sách cần phê duyệt
+                domain = [('hocsinh_id', '=', self.id)]
+                if is_admin == False:
+                    domain_gv_pheduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
+                    domain = expression.AND([domain, domain_gv_pheduyet])
+                url["domain"] = domain
+
             else:
                 # danh sách đang can thiệp
                 domain = [('hocsinh_id', '=', self.id)]
