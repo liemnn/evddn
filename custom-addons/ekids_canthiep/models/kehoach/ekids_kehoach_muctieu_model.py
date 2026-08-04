@@ -344,7 +344,7 @@ class KeHoach2MucTieu(models.Model):
                 # Nếu trạng thái bằng '1' (Đạt) dạng chuỗi hoặc số nguyên tùy cấu hình database của anh
 
                 if (kq.trangthai == '1'
-                        and  kq.loai !='-1'):
+                        and  kq.loai =='1'):
                     current_max += 1
                     # Cập nhật lại chuỗi dài nhất nếu chuỗi hiện tại vượt mốc cũ
                     if current_max > max:

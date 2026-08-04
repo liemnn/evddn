@@ -205,32 +205,32 @@
                                             </t>
 
                                             <!-- Ô 2 ĐỘNG: 🌟 CHỈ bật khung slot 95px khi trong màn hình có mục tiêu đạt cần kiểm duyệt -->
-                                            <t t-if="state.hasAnyTargetDone">
-                                                <div class="fixed-kiemduyet-slot">
-                                                    <t t-if="muctieu.is_kiemduyet">
-                                                        <button t-if="muctieu.trangthai_kiemduyet === '0'"
-                                                                type="button" class="btn-canthiep-status btn-kd-grey"
-                                                                t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
-                                                            <i class="fa fa-gavel"/> Đợi xác nhận
-                                                        </button>
-                                                        <button t-if="muctieu.trangthai_kiemduyet === '1'"
-                                                                type="button" class="btn-canthiep-status btn-kd-green"
-                                                                 t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
-                                                            <i class="fa fa-check-circle"/> Đạt (+)
-                                                        </button>
-                                                        <button t-if="muctieu.trangthai_kiemduyet === '-1'"
-                                                                type="button" class="btn-canthiep-status btn-kd-yellow"
-                                                                 t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
-                                                            <i class="fa fa-arrow-circle-right"/> Chuyển (-)
-                                                        </button>
-                                                        <button t-if="muctieu.trangthai_kiemduyet === '-2'"
-                                                                type="button" class="btn-canthiep-status btn-kd-red"
-                                                                 t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
-                                                            <i class="fa fa-minus-circle"/> Dừng (-)
-                                                        </button>
-                                                    </t>
-                                                </div>
-                                            </t>
+
+                                            <div class="fixed-kiemduyet-slot">
+                                                <t t-if="muctieu.is_kiemduyet">
+                                                    <button t-if="muctieu.trangthai_kiemduyet === '0'"
+                                                            type="button" class="btn-canthiep-status btn-kd-grey"
+                                                            t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
+                                                        <i class="fa fa-gavel"/> Đợi xác nhận
+                                                    </button>
+                                                    <button t-if="muctieu.trangthai_kiemduyet === '1'"
+                                                            type="button" class="btn-canthiep-status btn-kd-green"
+                                                             t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
+                                                        <i class="fa fa-check-circle"/> Đạt (+)
+                                                    </button>
+                                                    <button t-if="muctieu.trangthai_kiemduyet === '-1'"
+                                                            type="button" class="btn-canthiep-status btn-kd-yellow"
+                                                             t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
+                                                        <i class="fa fa-arrow-circle-right"/> Chuyển (-)
+                                                    </button>
+                                                    <button t-if="muctieu.trangthai_kiemduyet === '-2'"
+                                                            type="button" class="btn-canthiep-status btn-kd-red"
+                                                             t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
+                                                        <i class="fa fa-minus-circle"/> Dừng (-)
+                                                    </button>
+                                                </t>
+                                            </div>
+
 
                                             <!-- Nút tiện ích Ghi chú dạt lề -->
                                             <button type="button" class="btn btn-link p-1 text-decoration-none shadow-none d-flex align-items-center gap-1 flex-shrink-0"
