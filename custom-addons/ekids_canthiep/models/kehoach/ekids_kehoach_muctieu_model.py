@@ -309,7 +309,7 @@ class KeHoach2MucTieu(models.Model):
                 #TH2: Da cho can thiep
                 soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, kehoach.coso_id, "muctieu_soluong_dat_lientiep", "6")
 
-                ketqua_dat_lientiep= mt.func_ketqua_dat_lientiep()
+                ketqua_dat_lientiep= mt.func_ketqua_dat_lientiep_lonnhat()
                 if ketqua_dat_lientiep >= int(soluong_dat_lientiep_str):
                     mt.trangthai="1"
                 else:
@@ -329,7 +329,7 @@ class KeHoach2MucTieu(models.Model):
         return True
 
 
-    def func_ketqua_dat_lientiep(self):
+    def func_ketqua_dat_lientiep_lonnhat(self):
         today =date.today()
         max = 0
         current_max = 0
@@ -592,7 +592,10 @@ class KeHoach2MucTieu(models.Model):
                     if (ngay >last_ngay
                         and ngay<= today):
                        if ketqua2muctieu.trangthai == '0':
-                           setattr(ketqua2muctieu,'trangthai',last_ketqua2muctieu.trangthai)
+                           soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, coso,"muctieu_soluong_dat_lientiep","6")
+                           max_lientiep_dat= self.func_ketqua_dat_lientiep_lonnhat()
+                           if max_lientiep_dat < int(soluong_dat_lientiep_str):
+                               setattr(ketqua2muctieu,'trangthai',last_ketqua2muctieu.trangthai)
 
 
         else:

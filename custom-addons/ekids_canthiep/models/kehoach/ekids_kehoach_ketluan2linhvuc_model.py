@@ -12,13 +12,11 @@ class KetLuan2LinhVuc(models.Model):
                                  required=True,
                                  ondelete="cascade")
 
-    chuongtrinh_id = fields.Many2one(
-        'ekids.ct_chuongtrinh',
-        string='Chương trình',
-        required=True,
-        ondelete="cascade"
 
-    )
+    chuongtrinh_id = fields.Many2one("ekids.ct_chuongtrinh", related="linhvuc_id.chuongtrinh_id"
+                                     , string="Chương trình", required=True, ondelete="cascade")
+
+
 
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực', required=True, ondelete="cascade")
     tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi', required=True, ondelete="cascade")

@@ -121,7 +121,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
     def func_tao_kehoach_macdinh(self,ketluan):
 
-        trangthais=[kehoach_util.KEHOACH_DANG_LAP,kehoach_util.KEHOACH_DANG_PHEDUYET]
+        trangthais=[kehoach_util.KEHOACH_DANG_LAP,kehoach_util.KEHOACH_DANG_PHEDUYET,kehoach_util.KEHOACH_DANG_CANTHIEP]
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthais)
         if not kehoach:
             giaovien = giaovien_util.func_get_giaovien_tu_user(self)
@@ -147,7 +147,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                     data2={
                         'sequence':linhvuc.sequence,
                         'kehoach_id':kehoach.id,
-                        'chuongtrinh_id': linhvuc.linhvuc_id.chuongtrinh_id.id,
+                        'chuongtrinh_id': linhvuc.chuongtrinh_id.id,
                         'linhvuc_id': linhvuc.linhvuc_id.id,
                         'tuoi_id': linhvuc.tuoi_id.id,
                     }
