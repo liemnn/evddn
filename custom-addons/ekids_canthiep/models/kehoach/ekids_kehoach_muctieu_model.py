@@ -224,8 +224,8 @@ class KeHoach2MucTieu(models.Model):
                     gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
                     gv_lap = kehoach.gv_lapkehoach_id
                     if gv_kiemduyet.user_id.id == user.id:
-                        if record.trangthai == '1':
-                            is_canthiep = True
+                        #if record.trangthai == '1':
+                        is_canthiep = True
                     elif gv_lap.user_id.id == user.id:
                         is_canthiep = True
 

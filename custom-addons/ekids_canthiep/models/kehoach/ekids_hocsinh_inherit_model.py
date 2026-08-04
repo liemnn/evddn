@@ -261,17 +261,15 @@ class HocSinhInherit(models.Model
             is_lap_kehoach = False
             if ketluan:
                 trangthais =[kehoach_util.KEHOACH_DANG_LAP
-                                ,kehoach_util.KEHOACH_DANG_PHEDUYET]
+                                ,kehoach_util.KEHOACH_DANG_PHEDUYET,kehoach_util.KEHOACH_DANG_CANTHIEP]
                 kehoach_count = kehoach_util.func_count_kehoach_hocsinh_trangthai(self,hs,trangthais)
                 if kehoach_count <=0:
-                    if is_admin:
-                        is_lap_kehoach = True
-                    else:
-                        giaoviens = ketluan.gv_canthiep_ids
-                        if giaoviens:
-                            user_ids = giaoviens.mapped('user_id').ids
-                            if user.id in user_ids:
-                                is_lap_kehoach = True
+
+                    giaoviens = ketluan.gv_canthiep_ids
+                    if giaoviens:
+                        user_ids = giaoviens.mapped('user_id').ids
+                        if user.id in user_ids:
+                            is_lap_kehoach = True
             hs.is_lap_kehoach = is_lap_kehoach
 
 
