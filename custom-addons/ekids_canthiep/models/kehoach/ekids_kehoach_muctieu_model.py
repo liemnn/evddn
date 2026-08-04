@@ -245,8 +245,8 @@ class KeHoach2MucTieu(models.Model):
                     gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
                     gv_lap = kehoach.gv_lapkehoach_id
                     if gv_kiemduyet.user_id.id == user.id:
-                        if record.trangthai == "1":
-                            is_kiemduyet = True
+                        #if record.trangthai == "1":
+                         is_kiemduyet = True
                     elif gv_lap.user_id.id == user.id:
                         if record.trangthai_kiemduyet != "0":
                             is_kiemduyet = True
@@ -343,7 +343,8 @@ class KeHoach2MucTieu(models.Model):
                     continue
                 # Nếu trạng thái bằng '1' (Đạt) dạng chuỗi hoặc số nguyên tùy cấu hình database của anh
 
-                if kq.trangthai == '1':
+                if (kq.trangthai == '1'
+                        and  kq.loai !='-1'):
                     current_max += 1
                     # Cập nhật lại chuỗi dài nhất nếu chuỗi hiện tại vượt mốc cũ
                     if current_max > max:
@@ -585,6 +586,9 @@ class KeHoach2MucTieu(models.Model):
                 if (ngay <today and ketqua2muctieu.trangthai in ['1','-1','2']):
                     last_ketqua2muctieu = ketqua2muctieu
             #TON TAI ban ghi cuoi co ngay:
+            soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_dat_lientiep", "6")
+            max_lientiep_dat = self.func_ketqua_dat_lientiep_lonnhat()
+
             if last_ketqua2muctieu:
                 last_ngay =fields.Date.to_date(last_ketqua2muctieu.ngay)
                 for ketqua2muctieu in ketqua2muctieus:
@@ -592,8 +596,6 @@ class KeHoach2MucTieu(models.Model):
                     if (ngay >last_ngay
                         and ngay<= today):
                        if ketqua2muctieu.trangthai == '0':
-                           soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, coso,"muctieu_soluong_dat_lientiep","6")
-                           max_lientiep_dat= self.func_ketqua_dat_lientiep_lonnhat()
                            if max_lientiep_dat < int(soluong_dat_lientiep_str):
                                setattr(ketqua2muctieu,'trangthai',last_ketqua2muctieu.trangthai)
 

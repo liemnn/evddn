@@ -370,6 +370,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
            trangthais =[kehoach_util.KEHOACH_DANG_CANTHIEP]
            kehoach =kehoach_util.func_get_kehoach_can_kiemduyet_hocsinh_trangthai(self, self, trangthais)
            if kehoach:
+               self.func_tinhtoan_kehoach2muctieu_ketqua_canthiep(kehoach)
                url= {
                    'type': 'ir.actions.act_window',
                    'name': 'LẬP KẾ HOẠCH',
@@ -390,6 +391,15 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                return url
 
         return  None
+
+    def func_tinhtoan_kehoach2muctieu_ketqua_canthiep(self,kehoach):
+        kehoach_linhvuc_ids = kehoach.kehoach_linhvuc_ids
+        if kehoach_linhvuc_ids:
+            for kehoach_linhvuc in kehoach_linhvuc_ids:
+                kehoach_muctieu_ids = kehoach_linhvuc.kehoach_muctieu_ids
+                if kehoach_muctieu_ids:
+                    for kehoach_muctieu in kehoach_muctieu_ids:
+                        kehoach_muctieu.func_khoitao_ketqua2muctieu()
 
 
 
