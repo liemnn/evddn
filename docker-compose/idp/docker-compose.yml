@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:17
+    container_name: odoo19-db
+    environment:
+      POSTGRES_DB: idp
+      POSTGRES_USER: idp
+      POSTGRES_PASSWORD: "IDP@123!@#"
+      TZ: Asia/Ho_Chi_Minh
+      PGTZ: Asia/Ho_Chi_Minh
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./backups:/backups
+      - ./backup.sh:/backup.sh
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U idp -d idp -h localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: always
+    command: >
+      postgres -c listen_addresses='*'
+               -c config_file=/etc/postgresql/postgresql.conf
+
+  redis:
+    image: redis:7-alpine
+    container_name: odoo19-redis
+    restart: always
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+    volumes:
+      - ./redis_data:/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    command: [ "redis-server", "--appendonly", "yes" ]
+
+  odoo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: odoo:19.0
+    container_name: odoo19
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    user: "101:101"
+    environment:
+      HOST: db
+      PORT: 5432
+      DB_NAME: idp
+      USER: idp
+      PASSWORD: "IDP@123!@#"
+      TZ: Asia/Ho_Chi_Minh
+    volumes:
+      - odoo_data:/var/lib/odoo
+      - ./addons:/mnt/extra-addons
+      - ./odoo.conf:/etc/odoo/odoo.conf
+      - ./entrypoint.sh:/entrypoint.sh
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    entrypoint: ["/entrypoint.sh"]
+    ports:
+      # SỬA LẠI: Mở cổng 8069 và 8072 ra IP 0.0.0.0 để Nginx máy khác gọi vào
+      - "0.0.0.0:8069:8069"
+      - "0.0.0.0:8072:8072"
+    restart: always
+
+  # LƯU Ý VỀ SERVICE NGINX:
+  # Nếu bạn dùng Nginx chạy ở MÁY KHÁC, bạn có thể comment hoặc xoá hoàn toàn service nginx dưới đây.
+  # Trường hợp vẫn giữ Nginx local này làm backup, đã map lại cổng 80->8069.
+  nginx:
+    image: nginx:alpine
+    container_name: odoo19-nginx
+    depends_on:
+      - odoo
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx_logs:/var/log/nginx
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+    restart: always
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/idp/db_data
+
+  odoo_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/idp/odoo_data

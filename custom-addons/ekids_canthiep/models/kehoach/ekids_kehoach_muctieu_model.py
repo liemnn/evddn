@@ -114,6 +114,11 @@ class KeHoach2MucTieu(models.Model):
         ondelete='set null'  # Chí mạng giúp triệt tiêu lỗi hệ thống
     )
     sothang_da_chuyenttiep = fields.Integer(string="Số tháng đã được chuyển tiếp sang",compute="_compute_sothang_da_chuyenttiep")
+    ketqua_dat_lientiep_thangtruoc = fields.Integer(string="Kết quả can thiệp đạt liên tiêp tháng trước",
+                                            compute="_compute_ketqua_dat_lientiep_thangtruoc")
+    ketqua_hinhthanh_thangtruoc = fields.Integer(string="Kết quả can thiệp đạt liên tiêp tháng trước",
+                                                    compute="_compute_ketqua_hinhthanh_thangtruoc")
+
     kehoach_muctieu_thangtruoc_id = fields.Many2one(
         'ekids.kehoach_muctieu',
         string='Muc tiêu của tháng trước chuyển sang do không đạt',
@@ -290,6 +295,26 @@ class KeHoach2MucTieu(models.Model):
             if mt.kehoach_muctieu_thangtruoc_id:
                 so_thang = mt.kehoach_muctieu_thangtruoc_id.sothang_da_chuyenttiep +1
             mt.sothang_da_chuyenttiep=so_thang
+
+    def _compute_ketqua_dat_lientiep_thangtruoc(self):
+        for mt in self:
+            ketqua_dat_lientiep_thangtruoc = 0
+            muctieu_thangtruoc = mt.kehoach_muctieu_thangtruoc_id
+            if muctieu_thangtruoc:
+                ketqua_dat_lientiep_thangtruoc =muctieu_thangtruoc.func_ketqua_dat_lientiep_lonnhat()
+            mt.ketqua_dat_lientiep_thangtruoc = ketqua_dat_lientiep_thangtruoc
+
+
+    def _compute_ketqua_hinhthanh_thangtruoc(self):
+        for mt in self:
+            ketqua_hinhthanh_thangtruoc =0
+            muctieu_thangtruoc = mt.kehoach_muctieu_thangtruoc_id
+            if muctieu_thangtruoc:
+                muctieu_thangtruoc._compute_ketqua_hinhthanh()
+                ketqua_hinhthanh_thangtruoc = muctieu_thangtruoc.ketqua_hinhthanh
+            mt.ketqua_hinhthanh_thangtruoc = ketqua_hinhthanh_thangtruoc
+
+
 
     @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
     def _compute_trangthai(self):

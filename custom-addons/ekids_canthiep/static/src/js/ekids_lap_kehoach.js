@@ -86,6 +86,8 @@ export class LapKehoachWidget extends Component {
                 ,'is_bientap_temp'
                 ,"is_readonly"
                 ,"is_delete"
+                ,"ketqua_dat_lientiep_thangtruoc"
+                ,"ketqua_hinhthanh_thangtruoc"
                 ],
                 { order: "sequence asc, id asc" }
             );
