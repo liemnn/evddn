@@ -209,20 +209,20 @@
                                                           style="font-size: 12.5px; color: #991B1B; background-color: #FEF2F2; border: 1px solid #FECACA; border-radius: 6px; cursor: help; white-space: nowrap;"
                                                           t-attf-data-bs-toggle="tooltip"
                                                           t-attf-data-bs-placement="top"
-                                                          t-attf-title="Số tháng chuyển tiếp: #{muctieu.sothang_da_chuyenttiep} tháng&#10;• Hình thành: #{muctieu.ketqua_hinhthanh_thangtruoc} ngày&#10;• Đạt liên tiếp: #{muctieu.ketqua_dat_lientiep_thangtruoc} ngày">
+                                                          t-attf-title="Số tháng chuyển tiếp: #{muctieu.sothang_da_chuyenttiep} tháng&#10;• Hình thành (+/-): #{muctieu.ketqua_hinhthanh_thangtruoc} ngày&#10;• Đạt (+) liên tiếp: #{muctieu.ketqua_dat_lientiep_thangtruoc} ngày">
                                                         <i class="fa fa-history text-danger" style="font-size: 13px;"></i>
-                                                        <span class="fw-bold text-danger">Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)</span>
+                                                        <span class="fw-bold text-danger"> Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)</span>
 
                                                         <!-- Thẻ Vàng cho Hình Thành -->
                                                         <span class="badge fw-bold px-2 py-0.5"
                                                               style="font-size: 11.5px; background-color: #FEF9C3; color: #A16207; border: 1px solid #FDE047; border-radius: 4px;">
-                                                            : <t t-esc="muctieu.ketqua_hinhthanh_thangtruoc"/>
+                                                            +/-(<t t-esc="muctieu.ketqua_hinhthanh_thangtruoc"/>)
                                                         </span>
 
                                                         <!-- Thẻ Xanh cho Đạt -->
                                                         <span class="badge fw-bold px-2 py-0.5"
                                                               style="font-size: 11.5px; background-color: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; border-radius: 4px;">
-                                                            Đạt: <t t-esc="muctieu.ketqua_dat_lientiep_thangtruoc"/>d
+                                                            +(<t t-esc="muctieu.ketqua_dat_lientiep_thangtruoc"/>)
                                                         </span>
                                                     </span>
                                                 </t>
