@@ -70,6 +70,8 @@ class HocSinhInherit(models.Model
 
     tong_kehoach_doiduyet = fields.Integer(compute="_compute_tong_kehoach_doiduyet", string="Số lượng đợi duyệt")
     ngay_guiduyet = fields.Char(string="Ngày [Gửi duyệt]",compute="_compute_tong_kehoach_doiduyet")
+    ten_kehoach = fields.Char(string="Kế hoạch tháng", compute="_compute_ten_kehoach")
+
     ngay_duyet = fields.Char(string="Ngày [Duyệt]", compute="_compute_tong_kehoach_doiduyet")
 
 
@@ -136,6 +138,24 @@ class HocSinhInherit(models.Model
             else:
                 hs.tong_kehoach_doiduyet = 0
                 hs.ngay_guiduyet = None
+
+    def _compute_ten_kehoach(self):
+        for hs in self:
+            ten_kehoach=""
+            if hs.kehoach_ids:
+                tu_ngay = None
+                for kehoach in hs.kehoach_ids:
+                    if not tu_ngay:
+                        tu_ngay = kehoach.tu_ngay
+                        ten_kehoach = kehoach.name
+                    else:
+                        if tu_ngay < kehoach.tu_ngay:
+                            tu_ngay = kehoach.tu_ngay
+                            ten_kehoach = kehoach.name
+
+
+            hs.ten_kehoach = ten_kehoach
+
 
 
    
