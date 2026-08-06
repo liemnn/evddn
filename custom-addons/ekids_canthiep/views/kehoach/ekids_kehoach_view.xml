@@ -8,13 +8,13 @@
                       default_order="tu_ngay desc" create="false" delete="false">
 
                     <field name="index" string="STT" />
-                    <field name="hocsinh_id" string="Học sinh" />
-                    <field name="name" string="Kế hoạch" />
+                    <field name="hocsinh_id" string="Học sinh" class="text-wrap"/>
+                    <field name="name" string="Kế hoạch" class="text-wrap"/>
                     <field name="tu_ngay" string="Từ ngày" />
                     <field name="den_ngay" string="Đến ngày" />
                     <field name="songay" string="Số ngày" />
-                    <field name="gv_lapkehoach_id" string="Giáo viên"/>
-                    <field name="gv_kiemduyet_id" string="Chuyên môn"/>
+                    <field name="gv_lapkehoach_id" class="text-wrap" string="Giáo viên"/>
+                    <field name="gv_kiemduyet_id" class="text-wrap" string="Chuyên môn"/>
 
                     <field name="trangthai" string="Trạng thái" width="130"
                            widget="badge"
@@ -37,13 +37,13 @@
                       default_order="tu_ngay desc" create="false" delete="false">
 
                     <field name="index" string="STT" />
-                    <field name="hocsinh_id" string="Học sinh" />
-                    <field name="name" string="Kế hoạch" />
+                    <field name="hocsinh_id" string="Học sinh" class="text-wrap"/>
+                    <field name="name" string="Kế hoạch" class="text-wrap"/>
                     <field name="tu_ngay" string="Từ ngày" />
                     <field name="den_ngay" string="Đến ngày" />
                     <field name="songay" string="Số ngày" />
-                    <field name="gv_lapkehoach_id" string="Giáo viên"/>
-                    <field name="gv_kiemduyet_id" string="Chuyên môn"/>
+                    <field name="gv_lapkehoach_id" string="Giáo viên" class="text-wrap"/>
+                    <field name="gv_kiemduyet_id" string="Chuyên môn" class="text-wrap"/>
 
                     <field name="trangthai" string="Trạng thái" width="130"
                            widget="badge"
@@ -71,13 +71,13 @@
                       default_order="tu_ngay desc" create="false" delete="false">
 
                     <field name="index" string="STT" />
-                    <field name="hocsinh_id" string="Học sinh" />
-                    <field name="name" string="Kế hoạch" />
+                    <field name="hocsinh_id" string="Học sinh" class="text-wrap"/>
+                    <field name="name" string="Kế hoạch" class="text-wrap"/>
                     <field name="tu_ngay" string="Từ ngày" />
                     <field name="den_ngay" string="Đến ngày" />
                     <field name="songay" string="Số ngày" />
-                    <field name="gv_lapkehoach_id" string="Giáo viên"/>
-                    <field name="gv_kiemduyet_id" string="Chuyên môn"/>
+                    <field name="gv_lapkehoach_id" string="Giáo viên" class="text-wrap"/>
+                    <field name="gv_kiemduyet_id" string="Chuyên môn" class="text-wrap"/>
 
                     <field name="trangthai" string="Trạng thái" width="130"
                            widget="badge"
@@ -87,12 +87,7 @@
                            decoration-danger="trangthai == '-1'"
                            />
 
-                    <field name="trangthai_pheduyet" string="Kiểm duyệt" width="130"
-                           widget="badge"
-                           decoration-warning="trangthai == '-1'"
-                           decoration-info="trangthai == '0'"
-                           decoration-success="trangthai == '1'"
-                           />
+
 
 
 
