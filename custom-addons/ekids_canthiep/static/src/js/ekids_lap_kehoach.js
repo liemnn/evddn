@@ -140,7 +140,7 @@ export class LapKehoachWidget extends Component {
         this.state.expandedTargets[targetId] = !this.state.expandedTargets[targetId];
     }
 
-    async openAddTargetWizard(lineId) {
+    async them_MucTieu_Vao_KeHoach_LinhVuc(lineId) {
         // 🌟 CHỐT CHẶN 1: Nếu form đang readonly, chặn không cho mở Wizard thêm/xóa mục tiêu
         if (this.props.readonly) {
             this.notification.add("Kế hoạch đã khóa (Read-only), không thể thay đổi danh sách mục tiêu!", { type: "danger" });

@@ -86,15 +86,25 @@
                 <list default_order="linhvuc_id desc,sequence asc"
                       create="0" edit="0" delete="0" multi_edit="0">
 
-                    <field name="index_list" string="STT" width="60px"/>
-                    <field name="name" string="Mục tiêu" decoration-bf="True"/>
-                    <field name="linhvuc_id" string="Lĩnh vực" options="{'no_open': True, 'no_create': True}" optional="hide"/>
-                    <field name="tuoi_id" string="Độ tuổi" options="{'no_open': True, 'no_create': True}" optional="hide"/>
+                    <field name="index_list" string="STT" width="60"/>
+                    <field name="name"
+                           string="Mục tiêu"
+                           class="text-wrap"
+                    />
+                    <field name="linhvuc_id" string="Lĩnh vực"
+                           class="text-wrap"
+                           options="{'no_open': True, 'no_create': True}"
+                           optional="hide"/>
+                    <field name="tuoi_id"
+                           class="text-wrap"
+                           string="Độ tuổi"
+                           options="{'no_open': True, 'no_create': True}" optional="hide"/>
                     <field name="tieuchi_chuadat" string="Chưa đạt" optional="hide" decoration-danger="True"/>
                     <field name="tieuchi_hinhthanh" string="hình thành" optional="hide" decoration-warning="True"/>
                     <field name="tieuchi_dat" string="Đạt" optional="hide" decoration-success="True"/>
 
                     <field name="trangthai_canthiep" string="Can thiệp"
+                           class="text-wrap"
                            decoration-success="trangthai_canthiep == '1'"
                            decoration-danger="trangthai_canthiep == '0'"/>
                     <button string="Chọn"

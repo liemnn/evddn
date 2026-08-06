@@ -157,7 +157,7 @@
                                     <button t-if="!props.readonly"
                                             type="button" class="btn btn-sm btn-primary btn-add-target-clean d-flex align-items-center gap-1"
                                             style="background-color: #2563EB !important; border-color: #2563EB !important;"
-                                            t-on-click="() => this.openAddTargetWizard(lv.kehoach_linhvuc_id)">
+                                            t-on-click="() => this.them_MucTieu_Vao_KeHoach_LinhVuc(lv.kehoach_linhvuc_id)">
                                         <i class="fa fa-plus-circle"></i> Thêm [mục tiêu]
                                     </button>
                                 </div>
