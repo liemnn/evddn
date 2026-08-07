@@ -210,7 +210,8 @@ class KeHoach2MucTieu(models.Model):
                 if kehoach:
                     gv_lap = kehoach.gv_lapkehoach_id
                     if gv_lap.user_id.id == user.id:
-                        is_canthiep_readonly = False
+                        if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                            is_canthiep_readonly = False
 
             record.is_canthiep_readonly = is_canthiep_readonly
 
@@ -326,6 +327,8 @@ class KeHoach2MucTieu(models.Model):
                 if today >= kehoach.tu_ngay:
                     soluong_str = coso_util.func_cauhinh_canthiep(self, kehoach.coso_id, "muctieu_soluong_mo", "2")
                     is_chophep_canthiep = mt.func_is_chophep_canthiep(int(soluong_str))
+            elif kehoach.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
+                    is_chophep_canthiep = True # Cho phep xem lai
 
             if is_chophep_canthiep == False:
                 #TH1: Chua cho can thiep

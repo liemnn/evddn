@@ -174,11 +174,17 @@
                     </div>
                     <div class="w-100 text-start mt-1">
                         <label class="fw-bold text-muted small mb-1">MÔ TẢ BIỂU HIỆN CỦA TRẺ:</label>
-                        <textarea id="matrix_quick_desc" class="form-control form-control-sm bg-white" rows="2" placeholder="Nhập ghi chú chi tiết tiến trình..."><t t-esc="state.selectedDay.comment"/></textarea>
+                        <textarea id="matrix_quick_desc" class="form-control form-control-sm bg-white" rows="2"
+                                  placeholder="Nhập ghi chú chi tiết tiến trình..."><t t-esc="state.selectedDay.comment"/>
+                        </textarea>
                     </div>
                     <div class="d-flex justify-content-end gap-2 mt-1 pt-2 border-top" style="border-color: #E2E8F0 !important;">
                         <button type="button" class="btn btn-sm btn-light border bg-white text-secondary" t-on-click="() => this.state.selectedDay = null">Đóng lại</button>
-                        <button t-if="!props.readonly" type="button" class="btn btn-sm btn-primary fw-bold" style="background-color:#2563EB !important;" t-on-click="() => this.saveInlineData()">Xác nhận lưu</button>
+                        <button t-if="!props.readonly"
+                                type="button"
+                                class="btn btn-sm btn-primary fw-bold"
+                                style="background-color:#2563EB !important;"
+                                t-on-click="() => this.saveInlineData()">Xác nhận lưu</button>
                     </div>
                 </div>
             </t>
