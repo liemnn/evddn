@@ -193,7 +193,8 @@ class KeHoach2MucTieu(models.Model):
                     gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
 
                     if gv_kiemduyet.user_id.id == user.id:
-                        is_kiemduyet_readonly= False
+                        if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                            is_kiemduyet_readonly= False
 
             record.is_kiemduyet_readonly = is_kiemduyet_readonly
 
