@@ -125,8 +125,12 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthais)
         if not kehoach:
             giaovien = giaovien_util.func_get_giaovien_tu_user(self)
-            kehoach_gannhat = kehoach_util.func_get_kehoach_hocsinh_gannhat(self,self)
-            tu_ngay = self.func_get_default_kehoach_tu_ngay(kehoach_gannhat)
+            # tim ke hoach truoc
+            trangthais = [kehoach_util.KEHOACH_HET_HIEULUC]
+            kehoach_truoc = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, trangthais)
+            tu_ngay = date.today()
+            if kehoach_truoc:
+                tu_ngay = self.func_get_default_kehoach_tu_ngay(kehoach_truoc)
             den_ngay = self.func_get_default_kehoach_den_ngay(tu_ngay)
             songay = (den_ngay - tu_ngay).days + 1
             data ={
@@ -137,8 +141,8 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 "den_ngay": den_ngay,
                 "songay": songay
             }
-            if kehoach_gannhat:
-                data["kehoach_truoc_id"] =kehoach_gannhat.id
+            if kehoach_truoc:
+                data["kehoach_truoc_id"] =kehoach_truoc.id
 
             kehoach = self.env['ekids.kehoach'].create(data)
             if kehoach:

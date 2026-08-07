@@ -63,9 +63,10 @@ def func_get_kehoach_hocsinh(self, hocsinh):
 def func_get_kehoach_hocsinh_gannhat(self, hocsinh):
     giaovien =giaovien_util.func_get_giaovien_tu_user(self)
     if giaovien:
+        domain =[("hocsinh_id","=",hocsinh.id),
+                ("gv_lapkehoach_id","=",giaovien.id)]
 
-        kehoach_gan_nhat = (self.env['ekids.kehoach']
-                            .search([("hocsinh_id","=",hocsinh.id),("gv_lapkehoach_id","=",giaovien.id)], order='den_ngay desc', limit=1))
+        kehoach_gan_nhat = (self.env['ekids.kehoach'].search(domain, order='den_ngay desc', limit=1))
         return kehoach_gan_nhat
     else:
         return None
