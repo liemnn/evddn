@@ -133,7 +133,7 @@ class HocSinhInherit(models.Model
                                 tong +=1
 
                 hs.tong_kehoach_doiduyet = tong
-                hs.ngay_guiduyet = string_util.date2string_format(ngay,'%H:%M %d/%m/%Y')
+                hs.ngay_guiduyet = string_util.date2string_format(ngay,'%d/%m/%Y')
 
             else:
                 hs.tong_kehoach_doiduyet = 0

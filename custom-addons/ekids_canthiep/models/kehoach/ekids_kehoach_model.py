@@ -184,15 +184,40 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
     @api.depends("tu_ngay")
     def _compute_name(self):
-        today =date.today()
-        today.month
         for record in self:
-            tu_ngay =record.tu_ngay
-            name =""
-            if tu_ngay:
-                name = "Tháng "+ str(tu_ngay.month) +"/" + str(tu_ngay.year)
+            if not record.tu_ngay:
+                record.name = ""
+                continue
 
-            record.name = name
+            tu_ngay = record.tu_ngay
+            day = tu_ngay.day
+            month_current = tu_ngay.month
+            year_current = tu_ngay.year
+
+            # Tính tháng & năm tiếp theo bằng timedelta
+            first_day_of_month = tu_ngay.replace(day=1)
+            next_month_date = first_day_of_month + timedelta(days=32)
+            month_next = next_month_date.month
+            year_next = next_month_date.year
+
+            # TRƯỜNG HỢP 1: Trước ngày 15 -> "Kế hoạch tháng X/YYYY"
+            if day < 15:
+                record.name = f"Tháng {month_current}/{year_current}"
+
+            # TRƯỜNG HỢP 2: Từ 15 đến 25 -> "Kế hoạch tháng X+Y/YYYY"
+            elif 15 <= day <= 25:
+                # Nếu cùng năm (VD: Tháng 7+8/2026)
+                if year_current == year_next:
+                    record.name = f"Tháng {month_current}+{month_next}/{year_current}"
+                # Nếu giao năm (VD: Tháng 12/2026 + 1/2027)
+                else:
+                    record.name = f"Tháng {month_current}/{year_current} + {month_next}/{year_next}"
+
+            # TRƯỜNG HỢP 3: Lớn hơn 25 -> "Kế hoạch tháng Y/YYYY" (tháng tiếp theo)
+            else:
+                record.name = f"Tháng {month_next}/{year_next}"
+
+
 
 
     @api.depends("ketluan_id")
