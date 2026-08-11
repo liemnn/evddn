@@ -1,5 +1,7 @@
 from odoo import models, fields, api, _
 from datetime import datetime, timedelta,date
+from odoo.osv import expression
+
 import logging
 import logging
 _logger = logging.getLogger(__name__)
@@ -244,9 +246,11 @@ class CoSo(models.Model):
         list_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_kiemduyet_thietke_list').id
         form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_duyet_thietke_form').id
         search_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_search').id
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        #giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+
+
         domain = [
-            ('kehoach_id.coso_id', '=', giaovien.coso_id.id),
+            ('kehoach_id.coso_id', '=', self.id),
             ('muctieu_id', '!=', False),
             # 1. Loại trừ giá trị NULL/False và chuỗi rỗng hoàn toàn
             ('thietke_temp', '!=', False),
@@ -255,6 +259,8 @@ class CoSo(models.Model):
             ('thietke_temp', 'not ilike', '<p><br></p>'),
             ('thietke_temp', 'not ilike', '<p></p>'),
         ]
+
+
 
         return {
             'type': 'ir.actions.act_window',

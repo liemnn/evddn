@@ -65,15 +65,28 @@
                         invisible="is_sua_ketluan == False"
                         title="Sửa lại [Kết luận] đang soạn thảo"
                 />
+
+                <!-- 1. COPY TỪ KẾT LUẬN GẦN NHẤT CỦA CHÍNH HỌC SINH NÀY -->
+                <button name="action_copy_ketluan_gannhat"
+                        string=""
+                        type="object"
+                        class="btn-outline-primary btn-sm fw-bold"
+                        icon="fa-history"
+                        context="{'default_hocsinh_id': id}"
+                        invisible="not is_tao_ketluan"
+                        confirm="Bạn muốn copy [Kết luận] gần nhất cho học sinh này để soạn thảo ?"
+                        title="Copy nội dung từ [Kết luận] gần nhất của học sinh này"/>
+
+                <!-- 2. COPY TỪ MẪU KẾT LUẬN CỦA HỌC SINH KHÁC -->
                 <button name="action_copy_ketluan"
-                            string="Copy"
-                            type="object"
-                            class="btn-secondary"
-                            icon="fa-copy"
-                            context="{'default_hocsinh_id': id}"
-                            invisible="not is_tao_ketluan"
-                            title="Có thể copy từ [Kết luận] Học sinh khác"
-                    />
+                        string=""
+                        type="object"
+                        class="btn-outline-primary btn-sm fw-bold"
+                        icon="fa-copy"
+
+                        context="{'default_hocsinh_id': id}"
+                        invisible="not is_tao_ketluan"
+                        title="Xem và chọn copy nội dung từ [Kết luận] của Học sinh khác"/>
 
 
         </list>

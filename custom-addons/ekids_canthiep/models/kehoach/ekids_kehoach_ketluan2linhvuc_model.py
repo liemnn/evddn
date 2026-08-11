@@ -14,7 +14,7 @@ class KetLuan2LinhVuc(models.Model):
 
 
     chuongtrinh_id = fields.Many2one("ekids.ct_chuongtrinh", related="linhvuc_id.chuongtrinh_id"
-                                     , string="Chương trình", required=True, ondelete="cascade")
+                                     , string="Chương trình")
 
 
 

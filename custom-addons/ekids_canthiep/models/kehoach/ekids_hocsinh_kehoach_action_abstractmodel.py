@@ -48,7 +48,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self, self,
                                                                           [kehoach_util.KETLUAN_DANG_TAO])
         if ketluan:
-            return {
+            url= {
                 'type': 'ir.actions.act_window',
                 'name': 'CHƯƠNG TRÌNH CAN THIỆP',
                 'res_model': 'ekids.kehoach_ketluan',
@@ -62,7 +62,17 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                     'default_hocsinh_id': self.id
                 },
             }
+            return url
+    def action_copy_ketluan_gannhat(self):
+        self.ensure_one()
 
+        ketluan_gannhat = kehoach_util.func_get_ketluan_hocsinh_trangthai(self, self,
+                                                                  [kehoach_util.KEHOACH_DANG_CANTHIEP])
+        if ketluan_gannhat:
+            ketlua_copy =ketluan_gannhat.func_copy_ketluan_tu_nguon(ketluan_gannhat.id,ketluan_gannhat.hocsinh_id.id)
+            if ketlua_copy:
+                url = self.action_sua_ketluan()
+                return url
     def action_copy_ketluan(self):
         return {
             'type': 'ir.actions.act_window',
