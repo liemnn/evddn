@@ -3,6 +3,13 @@ from datetime import datetime, timedelta,date
 from dateutil.relativedelta import relativedelta
 from . import  coso_util,ngay_util,string_util
 from odoo.osv import expression
+
+def func_get_giaovien_tu_user(self):
+    user = self.env.user
+    giaovien = (self.env['ekids.giaovien']
+                .search([('user_id', '=', user.id)], limit=1))
+    return giaovien
+
 def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,tu_ngay, den_ngay):
     domain =[
                 ('giaovien_id', '=', giaovien.id),
@@ -124,6 +131,14 @@ def func_get_dulieu_chamcong_thucte_giaovien(self
 
     duoc_chamcong = len(dilam_cangay)  + (len(dilam_nuabuoi) * 0.5)
 
+    #TINH TOAN CHUYEN CAN:
+    nghi_vantinh_chuyencan = 0
+    if nghiles:
+        for key in nghiles:
+            nghile = nghiles.get(key)
+            if nghile.is_chuyencan == True:
+                nghi_vantinh_chuyencan +=1
+
     data ={
         'dilam_muon':len(dilam_muon),
         'dilam_nuabuoi':len(dilam_nuabuoi),
@@ -131,7 +146,9 @@ def func_get_dulieu_chamcong_thucte_giaovien(self
         'dilam_chamcong':duoc_chamcong,
         'gv_dilam_kehoach':gv_dilam_kehoachs,
         'gv_nghiles': gv_nghiles,
+        'nghi_vantinh_chuyencan': nghi_vantinh_chuyencan,
         'gv_coso_chonghi_truluongs': gv_coso_chonghi_truluongs
+
 
     }
 
@@ -338,6 +355,44 @@ def func_is_dilam_trong_ngay(giaovien, ngay):
             return True
 
     return False
+
+def sum_tong_giaovien_trong_thang(self, coso_ids,nam, thang):
+    days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
+    if not days:
+        return 0
+    tu_ngay = days[0]  # Ngày đầu tháng
+    den_ngay = days[-1]  # Ngày cuối tháng
+    return sum_tong_giaovien_trong_khoang_thoigian(self, coso_ids,tu_ngay,den_ngay)
+    # 1. Điều kiện cơ bản bắt buộc của giáo viên
+
+
+def sum_tong_giaovien_trong_khoang_thoigian(self, coso_ids,tu_ngay,den_ngay):
+
+    # 1. Điều kiện cơ bản bắt buộc của giáo viên
+    domain = [
+        ('coso_id', 'in', coso_ids),
+        ('giaovien_id.dilam_tungay', '!=', False),
+        ('giaovien_id.dilam_tungay', '<=', den_ngay)
+    ]
+
+    # 2. Điều kiện trạng thái: Đang làm việc HOẶC nghỉ việc trong chính tháng này
+    domain_danglam = [('giaovien_id.dilam_denngay', '=', False)]
+    domain_nghitrongthang = [
+        ('giaovien_id.dilam_denngay', '!=', False),
+        ('giaovien_id.dilam_denngay', '>=', tu_ngay),
+
+    ]
+
+    domain_trongthang = expression.OR([domain_danglam, domain_nghitrongthang])
+    domain = expression.AND([domain, domain_trongthang])
+
+    # 3. Gom nhóm theo giaovien_id để lọc trùng tuyệt đối
+    result = self.env['ekids.luong'].read_group(
+        domain=domain,
+        fields=['giaovien_id'],
+        groupby=['giaovien_id']
+    )
+    return len(result)
 
 
 

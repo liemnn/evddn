@@ -6,8 +6,13 @@
             <field name="arch" type="xml">
                 <list default_order="sequence">
                     <field name="sequence" widget="handle"/>
-                    <field name="name"/>
-                    <field name="desc" />
+                     <field name="index" width="50"/>
+                    <field name="name" />
+                    <field name="tong_muctieu" width="150"/>
+                    <field name="desc"  />
+                    <field name="trangthai"
+                           decoration-success="trangthai == '1'"
+                           decoration-danger="trangthai == '0'"/>
                 </list>
             </field>
         </record>
@@ -21,6 +26,8 @@
                     <field name="name"/>
                     <field name="desc"/>
                     <field name="tong_muctieu"/>
+
+                    <field name="trangthai"/>
 
                     <templates>
                         <t t-name="kanban-box">
@@ -49,9 +56,23 @@
                                     <div class="book-ribbon" style="position: absolute; top: -10px; right: 20px; width: 30px; height: 40px; background-color: #3b82f6; clip-path: polygon(100% 0, 100% 100%, 50% 75%, 0 100%, 0 0); box-shadow: 2px 2px 5px rgba(0,0,0,0.1);"></div>
 
                                     <div class="d-flex justify-content-between align-items-start mb-3" style="border-bottom: 2px solid #cbd5e1; padding-bottom: 12px;">
-                                        <h3 class="fw-bolder m-0" style="color: #0f172a; font-family: 'Georgia', serif; font-size: 1.25rem; letter-spacing: 0.5px; padding-right: 35px;">
-                                            <i class="fa fa-sitemap text-muted me-2" style="font-size: 1.1rem;"></i>
+                                        <h3 class="fw-bolder m-0 d-flex align-items-center gap-2 flex-wrap" style="color: #0f172a; max-width: 85%;">
+                                            <i class="fa fa-sitemap text-muted" style="font-size: 1.1rem;"></i>
                                             <field name="name"/>
+
+                                            <span class="ms-1 flex-shrink-0">
+                                                <t t-if="record.trangthai.raw_value == '0'">
+                                                    <span class="badge" style="background-color: #F1F5F9; color: red; border: 1px solid #E2E8F0; font-size: 10px; padding: 3px 6px; border-radius: 4px; font-weight: 700;">
+                                                         <field name="trangthai"/>
+                                                    </span>
+                                                </t>
+                                                <t t-elif="record.trangthai.raw_value == '1'">
+                                                    <span class="badge" style="background-color: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; font-size: 10px; padding: 3px 6px; border-radius: 4px; font-weight: 700;">
+                                                       <field name="trangthai"/>
+                                                    </span>
+                                                </t>
+
+                                            </span>
                                         </h3>
                                     </div>
 
@@ -85,31 +106,167 @@
             </field>
         </record>
 
-         <record id="ekids_canthiep.ct_linhvuc_form" model="ir.ui.view">
-            <field name="name">Form</field>
+        <record id="ekids_canthiep.ct_linhvuc_form" model="ir.ui.view">
+            <field name="name">ekids.ct_linhvuc.form</field>
             <field name="model">ekids.ct_linhvuc</field>
             <field name="arch" type="xml">
-                <form>
-                    <sheet>
-                         <field name="chuongtrinh_id" invisible="1"/>
-                        <group>
-                             <div class="row">
+                <form string="Lĩnh vực">
+                    <sheet class="p-4 bg-white">
 
-                                <div class="col-md-10">
-                                  <h3>
-                                      <field name="name" placeholder="Tên lĩnh vực"/>
-                                  </h3>
+                        <style>
+                            /* 1. Vòng tròn số thứ tự hiển thị (Sky Blue Gradient) */
+                            .ekids_circle_index {
+                                width: 52px;
+                                height: 52px;
+                                background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
+                                border-radius: 50%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                flex-shrink: 0;
+                                box-shadow: 0 4px 10px rgba(14, 165, 233, 0.12);
+                            }
+                            .ekids_circle_index input {
+                                background: transparent !important;
+                                border: none !important;
+                                text-align: center !important;
+                                font-size: 22px !important;
+                                font-weight: 900 !important;
+                                color: #0284C7 !important;
+                                width: 100% !important;
+                                padding: 0 !important;
+                            }
+
+                            /* 2. Ô nhập tên mốc tuổi gạch chân nét đứt */
+                            .ekids_premium_title_input { flex-grow: 1; min-width: 200px; }
+                            .ekids_premium_title_input input {
+                                font-size: 22px !important;
+                                font-weight: 800 !important;
+                                color: #1E293B !important;
+                                border-top: none !important;
+                                border-left: none !important;
+                                border-right: none !important;
+                                border-bottom: 2px dashed #E2E8F0 !important;
+                                border-radius: 0 !important;
+                                padding-bottom: 4px !important;
+                                padding-left: 0 !important;
+                                background: transparent !important;
+                                transition: all 0.2s;
+                                width: 100%;
+                            }
+                            .ekids_premium_title_input input:focus {
+                                border-bottom-color: #0284C7 !important;
+                                border-bottom-style: solid !important;
+                                box-shadow: none !important;
+                            }
+
+                            /* 🌟 3. THIẾT KẾ MỚI: Ô TRẠNG THÁI CAO CẤP MẶC ĐỊNH MÀU XANH */
+                            .kh-status-box {
+                                display: inline-flex;
+                                align-items: center;
+                                background: #f0fdf4; /* Xanh lá nhạt mặc định */
+
+                                border: 1px solid #bbf7d0;
+                                padding: 6px 14px;
+                                border-radius: 8px;
+                                font-weight: 800;
+                                gap: 6px;
+                                transition: all 0.2s ease;
+                            }
+                            .kh-status-box .o_field_widget { width: 140px !important; }
+                            .kh-status-box .o_input {
+                                font-weight: 900 !important;
+                                font-size: 13.5px !important;
+                                border: none !important;
+                                background: transparent !important;
+                                padding: 0 !important;
+                                box-shadow: none !important;
+                                cursor: pointer;
+                                color: red !important;
+                            }
+
+                            /* 🌟 THUẬT TOÁN ĐỔI MÀU ĐỎ KHI CHỌN KHÓA / NHÁP / KHÔNG HOẠT ĐỘNG */
+                            .kh-status-box:has(select option[value="lock"]:checked),
+                            .kh-status-box:has(select option[value="draft"]:checked),
+                            .kh-status-box:has(select option[value="2"]:checked),
+                            .kh-status-box:has(select option[value="0"]:checked),
+                            .kh-status-box:has(span:contains("Khóa")),
+                            .kh-status-box:has(span:contains("Nháp")),
+                            .kh-status-box:has(span:contains("Không hoạt động")) {
+                                background: #fef2f2 !important; /* Đổi sang nền đỏ Pastel */
+                                color: #dc2626 !important;
+                                border-color: #fecaca !important;
+                            }
+                            .kh-status-box:has(select option[value="lock"]:checked) .o_input,
+                            .kh-status-box:has(select option[value="draft"]:checked) .o_input,
+                            .kh-status-box:has(select option[value="2"]:checked) .o_input,
+                            .kh-status-box:has(select option[value="0"]:checked) .o_input,
+                            .kh-status-box:has(span:contains("Khóa")) .o_input,
+                            .kh-status-box:has(span:contains("Nháp")) .o_input,
+                            .kh-status-box:has(span:contains("Không hoạt động")) .o_input {
+                                color: #dc2626 !important;
+                            }
+
+                            /* 4. Khối ruy-băng mô tả chung */
+                            .ekids_blue_ribbon_box {
+                                border-left: 4px solid #0284C7 !important;
+                                background-color: #F9FAFB;
+                                border-radius: 0 16px 16px 0;
+                                padding: 20px;
+                                box-shadow: 0 1px 2px rgba(0,0,0,0.01);
+                            }
+
+                            /* 🌟 ĐỊNH HÌNH RESPONSIVE TRÊN MOBILE ĐẢM BẢO KHÔNG VỠ KHUNG */
+                            @media (max-width: 768px) {
+                                .kh-header-flex-row {
+                                    flex-direction: column !important; /* Xếp dọc các khối trên điện thoại */
+                                    align-items: stretch !important;
+                                    gap: 15px !important;
+                                }
+                                .ekids_circle_index { margin: 0 auto; } /* Căn giữa số STT tròn */
+                                .ekids_premium_title_input input { text-align: center !important; }
+                                .kh-status-box { width: 100% !important; justify-content: center; }
+                                .kh-status-box .o_field_widget { width: auto !important; flex-grow: 1; }
+                            }
+                        </style>
+
+                        <div class="d-flex align-items-center justify-content-between gap-3 mb-4 kh-header-flex-row" style="width: 100%;">
+
+                            <div class="d-flex align-items-center gap-3 flex-grow-1">
+                                <div class="ekids_circle_index" title="Đổi thứ tự sắp xếp hiển thị">
+                                    <field name="sequence" string="" placeholder="0"/>
                                 </div>
-                              </div>
-                        </group>
-                        <group>
-                            <field name="desc"/>
-                        </group>
 
-                       </sheet>
+                                <div class="ekids_premium_title_input">
+                                    <field name="name" nolabel="1" placeholder="Nhập tên lĩnh vực..."/>
+                                </div>
+                            </div>
+
+                            <div class="kh-status-box">
+                                <i class="fa fa-toggle-on"></i> TRẠNG THÁI:
+                                <field name="trangthai" nolabel="1"/>
+                            </div>
+
+                        </div>
+
+                        <div class="ekids_blue_ribbon_box mt-4">
+                            <h5 class="fw-extrabold d-flex align-items-center mb-3" style="color: #0369A1; font-size: 13.5px; letter-spacing: 0.5px;">
+                                <i class="fa fa-info-circle me-2" style="font-size: 16px;"></i> MÔ TẢ CHI TIẾT
+                            </h5>
+
+                            <div class="bg-transparent">
+                                <field name="desc"
+                                       nolabel="1"
+                                       placeholder="Mô tả chi tiết lĩnh vực can thiệp (nếu có)..."
+                                       style="width: 100%; min-height: 220px; border: none !important; background: transparent;"/>
+                            </div>
+                        </div>
+
+                    </sheet>
                 </form>
             </field>
         </record>
+
 
     </data>
 </odoo>

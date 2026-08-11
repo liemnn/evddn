@@ -1,0 +1,259 @@
+<odoo>
+  <data>
+     <record id="ekids_canthiep.kehoach_ketqua2muctieu_list" model="ir.ui.view">
+        <field name="name">ekids.kehoach_ketqua2muctieu.list</field>
+        <field name="model">ekids.kehoach_ketqua2muctieu</field>
+        <field name="arch" type="xml">
+
+            <list editable="bottom" create="0" delete="0" limit="200" default_order="ngay asc" class="hide_search_bar">
+
+
+
+                <field name="ngay" readonly="1" class="fw-bold" width="100"/>
+
+                <field name="trangthai"
+                       readonly="is_readonly"
+                       decoration-danger="trangthai == '-1'"
+                       decoration-warning="trangthai == '0'"
+                       decoration-success="trangthai == '1'"/>
+
+                <field name="desc"
+                       readonly="is_readonly"
+                       placeholder="Nhập ghi chú hoặc nhận xét của giáo viên..."/>
+
+            </list>
+
+        </field>
+    </record>
+
+    <record id="ekids_canthiep.kehoach_ketqua2muctieu_kanban" model="ir.ui.view">
+        <field name="name">ekids.kehoach_ketqua2muctieu.kanban</field>
+        <field name="model">ekids.kehoach_ketqua2muctieu</field>
+        <field name="arch" type="xml">
+
+            <kanban create="0" delete="0" class="custom_daily_kanban hide_search_bar" default_order="ngay asc">
+
+                <field name="id"/>
+                <field name="ngay"/>
+                <field name="trangthai"/>
+                <field name="desc"/>
+                <field name="is_readonly"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+
+                        <style>
+                            .custom_daily_kanban .o_kanban_record {
+                                width: 100% !important;
+                                flex: 0 0 100% !important;
+                                margin: 0 0 10px 0 !important;
+                                padding: 0 !important;
+                                background: transparent !important;
+                                border: none !important;
+                            }
+                        </style>
+
+                        <div class="d-flex align-items-center justify-content-between" style="background: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); transition: all 0.2s;">
+
+                            <div class="d-flex align-items-center gap-3" style="min-width: 180px;">
+                                <div class="d-flex align-items-center justify-content-center bg-light" style="width: 45px; height: 45px; border-radius: 10px; border: 1px solid #E2E8F0;">
+                                    <i class="fa fa-calendar text-primary" style="font-size: 18px;"></i>
+                                </div>
+
+                                <div class="d-flex flex-column">
+                                    <strong class="text-dark" style="font-size: 15px;">
+                                        <field name="ngay"/>
+                                    </strong>
+
+                                    <t t-if="record.is_readonly.raw_value">
+                                        <span class="text-muted mt-1" style="font-size: 11.5px; font-weight: 500;">
+                                            <i class="fa fa-lock me-1 text-danger"></i> Chưa đến ngày
+                                        </span>
+                                    </t>
+                                    <t t-else="">
+                                        <span class="text-success mt-1" style="font-size: 11.5px; font-weight: 500;">
+                                            <i class="fa fa-pencil me-1"></i> Cho phép sửa
+                                        </span>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <div class="text-center" style="min-width: 160px;">
+
+                                <t t-if="record.is_readonly.raw_value">
+                                    <t t-if="record.trangthai.raw_value == ''">
+                                        <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 12px; border-radius: 6px;">
+                                            <i class="fa fa-times-circle me-1"></i> Chưa ghi nhận
+                                        </span>
+                                    </t>
+                                    <t t-if="record.trangthai.raw_value == '-1'">
+                                        <span class="badge" style="background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 12px; border-radius: 6px;">
+                                            <i class="fa fa-times-circle me-1"></i> Chưa đạt
+                                        </span>
+                                    </t>
+
+                                    <t t-elif="record.trangthai.raw_value == '1'">
+                                        <span class="badge" style="background-color: #F0FDF4; color: #16A34A; border: 1px solid #BBF7D0; padding: 6px 12px; border-radius: 6px;">
+                                            <i class="fa fa-check-circle me-1"></i> Đạt
+                                        </span>
+                                    </t>
+                                </t>
+
+                                <t t-else="">
+                                    <div class="btn-group" role="group" style="box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-radius: 6px;">
+                                        <button type="object" name="action_set_chuadat"
+                                                t-attf-class="btn btn-sm fw-bold #{record.trangthai.raw_value == '-1' ? 'btn-danger' : 'btn-outline-danger'}"
+                                                title="Xác nhận [Chưa đạt]">(-)</button>
+                                        <button type="object" name="action_set_hinhthanh"
+                                                t-attf-class="btn btn-sm fw-bold #{record.trangthai.raw_value == '0' ? 'btn-warning text-dark' : 'btn-outline-warning'}"
+                                                title="Xác nhận [Đang hình thành]">(+/-)</button>
+                                        <button type="object" name="action_set_dat"
+                                                t-attf-class="btn btn-sm fw-bold #{record.trangthai.raw_value == '1' ? 'btn-success' : 'btn-outline-success'}"
+                                                title="Xác nhận [Đạt]">(+)</button>
+                                    </div>
+                                </t>
+                            </div>
+
+                            <div class="ms-4 d-flex align-items-center justify-content-between" style="flex: 1; min-width: 0;">
+
+                                <div class="text-muted text-truncate me-3" style="font-size: 13.5px;">
+                                    <t t-if="record.desc.raw_value">
+                                        <i class="fa fa-quote-left me-2" style="color: #CBD5E1;"></i>
+                                        <span style="font-style: italic;"><field name="desc"/></span>
+                                    </t>
+                                    <t t-else="">
+                                        <span style="opacity: 0.5;">Chưa có ghi chú...</span>
+                                    </t>
+                                </div>
+
+                                <div>
+                                    <t t-if="!record.is_readonly.raw_value">
+                                        <button type="object" name="action_vao_form_ghichu"
+                                                class="btn btn-sm btn-light fw-bold text-primary shadow-sm"
+                                                style="border: 1px solid #E2E8F0; border-radius: 6px; white-space: nowrap;">
+                                            <i class="fa fa-pencil-square-o me-1"></i> Ghi chú
+                                        </button>
+                                    </t>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="ekids_canthiep.kehoach_ketqua2muctieu_form" model="ir.ui.view">
+        <field name="name">ekids.kehoach_ketqua2muctieu.form</field>
+        <field name="model">ekids.kehoach_ketqua2muctieu</field>
+        <field name="arch" type="xml">
+            <form string="Chi tiết Can thiệp">
+
+                <field name="is_readonly" invisible="1"/>
+
+               <style>
+                    /* =================================================== */
+                    /* CSS TÔ MÀU CHO WIDGET SELECTION_BADGE (ODOO 17/18)  */
+                    /* =================================================== */
+
+                    /* Khoảng cách giữa các nút cho thoáng */
+                    .custom_ketqua_badge .o_selection_badge {
+                        margin-right: 12px !important;
+                        border-radius: 8px !important;
+                        padding: 8px 16px !important;
+                        transition: all 0.2s !important;
+                    }
+
+                    /* 1. NÚT CHƯA ĐẠT (-1) */
+                    .custom_ketqua_badge .o_selection_badge[data-value="-1"] {
+                        color: #DC2626 !important;
+                        background-color: #FFFFFF !important;
+                        border: 1px solid #E2E8F0 !important;
+                    }
+                    .custom_ketqua_badge .o_selection_badge[data-value="-1"].active {
+                        background-color: #FEF2F2 !important;
+                        border: 1px solid #FECACA !important;
+                        font-weight: 800 !important;
+                    }
+
+                    /* 2. NÚT ĐANG HÌNH THÀNH (0) */
+                    .custom_ketqua_badge .o_selection_badge[data-value="0"] {
+                        color: #D97706 !important;
+                        background-color: #FFFFFF !important;
+                        border: 1px solid #E2E8F0 !important;
+                    }
+                    .custom_ketqua_badge .o_selection_badge[data-value="0"].active {
+                        background-color: #FFFBEB !important;
+                        border: 1px solid #FDE68A !important;
+                        font-weight: 800 !important;
+                    }
+
+                    /* 3. NÚT ĐẠT (1) */
+                    .custom_ketqua_badge .o_selection_badge[data-value="1"] {
+                        color: #16A34A !important;
+                        background-color: #FFFFFF !important;
+                        border: 1px solid #E2E8F0 !important;
+                    }
+                    .custom_ketqua_badge .o_selection_badge[data-value="1"].active {
+                        background-color: #F0FDF4 !important;
+                        border: 1px solid #BBF7D0 !important;
+                        font-weight: 800 !important;
+                    }
+
+                    /* Hiệu ứng mượt mà khi hover chuột vào nút chưa chọn */
+                    .custom_ketqua_badge .o_selection_badge:not(.active):hover {
+                        background-color: #F8FAFC !important;
+                        transform: translateY(-1px);
+                    }
+                </style>
+
+                <div invisible="not is_readonly" class="alert alert-danger d-flex align-items-center mx-3 mt-3 p-3 shadow-sm" style="border-radius: 12px; border: 1px solid #FECACA;" role="alert">
+                    <i class="fa fa-lock fa-2x me-3" style="color: #DC2626;"></i>
+                    <div>
+                        <strong style="font-size: 15px; color: #991B1B;">Dữ liệu đã được khóa sổ!</strong>
+                        <div style="font-size: 13px; color: #DC2626;">Ngày can thiệp này đã vượt quá thời hạn cho phép chỉnh sửa. Bạn chỉ có thể xem.</div>
+                    </div>
+                </div>
+
+                <sheet class="p-4">
+
+
+
+                    <div class="row">
+
+
+                        <div class="col-12">
+                            <div class="p-3 shadow-sm" style="background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="fw-bold d-flex align-items-center mb-0" style="color: #1E293B; font-size: 15px;">
+                                        <i class="fa fa-pencil-square-o text-warning me-2 fs-5"></i> Ghi chú của giáo viên can thiệp
+                                    </h5>
+                                </div>
+                                <p class="text-muted mb-3" style="font-size: 13px;">Hãy nhập chi tiết về thái độ, phản ứng hoặc những tiến bộ nhỏ của học sinh trong buổi học này.</p>
+
+                                <field name="desc"
+                                       nolabel="1"
+                                       readonly="is_readonly"
+                                       placeholder="Ví dụ: Bé hôm nay rất chú ý lắng nghe, tuy nhiên còn rụt rè khi phát âm..."
+                                       style="width: 100%; min-height: 120px; border: 1px solid #CBD5E1; border-radius: 8px; padding: 12px; font-size: 14px; background-color: #FFFFFF; transition: border-color 0.2s;"/>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+
+                <footer class="d-flex justify-content-end gap-2" style="background-color: #F8FAFC; border-top: 1px solid #E2E8F0; padding: 12px 20px;">
+                    <button string="Lưu ghi chú &amp; Đóng" name="action_save_ghichu" type="object" class="btn btn-primary fw-bold shadow-sm" invisible="is_readonly" icon="fa-save" style="border-radius: 6px; padding-left: 20px; padding-right: 20px;"/>
+
+                    <button string="Hủy bỏ" special="cancel" class="btn btn-light fw-bold" invisible="is_readonly" icon="fa-times" style="border: 1px solid #CBD5E1; color: #475569;"/>
+
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+
+  </data>
+</odoo>

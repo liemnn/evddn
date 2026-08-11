@@ -2,6 +2,7 @@ import ast
 import json
 from collections import defaultdict
 from datetime import timedelta,date,datetime
+from odoo.osv import expression
 
 from odoo import models, fields, api, _
 import logging
@@ -55,7 +56,11 @@ class CoSo(models.Model):
         hocphi2thang = self.func_macdinh_tao_hocphi_thang_nay()
         if hocphi2thang:
             hocphi2thang.action_view_khoitao_hocphi_hocsinh()
+
+
             name = "HỌC PHÍ THÁNG "+str(hocphi2thang.name).upper()+"/"+ str(hocphi2thang.nam_id.name)
+            domain = self.func_get_domain_trong_khoang_thoigian(hocphi2thang)
+
             return {
                 'type': 'ir.actions.act_window',
                 'name': name,
@@ -63,7 +68,7 @@ class CoSo(models.Model):
                 'view_mode': 'list,kanban,form',
                 'order': 'hocsinh_id.name asc',
                 'target': 'current',
-                'domain': [('coso_id', '=', self.id),('thang_id', '=', hocphi2thang.id)],
+                'domain': domain,
                 'context': {
                     'default_coso_id': self.id,
                     'default_nam': hocphi2thang.nam_id.name,
@@ -71,6 +76,67 @@ class CoSo(models.Model):
 
                 }
             }
+
+    def func_xoa_hocphi_khi_hocsinh_nghi_trongthang(self,hocphi2thang):
+        hocphi_ids = hocphi2thang.hocphi_ids
+        if hocphi_ids:
+            nam = int(hocphi2thang.nam_id.name)
+            thang = int(hocphi2thang.name)
+            days = ngay_util.func_get_cacngay_trong_thang(nam,thang)
+            tu_ngay =days[0]
+
+            for hocphi in hocphi_ids:
+                ngay_nghihoc = hocphi.hocsinh_id.ngay_nghihoc
+                if ngay_nghihoc:
+                    if ngay_nghihoc < tu_ngay:
+                        hocphi.unlink()
+
+
+
+    def func_get_domain_trong_khoang_thoigian(self,hocphi2thang):
+        nam = int(hocphi2thang.nam_id.name)
+        thang = int(hocphi2thang.name)
+        ngays = ngay_util.func_get_cacngay_trong_thang(nam, thang)
+        tu_ngay = ngays[0]
+        den_ngay = ngays[len(ngays) - 1]
+
+        today = date.today()
+        thang_today =today.month
+        nam_today = today.year
+        domain = [('coso_id', '=', self.id), ('thang_id', '=', hocphi2thang.id)]
+        if (thang_today == thang
+            and nam_today == nam):
+            # xoa những học sinh đã nghỉ tháng này
+            self.func_xoa_hocphi_khi_hocsinh_nghi_trongthang(hocphi2thang)
+
+            domain_chung = [('coso_id', '=', self.id),
+                     ('thang_id', '=', hocphi2thang.id),
+                     ('hocsinh_id.ngay_nhaphoc', '<=', den_ngay)
+                     ]
+
+
+
+            # Nhóm 1: Học sinh đang theo học
+            domain_theohoc = [
+                ('hocsinh_id.trangthai', '=', '1'),
+            ]
+
+            # Nhóm 2: Học sinh đã nghỉ nhưng nghỉ trong tháng tìm kiếm
+            domain_danghi = [
+                ('hocsinh_id.ngay_nghihoc', '!=', False),
+                ('hocsinh_id.ngay_nghihoc', '>=', tu_ngay)
+            ]
+
+
+            domain = expression.AND([
+                domain_chung,
+                expression.OR([
+                    domain_theohoc,
+                    domain_danghi
+                ])
+            ])
+
+        return domain
 
     def action_quanly_khoan_thungoai(self):
 
@@ -189,40 +255,6 @@ class CoSo(models.Model):
 
             }
 
-        }
-
-    # KEHOACH --> CLICK LỰA CHỌN COSO ra kanban học sinh
-    def action_view_ekid_hocsinh_canthiep_kehoach_hocsinh(self):
-        self.ensure_one()
-        user = self.env.user
-        view_id = self.env.ref('ekids_hocsinh.kehoach_hocsinh_kanban_view').id
-
-        domain = [('id', '=', -1)]  # default rỗng
-
-        gv = self.env['ekids.giaovien'].search([('user_id', '=', user.id)], limit=1)
-        if gv:
-            ketluans = self.env['ekids.ketluan'].search([
-                ('gv_lapkehoach_id', '=', gv.id),
-                ('trangthai', '=', '0')
-            ])
-            if ketluans:
-                hocsinh_ids = ketluans.mapped('hocsinh_id.id')
-                domain = [('id', 'in', hocsinh_ids)]
-
-        return {
-            'type': 'ir.actions.act_window',
-            'name': _('HỌC SINH'),
-            'res_model': 'ekids.hocsinh',
-            'view_mode': 'kanban',
-            'views': [(view_id, 'kanban')],
-            'target': 'current',
-            'domain': domain,
-            'context': {
-                'default_coso_id': self.id,
-            },
-            'flags': {
-                'kanban': {'create': False}
-            }
         }
 
 

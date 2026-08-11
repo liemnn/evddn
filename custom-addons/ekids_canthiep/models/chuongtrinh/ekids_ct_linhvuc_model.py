@@ -4,10 +4,14 @@ from odoo import models, fields, api, exceptions
 class LinhVuc(models.Model):
     _name = "ekids.ct_linhvuc"
     _description = "Lĩnh vực"
+    _order = "sequence asc"
+
 
     coso_id = fields.Many2one("ekids.coso", related="chuongtrinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
     sequence = fields.Integer(string="STT", default=1)
+    index = fields.Integer(string="STT", compute="_compute_index", store=False)
+
     name = fields.Char(string="Tên",required=True)
 
     desc =fields.Html(string="Mô tả")
@@ -18,7 +22,14 @@ class LinhVuc(models.Model):
 
     tong_muctieu = fields.Integer(string="Tổng mục tiêu", compute="_compute_ct_linhvuc_tong_muctieu", store=False)
 
+    trangthai = fields.Selection([("0", "Không hoạt động")
+                                     , ("1", "Đang hoạt động")], default="1", required=True)
 
+    def _compute_index(self):
+        index = 1
+        for record in self:
+            record.index = index
+            index += 1
     def _compute_ct_linhvuc_tong_muctieu(self):
         for lv in self:
             count = self.env['ekids.ct_muctieu'].search_count([('linhvuc_id','=',lv.id)])
@@ -29,11 +40,14 @@ class LinhVuc(models.Model):
 
 
     def action_xem_muctieu(self):
+        list_view_id = self.env.ref('ekids_canthiep.ct_muctieu_vitri_list').id
+        form_view_id = self.env.ref('ekids_canthiep.ct_muctieu_form').id
         return {
             'type': 'ir.actions.act_window',
             'name': "LĨNH VỰC:"+ self.name,
             'res_model': 'ekids.ct_muctieu',
             'view_mode': 'list,kanban,form',
+            'views': [(list_view_id, 'list'),(form_view_id, 'form')],
             'target': 'current',
             'domain': [('linhvuc_id', '=', self.id)],
             'context': {

@@ -1,6 +1,34 @@
 from datetime import datetime, timedelta,date
-from . import  coso_util,ngay_util
+from odoo import models, fields, api
+import qrcode
+import base64
+import io
+
+from . import  coso_util,ngay_util,string_util
 from odoo.osv import expression
+
+import logging
+_logger = logging.getLogger(__name__)
+
+
+def func_get_dihoc_diemdanh(self,hocsinh,ngay):
+
+    nam =ngay.year
+    thang = ngay.month
+    hocsinh2thang = self.env['ekids.diemdanh_hocsinh2thang'].search([
+        ('hocsinh_id', '=', hocsinh.id),
+        ('diemdanh_id.thang', '=', str(thang)),
+        ('diemdanh_id.nam', '=', str(nam))
+    ],limit=1)
+    if hocsinh2thang:
+        field_name = "d" + str(ngay.day)
+        giatri = getattr(hocsinh2thang, field_name, '-1')
+        return giatri
+    else:
+        return "1"
+    return None
+
+
 def func_get_nghipheps_trong_khoang_thoigian(self,coso, hocsinh, nghiles,nhatruong_nghis, tu_ngay, den_ngay):
     nghipheps = self.env['ekids.hocsinh_nghiphep'].search([
         ('hocsinh_id', '=', hocsinh.id),
@@ -127,6 +155,20 @@ def func_is_co_ca_trong_ngay(hocsinh,ngay):
             return True
     return False
 
+def func_is_dangky_hoc(hocsinh,ngay):
+    week = ngay.weekday() + 2
+    field_name = "hd_t" + str(week)
+    if hocsinh.is_ngaydihoc_rieng ==True:
+        is_hoc = getattr(hocsinh,field_name)
+        if is_hoc == True:
+            return True
+    else:
+        coso =hocsinh.coso_id
+        is_hoc = getattr(coso, field_name)
+        if is_hoc == True:
+            return True
+    return False
+
 
 def func_get_ngay_dihoc_thucte(self,hocsinh2thang, nghiles):
 
@@ -236,10 +278,9 @@ def func_get_domain_trong_khoang_thoigian(coso_ids, tu_ngay,den_ngay):
 
     # Nhóm 2: Học sinh đã nghỉ nhưng nghỉ trong tháng tìm kiếm
     domain_danghi = [
-        ('trangthai', '=', '3'),
         ('ngay_nghihoc', '!=', False),
         ('ngay_nghihoc', '>=', tu_ngay),
-        ('ngay_nghihoc', '<=', den_ngay),
+
     ]
 
     domain = expression.AND([
@@ -290,3 +331,325 @@ def func_is_hoc(self, hocsinh, ngay):
     return False
 
 
+
+
+def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh,ngay):
+    # Ép toàn bộ biến về chuẩn Date an toàn bằng hàm lõi của Odoo
+    d_ngay = fields.Date.to_date(ngay)
+    d_nhaphoc = fields.Date.to_date(hocsinh.ngay_nhaphoc)
+    d_nghihoc = fields.Date.to_date(hocsinh.ngay_nghihoc)
+
+    # 1. Chặn lỗi ngầm nếu thiếu dữ liệu đầu vào
+    if not d_ngay or not d_nhaphoc:
+        return
+
+    # 2. Xử lý logic: Nếu ngày đang xét trước ngày nhập học -> Bỏ qua
+    if d_ngay < d_nhaphoc:
+        return
+
+    # 3. Xử lý logic: Nếu đã nghỉ học và ngày đang xét sau ngày nghỉ học -> Bỏ qua
+    if d_nghihoc and d_ngay > d_nghihoc:
+        return
+
+    weekday = ngay.weekday() + 2
+    thu_field = 't' + str(weekday)
+    ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search([
+                        ('hocsinh_id', '=', hocsinh.id)
+                        ])
+    if ca_canthieps:
+        for ca_canthiep in ca_canthieps:
+            is_canthiep = getattr(ca_canthiep,thu_field)
+            if is_canthiep:
+                count = self.env['ekids.diemdanh_ca2ngay'].search_count([
+                    ('hocsinh_id', '=', hocsinh.id),
+                    ('ngay', '=', ngay),
+                    ('hocsinh_ca_canthiep_id', '=', ca_canthiep.id),
+
+                ])
+                if count <= 0:
+                    data={
+                        'hocphi_dm_ca_id': ca_canthiep.dm_ca_id.id,
+                        'hocsinh_ca_canthiep_id': ca_canthiep.id,
+                        'ngay': ngay,
+                        'tu':ca_canthiep.tu,
+                        'den': ca_canthiep.den,
+                        'hocsinh_id': hocsinh.id,
+                        'trangthai': '0',
+
+                    }
+                    if ca_canthiep.giaovien_id:
+                        data['giaovien_id'] = ca_canthiep.giaovien_id.id
+
+
+                    self.env['ekids.diemdanh_ca2ngay'].create(data)
+
+
+def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay_nghiphep(self,hocsinh,ngay):
+    # Ép toàn bộ biến về chuẩn Date an toàn bằng hàm lõi của Odoo
+    d_ngay = fields.Date.to_date(ngay)
+    d_nhaphoc = fields.Date.to_date(hocsinh.ngay_nhaphoc)
+    d_nghihoc = fields.Date.to_date(hocsinh.ngay_nghihoc)
+
+    # 1. Chặn lỗi ngầm nếu thiếu dữ liệu đầu vào
+    if not d_ngay or not d_nhaphoc:
+        return
+
+    # 2. Xử lý logic: Nếu ngày đang xét trước ngày nhập học -> Bỏ qua
+    if d_ngay < d_nhaphoc:
+        return
+
+    # 3. Xử lý logic: Nếu đã nghỉ học và ngày đang xét sau ngày nghỉ học -> Bỏ qua
+    if d_nghihoc and d_ngay > d_nghihoc:
+        return
+
+    weekday = ngay.weekday() + 2
+    thu_field = 't' + str(weekday)
+    ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search([
+                        ('hocsinh_id', '=', hocsinh.id)
+                        ])
+    if ca_canthieps:
+        for ca_canthiep in ca_canthieps:
+            is_canthiep = getattr(ca_canthiep,thu_field)
+            if is_canthiep:
+                ca2ngay = self.env['ekids.diemdanh_ca2ngay'].search([
+                    ('hocsinh_id', '=', hocsinh.id),
+                    ('ngay', '=', ngay),
+                    ('hocsinh_ca_canthiep_id', '=', ca_canthiep.id),
+
+                ],limit=1)
+                trangthai = "0" # se hoc bu
+                if (ca_canthiep.dm_ca_id.is_hoantien_khi_nghi == True
+                        or ca_canthiep.dm_ca_id.tyle_hoan_rieng > 0):
+                    trangthai = "3"
+
+                if not ca2ngay:
+                    data={
+                        'hocphi_dm_ca_id': ca_canthiep.dm_ca_id.id,
+                        'hocsinh_ca_canthiep_id': ca_canthiep.id,
+                        'ngay': ngay,
+                        'tu':ca_canthiep.tu,
+                        'den': ca_canthiep.den,
+                        'hocsinh_id': hocsinh.id,
+                        'trangthai': trangthai,
+
+                    }
+                    if ca_canthiep.giaovien_id:
+                        data['giaovien_id'] = ca_canthiep.giaovien_id.id
+
+
+                    self.env['ekids.diemdanh_ca2ngay'].create(data)
+                else:
+                    setattr(ca2ngay,"trangthai",trangthai)
+
+
+def func_capnhat_macdinh_diemdanh_ca2ngay_theo_ngay_nghiphep(self,hocsinh,ngay):
+    ca2ngays = self.env['ekids.diemdanh_ca2ngay'].search([
+        ('hocsinh_id', '=', hocsinh.id),
+        ('ngay', '=', ngay),
+
+    ])
+    if ca2ngays:
+        for ca2ngay in ca2ngays:
+            if ca2ngay.trangthai =="3":
+                setattr(ca2ngay,"trangthai","0")
+
+
+@staticmethod
+def func_crc16_vietqr(data: str):
+    """Thuật toán CRC16/CCITT-FALSE chuẩn Napas."""
+    crc = 0xFFFF
+    poly = 0x1021
+    for char in data:
+        crc ^= (ord(char) << 8)
+        for _ in range(8):
+            if crc & 0x8000:
+                crc = (crc << 1) ^ poly
+            else:
+                crc <<= 1
+        crc &= 0xFFFF
+    return "{:04X}".format(crc)
+
+def func_build_qr_code(hp):
+    try:
+
+        coso = hp.coso_id
+        if (coso.bank_bin
+            and coso.bank_acc_number):
+            amount = str(int(round(float(hp.hocphi_phaidong))))  # Bỏ .00, làm tròn số
+            bin_code = "".join(filter(str.isdigit, str(coso.bank_bin or "")))
+            acc = "".join(filter(str.isdigit, str(coso.bank_acc_number or "")))
+
+            # [Tag 38] - Phân cấp chuẩn Napas
+            guid = "A000000727"
+            service = "QRIBFTTA"
+
+            # Lớp 01: Chứa BIN và ACC
+            consumer = f"00{len(bin_code):02d}{bin_code}01{len(acc):02d}{acc}"
+
+            # Lớp 38: Chứa GUID, CONSUMER và SERVICE
+            merchant_info = (
+                f"00{len(guid):02d}{guid}"
+                f"01{len(consumer):02d}{consumer}"
+                f"02{len(service):02d}{service}"
+            )
+            tag_38 = f"38{len(merchant_info):02d}{merchant_info}"
+
+            # Các thông tin bổ sung (Tag 59, 60 - Bắt buộc cho Zalo)
+            merchant_name = "EVDDN"  # Viết hoa không dấu
+            merchant_city = "HANOI"
+            tag_59 = f"59{len(merchant_name):02d}{merchant_name}"
+            tag_60 = f"60{len(merchant_city):02d}{merchant_city}"
+
+
+            # 1. Chuẩn bị nội dung (Tối đa 25 ký tự để tránh lỗi độ dài)
+            # Ví dụ: "NGUYENVANA HP 06/2026"
+            ten_hs = string_util.xoa_tiengviet_codau(hp.hocsinh_id.name or "HOC SINH").upper()
+            thang = string_util.xoa_tiengviet_codau(hp.thang_id.name or "").upper()
+            nam = string_util.xoa_tiengviet_codau(hp.nam_id.name or "").upper()
+
+            # 2. Kết hợp nội dung: "TRAN VIET THANG HP THANG 06 2026"
+            # Sử dụng f-string để ghép nối, giữ nguyên đầy đủ, giới hạn 25 ký tự an toàn
+            noi_dung = f"{ten_hs} HP {thang} {nam}".strip()
+
+            # 3. Xây dựng Tag 62
+            sub_tag_08 = f"08{len(noi_dung):02d}{noi_dung}"
+            tag_62 = f"62{len(sub_tag_08):02d}{sub_tag_08}"
+
+            # 3. Ghép vào Payload (Đặt Tag 62 trước Tag 63)
+            data = (
+                    "000201"
+                    "010212"
+                    + tag_38 +
+                    "5303704"
+                    + f"54{len(amount):02d}{amount}"
+                    + "5802VN"
+                    + tag_59
+                    + tag_60
+                    + tag_62  # <--- THÊM VÀO ĐÂY
+                    + "6304"
+            )
+
+
+
+            # Tính CRC
+            payload = data + func_crc16_vietqr(data)
+
+            #_logger.info("PAYLOAD_READY: %s", payload)  # Log để anh check
+
+            # Tạo ảnh QR
+            qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)
+            qr.add_data(payload)
+            qr.make(fit=True)
+
+
+            buffer = io.BytesIO()
+            qr.make_image(fill_color="black", back_color="white").save(buffer, format="PNG")
+            return base64.b64encode(buffer.getvalue())
+        else:
+            return False
+    except Exception as e:
+        _logger.error("Lỗi sinh QR với định dạng số tiền .00: %s", e)
+        return False
+
+
+def sum_tong_hocsinh_trong_thang(self, coso_ids,nam, thang):
+    days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
+    if not days:
+        return 0
+    tu_ngay = days[0]  # Ngày đầu tiên của tháng
+    den_ngay = days[-1]  # Ngày cuối cùng của tháng
+    return sum_tong_hocsinh_trong_khoang_thoigian(self, coso_ids,tu_ngay,den_ngay)
+
+def sum_tong_hocsinh_trong_khoang_thoigian(self, coso_ids,tu_ngay,den_ngay):
+
+
+    # 1. Điều kiện cơ bản bắt buộc (Cơ sở, học phí và bắt buộc phải có ngày nhập học hợp lệ)
+    domain = [
+        ('coso_id', 'in', coso_ids),
+        ('hocsinh_id.ngay_nhaphoc', '!=', False),
+        ('hocsinh_id.ngay_nhaphoc', '<=', den_ngay)
+    ]
+
+    # 2. Định nghĩa 2 trạng thái bằng expression.OR
+    # Trạng thái A: Học sinh hiện tại vẫn đang học (Chưa có ngày nghỉ)
+    domain_danghoc = [('hocsinh_id.ngay_nghihoc', '=', False)]
+
+    # Trạng thái B: Học sinh đã nghỉ nhưng ngày nghỉ nằm trong tháng này (tu_ngay -> den_ngay)
+    domain_nghi_trongthang = [
+        ('hocsinh_id.ngay_nghihoc', '!=', False),
+        ('hocsinh_id.ngay_nghihoc', '>=', tu_ngay)
+
+    ]
+
+    # Gộp 2 trạng thái: Đang học HOẶC mới nghỉ trong tháng
+    domain_hoc = expression.OR([
+        domain_danghoc,
+        domain_nghi_trongthang
+    ])
+
+    # 3. Kết hợp điều kiện cơ bản AND với trạng thái hợp lệ
+    domain = expression.AND([domain, domain_hoc])
+
+    # Tiến hành gom nhóm và đếm dữ liệu theo từng học sinh duy nhất
+    result = self.env['ekids.hocphi'].read_group(
+        domain=domain,
+        fields=['hocsinh_id'],
+        groupby=['hocsinh_id']
+    )
+    return len(result)
+
+def sum_tong_hocsinh_nghi_trong_thang(self,coso_ids, nam, thang):
+    # 1. Khởi tạo ngày đầu tháng hiện tại
+    ngay_dau_thang = date(int(nam), int(thang), 1)
+
+    # 2. Giảm đi 1 ngày để lấy ngày cuối cùng của tháng trước
+    thangtruoc = ngay_dau_thang - timedelta(days=1)
+
+    days = ngay_util.func_get_cacngay_trong_thang(thangtruoc.year, thangtruoc.month)
+    if not days:
+        return 0
+    tu_ngay = days[0]  # Ngày đầu tiên của tháng
+    den_ngay = days[-1]  # Ngày cuối cùng của tháng
+
+    # 1. Điều kiện cơ bản bắt buộc (Cơ sở, học phí và bắt buộc phải có ngày nhập học hợp lệ)
+    domain = [
+        ('coso_id', 'in', coso_ids),
+        ('hocsinh_id.ngay_nghihoc', '!=', False),
+        ('hocsinh_id.ngay_nghihoc', '>=', tu_ngay),
+        ('hocsinh_id.ngay_nghihoc', '<=', den_ngay)
+
+    ]
+
+    # Tiến hành gom nhóm và đếm dữ liệu theo từng học sinh duy nhất
+    result = self.env['ekids.hocphi'].read_group(
+        domain=domain,
+        fields=['hocsinh_id'],
+        groupby=['hocsinh_id']
+    )
+    return len(result)
+
+def sum_tong_hocsinh_moi_trong_thang(self, coso_ids,nam, thang):
+    days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
+    if not days:
+        return 0
+    tu_ngay = days[0]  # Ngày đầu tiên của tháng
+    den_ngay = days[-1]  # Ngày cuối cùng của tháng
+
+    # 1. Điều kiện cơ bản bắt buộc (Cơ sở, học phí và bắt buộc phải có ngày nhập học hợp lệ)
+    domain = [
+        ('coso_id', 'in', coso_ids),
+        ('hocsinh_id.ngay_nhaphoc', '!=', False),
+        ('hocsinh_id.ngay_nhaphoc', '>=', tu_ngay),
+        ('hocsinh_id.ngay_nhaphoc', '<=', den_ngay)
+    ]
+
+
+
+
+    # Tiến hành gom nhóm và đếm dữ liệu theo từng học sinh duy nhất
+    result = self.env['ekids.hocphi'].read_group(
+        domain=domain,
+        fields=['hocsinh_id'],
+        groupby=['hocsinh_id']
+    )
+    return len(result)

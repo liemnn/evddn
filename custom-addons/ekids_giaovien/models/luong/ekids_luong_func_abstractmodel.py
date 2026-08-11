@@ -193,7 +193,8 @@ class LuongFuncAbstractModel(models.AbstractModel):
 
             parameters = self.func_get_parameters(coso_nghiles
                                                   ,coso_chonghi_truluong
-                                                  ,coso_chonghis,giaovien
+                                                  ,coso_chonghis
+                                                  ,giaovien
                                                   , luong
                                                   ,nghipheps
                                                   , coso_dilam_kehoachs
@@ -223,6 +224,7 @@ class LuongFuncAbstractModel(models.AbstractModel):
         gv_dilam_kehoach = dl_chamcong['gv_dilam_kehoach']
         gv_nghiles = dl_chamcong['gv_nghiles']
         gv_coso_chonghi_truluongs = dl_chamcong['gv_coso_chonghi_truluongs']
+        nghi_vantinh_chuyencan = dl_chamcong['nghi_vantinh_chuyencan']
 
         parameters['nghiles'] = gv_nghiles
         parameters['nghipheps'] = nghipheps
@@ -234,13 +236,22 @@ class LuongFuncAbstractModel(models.AbstractModel):
         giaovien2thang = giaovien_util.func_get_chamcong_giaovien2thang(self, giaovien, nam, thang)
         parameters['duoc_chamcongs'] = giaovien2thang
 
+        # xu ly tinh huong giao vien nghi giua thang
+        songay_do_giaovien_nghilam = self.func_get_songay_nghi_do_thoigian_dilam_giaovien(coso,coso_nghiles,giaovien,ngay_dauthang,ngay_cuoithang)
 
-        parameters["$NGAY_DILAM"] = str(dilam_chamcong)
+
+        dilam_duoc_chamcong = int(dilam_chamcong) - songay_do_giaovien_nghilam
+        parameters["$NGAY_DILAM"] = str(dilam_duoc_chamcong)
 
 
         ngaynghi = dilam_nghi + (dilam_nuabuoi * 0.5) + len(gv_coso_chonghi_truluongs) + len(nghipheps)
 
-        parameters["$NGAY_NGHI"] = str(ngaynghi)
+        # chu y trường hợp giáo viên nghỉ giữa tháng
+        ngaynghi_tong = ngaynghi+songay_do_giaovien_nghilam
+        parameters["$NGAY_NGHI"] = str(ngaynghi_tong)
+        ngay_nghi_chuyencan = ngaynghi_tong - nghi_vantinh_chuyencan
+        parameters["$NGHI_CHUYENCAN"] = str(ngay_nghi_chuyencan)
+
         #luong.so_ngaynghi = chamcong_nghi
 
         ngay_cong_tinhluong =gv_dilam_kehoach - ngaynghi
@@ -252,7 +263,7 @@ class LuongFuncAbstractModel(models.AbstractModel):
         parameters["$NHATRUONG_NGHI"] = str(len(coso_chonghis))
         parameters["$NGHIPHEP"] = str(len(nghipheps))
 
-        tong_ngaynghi =ngaynghi + len(coso_nghiles) +len(coso_chonghis)
+        tong_ngaynghi =ngaynghi + len(coso_nghiles) +len(coso_chonghis) +songay_do_giaovien_nghilam
         parameters["$TONG_NGAYNGHI"] = str(tong_ngaynghi)
         luong.so_ngaynghi = tong_ngaynghi
 
@@ -261,7 +272,9 @@ class LuongFuncAbstractModel(models.AbstractModel):
         parameters["$NGAY_DIMUON"] = str(dilam_muon)
 
         tham_nien = giaovien.tham_nien
-        parameters["$THAM_NIEN"] = str(tham_nien)
+        # làm tròn thâm niên
+        tham_nien_int = int (tham_nien)
+        parameters["$THAM_NIEN"] = str(tham_nien_int)
         luong.tham_nien = tham_nien
 
         hs_in_thang = hocsinh_util.func_get_so_hocsinh_trong_thang(self, giaovien.coso_id.id, nam, thang)
@@ -269,6 +282,24 @@ class LuongFuncAbstractModel(models.AbstractModel):
 
 
         return parameters
+
+
+    def func_get_songay_nghi_do_thoigian_dilam_giaovien(self,coso,nghiles,giaovien,ngay_dauthang,ngay_cuoithang):
+        songay_do_giaovien_nghilam=0
+        if giaovien.dilam_denngay:
+           if (giaovien.dilam_denngay >= ngay_dauthang
+               and  giaovien.dilam_denngay<= ngay_cuoithang):
+               batdau = fields.Date.add(giaovien.dilam_denngay, days=1)
+               ngay_nghis= giaovien_util.func_get_ngay_dilam_theo_kehoach(self,coso,nghiles,batdau,ngay_cuoithang)
+               songay_do_giaovien_nghilam= songay_do_giaovien_nghilam+ len(ngay_nghis)
+
+        #if giaovien.dilam_tungay:
+         #   if giaovien.dilam_tungay >ngay_dauthang:
+          #      ketthuc = fields.Date.add(giaovien.dilam_tungay, days=-1)
+           #     ngay_nghis = giaovien_util.func_get_ngay_dilam_theo_kehoach(self, coso, nghiles, ngay_dauthang, ketthuc)
+            #    songay_do_giaovien_nghilam = songay_do_giaovien_nghilam + len(ngay_nghis)
+
+        return songay_do_giaovien_nghilam
 
 
 

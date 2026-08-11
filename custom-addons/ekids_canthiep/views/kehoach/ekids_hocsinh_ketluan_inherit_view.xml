@@ -1,0 +1,101 @@
+<odoo>
+  <data>
+    <record id="ekids_canthiep.hocsinh_search" model="ir.ui.view">
+        <field name="name">hocsinh.search</field>
+        <field name="model">ekids.hocsinh</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter string="Đang theo học" name="trangthai" domain="[('trangthai','=','1')]"/>
+                <filter string="Đã nghỉ" name="trangthai-nghi" domain="[('trangthai','=','3')]"/>
+                <filter string="Đợi đánh giá" name="trangthai-doidanhgia" domain="[('trangthai','=','2')]"/>
+                <field name="name"/>
+                <field name="ten"/>
+                <field name="bietdanh"/>
+                <field name="gioitinh"/>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="ekids_canthiep.hocsinh_ketluan_inherit_list" model="ir.ui.view">
+        <field name="name">Kế hoạch can thiệp</field>
+        <field name="model">ekids.hocsinh</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false" limit="200" default_order="id asc">
+                <field name="sequence" width="25"/>
+                <field name="name" width="170"/>
+                <field name="bietdanh" string="Biệt danh" optional="hide"/>
+                <field name="gioitinh"/>
+                <field name="ngaysinh" optional="hide"/>
+                <field name="tuoi"/>
+                <field name="ngay_nhaphoc" string="Nhập học" width="100"/>
+                <field name="thoigian_hoc" string="Thời gian học" width="100"/>
+
+                <field name="dm_xa_id" optional="hide"/>
+                <field name="trangthai" string="Trạng thái"
+                        decoration-success="trangthai == '1'"
+                        decoration-info="trangthai == '2'"
+                        decoration-danger="trangthai == '3'" width="100"/>
+                <field name="trangthai_ketluan" string="Kết luận"/>
+                <field name="tong_ketluan" string="Tổng số kết luận"/>
+
+
+
+               <button name="action_xem_danhsach_ketluan"
+                        string=""
+                        type="object"
+                        class="btn-secondary btn-sm"
+                        icon="fa-list-ul"
+                        title="Danh sách [Kết luận] cua trẻ"
+                />
+
+                 <button name="action_taomoi_ketluan"
+                        string="Mới"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-plus-circle"
+                        invisible="is_tao_ketluan == False"
+                        title="Có thể tạo mới [Kết luận]"
+                />
+                <button name="action_sua_ketluan"
+                        string="Sửa"
+                        type="object"
+                        class="btn-warning btn-sm text-dark fw-bold"
+                        icon="fa-pencil-square-o"
+                        invisible="is_sua_ketluan == False"
+                        title="Sửa lại [Kết luận] đang soạn thảo"
+                />
+
+                <!-- 1. COPY TỪ KẾT LUẬN GẦN NHẤT CỦA CHÍNH HỌC SINH NÀY -->
+                <button name="action_copy_ketluan_gannhat"
+                        string=""
+                        type="object"
+                        class="btn-outline-primary btn-sm fw-bold"
+                        icon="fa-history"
+                        context="{'default_hocsinh_id': id}"
+                        invisible="not is_tao_ketluan"
+                        confirm="Bạn muốn copy [Kết luận] gần nhất cho học sinh này để soạn thảo ?"
+                        title="Copy nội dung từ [Kết luận] gần nhất của học sinh này"/>
+
+                <!-- 2. COPY TỪ MẪU KẾT LUẬN CỦA HỌC SINH KHÁC -->
+                <button name="action_copy_ketluan"
+                        string=""
+                        type="object"
+                        class="btn-outline-primary btn-sm fw-bold"
+                        icon="fa-copy"
+
+                        context="{'default_hocsinh_id': id}"
+                        invisible="not is_tao_ketluan"
+                        title="Xem và chọn copy nội dung từ [Kết luận] của Học sinh khác"/>
+
+
+        </list>
+        </field>
+    </record>
+
+
+
+
+
+  </data>
+</odoo>

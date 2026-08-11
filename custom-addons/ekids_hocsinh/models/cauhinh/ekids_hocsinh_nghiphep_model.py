@@ -18,6 +18,8 @@ class HocSinhNghiPhep(models.Model):
     is_hoantra_hocphi = fields.Boolean(string="Cho phép thiết lập % hoàn trả [Học phí] riêng",default=False)
     tyle_hoantra_hocphi = fields.Integer(string="Tỷ lệ % sẽ được hoàn trả [Học phí] tháng tơi", default=0)
 
+    is_se_hocbu = fields.Boolean(string="Tất cả các ca sẽ được [Học Bù]", default=False)
+
     @api.constrains('tu_ngay', 'den_ngay')
     def _constrains_nghiLe(self):
         for rec in self:

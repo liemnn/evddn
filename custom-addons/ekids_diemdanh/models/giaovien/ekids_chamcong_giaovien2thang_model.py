@@ -84,7 +84,25 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
     )
     def _compute_tong_dilam_chamcong(self):
         for record in self:
-            record.tong_dilam_chamcong = record.tong_dilam_kehoach - (record.tong_nghi_cangay + record.tong_nghiphep+(record.tong_dilam_nuabuoi/2))
+            tong =record.tong_dilam_kehoach - (record.tong_nghi_cangay + record.tong_nghiphep+(record.tong_dilam_nuabuoi/2))
+            songay_nghi = 0
+            giaovien =record.giaovien_id
+            if giaovien.dilam_denngay:
+                loai2thang = record.chamcong_loai2thang_id
+                nam = int(loai2thang.nam)
+                thang = int(loai2thang.thang)
+                days = ngay_util.func_get_cacngay_trong_thang(nam,thang)
+                ngay_dauthang = days[0]
+                ngay_cuoithang = days[len(days)-1]
+
+                if (giaovien.dilam_denngay >= ngay_dauthang
+                        and giaovien.dilam_denngay <= ngay_cuoithang):
+                    batdau = fields.Date.add(giaovien.dilam_denngay, days=1)
+                    ngay_nghis = giaovien_util.func_get_ngay_dilam_theo_kehoach(self, record.coso_id, None, batdau,
+                                                                                ngay_cuoithang)
+                    songay_nghi = len(ngay_nghis)
+
+            record.tong_dilam_chamcong = tong -songay_nghi
 
     def action_xem_thongtin_dilam(self):
 

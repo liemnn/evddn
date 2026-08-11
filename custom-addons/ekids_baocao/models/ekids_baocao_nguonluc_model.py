@@ -2,6 +2,7 @@ from odoo import models, fields, api, Command
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo.tools import html2plaintext
+from odoo.osv import expression
 
 import logging
 
@@ -142,10 +143,10 @@ class BaoCaoNguonLucWizard(models.TransientModel):
         return table_data
 
     def get_table_data_by_thang(self, table_data, index, nam, thang, sum_data):
-        tong_hs = self.sum_tong_hocsinh_trong_thang(nam, thang)
-        hs_nghi = self.sum_tong_hocsinh_nghỉ_trong_thang(nam, thang)
-        hs_moi = self.sum_tong_hocsinh_moi_trong_thang(nam, thang)
-        giaovien = self.sum_tong_giaovien_trong_thang(nam, thang)
+        tong_hs = hocsinh_util.sum_tong_hocsinh_trong_thang(self,self.coso_ids.ids,nam, thang)
+        hs_nghi = hocsinh_util.sum_tong_hocsinh_nghi_trong_thang(self,self.coso_ids.ids,nam, thang)
+        hs_moi = hocsinh_util.sum_tong_hocsinh_moi_trong_thang(self,self.coso_ids.ids,nam, thang)
+        giaovien = giaovien_util.sum_tong_giaovien_trong_thang(self,self.coso_ids.ids,nam, thang)
 
         table_data.append([
             str(index), 'Tháng ' + str(thang), str(nam),
@@ -155,44 +156,18 @@ class BaoCaoNguonLucWizard(models.TransientModel):
         if sum_data['tong'] <= 0:
             sum_data['tong'] = tong_hs
 
-        sum_data['tong'] = int(sum_data['tong']) + hs_moi - hs_nghi
+        sum_data['tong'] = int(sum_data['tong']) + hs_moi
         sum_data['nghi'] = int(sum_data['nghi']) + hs_nghi
         sum_data['moi'] = int(sum_data['moi']) + hs_moi
         return table_data
 
-    def sum_tong_hocsinh_trong_thang(self, nam, thang):
-        return self.env['ekids.hocphi'].search_count([
-            ('coso_id', 'in', self.coso_ids.ids),
-            ('nam_id.name', '=', str(nam)),
-            ('thang_id.name', '=', str(thang)),
-            ('hocphi_phaidong', '>', 0)
-        ])
+    from odoo.osv import expression
 
-    def sum_tong_hocsinh_nghỉ_trong_thang(self, nam, thang):
-        days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
-        if not days: return 0
-        return self.env['ekids.hocsinh'].search_count([
-            ('coso_id', 'in', self.coso_ids.ids),
-            ('ngay_nghihoc', '>=', days[0]),
-            ('ngay_nghihoc', '<=', days[-1])
-        ])
+    from odoo.osv import expression
 
-    def sum_tong_hocsinh_moi_trong_thang(self, nam, thang):
-        days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
-        if not days: return 0
-        return self.env['ekids.hocsinh'].search_count([
-            ('coso_id', 'in', self.coso_ids.ids),
-            ('ngay_nhaphoc', '>=', days[0]),
-            ('ngay_nhaphoc', '<=', days[-1])
-        ])
 
-    def sum_tong_giaovien_trong_thang(self, nam, thang):
-        luong_thangs = self.env['ekids.luong_thang'].search([
-            ('coso_id', 'in', self.coso_ids.ids),
-            ('nam_id.name', '=', str(nam)),
-            ('name', '=', str(thang))
-        ])
-        return sum(luong.tong_giaovien for luong in luong_thangs)
+
+
 
     def action_xem_baocao(self):
         return self.env.ref('ekids_baocao.action_report_view_nguonluc').report_action(self)

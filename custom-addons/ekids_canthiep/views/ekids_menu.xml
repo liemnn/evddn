@@ -14,7 +14,7 @@
 
     <menuitem name="Kế hoạch" id="ekids_canthiep.kehoach_menu" parent="ekids_canthiep.menu_root"
           action="ekids_canthiep.coso_kehoach_action_window"
-           groups="base.group_system,ekids_core.ketluan" sequence="1"/>
+           groups="base.group_system,ekids_core.ketluan,ekids_core.giaovien" sequence="1"/>
 
     <menuitem name="Mẫu [Kế hoạch]" id="ekids_canthiep.mau_kehoach" parent="ekids_canthiep.menu_root"
           action="ekids_canthiep.mau_kehoach_action_window"
@@ -22,7 +22,14 @@
 
     <menuitem name="Chương trình" id="ekids_canthiep.chuongtrinh_menu" parent="ekids_canthiep.menu_root"
           action="ekids_canthiep.coso_chuongtrinh_action_window"
-          groups="base.group_system,ekids_core.ql_ct_canthiep" sequence="3"/>
+          groups="base.group_system,ekids_core.ql_ct_canthiep,ekids_core.ketluan" sequence="3"/>
+
+
+
+    <menuitem name="Danh mục" id="ekids_canthiep.danhmuc_menu" parent="ekids_canthiep.menu_root"
+          action="ekids_canthiep.coso_danhmuc_action_window"
+          groups="base.group_system,ekids_core.ketluan" sequence="4"/>
+
 
 
 

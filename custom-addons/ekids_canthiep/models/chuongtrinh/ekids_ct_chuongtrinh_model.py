@@ -1,4 +1,5 @@
 from odoo import models, fields, api, exceptions
+from odoo.osv import expression
 
 
 class ChuongTrinh(models.Model):
@@ -6,9 +7,8 @@ class ChuongTrinh(models.Model):
     _description = "CHƯƠNG TRÌNH CAN THIỆP"
 
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở", required=True, ondelete="restrict")
-
-    ma = fields.Char(string="Mã",required=True)
-    name = fields.Char(string="Tên",required=True)
+    name = fields.Char(string="Tên (viết tắt)",required=True)
+    title = fields.Char(string="Tên chương trình", required=True)
     desc =fields.Html(string="Mô tả")
     coso_ids = fields.Many2many(comodel_name="ekids.coso",
                                 relation="ekids_ct_chuongtrinh4coso_ids_rel",
@@ -21,10 +21,15 @@ class ChuongTrinh(models.Model):
     tuoi_ids = fields.One2many("ekids.ct_tuoi",
                                   "chuongtrinh_id", string="Độ tuổi")
 
+    muctieu_ids = fields.One2many("ekids.ct_muctieu",
+                               "chuongtrinh_id", string="Độ tuổi")
+
     tong_tuoi = fields.Integer(string="Tổng cấp độ",compute="_compute_tong_tuoi",store=False)
     tong_linhvuc = fields.Integer(string="Tổng lĩnh vực",compute="_compute_tong_linhvuc",store=False)
     tong_muctieu = fields.Integer(string="Tổng mục tiêu",compute="_compute_tong_muctieu",store=False)
 
+    trangthai = fields.Selection([("0", "Không hoạt động")
+                                     , ("1", "Đang hoạt động")], default="1", required=True)
 
     def _compute_tong_tuoi(self):
         for ct in self:
@@ -49,29 +54,24 @@ class ChuongTrinh(models.Model):
             else:
                 ct.tong_muctieu = 0
 
-
-
-
-
-
     @api.model
     def search_fetch(self, domain, field_names, offset=0, limit=50, order=None):
         # Lấy thông tin người dùng hiện tại
         user = self.env.user
+        # TH3: user khác của cơ sở ( thường là giáo viên được phân quyền)
+        # sẽ tính trên danh sách các cơ sở được phân cho user này
 
-        # Điều kiện lọc (ví dụ: chỉ cho phép xem các đơn hàng có đối tác là khách hàng của user)
-        if user.has_group('base.group_system'):  # Kiểm tra nhóm quyền
-            # TH1: là admin của toàn hệ thống
-            domain = []  # Thêm điều kiện cho
-
+        if user.coso_ids:
+            coso_ids = user.coso_ids
+            if len(coso_ids) > 0:
+                domain_tacgia = [('coso_id', 'in', coso_ids.ids)]
+                domain_chiase = [('coso_ids', 'in', coso_ids.ids)]
+                new_domain = expression.OR([domain_tacgia, domain_chiase])
+                domain = expression.AND([domain, new_domain])
         else:
-           if user.has_group('ekids_core.ql_ct_canthiep'):
-                # TH3: user khác của cơ sở ( thường là giáo viên được phân quyền)
-                # sẽ tính trên danh sách các cơ sở được quyền can thiệp các chương trình này
-                if user.coso_ids:
-                    domain = ['|']
-                    domain += [('coso_ids','=',False)]
-                    domain +=[('coso_ids', 'in', user.coso_ids.ids)]# Thêm điều kiện cho
+            domain_trangthai = [('trangthai', '=', "2")]
+            domain = expression.AND([domain, domain_trangthai])
+
 
         return super().search_fetch(domain, field_names, offset, limit, order)
 

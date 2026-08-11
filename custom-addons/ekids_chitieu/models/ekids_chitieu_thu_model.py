@@ -20,6 +20,10 @@ class Chi(models.Model):
     desc = fields.Html(string='Ghi chú')
     ngaychi = fields.Date(string="Ngày",required=True)
 
+    loai = fields.Selection([("0", "Tiền mặt")
+                                , ("1", "Chuyển khoản")
+                             ], string="Loại")
+
 
 
 

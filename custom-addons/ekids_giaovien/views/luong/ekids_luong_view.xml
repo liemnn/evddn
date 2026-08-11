@@ -101,6 +101,12 @@
                             title="In Lương của Giáo viên tháng này"
 
                         />
+                <field name="dilam_tungay" string="Làm từ ngày"  width="100"  optional="hide"/>
+                <field name="dilam_denngay" string="Ngày nghỉ"  width="100" optional="hide"/>
+                <field name="trangthai_giaovien" string="Trạng thái làm"  width="100" optional="hide"
+                       decoration-success="trangthai_giaovien == '1'"
+                        decoration-danger="trangthai_giaovien == '0'"/>
+
                 <field name="tham_nien" width="70" />
                 <field name="ngaycong" width="70" string="Công" />
                 <field name="so_ngaynghi" width="40" />
@@ -112,13 +118,16 @@
                 <field name="tong_nhatruong_chi" sum="Total" widget="integer" string="6.Tổng chi=4+5" width="100"/>
 
 
+
+
                 <field name="trangthai" width="150"
                        decoration-warning="trangthai == '-1'"
                        decoration-info="trangthai == '0'"
                        decoration-success="trangthai == '1'"
 
                 />
-                <field name="tong_thongtin_2" sum="Total" widget="integer" string="6.Thông tin" width="100" optional="hide"/>
+                 <field name="tong_thuong" sum="Total" widget="integer" string="LCB"   optional="hide"/>
+                <field name="tong_thongtin_2" sum="Total" widget="integer" string="Thông tin"  optional="hide"/>
 
             </list>
         </field>

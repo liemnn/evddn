@@ -1,0 +1,110 @@
+<odoo>
+  <data>
+    <record id="ekids_canthiep.hocsinh_duyet_kehoach_inherit_list" model="ir.ui.view">
+        <field name="name">Kế hoạch can thiệp</field>
+        <field name="model">ekids.hocsinh</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false" limit="200" default_order="id asc">
+
+
+                <field name="sequence" width="25"/>
+                <field name="name" width="170" class="text-wrap"/>
+                <field name="bietdanh" string="Biệt danh" optional="hide"/>
+                <field name="gioitinh"/>
+                <field name="ngaysinh" optional="hide"/>
+                <field name="tuoi" optional="hide"/>
+                <field name="ngay_nhaphoc" string="Nhập học" width="100" optional="hide"/>
+                <field name="thoigian_hoc" string="Thời gian học" width="100" optional="hide"/>
+
+                <field name="dm_xa_id" optional="hide"/>
+                <field name="trangthai" string="Trạng thái" class="text-wrap"
+                        widget="badge"
+                        decoration-success="trangthai == '1'"
+                        decoration-info="trangthai == '2'"
+                        decoration-danger="trangthai == '3'"/>
+                <field name="trangthai_kehoach" string="Kế hoạch" width="100" widget="badge" class="text-wrap"/>
+                <field name="ten_kehoach" string="Của tháng" width="100" class="text-wrap"/>
+                <field name="tong_kehoach" string="Tổng" width="70"/>
+                <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-secondary btn-sm"
+                        icon="fa-list-ul"
+                        invisible="tong_kehoach==0"
+                        context="{'default_context_type':'4'}"
+                        title="Danh sách [Kế hoạch]"
+                />
+
+                <field name="tong_kehoach_doiduyet" string="Đợi duyệt" width="70"/>
+
+                <field name="ngay_guiduyet" string="Gửi duyệt" width="100" class="text-wrap"/>
+
+
+
+
+                <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-info btn-sm text-white"
+                        icon="fa-list-ul"
+                        invisible="tong_kehoach_doiduyet==0"
+                        context="{'default_context_type':'2','default_context_trangthai':['2'],'default_context_trangthai_pheduyet':['0']}"
+                        title="Danh sách [Kế hoạch] Cần duyệt"
+                />
+
+                <button name="action_duyet_kehoach"
+                        string="Duyệt"
+                        type="object"
+                        class="btn-info btn-sm text-white"
+                        icon="fa-paper-plane"
+                        invisible="is_kiemduyet == False"
+                        title="Kế hoạch này cần Duyệt để đưa vào can thiệp"
+                />
+
+
+
+               <field name="ngay_conlai_kehoach"
+                       string="Còn lại(ngày)"
+                       width="70"
+                       class="fw-bold kh-blink-alert"
+                       decoration-danger="ngay_conlai_kehoach &gt;= 0 and ngay_conlai_kehoach &lt;= 2"
+                       decoration-warning="ngay_conlai_kehoach &gt;= 3 and ngay_conlai_kehoach &lt;= 10"
+                       decoration-success="ngay_conlai_kehoach &gt; 10"/>
+
+                <field name="tong_kehoach_dang_canthiep" string="Xác nhận" width="70"/>
+                <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-success btn-sm fw-bold text-uppercase"
+                        icon="fa-list-ul"
+                        invisible="tong_kehoach_dang_canthiep==0"
+                        context="{'default_context_type':'3','default_context_trangthai':['1'],'default_context_trangthai_pheduyet':['1']}"
+                        title="Danh sách [Kế hoạch] Cần đã Duyệt"
+                />
+
+                 <button name="action_xem_danhsach_kehoach_can_kiemduyet_ketqua"
+                        string="Xác nhận"
+                        type="object"
+                        class="btn-success btn-sm fw-bold text-uppercase"
+                        icon="fa-check-square-o"
+                        invisible="tong_kehoach_dang_canthiep==0"
+                        context="{'default_context_type':'3','default_context_trangthai':['1']}"
+                        title="Danh sách [Kế hoạch] Có thể xác nhận kết quả"
+                />
+
+
+
+
+
+
+
+            </list>
+        </field>
+    </record>
+
+
+
+
+
+  </data>
+</odoo>

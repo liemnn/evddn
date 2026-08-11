@@ -87,8 +87,8 @@
                 <filter string="Đang tính" name="trangthai" domain="[('trangthai','=','-1')]"/>
                 <filter string="Đã kiểm tra" name="trangthai" domain="[('trangthai','=','0')]"/>
                 <filter string="Phụ huynh đã đóng(cần kiểm tra)" name="trangthai" domain="[('trangthai','=','01')]"/>
-                <filter string="Đã đóng[Tiền mặt]" name="trangthai" domain="[('trangthai','=','10')]"/>
-                <filter string="Đã đóng[Chuyển khoản]" name="trangthai" domain="[('trangthai','=','11')]"/>
+                <filter string="Đã đóng[Tiền mặt]" name="trangthai" domain="[('loai','=','10')]"/>
+                <filter string="Đã đóng[Chuyển khoản]" name="trangthai" domain="[('loai','=','11')]"/>
                 <filter string="Đã xuất [Hóa đơn]" name="trangthai" domain="[('trangthai','=','3')]"/>
                 <filter string="Đang nợ học phí" name="trangthai" domain="[('trangthai','=','2')]"/>
 
@@ -135,6 +135,16 @@
 
                         />
 
+                <field name="ngay_nhaphoc" string="Ngày học" optional="hide" width="100"/>
+                <field name="ngay_nghihoc" string="Ngày nghỉ" optional="hide" width="100"/>
+                <field name="thoigian_hoc" string="Thời gian" optional="hide" width="100"/>
+                <field name="trangthai_hocsinh" string="Trạng thái học"  optional="hide" width="100"
+                       decoration-success="trangthai_hocsinh == '1'"
+                        decoration-info="trangthai_hocsinh == '2'"
+                        decoration-danger="trangthai_hocsinh == '3'"/>
+
+
+
                 <field name="songay_dihoc" width="30"/>
                 <field name="tien_bantru" sum="Total" widget="integer"/>
                 <field name="tien_ca" sum="Total" widget="integer"/>
@@ -151,8 +161,9 @@
                        decoration-success="trangthai == '3'"
                        decoration-danger="trangthai == '2'"
                 />
-
+                 <field name="loai" string="Hình thức" optional="hide" width="70"/>
                  <field name="ngay_dong_hocphi" string="Ngày đóng" optional="hide" width="70"/>
+
 
 
 
@@ -214,9 +225,17 @@
         <field name="model">ekids.hocphi</field>
         <field name="arch" type="xml">
             <form string="Quản lý Học phí học sinh">
+                <field name="is_chot_hocphi" invisible="1"/>
                 <header>
                     <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary" string="In phiếu thu"/>
                     <button name="action_xacthuc_tinhlai_hocphi_hocsinh" invisible="is_show_tinhtoan_lai == False" type="object" confirm="Bạn chắc chắn muốn tính toán lại chứ?" class="btn btn-secondary" string="Tính lại [Học phí]"/>
+                    <button name="action_chot_hocphi_khi_hocsinh_nghi"
+                            invisible="not is_chot_hocphi"
+                            type="object"
+                            confirm="Hết tháng này học sinh sẽ nghỉ học bạn chắc chắn muốn chốt lại toàn bộ [Học phí] trong tháng đề hoàn thành trước khi nghỉ ?"
+                            class="btn btn-secondary"
+                            string="Chốt Học phí"/>
+
                     <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,3,2" options="{'clickable': true}"
                            invisible="is_dong_hocphi_theoky == True" />
                     <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,10,11,12,3,2"

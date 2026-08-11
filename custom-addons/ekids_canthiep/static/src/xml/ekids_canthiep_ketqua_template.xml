@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="ekids_canthiep.CanThiepKetQuaWidgetTemplate">
+        <div class="w-100 bg-white p-3 rounded-3 border mt-2 d-flex flex-column gap-3 shadow-sm">
+
+            <style>
+                .ekids-matrix-grid { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
+
+                .matrix-double-box {
+                    display: flex;
+                    flex-direction: column;
+                    width: 44px;
+                    height: 46px;
+                    border: 1px solid #CBD5E1;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    user-select: none;
+                    transition: all 0.15s ease-in-out;
+                    background-color: #FFFFFF;
+                    overflow: hidden;
+                }
+                .matrix-double-box:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+                }
+
+                .box-day-num {
+                    height: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: #1E293B !important;
+                    background-color: #F1F5F9;
+                    border-bottom: 1px solid #E2E8F0;
+                    width: 100%;
+                }
+
+                .box-result-sym {
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 14px;
+                    font-weight: 900;
+                    color: #64748B;
+                }
+
+                /* HOÀN TRẢ VÀ GIỮ NGUYÊN MÀU SẮC GỐC ĐÃ OK CỦA BẠN */
+                .c-empty { border-color: #CBD5E1; }
+                .c-empty .box-day-num { background-color: #F8FAFC; color: #475569 !important; }
+
+                .c-success { border-color: #4ADE80 !important; background-color: #F0FDF4 !important; }
+                .c-success .box-day-num { background-color: #DCFCE7 !important; color: #166534 !important; }
+                .c-success .box-result-sym { color: #15803D !important; }
+
+                .c-warning { border-color: #FACC15 !important; background-color: #FEFCE8 !important; }
+                .c-warning .box-day-num { background-color: #FEF9C3 !important; color: #854D0E !important; }
+                .c-warning .box-result-sym { color: #B45309 !important; }
+
+                .c-danger { border-color: #F87171 !important; background-color: #FEF2F2 !important; }
+                .c-danger .box-day-num { background-color: #FEE2E2 !important; color: #991B1B !important; }
+                .c-danger .box-result-sym { color: #991B1B !important; }
+
+                /* Ngày tương lai (loai == '0') -> Hạ mờ như cũ */
+                .c-future { border-color: #E2E8F0 !important; background-color: #FAFAFA !important; opacity: 0.65; }
+                .c-future .box-day-num { background-color: #F1F5F9; color: #64748B !important; }
+
+                /* Ngày hôm nay */
+                .c-today { border-color: #0F172A !important; border-width: 2px !important; }
+                .c-today .box-day-num { background-color: #334155 !important; color: #FFFFFF !important; }
+
+                /* 🌟 Ô NGÀY NGHỈ (loai == '-1'): Bôi xám nền, chữ xám sẫm như ngày tương lai */
+                .c-rest-gray { border-color: #E2E8F0 !important; background-color: #F5F5F5 !important; }
+                .c-rest-gray .box-day-num { background-color: #E2E8F0 !important; color: #475569 !important; }
+                .c-rest-gray .box-result-sym { color: #475569 !important; font-weight: 700 !important; }
+
+                .is-active-focus {
+                    border-color: #2563EB !important;
+                    border-width: 2px !important;
+                    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
+                }
+
+                .badge-flat { font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 6px; border: 1px solid transparent; }
+                .b-danger { background-color: #FEF2F2; color: #991B1B; border-color: #FCA5A5; }
+                .b-warning { background-color: #FEFCE8; color: #854D0E; border-color: #FDE047; }
+                .b-success { background-color: #F0FDF4; color: #166534; border-color: #86EFAC; }
+                .b-total { background-color: #F1F5F9; color: #1E293B; border-color: #CBD5E1; }
+
+                .panel-flat-clean { border-left: 4px solid #2563EB !important; background-color: #F8FAFC !important; border-radius: 8px; }
+                .status-block-btn { height: 32px; padding: 0 12px; display: flex; align-items: center; font-weight: 700; font-size: 12px; border-radius: 6px; border: 1px solid #E2E8F0; background-color: #FFFFFF; color: #475569; cursor: pointer; transition: all 0.1s ease; }
+                .status-block-btn.btn-chuadat.active { background-color: #FEF2F2 !important; border-color: #FCA5A5 !important; color: #991B1B !important; }
+                .status-block-btn.btn-hinhthanh.active { background-color: #FEFCE8 !important; border-color: #FDE047 !important; color: #854D0E !important; }
+                .status-block-btn.btn-dat.active { background-color: #F0FDF4 !important; border-color: #86EFAC !important; color: #166534 !important; }
+            </style>
+
+            <!-- THANH TIÊU ĐỀ & BADGES TỔNG KẾT -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between border-bottom pb-2 mb-1 gap-2">
+                <div class="fw-bold text-dark d-flex align-items-center gap-2" style="font-size: 14px;">
+                    <i class="fa fa-calendar text-primary"></i> LỊCH TIẾN TRÌNH CAN THIỆP
+                </div>
+                <div class="d-flex align-items-center gap-1.5">
+                    <span class="badge-flat b-danger">Chưa đạt (-): <t t-esc="state.summary.chuadat"/></span>
+                    <span class="badge-flat b-warning">Hình thành (+/-): <t t-esc="state.summary.hinhthanh"/></span>
+                    <span class="badge-flat b-success">Đạt (+): <t t-esc="state.summary.dat"/></span>
+                    <span class="badge-flat b-total"><t t-esc="state.summary.totalEvaluated"/>/<t t-esc="state.summary.total"/> (<t t-esc="state.summary.phantram"/>%)</span>
+                </div>
+            </div>
+
+            <!-- LƯỚI Ô MA TRẬN PHẲNG -->
+            <div class="ekids-matrix-grid">
+                <t t-foreach="state.daysGrid" t-as="day" t-key="day.dayNum">
+                    <div t-attf-class="matrix-double-box
+                                      #{state.selectedDay and state.selectedDay.dayNum == day.dayNum ? 'is-active-focus' : ''}
+                                      #{day.loai === '0' ? 'c-future' : ''}
+                                      #{day.loai === '-1' ? 'c-rest-gray' : ''}
+                                      #{day.loai === '1' and day.is_date_status === '0' ? 'c-today' : ''}
+                                      #{day.loai === '1' and day.trangthaiValue === '1' ? 'c-success' : ''}
+                                      #{day.loai === '1' and day.trangthaiValue === '2' ? 'c-warning' : ''}
+                                      #{day.loai === '1' and day.trangthaiValue === '-1' ? 'c-danger' : ''}
+                                      #{day.loai === '1' and day.trangthaiValue === '0' and day.is_date_status !== '0' ? 'c-empty' : ''}"
+                         t-att-title="day.tooltipText"
+                         t-on-click="() => this.onDayClick(day)">
+
+                        <div class="box-day-num"><t t-esc="day.dateShortStr"/></div>
+
+                        <div class="box-result-sym">
+                            <!-- 🌟 HIỆU CHỈNH LOGIC TEXT THEO FIELD LOAI: -->
+                            <!-- Nếu loai == '-1' (Ngày nghỉ): Hiện chữ N -->
+                            <t t-if="day.loai === '-1'">N</t>
+                            <!-- Nếu loai == '0' (Tương lai): Để trống trơn -->
+                            <t t-elif="day.loai === '0'"></t>
+                            <!-- Nếu loai == '1' (Đi học): Hiển thị kết quả bình thường -->
+                            <t t-else="">
+                                <t t-if="day.trangthaiValue === '1'"><i class="fa fa-plus small"/></t>
+                                <t t-if="day.trangthaiValue === '2'">+/-</t>
+                                <t t-if="day.trangthaiValue === '-1'"><i class="fa fa-minus small"/></t>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+            <!-- KHAY FORM CHI TIẾT KHI CLICK Ô -->
+            <t t-if="state.selectedDay">
+                <div t-if="state.selectedDay.loai === '0'"
+                     class="w-100 p-3 mt-1 rounded border d-flex align-items-center justify-content-between"
+                     style="border-left: 4px solid #EF4444 !important; background-color: #FEF2F2 !important; color: #991B1B !important; font-size: 13px;">
+                    <span class="fw-bold"><i class="fa fa-exclamation-triangle me-2"/>Ngày tương lai chưa diễn ra, không thể cập nhật!</span>
+                    <button type="button" class="btn-close shadow-none" style="font-size:10px;" t-on-click="() => this.state.selectedDay = null"></button>
+                </div>
+
+                <div t-elif="state.selectedDay.loai === '-1'"
+                     class="w-100 p-3 mt-1 rounded border d-flex align-items-center justify-content-between"
+                     style="border-left: 4px solid #64748B !important; background-color: #F1F5F9 !important; color: #334155 !important; font-size: 13px;">
+                    <span class="fw-bold"><i class="fa fa-info-circle me-2"/>Ngày nghỉ (Không đi học), không can thiệp!</span>
+                    <button type="button" class="btn-close shadow-none" style="font-size:10px;" t-on-click="() => this.state.selectedDay = null"></button>
+                </div>
+
+                <div t-else="" class="w-100 p-3 mt-1 rounded border shadow-sm d-flex flex-column gap-2 panel-flat-clean">
+                    <div class="d-flex align-items-center justify-content-between border-bottom pb-2" style="border-color: #E2E8F0 !important;">
+                        <span class="fw-bold text-dark" style="font-size: 13px;">
+                            <i class="fa fa-pencil text-primary me-1"></i> Nhật ký ngày:
+                            <span class="text-primary font-monospace mx-1" style="font-size:14px; font-weight:700;"><t t-esc="state.selectedDay.dateDisplayStr"/></span>
+                            <span class="text-muted fw-normal">(Ngày thứ <t t-esc="state.selectedDay.dayNum"/>)</span>
+                        </span>
+                        <div class="d-flex gap-1.5 align-items-center">
+                            <div t-attf-class="status-block-btn btn-chuadat #{state.selectedDay.trangthaiValue === '-1' ? 'active' : ''}" t-on-click="() => this.selectQuickStatus('-1')">Chưa đạt (-)</div>
+                            <div t-attf-class="status-block-btn btn-hinhthanh #{state.selectedDay.trangthaiValue === '2' ? 'active' : ''}" t-on-click="() => this.selectQuickStatus('2')">Đang hình thành (+/-)</div>
+                            <div t-attf-class="status-block-btn btn-dat #{state.selectedDay.trangthaiValue === '1' ? 'active' : ''}" t-on-click="() => this.selectQuickStatus('1')">Đạt (+)</div>
+                            <button type="button" class="btn-close shadow-none ms-2" style="font-size:10px;" t-on-click="() => this.state.selectedDay = null"></button>
+                        </div>
+                    </div>
+                    <div class="w-100 text-start mt-1">
+                        <label class="fw-bold text-muted small mb-1">MÔ TẢ BIỂU HIỆN CỦA TRẺ:</label>
+                        <textarea id="matrix_quick_desc" class="form-control form-control-sm bg-white" rows="2"
+                                  placeholder="Nhập ghi chú chi tiết tiến trình..."><t t-esc="state.selectedDay.comment"/>
+                        </textarea>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-1 pt-2 border-top" style="border-color: #E2E8F0 !important;">
+                        <button type="button" class="btn btn-sm btn-light border bg-white text-secondary" t-on-click="() => this.state.selectedDay = null">Đóng lại</button>
+                        <button t-if="!props.readonly"
+                                type="button"
+                                class="btn btn-sm btn-primary fw-bold"
+                                style="background-color:#2563EB !important;"
+                                t-on-click="() => this.saveInlineData()">Xác nhận lưu</button>
+                    </div>
+                </div>
+            </t>
+
+        </div>
+    </t>
+</templates>

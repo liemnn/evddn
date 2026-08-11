@@ -2,6 +2,7 @@ from odoo import api, fields, models
 from datetime import datetime
 from odoo.exceptions import UserError, ValidationError
 import calendar
+import ast
 import uuid
 from .ekids_luong_func_abstractmodel import LuongFuncAbstractModel
 from .ekids_luong_formula_abstractmodel import LuongFolmulaAbstractModel
@@ -28,6 +29,17 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     coso_id = fields.Many2one("ekids.coso", related="giaovien_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
     giaovien_id = fields.Many2one('ekids.giaovien', string="Giáo viên",required=True,ondelete="restrict")
+
+    dilam_tungay = fields.Date(string="*Ngày đi làm", compute="_compute_dilam_tungay")
+    dilam_denngay = fields.Date(string="Ngày nghỉ làm",compute="_compute_dilam_denngay")
+
+
+    trangthai_giaovien = fields.Selection([
+        ("1", "Đang làm việc"),
+        ("0", "Đã nghỉ làm"),
+        ("2", "Tạm nghỉ hưởng BHXH (Ốm, Đẻ...")
+    ], string="Trạng thái", compute="_compute_trangthai_giaovien")
+
     thang_id = fields.Many2one('ekids.luong_thang', string='Tháng',required=True,ondelete="restrict")
     nam_id = fields.Many2one('ekids.luong_nam',related="thang_id.nam_id", string='Năm', required=True, ondelete="restrict")
 
@@ -80,6 +92,7 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     tong_tru = fields.Float(string='Bị trừ(-)', digits=(10, 0), compute="compute_tong_tru", store=True)
     tong_thongtin = fields.Float(string='Thông tin', digits=(10, 0), compute="compute_tong_thongtin", store=True)
     tong_thongtin_2 = fields.Float(string='Thông tin', digits=(10, 0), compute="compute_tong_thongtin_2", store=True)
+    tong_thuong = fields.Float(string='Thưởng', digits=(10, 0), compute="compute_tong_thuong")
 
 
 
@@ -90,6 +103,17 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
 
     is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
 
+    def _compute_dilam_tungay(self):
+        for record in self:
+            record.dilam_tungay = record.giaovien_id.dilam_tungay
+
+    def _compute_dilam_denngay(self):
+        for record in self:
+            record.dilam_denngay = record.giaovien_id.dilam_denngay
+
+    def _compute_trangthai_giaovien(self):
+        for record in self:
+            record.trangthai_giaovien = record.giaovien_id.trangthai
 
     def _compute_is_dl_locked(self):
         for record in self:
@@ -206,6 +230,39 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
                     luong.tong_thongtin_2= tong
             else:
                 luong.tong_thongtin_2 = 0
+
+    import json
+
+    def compute_tong_thuong(self):
+        # Tránh crash nếu self trống
+        if not self:
+            return
+
+        # 1. Lấy cấu hình chung (Ép kiểu tỷ lệ thưởng sang số thực float)
+        coso = self[0].coso_id
+
+        # Lấy cấu hình dm_luong, giả sử hàm trả về chuỗi JSON hoặc list.
+        # Nếu hàm trả về chuỗi JSON, ta cần dùng json.loads để parse thành mảng Python
+        dm_luong_raw = coso_util.func_cauhinh_luong(self, coso,"dm_luong", "[]")
+        try:
+            dm_luongs = ast.literal_eval(dm_luong_raw)
+        except Exception:
+            dm_luongs = []
+
+        for rec in self:
+            tong_tien = 0.0
+            if dm_luongs and len(dm_luongs)>0:
+
+                # Đổi tên biến vòng lặp con thành 'line' để tránh đè biến 'rec' (luong cũ) của vòng lặp cha
+                if rec.luong_cong_ids:
+                    for luong_cong_id in rec.luong_cong_ids:
+                        if luong_cong_id.name:
+                            for dm_luong in dm_luongs:
+                                if dm_luong == luong_cong_id.name:
+                                    tong_tien += luong_cong_id.tien
+
+                # 3. Áp công thức và gán giá trị cho trường compute
+            rec.tong_thuong = tong_tien
 
 
     def _get_report_values(self, docids, data=None):

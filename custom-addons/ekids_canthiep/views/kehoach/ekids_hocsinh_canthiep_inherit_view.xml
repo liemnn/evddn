@@ -1,0 +1,66 @@
+<odoo>
+  <data>
+    <record id="ekids_canthiep.hocsinh_canthiep_inherit_list" model="ir.ui.view">
+        <field name="name">Kế hoạch can thiệp</field>
+        <field name="model">ekids.hocsinh</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false" limit="200" default_order="id asc">
+
+
+                <field name="sequence" width="25"/>
+                <field name="name" width="170" class="text-wrap"/>
+                <field name="bietdanh" string="Biệt danh" optional="hide"/>
+                <field name="gioitinh"/>
+                <field name="ngaysinh" optional="hide"/>
+                <field name="tuoi"/>
+                <field name="ngay_nhaphoc" string="Nhập học" width="100"/>
+                <field name="thoigian_hoc" string="Thời gian học" width="100"/>
+
+                <field name="dm_xa_id" optional="hide"/>
+                <field name="trangthai" string="Trạng thái"
+                        widget="badge"
+                        decoration-success="trangthai == '1'"
+                        decoration-info="trangthai == '2'"
+                        decoration-danger="trangthai == '3'" width="100" class="text-wrap"/>
+                <field name="trangthai_kehoach" string="Kế hoạch" widget="badge" class="text-wrap"/>
+                <field name="ten_kehoach" string="Của tháng" class="text-wrap"/>
+                <field name="ngay_conlai_kehoach"
+                       string="Còn lại(ngày)"
+                       width="70"
+                       class="fw-bold kh-blink-alert"
+                       decoration-danger="ngay_conlai_kehoach &gt; 0 and ngay_conlai_kehoach &lt;= 2"
+                       decoration-warning="ngay_conlai_kehoach &gt;= 3 and ngay_conlai_kehoach &lt;= 10"
+                       decoration-success="ngay_conlai_kehoach &gt; 10"/>
+
+                <field name="tong_kehoach_da_canthiep" string="Đang can thiệp"/>
+
+
+                <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-info btn-sm text-white"
+                        icon="fa-list-ul"
+
+                        context="{'default_context_type':'3','default_context_trangthai':['1','-1'],'default_context_trangthai_pheduyet':['1']}"
+                        title="Danh sách [Kế hoạch] Đã can thiệp"
+                />
+
+                <button name="action_canthiep"
+                        string="Can thiệp"
+                        type="object"
+                        class="btn-success btn-sm fw-bold text-uppercase"
+                        icon="fa-play-circle"
+                        invisible="is_canthiep==False"
+                        title="Bấm vào đây để mở bảng đánh giá và ghi nhận kết quả học tập hàng ngày của trẻ"
+                />
+
+            </list>
+        </field>
+    </record>
+
+
+
+
+
+  </data>
+</odoo>

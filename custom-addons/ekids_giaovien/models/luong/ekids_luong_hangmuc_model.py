@@ -21,6 +21,10 @@ class LuongHangMuc(models.Model):
          ("2", "Thông tin"),
          ], string="Khoản",required=True)
 
+    dm_chitra_id = fields.Many2one('ekids.luong_dm_chitra', string="Danh mục Lương", required=False,
+                                       ondelete="cascade")
+
+
 
 
 

@@ -330,39 +330,7 @@
          </record>
 
 
-     <record id="ekids_hocsinh.coso_kanban_kehoachcanthiep_view" model="ir.ui.view">
-            <field name="name">Quản lý học sinh các cơ sở --> Lựa chọn cơ sở để quản lý</field>
-            <field name="model">ekids.coso</field>
-            <field name="priority" eval="100"/>
-            <field name="arch" type="xml">
-                <kanban  archivable="false" >
-                    <t t-name="kanban-box">
-                        <div class="box">
-                            <!-- Icon Section -->
-                            <div class="avatar">
-                               <field name="logo" widget="image" />
-                            </div>
-                            <!-- Title Section -->
-                            <h2 class="title">
-                                <field name="name"/>
-                            </h2>
-                            <!-- Description Section -->
-                            <p class="slogan">
-                               <field name="slogan"/>
-                            </p>
-                            <p class="description">
-                               (Quản lý hồ sơ học sinh đang và đã can thiệp tại Cơ sở)
-                            </p>
-                            <!-- Button Section -->
 
-                            <button  class="function"
-                                 name="action_view_ekid_hocsinh_canthiep_kehoach_hocsinh"
-                                 type="object" string="Lập kế hoạch [Can thiệp]"/>
-                        </div>
-                    </t>
-                </kanban>
-            </field>
-        </record>
 
 
     <record model="ir.actions.act_window" id="ekids_hocsinh.coso_hocsinh_action_window">

@@ -39,19 +39,45 @@
 
 
         <record id="ekids_chitieu.chitieu_thang_form" model="ir.ui.view">
-            <field name="name">Form Chi Tiêu Tháng</field>
+            <field name="name">Form Chi Tiêu Tháng - Premium UI</field>
             <field name="model">ekids.chitieu_thang</field>
             <field name="arch" type="xml">
                 <form edit="is_dl_locked == False" delete="is_dl_locked == False">
                     <sheet>
+                        <style>
+                            /* Dashboard Cards bên phải */
+                            .kh-dashboard { display: flex; gap: 15px; margin-bottom: 25px; justify-content: flex-end; }
+                            .kh-card { background: #fff; padding: 15px 25px; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+                            .kh-card-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+                            .kh-card-text { font-size: 12px; color: #64748b; font-weight: 700; text-transform: uppercase; }
+                            .kh-card-val { font-size: 18px; font-weight: 900; color: #1e293b; }
+                        </style>
+
                         <field name="coso_id" invisible="1"/>
                         <field name="is_dl_locked" invisible="1"/>
 
-                        <div class="oe_title mb-4">
-                            <label for="name" class="oe_edit_only text-muted" string="Tháng / Kỳ chi tiêu"/>
-                            <h1>
-                                <field name="name" readonly="id" class="text-primary"/>
-                            </h1>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div class="oe_title">
+                                <label for="name" string="Kỳ chi tiêu"/>
+                                <h1><field name="name" readonly="id" class="text-primary"/></h1>
+                            </div>
+
+                            <div class="kh-dashboard">
+                                <div class="kh-card">
+                                    <div class="kh-card-icon" style="background: #dcfce7; color: #166534;"><i class="fa fa-money"/></div>
+                                    <div>
+                                        <div class="kh-card-text">Tiền mặt</div>
+                                        <div class="kh-card-val"><field name="tong_chi_tm" readonly="id"/> vnđ</div>
+                                    </div>
+                                </div>
+                                <div class="kh-card">
+                                    <div class="kh-card-icon" style="background: #dbeafe; color: #1e40af;"><i class="fa fa-university"/></div>
+                                    <div>
+                                        <div class="kh-card-text">Chuyển khoản</div>
+                                        <div class="kh-card-val"><field name="tong_chi_ck" readonly="id"/> vnđ</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <notebook>
@@ -66,6 +92,7 @@
                                                domain="[('trangthai','=','1'),('loai','=','0')]"
                                                context="{'default_coso_id':context.get('default_coso_id')}"/>
                                         <field name="desc"/>
+                                        <field name="loai"  decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
                                         <field name="create_uid" string="Người tạo"/>
                                         <field name="create_date" string="Ngày tạo"/>
                                      </list>
@@ -74,6 +101,8 @@
                                         <field name="ngaychi"/>
                                         <field name="dm_loaichi_id"/>
                                         <field name="tien"/>
+                                        <field name="loai"  decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
+
 
                                         <templates>
                                             <t t-name="kanban-box">
@@ -108,6 +137,7 @@
                                                domain="[('trangthai','=','1'),('loai','=','1')]"
                                                context="{'default_coso_id':context.get('default_coso_id')}"/>
                                         <field name="desc"/>
+                                        <field name="loai"  decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
                                         <field name="create_uid" string="Người tạo"/>
                                         <field name="create_date" string="Ngày tạo"/>
                                      </list>
@@ -116,6 +146,7 @@
                                         <field name="ngaychi"/>
                                         <field name="dm_loaichi_id"/>
                                         <field name="tien"/>
+                                        <field name="loai"  decoration-success="loai == '1'" decoration-danger="loai == '0'" width="100"/>
 
                                         <templates>
                                             <t t-name="kanban-box">
@@ -140,6 +171,7 @@
                                 </field>
                             </page>
                         </notebook>
+
 
                     </sheet>
                 </form>

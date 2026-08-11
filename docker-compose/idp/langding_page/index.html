@@ -1,0 +1,569 @@
+<t name="Login Layout" t-name="web.login_layout">
+    <t t-call="web.frontend_layout">
+        <t t-set="html_data" t-value="{'style': 'height: 100%;'}"/>
+        <t t-set="body_classname" t-value="'bg-100'"/>
+        <t t-set="no_header" t-value="True"/>
+        <t t-set="no_footer" t-value="True"/>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap');
+
+            :root {
+                --primary: #2563eb;
+                --primary-light: #eff6ff;
+                --primary-dark: #1d4ed8;
+                --secondary: #059669;
+                --warning: #ea580c;
+                --purple: #9333ea;
+                --zalo-color: #0068ff;
+                --zalo-hover: #0056d6;
+                --text-dark: #1e293b;
+                --text-muted: #64748b;
+                --bg-light: #f8fafc;
+                --bg-gray: #f0f4f8;
+            }
+
+            html { scroll-behavior: smooth; }
+
+            body.bg-100 {
+                font-family: 'Nunito', sans-serif;
+                background-color: #ffffff !important;
+                color: var(--text-dark);
+                overflow-x: hidden;
+                margin: 0; padding: 0;
+            }
+
+            section { padding: 90px 0; }
+            .bg-gray { background-color: var(--bg-gray); }
+            .bg-light { background-color: var(--bg-light); }
+
+            /* NAVBAR */
+            .navbar-custom {
+                background-color: #ffffff;
+                box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+                padding: 10px 0;
+                position: sticky; top: 0; z-index: 1020;
+            }
+            .navbar-brand { display: flex; align-items: center; text-decoration: none; font-weight: 800; color: var(--primary); font-size: 1.5rem; }
+            .navbar-brand img { max-height: 50px; width: auto; object-fit: contain; margin-right: 10px; }
+            .nav-link { font-weight: 700; color: var(--text-dark); padding: 8px 16px !important; border-radius: 8px; transition: 0.3s; }
+            .nav-link:hover, .nav-link.active { background-color: var(--primary-light); color: var(--primary); }
+            .btn-try { background-color: var(--warning); color: white !important; font-weight: 700; border-radius: 8px; padding: 8px 24px; transition: 0.3s; text-decoration: none; display: inline-block;}
+            .btn-try:hover { background-color: #c2410c; transform: translateY(-2px); }
+
+            /* ================= HERO LOGIN (CARD Ở GIỮA) ================= */
+            .hero-login-section {
+                padding: 80px 0 100px;
+                background: linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%);
+                position: relative;
+                min-height: auto;
+            }
+
+            .evddn-login-card {
+                background: #ffffff;
+                border-radius: 24px;
+                box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.25);
+                width: 100%;
+                max-width: 450px;
+                padding: 50px 40px;
+                border: 1px solid rgba(255, 255, 255, 0.6);
+                margin: 0 auto;
+                position: relative;
+                z-index: 10;
+            }
+
+            .evddn-login-title {
+                text-align: center;
+                font-size: 1.6rem;
+                font-weight: 800;
+                margin-bottom: 30px;
+                background: -webkit-linear-gradient(45deg, var(--primary), var(--purple));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            .evddn-login-title i {
+                margin-right: 8px;
+                font-size: 1.4rem;
+            }
+
+            .evddn-logo-container { text-align: center; margin-bottom: 25px; }
+            .evddn-logo-container img { max-height: 80px; max-width: 100%; transition: transform 0.3s ease;}
+            .evddn-logo-container img:hover { transform: scale(1.05); }
+
+            /* TÙY CHỈNH NATIVE FORM ODOO */
+            .evddn-login-card .card { box-shadow: none !important; border: none !important; background: transparent !important; margin: 0; }
+            .evddn-login-card .card-body { padding: 0 !important; }
+
+            /* Tùy chỉnh ô nhập liệu (Inputs) */
+            .evddn-login-card .form-group { margin-bottom: 20px; }
+            .evddn-login-card .col-form-label {
+                font-weight: 700 !important;
+                color: #475569 !important;
+                margin-bottom: 8px;
+                font-size: 0.95rem;
+            }
+            .evddn-login-card .form-control {
+                border-radius: 12px !important;
+                padding: 12px 15px !important;
+                border: 2px solid #e2e8f0 !important;
+                font-size: 1.05rem !important;
+                transition: all 0.3s ease !important;
+                background-color: #f8fafc !important;
+                height: auto !important;
+            }
+            .evddn-login-card .form-control:focus {
+                border-color: var(--primary) !important;
+                background-color: #ffffff !important;
+                box-shadow: 0 0 0 4px rgba(37,99,235,0.1) !important;
+            }
+
+            /* Tùy chỉnh Nút Đăng Nhập */
+            .evddn-login-card .oe_login_buttons .btn-primary {
+                background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+                border: none !important;
+                border-radius: 12px !important;
+                padding: 14px !important;
+                font-weight: 800 !important;
+                font-size: 1.1rem !important;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                transition: all 0.3s ease !important;
+                box-shadow: 0 4px 15px rgba(37,99,235,0.3) !important;
+                width: 100% !important;
+                margin-top: 15px;
+            }
+            .evddn-login-card .oe_login_buttons .btn-primary:hover {
+                transform: translateY(-2px) !important;
+                box-shadow: 0 8px 25px rgba(37,99,235,0.4) !important;
+            }
+
+            /* Zalo liên hệ dưới form */
+            .evddn-zalo-contact { margin-top: 30px; padding-top: 25px; border-top: 1px dashed #cbd5e1; text-align: center; width: 100%; margin-left: auto; margin-right: auto;}
+            .btn-zalo-login { background-color: var(--zalo-color); color: white !important; font-weight: 700; padding: 12px 20px; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0, 104, 255, 0.2); }
+            .btn-zalo-login:hover { background-color: var(--zalo-hover); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 104, 255, 0.3); }
+
+            /* ================= CÁC SECTION BÊN DƯỚI ================= */
+            .section-header { text-align: center; margin-bottom: 50px; }
+            .section-header h2 { font-weight: 800; font-size: 2.5rem; color: var(--text-dark); margin-bottom: 15px; }
+            .section-header p { font-size: 1.15rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+            .feature-card { background: #ffffff; border-radius: 20px; padding: 35px 30px; height: 100%; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: all 0.3s ease; position: relative; overflow: hidden; }
+            .feature-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: var(--primary); transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; }
+            .feature-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border-color: transparent; }
+            .feature-card:hover::before { transform: scaleX(1); }
+            .icon-box { width: 70px; height: 70px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 25px; }
+            .icon-blue { color: #2563eb; background: #dbeafe; }
+            .icon-green { color: #059669; background: #d1fae5; }
+            .icon-purple { color: #9333ea; background: #f3e8ff; }
+            .icon-orange { color: #ea580c; background: #ffedd5; }
+            .icon-gold { color: #ca8a04; }
+            .feature-card h3 { font-weight: 800; font-size: 1.4rem; margin-bottom: 15px; }
+            .feature-list { list-style: none; padding: 0; margin: 0; }
+            .feature-list li { position: relative; padding-left: 28px; margin-bottom: 12px; font-size: 1.05rem; color: var(--text-muted); line-height: 1.5; }
+            .feature-list li::before { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 0; top: 2px; color: var(--secondary); font-size: 1rem; }
+
+            .pillar-col { border-radius: 16px; padding: 25px 20px; height: 100%; border: 2px solid transparent; position: relative; }
+            .bg-pillar-1 { background-color: #eaf5ec; border-color: #c8e6c9; } .bg-pillar-2 { background-color: #e9eef6; border-color: #c5cae9; } .bg-pillar-3 { background-color: #fdf0ec; border-color: #ffccbc; }
+            .pillar-title { text-align: center; font-weight: 800; font-size: 1.2rem; margin-bottom: 25px; color: #d32f2f; text-transform: uppercase; }
+            .diagram-card { background: #ffffff; border-radius: 12px; padding: 20px 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 2px dashed #94a3b8; margin-bottom: 20px; transition: all 0.3s ease; position: relative; z-index: 2; }
+            .diagram-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); border-color: var(--primary); }
+            .card-icon { font-size: 2.5rem; margin-bottom: 10px; }
+            .diagram-card h4 { font-weight: 800; font-size: 1.1rem; color: #1e293b; margin-bottom: 8px; }
+            .diagram-card p { font-size: 0.9rem; color: #475569; margin-bottom: 0; line-height: 1.4; }
+            .spacer-card { height: 120px; margin-bottom: 20px; }
+            .flow-arrow { position: absolute; right: -25px; top: 50%; transform: translateY(-50%); font-size: 2rem; color: #cbd5e1; z-index: 10; }
+
+            .horizontal-timeline { position: relative; width: 100%; }
+            .horizontal-timeline::before { content: ''; position: absolute; top: 45px; left: 10%; right: 10%; height: 4px; background: #cbd5e1; z-index: 1; border-radius: 4px; }
+            .step-col { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; }
+            .step-icon { width: 90px; height: 90px; border-radius: 50%; background: #ffffff; border: 5px solid; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 25px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+            .step-col:hover .step-icon { transform: scale(1.1) translateY(-5px); }
+            .step-icon span { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: -2px; }
+            .step-icon i { font-size: 1.6rem; }
+            .border-1 { border-color: var(--primary); color: var(--primary); } .border-2 { border-color: var(--warning); color: var(--warning); } .border-3 { border-color: var(--purple); color: var(--purple); } .border-4 { border-color: var(--secondary); color: var(--secondary); }
+            .step-card { background: #ffffff; padding: 25px 20px; border-radius: 16px; text-align: center; width: 100%; height: 100%; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: all 0.3s; position: relative; }
+            .step-card::before { content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 16px; height: 16px; background: #ffffff; border-top: 1px solid #e2e8f0; border-left: 1px solid #e2e8f0; }
+            .step-col:hover .step-card { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border-color: #cbd5e1; }
+            .step-card h3 { font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; line-height: 1.4; }
+            .step-card p { font-size: 0.95rem; color: #475569; margin-bottom: 0; line-height: 1.5; }
+
+            .pricing-container { background: #ffffff; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); padding: 50px; position: relative; overflow: hidden; border: 1px solid #e2e8f0; }
+            .pricing-container::before { content: ''; position: absolute; top: -150px; right: -150px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(37,99,235,0.08) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; z-index: 0; }
+            .trial-banner { background: linear-gradient(135deg, #ff9100 0%, #ff6d00 100%); color: white; border-radius: 16px; padding: 20px 30px; display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 40px; box-shadow: 0 10px 20px rgba(255,109,0,0.2); position: relative; z-index: 1; }
+            .trial-banner i { font-size: 2.5rem; animation: bounce 2s infinite; }
+            @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+            .trial-text h3 { font-size: 1.4rem; margin-bottom: 5px; font-weight: 800; text-transform: uppercase; }
+            .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px; position: relative; z-index: 1; }
+            .pricing-card { background: #ffffff; border: 2px solid #e2e8f0; border-radius: 16px; padding: 40px 30px; transition: all 0.3s ease; position: relative; }
+            .pricing-card:hover { border-color: var(--primary); box-shadow: 0 15px 30px rgba(37,99,235,0.1); transform: translateY(-5px); }
+            .pricing-card.best-value { border-color: var(--primary); box-shadow: 0 15px 30px rgba(37,99,235,0.15); background: linear-gradient(to bottom, #f8faff 0%, #ffffff 100%); }
+            .ribbon { position: absolute; top: -15px; right: 30px; background: var(--warning); color: white; padding: 6px 20px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(234,88,12,0.3); }
+            .plan-price { margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; }
+            .plan-price .amount { font-size: 2.5rem; font-weight: 800; color: var(--primary-dark); }
+            .discount-section { background: var(--bg-light); border-radius: 12px; padding: 25px; text-align: center; border: 1px dashed #cbd5e1; position: relative; z-index: 1; }
+            .discount-badge { background: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); min-width: 200px; border-left: 4px solid var(--primary); }
+            .discount-badge strong { font-size: 1.5rem; color: var(--primary-dark); }
+
+            /* MỤC LIÊN HỆ DƯỚI CÙNG */
+            .contact-card { background: #ffffff; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); width: 100%; max-width: 1000px; overflow: hidden; display: flex; flex-wrap: wrap; border: 1px solid #e2e8f0; margin: 0 auto;}
+            .info-side { background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%); color: white; padding: 50px 40px; flex: 1; min-width: 300px; }
+            .info-side h2 { font-weight: 800; font-size: 2rem; margin-bottom: 20px; line-height: 1.3; }
+            .info-side p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 30px; line-height: 1.6; }
+            .action-side { padding: 50px 40px; flex: 1.2; min-width: 300px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+
+            .zalo-icon-wrapper { width: 90px; height: 90px; background: var(--primary-light); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 25px; position: relative; }
+            .zalo-icon-wrapper::before, .zalo-icon-wrapper::after { content: ''; position: absolute; border: 2px solid var(--zalo-color); border-radius: 50%; inset: -10px; animation: ripple 2s infinite ease-out; opacity: 0; }
+            .zalo-icon-wrapper::after { animation-delay: 1s; inset: -20px; }
+            @keyframes ripple { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 0; } }
+
+            .btn-zalo { background-color: var(--zalo-color); color: white !important; font-size: 1.15rem; font-weight: 700; padding: 15px 40px; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; transition: all 0.3s ease; box-shadow: 0 10px 20px rgba(0, 104, 255, 0.3); border: none; }
+            .btn-zalo:hover { background-color: var(--zalo-hover); transform: translateY(-3px); box-shadow: 0 15px 25px rgba(0, 104, 255, 0.4); }
+
+            /* MOBILE RESPONSIVE */
+            @media (max-width: 991px) {
+                .evddn-login-card { padding: 40px 25px; }
+                .evddn-login-title { font-size: 1.3rem; }
+                .horizontal-timeline::before { display: none; }
+                .step-col { margin-bottom: 30px; }
+                .pricing-grid { grid-template-columns: 1fr; }
+                .discount-grid { flex-direction: column; align-items: center; }
+                .discount-badge { width: 100%; max-width: 300px; }
+                .flow-arrow { display: none; }
+                .spacer-card { display: none; }
+                .pillar-col { margin-bottom: 30px; }
+            }
+        </style>
+
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container">
+                <a class="navbar-brand" href="#top">
+                    <img t-attf-src="/web/binary/company_logo{{ '?dbname='+db if db else '' }}" alt="eVDDN Logo"/>
+                    eVDDN
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="fas fa-bars"/>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav align-items-center gap-2">
+                        <li class="nav-item"><a class="nav-link" href="#features">Tính năng</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#diagram">Luồng vận hành phần mềm</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#process">Dùng thử 3 tháng(miễn phí)</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#pricing">Bảng giá</a></li>
+                        <li class="nav-item ms-lg-2">
+                            <a class="btn btn-try" href="#contact"><i class="fas fa-rocket me-2"/>Liên hệ</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section id="top" class="hero-login-section">
+            <div class="container d-flex justify-content-center">
+                <div class="evddn-login-card">
+
+                    <div class="evddn-logo-container">
+                        <a href="https://evddn.vn" target="_blank" title="Xem chi tiết giới thiệu tính năng phần mềm">
+                            <img t-attf-src="/web/binary/company_logo{{ '?dbname='+db if db else '' }}" alt="Logo eVDDN"/>
+                        </a>
+                    </div>
+
+                    <div class="evddn-login-title">
+                        <i class="fas fa-shield-alt"/> Đăng nhập hệ thống
+                    </div>
+
+                    <div t-attf-class="mx-auto o_database_list" style="width: 100%;">
+                        <t t-out="0"/>
+                    </div>
+
+                    <div class="evddn-zalo-contact" t-if="not disable_footer">
+                        <p class="text-muted mb-2" style="font-size: 0.85rem;">Bạn muốn trải nghiệm sử dụng thử ?</p>
+                        <a href="#contact" class="btn-zalo-login">
+                            <i class="fas fa-comment-dots"/> Liên hệ ngay để được giới thiệu tính năng và cấp tài khoản dùng thử
+                        </a>
+
+                        <t t-if="not disable_database_manager">
+                            <div class="mt-4">
+                                <a class="text-muted small text-decoration-none" href="/web/database/manager">
+                                    <i class="fas fa-database"/> Quản lý Database
+                                </a>
+                            </div>
+                        </t>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="bg-white">
+            <div class="container">
+                <div class="section-header">
+                    <span class="badge bg-primary-light text-primary px-3 py-2 rounded-pill mb-3 fw-bold" style="background: var(--primary-light)">
+                        <i class="fas fa-star me-1 text-warning"/> GIẢI PHÁP CHUYÊN SÂU
+                    </span>
+                    <h2>Tại sao các Trung tâm Can thiệp<br/>lựa chọn phần mềm của chúng tôi?</h2>
+                    <p>Phần mềm được thiết kế chuyên biệt cho mô hình giáo dục chuyên biệt, giúp tự động,minh bạch hóa mọi hoạt động, tối ưu chi phí và gia tăng niềm tin nơi phụ huynh.</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-6">
+                        <div class="feature-card">
+                            <div class="icon-box" style="background: #dbeafe;"><i class="fas fa-child icon-blue"/></div>
+                            <h3>Quản lý Hồ sơ [Học sinh] &amp; Sắp Lịch Can thiệp</h3>
+                            <ul class="feature-list">
+                                <li><b>Số hóa 100% hồ sơ [Học sinh]:</b> Lưu trữ thông tin,bệnh án điện tử,thông tin phụ huynh, quá trình học tập can thiệp của trẻ</li>
+                                <li><b>Lịch học thông minh, tối ưu:</b> Xếp ca can thiệp tối ưu phù hợp mọi dịch vụ của cơ sở can thiệp</li>
+                                <li><b>Minh bạch quá trình:</b> Gửi thông báo,thông tin học phí, lịch trình can thiệp của trẻ</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <div class="feature-card">
+                            <div class="icon-box" style="background: #d1fae5;"><i class="fas fa-file-invoice-dollar icon-green"/></div>
+                            <h3>Tự động hóa tính toán [Học phí]</h3>
+                            <ul class="feature-list">
+                                <li><b>Tính học phí tự động:</b> Đối soát ca học thực tế, ca học bù, tăng cường chính xác.</li>
+                                <li><b>Thông báo đa kênh:</b> Gửi nhắc nợ tự động qua ứng dụng, thông tin học phí qua link, hình ảnh</li>
+                                <li><b>Thanh toán QR:</b> Tích hợp thanh toán, hỗ trợ phương án xuất hóa đơn.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <div class="feature-card">
+                            <div class="icon-box" style="background: #f3e8ff;"><i class="fas fa-chalkboard-teacher icon-purple"/></div>
+                            <h3>Quản lý Nhân sự [GIáo viên]</h3>
+                            <ul class="feature-list">
+                                 <li><b>Số hóa hồ sơ [Giáo viên]:</b> Thông tin giáo viên, thâm niên, quá trình học tập công tác, nghỉ phép</li>
+                                <li><b>Chấm công:</b> Chấm công, điểm danh đi làm của giáo viên.</li>
+                                <li><b>Đánh giá KPI:</b> Thống kê số ca dạy để lập bảng KPI hàng tháng.</li>
+                                <li><b>Tự động tính Lương</b> Tự động tính lương cứng, lương theo ca, tiền thưởng, các khoản đóng bảo hiểm</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <div class="feature-card">
+                            <div class="icon-box" style="background: #ffedd5;"><i class="fas fa-chart-pie icon-orange"/></div>
+                            <h3>Tài chính, Kế toán &amp; Vận hành</h3>
+                            <ul class="feature-list">
+                                <li><b>Quản lý Thu - Chi:</b> Ghi nhận các dòng tiền vào/ra hàng ngày.</li>
+                                <li><b>Báo cáo P&amp;L:</b> Dashboard tổng hợp tài chính lỗ/lãi trực quan.</li>
+                                <li><b>Bảo mật dữ liệu:</b> Phân quyền chặt chẽ theo từng vai trò nhân sự.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="diagram" class="bg-gray">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Luồng Vận Hành Cốt Lõi Của Phần Mềm</h2>
+                    <p>Dữ liệu liên thông xuyên suốt từ Phụ huynh - Giáo viên đến Ban quản lý.</p>
+                </div>
+
+                <div class="row g-4 position-relative">
+                    <div class="col-12 col-lg-4">
+                        <div class="pillar-col bg-pillar-1">
+                            <div class="pillar-title">Lưu trữ Hồ sơ điện tử</div>
+                            <div class="diagram-card">
+                                <i class="fas fa-user-graduate card-icon icon-blue"/>
+                                <h4>Hồ sơ HỌC SINH</h4>
+                                <p>(Thông tin cơ bản, bệnh án, liên hệ phụ huynh)</p>
+                            </div>
+                            <div class="spacer-card d-none d-lg-block"/>
+                            <div class="diagram-card">
+                                <i class="fas fa-chalkboard-teacher card-icon icon-orange"/>
+                                <h4>Hồ sơ GIÁO VIÊN</h4>
+                                <p>(Hợp đồng, bằng cấp, chuyên môn)</p>
+                            </div>
+                            <i class="fas fa-arrow-right flow-arrow d-none d-lg-block"/>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
+                        <div class="pillar-col bg-pillar-2">
+                            <div class="pillar-title">Hỗ trợ nghiệp vụ hàng ngày</div>
+                            <div class="diagram-card">
+                                <i class="fas fa-clipboard-user card-icon icon-blue"/>
+                                <h4>Điểm danh</h4>
+                                <p>(Điểm danh đi học tham gia can thiệp ca / dịch vụ khác)</p>
+                            </div>
+                            <div class="diagram-card">
+                                <i class="fas fa-business-time card-icon icon-purple"/>
+                                <h4>Chấm công</h4>
+                                <p>(Chấm công đi làm, nghỉ, đi muộn, quản lý ngày nghỉ)</p>
+                            </div>
+                            <div class="diagram-card">
+                                <i class="fas fa-chart-line card-icon icon-orange"/>
+                                <h4>Đánh giá KPI</h4>
+                                <p>(Ghi nhận kết quả hoàn thành các chỉ tiêu KPI hàng tháng)</p>
+                            </div>
+                            <div class="diagram-card">
+                                <i class="fas fa-hand-holding-dollar card-icon icon-gold"/>
+                                <h4>Chi tiêu</h4>
+                                <p>(Ghi chép các khoản chi tiêu, đầu tư, mua sắm hàng tháng)</p>
+                            </div>
+                            <i class="fas fa-arrow-right flow-arrow d-none d-lg-block"/>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
+                        <div class="pillar-col bg-pillar-3">
+                            <div class="pillar-title">Tự động hóa</div>
+                            <div class="diagram-card">
+                                <i class="fas fa-file-invoice-dollar card-icon icon-green"/>
+                                <h4>HỌC PHÍ</h4>
+                                <p>(Tự động đối soát ca học và tính học phí gửi phụ huynh)</p>
+                            </div>
+                            <div class="spacer-card d-none d-lg-block" style="height: 30px;"/>
+                            <div class="diagram-card">
+                                <i class="fas fa-money-check-dollar card-icon icon-purple"/>
+                                <h4>LƯƠNG</h4>
+                                <p>(Tự động tổng hợp công, KPI để tính lương cho giáo viên)</p>
+                            </div>
+                            <div class="spacer-card d-none d-lg-block" style="height: 30px;"/>
+                            <div class="diagram-card">
+                                <i class="fas fa-chart-pie card-icon icon-gold"/>
+                                <h4>Báo cáo tài chính</h4>
+                                <p>(Tổng hợp thu/chi, xác định Lỗ/Lãi theo từng tháng, năm)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="process" class="bg-white">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Lộ trình dùng thử 3 tháng miễn phí</h2>
+                    <p>Hãy dùng thử trải nghiệm 3 tháng phù hợp mới thuê.</p>
+                </div>
+                <div class="horizontal-timeline">
+                    <div class="row g-4 align-items-stretch">
+                        <div class="col-12 col-lg-3 step-col">
+                            <div class="step-icon border-1"><span>B.1</span><i class="fas fa-phone-alt"/></div>
+                            <div class="step-card">
+                                <h3>Liên hệ &amp;<br/>Nhận tài khoản</h3>
+                                <p>Trao đổi qua Zalo/SĐT <b>039.339.3386</b> nhận tư vấn và cấp tài khoản dùng thử.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-3 step-col">
+                            <div class="step-icon border-2"><span>B.2</span><i class="fas fa-database"/></div>
+                            <div class="step-card">
+                                <h3>Khởi tạo &amp;<br/>Nạp dữ liệu</h3>
+                                <p>Thiết lập thông tin trung tâm. <br/><span class="badge bg-warning text-dark mt-2">Kỹ thuật viên hỗ trợ nạp 100%</span></p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-3 step-col">
+                            <div class="step-icon border-3"><span>B.3</span><i class="fas fa-laptop-code"/></div>
+                            <div class="step-card">
+                                <h3>Đào tạo &amp;<br/>Trải nghiệm 3 tháng</h3>
+                                <p>Trung tâm vận hành thực tế và dùng thử miễn phí toàn bộ tính năng.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-3 step-col">
+                            <div class="step-icon border-4"><span>B.4</span><i class="fas fa-file-contract"/></div>
+                            <div class="step-card">
+                                <h3>Ký kết hợp đồng<br/>Sử dụng</h3>
+                                <p>Đánh giá hiệu quả thực tế và ký hợp đồng thuê phần mềm theo bảng giá.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="bg-gray">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Chính Sách Thuê Phần Mềm</h2>
+                    <p>Giải pháp quản lý thông minh - Chi phí linh hoạt theo quy mô cơ sở</p>
+                </div>
+                <div class="pricing-container mx-auto" style="max-width: 1100px;">
+                    <div class="trial-banner">
+                        <i class="fas fa-gift"/>
+                        <div class="trial-text text-start">
+                            <h3 class="mb-1">Đặc quyền trải nghiệm: Miễn phí 03 tháng!</h3>
+                            <p class="mb-0 fs-6">Sau 3 tháng vận hành thực tế, nếu thấy phù hợp và hiệu quả mới tiến hành ký hợp đồng.</p>
+                        </div>
+                    </div>
+                    <div class="pricing-grid">
+                        <div class="pricing-card">
+                            <div class="fs-4 fw-bold text-dark mb-3"><i class="fas fa-user-graduate me-2 text-primary"/> Gói Linh Hoạt</div>
+                            <div class="plan-price">
+                                <span class="amount">15.000<small style="font-size: 1.5rem;">đ</small></span>
+                                <span class="text-muted fw-bold">/ học sinh / tháng</span>
+                            </div>
+                            <ul class="feature-list">
+                                <li><i class="fas fa-check-circle text-success"/> Tối ưu chi phí cho quy mô nhỏ.</li>
+                                <li><i class="fas fa-check-circle text-success"/> <b>Chỉ tính phí</b> trên số lượng học sinh đang theo học thực tế.</li>
+                                <li><i class="fas fa-check-circle text-success"/> Đầy đủ toàn bộ tính năng hệ thống.</li>
+                            </ul>
+                        </div>
+                        <div class="pricing-card best-value">
+                            <div class="ribbon">⭐ Khuyên dùng</div>
+                            <div class="fs-4 fw-bold text-dark mb-3"><i class="fas fa-school me-2 text-primary"/> Gói Trọn Gói</div>
+                            <div class="plan-price">
+                                <span class="amount">1.000.000<small style="font-size: 1.5rem;">đ</small></span>
+                                <span class="text-muted fw-bold">/ cơ sở / tháng</span>
+                            </div>
+                            <ul class="feature-list">
+                                <li><i class="fas fa-check-circle text-success"/> Giải pháp hoàn hảo cho trung tâm đông học sinh.</li>
+                                <li><i class="fas fa-check-circle text-success"/> <b>Không giới hạn</b> số lượng học sinh.</li>
+                                <li><i class="fas fa-check-circle text-success"/> Dễ dàng dự phóng ngân sách khi mở rộng.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="discount-section">
+                        <div class="fs-5 fw-bold text-danger mb-3"><i class="fas fa-fire"/> Ưu đãi đặc biệt khi thanh toán trả trước</div>
+                        <div class="d-flex flex-wrap justify-content-center gap-3">
+                            <div class="discount-badge"><span>Thanh toán 06 tháng</span><strong>Giảm 5%</strong></div>
+                            <div class="discount-badge"><span>Thanh toán 01 năm</span><strong>Giảm 10%</strong></div>
+                            <div class="discount-badge"><span>Thanh toán 02 năm</span><strong>Giảm 15%</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="bg-white pb-5">
+            <div class="container d-flex justify-content-center">
+                <div class="contact-card">
+                    <div class="info-side">
+                        <h2>Bắt đầu hành trình<br/>chuyển đổi số</h2>
+                        <p>Đội ngũ chuyên gia của chúng tôi đã sẵn sàng hỗ trợ Trung tâm của bạn thiết lập hệ thống hoàn toàn miễn phí.</p>
+                        <ul class="list-unstyled mt-4">
+                            <li class="mb-3 fw-bold"><i class="fas fa-check-circle me-2 text-warning"/> Tư vấn nghiệp vụ 1:1 chuyên sâu</li>
+                            <li class="mb-3 fw-bold"><i class="fas fa-check-circle me-2 text-warning"/> Khởi tạo &amp; Cấu hình hệ thống</li>
+                            <li class="mb-3 fw-bold"><i class="fas fa-check-circle me-2 text-warning"/> Hỗ trợ kỹ thuật 24/7</li>
+                        </ul>
+                    </div>
+                    <div class="action-side">
+
+                        <div class="zalo-icon-wrapper">
+                            <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M21 11.5C21 16.75 16.97 21 12 21C11.16 21 10.35 20.89 9.58 20.69C9.28 20.61 8.95 20.67 8.7 20.86L5.68 23.09C5.35 23.33 4.88 23.14 4.83 22.73L4.54 19.9C4.5 19.54 4.28 19.22 3.96 19.06C2.15 18.15 1 16.42 1 14.5C1 11.25 4.3 8.5 9 8.5H15C18.31 8.5 21 10.15 21 11.5Z' fill='%230068ff'/%3E%3Cpath d='M16 11.5C16 14.54 13.54 17 10.5 17C7.46 17 5 14.54 5 11.5C5 8.46 7.46 6 10.5 6C13.54 6 16 8.46 16 11.5Z' fill='white'/%3E%3Cpath d='M10.5 15C8.57 15 7 13.43 7 11.5C7 9.57 8.57 8 10.5 8C12.43 8 14 9.57 14 11.5C14 13.43 12.43 15 10.5 15ZM10.5 9C9.12 9 8 10.12 8 11.5C8 12.88 9.12 14 10.5 14C11.88 14 13 12.88 13 11.5C13 10.12 11.88 9 10.5 9Z' fill='%230068ff'/%3E%3C/svg%3E" alt="Zalo Logo" style="width: 50px; height: 50px; object-fit: contain;"/>
+                        </div>
+
+                        <h3 class="fw-bold mb-2">Kết nối cùng Chuyên gia</h3>
+                        <p class="text-muted mb-4">Trao đổi trực tiếp mọi thắc mắc và nhận tài khoản trải nghiệm ngay hôm nay.</p>
+                        <a href="https://zalo.me/0393393386" target="_blank" class="btn-zalo">
+                            <i class="fas fa-comment-dots"/> Chat qua Zalo (039 339 3386)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-dark text-white text-center py-4">
+            <div class="container">
+                <p class="mb-0 text-white-50">© 2026 eVDDN Giải pháp chuyển đổi số toàn diện cho trung tâm can thiệp chuyên biệt.</p>
+            </div>
+        </footer>
+
+    </t>
+</t>

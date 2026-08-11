@@ -7,11 +7,15 @@
         <field name="arch" type="xml">
             <list>
                 <field name="sequence" width="35" string="TT"/>
+                <field name="sequence" widget="handle"/>
                 <field name="name" width="350"/>
                 <field name="code" width="100"/>
                 <field name="luong_cocau"/>
                 <field name="luong_loai" string="Phần lương"/>
-                <field name="formula" widget="300" optional="hide"/>
+                <field name="dieukien_loai" string="Loại" optional="hide"/>
+                <field name="dm_chamcong_id"  string="Mục" optional="hide"/>
+                <field name="formula" width="300" optional="hide"/>
+                <field name="desc" string="Mô tả" optional="hide"/>
 
 
             </list>
@@ -164,7 +168,8 @@
                             </group>
                             <group>
                                 <di>
-                                     <p>- <strong>$NGAY_NGHI</strong>: Ngày chấm công nghỉ/tháng</p>
+                                    <p>- <strong>$NGAY_NGHI</strong>: Ngày chấm công nghỉ/tháng</p>
+                                    <p>- <strong>$NGHI_CHUYENCAN</strong>: Ngày nghỉ để tính chuyên cần</p>
                                     <p>- <strong>$NGHILE</strong>: Nghỉ lễ theo quy định nhà nước</p>
                                     <p>- <strong>$NHATRUONG_NGHI</strong>: Ngày nhà trường cho nghỉ/tháng</p>
                                     <p>- <strong>$TONG_HS_TRONG_THANG</strong>: Tổng học sinh trong tháng</p>

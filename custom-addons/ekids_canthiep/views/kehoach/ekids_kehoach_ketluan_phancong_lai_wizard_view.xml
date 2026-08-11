@@ -1,0 +1,66 @@
+<odoo>
+  <data>
+    <record id="ekids_canthiep.kehoach_ketluan_phancong_lai_wizard_form" model="ir.ui.view">
+        <field name="name">ekids.kehoach_ketluan_phancong_lai_wizard.form</field>
+        <field name="model">ekids.kehoach_ketluan_phancong_lai_wizard</field>
+        <field name="arch" type="xml">
+            <form string="B1:Phân công lại giáo viên cho [Kết luận]">
+                <field name="coso_id" invisible="1"/>
+                <sheet>
+                    <div class="alert alert-info" role="alert" style="margin-bottom: 15px; font-weight: 500;">
+                        <i class="fa fa-info-circle" style="margin-right: 5px;"></i>
+                        <strong>Hướng dẫn:</strong> Sử dụng bảng phía trên để [Phân công] lại [Giáo viên] kiểm duyệt và nhóm Giáo viên can thiệp chung cho Kết luận. Sau đó, điều chỉnh chi tiết [Giáo viên] lập kế hoạch/can thiệp cụ thể cho từng [Kế hoạch] đang can thiệp hiện có.
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <group>
+                                <group string="B1:Phân công lại giáo viên cho [Kết luận]">
+                                    <field name="gv_kiemduyet_id"
+                                           domain="[('coso_id','=',coso_id)]"
+                                           options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="gv_canthiep_ids" widget="many2many_tags"
+                                           domain="[('coso_id','=',coso_id)]"
+                                           options="{'no_create': True, 'no_open': True}"/>
+                                </group>
+                            </group>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="B2. Phân công lại [GIÁO VIÊN] trong [KẾ HOẠCH] đang can thiệp (nếu cần)">
+                            <field name="gv_canthiep_wizard_ids"
+                                   create="false"
+                                   delete="false"
+                                   edit="true"
+                                   options="{'no_create': True, 'no_open': True, 'no_create_edit': True}">
+
+                                <list delete="false" create="false" edit="true" editable="bottom">
+                                    <field name="kehoach_id" string="Kế hoạch đang có"/>
+                                    <field name="gv_canthiep_id"
+                                           domain="[('coso_id','=',parent.coso_id),('id', 'in', parent.gv_canthiep_ids)]"
+                                           options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="trangthai" string="Trạng thái kế hoạch" width="130"
+                                           widget="badge"
+                                           decoration-warning="trangthai == '0'"
+                                           decoration-info="trangthai == '2'"
+                                           decoration-success="trangthai == '1'"
+                                           decoration-danger="trangthai == '-1'"
+                                           />
+                                </list>
+
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_phancong_lai"
+                            confirm ="Bạn chắc chắn muốn điều chỉnh, phân công lại ?"
+                            string="Xác nhận thay đổi" type="object" class="btn-primary"/>
+                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+  </data>
+</odoo>

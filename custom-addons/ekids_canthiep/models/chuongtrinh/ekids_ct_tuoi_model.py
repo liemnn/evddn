@@ -4,15 +4,27 @@ from odoo import models, fields, api, exceptions
 class DanhMucTuoi(models.Model):
     _name = "ekids.ct_tuoi"
     _description = "Tuổi thực tế"
+    _order = "sequence asc"
 
     coso_id = fields.Many2one("ekids.coso", related="chuongtrinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
     sequence = fields.Integer(string="STT", default=1)
+    index= fields.Integer(string="STT", compute="_compute_index", store=False)
+
     chuongtrinh_id = fields.Many2one('ekids.ct_chuongtrinh', string='Chương trình')
     name = fields.Char(string="Tên",required=True)
     desc =fields.Html(string="Mô tả")
 
     tong_muctieu = fields.Integer(string="Tổng mục tiêu", compute="_compute_tong_muctieu", store=False)
+
+    trangthai = fields.Selection([("0", "Không hoạt động")
+                                     , ("1", "Đang hoạt động")], default="1", required=True)
+
+    def _compute_index(self):
+        index = 1
+        for record in self:
+            record.index = index
+            index += 1
 
     def _compute_tong_muctieu(self):
         for tuoi in self:

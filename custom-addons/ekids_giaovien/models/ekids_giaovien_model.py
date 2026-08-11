@@ -217,7 +217,8 @@ class GiaoVien(models.Model):
                         _("Tài khoản [Số điện thoại] đã có người khác sử dụng!"))
 
         view_id = self.env.ref('ekids_giaovien.view_ekids_giaovien_user_form').id
-        coso_ids =self.env['ekids.coso'].search([]).ids
+
+        coso_ids =[self.coso_id.id]
         return {
             'type': 'ir.actions.act_window',
             'name': _('Thông tin tài khoản'),

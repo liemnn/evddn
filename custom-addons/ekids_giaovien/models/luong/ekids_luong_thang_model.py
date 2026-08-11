@@ -6,6 +6,21 @@ from .ekids_luong_func_abstractmodel import LuongFuncAbstractModel
 from .ekids_luong_formula_abstractmodel import LuongFolmulaAbstractModel
 
 
+import logging
+
+_logger = logging.getLogger(__name__)
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import giaovien_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
+
 class LuongThang(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
     _name = 'ekids.luong_thang'
     _description = 'Lương của một thang của trung tâm'
@@ -46,7 +61,7 @@ class LuongThang(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
 
     def _compute_tong_giaovien(self):
         for thang in self:
-            total = self.env['ekids.luong'].search_count([('thang_id', '=', thang.id)])
+            total = giaovien_util.sum_tong_giaovien_trong_thang(self,[thang.coso_id.id],int(thang.nam_id.name), int(thang.name))
             thang.tong_giaovien = total
 
 

@@ -6,6 +6,23 @@ from .ekids_hocphi_thang_abstractmodel import HocPhiThangAbstractModel
 import calendar
 
 
+
+import logging
+
+_logger = logging.getLogger(__name__)
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import giaovien_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
+
+
+
 class HocPhiThang(models.Model,HocPhiThangAbstractModel):
     _name = 'ekids.hocphi_thang'
     _description = 'Lương của một thang của trung tâm'
@@ -27,6 +44,11 @@ class HocPhiThang(models.Model,HocPhiThangAbstractModel):
                               ("12", "Tháng 12"),
                               ]
                              , string="Khởi tạo học phí của Tháng",required=True,index=True)
+
+    hocphi_ids = fields.One2many("ekids.hocphi",
+                                          inverse_name="thang_id",
+                                          string="Học phí của tháng")
+
 
 
     tong_hocsinh = fields.Integer(string="Tổng học sinh", readonly=True, compute="_compute_tong_hocsinh")
@@ -58,23 +80,38 @@ class HocPhiThang(models.Model,HocPhiThangAbstractModel):
 
     def _compute_tong_dong_ck(self):
         for thang in self:
+            # Sử dụng toán tử '|' (OR) để lọc: trangthai='11' HOẶC loai='11'
             result = self.env['ekids.hocphi'].read_group(
-                domain=[('thang_id', '=', thang.id),('trangthai', 'in', ['11','12'])],  # điều kiện lọc (nếu cần)
-                fields=['hocphi_phaidong'],  # tên trường cần tính tổng
-                groupby=[]  # không cần group theo trường nào cả
+                domain=[
+                    ('thang_id', '=', thang.id),
+                    '|',
+                    ('trangthai', '=', '11'),
+                    ('loai', '=', '11')
+                ],
+                fields=['hocphi_phaidong'],
+                groupby=[]
             )
 
-            total = result[0]['hocphi_phaidong'] if result else 0.0
+            # Lấy giá trị tổng từ kết quả read_group
+            total = result[0]['hocphi_phaidong'] if result and result[0]['hocphi_phaidong'] else 0.0
             thang.tong_dong_ck = total
+
     def _compute_tong_dong_tm(self):
         for thang in self:
+            # Sử dụng toán tử '|' (OR) để lọc: trangthai='10' HOẶC loai='10'
             result = self.env['ekids.hocphi'].read_group(
-                domain=[('thang_id', '=', thang.id),('trangthai', '=', '10')],  # điều kiện lọc (nếu cần)
-                fields=['hocphi_phaidong'],  # tên trường cần tính tổng
-                groupby=[]  # không cần group theo trường nào cả
+                domain=[
+                    ('thang_id', '=', thang.id),
+                    '|',
+                    ('trangthai', '=', '10'),
+                    ('loai', '=', '10')
+                ],
+                fields=['hocphi_phaidong'],
+                groupby=[]
             )
 
-            total = result[0]['hocphi_phaidong'] if result else 0.0
+            # Lấy giá trị tổng từ kết quả
+            total = result[0]['hocphi_phaidong'] if result and result[0]['hocphi_phaidong'] else 0.0
             thang.tong_dong_tm = total
 
     def _compute_tong_no(self):
@@ -90,7 +127,7 @@ class HocPhiThang(models.Model,HocPhiThangAbstractModel):
 
     def _compute_tong_hocsinh(self):
         for thang in self:
-            total = self.env['ekids.hocphi'].search_count([('thang_id','=',thang.id)])
+            total = hocsinh_util.sum_tong_hocsinh_trong_thang(self,[thang.coso_id.id], int(thang.nam_id.name), int(thang.name))
             thang.tong_hocsinh = total
     def _compute_tong_hocphi(self):
         for thang in self:

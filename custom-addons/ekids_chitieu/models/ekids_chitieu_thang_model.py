@@ -27,6 +27,11 @@ class ChiTieuThang(models.Model):
     tong_chi = fields.Integer(string="Tổng chi", readonly=True, compute="_compute_tong_chi_thang")
     tong_thu = fields.Integer(string="Tổng thu", readonly=True, compute="_compute_tong_thu_thang")
 
+    tong_chi_tm = fields.Integer(string="Tổng chi", readonly=True, compute="_compute_tong_chi_tm")
+    tong_chi_ck = fields.Integer(string="Tổng chi", readonly=True, compute="_compute_tong_chi_ck")
+
+
+
     is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa",readonly=True, compute="_compute_is_dl_locked" )
 
     _sql_constraints = [
@@ -73,6 +78,26 @@ class ChiTieuThang(models.Model):
 
             total = result[0]['tien'] if result else 0.0
             thang.tong_thu = total
+
+    @api.depends("chi_ids","chi_ids.tien")
+    def _compute_tong_chi_tm(self):
+        for thang in self:
+            tong = 0.0
+            if thang.chi_ids:
+                for chi in thang.chi_ids:
+                    if chi.loai=='0':
+                        tong += chi.tien
+            thang.tong_chi_tm =tong
+
+    @api.depends("chi_ids", "chi_ids.tien")
+    def _compute_tong_chi_ck(self):
+        for thang in self:
+            tong = 0.0
+            if thang.chi_ids:
+                for chi in thang.chi_ids:
+                    if chi.loai !='0':
+                        tong += chi.tien
+            thang.tong_chi_ck = tong
 
 
     def action_delete_chitieu_thang(self):

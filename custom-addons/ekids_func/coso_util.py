@@ -1,6 +1,9 @@
 from datetime import datetime, timedelta,date
 from odoo.exceptions import UserError, ValidationError
 from . import  ngay_util
+# phần học phí khá phức tạp cần chekc xme có locked không
+import json
+from odoo.exceptions import UserError
 
 def func_is_coso_hoatdong(coso,ngay):
     weekday = ngay.weekday() + 2
@@ -81,9 +84,7 @@ def func_is_dl_luong_locked(self,coso,trangthai):
         return True
 
 
-# phần học phí khá phức tạp cần chekc xme có locked không
-import json
-from odoo.exceptions import UserError
+
 
 def func_is_dl_hocphi_locked(self,coso,trangthai):
     if self.env.is_admin():
@@ -143,4 +144,41 @@ def func_is_chuyen_trangthai(self,coso,tt_hientai,tt_dich):
     else:
         raise UserError("Học phí ở trạng thái này không cho phép [Chuyển] sang [Trạng thái] bạn vừa lựa chọn. vui lòng lựa chọn lại ! ")
         return False
+
+def func_cauhinh_canthiep(self,coso,thamso,default):
+    return func_cauhinh(self, coso, "KEHOACH_CANTHIEP", thamso, default)
+
+def func_cauhinh_luong(self,coso,thamso,default):
+    return func_cauhinh(self,coso,"LUONG",thamso,default)
+
+def func_cauhinh(self,coso,loai,thamso,default):
+    json_string = coso.cauhinh
+    if not json_string:
+        return None
+
+    try:
+        config_data = json.loads(json_string)
+    except Exception:
+        if default:
+            return default
+        else:
+            raise UserError("Quản trị phần mềm Chưa cấu hình cho phần can thiệp của Cơ sở["+coso.name+"] vui lòng liên hệ ! ")
+
+
+
+    # 2. Nếu trạng thái hiện tại không có trong cấu hình JSON
+    if loai not in config_data:
+        # Tùy nghiệp vụ: có thể cho qua hoặc chặn lại. Ở đây tôi chọn cho qua nếu chưa định nghĩa.
+        if default:
+            return default
+        else:
+            raise UserError(
+                "Không thây tham số "+loai+ "của cơ sở[" + coso.name + "] vui lòng liên hệ quản trị phần mềm ! ")
+    else:
+        result = config_data[loai].get(thamso,[])
+        if result:
+            return result
+        else:
+            return default
+
 

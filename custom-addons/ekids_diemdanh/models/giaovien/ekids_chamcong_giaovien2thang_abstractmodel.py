@@ -150,6 +150,36 @@ class ChamCongGiaoVien2ThangAbstractModel(models.AbstractModel):
 
                         }
                         self.env['ekids.diemdanh_ca2ngay'].create(data)
+    def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,giaovien_id,ngay):
+
+        weekday = ngay.weekday() + 2
+        thu_field = 't' + str(weekday)
+        ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search([
+                            ('giaovien_id', '=', giaovien_id)
+                            ])
+        if ca_canthieps:
+            for ca_canthiep in ca_canthieps:
+                is_canthiep = getattr(ca_canthiep,thu_field)
+                if is_canthiep:
+                    count = self.env['ekids.diemdanh_ca2ngay'].search_count([
+                        ('giaovien_id', '=', giaovien_id),
+                        ('ngay', '=', ngay),
+                        ('hocphi_dm_ca_id', '=', ca_canthiep.dm_ca_id.id),
+
+                    ])
+                    if count <= 0:
+                        data={
+
+                            'hocphi_dm_ca_id': ca_canthiep.dm_ca_id.id,
+                            'ngay': ngay,
+                            'tu':ca_canthiep.tu,
+                            'den': ca_canthiep.den,
+                            'giaovien_id': giaovien_id,
+                            'hocsinh_id': ca_canthiep.hocsinh_id.id,
+                            'trangthai': '0',
+
+                        }
+                        self.env['ekids.diemdanh_ca2ngay'].create(data)
 
 
 

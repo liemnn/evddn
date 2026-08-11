@@ -4,6 +4,7 @@ from odoo.exceptions import UserError
 from odoo.exceptions import ValidationError
 from .ekids_hocphi_thang_abstractmodel import HocPhiThangAbstractModel
 
+
 import uuid
 import calendar
 
@@ -30,6 +31,19 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                               ondelete="restrict")
     sequence = fields.Integer(string="TT", compute="_compute_sequence")
     hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="restrict",index=True)
+    ngay_nhaphoc = fields.Date(string="Ngày bắt đầu(đi học, đánh giá..)", compute="_compute_ngay_nhaphoc")
+    ngay_nghihoc = fields.Date(string="Ngày nghỉ học",compute="_compute_ngay_nghihoc")
+    thoigian_hoc = fields.Char(string="Thời gian theo học", compute="_compute_thoigian_hoc", store=False)
+
+    trangthai_hocsinh = fields.Selection([
+        ("1", "Đang theo học"),
+        ("2", "Đợi đánh giá"),
+        ("3", "Đã nghỉ"),
+        ("4", "Đã đannh giá nhưng không học")
+    ]
+        , string="Trạng thái học sinh theo học",compute="_compute_trangthai_hocsinh")
+
+
     thang_id = fields.Many2one('ekids.hocphi_thang', string='Học phí tháng',readonly=True,ondelete="restrict",index=True)
     nam_id = fields.Many2one('ekids.hocphi_nam', related="thang_id.nam_id", string='Năm', required=True,index=True,
                              ondelete="restrict")
@@ -42,6 +56,11 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                                   ,("12", "Đã đóng[Ví học sinh]")
                                   ,("3", "Đã xuất[Hóa đơn]")
                                   ,("2", "Nợ học phí")],default='-1')
+
+    loai = fields.Selection([("10", "Tiền mặt")
+                                     , ("11", "Chuyển khoản")
+                                     , ("12", "Ví học sinh")
+                                     ],string="Loại hình đóng học phí")
 
     ngay_dong_hocphi = fields.Date(string="Ngày đóng [Học phí]")
 
@@ -115,6 +134,116 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
     is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
 
+
+    is_chot_hocphi = fields.Boolean(compute="_compute_is_chot_hocphi")
+
+
+
+    qr_code_image = fields.Binary("QR Code Chuyển Khoản", compute="_compute_qr_code")
+
+
+    def _compute_ngay_nhaphoc(self):
+        for rec in self:
+            rec.ngay_nhaphoc = rec.hocsinh_id.ngay_nhaphoc
+
+    def _compute_ngay_nghihoc(self):
+        for rec in self:
+            rec.ngay_nghihoc = rec.hocsinh_id.ngay_nghihoc
+
+    def _compute_thoigian_hoc(self):
+        for rec in self:
+            rec.thoigian_hoc = rec.hocsinh_id.thoigian_hoc
+
+
+    def _compute_trangthai_hocsinh(self):
+        for rec in self:
+            rec.trangthai_hocsinh = rec.hocsinh_id.trangthai
+
+
+    def _compute_qr_code(self):
+        for rec in self:
+            rec.qr_code_image = hocsinh_util.func_build_qr_code(rec)
+
+
+
+
+
+    def _compute_is_chot_hocphi(self):
+        for record in self:
+
+            if  record.trangthai =='-1':
+                record.is_chot_hocphi = False
+
+                # 2. Chốt chặn an toàn: Tránh lỗi sập hệ thống (Crash) nếu dữ liệu bị trống
+                if not record.hocsinh_id or not record.nam_id or not record.thang_id:
+                    continue
+
+                ngay_nghihoc = record.hocsinh_id.ngay_nghihoc
+                if not ngay_nghihoc:
+                    continue
+
+                try:
+                    # Gọi hàm lấy danh sách ngày (ép kiểu int an toàn)
+                    days = ngay_util.func_get_cacngay_trong_thang(int(record.nam_id.name), int(record.thang_id.name))
+                    if not days:
+                        continue
+
+                    ngay_dauthang = days[0]
+                    ngay_cuoithang = days[-1]  # Tối ưu: Dùng chỉ số -1 để lấy ngày cuối tháng nhanh gọn
+
+                    # 3. Sử dụng cú pháp so sánh chuỗi liên tiếp (Chỉ có ở Python cực kỳ trực quan)
+                    if ngay_dauthang <= ngay_nghihoc <= ngay_cuoithang:
+                        record.is_chot_hocphi = True
+
+                except (ValueError, TypeError, IndexError):
+                    # Bỏ qua nếu có lỗi tính toán hoặc ép kiểu sai định dạng ngày tháng
+                    continue
+            else:
+                record.is_chot_hocphi = False
+
+    def action_chot_hocphi_khi_hocsinh_nghi(self):
+        self.action_xacthuc_tinhlai_hocphi_hocsinh()
+        days = ngay_util.func_get_cacngay_trong_thang(int(self.nam_id.name), int(self.thang_id.name))
+        ngay_dauthang = days[0]
+        ngay_cuoithang = days[-1]  # Tối ưu: Dùng chỉ số -1 để lấy ngày cuối tháng nhanh gọn
+        hocsinh = self.hocsinh_id
+        if ngay_cuoithang > hocsinh.ngay_nghihoc:
+            ngay_cuoithang = hocsinh.ngay_nghihoc
+
+        coso = self.coso_id
+        hocsinh = self.hocsinh_id
+        nghiles_thangtruoc = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, coso, ['0'],
+                                                                                        ngay_dauthang,
+                                                                                        ngay_cuoithang)
+
+        thu_bantrus = hocsinh.thu_bantru_ids
+        ca_canthieps = self.func_get_danhmuc_ca_cua_hocsinh(hocsinh)
+        ca2thus = self.func_get_dm_ca_hocsinh_ngay_trong_tuan(hocsinh, ca_canthieps)
+        ngay_dihoc_cosos = (hocsinh_util
+                            .func_get_ngay_dihoc_cua_coso(coso, nghiles_thangtruoc, ngay_dauthang, ngay_cuoithang))
+        nhatruong_nghi_bu_thangtruoc = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, coso, ['2'],
+                                                                                          ngay_dauthang,
+                                                                                          ngay_cuoithang)
+
+        nhatruong_nghi_thangtruoc = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, coso, ['1'],
+                                                                                       ngay_dauthang,
+                                                                                       ngay_cuoithang)
+
+        self.func_hoantra_hocphi_thang_truoc(coso
+                                             , nghiles_thangtruoc
+                                             , self
+                                             , hocsinh
+                                             , thu_bantrus
+                                             , ca_canthieps
+                                             , ca2thus
+                                             , ngay_dauthang
+                                             , ngay_cuoithang
+                                             , ngay_dihoc_cosos
+                                             , nhatruong_nghi_bu_thangtruoc
+                                             , nhatruong_nghi_thangtruoc)
+
+
+
     def _compute_is_dl_locked(self):
         for record in self:
             coso = record.coso_id
@@ -157,12 +286,15 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
         for record in self:
             record.songay_dihoc = str(record.ngay_dihoc)+"/"+str(record.ngay_dihoc_coso)
 
-    @api.depends("trangthai")
+    @api.depends("trangthai","is_chot_hocphi")
     def _compute_is_show_tinhtoan_lai(self):
 
         for record in self:
-            if record.trangthai=="-1":
-                record.is_show_tinhtoan_lai = True
+            if record.trangthai == "-1":
+                if record.is_chot_hocphi == False:
+                    record.is_show_tinhtoan_lai = True
+                else:
+                    record.is_show_tinhtoan_lai = False
             else:
                 record.is_show_tinhtoan_lai =False
 
@@ -272,21 +404,19 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 # tong giảm ca can thiệp
                 ca = hp.func_hocphi_giam_ca()
                 # tổng giảm
-                hocphi = hp.hocphi
-                hocphi_giam = (bantru + ca) - hp.tien_duoctru
                 tien_giam = ((bantru/100)* tyle_bantru) +((ca/100)* tyle_ca)
                 hp.hocphi_giam = tien_giam
-                hp.hocphi_phaidong = hocphi - hocphi_giam
+                hp._compute_hocphi()
             else:
                 # Giam theo tong khong chia tung khoan rieng
                 bantru = hp.func_hocphi_giam_bantru()
                 # tong giảm ca can thiệp
                 ca = hp.func_hocphi_giam_ca()
-                tien_duoctru = hp.tien_duoctru
-                hocphi = (bantru + ca) - tien_duoctru
-                sotien_giam = (hocphi / 100) * hp.tyle_giamhocphi
+                #tien_duoctru = hp.tien_duoctru
+
+                sotien_giam = ((bantru + ca) / 100) * hp.tyle_giamhocphi
                 hp.hocphi_giam = sotien_giam
-                hp.hocphi_phaidong = hocphi - sotien_giam
+                hp._compute_hocphi()
 
 
 
@@ -321,7 +451,8 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
 
 
 
-    @api.depends("hocphi_bantru_ids","hocphi_ca_ids","hocphi_duoctru_ids","hocphi_giam")
+    @api.depends("hocphi_bantru_ids","hocphi_ca_ids","hocphi_duoctru_ids","hocphi_giam"
+        ,"is_giamhocphi_dacthu","tyle_giamhocphi","tyle_giamhocphi_bantru","tyle_giamhocphi_ca")
     def _compute_hocphi_phaidong(self):
         for hp in self:
             hp.hocphi_phaidong = hp.hocphi - hp.hocphi_giam
@@ -469,6 +600,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 if new_state in ['10', '11','12']:
                     # cập nhật đã đóng tiền:
                     vals['ngay_dong_hocphi'] = datetime.today()
+                    vals['loai'] = new_state
                 elif new_state in ['-1','0','2']:
                     vals['ngay_dong_hocphi'] = False
 

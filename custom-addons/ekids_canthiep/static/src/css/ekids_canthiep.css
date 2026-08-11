@@ -101,3 +101,8 @@
     transform: translateY(-2px);
     color: #ffffff;
 }
+
+/* ấn ô search trong list view  */
+.o_list_view.hide_search_bar .o_control_panel {
+    display: none !important;
+}
