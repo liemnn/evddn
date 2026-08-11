@@ -570,6 +570,24 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         return result
 
 
+    def action_khoitao_lai_kehoach(self):
+        self.ensure_one()
+        hocsinh = self.hocsinh_id
+
+
+        if not hocsinh:
+            raise UserError("Không tìm thấy thông tin Học sinh để khởi tạo lại kế hoạch!")
+
+        # BƯỚC 2: Xóa kế hoạch cũ
+        self.unlink()
+
+        # Ép Odoo xóa hoàn toàn bản ghi xuống DB ngay lập tức để làm sạch bộ nhớ Cache
+        self.env.flush_all()
+
+        url =hocsinh.action_lap_kehoach()
+        return url
+
+
 
 
     # 🌟 BỎ HOÀN TOÀN decorator @api.model ở đây

@@ -112,7 +112,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         if ketluan:
             kehoach = self.func_tao_kehoach_macdinh(ketluan)
             if kehoach:
-                return {
+                url= {
                     'type': 'ir.actions.act_window',
                     'name': 'LẬP KẾ HOẠCH',
                     'res_model': 'ekids.kehoach',
@@ -128,6 +128,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                         'default_hocsinh_id': self.id
                     },
                 }
+                return url
 
     def func_tao_kehoach_macdinh(self,ketluan):
 
