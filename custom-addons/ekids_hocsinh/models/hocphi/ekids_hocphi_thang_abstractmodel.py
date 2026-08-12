@@ -1,5 +1,6 @@
 from odoo import api, fields, models
 from datetime import datetime,date, timedelta
+import math
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -576,7 +577,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                     if dm_ca.is_tien_trongoi == True:
                         # dongia = (dm_ca.tien/len(ngay_dihoc_kehoachs))
                         soca_tren_ngay = soca /len(ngay_dihoc_kehoachs)
-                        lamtron =int(soca_tren_ngay)
+                        lamtron = math.ceil(soca_tren_ngay)
                         if lamtron <= 0:
                             tien = dm_ca.tien
                         else:

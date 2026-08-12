@@ -35,11 +35,7 @@ class HocSinhCaCanThiep(models.Model):
 
     desc = fields.Html(string="Ghi chú")
 
-    tu_ngay = fields.Date(string="Từ ngày")
 
-    # Default = Hôm nay + 31 ngày (Dùng hàm lambda để tính toán nhanh)
-
-    den_ngay = fields.Date(string="Đến ngày")
 
 
     @api.onchange('dm_ca_id')
