@@ -364,7 +364,9 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                     domain = expression.AND([domain, domain_trangthai])
                 if is_admin == False:
                     domain_gv_pheduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
-                    domain = expression.AND([domain, domain_gv_pheduyet])
+                    domain_gv_lap = [('gv_lapkehoach_id', '=', giaovien.id)]
+                    domain_gv =expression.OR([domain_gv_pheduyet, domain_gv_lap])
+                    domain = expression.AND([domain, domain_gv])
                 url["domain"] = domain
 
             else:

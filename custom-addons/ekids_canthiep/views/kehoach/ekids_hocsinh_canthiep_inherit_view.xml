@@ -24,23 +24,23 @@
                         decoration-danger="trangthai == '3'" width="100" class="text-wrap"/>
                 <field name="trangthai_kehoach" string="Kế hoạch" widget="badge" class="text-wrap"/>
                 <field name="ten_kehoach" string="Của tháng" class="text-wrap"/>
-                <field name="ngay_conlai_kehoach"
+
+
+                <field name="tong_kehoach_dang_canthiep" string="Đang can thiệp"/>
+                 <field name="ngay_conlai_kehoach"
                        string="Còn lại(ngày)"
-                       width="70"
+                       width="90"
                        class="fw-bold kh-blink-alert"
                        decoration-danger="ngay_conlai_kehoach &gt; 0 and ngay_conlai_kehoach &lt;= 2"
                        decoration-warning="ngay_conlai_kehoach &gt;= 3 and ngay_conlai_kehoach &lt;= 10"
                        decoration-success="ngay_conlai_kehoach &gt; 10"/>
 
-                <field name="tong_kehoach_da_canthiep" string="Đang can thiệp"/>
-
-
                 <button name="action_xem_danhsach_kehoach"
                         string=""
                         type="object"
-                        class="btn-info btn-sm text-white"
+                        class="btn-success btn-sm fw-bold text-uppercase"
                         icon="fa-list-ul"
-
+                        invisible="tong_kehoach_dang_canthiep==0"
                         context="{'default_context_type':'3','default_context_trangthai':['1','-1'],'default_context_trangthai_pheduyet':['1']}"
                         title="Danh sách [Kế hoạch] Đã can thiệp"
                 />
@@ -52,6 +52,18 @@
                         icon="fa-play-circle"
                         invisible="is_canthiep==False"
                         title="Bấm vào đây để mở bảng đánh giá và ghi nhận kết quả học tập hàng ngày của trẻ"
+                />
+
+                <field name="tong_kehoach_da_canthiep" string="Đã kết thúc" width="70"/>
+
+                <button name="action_xem_danhsach_kehoach"
+                    string=""
+                    type="object"
+                    class="btn-secondary btn-sm"
+                    icon="fa-list-ul"
+                    invisible="tong_kehoach_da_canthiep==0"
+                    context="{'default_context_type':'5','default_context_trangthai':['-1']}"
+                    title="Danh sách [Kế hoạch] đã kết thúc"
                 />
 
             </list>
