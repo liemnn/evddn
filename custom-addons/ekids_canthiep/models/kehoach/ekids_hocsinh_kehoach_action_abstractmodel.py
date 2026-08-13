@@ -294,100 +294,58 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
             )
 
-
     def action_xem_danhsach_kehoach(self):
-        user = self.env.user
-        is_admin = user.has_group('base.group_system')
-        context_type = self.env.context.get("default_context_type")
-        context_trangthai = self.env.context.get("default_context_trangthai")
-        context_trangthai_pheduyet = self.env.context.get("default_context_trangthai_pheduyet")
-
+        self.ensure_one()
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
-        if giaovien:
-            list_view_id = self.env.ref('ekids_canthiep.kehoach_list').id
-            form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
-            kanban_view_id = self.env.ref('ekids_canthiep.kehoach_kanban').id
-            if context_type =="1":
-                #Danh sách lập kế hoạch
-                list_view_id = self.env.ref('ekids_canthiep.lap_kehoach_list').id
+        if not giaovien:
+            return False
 
+        env_ctx = self.env.context
+        context_type = env_ctx.get("default_context_type")
+        is_admin = self.env.user.has_group('base.group_system')
 
-            url= {
-                'type': 'ir.actions.act_window',
-                'name': 'DANH SÁCH',
-                'res_model': 'ekids.kehoach',
-                'view_mode': 'list,kanban,form',
-                'views': [(list_view_id, 'list'),(kanban_view_id, 'kanban'),(form_view_id, 'form')],
-                'target': 'current',
-                'context': {
-                    'default_coso_id': self.coso_id.id,
-                    'default_hocsinh_id': self.id
-                },
-            }
-            if context_type =="1":
-                # danh sách lập kế hoạch
-                domain =[('hocsinh_id', '=', self.id)]
-                if is_admin == False:
-                    domain_gv= [('gv_lapkehoach_id','=',giaovien.id)]
-                    domain = expression.AND([domain, domain_gv])
-                url["domain"]=domain
-            elif context_type=="2":
-                # danh sách cần phê duyệt
-                domain = [('hocsinh_id', '=', self.id)]
-                if context_trangthai:
-                    domain_trangthai =[('trangthai', 'in', context_trangthai)]
-                    domain = expression.AND([domain, domain_trangthai])
-                if context_trangthai_pheduyet:
-                    domain_trangthai = [('trangthai_pheduyet', 'in', context_trangthai_pheduyet)]
-                    domain = expression.AND([domain, domain_trangthai])
-                if is_admin == False:
-                    domain_gv_pheduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
-                    domain = expression.AND([domain, domain_gv_pheduyet])
+        # 1. Chọn View ID
+        list_view_xml = 'ekids_canthiep.lap_kehoach_list' if context_type == "1" else 'ekids_canthiep.kehoach_list'
+        list_view_id = self.env.ref(list_view_xml).id
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_form').id
+        kanban_view_id = self.env.ref('ekids_canthiep.kehoach_kanban').id
 
-                url["domain"] = domain
+        # 2. Xây dựng Domain cơ bản
+        domain = [('hocsinh_id', '=', self.id)]
 
-            elif context_type == "4":
-                # Danh sách tất cả kế hoạch do mình phê duyệt
-                # danh sách cần phê duyệt
-                domain = [('hocsinh_id', '=', self.id)]
-                if is_admin == False:
-                    domain_gv_pheduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
-                    domain = expression.AND([domain, domain_gv_pheduyet])
-                url["domain"] = domain
+        # Bổ sung trạng thái từ Context nếu có
+        if env_ctx.get("default_context_trangthai"):
+            domain.append(('trangthai', 'in', env_ctx["default_context_trangthai"]))
+        if env_ctx.get("default_context_trangthai_pheduyet") and context_type not in ["1", "5"]:
+            domain.append(('trangthai_pheduyet', 'in', env_ctx["default_context_trangthai_pheduyet"]))
 
-            elif context_type == "5":
-                # Danh sách tất cả kế hoạch ketthuc do mình phê duyệt
-                # danh sách cần phê duyệt
-                domain = [('hocsinh_id', '=', self.id)]
-                if context_trangthai:
-                    domain_trangthai = [('trangthai', 'in', context_trangthai)]
-                    domain = expression.AND([domain, domain_trangthai])
-                if is_admin == False:
-                    domain_gv_pheduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
-                    domain_gv_lap = [('gv_lapkehoach_id', '=', giaovien.id)]
-                    domain_gv =expression.OR([domain_gv_pheduyet, domain_gv_lap])
-                    domain = expression.AND([domain, domain_gv])
-                url["domain"] = domain
+        # 3. Phân quyền theo Giáo viên (Nếu không phải Admin)
+        if not is_admin:
+            gv_lap_domain = [('gv_lapkehoach_id', '=', giaovien.id)]
+            gv_duyet_domain = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
 
-            else:
-                # danh sách đang can thiệp
-                domain = [('hocsinh_id', '=', self.id)]
-                if context_trangthai:
-                    domain_trangthai =[('trangthai', 'in', context_trangthai)]
-                    domain = expression.AND([domain, domain_trangthai])
-                if context_trangthai_pheduyet:
-                    domain_trangthai = [('trangthai_pheduyet', 'in', context_trangthai_pheduyet)]
-                    domain = expression.AND([domain, domain_trangthai])
+            if context_type == "1":
+                domain.extend(gv_lap_domain)
+            elif context_type in ["2", "4"]:
+                domain.extend(gv_duyet_domain)
+            elif context_type in ["5", None]:  # Type 5 hoặc mặc định (Đang can thiệp)
+                domain = expression.AND([domain, expression.OR([gv_duyet_domain, gv_lap_domain])])
 
-                if is_admin == False:
-                    domain_gv_lapkehoach= [('gv_lapkehoach_id','=',giaovien.id)]
-                    domain_gv_kiemduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
-                    domain_gv = expression.OR([domain_gv_lapkehoach, domain_gv_kiemduyet])
-
-                    domain = expression.AND([domain, domain_gv])
-
-                url["domain"] = domain
-            return url
+        # 4. Trả về Window Action
+        url= {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH SÁCH KẾ HOẠCH',
+            'res_model': 'ekids.kehoach',
+            'view_mode': 'list,kanban,form',
+            'views': [(list_view_id, 'list'), (kanban_view_id, 'kanban'), (form_view_id, 'form')],
+            'target': 'current',
+            'domain': domain,
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'default_hocsinh_id': self.id,
+            },
+        }
+        return url
 
     def action_xem_danhsach_kehoach_can_kiemduyet_ketqua(self):
         self._compute_tong_kehoach_dang_canthiep()
