@@ -44,7 +44,7 @@ class LuongDMChiTra(models.Model):
          ("1", "Giao  nhiệm vụ(KPI)")],string= "Lựa chọn loại [Điều kiện] áp dụng")
     is_show_dieukien_loai = fields.Boolean(compute="_compute_is_show_dieukien_loai")
 
-    tien = fields.Char(string="Tiền")
+    tien = fields.Float(string='Số tiền (vnđ)', digits=(10, 0))
 
     formula =fields.Text(string="Giá trị/Công thức")
 
