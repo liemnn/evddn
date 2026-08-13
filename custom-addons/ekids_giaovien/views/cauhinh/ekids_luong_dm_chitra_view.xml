@@ -10,6 +10,7 @@
                 <field name="sequence" widget="handle"/>
                 <field name="name" width="350"/>
                 <field name="code" width="100"/>
+                <field name="tien" string="Tiền (vnđ)"/>
                 <field name="luong_cocau"/>
                 <field name="luong_loai" string="Phần lương"/>
                 <field name="dieukien_loai" string="Loại" optional="hide"/>
@@ -143,6 +144,7 @@
                              <separator string="3. GIÁ TRỊ/CÔNG THỨC TÍNH" />
                                 <field name="formula"/>
                                 <field name="desc"/>
+                                <field name="tien" string="Tiền (vnđ) tối đa nhận"/>
                          </group>
 
 
