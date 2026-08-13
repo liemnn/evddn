@@ -82,6 +82,8 @@ class HocSinhInherit(models.Model
     ngay_conlai_kehoach = fields.Integer(compute="_compute_ngay_conlai_kehoach",string="Ngày còn lại [Kế hoạch]")
 
 
+
+
     def _compute_ngay_conlai_kehoach(self):
         today = date.today()
         for hs in self:
@@ -222,8 +224,7 @@ class HocSinhInherit(models.Model
                 tong =0
                 if hs.kehoach_ids:
                     for kh in hs.kehoach_ids:
-                        if (kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP
-                                or kh.trangthai == kehoach_util.KEHOACH_HET_HIEULUC):
+                        if kh.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
                             if is_admin:
                                 tong += 1
                             elif (kh.gv_lapkehoach_id.id == giaovien.id):
@@ -231,6 +232,8 @@ class HocSinhInherit(models.Model
                 hs.tong_kehoach_da_canthiep = tong
             else:
                 hs.tong_kehoach_da_canthiep = 0
+
+
 
 
     def _compute_is_tao_ketluan(self):

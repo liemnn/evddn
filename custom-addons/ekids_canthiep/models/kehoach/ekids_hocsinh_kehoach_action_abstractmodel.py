@@ -355,6 +355,18 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                     domain = expression.AND([domain, domain_gv_pheduyet])
                 url["domain"] = domain
 
+            elif context_type == "5":
+                # Danh sách tất cả kế hoạch ketthuc do mình phê duyệt
+                # danh sách cần phê duyệt
+                domain = [('hocsinh_id', '=', self.id)]
+                if context_trangthai:
+                    domain_trangthai = [('trangthai', 'in', context_trangthai)]
+                    domain = expression.AND([domain, domain_trangthai])
+                if is_admin == False:
+                    domain_gv_pheduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
+                    domain = expression.AND([domain, domain_gv_pheduyet])
+                url["domain"] = domain
+
             else:
                 # danh sách đang can thiệp
                 domain = [('hocsinh_id', '=', self.id)]
