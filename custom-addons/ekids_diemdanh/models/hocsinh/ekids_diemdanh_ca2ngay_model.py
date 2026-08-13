@@ -66,14 +66,23 @@ class DiemDanhCa2Ngay(models.Model):
 
     def _compute_is_xoa(self):
         today =date.today()
+
         for rec in self:
             is_xoa=False
             if rec.ngay:
-                if today.month > rec.ngay.month:
-                    is_xoa =False
-                else:
-                    if not rec.hocsinh_ca_canthiep_id:
+                if (today.month == rec.ngay.month
+                        or today.year == rec.ngay.year):
+                    ca = rec.hocsinh_ca_canthiep_id
+                    if not ca:
+                        # TH1: tu tao ra: hoc bu..day tang cuong
                         is_xoa = True
+                    else:
+                         # TH2: Có ca tao ra nhung het hieu luc
+                        trangthai = ca.func_tinhtoan_trangthai_theo_ngay(rec.ngay,rec.ngay)
+                        if trangthai == "0":
+                            # da het hieu luc
+                            is_xoa = True
+
             rec.is_xoa =is_xoa
 
 

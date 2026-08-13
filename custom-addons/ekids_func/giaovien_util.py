@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta,date
 from datetime import datetime, timedelta,date
 from dateutil.relativedelta import relativedelta
-from . import  coso_util,ngay_util,string_util
+from . import  coso_util,ngay_util,string_util,hocsinh_util
 from odoo.osv import expression
 
 def func_get_giaovien_tu_user(self):
@@ -393,6 +393,64 @@ def sum_tong_giaovien_trong_khoang_thoigian(self, coso_ids,tu_ngay,den_ngay):
         groupby=['giaovien_id']
     )
     return len(result)
+
+
+
+def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay_giaovien(self,giaovien_id,ngay):
+
+    weekday = ngay.weekday() + 2
+    thu_field = 't' + str(weekday)
+    ca_canthieps = func_get_giaovien_ca_canthieps(self,giaovien_id,ngay,ngay)
+    if ca_canthieps:
+        for ca_canthiep in ca_canthieps:
+            is_canthiep = getattr(ca_canthiep,thu_field)
+            if is_canthiep:
+                count = self.env['ekids.diemdanh_ca2ngay'].search_count([
+                    ('giaovien_id', '=', giaovien_id),
+                    ('ngay', '=', ngay),
+                    ('hocphi_dm_ca_id', '=', ca_canthiep.dm_ca_id.id),
+
+                ])
+                if count <= 0:
+                    data={
+
+                        'hocphi_dm_ca_id': ca_canthiep.dm_ca_id.id,
+                        'ngay': ngay,
+                        'tu':ca_canthiep.tu,
+                        'den': ca_canthiep.den,
+                        'giaovien_id': giaovien_id,
+                        'hocsinh_id': ca_canthiep.hocsinh_id.id,
+                        'trangthai': '0',
+
+                    }
+                    self.env['ekids.diemdanh_ca2ngay'].create(data)
+
+
+def func_get_giaovien_ca_canthieps(self, giaovien_id, ngay_dauthang, ngay_cuoithang):
+    # 1. Các điều kiện cơ bản (luôn là AND)
+    domain = [
+        ('giaovien_id', '=', giaovien_id),
+        ('dm_ca_id.trangthai', '=', '1')
+    ]
+
+    # 2. Điều kiện về ngày bắt đầu (tu_ngay <= ngay_cuoithang hoặc chưa có ngày bắt đầu)
+
+    domain_tu_ngay = [('tu_ngay', '=', False)]
+    domain_tu_ngay_dk = [('tu_ngay', '<=', ngay_cuoithang)]
+    domain_tu_ngay = expression.OR([domain_tu_ngay, domain_tu_ngay_dk])
+
+    # 3. Điều kiện về ngày kết thúc (den_ngay >= ngay_dauthang hoặc chưa có ngày kết thúc)
+    domain_denngay = [('den_ngay', '=', False)]
+    domain_denngay_dk = [('den_ngay', '>=', ngay_dauthang)]
+    domain_denngay = expression.OR([domain_denngay, domain_denngay_dk])
+
+    # 4. Kết hợp lại bằng expression.AND
+    # Đây là cách viết: base_domain AND start_domain AND end_domain
+    domain = expression.AND([domain, domain_tu_ngay, domain_denngay])
+
+    ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search(domain)
+
+    return ca_canthieps
 
 
 

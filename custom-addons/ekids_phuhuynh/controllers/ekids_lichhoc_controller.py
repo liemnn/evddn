@@ -83,9 +83,7 @@ class LichHocController(http.Controller):
                 }
                 data.append(values)
 
-        else:
-            #không có ca trong ngay
-            ca2thus =hocsinh_util.func_get_tinhtoan_ca2thu_theo_thu(hocsinh,ngay)
+
 
 
 

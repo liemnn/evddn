@@ -11,6 +11,31 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
+def func_get_hocsinh_ca_canthieps(self, hocsinh, ngay_dauthang, ngay_cuoithang):
+    # 1. Các điều kiện cơ bản (luôn là AND)
+    domain = [
+        ('hocsinh_id', '=', hocsinh.id),
+        ('dm_ca_id.trangthai', '=', '1')
+    ]
+
+    # 2. Điều kiện về ngày bắt đầu (tu_ngay <= ngay_cuoithang hoặc chưa có ngày bắt đầu)
+
+    domain_tu_ngay = [('tu_ngay', '=', False)]
+    domain_tu_ngay_dk = [('tu_ngay', '<=', ngay_cuoithang)]
+    domain_tu_ngay = expression.OR([domain_tu_ngay, domain_tu_ngay_dk])
+
+    # 3. Điều kiện về ngày kết thúc (den_ngay >= ngay_dauthang hoặc chưa có ngày kết thúc)
+    domain_denngay = [('den_ngay', '=', False)]
+    domain_denngay_dk = [('den_ngay', '>=', ngay_dauthang)]
+    domain_denngay = expression.OR([domain_denngay, domain_denngay_dk])
+
+    # 4. Kết hợp lại bằng expression.AND
+    # Đây là cách viết: base_domain AND start_domain AND end_domain
+    domain = expression.AND([domain, domain_tu_ngay, domain_denngay])
+
+    ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search(domain)
+
+    return ca_canthieps
 def func_get_dihoc_diemdanh(self,hocsinh,ngay):
 
     nam =ngay.year
@@ -216,13 +241,7 @@ def func_get_cas_tangcuong_tatca_hocsinh(self, coso,nam,thang):
 
 
 
-def func_get_tinhtoan_ca2thu_theo_thu(self,hocsinh,day):
-    weekday = day.weekday() + 2
-    tinhtoan_ca2thus = self.env['ekids.tinhtoan_ca2thu'].search([
-        ('hocsinh_id', '=',hocsinh.id),
-        ('thu', '=', weekday),
-    ])
-    return tinhtoan_ca2thus
+
 
 def func_get_so_hocsinh_trong_thang(self,coso_id,nam,thang):
     days = ngay_util.func_get_cacngay_trong_thang(int(nam), int(thang))
@@ -350,12 +369,13 @@ def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay(self,hocsinh,ngay):
     # 3. Xử lý logic: Nếu đã nghỉ học và ngày đang xét sau ngày nghỉ học -> Bỏ qua
     if d_nghihoc and d_ngay > d_nghihoc:
         return
+    # B1: xoa cac ca khong con hieu luc
+    func_xoa_diemdanh_ca2ngay_khi_ca_canthiep_het_hieuluc(self, hocsinh, ngay)
+    # B2: Tao moi ca default
 
     weekday = ngay.weekday() + 2
     thu_field = 't' + str(weekday)
-    ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search([
-                        ('hocsinh_id', '=', hocsinh.id)
-                        ])
+    ca_canthieps = func_get_hocsinh_ca_canthieps(self,hocsinh,ngay,ngay)
     if ca_canthieps:
         for ca_canthiep in ca_canthieps:
             is_canthiep = getattr(ca_canthiep,thu_field)
@@ -401,12 +421,13 @@ def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay_nghiphep(self,hocsinh,ngay):
     # 3. Xử lý logic: Nếu đã nghỉ học và ngày đang xét sau ngày nghỉ học -> Bỏ qua
     if d_nghihoc and d_ngay > d_nghihoc:
         return
-
+    # B1: xoa cac ca khong con hieu luc
+    func_xoa_diemdanh_ca2ngay_khi_ca_canthiep_het_hieuluc(self, hocsinh, ngay)
+    # B2: Tao moi ca default
     weekday = ngay.weekday() + 2
     thu_field = 't' + str(weekday)
-    ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search([
-                        ('hocsinh_id', '=', hocsinh.id)
-                        ])
+    ca_canthieps = func_get_hocsinh_ca_canthieps(self,hocsinh,ngay,ngay)
+
     if ca_canthieps:
         for ca_canthiep in ca_canthieps:
             is_canthiep = getattr(ca_canthiep,thu_field)
@@ -440,6 +461,27 @@ def func_tao_macdinh_diemdanh_ca2ngay_theo_ngay_nghiphep(self,hocsinh,ngay):
                     self.env['ekids.diemdanh_ca2ngay'].create(data)
                 else:
                     setattr(ca2ngay,"trangthai",trangthai)
+
+def func_xoa_diemdanh_ca2ngay_khi_ca_canthiep_het_hieuluc(self,hocsinh,ngay):
+    today = date.today()
+    ca2ngays = self.env['ekids.diemdanh_ca2ngay'].search([
+        ('hocsinh_id', '=', hocsinh.id),
+        ('ngay', '=', ngay),
+
+
+    ])
+    if ca2ngays:
+        for ca2ngay in ca2ngays:
+            ca_canthiep = ca2ngay.hocsinh_ca_canthiep_id
+            if ca_canthiep:
+                trangthai = ca_canthiep.func_tinhtoan_trangthai_theo_ngay(ngay,ngay)
+                if trangthai == '0':
+                    # xoa di cac ca can thiep khong con hieu luc
+                    if (today.year == ngay.year
+                        and today.month == ngay.month):
+                        ca2ngay.unlink()
+
+
 
 
 def func_capnhat_macdinh_diemdanh_ca2ngay_theo_ngay_nghiphep(self,hocsinh,ngay):
