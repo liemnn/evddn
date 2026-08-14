@@ -142,13 +142,13 @@
                         </group>
                          <group>
                              <separator string="3. GIÁ TRỊ/CÔNG THỨC TÍNH" />
-                                <field name="formula"/>
+                                <field name="formula" string="Giá trị/Công thức (để tính ra lương)"/>
                                 <field name="desc"/>
-                                <field name="tien" string="Tiền (vnđ) tối đa nhận"/>
+                                <field name="tien" string="Mô tả số tiền tối đa nhận (chú ý: Chỉ để mô tả/làm rõ)"/>
                          </group>
 
 
-                        <group col="2" >
+                        <group col="2">
                              <separator string="4. CÁC BIẾN CÓ THỂ SỬ DỤNG KHI ĐƯA VÀO CÔNG THỨC" />
                             <group>
                                 <di>

@@ -243,9 +243,9 @@ def func_get_cas_tangcuong_tatca_hocsinh(self, coso,nam,thang):
 
 
 
-def func_get_so_hocsinh_trong_thang(self,coso_id,nam,thang):
+def func_get_so_hocsinh_trong_thang_tinhluong(self,coso_id,nam,thang):
     days = ngay_util.func_get_cacngay_trong_thang(int(nam), int(thang))
-    tu_ngay = days[0]
+    tu_ngay = date(int(nam), int(thang),15)
     den_ngay = days[len(days) - 1]
     coso_ids = [coso_id]
 
@@ -279,6 +279,7 @@ def func_danhsach_hocsinh_khoang_thoigian(self, coso_ids, tu_ngay, den_ngay):
     hocsinhs = self.env['ekids.hocsinh'].search(domain)
 
     return hocsinhs
+
 
 
 
