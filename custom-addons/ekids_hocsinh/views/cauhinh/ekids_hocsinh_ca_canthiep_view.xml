@@ -33,14 +33,18 @@
                     <field name="name"/>
                     <field name="tu"/>
                     <field name="den"/>
+                    <field name="tu_ngay"/>
+                    <field name="den_ngay"/>
                     <field name="dm_ca_id"/>
                     <field name="giaovien_id"/>
+                    <field name="trangthai"/> <!-- BỔ SUNG TRƯỜNG NÀY -->
 
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click oe_kanban_card d-flex flex-column position-relative"
                                  style="border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 8px;">
 
+                                <!-- Nút menu dropdown (Xóa) -->
                                 <div class="o_dropdown_kanban dropdown" style="position: absolute; right: 10px; top: 10px; z-index: 10;">
                                     <a class="dropdown-toggle o-no-caret btn btn-sm text-muted" role="button" data-bs-toggle="dropdown" href="#">
                                         <i class="fa fa-ellipsis-v fa-lg"></i>
@@ -54,32 +58,69 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3 pe-4">
-                                    <strong style="font-size: 16px; color: #1e3a8a; font-weight: 800;">
+                                <!-- TÊN CA & HUY HIỆU TRẠNG THÁI -->
+                                <div class="d-flex justify-content-between align-items-start mb-2 pe-4">
+                                    <strong style="font-size: 15px; color: #1e3a8a; font-weight: 800;">
                                         <i class="fa fa-tag me-1" style="color: #3b82f6;"></i>
                                         <field name="dm_ca_id"/>
                                     </strong>
+
+                                    <!-- HIỂN THỊ HUY HIỆU TRẠNG THÁI -->
+                                    <div>
+                                        <t t-if="record.trangthai.raw_value == '1'">
+                                            <span class="badge bg-success" style="font-size: 10px; padding: 4px 8px;">Đang hoạt động</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge bg-secondary" style="font-size: 10px; padding: 4px 8px;">Hết hiệu lực</span>
+                                        </t>
+                                    </div>
                                 </div>
 
-                                <div class="mb-3 p-2" style="background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px;">
+                                <!-- KHUNG THỜI GIAN & THỨ TRONG TUẦN -->
+                                <div class="mb-2 p-2" style="background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px;">
                                     <div class="d-flex justify-content-center align-items-center mb-1" style="font-size: 14px; font-weight: 700; color: #475569;">
                                         <i class="fa fa-clock-o me-2" style="color: #f59e0b;"></i>
                                         <field name="tu"/>
                                         <i class="fa fa-long-arrow-right mx-2 text-muted" style="opacity: 0.5; font-size: 11px;"></i>
                                         <field name="den"/>
                                     </div>
-                                    <div class="text-center mt-1" style="font-size: 16px; font-weight: 800; color: #10b981;">
-                                        <i class="fa fa-calendar-check-o me-1"></i>
+                                    <div class="text-center mt-1" style="font-size: 15px; font-weight: 800; color: #10b981;">
+                                        <i class="fa fa-calendar-o me-1"></i>
                                         <field name="name"/>
                                     </div>
                                 </div>
 
+                                <!-- KHUNG HIỆU LỰC ÁP DỤNG (TỪ NGÀY - ĐẾN NGÀY) -->
+                                <div class="mb-3 px-2 py-1.5" style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; font-size: 12px; color: #1e40af; font-weight: 600;">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span>
+                                            <i class="fa fa-calendar-check-o me-1 text-primary"></i> Hiệu lực:
+                                        </span>
+                                        <span>
+                                            <t t-if="record.tu_ngay.raw_value">
+                                                <field name="tu_ngay"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="text-muted">Đầu</span>
+                                            </t>
+                                            <i class="fa fa-long-arrow-right mx-1 text-muted"></i>
+                                            <t t-if="record.den_ngay.raw_value">
+                                                <field name="den_ngay"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="text-muted">Nay</span>
+                                            </t>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- PHẦN DƯỚI: GIÁO VIÊN -->
                                 <div class="o_kanban_record_bottom mt-auto pt-2" style="border-top: 1px dashed #e2e8f0;">
                                     <div class="oe_kanban_bottom_left d-flex align-items-center w-100" style="font-size: 13px; font-weight: 600; color: #475569;">
                                         <div class="me-2 d-flex align-items-center justify-content-center rounded-circle" style="width: 24px; height: 24px; background-color: #f1f5f9;">
                                             <i class="fa fa-user text-secondary"></i>
                                         </div>
-                                        Giáo viên:<field name="giaovien_id"/>
+                                        Giáo viên: <field name="giaovien_id"/>
                                     </div>
                                 </div>
 
