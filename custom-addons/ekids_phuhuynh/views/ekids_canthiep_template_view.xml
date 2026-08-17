@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================= -->
+    <!-- MÀN HÌNH 1: DANH SÁCH KẾ HOẠCH CHO APP PHỤ HUYNH          -->
+    <!-- ========================================================= -->
+    <template id="ekids_phuhuynh.kehoach_list_mobile_template" name="Danh sách Kế hoạch Mobile">
+        <t t-call="web.layout">
+            <t t-set="head">
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+                <style>
+                    body {
+                        background-color: #F1F5F9;
+                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                        margin: 0;
+                        padding-bottom: 70px;
+                        color: #1E293B;
+                    }
+
+                    /* Header App */
+                    .app-top-navbar {
+                        background: #2563EB;
+                        color: #FFFFFF;
+                        padding: 14px 16px;
+                        display: flex;
+                        align-items: center;
+                        position: sticky;
+                        top: 0;
+                        z-index: 100;
+                        box-shadow: 0 2px 10px rgba(37, 99, 235, 0.2);
+                    }
+                    .btn-app-back {
+                        background: rgba(255, 255, 255, 0.2);
+                        color: #FFFFFF;
+                        border: none;
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 15px;
+                        text-decoration: none;
+                    }
+                    .app-header-title {
+                        flex-grow: 1;
+                        text-align: center;
+                        font-weight: 700;
+                        font-size: 17px;
+                        margin-right: 34px;
+                    }
+
+                    /* Banner thông tin học sinh ở đầu trang */
+                    .student-info-banner {
+                        background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+                        color: #FFFFFF;
+                        margin: 12px 14px;
+                        padding: 14px 16px;
+                        border-radius: 14px;
+                        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+                    /* Thẻ Card Kế Hoạch */
+                    .plan-card-item {
+                        background: #FFFFFF;
+                        margin: 12px 14px;
+                        border-radius: 14px;
+                        border: 1px solid #E2E8F0;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+                        text-decoration: none;
+                        color: inherit;
+                        display: block;
+                        overflow: hidden;
+                        transition: transform 0.15s ease, background-color 0.15s ease;
+                    }
+                    .plan-card-item:active {
+                        transform: scale(0.985);
+                        background-color: #F8FAFC;
+                    }
+
+                    .card-header-bar {
+                        padding: 12px 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        border-bottom: 1px solid #F1F5F9;
+                    }
+                    .plan-title-box {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
+                    .plan-icon-square {
+                        width: 38px;
+                        height: 38px;
+                        border-radius: 10px;
+                        background: #EFF6FF;
+                        color: #2563EB;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 17px;
+                        flex-shrink: 0;
+                    }
+                    .plan-name-text {
+                        font-size: 16px;
+                        font-weight: 800;
+                        color: #0F172A;
+                    }
+
+                    /* Badge Trạng Thái */
+                    .status-tag {
+                        font-size: 11.5px;
+                        font-weight: 700;
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                        white-space: nowrap;
+                    }
+                    .st-canthiep { background: #DCFCE7; color: #15803D; }
+                    .st-kiemduyet { background: #FEF3C7; color: #B45309; }
+                    .st-hethieuluc { background: #FEE2E2; color: #B91C1C; }
+                    .st-danglap { background: #F1F5F9; color: #475569; }
+
+                    .card-body-section {
+                        padding: 12px 14px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+
+                    .student-row-detail {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        font-size: 14px;
+                    }
+                    .student-name-val {
+                        font-weight: 800;
+                        color: #1E40AF;
+                    }
+
+                    .time-summary-box {
+                        background: #F8FAFC;
+                        border: 1px solid #E2E8F0;
+                        border-radius: 10px;
+                        padding: 10px 12px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 6px;
+                    }
+                    .time-duration-row {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        font-size: 13px;
+                        color: #334155;
+                    }
+                    .days-badge {
+                        font-size: 12px;
+                        font-weight: 700;
+                        background: #E2E8F0;
+                        color: #334155;
+                        padding: 2px 8px;
+                        border-radius: 6px;
+                    }
+                    .days-remaining-badge {
+                        font-size: 12px;
+                        font-weight: 800;
+                        background: #FEE2E2;
+                        color: #DC2626;
+                        padding: 2px 8px;
+                        border-radius: 6px;
+                        border: 1px solid #FECACA;
+                    }
+
+                    .teacher-grid-row {
+                        display: flex;
+                        gap: 8px;
+                    }
+                    .teacher-card-cell {
+                        flex: 1;
+                        background: #FFFFFF;
+                        border: 1px solid #CBD5E1;
+                        border-radius: 8px;
+                        padding: 8px 10px;
+                    }
+                    .teacher-role-lbl {
+                        font-size: 11px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        color: #64748B;
+                        margin-bottom: 2px;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    .teacher-name-txt {
+                        font-size: 13.5px;
+                        font-weight: 700;
+                        color: #0F172A;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .card-footer-bar {
+                        background: #FAFAFA;
+                        border-top: 1px solid #F1F5F9;
+                        padding: 9px 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        font-size: 12.5px;
+                        color: #2563EB;
+                        font-weight: 600;
+                    }
+
+                    .empty-notice-box {
+                        text-align: center;
+                        padding: 50px 20px;
+                        color: #94A3B8;
+                    }
+                </style>
+            </t>
+
+            <!-- THANH TOPBAR -->
+            <div class="app-top-navbar">
+                <a href="/ph/home" class="btn-app-back">
+                    <i class="fa fa-chevron-left"></i>
+                </a>
+                <div class="app-header-title">CÁC [KẾ HOẠCH] CAN THIỆP CỦA BÉ</div>
+            </div>
+
+
+            <!-- DANH SÁCH THẺ KẾ HOẠCH CHI TIẾT -->
+            <div class="plan-cards-container">
+                <t t-if="not kehoachs">
+                    <div class="empty-notice-box">
+                        <i class="fa fa-calendar-minus-o" style="font-size: 46px; margin-bottom: 12px; color: #CBD5E1;"></i>
+                        <div>Chưa có kế hoạch can thiệp nào được đăng ký.</div>
+                    </div>
+                </t>
+
+                <t t-foreach="kehoachs" t-as="kh">
+                    <a t-attf-href="/ph/kehoach/#{kh.id}" class="plan-card-item">
+
+                        <!-- 1. TÊN KẾ HOẠCH &amp; TRẠNG THÁI -->
+                        <div class="card-header-bar">
+                            <div class="plan-title-box">
+                                <div class="plan-icon-square">
+                                    <i class="fa fa-calendar-check-o"></i>
+                                </div>
+                                <div>
+                                    <div class="plan-name-text"><span t-esc="kh.name"/></div>
+                                </div>
+                            </div>
+                            <div>
+                                <t t-if="kh.trangthai == '2'">
+                                    <span class="status-tag st-canthiep">Đang can thiệp</span>
+                                </t>
+                                <t t-elif="kh.trangthai == '1'">
+                                    <span class="status-tag st-kiemduyet">Đang kiểm duyệt</span>
+                                </t>
+                                <t t-elif="kh.trangthai == '-1'">
+                                    <span class="status-tag st-hethieuluc">Hết hiệu lực</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="status-tag st-danglap">Đang lập</span>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- 2. THÂN NỘI DUNG -->
+                        <div class="card-body-section">
+                            <!-- TÊN HỌC SINH -->
+                            <div class="student-row-detail">
+                                <span style="color: #64748B; font-size: 13px;">Học sinh:</span>
+                                <span class="student-name-val"><span t-esc="kh.hocsinh_id.name"/></span>
+                            </div>
+
+                            <!-- THỜI GIAN, TỔNG SỐ NGÀY &amp; CÒN LẠI -->
+                            <div class="time-summary-box">
+                                <div class="time-duration-row">
+                                    <span>
+                                        <i class="fa fa-calendar" style="color: #2563EB; margin-right: 4px;"></i>
+                                        <span t-field="kh.tu_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/> -
+                                        <span t-field="kh.den_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>
+                                    </span>
+                                    <span class="days-badge">
+                                        Tổng: <strong t-esc="kh.songay or 30"/> ngày
+                                    </span>
+                                </div>
+                                <div class="time-duration-row" style="border-top: 1px dashed #E2E8F0; padding-top: 5px;">
+                                    <span style="font-size: 12.5px; color: #64748B;">Thời gian còn lại:</span>
+                                    <span class="days-remaining-badge">
+                                        Còn <strong t-esc="kh.ngay_conlai_kehoach or 0"/> ngày
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- GIÁO VIÊN CAN THIỆP &amp; GIÁO VIÊN PHÊ DUYỆT -->
+                            <div class="teacher-grid-row">
+                                <div class="teacher-card-cell">
+                                    <div class="teacher-role-lbl">
+                                        <i class="fa fa-user-md" style="color: #EA580C;"></i> Giáo viên can thiệp
+                                    </div>
+                                    <div class="teacher-name-txt">
+                                        <span t-esc="kh.gv_lapkehoach_id.name or 'Chưa phân công'"/>
+                                    </div>
+                                </div>
+                                <div class="teacher-card-cell">
+                                    <div class="teacher-role-lbl">
+                                        <i class="fa fa-graduation-cap" style="color: #0D9488;"></i> Giáo viên phê duyệt
+                                    </div>
+                                    <div class="teacher-name-txt">
+                                        <span t-esc="kh.gv_kiemduyet_id.name or 'BGH'"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. FOOTER HÀNH ĐỘNG -->
+                        <div class="card-footer-bar">
+                            <span>Xem chi tiết mục tiêu &amp; nhật ký</span>
+                            <i class="fa fa-angle-right" style="font-size: 16px;"></i>
+                        </div>
+                    </a>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- ========================================================= -->
+    <!-- MÀN HÌNH 2: XEM CHI TIẾT KẾ HOẠCH (STYLE BẢN IN RÚT GỌN)  -->
+    <!-- ========================================================= -->
+    <template id="ekids_phuhuynh.kehoach_detail_mobile_template" name="Chi tiết Kế hoạch Mobile">
+        <t t-call="web.layout">
+            <t t-set="head">
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+                <style>
+                    body {
+                        background-color: #F8FAFC;
+                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                        margin: 0;
+                        padding-bottom: 40px;
+                        color: #1E293B;
+                    }
+
+                    .app-top-navbar {
+                        background: #2563EB;
+                        color: #FFFFFF;
+                        padding: 14px 16px;
+                        display: flex;
+                        align-items: center;
+                        position: sticky;
+                        top: 0;
+                        z-index: 100;
+                        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+                    }
+                    .btn-app-back {
+                        background: rgba(255, 255, 255, 0.2);
+                        color: #FFFFFF;
+                        border: none;
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 15px;
+                        text-decoration: none;
+                    }
+                    .app-header-title {
+                        flex-grow: 1;
+                        text-align: center;
+                        font-weight: 700;
+                        font-size: 16px;
+                        margin-right: 34px;
+                    }
+
+                    .detail-content-wrap { padding: 12px; }
+
+                    /* Khung bảng hành chính tổng quan */
+                    .admin-summary-card {
+                        background: #FFFFFF;
+                        border-radius: 12px;
+                        border: 1px solid #CBD5E1;
+                        padding: 14px;
+                        margin-bottom: 14px;
+                        box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+                    }
+                    .admin-header-title {
+                        text-align: center;
+                        font-size: 16px;
+                        font-weight: 800;
+                        color: #1E40AF;
+                        text-transform: uppercase;
+                        margin-bottom: 4px;
+                    }
+                    .admin-sub-time {
+                        text-align: center;
+                        font-size: 12.5px;
+                        color: #64748B;
+                        font-style: italic;
+                        margin-bottom: 12px;
+                    }
+
+                    .profile-info-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 13px;
+                        margin-bottom: 10px;
+                    }
+                    .profile-info-table td {
+                        padding: 6px 8px;
+                        border: 1px solid #E2E8F0;
+                        vertical-align: middle;
+                    }
+                    .td-label {
+                        background-color: #F8FAFC;
+                        font-weight: 700;
+                        color: #475569;
+                        width: 35%;
+                    }
+                    .td-value {
+                        color: #0F172A;
+                    }
+
+                    .section-block-title {
+                        font-weight: 800;
+                        color: #1E293B;
+                        font-size: 14px;
+                        text-transform: uppercase;
+                        margin: 16px 2px 8px 2px;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+
+                    /* Thẻ Mục tiêu */
+                    .goal-mobile-card {
+                        background: #FFFFFF;
+                        border-radius: 12px;
+                        border: 1px solid #CBD5E1;
+                        padding: 12px;
+                        margin-bottom: 12px;
+                        box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+                    }
+                    .goal-card-top {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 6px;
+                        margin-bottom: 8px;
+                    }
+                    .goal-main-title {
+                        font-size: 14.5px;
+                        font-weight: 700;
+                        color: #0F172A;
+                        line-height: 1.35;
+                    }
+                    .goal-note-italic {
+                        font-size: 13px;
+                        font-style: italic;
+                        color: #64748B;
+                    }
+                    .goal-meta-tags {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 4px;
+                    }
+                    .goal-tag-pill {
+                        background: #F1F5F9;
+                        border: 1px solid #E2E8F0;
+                        font-size: 11.5px;
+                        padding: 2px 6px;
+                        border-radius: 4px;
+                        color: #475569;
+                    }
+
+                    /* Dải chấm điểm ngày */
+                    .days-scroll-wrapper {
+                        display: flex;
+                        overflow-x: auto;
+                        gap: 4px;
+                        padding: 8px 0;
+                        border-top: 1px dashed #E2E8F0;
+                        border-bottom: 1px dashed #E2E8F0;
+                        margin: 8px 0;
+                        -webkit-overflow-scrolling: touch;
+                    }
+                    .day-cell-box {
+                        width: 32px;
+                        height: 42px;
+                        flex-shrink: 0;
+                        border: 1px solid #CBD5E1;
+                        border-radius: 4px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        align-items: center;
+                        background: #FFFFFF;
+                        font-size: 11px;
+                        overflow: hidden;
+                    }
+                    .day-header-indicator {
+                        background: #F8FAFC;
+                        width: 100%;
+                        text-align: center;
+                        padding: 1px 0;
+                        border-bottom: 1px solid #E2E8F0;
+                        font-weight: 700;
+                        color: #334155;
+                        font-size: 10.5px;
+                    }
+                    .day-score-char {
+                        font-size: 13.5px;
+                        font-weight: 800;
+                        height: 22px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #0F172A;
+                    }
+                    .bg-day-rest {
+                        background-color: #F1F5F9;
+                    }
+                    .bg-day-rest .day-header-indicator {
+                        background-color: #E2E8F0;
+                        color: #64748B;
+                    }
+                    .bg-day-rest .day-score-char {
+                        color: #64748B;
+                    }
+
+                    .goal-summary-badge-line {
+                        font-size: 13px;
+                        color: #334155;
+                        margin-top: 6px;
+                        line-height: 1.4;
+                    }
+
+                    .eval-conclusion-row {
+                        margin-top: 6px;
+                        padding-top: 6px;
+                        border-top: 1px dashed #E2E8F0;
+                        font-size: 13px;
+                        color: #1E293B;
+                    }
+                    .eval-pill-tag {
+                        display: inline-block;
+                        padding: 1px 8px;
+                        border-radius: 4px;
+                        font-weight: 700;
+                        font-size: 12px;
+                        border: 1px solid #CBD5E1;
+                        background: #F8FAFC;
+                        text-transform: uppercase;
+                    }
+                    .eval-opinion-text {
+                        font-style: italic;
+                        color: #475569;
+                        margin-top: 4px;
+                        padding-left: 6px;
+                        border-left: 2px solid #CBD5E1;
+                    }
+                </style>
+            </t>
+
+            <!-- TOPBAR -->
+            <div class="app-top-navbar">
+                <a href="/ph/kehoachs" class="btn-app-back">
+                    <i class="fa fa-chevron-left"></i>
+                </a>
+                <div class="app-header-title">CHI TIẾT KẾ HOẠCH</div>
+            </div>
+
+            <div class="detail-content-wrap">
+                <!-- 1. TỔNG QUAN HÀNH CHÍNH &amp; LĨNH VỰC THEO MẪU IN -->
+                <div class="admin-summary-card">
+                    <div class="admin-header-title">Kế hoạch can thiệp cá nhân</div>
+                    <div class="admin-header-title" style="font-size: 14.5px; color: #2563EB; margin-top: 2px;">
+                        <span t-field="o.name"/>
+                    </div>
+                    <div class="admin-sub-time">
+                        (Từ ngày <span t-field="o.tu_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>
+                        đến ngày <span t-field="o.den_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>)
+                    </div>
+
+                    <table class="profile-info-table">
+                        <tr>
+                            <td class="td-label">Họ và tên HS:</td>
+                            <td class="td-value" style="font-weight: 800; color: #1E40AF;"><span t-field="o.hocsinh_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td class="td-label">Tuổi / Giới tính:</td>
+                            <td class="td-value">
+                                <span t-field="o.hocsinh_id.tuoi"/> /
+                                <span t-field="o.hocsinh_id.gioitinh"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-label">Liều lượng CT:</td>
+                            <td class="td-value"><span t-field="o.ketluan_id.dm_lieuluong_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td class="td-label">Dạng rối loạn:</td>
+                            <td class="td-value">
+                                <span t-out="', '.join(o.ketluan_id.dm_roiloan_ids.mapped('name')) if o.ketluan_id and o.ketluan_id.dm_roiloan_ids else ''"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-label">Mức độ:</td>
+                            <td class="td-value"><span t-field="o.ketluan_id.dm_mucdo_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td class="td-label">Chương trình:</td>
+                            <td class="td-value" style="font-weight: 600;">
+                                <span t-out="o.with_context(lang='vi_VN').ketluan_id.chuongtrinh if o.ketluan_id and o.ketluan_id.chuongtrinh else 'CHƯƠNG TRÌNH CAN THIỆP TOÀN DIỆN DÀNH CHO TRẺ RỐI LẠN PHÁT TRIỂN'"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="td-label">Quản lý chuyên môn:</td>
+                            <td class="td-value"><strong><span t-field="o.gv_kiemduyet_id.name"/></strong></td>
+                        </tr>
+                        <tr>
+                            <td class="td-label">Giáo viên can thiệp:</td>
+                            <td class="td-value"><strong><span t-field="o.gv_lapkehoach_id.name"/></strong></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- 2. HỆ THỐNG MỤC TIÊU VÀ NHẬT KÝ THEO DÕI -->
+                <div class="section-block-title">
+                    <i class="fa fa-tasks" style="color: #2563EB;"></i> Mục tiêu &amp; Nhật ký đánh giá
+                </div>
+
+                <t t-foreach="o.kehoach_linhvuc_ids" t-as="lv">
+                    <t t-foreach="lv.kehoach_muctieu_ids" t-as="muctieu">
+                        <div class="goal-mobile-card">
+                            <!-- TIÊU ĐỀ MỤC TIÊU &amp; TAGS -->
+                            <div class="goal-card-top">
+                                <div class="goal-main-title">
+                                    Mục tiêu <t t-out="muctieu_index + 1"/>: <span t-field="muctieu.name"/>
+                                </div>
+                                <t t-if="muctieu.ghichu">
+                                    <div class="goal-note-italic">
+                                        Ghi chú: <span t-field="muctieu.ghichu"/>
+                                    </div>
+                                </t>
+                                <div class="goal-meta-tags">
+                                    <span class="goal-tag-pill"><i class="fa fa-folder-open-o"></i> <span t-field="lv.linhvuc_id.name"/></span>
+                                    <span class="goal-tag-pill"><i class="fa fa-child"></i> <span t-field="lv.tuoi_id.name"/></span>
+                                    <span class="goal-tag-pill"><i class="fa fa-bookmark-o"></i> <span t-field="lv.chuongtrinh_id.name"/></span>
+                                </div>
+                            </div>
+
+                            <!-- DẢI CHẤM ĐIỂM CÁC NGÀY TRONG THÁNG -->
+                            <div class="days-scroll-wrapper">
+                                <t t-if="muctieu.ketqua2muctieu_ids">
+                                    <t t-foreach="muctieu.ketqua2muctieu_ids" t-as="kq">
+                                        <t t-set="is_future" t-value="kq.is_date_status == '1'"/>
+                                        <t t-set="is_rest" t-value="kq.loai in ['0', '-1'] or is_future"/>
+
+                                        <div t-attf-class="day-cell-box #{is_rest and 'bg-day-rest' or ''}">
+                                            <div class="day-header-indicator">
+                                                <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
+                                            </div>
+                                            <div class="day-score-char">
+                                                <t t-if="is_future"></t>
+                                                <t t-else="">
+                                                    <t t-if="kq.loai == '-1'">N</t>
+                                                    <t t-elif="kq.loai == '0'"></t>
+                                                    <t t-else="">
+                                                        <t t-if="kq.trangthai == '1'">+</t>
+                                                        <t t-elif="kq.trangthai == '2'">+/-</t>
+                                                        <t t-elif="kq.trangthai == '-1'">-</t>
+                                                    </t>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </t>
+                            </div>
+
+                            <!-- TỔNG KẾT KẾT QUẢ CAN THIỆP -->
+                            <div class="goal-summary-badge-line">
+                                <strong>Kết quả can thiệp:</strong>
+                                Chưa đạt (-): <strong><span t-field="muctieu.ketqua_khongdat"/></strong> |
+                                Hình thành (+/-): <strong><span t-field="muctieu.ketqua_hinhthanh"/></strong> |
+                                Đạt (+): <strong><span t-field="muctieu.ketqua_dat"/></strong>
+                            </div>
+
+                            <!-- ĐÁNH GIÁ CHUYÊN MÔN (CHỈ HIỆN KHI KHÁC '0') -->
+                            <t t-if="muctieu.trangthai_kiemduyet and muctieu.trangthai_kiemduyet != '0'">
+                                <div class="eval-conclusion-row">
+                                    <span style="font-weight: 700; margin-right: 6px;">Đánh giá chuyên môn:</span>
+                                    <span class="eval-pill-tag">
+                                        <t t-if="muctieu.trangthai_kiemduyet == '1'">Đạt (+)</t>
+                                        <t t-elif="muctieu.trangthai_kiemduyet == '-1'">Chuyển sang tháng sau (-)</t>
+                                        <t t-elif="muctieu.trangthai_kiemduyet == '-2'">Dừng lại (-)</t>
+                                    </span>
+                                    <t t-if="muctieu.ghichu_kiemduyet">
+                                        <div class="eval-opinion-text">
+                                            <strong>Ý kiến/Định hướng:</strong> <t t-out="muctieu.ghichu_kiemduyet"/>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+</odoo>

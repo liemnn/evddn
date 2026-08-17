@@ -25,6 +25,7 @@
         'views/ekids_chat_template_view.xml',
         'views/ekids_hocphi_thanhtoan_template_view.xml',
         'views/ekids_nghiphep_template_view.xml',
+        'views/ekids_canthiep_template_view.xml',
         'views/ekids_info_template_view.xml',
 
 

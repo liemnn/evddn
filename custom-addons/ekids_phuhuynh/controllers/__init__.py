@@ -9,3 +9,4 @@ from . import ekids_info_controller
 from . import ekids_thanhtoan_hocphi_controller
 from . import ekids_pwa_controller
 from . import ekids_phuhuynh_login
+from . import ekids_canthiep_controller
