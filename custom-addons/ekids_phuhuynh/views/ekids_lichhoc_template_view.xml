@@ -1,311 +1,339 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="ekids_phuhuynh.lichhoc" name="Lịch học của bé">
-        &lt;!DOCTYPE html&gt;
-        <html lang="vi">
-        <head>
-            <meta charset="UTF-8"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-            <meta name="apple-mobile-web-app-capable" content="yes"/>
-            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-            <meta name="apple-mobile-web-app-title" content="eVDDN"/>
-            <title>eVDDN - Hệ thống quản lý trường mầm non chuyên biệt</title>
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
 
-                :root {
-                    --primary: #2563EB;
-                    --primary-light: #3B82F6;
-                    --primary-hover: #1D4ED8;
-                    --bg-color: #E0F2FE;
-                    --card-glass: rgba(255, 255, 255, 0.95);
-                    --text-main: #1F2937;
-                    --text-sub: #6B7280;
+    <!-- ========================================================= -->
+    <!-- MÀN HÌNH DANH SÁCH LỊCH HỌC CHO APP PHỤ HUYNH             -->
+    <!-- ========================================================= -->
+    <template id="ekids_phuhuynh.lichhoc_list_mobile_template" name="Lịch học của bé Mobile">
+        <t t-call="web.layout">
+            <t t-set="head">
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+                <style>
+                    body {
+                        background-color: #F1F5F9;
+                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                        margin: 0;
+                        padding-bottom: 70px;
+                        color: #1E293B;
+                    }
 
-                    --c-red: #EF4444;
-                    --c-green: #10B981;
-                    --c-yellow: #F59E0B;
-                    --c-orange: #FF9800;
-                    --c-purple: #8B5CF6;
-                }
+                    /* Header App */
+                    .app-top-navbar {
+                        background: #2563EB;
+                        color: #FFFFFF;
+                        padding: 14px 16px;
+                        display: flex;
+                        align-items: center;
+                        position: sticky;
+                        top: 0;
+                        z-index: 100;
+                        box-shadow: 0 2px 10px rgba(37, 99, 235, 0.2);
+                    }
+                    .btn-app-back {
+                        background: rgba(255, 255, 255, 0.2);
+                        color: #FFFFFF;
+                        border: none;
+                        width: 34px;
+                        height: 34px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 15px;
+                        text-decoration: none;
+                    }
+                    .app-header-title {
+                        flex-grow: 1;
+                        text-align: center;
+                        font-weight: 700;
+                        font-size: 17px;
+                        margin-right: 34px;
+                    }
 
-                * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+                    /* Banner thông tin học sinh */
+                    .student-info-banner {
+                        background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+                        color: #FFFFFF;
+                        margin: 12px 14px;
+                        padding: 14px 16px;
+                        border-radius: 14px;
+                        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
 
-                /* FIX 1: Dùng 100dvh để chuẩn trên mobile */
-                html, body {
-                    background-color: var(--bg-color);
-                    width: 100vw;
-                    height: 100vh; /* Fallback */
-                    height: 100dvh;
-                    overflow: hidden;
-                }
+                    /* Thẻ Lịch Học Hiện Đại */
+                    .schedule-card-item {
+                        background: #FFFFFF;
+                        margin: 12px 14px;
+                        border-radius: 14px;
+                        border: 1px solid #E2E8F0;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+                        overflow: hidden;
+                        display: block;
+                    }
 
-                .app-container {
-                    width: 100%; height: 100%;
-                    position: relative; display: flex; flex-direction: column;
-                    overflow: hidden;
-                }
+                    .card-header-bar {
+                        padding: 12px 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        border-bottom: 1px solid #F1F5F9;
+                    }
+                    .card-type-box {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
+                    .card-type-icon {
+                        width: 38px;
+                        height: 38px;
+                        border-radius: 10px;
+                        background: #EFF6FF;
+                        color: #2563EB;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 17px;
+                        flex-shrink: 0;
+                    }
+                    .card-title-text {
+                        font-size: 15.5px;
+                        font-weight: 800;
+                        color: #0F172A;
+                    }
 
-                /* --- ẢNH NỀN --- */
-                .cartoon-bg {
-                    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-                    background-image: url('/ekids_phuhuynh/static/src/img/backgroud.jpg');
-                    background-size: cover; background-position: center;
-                    opacity: 1; pointer-events: none; z-index: 0;
-                }
+                    /* Badge Trạng thái hiệu lực */
+                    .status-tag {
+                        font-size: 11.5px;
+                        font-weight: 700;
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                        white-space: nowrap;
+                    }
+                    .st-active { background: #DCFCE7; color: #15803D; }
+                    .st-expired { background: #FEE2E2; color: #B91C1C; }
 
-                /* --- HEADER TRANG PHỤ --- */
-                .sub-header {
-                    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-                    padding: 15px 20px;
-                    color: white; flex-shrink: 0;
-                    position: relative; z-index: 10;
-                    display: flex; align-items: center; justify-content: space-between;
-                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-                }
+                    /* Thân Card */
+                    .card-body-section {
+                        padding: 12px 14px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
 
-                .back-btn {
-                    width: 36px; height: 36px; border-radius: 50%;
-                    background: rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center;
-                    font-size: 1.1rem; cursor: pointer; backdrop-filter: blur(5px);
-                    color: white; text-decoration: none;
-                }
+                    /* Dải Thứ Trong Tuần (T2 - CN) */
+                    .weekday-badges-flow {
+                        display: flex;
+                        gap: 6px;
+                        flex-wrap: wrap;
+                        align-items: center;
+                    }
+                    .weekday-pill {
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 8px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 12px;
+                        font-weight: 800;
+                        border: 1px solid #E2E8F0;
+                        color: #94A3B8;
+                        background-color: #F8FAFC;
+                    }
+                    .weekday-pill.active {
+                        background-color: #2563EB;
+                        color: #FFFFFF;
+                        border-color: #1D4ED8;
+                        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+                    }
 
-                .page-title { font-size: 1.1rem; font-weight: 700; }
-                .dummy-space { width: 36px; }
+                    /* Khung thời gian  khung giờ */
+                    .time-grid-box {
+                        background: #F8FAFC;
+                        border: 1px solid #E2E8F0;
+                        border-radius: 10px;
+                        padding: 10px 12px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 6px;
+                    }
+                    .time-item-row {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        font-size: 13px;
+                        color: #334155;
+                    }
+                    .time-highlight-badge {
+                        font-size: 13px;
+                        font-weight: 800;
+                        color: #1E40AF;
+                        background: #DBEAFE;
+                        padding: 2px 8px;
+                        border-radius: 6px;
+                    }
 
-                /* --- MAIN SCROLL --- */
-                /* FIX 2: Tăng padding đáy để chừa chỗ cho thanh Menu cố định */
-                .main-scroll {
-                    flex: 1; overflow-y: auto;
-                    padding: 15px 15px 110px;
-                    z-index: 2; position: relative;
-                    scrollbar-width: none;
-                }
-                .main-scroll::-webkit-scrollbar { display: none; }
+                    /* Khối Giáo viên  Ghi chú */
+                    .info-cell-box {
+                        background: #FFFFFF;
+                        border: 1px solid #CBD5E1;
+                        border-radius: 8px;
+                        padding: 8px 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+                    .info-cell-lbl {
+                        font-size: 11.5px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        color: #64748B;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                    }
+                    .info-cell-val {
+                        font-size: 13.5px;
+                        font-weight: 700;
+                        color: #0F172A;
+                    }
 
-                /* --- CHỌN TUẦN --- */
-                .week-picker {
-                    background: var(--card-glass); backdrop-filter: blur(10px);
-                    border-radius: 20px; padding: 12px 20px;
-                    display: flex; justify-content: space-between; align-items: center;
-                    margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-                    border: 1px solid rgba(255,255,255,0.8);
-                }
-                .week-picker i { color: var(--primary); font-size: 1.2rem; cursor: pointer; padding: 5px; }
-                .week-info { text-align: center; }
-                .week-info h3 { font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px; }
-                .week-info p { font-size: 0.7rem; color: var(--text-sub); font-weight: 600; margin: 0; }
+                    .empty-notice-box {
+                        text-align: center;
+                        padding: 50px 20px;
+                        color: #94A3B8;
+                    }
+                </style>
+            </t>
 
-                /* --- THẺ NGÀY --- */
-                .day-card {
-                    background: var(--card-glass); backdrop-filter: blur(10px);
-                    border-radius: 16px; padding: 18px 15px; margin-bottom: 15px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-                    border: 1px solid rgba(255,255,255,0.8);
-                    position: relative; overflow: hidden;
-                }
-
-                .day-card.today {
-                    border: 2px solid var(--primary-light);
-                    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
-                }
-                .today-badge {
-                    position: absolute; top: 16px; right: 15px;
-                    background: #DBEAFE; color: var(--primary);
-                    padding: 4px 10px; border-radius: 12px; font-size: 0.65rem; font-weight: 800;
-                }
-
-                .day-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 15px; border-bottom: 1px dashed #E5E7EB; padding-bottom: 12px; }
-                .day-name { font-size: 1.1rem; font-weight: 800; color: var(--text-main); }
-                .day-date { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; }
-
-                /* --- TIMELINE --- */
-                .timeline { display: flex; flex-direction: column; }
-                .timeline-item { display: flex; gap: 12px; margin-bottom: 12px; }
-                .timeline-item:last-child { margin-bottom: 0; }
-
-                .time-col { width: 45px; text-align: right; flex-shrink: 0; padding-top: 2px; }
-                .time-start { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
-                .time-end { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
-
-                .line-col { display: flex; flex-direction: column; align-items: center; width: 14px; }
-                .dot { width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex-shrink: 0; z-index: 2; }
-                .line { width: 2px; background: #E5E7EB; flex: 1; margin-top: 4px; margin-bottom: -16px; z-index: 1; }
-                .timeline-item:last-child .line { display: none; }
-
-                .content-col { flex: 1; border-radius: 12px; padding: 12px; border-left: 4px solid transparent; }
-                .content-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
-                .content-title-row h4 { font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin: 0; line-height: 1.2; }
-
-                .price-badge {
-                    font-size: 0.75rem; font-weight: 800; color: var(--c-red);
-                    background: rgba(255, 255, 255, 0.7);
-                    padding: 2px 8px; border-radius: 8px;
-                    border: 1px solid rgba(239, 68, 68, 0.2);
-                    white-space: nowrap; flex-shrink: 0; margin-left: 10px;
-                }
-
-                .content-col p { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; margin: 0 0 4px 0; display: flex; align-items: center; gap: 6px; }
-                .content-col p:last-child { margin-bottom: 0; }
-
-                .bg-orange { background: #FFF7ED; border-left-color: var(--c-orange); }
-                .dot.c-orange { background: var(--c-orange); }
-                .bg-blue { background: #EFF6FF; border-left-color: var(--primary); }
-                .dot.c-blue { background: var(--primary); }
-                .bg-green { background: #ECFDF5; border-left-color: var(--c-green); }
-                .dot.c-green { background: var(--c-green); }
-
-                .off-day-box {
-                    background: #F8FAFC; border-radius: 12px; padding: 20px;
-                    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-                    border: 1px dashed #CBD5E1; text-align: center;
-                }
-                .off-day-box i { font-size: 1.8rem; color: #94A3B8; }
-                .off-day-box span { font-size: 0.85rem; font-weight: 600; color: #64748B; }
-
-                /* --- FIX 3: BOTTOM NAV CỐ ĐỊNH NHƯ TRANG CHỦ --- */
-                .bottom-nav {
-                    position: fixed;
-                    bottom: 0; left: 0; right: 0;
-                    background: #FFFFFF;
-                    display: flex; justify-content: space-between; align-items: center;
-                    padding: 8px 10px 15px;
-                    box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 1000;
-                    border-top-left-radius: 20px; border-top-right-radius: 20px;
-                }
-
-                .nav-item {
-                    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-                    color: #9CA3AF; text-decoration: none; gap: 4px;
-                    transition: all 0.3s ease;
-                }
-                .nav-item i { font-size: 1.1rem; transition: transform 0.3s ease; }
-                .nav-item span { font-size: 0.6rem; font-weight: 700; white-space: nowrap; }
-
-                .nav-item:hover { color: var(--primary); }
-                .nav-item:hover i { transform: translateY(-4px) scale(1.1); }
-
-                .nav-item.active { color: var(--primary); }
-
-                .center-btn-wrapper { position: relative; flex-shrink: 0; width: 60px; display: flex; justify-content: center; }
-                .nav-center-btn {
-                    width: 52px; height: 52px; background: var(--primary);
-                    border-radius: 50%; display: flex; justify-content: center; align-items: center;
-                    color: white; font-size: 1.4rem; transform: translateY(-22px);
-                    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); border: 4px solid #FFFFFF;
-                    transition: all 0.3s ease;
-                }
-                .nav-center-btn:hover {
-                    transform: translateY(-26px) scale(1.1);
-                    background: linear-gradient(135deg, #60A5FA, #2563EB);
-                }
-
-            </style>
-        </head>
-        <body>
-
-        <div class="app-container">
-
-            <div class="cartoon-bg"></div>
-
-            <div class="sub-header">
-                <a href="/ph/home" class="back-btn" title="Quay lại"><i class="fas fa-chevron-left"></i></a>
-                <div class="page-title">Lịch học tuần này</div>
-                <div class="dummy-space"></div>
+            <!-- THANH TOPBAR -->
+            <div class="app-top-navbar">
+                <a href="/ph/home" class="btn-app-back">
+                    <i class="fa fa-chevron-left"></i>
+                </a>
+                <div class="app-header-title">LỊCH HỌC CỦA BÉ</div>
             </div>
 
-            <div class="main-scroll">
 
-                <div class="week-picker">
-                    <i class="fas fa-chevron-left" title="Tuần trước"></i>
-                    <div class="week-info">
-                        <h3>Lịch học cá nhân</h3>
-                        <p>Dữ liệu đồng bộ trực tiếp</p>
+
+            <!-- DANH SÁCH LỊCH HỌC / CA CAN THIỆP -->
+            <div class="schedule-cards-container">
+                <t t-if="not ca_canthiep_list">
+                    <div class="empty-notice-box">
+                        <i class="fa fa-calendar-times-o" style="font-size: 46px; margin-bottom: 12px; color: #CBD5E1;"></i>
+                        <div>Bé chưa có lịch học/ca can thiệp nào được thiết lập.</div>
                     </div>
-                    <i class="fas fa-chevron-right" title="Tuần sau"></i>
-                </div>
+                </t>
 
-                <t t-foreach="danh_sach_ngay" t-as="ngay">
+                <t t-foreach="ca_canthiep_list" t-as="ca">
+                    <div class="schedule-card-item">
 
-                    <div t-attf-class="day-card {{ 'today' if ngay['date'] == 'Hôm nay' else '' }}">
-
-                        <t t-if="ngay['date'] == 'Hôm nay'">
-                            <div class="today-badge">Hôm nay</div>
-                        </t>
-
-                        <div class="day-header">
-                            <span class="day-name">
-                                <t t-if="'T' in ngay['week']">Thứ <t t-esc="ngay['week'].replace('T', '')"/></t>
-                                <t t-else=""><t t-esc="ngay['week']"/></t>
-                            </span>
-                            <span class="day-date"><t t-esc="ngay['date']"/></span>
-                        </div>
-
-                        <t t-if="ngay.get('cas')">
-                            <div class="timeline">
-
-                                <t t-foreach="ngay['cas']" t-as="ca">
-
-                                    <t t-set="mau_ca" t-value="'orange' if ca_index % 3 == 0 else ('blue' if ca_index % 3 == 1 else 'green')"/>
-
-                                    <div class="timeline-item">
-                                        <div class="time-col">
-                                            <div class="time-start"><t t-esc="ca['tu']"/></div>
-                                            <div class="time-end"><t t-esc="ca['den']"/></div>
-                                        </div>
-
-                                        <div class="line-col">
-                                            <div t-attf-class="dot c-{{ mau_ca }}"></div>
-                                            <div class="line"></div>
-                                        </div>
-
-                                        <div t-attf-class="content-col bg-{{ mau_ca }}">
-                                            <div class="content-title-row">
-                                                <h4><t t-esc="ca['ca']"/></h4>
-                                                <t t-if="ca.get('gia')">
-                                                    <span class="price-badge"><t t-esc="ca['gia']"/> đ</span>
-                                                </t>
-                                            </div>
-
-                                            <t t-if="ca.get('giaovien')">
-                                                <p><i class="fas fa-chalkboard-teacher"></i> Giáo viên: <t t-esc="ca['giaovien']"/></p>
-                                            </t>
-                                        </div>
+                        <!-- 1. HEADER: LOẠI HÌNH CA &amp; TRẠNG THÁI HIỆU LỰC -->
+                        <div class="card-header-bar">
+                            <div class="card-type-box">
+                                <div class="card-type-icon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <div>
+                                    <div class="card-title-text">
+                                        <span t-esc="ca.dm_ca_id.name or 'Ca can thiệp'"/>
                                     </div>
-
+                                    <div style="font-size: 12px; color: #64748B;">
+                                        Mức phí: <strong style="color: #1E293B;"><span t-field="ca.tien" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <t t-if="ca.trangthai == '1'">
+                                    <span class="status-tag st-active"><i class="fa fa-check-circle"></i> Còn hiệu lực</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="status-tag st-expired"><i class="fa fa-times-circle"></i> Hết hiệu lực</span>
                                 </t>
                             </div>
-                        </t>
+                        </div>
 
-                        <t t-else="">
-                            <div class="off-day-box">
-                                <i class="fas fa-home"></i>
-                                <span>Bé không có lịch ca học hôm nay</span>
+                        <!-- 2. THÂN NỘI DUNG -->
+                        <div class="card-body-section">
+
+                            <!-- CÁC THỨ HỌC TRONG TUẦN -->
+                            <div>
+                                <div style="font-size: 12px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 6px;">
+                                    <i class="fa fa-calendar-check-o" style="color: #2563EB;"></i> Ngày học trong tuần:
+                                </div>
+                                <div class="weekday-badges-flow">
+                                    <span t-attf-class="weekday-pill #{ca.t2 and 'active' or ''}">T2</span>
+                                    <span t-attf-class="weekday-pill #{ca.t3 and 'active' or ''}">T3</span>
+                                    <span t-attf-class="weekday-pill #{ca.t4 and 'active' or ''}">T4</span>
+                                    <span t-attf-class="weekday-pill #{ca.t5 and 'active' or ''}">T5</span>
+                                    <span t-attf-class="weekday-pill #{ca.t6 and 'active' or ''}">T6</span>
+                                    <span t-attf-class="weekday-pill #{ca.t7 and 'active' or ''}">T7</span>
+                                    <span t-attf-class="weekday-pill #{ca.t8 and 'active' or ''}">CN</span>
+                                </div>
                             </div>
-                        </t>
+
+                            <!-- KHUNG GIỜ HỌC VÀ THỜI GIAN ÁP DỤNG -->
+                            <div class="time-grid-box">
+                                <div class="time-item-row">
+                                    <span style="font-weight: 600;">
+                                        <i class="fa fa-hourglass-half" style="color: #2563EB; margin-right: 4px;"></i> Khung giờ học:
+                                    </span>
+                                    <span class="time-highlight-badge">
+                                        <t t-if="ca.tu and ca.den">
+                                            <span t-esc="ca.tu"/> - <span t-esc="ca.den"/>
+                                        </t>
+                                        <t t-elif="ca.tu">
+                                            Từ <span t-esc="ca.tu"/>
+                                        </t>
+                                        <t t-else="">
+                                            Theo lịch xếp lớp
+                                        </t>
+                                    </span>
+                                </div>
+
+                                <div class="time-item-row" style="border-top: 1px dashed #E2E8F0; padding-top: 5px;">
+                                    <span style="font-size: 12.5px; color: #64748B;">
+                                        <i class="fa fa-calendar-o" style="margin-right: 4px;"></i> Thời gian áp dụng:
+                                    </span>
+                                    <span style="font-size: 13px; font-weight: 700; color: #334155;">
+                                        <t t-if="ca.tu_ngay or ca.den_ngay">
+                                            <span t-field="ca.tu_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/> -
+                                            <span t-field="ca.den_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>
+                                        </t>
+                                        <t t-else="">
+                                            Cố định hàng tháng
+                                        </t>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- GIÁO VIÊN PHỤ TRÁCH -->
+                            <div class="info-cell-box">
+                                <div class="info-cell-lbl">
+                                    <i class="fa fa-user-md" style="color: #EA580C;"></i> Giáo viên can thiệp:
+                                </div>
+                                <div class="info-cell-val">
+                                    <span t-esc="ca.giaovien_id.name or 'Chưa phân công'"/>
+                                </div>
+                            </div>
+
+                            <!-- GHI CHÚ (NẾU CÓ) -->
+                            <t t-if="ca.desc">
+                                <div style="font-size: 12.5px; font-style: italic; color: #64748B; padding-left: 4px;">
+                                    <i class="fa fa-info-circle"></i> <t t-out="ca.desc"/>
+                                </div>
+                            </t>
+
+                        </div>
 
                     </div>
                 </t>
             </div>
-
-            <div class="bottom-nav">
-                <a href="/ph/home" class="nav-item"><i class="fas fa-home"></i><span>Trang chủ</span></a>
-
-                <a href="/ph/lichhoc" class="nav-item active"><i class="fas fa-calendar-check"></i><span>Lịch học</span></a>
-
-                <div class="center-btn-wrapper">
-                    <div class="nav-center-btn"><i class="fas fa-qrcode"></i></div>
-                </div>
-
-                <a href="#" class="nav-item"><i class="fas fa-headset"></i><span>Hỗ trợ</span></a>
-                <a href="#" class="nav-item"><i class="fas fa-bell"></i><span>Thông báo</span></a>
-            </div>
-
-        </div>
-
-        </body>
-        </html>
+        </t>
     </template>
+
 </odoo>
