@@ -259,18 +259,13 @@
                                 </div>
                             </div>
                             <div>
-                                <t t-if="kh.trangthai == '2'">
+                                <t t-if="kh.trangthai == '1'">
                                     <span class="status-tag st-canthiep">Đang can thiệp</span>
-                                </t>
-                                <t t-elif="kh.trangthai == '1'">
-                                    <span class="status-tag st-kiemduyet">Đang kiểm duyệt</span>
                                 </t>
                                 <t t-elif="kh.trangthai == '-1'">
                                     <span class="status-tag st-hethieuluc">Hết hiệu lực</span>
                                 </t>
-                                <t t-else="">
-                                    <span class="status-tag st-danglap">Đang lập</span>
-                                </t>
+
                             </div>
                         </div>
 
