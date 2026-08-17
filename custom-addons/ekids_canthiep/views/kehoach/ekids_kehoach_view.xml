@@ -13,8 +13,16 @@
                     <field name="tu_ngay" string="Từ ngày" />
                     <field name="den_ngay" string="Đến ngày" />
                     <field name="songay" string="Số ngày" />
+                    <field name="ngay_conlai_kehoach"
+                                           string="Còn lại(ngày)"
+                                           width="100"
+                                           class="fw-bold kh-blink-alert"
+                                           decoration-danger="ngay_conlai_kehoach &gt;= 0 and ngay_conlai_kehoach &lt;= 2"
+                                           decoration-warning="ngay_conlai_kehoach &gt;= 3 and ngay_conlai_kehoach &lt;= 10"
+                                           decoration-success="ngay_conlai_kehoach &gt; 10"/>
                     <field name="gv_lapkehoach_id" class="text-wrap" string="Giáo viên"/>
                     <field name="gv_kiemduyet_id" class="text-wrap" string="Chuyên môn"/>
+
 
                     <field name="trangthai" string="Trạng thái" width="130"
                            widget="badge"
@@ -42,8 +50,16 @@
                     <field name="tu_ngay" string="Từ ngày" />
                     <field name="den_ngay" string="Đến ngày" />
                     <field name="songay" string="Số ngày" />
+                    <field name="ngay_conlai_kehoach"
+                                           string="Còn lại(ngày)"
+                                           width="100"
+                                           class="fw-bold kh-blink-alert"
+                                           decoration-danger="ngay_conlai_kehoach &gt;= 0 and ngay_conlai_kehoach &lt;= 2"
+                                           decoration-warning="ngay_conlai_kehoach &gt;= 3 and ngay_conlai_kehoach &lt;= 10"
+                                           decoration-success="ngay_conlai_kehoach &gt; 10"/>
                     <field name="gv_lapkehoach_id" string="Giáo viên" class="text-wrap"/>
                     <field name="gv_kiemduyet_id" string="Chuyên môn" class="text-wrap"/>
+
 
                     <field name="trangthai" string="Trạng thái" width="130"
                            widget="badge"
@@ -76,8 +92,16 @@
                     <field name="tu_ngay" string="Từ ngày" />
                     <field name="den_ngay" string="Đến ngày" />
                     <field name="songay" string="Số ngày" />
+                    <field name="ngay_conlai_kehoach"
+                                           string="Còn lại(ngày)"
+                                           width="100"
+                                           class="fw-bold kh-blink-alert"
+                                           decoration-danger="ngay_conlai_kehoach &gt;= 0 and ngay_conlai_kehoach &lt;= 2"
+                                           decoration-warning="ngay_conlai_kehoach &gt;= 3 and ngay_conlai_kehoach &lt;= 10"
+                                           decoration-success="ngay_conlai_kehoach &gt; 10"/>
                     <field name="gv_lapkehoach_id" string="Giáo viên" class="text-wrap"/>
                     <field name="gv_kiemduyet_id" string="Chuyên môn" class="text-wrap"/>
+
 
                     <field name="trangthai" string="Trạng thái" width="130"
                            widget="badge"

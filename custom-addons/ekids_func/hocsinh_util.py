@@ -245,11 +245,12 @@ def func_get_cas_tangcuong_tatca_hocsinh(self, coso,nam,thang):
 
 def func_get_so_hocsinh_trong_thang_tinhluong(self,coso_id,nam,thang):
     days = ngay_util.func_get_cacngay_trong_thang(int(nam), int(thang))
-    tu_ngay = date(int(nam), int(thang),15)
+    tu_ngay = days[0]
+    ngay_15 = date(int(nam), int(thang),15)
     den_ngay = days[len(days) - 1]
     coso_ids = [coso_id]
 
-    domain = func_get_domain_trong_khoang_thoigian(coso_ids, tu_ngay, den_ngay)
+    domain = func_get_domain_trong_khoang_thoigian(coso_ids, tu_ngay, den_ngay,ngay_15)
 
     count = self.env['ekids.hocsinh'].search_count(domain)
 
@@ -266,7 +267,7 @@ def func_danhsach_hocsinh_trongthang(self, coso_id, nam, thang):
     den_ngay = days[len(days) - 1]
     coso_ids = [coso_id]
 
-    domain =func_get_domain_trong_khoang_thoigian(coso_ids,tu_ngay,den_ngay)
+    domain =func_get_domain_trong_khoang_thoigian(coso_ids,tu_ngay,den_ngay,None)
 
     hocsinhs = self.env['ekids.hocsinh'].search(domain)
 
@@ -274,7 +275,7 @@ def func_danhsach_hocsinh_trongthang(self, coso_id, nam, thang):
 
 def func_danhsach_hocsinh_khoang_thoigian(self, coso_ids, tu_ngay, den_ngay):
 
-    domain =func_get_domain_trong_khoang_thoigian(coso_ids,tu_ngay,den_ngay)
+    domain =func_get_domain_trong_khoang_thoigian(coso_ids,tu_ngay,den_ngay,None)
 
     hocsinhs = self.env['ekids.hocsinh'].search(domain)
 
@@ -284,12 +285,15 @@ def func_danhsach_hocsinh_khoang_thoigian(self, coso_ids, tu_ngay, den_ngay):
 
 
 
-def func_get_domain_trong_khoang_thoigian(coso_ids, tu_ngay,den_ngay):
+def func_get_domain_trong_khoang_thoigian(coso_ids, tu_ngay,den_ngay,ngay_15):
 
     domain_chung= [
         ('coso_id', 'in', coso_ids),
         ('ngay_nhaphoc', '<=', den_ngay),
     ]
+    if ngay_15:
+        domain_chung_15=[('ngay_nhaphoc', '<=', ngay_15)]
+        domain_chung = expression.AND([domain_chung,domain_chung_15])
 
     # Nhóm 1: Học sinh đang theo học
     domain_theohoc = [
@@ -302,6 +306,9 @@ def func_get_domain_trong_khoang_thoigian(coso_ids, tu_ngay,den_ngay):
         ('ngay_nghihoc', '>=', tu_ngay),
 
     ]
+    if ngay_15:
+        domain_danghi_15 = [('ngay_nghihoc', '>=', ngay_15)]
+        domain_danghi = expression.AND([domain_danghi,domain_danghi_15])
 
     domain = expression.AND([
         domain_chung,

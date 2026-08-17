@@ -115,9 +115,22 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     is_show_wiget_canthiep = fields.Boolean(compute="_compute_is_show_wiget_canthiep")
     is_xoa = fields.Boolean(compute="_compute_is_xoa")
 
+    ngay_conlai_kehoach = fields.Integer(compute="_compute_ngay_conlai_kehoach", string="Ngày còn lại [Kế hoạch]")
+
     access_token = fields.Char(string="Thẻ truy cập nhanh", readonly=True, copy=False)
     share_full_url = fields.Char("Chia sẻ full", compute="_compute_urls")
     share_short_url = fields.Char("Chia sẻ short", compute="_compute_urls")
+
+
+    def _compute_ngay_conlai_kehoach(self):
+        today = date.today()
+        for kh in self:
+            so_ngay = 0
+            if kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                so_ngay = (kh.den_ngay - today).days
+                if so_ngay <= 0:
+                    so_ngay=0
+            kh.ngay_conlai_kehoach = so_ngay
 
     @api.depends('access_token')
     def _compute_urls(self):
