@@ -277,7 +277,6 @@ class HocSinhInherit(models.Model
 
     def _compute_is_lap_kehoach(self):
         user = self.env.user
-        is_admin = user.has_group('base.group_system')
         for hs in self:
             trangthais = [kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]
             ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,hs,trangthais)
@@ -465,23 +464,7 @@ class HocSinhInherit(models.Model
 
 
 
-    def func_get_default_kehoach_tu_ngay(self,kehoach_gan_nhat):
-        tu_ngay = fields.Date.context_today(self)
-        if kehoach_gan_nhat and kehoach_gan_nhat.den_ngay:
-            # 2. Bốc được ngày kết thúc, tiến hành cộng thêm 1 ngày tịnh tiến
-            tu_ngay = fields.Date.to_date(kehoach_gan_nhat.den_ngay)
-            tu_ngay =tu_ngay + timedelta(days=1)
-           
-        return tu_ngay
 
-    # Default = Hôm nay + 31 ngày (Dùng hàm lambda để tính toán nhanh)
-
-    def func_get_default_kehoach_den_ngay(self,tu_ngay):
-        if tu_ngay:
-            songay_str = coso_util.func_cauhinh_canthiep(self,self.coso_id,"macdinh_songay_kehoach","30")
-            songay =int(songay_str)-1
-            return fields.Date.to_date(tu_ngay) + timedelta(days=songay)
-        return False
 
 
 

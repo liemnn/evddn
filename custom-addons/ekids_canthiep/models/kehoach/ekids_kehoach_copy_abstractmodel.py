@@ -61,6 +61,8 @@ class KeHoachCopyAbstractModel(models.AbstractModel):
                     ,("muctieu_id", "=", kehoach_muctieu_truoc.muctieu_id.id)
 
                 ],limit=1)
+
+
                 if (kehoach_muctieu_truoc.trangthai_kiemduyet =="1"
                         or kehoach_muctieu_truoc.trangthai_kiemduyet =="-2"):
                     #TH1: kế hoạch tháng trước đã đạt, hoặc hủy bỏ do đánh giá nếu có thì xóa đi
