@@ -314,6 +314,20 @@
                                          <span>Xem [Học phí] các tháng trước</span>
                                      </button>
 
+                                     <button class="oe_kanban_action kh-btn-action btn-outline-warning"
+                                            name="action_tinh_hocphi_thang_tieptheo"
+                                            invisible="is_thu_hocphi_dauthang == False"
+                                            type="object"
+                                            confirm="⚠️ CẢNH BÁO NGUY HIỂM: Tháng hiện tại chưa kết thúc và chưa hoàn tất điểm danh/chấm công. Việc lập trước học phí tháng tiếp theo có thể dẫn đến sai lệch số buổi hoàn trả. Bạn có chắc chắn muốn tiếp tục?">
+                                        <i class="fa fa-exclamation-triangle text-warning"></i>
+                                        <span class="d-flex flex-column text-start ms-1">
+                                            <strong style="font-size: 13px;">TÍNH HỌC PHÍ THÁNG TIẾP THEO</strong>
+                                            <span style="font-size: 11.5px; color: #dc3545; font-style: italic; font-weight: normal;">
+                                                (Tạo trước - Điểm danh tháng này chưa chốt)
+                                            </span>
+                                        </span>
+                                    </button>
+
                                      <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                              name="action_quanly_khoan_thungoai"
                                              type="object">

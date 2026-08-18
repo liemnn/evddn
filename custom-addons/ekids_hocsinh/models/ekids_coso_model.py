@@ -77,6 +77,31 @@ class CoSo(models.Model):
                 }
             }
 
+    def action_tinh_hocphi_thang_tieptheo(self):
+        hocphi2thang = self.func_macdinh_tao_hocphi_thang_tieptheo()
+        if hocphi2thang:
+            hocphi2thang.action_view_khoitao_hocphi_hocsinh()
+
+
+            name = "HỌC PHÍ THÁNG "+str(hocphi2thang.name).upper()+"/"+ str(hocphi2thang.nam_id.name)
+            domain = self.func_get_domain_trong_khoang_thoigian(hocphi2thang)
+
+            return {
+                'type': 'ir.actions.act_window',
+                'name': name,
+                'res_model': 'ekids.hocphi',
+                'view_mode': 'list,kanban,form',
+                'order': 'hocsinh_id.name asc',
+                'target': 'current',
+                'domain': domain,
+                'context': {
+                    'default_coso_id': self.id,
+                    'default_nam': hocphi2thang.nam_id.name,
+                    'default_thang': hocphi2thang.name
+
+                }
+            }
+
     def func_xoa_hocphi_khi_hocsinh_nghi_trongthang(self,hocphi2thang):
         hocphi_ids = hocphi2thang.hocphi_ids
         if hocphi_ids:
@@ -152,6 +177,23 @@ class CoSo(models.Model):
 
                 }
             }
+
+    def func_macdinh_tao_hocphi_thang_tieptheo(self):
+        today = fields.Date.context_today(self)
+
+        current_year = today.year
+        current_month = today.month
+
+        # Tính tháng tiếp theo và xử lý chuyển năm khi là tháng 12
+        if current_month == 12:
+            month = 1
+            year = current_year + 1
+        else:
+            month = current_month + 1
+            year = current_year
+
+        hocphi2thang = self.func_macdinh_tao_hocphi(year, month)
+        return hocphi2thang
     def func_macdinh_tao_hocphi_thang_nay(self):
         today = date.today()
         if self.is_thu_hocphi_dauthang == False:
@@ -164,32 +206,40 @@ class CoSo(models.Model):
         year = today.year
         month =today.month
 
+        hocphi2thang = self.func_macdinh_tao_hocphi(year,month)
+        return hocphi2thang
+
+
+    def func_macdinh_tao_hocphi(self,nam,thang):
+
         hocphi2nam = self.env['ekids.hocphi_nam'].search(
             [('coso_id', '=', self.id)
-                , ('name', '=', str(year))
+                , ('name', '=', str(nam))
 
              ])
         if not hocphi2nam:
             data ={
                 'coso_id': self.id,
-                'name':  str(year),
+                'name':  str(nam),
             }
             hocphi2nam = self.env['ekids.hocphi_nam'].create(data)
 
         hocphi2thang= self.env['ekids.hocphi_thang'].search(
             [('coso_id', '=', self.id)
                 , ('nam_id', '=',hocphi2nam.id)
-                , ('name', '=', str(month))
+                , ('name', '=', str(thang))
 
              ])
         if not hocphi2thang:
             data = {
                 'coso_id': self.id,
                 'nam_id': hocphi2nam.id,
-                'name': str(month),
+                'name': str(thang),
             }
             hocphi2thang = self.env['ekids.hocphi_thang'].create(data)
         return hocphi2thang
+
+
 
 
     def action_cauhinh_hocphi_dm_thu_bantru(self):
