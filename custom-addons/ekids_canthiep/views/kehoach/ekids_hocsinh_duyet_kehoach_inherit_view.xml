@@ -1,122 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
     <record id="ekids_canthiep.hocsinh_duyet_kehoach_inherit_list" model="ir.ui.view">
         <field name="name">Kế hoạch can thiệp</field>
         <field name="model">ekids.hocsinh</field>
         <field name="arch" type="xml">
-            <list create="false" delete="false" limit="200" default_order="id asc">
+            <!-- Nổi bật màu vàng nhẹ các dòng đang có kế hoạch chờ duyệt -->
+            <list create="false" delete="false" limit="200" default_order="id asc"
+                  decoration-warning="tong_kehoach_doiduyet &gt; 0">
 
-
-                <field name="sequence" width="25"/>
-                <field name="name" width="170" class="text-wrap"/>
+                <!-- ================= 1. THÔNG TIN HỌC SINH ================= -->
+                <field name="sequence" width="35" string="TT"/>
+                <field name="name" width="160" class="fw-bold text-wrap" string="Họ và tên"/>
+                <field name="gioitinh" width="70" string="Giới tính"/>
+                <field name="tuoi" optional="hide" string="Tuổi"/>
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
-                <field name="gioitinh"/>
                 <field name="ngaysinh" optional="hide"/>
-                <field name="tuoi" optional="hide"/>
-                <field name="ngay_nhaphoc" string="Nhập học" width="100" optional="hide"/>
-                <field name="thoigian_hoc" string="Thời gian học" width="100" optional="hide"/>
-
+                <field name="ngay_nhaphoc" string="Nhập học" optional="hide"/>
+                <field name="thoigian_hoc" string="Thời gian học" optional="hide"/>
                 <field name="dm_xa_id" optional="hide"/>
-                <field name="trangthai" string="Trạng thái" class="text-wrap"
-                        widget="badge"
-                        decoration-success="trangthai == '1'"
-                        decoration-info="trangthai == '2'"
-                        decoration-danger="trangthai == '3'"/>
-                <field name="trangthai_kehoach" string="Kế hoạch" width="100" widget="badge" class="text-wrap"/>
-                <field name="ten_kehoach" string="Của tháng" width="100" class="text-wrap"/>
-                <field name="tong_kehoach" string="Tổng" width="70"/>
-                <button name="action_xem_danhsach_kehoach"
-                        string=""
-                        type="object"
-                        class="btn-secondary btn-sm"
-                        icon="fa-list-ul"
-                        invisible="tong_kehoach==0"
-                        context="{'default_context_type':'4'}"
-                        title="Danh sách [Kế hoạch]"
-                />
 
-                <field name="tong_kehoach_doiduyet" string="Đợi duyệt" width="70"/>
+                <field name="trangthai" string="Trạng thái" width="110" class="text-wrap"
+                       widget="badge"
+                       decoration-success="trangthai == '1'"
+                       decoration-info="trangthai == '2'"
+                       decoration-danger="trangthai == '3'"/>
 
-                <field name="ngay_guiduyet" string="Gửi duyệt" width="100" class="text-wrap"/>
+                <!-- ================= 2. KẾ HOẠCH HIỆN TẠI & TIẾN ĐỘ ================= -->
+                <field name="ten_kehoach" string="Của tháng" width="105" class="fw-bold text-wrap"/>
+                <field name="trangthai_kehoach" string="Kế hoạch" width="110" widget="badge" class="text-wrap"/>
 
 
 
+                <!-- ================= 3. KHỐI GIAI ĐOẠN 1: ĐỢI DUYỆT ================= -->
+                <field name="tong_kehoach_doiduyet" string="Đợi duyệt" width="65" class="text-center fw-bold"/>
+                <field name="ngay_guiduyet" string="Gửi duyệt" width="95" class="text-center text-wrap"/>
 
                 <button name="action_xem_danhsach_kehoach"
                         string=""
                         type="object"
-                        class="btn-info btn-sm text-white"
+                        class="btn-outline-info btn-sm"
                         icon="fa-list-ul"
-                        invisible="tong_kehoach_doiduyet==0"
+                        invisible="tong_kehoach_doiduyet == 0"
                         context="{'default_context_type':'2','default_context_trangthai':['2'],'default_context_trangthai_pheduyet':['0']}"
-                        title="Danh sách [Kế hoạch] Cần duyệt"
-                />
+                        title="Xem danh sách [Kế hoạch] Chờ duyệt"/>
 
                 <button name="action_duyet_kehoach"
                         string="Duyệt"
                         type="object"
-                        class="btn-info btn-sm text-white"
+                        class="btn-info btn-sm text-white fw-bold"
                         icon="fa-paper-plane"
                         invisible="is_kiemduyet == False"
-                        title="Kế hoạch này cần Duyệt để đưa vào can thiệp"
-                />
+                        title="Kế hoạch này cần Duyệt để đưa vào can thiệp"/>
 
-                <field name="tong_kehoach_dang_canthiep" string="Xác nhận" width="70"/>
-
-               <field name="ngay_conlai_kehoach"
-                       string="Còn lại(ngày)"
-                       width="70"
-                       class="fw-bold kh-blink-alert"
+                <!-- ================= 4. KHỐI GIAI ĐOẠN 2: ĐANG CAN THIỆP & XÁC NHẬN ================= -->
+                <field name="tong_kehoach_dang_canthiep" string="Đang can thiệp" width="65" class="text-center fw-bold"/>
+                <field name="ngay_conlai_kehoach"
+                       string="Còn lại (ngày)"
+                       width="95"
+                       class="fw-bold text-center"
                        decoration-danger="ngay_conlai_kehoach &gt;= 0 and ngay_conlai_kehoach &lt;= 2"
                        decoration-warning="ngay_conlai_kehoach &gt;= 3 and ngay_conlai_kehoach &lt;= 10"
                        decoration-success="ngay_conlai_kehoach &gt; 10"/>
 
-
                 <button name="action_xem_danhsach_kehoach"
                         string=""
                         type="object"
-                        class="btn-success btn-sm fw-bold text-uppercase"
+                        class="btn-outline-success btn-sm"
                         icon="fa-list-ul"
-                        invisible="tong_kehoach_dang_canthiep==0"
+                        invisible="tong_kehoach_dang_canthiep == 0"
                         context="{'default_context_type':'3','default_context_trangthai':['1'],'default_context_trangthai_pheduyet':['1']}"
-                        title="Danh sách [Kế hoạch] Cần đã Duyệt"
-                />
+                        title="Xem danh sách [Kế hoạch] Đang can thiệp"/>
 
-                 <button name="action_xem_danhsach_kehoach_can_kiemduyet_ketqua"
+                <button name="action_xem_danhsach_kehoach_can_kiemduyet_ketqua"
                         string="Xác nhận"
                         type="object"
                         class="btn-success btn-sm fw-bold text-uppercase"
                         icon="fa-check-square-o"
-                        invisible="tong_kehoach_dang_canthiep==0"
+                        invisible="tong_kehoach_dang_canthiep == 0"
                         context="{'default_context_type':'3','default_context_trangthai':['1']}"
-                        title="Danh sách [Kế hoạch] Có thể xác nhận kết quả"
-                />
+                        title="Đánh giá / Xác nhận kết quả can thiệp"/>
 
-                <field name="tong_kehoach_da_canthiep" string="Đã kết thúc" width="70"/>
+                <!-- ================= 5. KHỐI GIAI ĐOẠN 3: LƯU TRỮ & TỔNG ================= -->
+                <field name="tong_kehoach_da_canthiep" string="Đã kết thúc" width="75" class="text-center"/>
 
                 <button name="action_xem_danhsach_kehoach"
-                    string=""
-                    type="object"
-                    class="btn-secondary btn-sm"
-                    icon="fa-list-ul"
-                    invisible="tong_kehoach_da_canthiep==0"
-                    context="{'default_context_type':'5','default_context_trangthai':['-1']}"
-                    title="Danh sách [Kế hoạch] đã kết thúc"
-                />
+                        string=""
+                        type="object"
+                        class="btn-outline-secondary btn-sm"
+                        icon="fa-list-ul"
+                        invisible="tong_kehoach_da_canthiep == 0"
+                        context="{'default_context_type':'5','default_context_trangthai':['-1']}"
+                        title="Danh sách [Kế hoạch] đã kết thúc"/>
 
+                <field name="tong_kehoach" string="Tổng kế hoạch" width="55" class="text-center fw-bold"/>
 
+                <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-secondary btn-sm"
+                        icon="fa-folder-open-o"
+                        invisible="tong_kehoach == 0"
+                        context="{'default_context_type':'4'}"
+                        title="Xem toàn bộ lịch sử [Kế hoạch]"/>
 
-
-
-
+                <!-- Cột ẩn logic -->
+                <field name="is_kiemduyet" column_invisible="1"/>
 
             </list>
         </field>
     </record>
-
-
-
-
-
   </data>
 </odoo>

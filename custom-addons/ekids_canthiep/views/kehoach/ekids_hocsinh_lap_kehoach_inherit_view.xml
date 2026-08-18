@@ -7,22 +7,26 @@
             <list create="false" delete="false" limit="200" default_order="id asc">
 
                 <field name="sequence" width="25"/>
-                <field name="name" width="170" class="text-wrap"/>
+                <field name="name" width="200" class="text-wrap"/>
+                <field name="gioitinh" width="70" string="Giới tính"/>
+                <field name="tuoi" optional="hide" string="Tuổi"/>
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
-                <field name="gioitinh"/>
                 <field name="ngaysinh" optional="hide"/>
-                <field name="tuoi"/>
-                <field name="ngay_nhaphoc" string="Nhập học" width="100"/>
-                <field name="thoigian_hoc" string="Thời gian học" width="100"/>
-
+                <field name="ngay_nhaphoc" string="Nhập học" optional="hide"/>
+                <field name="thoigian_hoc" string="Thời gian học" optional="hide"/>
                 <field name="dm_xa_id" optional="hide"/>
-                <field name="trangthai" string="Trạng thái" class="text-wrap"
-                        widget="badge"
-                        decoration-success="trangthai == '1'"
-                        decoration-info="trangthai == '2'"
-                        decoration-danger="trangthai == '3'" width="100"/>
-                <field name="trangthai_kehoach"  string="Kế hoạch" widget="badge" class="text-wrap"/>
-                <field name="ten_kehoach" string="Của tháng" class="text-wrap"/>
+
+                <field name="trangthai" string="Trạng thái" width="110" class="text-wrap"
+                       widget="badge"
+                       decoration-success="trangthai == '1'"
+                       decoration-info="trangthai == '2'"
+                       decoration-danger="trangthai == '3'"/>
+
+                <!-- ================= 2. KẾ HOẠCH HIỆN TẠI & TIẾN ĐỘ ================= -->
+                <field name="ten_kehoach" string="Của tháng" width="150" class="fw-bold text-wrap"/>
+                <field name="trangthai_kehoach" string="Kế hoạch" width="110" widget="badge" class="text-wrap"/>
+
+
                 <field name="tong_kehoach_taomoi" string="Đã lập"/>
 
                 <button name="action_xem_danhsach_kehoach"
