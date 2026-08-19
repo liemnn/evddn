@@ -8,7 +8,7 @@ class ChiTieuNam(models.Model):
     _description = "Mô tả về chi tiêu hàng năm"
     _order = "id desc"
 
-
+    sequence = fields.Integer(string="STT", default=1)
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở",required=True,ondelete="restrict")
     name = fields.Selection([(str(year), str(year))
                              for year in range(datetime.now().year - 1,

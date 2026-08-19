@@ -284,7 +284,89 @@
 /* Nút dạng List dùng icon nhỏ */
 .kh-btn-action i { font-size: 18px; }
 
+/* Fix bug odoo handle và calendar */
+
+/* ===================================================
+   1. KHÔI PHỤC CÁC MŨI TÊN (CALENDAR / DATEPICKER / CHEVRON)
+   =================================================== */
+/* Mũi tên trái (Lùi tháng) */
+.oi-chevron-left::before,
+.oi.oi-chevron-left::before {
+    font-family: "FontAwesome" !important;
+    content: "\f053" !important;
+}
+
+/* Mũi tên phải (Tiến tháng) */
+.oi-chevron-right::before,
+.oi.oi-chevron-right::before {
+    font-family: "FontAwesome" !important;
+    content: "\f054" !important;
+}
+
+/* Mũi tên trỏ xuống */
+.oi-chevron-down::before,
+.oi.oi-chevron-down::before {
+    font-family: "FontAwesome" !important;
+    content: "\f078" !important;
+}
+
+/* Mũi tên trỏ lên */
+.oi-chevron-up::before,
+.oi.oi-chevron-up::before {
+    font-family: "FontAwesome" !important;
+    content: "\f077" !important;
+}
+
+/* Ép hiển thị chung cho các icon .oi */
+.oi::before {
+    display: inline-block !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    text-rendering: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
 
 
+/* ===================================================
+   2. ICON KÉO THẢ 6 CHẤM TRÒN (2 CỘT x 3 HÀNG)
+   =================================================== */
+.o_list_table td.o_handle_cell {
+    width: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding: 0 !important;
+}
 
+.o_list_table td.o_handle_cell .o_row_handle {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 24px !important;
+    cursor: grab !important;
+}
 
+/* Vẽ 6 chấm tròn bằng SVG nhúng Base64 */
+.o_list_table td.o_handle_cell .o_row_handle.oi-draggable::before {
+    content: "" !important;
+    display: inline-block !important;
+    width: 10px !important;
+    height: 16px !important;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNiI+PGNpcmNsZSBjeD0iMi41IiBjeT0iMi41IiByPSIxLjUiIGZpbGw9IiM2Yzc1N2QiLz48Y2lyY2xlIGN4PSI3LjUiIGN5PSIyLjUiIHI9IjEuNSIgZmlsbD0iIzZjNzU3ZCIvPjxjaXJjbGUgY3g9IjIuNSIgY3k9IjgiIHI9IjEuNSIgZmlsbD0iIzZjNzU3ZCIvPjxjaXJjbGUgY3g9IjcuNSIgY3k9IjgiIHI9IjEuNSIgZmlsbD0iIzZjNzU3ZCIvPjxjaXJjbGUgY3g9IjIuNSIgY3k9IjEzLjUiIHI9IjEuNSIgZmlsbD0iIzZjNzU3ZCIvPjxjaXJjbGUgY3g9IjcuNSIgY3k9IjEzLjUiIHI9IjEuNSIgZmlsbD0iIzZjNzU3ZCIvPjwvc3ZnPg==") !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    opacity: 0.85;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+/* Hover: Đậm màu đen và phóng to nhẹ */
+.o_list_table td.o_handle_cell .o_row_handle:hover::before {
+    opacity: 1 !important;
+    transform: scale(1.15);
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMCAxNiI+PGNpcmNsZSBjeD0iMi41IiBjeT0iMi41IiByPSIxLjUiIGZpbGw9IiMyMTI1MjkiLz48Y2lyY2xlIGN4PSI3LjUiIGN5PSIyLjUiIHI9IjEuNSIgZmlsbD0iIzIxMjUyOSIvPjxjaXJjbGUgY3g9IjIuNSIgY3k9IjgiIHI9IjEuNSIgZmlsbD0iIzIxMjUyOSIvPjxjaXJjbGUgY3g9IjcuNSIgY3k9IjgiIHI9IjEuNSIgZmlsbD0iIzIxMjUyOSIvPjxjaXJjbGUgY3g9IjIuNSIgY3k9IjEzLjUiIHI9IjEuNSIgZmlsbD0iIzIxMjUyOSIvPjxjaXJjbGUgY3g9IjcuNSIgY3k9IjEzLjUiIHI9IjEuNSIgZmlsbD0iIzIxMjUyOSIvPjwvc3ZnPg==") !important;
+}
