@@ -218,21 +218,19 @@
         </field>
     </record>
 
-        <!--        kanban view-->
-
     <record id="ekids_hocsinh.hocphi_form" model="ir.ui.view">
-        <field name="name">Thông tin Học phí (Fix Height)</field>
+        <field name="name">Thông tin Học phí (Optimized Space)</field>
         <field name="model">ekids.hocphi</field>
         <field name="arch" type="xml">
-            <form string="Quản lý Học phí học sinh">
+            <form string="Quản lý Học phí học sinh" class="o_form_sheet_bg">
                 <field name="is_chot_hocphi" invisible="1"/>
                 <header>
-                    <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary" string="In phiếu thu"/>
+                    <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary" string="In phiếu thu" icon="fa-print"/>
                     <button name="action_xacthuc_tinhlai_hocphi_hocsinh" invisible="is_show_tinhtoan_lai == False" type="object" confirm="Bạn chắc chắn muốn tính toán lại chứ?" class="btn btn-secondary" string="Tính lại [Học phí]"/>
                     <button name="action_chot_hocphi_khi_hocsinh_nghi"
                             invisible="not is_chot_hocphi"
                             type="object"
-                            confirm="Hết tháng này học sinh sẽ nghỉ học bạn chắc chắn muốn chốt lại toàn bộ [Học phí] trong tháng đề hoàn thành trước khi nghỉ ?"
+                            confirm="Hết tháng này học sinh sẽ nghỉ học bạn chắc chắn muốn chốt lại toàn bộ [Học phí] trong tháng?"
                             class="btn btn-secondary"
                             string="Chốt Học phí"/>
 
@@ -244,203 +242,150 @@
                            invisible="is_dong_hocphi_theoky == False"/>
                 </header>
 
-                <sheet>
+                <sheet class="p-3" style="background-color: #f1f5f9; max-width: 1400px; margin: 0 auto;">
                     <field name="is_dl_locked" invisible="1"/>
-                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom w-100 mx-0" style="gap: 15px;">
 
-                        <div class="d-flex align-items-center flex-wrap" style="gap: 20px;">
-                            <div class="d-flex align-items-baseline">
-                                <span class="fw-bold text-muted me-2 small">Học sinh:</span>
-                                <field name="hocsinh_id"
-                                       readonly="1"
-                                       class="fw-bolder fs-4 text-primary mb-0"
-                                       options="{'no_open': True}"
-                                       style="font-weight: 800;"/>
+                    <!-- 1. HEADER THÔNG TIN HỌC SINH (SIÊU GỌN) -->
+                    <div class="bg-white px-3 py-2 rounded-2 shadow-sm mb-2 d-flex flex-wrap justify-content-between align-items-center" style="border-left: 4px solid #2563eb !important;">
+                        <div class="d-flex align-items-center" style="gap: 20px;">
+                            <div>
+                                <span class="text-muted fw-bold d-block" style="font-size: 0.6rem; text-transform: uppercase;">Học sinh</span>
+                                <field name="hocsinh_id" readonly="1" class="fw-bold fs-5 text-primary mb-0" options="{'no_open': True}"/>
                             </div>
-
-                            <div class="d-flex align-items-center bg-white border rounded-pill px-2 py-1 shadow-sm"
-                                 invisible="is_dong_hocphi_theoky == False"
-                                 style="border-color: #10b981 !important;">
-
-                                <button name="action_xem_lichsu_giaodich"
-                                        type="object"
-                                        class="btn btn-link p-0 m-0 text-start text-decoration-none d-flex align-items-center"
-                                        style="color: inherit; box-shadow: none;"
-                                        title="Nhấn để xem Lịch sử giao dịch">
-
-                                    <div class="text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 34px; height: 34px; background-color: #10b981;">
-                                        <i class="fa fa-google-wallet fs-6"/>
-                                    </div>
-                                    <div class="d-flex flex-column justify-content-center me-3">
-                                        <span class="fw-bold text-muted" style="font-size: 0.65rem; text-transform: uppercase; line-height: 1;">Số dư tài khoản</span>
-                                        <span class="fw-black text-success" style="font-size: 1.1rem; line-height: 1;">
-                                            <field name="sotien_vi" readonly="1" widget="integer" nolabel="1"/> <small style="font-size: 0.75rem;">vnđ</small>
-                                        </span>
-                                    </div>
-                                </button>
-
-                                <button name="action_nop_hocphi_qua_vi"
-                                        invisible="is_show_vi_thanhtoan == False"
-                                        type="object"
-                                        class="btn btn-success btn-sm rounded-pill fw-bold px-3 py-1 m-0"
-                                        style="font-size: 0.8rem; text-transform: uppercase; background-color: #10b981; border: none; box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3);"
-                                        icon="fa-check-circle"
-                                        string="Thanh toán"
-                                        confirm="Xác nhận trừ tiền từ Ví của học sinh để đóng học phí tháng này?"/>
+                            <div class="border-start ps-3">
+                                <span class="text-muted fw-bold d-block" style="font-size: 0.6rem; text-transform: uppercase;">Tháng học</span>
+                                <span class="fw-bold text-dark">THÁNG <field name="thang_id" readonly="1" class="oe_inline"/></span>
                             </div>
-                        </div>
-
-                        <div class="d-flex align-items-center flex-wrap" style="gap: 25px;">
-                            <div class="text-end">
-                                <h5 class="text-uppercase fw-bold mb-0" style="letter-spacing: 0.5px; color: #444;">
-                                    HỌC PHÍ THÁNG <field name="thang_id" readonly="1" class="oe_inline"/>
-                                </h5>
-                            </div>
-                            <div class="d-flex align-items-baseline border-start ps-4">
-                                <span class="fw-bold text-dark me-2" style="font-size: 1.05rem;">Số ngày đi học:</span>
-                                <span class="badge bg-light border border-secondary-subtle px-3 py-1 shadow-sm d-flex align-items-baseline">
-                                    <field name="songay_dihoc"
-                                           readonly="1"
-                                           class="fw-bolder text-info oe_inline mb-0"
-                                           style="font-size: 1.15rem; font-weight: 800;"/>
-                                    <span class="ms-1 fw-bold text-dark" style="font-size: 0.95rem;">ngày</span>
+                            <div class="border-start ps-3">
+                                <span class="text-muted fw-bold d-block" style="font-size: 0.6rem; text-transform: uppercase;">Khối lượng</span>
+                                <span class="badge bg-light text-dark border px-2 py-0.5 fw-bold">
+                                    <field name="songay_dihoc" readonly="1" class="oe_inline text-info"/> ngày đi học
                                 </span>
                             </div>
                         </div>
 
+                        <!-- Khu vực Ví tiền -->
+                        <div class="d-flex align-items-center" style="gap: 10px;" invisible="is_dong_hocphi_theoky == False">
+                            <div class="bg-light border rounded-pill px-3 py-1 d-flex align-items-center">
+                                <i class="fa fa-google-wallet text-success me-2"/>
+                                <div class="d-flex flex-column">
+                                    <span style="font-size: 0.55rem; text-transform: uppercase;" class="text-muted fw-bold">Ví học sinh</span>
+                                    <span class="fw-bold text-success"><field name="sotien_vi" readonly="1" widget="integer" nolabel="1"/> đ</span>
+                                </div>
+                            </div>
+                            <button name="action_nop_hocphi_qua_vi"
+                                    invisible="is_show_vi_thanhtoan == False"
+                                    type="object"
+                                    class="btn btn-success btn-sm rounded-pill fw-bold px-3 py-1 shadow-sm"
+                                    string="Thanh toán"
+                                    confirm="Xác nhận trừ tiền từ Ví để đóng học phí?"/>
+                        </div>
                     </div>
-                    <div class="row d-flex align-items-stretch mb-4 mx-0" style="min-height: 280px;">
 
-                        <div class="col-md-7 px-0 pe-md-3 d-flex flex-column">
-                            <div class="border rounded shadow-sm bg-white overflow-hidden d-flex flex-column flex-grow-1">
-                                <div class="border-bottom p-2 px-3" style="background-color: #e9ecef;">
-                                    <span class="fw-bold text-dark" style="font-size: 0.9rem;">
-                                        <i class="fa fa-list-alt me-2 text-secondary"/> THÔNG TIN VỀ HỌC PHÍ THÁNG <field name="thang_id" readonly="1" class="oe_inline"/>
+                    <!-- 2. KHU VỰC TRUNG TÂM (TỐI ƯU CHIỀU CAO & KHOẢNG TRẮNG) -->
+                    <div class="row g-2 mb-2">
+
+                        <!-- Cột Trái: Cấu trúc tiền (Giảm padding dọc cho đỡ tốn chỗ) -->
+                        <div class="col-lg-7 d-flex flex-column">
+                            <div class="bg-white rounded-2 shadow-sm p-3 d-flex flex-column flex-grow-1 border">
+                                <div class="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom">
+                                    <span class="fw-bold text-uppercase text-dark" style="font-size: 0.8rem;">
+                                        <i class="fa fa-calculator text-primary me-1"/> Cấu trúc tính tiền học phí
                                     </span>
+                                    <span class="badge bg-success text-white px-2 py-0.5" style="font-size: 0.65rem;">Chuẩn quy định</span>
                                 </div>
 
-                                <div class="p-3 d-flex flex-column flex-grow-1">
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                                            <div class="flex-shrink-0">
-                                                <span class="badge bg-secondary me-2" style="font-size: 0.7rem;">1</span>
-                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Tiền Lớp Chung</span>
-                                            </div>
-                                            <div class="d-flex align-items-baseline justify-content-end">
-                                                <field name="tien_bantru" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
-                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                                            <div class="flex-shrink-0">
-                                                <span class="badge bg-secondary me-2" style="font-size: 0.7rem;">2</span>
-                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Tiền Ca/Dịch Vụ</span>
-                                            </div>
-                                            <div class="d-flex align-items-baseline justify-content-end">
-                                                <field name="tien_ca" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
-                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2 text-dark">
-                                            <div class="flex-shrink-0">
-                                                <span class="badge bg-secondary me-2" style="font-size: 0.7rem;">3</span>
-                                                <span class="fw-bold" style="font-size: 0.95rem;">Được trừ</span>
-                                            </div>
-                                            <div class="d-flex align-items-baseline justify-content-end">
-                                                <span class="me-1 fw-bold">-</span>
-                                                <field name="tien_duoctru" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
-                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2 text-dark">
-                                            <div class="flex-shrink-0">
-                                                <span class="badge bg-secondary me-2" style="font-size: 0.7rem;">4</span>
-                                                <span class="fw-bold" style="font-size: 0.95rem;">Được giảm theo chính sách (nếu có)</span>
-                                            </div>
-                                            <div class="d-flex align-items-baseline justify-content-end text-dark">
-                                                <span class="me-1 fw-bold">-</span>
-                                                <field name="hocphi_giam" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
-                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
-                                            </div>
+                                <div class="flex-grow-1 py-1">
+                                    <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom">
+                                        <span class="text-dark fw-semibold" style="font-size: 0.9rem;">1. Dịch vụ Ca (Can thiệp)</span>
+                                        <div class="d-flex align-items-baseline">
+                                            <field name="tien_ca" class="oe_inline text-end fw-bold text-dark" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 text-muted small" style="font-size: 0.75rem;">đ</span>
                                         </div>
                                     </div>
 
-                                    <div class="d-flex justify-content-between align-items-center bg-success text-white rounded p-2 shadow-sm mt-2">
-                                        <span class="fw-bold ps-2" style="font-size: 0.85rem;">TỔNG PHẢI ĐÓNG = [1]+[2]-[3]-[4]</span>
-                                        <div class="d-flex align-items-baseline justify-content-end pe-2">
-                                            <field name="hocphi_phaidong" class="fw-black mb-0 oe_inline text-end" style="font-size: 1.3rem; font-weight: 900; line-height: 1;" widget="integer" nolabel="1"/>
-                                            <span class="ms-1 fw-bold opacity-75" style="font-size: 0.8rem;">VNĐ</span>
+                                    <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom">
+                                        <span class="text-dark fw-semibold" style="font-size: 0.9rem;">2. Lớp chung / Bán trú</span>
+                                        <div class="d-flex align-items-baseline">
+                                            <field name="tien_bantru" class="oe_inline text-end fw-bold text-dark" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 text-muted small" style="font-size: 0.75rem;">đ</span>
                                         </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom">
+                                        <span class="text-secondary fw-semibold" style="font-size: 0.9rem;">3. Các khoản được trừ (-)</span>
+                                        <div class="d-flex align-items-baseline text-danger">
+                                            <span class="me-1">-</span>
+                                            <field name="tien_duoctru" class="oe_inline text-end fw-bold" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 text-muted small" style="font-size: 0.75rem;">đ</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center py-1.5 border-bottom">
+                                        <span class="text-danger fw-semibold" style="font-size: 0.9rem;">4. Giảm theo chính sách</span>
+                                        <div class="d-flex align-items-baseline text-danger">
+                                            <span class="me-1">-</span>
+                                            <field name="hocphi_giam" class="oe_inline text-end fw-bold" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 text-muted small" style="font-size: 0.75rem;">đ</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Khối tổng tiền (Gọn gàng, bám sát nội dung) -->
+                                <div class="mt-2 p-2.5 rounded-2 text-white d-flex justify-content-between align-items-center shadow-sm" style="background: #0f172a !important;">
+                                    <div class="d-flex flex-column">
+                                        <span class="text-uppercase fw-bold" style="font-size: 0.65rem; opacity: 0.8;">Tổng phải đóng thực tế</span>
+                                        <span class="text-success fw-bold" style="font-size: 0.7rem;"><i class="fa fa-check-circle me-1"/> Đã khớp số liệu</span>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <field name="hocphi_phaidong" class="fw-black mb-0 oe_inline text-end text-white" style="font-size: 1.25rem; font-weight: 900; line-height: 1;" widget="integer" nolabel="1"/>
+                                        <span class="ms-1 fw-bold text-white opacity-75" style="font-size: 0.8rem;">VNĐ</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-5 px-0 d-flex flex-column">
-                            <div class="border rounded shadow-sm bg-white overflow-hidden d-flex flex-column">
-                                <div class="border-bottom p-2 px-3" style="background-color: #e9ecef;">
-                                    <span class="fw-bold text-dark" style="font-size: 0.9rem;">
-                                        <i class="fa fa-sliders me-2 text-secondary"/> CHÍNH SÁCH GIẢM (nếu có)
-                                    </span>
+                        <!-- Cột Phải: Thiết lập chính sách (Thu hẹp chiều cao, căn giữa nội dung) -->
+                        <div class="col-lg-5 d-flex flex-column">
+                            <div class="bg-white rounded-2 shadow-sm p-3 d-flex flex-column flex-grow-1 border">
+                                <div class="d-flex align-items-center pb-1 mb-2 border-bottom">
+                                    <i class="fa fa-sliders text-primary me-1"/>
+                                    <span class="fw-bold text-uppercase text-dark" style="font-size: 0.8rem;">Thiết lập chính sách giảm</span>
                                 </div>
 
-                                <div class="p-3 bg-white">
-                                    <group class="mb-0 mt-0">
-                                        <field name="dm_chinhsach_giam_id" string="Diện chính sách giảm học phí" readonly="1"/>
-                                        <field name="is_giamhocphi_dacthu"
-                                               string="Thiết lập giảm đặc thù cho học sinh"
-                                               widget="boolean_toggle"
-                                               readonly="is_dl_locked"
-                                        />
-                                        <field name="tyle_giamhocphi"
-                                               string="% Giảm học phí/tổng "
-                                               widget="percent" class="fw-bold text-danger"
-                                               invisible="is_giamhocphi_dacthu == True"
-                                               readonly="is_dl_locked"
-                                        />
-                                        <field name="tyle_giamhocphi_bantru"
-                                               string="% Giảm [Lớp chung]"
-                                               widget="percent" class="fw-bold text-danger"
-                                               invisible="is_giamhocphi_dacthu == False"
-                                               readonly="is_dl_locked"
-                                        />
-                                        <field name="tyle_giamhocphi_ca"
-                                               string="% Giảm [Can thiệp]"
-                                               widget="percent"
-                                               class="fw-bold text-danger"
-                                               invisible="is_giamhocphi_dacthu == False"
-                                               readonly="is_dl_locked"
-                                        />
+                                <div class="flex-grow-1 d-flex flex-column justify-content-center py-2">
+                                    <group class="mb-0">
+                                        <field name="dm_chinhsach_giam_id" string="Diện chính sách" readonly="1"/>
+                                        <field name="is_giamhocphi_dacthu" string="Giảm đặc thù" widget="boolean_toggle" readonly="is_dl_locked"/>
+                                        <field name="tyle_giamhocphi" string="% Giảm tổng" widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == True" readonly="is_dl_locked"/>
+                                        <field name="tyle_giamhocphi_bantru" string="% Giảm lớp chung" widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == False" readonly="is_dl_locked"/>
+                                        <field name="tyle_giamhocphi_ca" string="% Giảm can thiệp" widget="percent" class="fw-bold text-danger" invisible="is_giamhocphi_dacthu == False" readonly="is_dl_locked"/>
                                     </group>
                                 </div>
+
+                                <div class="text-muted fst-italic text-center pt-1 border-top" style="font-size: 0.7rem;">
+                                    Hệ thống tự động tính toán lại khi thay đổi cấu hình.
+                                </div>
                             </div>
                         </div>
 
                     </div>
 
-                    <notebook>
-                        <page name="hocphi_bantru_ids" string="CHI TIẾT: LỚP CHUNG [+]">
-                            <field name="hocphi_bantru_ids"
-                                   context="{'default_coso_id': coso_id}"
-                                   readonly="is_dl_locked"
-                            />
-                        </page>
-                        <page name="hocphi_ca_ids" string="CHI TIẾT: CA CAN THIỆP [+]">
-                            <field name="hocphi_ca_ids"
-                                   context="{'default_coso_id': coso_id}"
-                                   readonly="is_dl_locked"
-                            />
-                        </page>
-                        <page name="hocphi_duoctru_ids" string="CHI TIẾT: ĐƯỢC TRỪ [-]">
-                            <field name="hocphi_duoctru_ids"
-                                   context="{'default_coso_id': coso_id}"
-                                   readonly="is_dl_locked"
-                            />
-                        </page>
-                    </notebook>
+                    <!-- 3. KHU VỰC CHI TIẾT BÊN DƯỚI -->
+                    <div class="bg-white rounded-2 shadow-sm p-2 border">
+                        <notebook class="custom-app-notebook">
+                            <page name="hocphi_ca_ids" string="Chi tiết Dịch vụ Ca [+]">
+                                <field name="hocphi_ca_ids" context="{'default_coso_id': coso_id}" readonly="is_dl_locked"/>
+                            </page>
+                            <page name="hocphi_bantru_ids" string="Chi tiết Lớp chung [+]">
+                                <field name="hocphi_bantru_ids" context="{'default_coso_id': coso_id}" readonly="is_dl_locked"/>
+                            </page>
+                            <page name="hocphi_duoctru_ids" string="Chi tiết Khoản được trừ [-]">
+                                <field name="hocphi_duoctru_ids" context="{'default_coso_id': coso_id}" readonly="is_dl_locked"/>
+                            </page>
+                        </notebook>
+                    </div>
+
                 </sheet>
             </form>
         </field>

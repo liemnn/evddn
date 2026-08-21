@@ -114,7 +114,8 @@ class CoSo(models.Model):
                 ngay_nghihoc = hocphi.hocsinh_id.ngay_nghihoc
                 if ngay_nghihoc:
                     if ngay_nghihoc < tu_ngay:
-                        hocphi.unlink()
+                        hocphi.with_context(unlink_by_system=True).unlink()
+                        #hocphi.unlink()
 
 
 

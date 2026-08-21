@@ -5,11 +5,665 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/ERROR" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/backup" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/entrypoint.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/nginx.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/nginx/ssl/ca_bundle.crt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/nginx/ssl/certificate.crt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/nginx/ssl/private.key" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/nginx/ssl/selfsigned.crt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/nginx/ssl/selfsigned.key" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/nginx_port.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/odoo.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/postgresql.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/ERROR" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/entrypoint.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/nginx.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/__manifest__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/controllers/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/controllers/rpc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/base_data.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/ir_actions_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/ir_config_parameter_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/ir_cron_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/ir_demo_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/ir_demo_failure_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/ir_module_category_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/ir_module_module.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/neutralize.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/report_paperformat_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res.country.state.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res.lang.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_bank.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_bank_demo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_company_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_company_demo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_country_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_currency_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_currency_rate_demo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_lang_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_partner_bank_demo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_partner_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_partner_demo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_partner_image_demo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_users_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/res_users_demo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/data/rtlcss.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/af.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/am.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/ar.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/az.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/base.pot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/be.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/bg.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/bs.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/ca.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/cs.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/da.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/de.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/el.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/en_GB.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es_BO.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es_CL.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es_CO.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es_CR.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es_DO.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es_EC.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es_MX.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es_PE.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es_PY.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/es_VE.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/et.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/eu.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/fa.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/fi.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/fo.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/fr.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/fr_BE.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/fr_CA.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/gl.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/gu.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/he.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/hi.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/hr.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/hu.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/hy.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/id.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/is.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/it.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/ja.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/ka.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/kab.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/km.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/ko.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/lb.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/lo.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/lt.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/lv.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/mk.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/ml.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/mn.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/ms.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/nb.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/nl.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/no.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/pl.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/pt.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/pt_BR.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/ro.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/ru.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/sk.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/sl.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/sq.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/sr.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/sr@latin.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/sv.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/sw.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/ta.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/th.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/tr.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/uk.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/vi.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/zh_CN.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/i18n/zh_TW.po" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/assetsbundle.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/avatar_mixin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/decimal_precision.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/image_mixin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_actions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_actions_report.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_asset.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_attachment.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_autovacuum.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_binary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_config_parameter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_cron.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_default.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_demo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_demo_failure.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_exports.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_fields.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_filters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_http.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_logging.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_mail_server.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_module.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_profile.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_property.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_qweb.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_qweb_fields.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_rule.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_sequence.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_ui_menu.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/ir_ui_view.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/report_layout.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/report_paperformat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/res_bank.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/res_company.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/res_config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/res_country.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/res_currency.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/res_lang.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/res_partner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/res_users.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/models/res_users_deletion.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/populate/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/populate/ir_filters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/populate/res_company.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/populate/res_currency.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/populate/res_partner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/populate/res_user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/corporate_defaults.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/corporate_defaults.xsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/corporate_odt_header.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/corporate_sxw_header.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/custom_default_printscreen.xsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/custom_new.xsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/custom_report.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/custom_rml_printscreen.xsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/custom_view.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/ir_model_report.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/ir_model_templates.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/ir_module_report_templates.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/ir_module_reports.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/mako_footer.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/mako_header.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/mako_template.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/report/report_base_report_irmodulereference.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/rng/activity_view.rng" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/rng/calendar_view.rng" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/rng/common.rng" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/rng/graph_view.rng" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/rng/pivot_view.rng" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/rng/search_view.rng" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/rng/tree_view.rng" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/security/base_groups.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/security/base_security.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/security/ir.model.access.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/description/board.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/description/board.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/description/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/description/icon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/description/modules.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/description/modules.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/description/settings.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/description/settings.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/avatar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/avatar_grey.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/bg_background_template.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/company_image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ad.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ae.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/af.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ag.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ai.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/al.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/am.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/an.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ao.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/as.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/at.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/au.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/aw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ax.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/az.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ba.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/be.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bf.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bj.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/br.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bs.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/by.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/bz.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ca.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cf.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ch.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ci.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ck.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/co.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cv.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cx.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/cz.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/de.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/dj.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/dk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/dm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/do.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/dz.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ec.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ee.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/eg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/eh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/er.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/es.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/et.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/fi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/fj.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/fk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/fm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/fo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/fr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ga.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ge.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gq.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gs.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/gy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/hk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/hn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/hr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ht.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/hu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/id.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ie.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/il.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/im.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/in.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/io.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/iq.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ir.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/iran.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/is.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/it.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/je.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/jm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/jo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/jp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ke.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/kg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/kh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ki.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/km.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/kn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/kp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/kr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/kw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ky.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/kz.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/la.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/lb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/lc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/li.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/lk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/lr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ls.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/lt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/lu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/lv.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ly.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ma.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/md.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/me.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ml.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mq.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ms.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mv.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mx.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/my.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/mz.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/na.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/nc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ne.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/nf.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ng.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ni.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/nl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/no.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/np.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/nr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/nu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/nz.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/om.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pa.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pe.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pf.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ph.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ps.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/pw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/py.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/qa.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ro.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/rs.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ru.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/rw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sa.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/se.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sh.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/si.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/so.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ss.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/st.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sv.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sx.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/sz.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/td.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tf.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/th.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tj.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/to.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tt.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tv.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/tz.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ua.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ug.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/us.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/uy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/uz.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/va.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/vc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ve.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/vg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/vi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/vn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/vu.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/wf.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ws.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/xk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/ye.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/za.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/zm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/country_flags/zw.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/account_accountant.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/appointment.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/helpdesk.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/hr_appraisal.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/industry_fsm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/knowledge.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/marketing_automation.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/mrp_plm.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/mrp_workorder.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/payment_sepa_direct_debit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/planning.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/quality_control.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/sale_ebay.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/sale_subscription.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/sign.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/social.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/stock_barcode.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/timesheet_grid.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/voip.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/web_mobile.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/web_studio.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/website_form_editor.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/website_twitter_wall.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/icons/website_version.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/lang_flags/lang_ar.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/logo_sample.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/logo_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/main_partner-image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/money.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/onboarding_confetti.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/partner_demo_portal.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/partner_root-image.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/public_user-image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_company_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_1-image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_10-image.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_12-image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_18-image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_2-image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_3-image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_4-image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_10.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_11.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_13.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_14.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_15.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_16.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_17.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_18.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_24.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_25.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_27.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_28.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_30.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_31.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_32.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_33.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_34.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_address_7.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_main1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/res_partner_main2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/truck.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/user-slash.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/img/user_demo-image.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/src/css/description.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/src/css/description.sass" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/src/css/modules.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/src/scss/onboarding.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/src/scss/onboarding.variables.dark.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/src/scss/onboarding.variables.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/src/scss/res_partner.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/tests/test_ir_model_fields_translation.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/static/xls/res_partner.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/common.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/fire_small.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/minimal.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/odoo.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_acl.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_avatar_mixin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_barcode.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_base.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_basecase.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_cache.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_cloc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_config_parameter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_date_utils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_db_cursor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_deprecation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_expression.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_float.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_form_create.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_format_address_mixin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_func.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_http_case.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_image.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_actions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_attachment.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_cron.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_default.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_filters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_http.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_mail_server.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_module.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_module_category.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_sequence.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ir_sequence_date_range.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_mail.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_mail_examples.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_menu.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_mimetypes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_misc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_module.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_neutralize.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_num2words_ar.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_orm.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_ormcache.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_osv.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_pdf.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_profiler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_qweb.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_qweb_field.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_reports.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_res_company.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_res_config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_res_country.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_res_currency.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_res_lang.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_res_partner.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_res_partner_bank.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_res_users.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_search.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_test_retry.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_test_suite.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_tests_tags.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_translate.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_tz.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_uninstall.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_user_has_group.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/test_xmlrpc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/tests/tommy_small.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/base_menus.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/decimal_precision_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_actions_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_asset_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_attachment_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_config_parameter_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_cron_trigger_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_cron_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_default_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_filters_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_logging_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_mail_server_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_model_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_module_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_profile_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_property_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_qweb_widget_templates.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_rule_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_sequence_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_ui_menu_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/ir_ui_view_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/onboarding_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/report_paperformat_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/res_bank_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/res_company_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/res_config_settings_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/res_config_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/res_country_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/res_currency_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/res_lang_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/res_partner_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/views/res_users_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_export_language.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_export_language_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_import_language.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_import_language_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_language_install.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_language_install_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_module_uninstall.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_module_uninstall_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_module_update.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_module_update_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_module_upgrade.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_module_upgrade_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_partner_merge.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server-onlyoffice/vidu_z31/odoo/base/wizard/base_partner_merge_views.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_chitieu_nam_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_chitieu_nam_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_chitieu_thang_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/models/ekids_chitieu_thang_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_chitieu_thang_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/views/ekids_chitieu_thang_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/static/src/css/ekids_odoo_custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/static/src/css/ekids_odoo_custom.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_func/coso_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_func/coso_util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/ekids_coso_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/ekids_coso_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/ekids_hocphi_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/ekids_hocphi_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,26 +701,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.evddn.executor&quot;: &quot;Run&quot;,
-    &quot;Python.formula_util.executor&quot;: &quot;Run&quot;,
-    &quot;Python.python_util.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/odoo/evddn/custom-addons/ekids_phuhuynh/views&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.evddn.executor": "Debug",
+    "Python.formula_util.executor": "Run",
+    "Python.python_util.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "last_opened_file_path": "D:/odoo/evddn",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\odoo\evddn\docker-compose" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_phuhuynh\views" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_phuhuynh\controllers" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_func" />
       <recent name="D:\odoo\evddn\backups" />
-      <recent name="D:\odoo\evddn\docker-compose\odoo19" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_hdsd\static\src\html\giaovien" />
@@ -164,14 +818,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00373" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1785297553172</created>
-      <option name="number" value="00373" />
-      <option name="presentableId" value="LOCAL-00373" />
-      <option name="project" value="LOCAL" />
-      <updated>1785297553172</updated>
     </task>
     <task id="LOCAL-00374" summary="liemnn">
       <option name="closed" value="true" />
@@ -557,7 +1203,15 @@
       <option name="project" value="LOCAL" />
       <updated>1787020858622</updated>
     </task>
-    <option name="localTasksCounter" value="422" />
+    <task id="LOCAL-00422" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1787108755768</created>
+      <option name="number" value="00422" />
+      <option name="presentableId" value="LOCAL-00422" />
+      <option name="project" value="LOCAL" />
+      <updated>1787108755769</updated>
+    </task>
+    <option name="localTasksCounter" value="423" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -685,6 +1339,16 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_phuhuynh/controllers/ekids_lichhoc_controller.py</url>
           <line>14</line>
           <option name="timeStamp" value="443" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/ekids_coso_model.py</url>
+          <line>116</line>
+          <option name="timeStamp" value="448" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_func/coso_util.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="449" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
