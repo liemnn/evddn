@@ -254,6 +254,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
             is_show_vi_thanhtoan = False
             if record.trangthai in ['1','0','2']:
                 is_show_vi_thanhtoan =True
+            record._compute_is_dong_hocphi_theoky()
             if record.is_dong_hocphi_theoky == False:
                 is_show_vi_thanhtoan = False
             record.is_show_vi_thanhtoan =is_show_vi_thanhtoan
@@ -269,6 +270,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 is_dong_hocphi_theoky = True
             else:
                 is_dong_hocphi_theoky = False
+
             if record.hocsinh_id.tien <=0:
                 #het tien
                 is_dong_hocphi_theoky = False

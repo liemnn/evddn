@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/views/giaovien/ekids_chamcong_congviec2thang_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/views/giaovien/ekids_chamcong_congviec2thang_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_func/giaovien_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_func/giaovien_util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/ekids_hocphi_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/ekids_hocphi_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +55,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/DPI_Odoo",
+    "last_opened_file_path": "D:/odoo/evddn",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
@@ -162,14 +163,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00375" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1785398604214</created>
-      <option name="number" value="00375" />
-      <option name="presentableId" value="LOCAL-00375" />
-      <option name="project" value="LOCAL" />
-      <updated>1785398604216</updated>
     </task>
     <task id="LOCAL-00376" summary="liemnn">
       <option name="closed" value="true" />
@@ -555,7 +548,15 @@
       <option name="project" value="LOCAL" />
       <updated>1787279563101</updated>
     </task>
-    <option name="localTasksCounter" value="424" />
+    <task id="LOCAL-00424" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1787624176996</created>
+      <option name="number" value="00424" />
+      <option name="presentableId" value="LOCAL-00424" />
+      <option name="project" value="LOCAL" />
+      <updated>1787624176997</updated>
+    </task>
+    <option name="localTasksCounter" value="425" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -579,11 +580,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/taichinh/ekids_lichsu_giaodich_model.py</url>
-          <line>64</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ban_in/ekids_luong_ban_in_model.py</url>
           <line>106</line>
@@ -690,9 +686,9 @@
           <option name="timeStamp" value="448" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_func/coso_util.py</url>
-          <line>89</line>
-          <option name="timeStamp" value="449" />
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py</url>
+          <line>250</line>
+          <option name="timeStamp" value="452" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

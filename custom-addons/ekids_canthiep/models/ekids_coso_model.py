@@ -248,17 +248,33 @@ class CoSo(models.Model):
         search_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_search').id
         #giaovien = giaovien_util.func_get_giaovien_tu_user(self)
 
+        # Tập các giá trị đại diện cho HTML rỗng
+        EMPTY_HTML = [False, '', '<p><br></p>', '<p></p>', '<p><br/></p>', '<p>&nbsp;</p>']
 
-        domain = [
+        # 1. Điều kiện chung: thuộc cơ sở, có mục tiêu và bản ghi temp PHẢI có nội dung
+        domain_base = [
             ('kehoach_id.coso_id', '=', self.id),
             ('muctieu_id', '!=', False),
-            # 1. Loại trừ giá trị NULL/False và chuỗi rỗng hoàn toàn
-            ('thietke_temp', '!=', False),
-            ('thietke_temp', '!=', ''),
-            # 2. Loại trừ các thẻ HTML rỗng phổ biến của Editor Odoo 18
-            ('thietke_temp', 'not ilike', '<p><br></p>'),
-            ('thietke_temp', 'not ilike', '<p></p>'),
+            ('thietke_temp', 'not in', EMPTY_HTML),
         ]
+
+        # 2. Nhánh 1: Chưa xem ('0') VÀ mục tiêu gốc CHƯA CÓ thiết kế
+        domain_chua_xem = [
+            ('trangthai_thietke', '=', '0'),
+            ('muctieu_id.thietke', 'in', EMPTY_HTML),
+        ]
+
+        # 3. Nhánh 2: Đã xem / đã xử lý (khác '0')
+        domain_da_xu_ly = [
+            ('trangthai_thietke', '!=', '0'),
+        ]
+
+        # Kết hợp: domain_base AND (domain_chua_xem OR domain_da_xu_ly)
+        domain = expression.AND([
+            domain_base,
+            expression.OR([domain_chua_xem, domain_da_xu_ly])
+        ])
+
 
 
 
