@@ -162,7 +162,7 @@ def func_get_songay_dilam_giaovien_trongthang(giaovien,coso_dilam_kehoachs):
             if day:
                 is_dilam = func_is_dilam_trong_ngay(giaovien,day)
                 if is_dilam == True:
-                    ngay = ngay +1
+                    ngay = ngay + 1
 
     return ngay
 
