@@ -6,7 +6,7 @@
             <field name="arch" type="xml">
                 <list editable="bottom" create="true" delete="true" limit="20" >
                     <field name="sequence" widget="handle" />
-                    <field name="ngay" readonly="true"/>
+                    <field name="ngay" readonly="true" string="Ngày"/>
                     <field name="hocphi_dm_ca_id"
                            domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
                            context="{'default_coso_id':coso_id}"/>

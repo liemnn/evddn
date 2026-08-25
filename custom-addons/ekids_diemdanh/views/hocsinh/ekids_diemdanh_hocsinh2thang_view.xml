@@ -79,53 +79,104 @@
         </record>
 
         <record id="ekids_diemdanh.diemdanh_hocsinh2thang_form" model="ir.ui.view">
-            <field name="name">Form</field>
+            <field name="name">Form Điểm Danh  Học Bù Nâng Cấp</field>
             <field name="model">ekids.diemdanh_hocsinh2thang</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="Điểm danh và Học bù tháng">
                     <sheet>
-                        <group>
-                            <h3><field name="hocsinh_id" readonly="true"/></h3>
-                        </group>
-                        <group col="2">
-                            <group col="1">
-                                <separator string="THÔNG TIN ĐIỂM DANH TRONG THÁNG" />
-                                <group>
-                                    <field name="tong_dihoc_kehoach" readonly="true" string="Số ngay đi học theo quy định"/>
-                                    <field name="tong_dihoc_diemdanh" readonly="true" string="Số ngay đi học thực tế"/>
-                                    <field name="tong_nghi_cangay" readonly="true" string="Số ngay nghỉ học cả ngày"/>
-                                    <field name="tong_dihoc_nuabuoi" readonly="true" string="Số ngay đi học nửa ngày"/>
-                                    <field name="tong_nghiphep" readonly="true" string="Học sinh xin nghỉ"/>
+                        <!-- 1. Header Tên Học Sinh Gọn Gàng -->
+                        <div class="card border-0 shadow-sm px-3 py-2 mb-3 bg-white rounded" style="border-left: 4px solid #6c5ce7 !important;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h3 class="mb-0 font-weight-bold text-dark" style="font-size: 20px;">
+                                    <i class="fa fa-user-circle text-purple mr-2"/>
+                                    <field name="hocsinh_id" readonly="1" options="{'no_open': True}"/>
+                                </h3>
+                                <span class="badge badge-pill badge-light text-muted border px-2 py-1" style="font-size: 11px;">
+                                    <i class="fa fa-calendar-alt mr-1"/> Quản lý tháng
+                                </span>
+                            </div>
+                        </div>
 
-                                </group>
-                            </group>
-                            <group col="1">
-                                <separator string="THÔNG TIN [HỌC BÙ/TĂNG CƯỜNG] CỦA THÁNG" />
-                                <group>
-                                    <field name="hocbu_thangtruoc"/>
-                                    <field name="hocbu_thangnay" readonly="true"/>
-                                    <field name="hocbu_da_day" readonly="true"/>
-                                    <field name="hocbu_conlai" readonly="true"/>
-                                    <field name="tangcuong_da_day" readonly="true"/>
+                        <!-- 2. Khu vực thống kê 2 cột có Icon sinh động và Font số to rõ -->
+                        <div class="row">
+                            <!-- Cột 1: Thông tin điểm danh -->
+                            <div class="col-12 col-lg-6 mb-2">
+                                <div class="card border-0 shadow-sm p-3 bg-white rounded h-100" style="border-left: 3px solid #0984e3 !important;">
+                                    <div class="font-weight-bold text-primary mb-3" style="font-size: 12px; letter-spacing: 0.5px;">
+                                        <i class="fa fa-calendar-check-o mr-1"/> THÔNG TIN ĐIỂM DANH
+                                    </div>
+                                    <div class="o_stat_container">
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-flag text-info mr-2" style="width: 16px; text-align: center;"/> Quy định</span>
+                                            <field name="tong_dihoc_kehoach" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-check-circle text-success mr-2" style="width: 16px; text-align: center;"/> Thực tế</span>
+                                            <field name="tong_dihoc_diemdanh" readonly="1" class="font-weight-bold text-success" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-moon-o text-secondary mr-2" style="width: 16px; text-align: center;"/> Nghỉ cả ngày</span>
+                                            <field name="tong_nghi_cangay" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-clock-o text-warning mr-2" style="width: 16px; text-align: center;"/> Nghỉ nửa buổi</span>
+                                            <field name="tong_dihoc_nuabuoi" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between pt-1">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-envelope-o text-primary mr-2" style="width: 16px; text-align: center;"/> Xin nghỉ phép</span>
+                                            <field name="tong_nghiphep" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <!-- Cột 2: Học bù & Tăng cường -->
+                            <div class="col-12 col-lg-6 mb-2">
+                                <div class="card border-0 shadow-sm p-3 bg-white rounded h-100" style="border-left: 3px solid #e17055 !important;">
+                                    <div class="font-weight-bold mb-3" style="font-size: 12px; letter-spacing: 0.5px; color: #d35400 !important;">
+                                        <i class="fa fa-refresh mr-1"/> HỌC BÙ &amp; TĂNG CƯỜNG
+                                    </div>
+                                    <div class="o_stat_container">
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-history text-secondary mr-2" style="width: 16px; text-align: center;"/> Tồn tháng trước</span>
+                                            <field name="hocbu_thangtruoc" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-plus-circle text-info mr-2" style="width: 16px; text-align: center;"/> Phát sinh mới</span>
+                                            <field name="hocbu_thangnay" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-check-square-o text-success mr-2" style="width: 16px; text-align: center;"/> Đã dạy bù</span>
+                                            <field name="hocbu_da_day" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-weight: 600; font-size: 13px;"><i class="fa fa-exclamation-circle text-danger mr-2" style="width: 16px; text-align: center;"/> Còn lại</span>
+                                            <field name="hocbu_conlai" readonly="1" class="font-weight-bold text-danger" style="font-size: 18px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between pt-1">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-bolt text-warning mr-2" style="width: 16px; text-align: center;"/> Tăng cường</span>
+                                            <field name="tangcuong_da_day" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                </group>
-                            </group>
-
-                        </group>
-
-                        <notebook>
-                            <page name="hocbu_thangnay_ids " string="CA [NGHỈ] ĐỢI HỌC BÙ THÁNG NÀY(-)">
-                                <field name="hocbu_thangnay_ids" context="{'default_coso_id':coso_id}"/>
-                            </page>
-                            <page name="hocbu_da_day_ids " string="CA [ĐÃ HỌC BÙ] THÁNG NÀY(+)">
-                                <field name="hocbu_da_day_ids" context="{'default_coso_id':coso_id}"/>
-                            </page>
-                            <page name="tangcuong_ids " string="CA [TĂNG CƯỜNG] THÁNG NÀY(+)">
-                                <field name="tangcuong_ids" context="{'default_coso_id':coso_id}"/>
-                            </page>
-                        </notebook>
+                        <!-- 3. Notebook Chi Tiết Phía Dưới (Giữ nguyên tuyệt đối dữ liệu gốc) -->
+                        <div class="card border-0 shadow-sm mt-2 bg-white rounded p-2">
+                            <notebook>
+                                <page name="hocbu_thangnay_ids" string="Ca nghỉ đợi học bù (-)">
+                                    <field name="hocbu_thangnay_ids" context="{'default_coso_id': coso_id}"/>
+                                </page>
+                                <page name="hocbu_da_day_ids" string="Ca đã học bù (+)">
+                                    <field name="hocbu_da_day_ids" context="{'default_coso_id': coso_id}"/>
+                                </page>
+                                <page name="tangcuong_ids" string="Ca tăng cường (+)">
+                                    <field name="tangcuong_ids" context="{'default_coso_id': coso_id}"/>
+                                </page>
+                            </notebook>
+                        </div>
                     </sheet>
                 </form>
             </field>
