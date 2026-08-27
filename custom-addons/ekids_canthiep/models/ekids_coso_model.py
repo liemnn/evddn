@@ -26,6 +26,8 @@ class CoSo(models.Model):
 
     is_ql_chuongtrinh = fields.Boolean(compute="_compute_is_ql_chuongtrinh")
 
+    is_theodoi_kehoach = fields.Boolean(compute="_compute_is_theodoi_kehoach")
+
     def _compute_is_ql_chuongtrinh(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
@@ -51,6 +53,18 @@ class CoSo(models.Model):
                 if hocsinh_ids and len(hocsinh_ids)>0:
                     is_duyet_kehoach = True
             record.is_duyet_kehoach = is_duyet_kehoach
+
+    def _compute_is_theodoi_kehoach(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_ql_coso = user.has_group('ekids_core.quanlycoso')
+
+        for record in self:
+            is_theodoi_kehoach = False
+            if is_admin  or is_ql_coso:
+                is_theodoi_kehoach = True
+
+            record.is_theodoi_kehoach = is_theodoi_kehoach
 
 
     def _compute_is_ketluan(self):
@@ -238,6 +252,27 @@ class CoSo(models.Model):
                 'search_default_trangthai': '1',
             },
         }
+
+    def action_danhsach_hocsinh_theodoi_kehoach(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_ql_coso = user.has_group('ekids_core.quanlycoso')
+        if is_admin or is_ql_coso:
+            list_view_id = self.env.ref('ekids_canthiep.hocsinh_theodoi_kehoach_inherit_list').id
+            domain = [('coso_id', '=', self.id)]
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'DANH SÁCH',
+                'res_model': 'ekids.hocsinh',
+                'view_mode': 'list',
+                'views': [(list_view_id, 'list')],
+                'target': 'current',
+                'domain': domain,
+                'context': {
+                    'default_coso_id': self.id,
+                    'search_default_trangthai': '1',
+                },
+            }
 
     def action_kiemduyet_noidung_thietke(self):
         user = self.env.user

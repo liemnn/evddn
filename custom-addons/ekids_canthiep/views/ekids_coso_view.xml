@@ -128,6 +128,7 @@
                          <t t-name="kanban-box">
                              <div class="oe_kanban_global_click kh-premium-card">
                                  <field name="is_ketluan" invisible="1"/>
+                                 <field name="is_theodoi_kehoach" invisible="1"/>
 
                                  <style>
                                     /* 1. Khung thẻ chính - Hiệu ứng 3D Layering */
@@ -296,6 +297,16 @@
                                          <i class="fa fa-play-circle"></i>
                                          <span>Can thiệp [Hàng ngày]</span>
                                      </button>
+
+                                      <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_danhsach_hocsinh_theodoi_kehoach"
+                                            invisible="is_theodoi_kehoach == False"
+                                            context="{'default_context_type':'3'}"
+                                            type="object">
+                                        <!-- Icon lịch kiểm tra tiến độ theo ngày -->
+                                        <i class="fa fa-calendar-check-o"></i>
+                                        <span>Theo dõi [Kế hoạch]</span>
+                                    </button>
 
 
                                  </div>
