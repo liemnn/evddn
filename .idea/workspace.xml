@@ -5,12 +5,76 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_hocsinh_theodoi_kehoach_inherit_view.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/__manifest__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/controllers/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/controllers/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/data/access_rights.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/data/dynamic_forms_config_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/data/dynamic_forms_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/data/dynamic_forms_setup_data.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/data/email_templates.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/demo/dynamic_forms_demo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/hooks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/models/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/models/config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/models/email_notification.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/models/field.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/models/field_mapping.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/models/field_options_wizard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/models/form.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/models/reporting.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/models/submission.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/report/form_submission_report.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/security/dynamic_forms_security.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/Logo 512x512.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/advance_hr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/advance_project_app.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/asset_management_app.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/button.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/demo.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/formate_screenshot.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/formate_screenshot_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/formate_screenshot_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/formate_screenshot_3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/formate_screenshot_4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/formate_screenshot_5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/info-icon-1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/info-icon-2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/info-icon-3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/info-icon-4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/main_screenshot.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/pet_management.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/play.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/pos_quicknote.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/description/profilt_loss_app.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/src/css/dynamic_forms_body_styles.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/src/css/embed_form.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/src/css/form_builder.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/src/js/dynamic_forms_assets.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/src/js/embed_form.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/src/js/form_builder.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/src/js/form_field.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/src/js/form_field_widget.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/static/src/js/form_preview.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/config_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/email_notification_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/embed_templates.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/field_condition_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/field_mapping_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/field_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/form_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/menu_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/reporting_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/submission_views.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/depend-addons/dynamic_custom_odoo_form_builde/views/templates.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/ekids_coso_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/ekids_coso_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_core/security/ekids_security.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_core/security/ekids_security.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/erp-all-in-one-server/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,26 +112,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Run",
-    "Python.formula_util.executor": "Run",
-    "Python.python_util.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_canthiep/views/kehoach",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.evddn.executor&quot;: &quot;Run&quot;,
+    &quot;Python.formula_util.executor&quot;: &quot;Run&quot;,
+    &quot;Python.python_util.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/odoo/evddn&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\odoo\evddn\depend-addons" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\views\kehoach" />
       <recent name="D:\odoo\evddn\docker-compose" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_phuhuynh\views" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_phuhuynh\controllers" />
-      <recent name="D:\odoo\evddn\custom-addons\ekids_func" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_hdsd\static\src\html\giaovien" />
@@ -165,14 +229,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00379" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1785684741303</created>
-      <option name="number" value="00379" />
-      <option name="presentableId" value="LOCAL-00379" />
-      <option name="project" value="LOCAL" />
-      <updated>1785684741303</updated>
     </task>
     <task id="LOCAL-00380" summary="liemnn">
       <option name="closed" value="true" />
@@ -558,7 +614,15 @@
       <option name="project" value="LOCAL" />
       <updated>1787645784123</updated>
     </task>
-    <option name="localTasksCounter" value="428" />
+    <task id="LOCAL-00428" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1787816920821</created>
+      <option name="number" value="00428" />
+      <option name="presentableId" value="LOCAL-00428" />
+      <option name="project" value="LOCAL" />
+      <updated>1787816920822</updated>
+    </task>
+    <option name="localTasksCounter" value="429" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -686,11 +750,6 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/ekids_coso_model.py</url>
           <line>116</line>
           <option name="timeStamp" value="448" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py</url>
-          <line>285</line>
-          <option name="timeStamp" value="452" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

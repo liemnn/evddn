@@ -125,7 +125,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                 ('ngay', '<=', ngay_cuoithang)
             ])
 
-            rec.hocbu_thangnay = count_ca2ngay_ids +rec.hocbu_thangtruoc
+            rec.hocbu_thangnay = count_ca2ngay_ids
 
             count_ca2ngay_ids = self.env['ekids.diemdanh_ca2ngay'].search_count([
                 ('hocsinh_id', '=', rec.hocsinh_id.id),
@@ -135,7 +135,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
             ])
 
             rec.hocbu_da_day =count_ca2ngay_ids
-            rec.hocbu_conlai = rec.hocbu_thangnay- rec.hocbu_da_day
+            rec.hocbu_conlai = (rec.hocbu_thangtruoc +rec.hocbu_thangnay) - rec.hocbu_da_day
 
             count_ca2ngay_tc= self.env['ekids.diemdanh_ca2ngay'].search_count([
                 ('hocsinh_id', '=', rec.hocsinh_id.id),
