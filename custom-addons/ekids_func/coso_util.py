@@ -157,7 +157,7 @@ def func_cauhinh_luong(self,coso,thamso,default):
 def func_cauhinh(self,coso,loai,thamso,default):
     json_string = coso.cauhinh
     if not json_string:
-        return None
+        return default
 
     try:
         config_data = json.loads(json_string)
