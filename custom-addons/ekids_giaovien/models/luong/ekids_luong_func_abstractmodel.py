@@ -273,8 +273,8 @@ class LuongFuncAbstractModel(models.AbstractModel):
 
         tham_nien = giaovien.tham_nien
         # làm tròn thâm niên
-        tham_nien_int = int (tham_nien)
-        parameters["$THAM_NIEN"] = str(tham_nien_int)
+        #tham_nien_int = int (tham_nien)
+        parameters["$THAM_NIEN"] = str(tham_nien)
         luong.tham_nien = tham_nien
 
         hs_in_thang = hocsinh_util.func_get_so_hocsinh_trong_thang_tinhluong(self, giaovien.coso_id.id, nam, thang)

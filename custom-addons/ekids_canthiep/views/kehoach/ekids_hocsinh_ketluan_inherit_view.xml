@@ -88,7 +88,16 @@
                         invisible="not is_tao_ketluan"
                         title="Xem và chọn copy nội dung từ [Kết luận] của Học sinh khác"/>
 
+                <field name="tong_kehoach" string="Tổng kế hoạch" width="55" class="text-center fw-bold"/>
 
+                <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-secondary btn-sm"
+                        icon="fa-folder-open-o"
+                        invisible="tong_kehoach == 0"
+                        context="{'default_context_type':'4'}"
+                        title="Xem toàn bộ lịch sử [Kế hoạch]"/>
         </list>
         </field>
     </record>
