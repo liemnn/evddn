@@ -456,9 +456,14 @@
                      <field name="is_header_open" invisible="1"/>
                      <field name="is_show_wiget_canthiep" invisible="1"/>
 
+                     <!-- Các trường dữ liệu phục vụ hiển thị kết quả -->
+                     <field name="tong_muctieu" invisible="1"/>
+                     <field name="tong_dat_canthiep" invisible="1"/>
+                     <field name="tong_dat_kiemduyet" invisible="1"/>
+                     <field name="tyle_dat_canthiep" invisible="1"/>
+                     <field name="tyle_dat_kiemduyet" invisible="1"/>
+
                      <header>
-
-
                         <button name="action_ketthuc_kehoach"
                                 string="Kết thúc"
                                 type="object"
@@ -490,6 +495,7 @@
                                  confirm="Bạn xác nhận [Kế hoạch] chưa đạt cần trả về cho giáo viên lập kế hoạch chỉnh sửa lại ?"
                                  class="btn-danger fw-bold"
                                  invisible="not is_pheduyet"/>
+
                          <button name="action_xoa"
                                  string="Xóa"
                                  type="object"
@@ -521,22 +527,22 @@
                              .o_form_sheet { max-width: 100% !important; width: 100% !important; padding: 12px !important; }
                              .flat-header-toggler-input { display: none !important; }
 
-                             /* Khung bọc Master Header màu xám nhạt */
+                             /* Khung bọc Master Header */
                              .flat-accent-master-block {
                                  background-color: #F1F5F9 !important;
                                  border: 1px solid #CBD5E1 !important;
                                  border-radius: 8px !important;
-                                 padding: 12px 16px !important;
-                                 margin-bottom: 16px !important;
+                                 padding: 10px 14px !important;
+                                 margin-bottom: 8px !important;
                                  display: flex;
                                  flex-direction: column;
                                  width: 100% !important;
                              }
 
-                             /* Số thứ tự hình tròn chuẩn tâm đối xứng tuyệt đối */
+                             /* Số thứ tự hình tròn */
                              .flat_master_circle_index_top {
-                                 width: 32px;
-                                 height: 32px;
+                                 width: 30px;
+                                 height: 30px;
                                  border-radius: 50%;
                                  background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%);
                                  color: #FFFFFF !important;
@@ -544,7 +550,7 @@
                                  align-items: center !important;
                                  justify-content: center !important;
                                  font-weight: 900;
-                                 font-size: 14px;
+                                 font-size: 13px;
                                  border: 2px solid #FFFFFF;
                                  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.2);
                                  flex-shrink: 0;
@@ -562,29 +568,27 @@
 
                              .flat-header-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
 
-                             /* Hàng chứa menu giáo viên và nút kết luận thẳng hàng */
                              .flat-header-middle-row {
                                  display: flex !important;
                                  align-items: center !important;
                                  justify-content: space-between !important;
                                  width: 100% !important;
-                                 margin-top: 10px !important;
+                                 margin-top: 8px !important;
                                  flex-wrap: wrap !important;
-                                 gap: 10px !important;
+                                 gap: 8px !important;
                              }
 
-                             /* Menu Phân công giáo viên đóng khung trắng độc lập */
                              .flat-assignment-menu-trigger {
                                  background-color: #FFFFFF !important;
                                  border: 1px solid #CBD5E1 !important;
                                  color: #475569 !important;
-                                 padding: 5px 14px !important;
+                                 padding: 4px 12px !important;
                                  font-weight: 700 !important;
-                                 font-size: 12.5px !important;
+                                 font-size: 12px !important;
                                  border-radius: 5px !important;
                                  display: inline-flex !important;
                                  align-items: center !important;
-                                 gap: 6px !important;
+                                 gap: 5px !important;
                                  cursor: pointer !important;
                                  user-select: none !important;
                                  transition: all 0.15s ease;
@@ -596,49 +600,38 @@
                                  border-color: #94A3B8 !important;
                              }
 
-                             /* Vùng xám đậm chi tiết giáo viên */
                              .flat-assignment-detail-panel {
                                  width: 100% !important;
                                  background-color: #E2E8F0 !important;
                                  border: 1px solid #CBD5E1 !important;
                                  border-radius: 6px !important;
-                                 padding: 10px 14px !important;
+                                 padding: 8px 12px !important;
                                  margin-top: 6px !important;
                                  display: flex !important;
                                  align-items: center !important;
                                  justify-content: space-between !important;
                              }
 
-                             /* Ký tự gạch đứng phân tách giữa các giáo viên trên Máy tính */
-                             .flat-gv-divider { color: #94A3B8; font-weight: 300; margin: 0 10px; font-size: 13px; user-select: none; opacity: 0.6; }
+                             .flat-gv-divider { color: #94A3B8; font-weight: 300; margin: 0 8px; font-size: 12px; user-select: none; opacity: 0.6; }
 
-                             /* Nút đóng mở tổng */
-                             .lbl-flat-toggler { background-color: #FFFFFF !important; border: 1px solid #CBD5E1 !important; color: #475569 !important; padding: 5px 14px; font-weight: 700; font-size: 12.5px; border-radius: 5px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 0px !important; user-select: none; transition: all 0.15s ease; }
+                             .lbl-flat-toggler { background-color: #FFFFFF !important; border: 1px solid #CBD5E1 !important; color: #475569 !important; padding: 4px 12px; font-weight: 700; font-size: 12px; border-radius: 5px; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 0px !important; user-select: none; transition: all 0.15s ease; }
                              .lbl-flat-toggler:hover { background-color: #F8FAFC; color: #1E293B; border-color: #94A3B8; }
 
-                             .flat-header-collapsible-content { width: 100%; }
-
-                             /* Định dạng các trường giáo viên thô sạch phẳng lỳ */
                              .flat-gv-badge {
                                  display: inline-flex !important;
                                  align-items: center !important;
                                  justify-content: center !important;
                                  gap: 4px !important;
-                                 font-size: 13px !important;
+                                 font-size: 12.5px !important;
                                  font-weight: 500 !important;
                                  background: transparent !important;
                                  border: none !important;
-                                 box-shadow: none !important;
                                  line-height: 1 !important;
                              }
-
-                             /* Ép khoảng cách icon cách chữ đúng 5px */
-                             .flat-gv-badge i { margin-right: 5px !important; }
-                             .c-lap-purple i { color: #6D28D9 !important; }
+                             .flat-gv-badge i { margin-right: 4px !important; }
                              .c-canthiep-orange i { color: #C2410C !important; }
                              .c-chuyenmon-teal i { color: #0F766E !important; }
 
-                             /* ÉP THẲNG HÀNG TRỤC DỌC TUYỆT ĐỐI VÀ CHỐNG VỠ DÒNG CHỮ */
                              .flat-gv-badge .o_field_widget,
                              .flat-gv-badge span,
                              .flat-gv-badge a,
@@ -657,50 +650,113 @@
                              .flat-gv-badge a, .flat-gv-badge span.o_field_char { color: #1E293B !important; font-weight: 700 !important; }
                              .badge-bold-title { font-weight: 700 !important; color: #334155 !important; display: inline-flex !important; align-items: center !important; white-space: nowrap !important; }
 
-                             /* NÚT XEM KẾT LUẬN CỐ ĐỊNH BÊN PHẢI */
-                             .btn-flat-conclusion { background-color: #FFFFFF !important; color: #475569 !important; font-weight: 700; font-size: 12.5px; padding: 5px 14px; border-radius: 5px; border: 1px solid #CBD5E1; height: 31px; cursor: pointer; transition: all 0.15s; display: inline-flex !important; align-items: center !important; gap: 6px !important; margin-bottom: 0px !important; margin-left: auto !important; }
+                             .btn-flat-conclusion { background-color: #FFFFFF !important; color: #475569 !important; font-weight: 700; font-size: 12px; padding: 4px 12px; border-radius: 5px; border: 1px solid #CBD5E1; height: 28px; cursor: pointer; transition: all 0.15s; display: inline-flex !important; align-items: center !important; gap: 5px !important; margin-bottom: 0px !important; margin-left: auto !important; }
                              .btn-flat-conclusion:hover { background-color: #F8FAFC; border-color: #94A3B8; color: #0F172A; }
 
-                             /* Lưới ô nhập liệu phía dưới */
-                             .flat-inputs-grid { display: flex; gap: 14px; flex-wrap: wrap; width: 100%; margin-top: 12px; }
-                             .flat-input-column { flex: 1; min-width: 150px; display: flex; flex-direction: column; gap: 4px; }
-                             .flat-input-label-text { font-weight: 700; color: #475569; font-size: 11px; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
+                             .flat-inputs-grid { display: flex; gap: 10px; flex-wrap: wrap; width: 100%; margin-top: 10px; }
+                             .flat-input-column { flex: 1; min-width: 140px; display: flex; flex-direction: column; gap: 3px; }
+                             .flat-input-label-text { font-weight: 700; color: #475569; font-size: 10.5px; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
 
-                             .flat-field-value-holder { width: 100%; border: 1px solid #CBD5E1; padding: 5px 10px; border-radius: 5px; font-size: 13px; font-weight: 800; background-color: #FFFFFF; height: 30px; display: flex; align-items: center; }
+                             .flat-field-value-holder { width: 100%; border: 1px solid #CBD5E1; padding: 4px 8px; border-radius: 5px; font-size: 12.5px; font-weight: 800; background-color: #FFFFFF; height: 28px; display: flex; align-items: center; }
                              .v-student .flat-field-value-holder { background-color: #EFF6FF; border-color: #BFDBFE; color: #1E40AF; }
-                             .v-from .flat-field-value-holder, .v-to .flat-field-value-holder { background-color: #FFFFFF; }
                              .v-duration .flat-field-value-holder { background-color: #FFFBEB; border-color: #FEF3C7; color: #92400E; justify-content: center; }
+                             .compact_editable_date input { padding: 0px !important; height: 18px !important; font-size: 12.5px !important; font-weight: 800 !important; border: none !important; background: transparent !important; color: #1E293B !important; width: 100% !important; box-shadow: none !important; }
 
-                             .compact_editable_date input { padding: 0px !important; height: 20px !important; font-size: 13px !important; font-weight: 800 !important; border: none !important; background: transparent !important; color: #1E293B !important; width: 100% !important; box-shadow: none !important; }
-                             .ekids_red_compact_badge { background-color: #FEF2F2 !important; color: #DC2626 !important; border: 1px solid #FCA5A5 !important; font-size: 12px !important; padding: 2px 8px !important; border-radius: 4px !important; font-weight: 900 !important; display: inline-flex !important; align-items: center; }
-                             .ekids_red_compact_badge span, .ekids_red_compact_badge input { color: #DC2626 !important; font-weight: 900 !important; background: transparent !important; border: none !important; padding: 0 !important; width: auto !important; }
+                             /* ================= KHỐI KẾT QUẢ 1 DÒNG - CĂN CHỈNH SỐ THẲNG TRỤC DỌC TUYỆT ĐỐI ================= */
+                             .ekids-single-line-strip {
+                                 background: #FFFFFF !important;
+                                 border: 1px solid #CBD5E1 !important;
+                                 border-left: 3.5px solid #0284C7 !important;
+                                 border-radius: 6px !important;
+                                 padding: 3px 10px !important;
+                                 margin-bottom: 8px !important;
+                                 display: flex !important;
+                                 align-items: center !important;
+                                 justify-content: space-between !important;
+                                 white-space: nowrap !important;
+                                 overflow-x: auto !important;
+                                 gap: 10px !important;
+                                 min-height: 34px !important;
+                             }
+                             .ekids-single-line-strip::-webkit-scrollbar { display: none; }
 
-                             /* RESPONSIVE MOBILE */
+                             .ekids-line-content {
+                                 display: inline-flex !important;
+                                 align-items: center !important;
+                                 gap: 8px !important;
+                                 font-size: 12px !important;
+                                 color: #334155 !important;
+                             }
+
+                             /* Ép toàn bộ khung con, icon, chữ và số vào chung 1 trục flex */
+                             .badge-item {
+                                 display: inline-flex !important;
+                                 align-items: center !important;
+                                 vertical-align: middle !important;
+                                 gap: 4px !important;
+                                 padding: 3px 8px !important;
+                                 border-radius: 4px !important;
+                                 font-weight: 600 !important;
+                                 font-size: 12px !important;
+                                 line-height: 1 !important;
+                             }
+
+                             /* Xóa bỏ hoàn toàn khoảng nhảy vị trí của thẻ field Odoo */
+                             .badge-item .o_field_widget,
+                             .badge-item .o_field_number,
+                             .badge-item .o_field_float,
+                             .badge-item span {
+                                 display: inline-flex !important;
+                                 align-items: center !important;
+                                 justify-content: center !important;
+                                 margin: 0 !important;
+                                 padding: 0 !important;
+                                 line-height: 1 !important;
+                                 height: auto !important;
+                                 vertical-align: middle !important;
+                                 font-size: 12px !important;
+                                 font-weight: 900 !important; /* Bôi đậm số */
+                             }
+
+                             .b-total { background: #F1F5F9 !important; color: #1E293B !important; border: 1px solid #E2E8F0 !important; }
+                             .b-total .o_field_widget, .b-total span { color: #0F172A !important; }
+
+                             .b-teacher { background: #EFF6FF !important; color: #1D4ED8 !important; border: 1px solid #BFDBFE !important; }
+                             .b-teacher .o_field_widget, .b-teacher span { color: #1E40AF !important; }
+
+                             .b-eval { background: #ECFDF5 !important; color: #047857 !important; border: 1px solid #A7F3D0 !important; }
+                             .b-eval .o_field_widget, .b-eval span { color: #065F46 !important; }
+
+                             .b-warn {
+                                 background: #FEF2F2 !important;
+                                 color: #DC2626 !important;
+                                 border: 1px solid #FECACA !important;
+                                 font-size: 11.5px !important;
+                                 padding: 3px 8px !important;
+                                 font-weight: 700 !important;
+                                 display: inline-flex !important;
+                                 align-items: center !important;
+                                 gap: 4px !important;
+                                 line-height: 1 !important;
+                             }
+
                              @media (max-width: 768px) {
-                                 .flat-assignment-detail-panel {
-                                     flex-direction: column !important;
-                                     align-items: flex-start !important;
-                                     gap: 10px !important;
-                                     padding: 12px 14px !important;
-                                     width: 100% !important;
-                                     overflow-x: auto !important;
-                                 }
-                                 .flat-gv-track-layout { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; width: 100% !important; }
+                                 .flat-assignment-detail-panel { flex-direction: column !important; align-items: flex-start !important; }
                                  .flat-gv-divider { display: none !important; }
                                  .flat-input-column { flex: 1 1 100% !important; width: 100% !important; }
                                  .flat-header-middle-row { flex-direction: column !important; align-items: flex-start !important; }
-                                 .btn-flat-conclusion { margin-left: 0 !important; margin-top: 6px !important; width: 100% !important; justify-content: center !important; }
+                                 .btn-flat-conclusion { margin-left: 0 !important; margin-top: 4px !important; width: 100% !important; justify-content: center !important; }
                              }
                          </style>
 
+                         <!-- MASTER HEADER -->
                          <div class="flat-accent-master-block">
-
                              <div class="flat-header-top-row">
                                  <div class="d-flex align-items-center gap-2.5">
                                      <div class="flat_master_circle_index_top">
                                          <field name="index" readonly="1"/>
                                      </div>
-                                     <span class="fw-bold text-slate-800" style="font-size: 18px; color: #1E293B;">
+                                     <span class="fw-bold text-slate-800" style="font-size: 17px; color: #1E293B;">
                                           <field name="name" readonly="1"/>
                                      </span>
                                  </div>
@@ -715,10 +771,7 @@
                                  </a>
                              </div>
 
-                             <!-- 🌟 GIẢI PHÁP ĐỒNG BỘ: Sử dụng 2 khối div riêng biệt kiểm soát bằng thuộc tính invisible của Odoo
-                                  để render class ban đầu chuẩn xác (.show hoặc không có .show), trao quyền đóng mở mượt mà lại cho Bootstrap JS -->
-
-                             <!-- Khối hiển thị MỞ SẴN khi is_header_open == True -->
+                             <!-- Khối mở sẵn -->
                              <div invisible="is_header_open == False" class="collapse w-100 show" id="collapseHeaderAccentZone_Main">
                                  <div class="w-100 pt-2 border-top Regal-divider mt-2" style="border-color: #CBD5E1 !important;">
                                       <div class="flat-header-middle-row">
@@ -726,7 +779,7 @@
                                               <i class="fa fa-users me-1.5"></i> Phân công giáo viên <i class="fa fa-caret-down text-muted ms-1" style="font-size: 11px;"></i>
                                           </a>
                                           <button name="action_xem_ketluan" string="Xem kết luận" type="object" icon="fa-file-text-o" class="btn-flat-conclusion"/>
-                                          <div class="p-1.5 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
+                                          <div class="p-1 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
                                               <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
                                           </div>
                                       </div>
@@ -734,11 +787,15 @@
                                       <div class="collapse w-100" id="collapseStaffDetailPanel_Core">
                                           <div class="flat-assignment-detail-panel">
                                                <div class="flat-gv-track-layout">
-                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange"><span class="badge-bold-title"><i class="fa fa-user-md"></i> Giáo viên: </span>
-                                                       <field name="gv_lapkehoach_id" readonly="1"  options="{'no_open': True}"/>
+                                                   <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange">
+                                                       <span class="badge-bold-title"><i class="fa fa-user-md"></i> Giáo viên: </span>
+                                                       <field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/>
                                                    </span>
                                                    <span class="flat-vertical-divider flat-gv-divider">|</span>
-                                                   <span class="flat-gv-badge c-chuyenmon-teal b-chuyenmon-teal"><span class="badge-bold-title"><i class="fa fa-graduation-cap"></i> Chuyên môn: </span><field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/></span>
+                                                   <span class="flat-gv-badge c-chuyenmon-teal b-chuyenmon-teal">
+                                                       <span class="badge-bold-title"><i class="fa fa-graduation-cap"></i> Chuyên môn: </span>
+                                                       <field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/>
+                                                   </span>
                                                </div>
                                           </div>
                                       </div>
@@ -766,7 +823,7 @@
                                  </div>
                              </div>
 
-                             <!-- Khối hiển thị ĐÓNG SẴN (Không có class .show) khi is_header_open == False -->
+                             <!-- Khối đóng sẵn -->
                              <div invisible="is_header_open == True" class="collapse w-100" id="collapseHeaderAccentZone_Main">
                                  <div class="w-100 pt-2 border-top Regal-divider mt-2" style="border-color: #CBD5E1 !important;">
                                       <div class="flat-header-middle-row">
@@ -774,7 +831,7 @@
                                               <i class="fa fa-users me-1.5"></i> Phân công giáo viên <i class="fa fa-caret-down text-muted ms-1" style="font-size: 11px;"></i>
                                           </a>
                                           <button name="action_xem_ketluan" string="Xem kết luận" type="object" icon="fa-file-text-o" class="btn-flat-conclusion"/>
-                                          <div class="p-1.5 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
+                                          <div class="p-1 rounded-3 border d-flex align-items-center shadow-inner bg-slate-50" style="border-color: #E4E7EC !important;">
                                               <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
                                           </div>
                                       </div>
@@ -782,12 +839,15 @@
                                       <div class="collapse w-100" id="collapseStaffDetailPanel_Core">
                                           <div class="flat-assignment-detail-panel">
                                                <div class="flat-gv-track-layout">
-
                                                    <span class="flat-gv-badge c-canthiep-orange b-canthiep-orange">
                                                        <span class="badge-bold-title"><i class="fa fa-user-md"></i> Giáo viên: </span>
-                                                       <field name="gv_lapkehoach_id"  readonly="1" options="{'no_open': True}"/></span>
+                                                       <field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/>
+                                                   </span>
                                                    <span class="flat-vertical-divider flat-gv-divider">|</span>
-                                                   <span class="flat-gv-badge c-chuyenmon-teal b-chuyenmon-teal"><span class="badge-bold-title"><i class="fa fa-graduation-cap"></i> Chuyên môn: </span><field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/></span>
+                                                   <span class="flat-gv-badge c-chuyenmon-teal b-chuyenmon-teal">
+                                                       <span class="badge-bold-title"><i class="fa fa-graduation-cap"></i> Chuyên môn: </span>
+                                                       <field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/>
+                                                   </span>
                                                </div>
                                           </div>
                                       </div>
@@ -814,7 +874,49 @@
                                       </div>
                                  </div>
                              </div>
+                         </div>
 
+                         <!-- ================= VÙNG KẾT QUẢ 1 DÒNG DUY NHẤT (SỐ IN ĐẬM, THẲNG HÀNG) ================= -->
+                         <div class="ekids-single-line-strip">
+                             <div class="ekids-line-content">
+                                 <span class="badge-item b-total">
+                                     <i class="fa fa-list-alt text-muted"></i>
+                                     <span>Tổng</span>
+                                     <field name="tong_muctieu" readonly="1"/>
+                                     <span>mục tiêu</span>
+                                 </span>
+
+                                 <span class="text-muted opacity-50">|</span>
+
+                                 <span class="badge-item b-teacher">
+                                     <i class="fa fa-user-md"></i>
+                                     <span>Giáo viên [Can thiệp] đạt(+):</span>
+                                     <field name="tong_dat_canthiep" readonly="1"/>
+                                     <span>/</span>
+                                     <field name="tong_muctieu" readonly="1"/>
+                                     <span>(</span>
+                                     <field name="tyle_dat_canthiep" readonly="1"/>
+                                     <span>%)</span>
+                                 </span>
+
+                                 <span class="text-muted opacity-50">|</span>
+
+                                 <span class="badge-item b-eval">
+                                     <i class="fa fa-check-circle-o"></i>
+                                     <span>Sau [Đánh giá] đạt(+):</span>
+                                     <field name="tong_dat_kiemduyet" readonly="1"/>
+                                     <span>/</span>
+                                     <field name="tong_muctieu" readonly="1"/>
+                                     <span>(</span>
+                                     <field name="tyle_dat_kiemduyet" readonly="1"/>
+                                     <span>%)</span>
+                                 </span>
+                             </div>
+
+                             <span class="b-warn" invisible="tong_dat_kiemduyet &gt;= tong_dat_canthiep">
+                                 <i class="fa fa-exclamation-triangle"></i>
+                                 <span>Đánh giá giảm sau kiểm duyệt</span>
+                             </span>
                          </div>
 
                          <group class="w-100 m-0 p-0" col="2">
@@ -838,8 +940,6 @@
                  </form>
              </field>
         </record>
-
-
 
 
 

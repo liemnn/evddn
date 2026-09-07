@@ -1,5 +1,21 @@
 <odoo>
   <data>
+      <record id="ekids_canthiep.kehoach_ketluan_search" model="ir.ui.view">
+            <field name="name">ekids.kehoach_ketluan.search</field>
+            <field name="model">ekids.kehoach_ketluan</field>
+            <field name="arch" type="xml">
+                <search string="Tìm kiếm Kết luận">
+                    <field name="hocsinh_id" string="Học sinh" filter_domain="[('hocsinh_id.name', 'ilike', self)]"/>
+                    <field name="dm_gv_danhgia_id" string="Chuyên gia"/>
+                    <field name="chuongtrinh_ids" string="Chương trình"/>
+                    <separator/>
+                    <group expand="0" string="Nhóm theo">
+                        <filter name="group_by_hocsinh" string="Học sinh" context="{'group_by': 'hocsinh_id'}"/>
+                        <filter name="group_by_chuyengia" string="Chuyên gia" context="{'group_by': 'dm_gv_danhgia_id'}"/>
+                    </group>
+                </search>
+            </field>
+      </record>
 
       <record id="ekids_canthiep.kehoach_ketluan_list" model="ir.ui.view">
             <field name="name">ekids.kehoach_ketluan</field>

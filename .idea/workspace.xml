@@ -5,25 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/__manifest__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/controllers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/controllers/ekids_home_controller.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/static/src/icons/180.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/static/src/icons/192.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/static/src/icons/256.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/static/src/icons/512.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/static/src/js/custom_title.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/static/src/js/register_sw.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/static/src/js/user_menu.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/static/src/manifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/views/assets.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/views/odoo_login_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_hocsinh_ketluan_inherit_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_hocsinh_ketluan_inherit_view.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_func_abstractmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/models/luong/ekids_luong_func_abstractmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_kehoach_ketluan_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_kehoach_ketluan_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_kehoach_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_kehoach_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,13 +50,13 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Debug",
+    "Python.evddn.executor": "Run",
     "Python.formula_util.executor": "Run",
     "Python.python_util.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/DPI_Odoo/tccnqp-custom",
+    "last_opened_file_path": "D:/odoo/evddn",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
@@ -179,14 +164,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00383" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1785738609211</created>
-      <option name="number" value="00383" />
-      <option name="presentableId" value="LOCAL-00383" />
-      <option name="project" value="LOCAL" />
-      <updated>1785738609211</updated>
     </task>
     <task id="LOCAL-00384" summary="liemnn">
       <option name="closed" value="true" />
@@ -572,7 +549,15 @@
       <option name="project" value="LOCAL" />
       <updated>1788013703637</updated>
     </task>
-    <option name="localTasksCounter" value="432" />
+    <task id="LOCAL-00432" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1788595134500</created>
+      <option name="number" value="00432" />
+      <option name="presentableId" value="LOCAL-00432" />
+      <option name="project" value="LOCAL" />
+      <updated>1788595134500</updated>
+    </task>
+    <option name="localTasksCounter" value="433" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -678,7 +663,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_model.py</url>
-          <line>586</line>
+          <line>616</line>
           <option name="timeStamp" value="441" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

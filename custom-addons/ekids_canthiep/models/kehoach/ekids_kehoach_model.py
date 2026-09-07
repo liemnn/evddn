@@ -121,6 +121,36 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     share_full_url = fields.Char("Chia sẻ full", compute="_compute_urls")
     share_short_url = fields.Char("Chia sẻ short", compute="_compute_urls")
 
+    tong_muctieu = fields.Integer(compute="_compute_tong_ketqua_canthiep")
+    tong_dat_canthiep = fields.Integer(compute="_compute_tong_ketqua_canthiep")
+    tong_dat_kiemduyet = fields.Integer(compute="_compute_tong_ketqua_canthiep")
+    tyle_dat_canthiep = fields.Integer(compute="_compute_tong_ketqua_canthiep")
+    tyle_dat_kiemduyet = fields.Integer(compute="_compute_tong_ketqua_canthiep")
+
+    def _compute_tong_ketqua_canthiep(self):
+        for kh in self:
+            # Lấy toàn bộ danh sách mục tiêu thuộc kế hoạch
+            muctieus = kh.kehoach_linhvuc_ids.mapped('kehoach_muctieu_ids')
+            tong_mt = len(muctieus)
+
+            if muctieus:
+                # Gọi compute trạng thái cho toàn bộ recordset cùng lúc
+                muctieus._compute_trangthai()
+
+                # Đếm số lượng mục tiêu đạt
+                dat_ct = len(muctieus.filtered(lambda m: m.trangthai == '1'))
+                dat_kd = len(muctieus.filtered(lambda m: m.trangthai_kiemduyet == '1'))
+            else:
+                dat_ct = 0
+                dat_kd = 0
+
+            kh.tong_muctieu = tong_mt
+            kh.tong_dat_canthiep = dat_ct
+            kh.tong_dat_kiemduyet = dat_kd
+
+            # Tính tỷ lệ % (nếu bạn có dùng trường hiển thị tỷ lệ trên form)
+            kh.tyle_dat_canthiep = round((dat_ct / tong_mt * 100), 1) if tong_mt > 0 else 0.0
+            kh.tyle_dat_kiemduyet = round((dat_kd / tong_mt * 100), 1) if tong_mt > 0 else 0.0
 
     def _compute_ngay_conlai_kehoach(self):
         today = date.today()
