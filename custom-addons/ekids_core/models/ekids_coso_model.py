@@ -89,6 +89,9 @@ class CoSo(models.Model):
 
     cauhinh = fields.Text(string="Thiết lập cấu hình cho Cơ sở", default="")
 
+    is_thue_quantricoso = fields.Boolean(string="Thuê Module [Quản trị/vận hành cơ sở]", default=True)
+    is_thue_canthiep = fields.Boolean(string="Thuê Module [Chương trình can thiệp]", default=True)
+
     def _get_vietnam_banks(self):
         return [
             ('422589', 'CIMB (Ngân hàng TNHH MTV CIMB Việt Nam)'),

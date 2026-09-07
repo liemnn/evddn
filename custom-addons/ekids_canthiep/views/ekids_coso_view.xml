@@ -19,7 +19,16 @@
                                     <div class="kh-premium-slogan"><field name="slogan"/></div>
                                 </div>
 
-                                <div class="kh-premium-body">
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==True">
+                                      <div class="kh-description" style="color:red;">
+                                          Hiện trung tâm không thuê [Chương trình can thiệp] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                                      </div>
+
+                                  </div>
+
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==False">
+
+
                                     <div class="kh-premium-desc">
                                         (Quản lý chương trình can thiệp cho trẻ)
                                     </div>
@@ -66,7 +75,15 @@
                                     <div class="kh-premium-slogan"><field name="slogan"/></div>
                                 </div>
 
-                                <div class="kh-premium-body">
+
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==True">
+                                      <div class="kh-description" style="color:red;">
+                                          Hiện trung tâm không thuê [Chương trình can thiệp] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                                      </div>
+
+                                  </div>
+
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==False">
                                     <div class="kh-premium-desc">
                                         (Quản lý Các Danh mục và Chuyên gia đánh giá)
                                     </div>
@@ -263,7 +280,15 @@
                                      <div class="kh-premium-slogan"><field name="slogan"/></div>
                                  </div>
 
-                                 <div class="kh-premium-body">
+
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==True">
+                                      <div class="kh-description" style="color:red;">
+                                          Hiện trung tâm không thuê [Chương trình can thiệp] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                                      </div>
+
+                                  </div>
+
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==False">
                                      <div class="kh-description">(Quản lý kết luận, lập kế hoạch và thực hiện can thiệp hàng ngày cho trẻ)</div>
                                   <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                              name="action_danhsach_hocsinh_ketluan"
