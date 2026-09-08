@@ -32,31 +32,33 @@
                 <list string="Danh sách mục tiêu kế hoạch"
                       default_order="create_date desc" limit="200" create="0" delete="0" edit="0">
 
+
                     <!-- 1. STT VÀ SEQUENCE HỖ TRỢ KÉO THẢ -->
 
-                    <field name="index" string="STT" readonly="1" optional="show"/>
+                    <field name="index" string="STT" readonly="1" optional="show" width="10"/>
 
                     <!-- 2. THÔNG TIN PHÂN LOẠI (Related Fields) -->
                     <field name="chuongtrinh_id" string="Chương trình" readonly="1" optional="show"/>
-                    <field name="linhvuc_id" string="Lĩnh vực" readonly="1" optional="show"/>
+                    <field name="linhvuc_id" string="Lĩnh vực" readonly="1" optional="show" class="text-wrap"/>
                     <field name="tuoi_id" string="Độ tuổi" readonly="1" optional="show"/>
 
                     <!-- 3. TÊN MỤC TIÊU -->
-                    <field name="name" string="Tên mục tiêu" readonly="1" class="fw-bold"/>
+                    <field name="name" string="Tên mục tiêu" readonly="1" class="text-wrap"/>
 
                     <!-- 4. THÔNG TIN GIÁO VIÊN VÀ NGÀY BIÊN TẬP -->
                     <!-- Lấy giáo viên lập từ Kế hoạch cha -->
 
-                    <field name="gv_lapkehoach_id" string="Giáo viên" width="100" optional="show"/>
+                    <field name="gv_lapkehoach_id" string="Giáo viên"  optional="show" class="text-wrap"/>
+
                     <field name="create_date" string="Ngày biên tập"
-                           widget="date"
-                           width="100"/>
+                           widget="date" />
+                    <field name="coso_id" string="Cơ sở" optional="show" class="text-wrap"/>
 
 
                     <!-- 5. CÁC TRẠNG THÁI KIỂM DUYỆT & CAN THIỆP -->
                     <field name="trangthai_thietke"
                            string="Trạng thái"
-                           width="100"
+
                            widget="badge"
                            decoration-success="trangthai_thietke == '1'"
                            decoration-info="trangthai_thietke == '-1'"
