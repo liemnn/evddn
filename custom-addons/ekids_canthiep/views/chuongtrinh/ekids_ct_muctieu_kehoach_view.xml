@@ -350,8 +350,12 @@
                                 <div class="kh-meta-item">
                                     <i class="fa fa-user-circle-o" style="color: #6366f1;"></i>
                                     <span class="lbl">Giáo viên:</span>
-                                    <span class="val"><field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/></span>
+                                    <span class="val">
+                                        <field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/>
+                                    </span>
                                 </div>
+
+
                                 <div style="color: #cbd5e1;">|</div>
                                 <div class="kh-meta-item">
                                     <i class="fa fa-clock-o" style="color: #0ea5e9;"></i>
@@ -359,10 +363,23 @@
                                     <span class="val"><field name="create_date" readonly="1"/></span>
                                 </div>
 
+
+                            </div>
+
+                            <div class="kh-meta-bar">
+
+                                 <div class="kh-meta-item">
+                                    <i class="fa fa-graduation-cap" style="color: #6366f1;"></i>
+                                    <span class="lbl">Cơ sở:</span>
+                                    <span class="val">
+                                        <field name="coso_id" readonly="1" options="{'no_open': True}"/>
+                                    </span>
+                                </div>
+
                                 <!-- 🌟 CĂN PHẢI TOÀN BỘ CẢNH BÁO + NÚT BẤM -->
                                 <div class="kh-meta-right-container" invisible="is_co_thietke == False">
                                     <span class="txt-has-design-alert">
-                                        <i class="fa fa-exclamation-circle"></i> Xem chi tiết nội dung mục tiêu trong [Chương trình] trước khi thay đổi
+                                        <i class="fa fa-exclamation-circle"></i> Xem chi thiêt mục tiêu trong [Chương trình] trước khi thay đổi
                                     </span>
                                     <button name="action_xem_chitiet_muctieu"
                                             string="Xem chi tiết"
@@ -370,6 +387,8 @@
                                             class="btn-sm btn-outline-primary"
                                             icon="fa-external-link"/>
                                 </div>
+
+
                             </div>
 
                             <!-- KHỐI 3 CỘT (CHƯƠNG TRÌNH, LĨNH VỰC, ĐỘ TUỔI) -->

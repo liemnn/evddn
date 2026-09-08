@@ -288,7 +288,7 @@ class CoSo(models.Model):
 
         # 1. Điều kiện chung: thuộc cơ sở, có mục tiêu và bản ghi temp PHẢI có nội dung
         domain_base = [
-            ('kehoach_id.coso_id', '=', self.id),
+            #('kehoach_id.coso_id', '=', self.id),
             ('chuongtrinh_id.coso_id', '=', self.id),
             ('muctieu_id', '!=', False),
             ('thietke_temp', 'not in', EMPTY_HTML),

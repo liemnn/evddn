@@ -26,6 +26,12 @@ class KeHoach2MucTieu(models.Model):
     sequence = fields.Integer(string="STT", compute="_compute_sequence",store=True)
     index = fields.Integer(string="STT", default=1,compute="_compute_index")
 
+    coso_id = fields.Many2one("ekids.coso"
+                              ,related="kehoach_linhvuc_id.chuongtrinh_id.coso_id"
+                              , string="Cơ sở"
+                              ,required=True,
+                              ondelete="restrict")
+
     kehoach_id = fields.Many2one("ekids.kehoach",
                                  related="kehoach_linhvuc_id.kehoach_id",
                                  string="Thuộc kế hoạch nào",
