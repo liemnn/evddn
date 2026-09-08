@@ -10,6 +10,33 @@ def func_get_giaovien_tu_user(self):
                 .search([('user_id', '=', user.id)], limit=1))
     return giaovien
 
+def func_get_giaoviens_tu_user(self):
+    user = self.env.user
+    GiaoVien = self.env['ekids.giaovien']
+
+    # 1. Tìm giáo viên liên kết với tài khoản đang đăng nhập
+    current_gv = GiaoVien.search([('user_id', '=', user.id)], limit=1)
+    if not current_gv:
+        return GiaoVien.browse()  # Recordset rỗng
+
+    # 2. Điều kiện 1: Chính là giáo viên đang đăng nhập
+    self_domain = [('id', '=', current_gv.id)]
+
+    # 3. Điều kiện 2: Cùng SĐT VÀ thuộc cơ sở mà user quản lý
+    dienthoai = (current_gv.dienthoai or '').strip()
+    if dienthoai and user.coso_ids:
+        same_phone_domain = expression.AND([
+            [('dienthoai', '=', dienthoai)],
+            [('coso_id', 'in', user.coso_ids.ids)]
+        ])
+        # Dùng expression.OR để kết hợp 2 điều kiện
+        final_domain = expression.OR([self_domain, same_phone_domain])
+    else:
+        final_domain = self_domain
+
+    return GiaoVien.search(final_domain)
+
+
 def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,tu_ngay, den_ngay):
     domain =[
                 ('giaovien_id', '=', giaovien.id),

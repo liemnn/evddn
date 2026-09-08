@@ -115,7 +115,7 @@ class HocSinhInherit(models.Model
     def _compute_tong_kehoach_doiduyet(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for hs in self:
             if hs.kehoach_ids:
                 tong =0
@@ -131,7 +131,7 @@ class HocSinhInherit(models.Model
 
                             if is_admin:
                                 tong +=1
-                            elif (kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id):
+                            elif (kh.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids):
                                 tong +=1
 
                 hs.tong_kehoach_doiduyet = tong
@@ -188,7 +188,7 @@ class HocSinhInherit(models.Model
         is_admin = user.has_group('base.group_system')
 
         context_type = self.env.context.get("default_context_type","-1")
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for hs in self:
             if hs.kehoach_ids:
                 tong =0
@@ -201,13 +201,13 @@ class HocSinhInherit(models.Model
                                     #TH: Kiem duyet
                                     if is_admin:
                                         tong += 1
-                                    elif (kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id):
+                                    elif (kh.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids):
                                         tong += 1
                                 elif context_type =="3":
                                     #TH can thiep
                                     if is_admin:
                                         tong += 1
-                                    elif (kh.gv_lapkehoach_id.id == giaovien.id):
+                                    elif (kh.gv_lapkehoach_id.id in giaoviens.ids):
                                         tong +=1
 
 
@@ -333,6 +333,7 @@ class HocSinhInherit(models.Model
     def _compute_is_kiemduyet(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens =giaovien_util.func_get_giaoviens_tu_user(self)
         for hs in self:
             is_kiemduyet = False
             trangthais =[kehoach_util.KEHOACH_DANG_PHEDUYET]
@@ -343,7 +344,7 @@ class HocSinhInherit(models.Model
                         is_kiemduyet = True
                     else:
                         giaovien = kehoach.ketluan_id.gv_kiemduyet_id
-                        if giaovien.user_id.id == user.id:
+                        if giaovien.id in giaoviens.ids:
                             is_kiemduyet = True
             hs.is_kiemduyet = is_kiemduyet
 
@@ -356,6 +357,7 @@ class HocSinhInherit(models.Model
         today = date.today()
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens =giaovien_util.func_get_giaoviens_tu_user(self)
         today =date.today()
         for hs in self:
             # LƯU Ý SỐNG CÒN: Luôn gán mặc định False đầu vòng lặp cho từng học sinh
@@ -386,7 +388,7 @@ class HocSinhInherit(models.Model
                                 is_canthiep = True
                         else:
                             giaovien = kehoach.ketluan_id.gv_kiemduyet_id
-                            if giaovien and giaovien.user_id and giaovien.user_id.id == user.id:
+                            if (giaovien and giaovien.id in giaoviens.ids):
                                 # cho phép giáo viên vào kiểm duyệt
                                 is_canthiep = True
             hs.is_canthiep = is_canthiep

@@ -314,8 +314,8 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
     def action_xem_danhsach_kehoach(self):
         self.ensure_one()
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
-        if not giaovien:
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
+        if not giaoviens:
             return False
 
         env_ctx = self.env.context
@@ -339,8 +339,8 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
         # 3. Phân quyền theo Giáo viên (Nếu không phải Admin)
         if not is_admin:
-            gv_lap_domain = [('gv_lapkehoach_id', '=', giaovien.id)]
-            gv_duyet_domain = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
+            gv_lap_domain = [('gv_lapkehoach_id', 'in', giaoviens.ids)]
+            gv_duyet_domain = [('ketluan_id.gv_kiemduyet_id', 'in', giaoviens.ids)]
 
             if context_type == "1":
                 domain.extend(gv_lap_domain)

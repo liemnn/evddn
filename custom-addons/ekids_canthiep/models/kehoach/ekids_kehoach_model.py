@@ -200,7 +200,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def _compute_is_readonly(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
-
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for record in self:
             if not record.access_token:
                 record.access_token=str(uuid.uuid4())
@@ -219,7 +219,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                     if (record.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
                         and record.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET):
                         giaovien = self.ketluan_id.gv_kiemduyet_id
-                        if giaovien.user_id.id == user.id:
+                        if giaovien.id in giaoviens.ids:
                             is_readonly= False
 
 
@@ -298,10 +298,11 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def _compute_is_pheduyet(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for kehoach in self:
             if (kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
                 and kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET):
-                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.user_id.id == user.id):
+                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids):
                     kehoach.is_pheduyet = True
                 else:
                     kehoach.is_pheduyet = False
@@ -311,9 +312,10 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def _compute_is_kiemduyet(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens=giaovien_util.func_get_giaoviens_tu_user(self)
         for kehoach in self:
             if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.user_id.id == user.id):
+                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids):
                     kehoach.is_kiemduyet = True
                 else:
                     kehoach.is_kiemduyet = False
@@ -570,12 +572,13 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             is_chophep_ketthuc =False
             user = self.env.user
             is_admin = user.has_group('base.group_system')
+            giaoviens =giaovien_util.func_get_giaoviens_tu_user(self)
             if is_admin:
                 is_chophep_ketthuc =True
             else:
                 giaovien = self.ketluan_id.gv_kiemduyet_id
                 # Phòng thủ kiểm tra chắc chắn để tránh lỗi sập hệ thống (Null Pointer) khi chưa chọn giáo viên
-                if giaovien and giaovien.user_id and giaovien.user_id.id == user.id:
+                if giaovien and giaovien.id in giaoviens.ids:
                    is_chophep_ketthuc = True
         if is_chophep_ketthuc:
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
