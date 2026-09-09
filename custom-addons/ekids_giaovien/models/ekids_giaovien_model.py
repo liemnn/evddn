@@ -34,7 +34,7 @@ class GiaoVien(models.Model):
     gioitinh  = fields.Selection([("0","Nữ"),("1","Nam")],'Giới tính',required=True)
     ngaysinh = fields.Date(string="Ngày sinh",required=True)
 
-    desc = fields.Html(string="Kinh nghiệm làm việc/thông tin giáo viên")
+    desc = fields.Html(string="Vị trí công việc")
 
 
     diachi_quequan = fields.Char(string="Quê quán")
@@ -56,7 +56,7 @@ class GiaoVien(models.Model):
                                              , ("0", "Chưa có gia đình")
                                              , ("1", "Khác")
                                           ]
-                                         ,'Tình trạng hôn nhân',required=True)
+                                         ,'Tình trạng hôn nhân')
 
     dilam_tungay = fields.Date(string="*Ngày đi làm",required=True)
     dilam_denngay = fields.Date(string="Ngày nghỉ làm")

@@ -28,6 +28,8 @@ class CoSo(models.Model):
 
     is_theodoi_kehoach = fields.Boolean(compute="_compute_is_theodoi_kehoach")
 
+
+
     def _compute_is_ql_chuongtrinh(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')

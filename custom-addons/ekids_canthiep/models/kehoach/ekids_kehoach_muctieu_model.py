@@ -27,7 +27,7 @@ class KeHoach2MucTieu(models.Model):
     index = fields.Integer(string="STT", default=1,compute="_compute_index")
 
     coso_id = fields.Many2one("ekids.coso"
-                              ,related="kehoach_linhvuc_id.chuongtrinh_id.coso_id"
+                              ,related="kehoach_id.gv_lapkehoach_id.coso_id"
                               , string="Cơ sở"
                               ,required=True,
                               ondelete="restrict")

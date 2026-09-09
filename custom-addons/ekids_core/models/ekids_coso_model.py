@@ -57,8 +57,7 @@ class CoSo(models.Model):
 
     bank_bin = fields.Selection(
         selection='_get_vietnam_banks',
-        string="Ngân hàng thụ hưởng",
-        required=True
+        string="Ngân hàng thụ hưởng"
     )
     bank_acc_number = fields.Char("Số tài khoản")
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eKids - Hướng dẫn sử dụng</title>
+    <title>eKids - Hướng dẫn sử dụng phần mềm eVDDN</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -14,112 +14,151 @@
             --c-cyan: #0891B2;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; padding-bottom: 80px; }
+        body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; padding-bottom: 50px; }
         @keyframes gradientWave { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- HERO SECTION --- */
-        .hero { background: linear-gradient(-45deg, #1E3A8A, #2563EB, #3B82F6, #1D4ED8); background-size: 400% 400%; animation: gradientWave 10s ease infinite; padding: 70px 20px 90px; text-align: center; color: white; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15); margin-bottom: -50px; position: relative; z-index: 1;}
-        .hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
-        .hero p { font-size: 1.05rem; color: rgba(255, 255, 255, 0.9); font-weight: 500; }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2; }
-
-        /* --- KHUNG KHỞI TẠO (NHO GỌN - NÚT BÊN PHẢI) --- */
-        .onboarding-banner {
-            background: linear-gradient(135deg, #EEF2FF 0%, #FFFFFF 100%);
-            border: 1px solid #C7D2FE;
-            border-radius: 20px;
-            padding: 25px 30px;
+        /* --- HERO SECTION SIÊU GỌN --- */
+        .hero {
+            background: linear-gradient(-45deg, #1E3A8A, #2563EB, #3B82F6, #1D4ED8);
+            background-size: 400% 400%;
+            animation: gradientWave 10s ease infinite;
+            padding: 15px 25px 30px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.08);
+            color: white;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
+            margin-bottom: -25px;
             position: relative;
-            overflow: hidden;
-            animation: fadeUp 0.5s ease-out forwards;
-            gap: 30px;
-        }
-        .onboarding-banner::after {
-            content: '\f135';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            right: 250px;
-            bottom: -30px;
-            font-size: 14rem;
-            color: rgba(79, 70, 229, 0.03);
-            z-index: 0;
-            transform: rotate(-15deg);
-            pointer-events: none;
-        }
-        .onb-left {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            flex: 1;
             z-index: 1;
         }
-        .onb-icon {
-            width: 50px; height: 50px;
-            background: var(--c-indigo); color: white; border-radius: 14px;
-            display: flex; justify-content: center; align-items: center; font-size: 1.5rem;
-            flex-shrink: 0; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); margin-top: 5px;
-        }
-        .onb-text-wrapper { display: flex; flex-direction: column; }
-        .onb-header-text span { font-size: 0.75rem; font-weight: 800; color: var(--c-indigo); text-transform: uppercase; letter-spacing: 1px; }
-        .onb-header-text h2 { font-size: 1.5rem; color: var(--text-main); font-weight: 800; line-height: 1.2; margin-top: 4px; margin-bottom: 6px;}
-        .onb-desc { font-size: 0.95rem; color: var(--text-sub); line-height: 1.5; margin: 0; max-width: 800px;}
+        .hero-left h1 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.3px; margin: 0; }
 
-        .onb-right {
+        /* Liên hệ góc trên bên phải */
+        .hero-support {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .hero-support i { color: #34D399; }
+        .hero-support a { color: #ffffff; text-decoration: none; font-weight: 700; }
+        .hero-support a:hover { text-decoration: underline; }
+
+        .container { max-width: 1350px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 2; }
+
+        /* --- TAB NAVIGATION MENU --- */
+        .tab-menu {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
             gap: 10px;
-            flex-shrink: 0;
-            z-index: 1;
-        }
-        .btn-onb { background: var(--c-indigo); color: white; padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); }
-        .btn-onb:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(79, 70, 229, 0.4); background: #4338CA; }
-        .btn-onb-outline { background: white; color: var(--c-indigo); border: 1px solid #A5B4FC; padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
-        .btn-onb-outline:hover { background: #EEF2FF; border-color: var(--c-indigo); }
-
-        /* --- TIÊU ĐỀ PHÂN CÁCH --- */
-        .section-divider {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--text-main);
             margin-bottom: 25px;
+            flex-wrap: nowrap;
+            background: var(--surface);
+            padding: 8px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 16px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            border-radius: 10px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            animation: fadeUp 0.6s ease-out forwards;
-            opacity: 0;
+            gap: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            flex: 1;
+            justify-content: center;
         }
-        .section-divider::before {
-            content: '';
-            display: block;
-            width: 6px;
-            height: 24px;
+        .tab-btn:hover { color: var(--primary); background: var(--primary-light); }
+        .tab-btn.active {
             background: var(--primary);
-            border-radius: 4px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
         }
 
-        /* --- LƯỚI CÁC PHÂN HỆ (GRID) --- */
-        .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; align-items: stretch; }
+        /* --- TAB CONTENT PANELS --- */
+        .tab-pane { display: none; animation: fadeUp 0.3s ease-out forwards; }
+        .tab-pane.active { display: block; }
 
-        .guide-card { background: var(--surface); border-radius: 16px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); border: 1px solid var(--border-color); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; opacity: 0; animation: fadeUp 0.6s ease-out forwards; position: relative; overflow: hidden; }
+        /* --- KHUNG BANNER CHUNG (CHO TAB 1) --- */
+        .onboarding-banner {
+            background: linear-gradient(135deg, #EEF2FF 0%, #FFFFFF 100%);
+            border: 1px solid #C7D2FE;
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.06);
+            position: relative;
+            overflow: hidden;
+            gap: 20px;
+        }
+        .onboarding-banner::after {
+            content: '\f135'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            position: absolute; right: 200px; bottom: -30px; font-size: 12rem;
+            color: rgba(79, 70, 229, 0.03); z-index: 0; transform: rotate(-15deg); pointer-events: none;
+        }
+        .onb-left { display: flex; align-items: flex-start; gap: 16px; flex: 1; z-index: 1; }
+        .onb-icon {
+            width: 44px; height: 44px; background: var(--c-indigo); color: white; border-radius: 12px;
+            display: flex; justify-content: center; align-items: center; font-size: 1.3rem;
+            flex-shrink: 0; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); margin-top: 3px;
+        }
+        .onb-text-wrapper { display: flex; flex-direction: column; }
+        .onb-header-text span { font-size: 0.7rem; font-weight: 800; color: var(--c-indigo); text-transform: uppercase; letter-spacing: 1px; }
+        .onb-header-text h2 { font-size: 1.35rem; color: var(--text-main); font-weight: 800; line-height: 1.2; margin-top: 2px; margin-bottom: 4px;}
+        .onb-desc { font-size: 0.9rem; color: var(--text-sub); line-height: 1.5; margin: 0; max-width: 800px;}
 
-        .guide-card:nth-child(1) { animation-delay: 0.1s; }
-        .guide-card:nth-child(2) { animation-delay: 0.2s; }
-        .guide-card:nth-child(3) { animation-delay: 0.3s; }
-        .guide-card:nth-child(4) { animation-delay: 0.4s; }
-        .guide-card:nth-child(5) { animation-delay: 0.5s; }
-        .guide-card:nth-child(6) { animation-delay: 0.6s; }
+        .onb-right { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; z-index: 1; }
+        .btn-onb { background: var(--c-indigo); color: white; padding: 9px 18px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); }
+        .btn-onb:hover { transform: translateY(-2px); background: #4338CA; }
+        .btn-onb-outline { background: white; color: var(--c-indigo); border: 1px solid #A5B4FC; padding: 9px 18px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; }
+        .btn-onb-outline:hover { background: #EEF2FF; border-color: var(--c-indigo); }
 
-        .guide-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+        /* --- TRÌNH XEM PDF TRỰC TIẾP CHO TAB 2 --- */
+        .pdf-embed-wrapper {
+            background: #525659; border-radius: 16px; overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); display: flex; flex-direction: column; height: 75vh; border: 1px solid var(--border-color);
+        }
+        .compact-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: #FFFFFF; border-bottom: 1px solid #CBD5E1; z-index: 5; }
+        .os-tabs { display: flex; gap: 8px; }
+        .os-tab { padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; border: 1px solid var(--border-color); background: #F8FAFC; color: var(--text-sub); }
+        .os-tab:hover { background: #E2E8F0; }
+        .os-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .os-tab.active i { color: white !important; }
+
+        .download-btn { background: #F1F5F9; border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; text-decoration: none; }
+        .download-btn:hover { background: white; border-color: var(--primary); color: var(--primary); }
+
+        .pdf-viewer-container { flex: 1; width: 100%; background: #525659; display: flex; }
+        .pdf-viewer-container iframe { width: 100%; height: 100%; border: none; display: block; }
+
+        /* --- LƯỚI CÁC PHÂN HỆ (GRID CHO TAB 3 & 4) --- */
+        .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; align-items: stretch; }
+
+        .guide-card { background: var(--surface); border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04); border: 1px solid var(--border-color); transition: all 0.3s ease; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        .guide-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease; }
         .guide-card:nth-child(1)::before { background: var(--c-blue); }
         .guide-card:nth-child(2)::before { background: var(--c-orange); }
         .guide-card:nth-child(3)::before { background: var(--c-purple); }
@@ -127,166 +166,330 @@
         .guide-card:nth-child(5)::before { background: var(--c-red); }
         .guide-card:nth-child(6)::before { background: var(--c-cyan); }
 
-        .guide-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); } .guide-card:hover::before { transform: scaleX(1); }
-        .card-header { display: flex; align-items: center; gap: 16px; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
-        .icon-box { width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.4rem; color: white; flex-shrink: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .guide-card:hover .icon-box { transform: scale(1.1) rotate(5deg); }
+        .guide-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.06); }
+        .guide-card:hover::before { transform: scaleX(1); }
 
-        .bg-blue { background: var(--c-blue); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
-        .bg-orange { background: var(--c-orange); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
-        .bg-purple { background: var(--c-purple); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }
-        .bg-green { background: var(--c-green); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
-        .bg-red { background: var(--c-red); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
-        .bg-cyan { background: var(--c-cyan); box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3); }
+        .card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+        .icon-box { width: 42px; height: 42px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; color: white; flex-shrink: 0; }
 
-        .card-title { flex: 1; } .card-title h2 { font-size: 1.05rem; font-weight: 800; color: var(--text-main); line-height: 1.3; transition: color 0.3s; } .card-title span { font-size: 0.75rem; font-weight: 800; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; }
+        .bg-blue { background: var(--c-blue); }
+        .bg-orange { background: var(--c-orange); }
+        .bg-purple { background: var(--c-purple); }
+        .bg-green { background: var(--c-green); }
+        .bg-red { background: var(--c-red); }
+        .bg-cyan { background: var(--c-cyan); }
+
+        .card-title { flex: 1; }
+        .card-title h2 { font-size: 1rem; font-weight: 800; color: var(--text-main); line-height: 1.25; }
+        .card-title span { font-size: 0.7rem; font-weight: 800; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; }
         .card-body { flex: 1; }
 
-        .feature-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-        .feature-list li { position: relative; border-radius: 10px; font-size: 0.9rem; font-weight: 500; transition: all 0.25s ease; }
-        .feature-list li a { display: block; padding: 10px 12px 10px 32px; color: var(--text-sub); text-decoration: none; border-radius: 10px; transition: all 0.25s ease;}
-        .feature-list li::before { content: '\f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #CBD5E1; font-size: 0.7rem; transition: all 0.25s ease; pointer-events: none;}
+        .feature-list { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+        .feature-list li { position: relative; border-radius: 8px; font-size: 0.86rem; font-weight: 500; }
+        .feature-list li a { display: block; padding: 8px 10px 8px 28px; color: var(--text-sub); text-decoration: none; border-radius: 8px; transition: all 0.2s ease;}
+        .feature-list li::before { content: '\f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #CBD5E1; font-size: 0.65rem; }
 
-        .guide-card:nth-child(1) .feature-list li a:hover { background-color: #EFF6FF; color: var(--primary-hover); font-weight: 700; transform: translateX(5px); } .guide-card:nth-child(1) .feature-list li:hover::before { color: var(--primary-hover); }
-        .guide-card:nth-child(2) .feature-list li a:hover { background-color: #FFF7ED; color: #D97706; font-weight: 700; transform: translateX(5px); } .guide-card:nth-child(2) .feature-list li:hover::before { color: #D97706; }
-        .guide-card:nth-child(3) .feature-list li a:hover { background-color: #F5F3FF; color: #6D28D9; font-weight: 700; transform: translateX(5px); } .guide-card:nth-child(3) .feature-list li:hover::before { color: #6D28D9; }
-        .guide-card:nth-child(4) .feature-list li a:hover { background-color: #ECFDF5; color: #059669; font-weight: 700; transform: translateX(5px); } .guide-card:nth-child(4) .feature-list li:hover::before { color: #059669; }
-        .guide-card:nth-child(5) .feature-list li a:hover { background-color: #FEF2F2; color: #DC2626; font-weight: 700; transform: translateX(5px); } .guide-card:nth-child(5) .feature-list li:hover::before { color: #DC2626; }
-        .guide-card:nth-child(6) .feature-list li a:hover { background-color: #CFFAFE; color: #0E7490; font-weight: 700; transform: translateX(5px); } .guide-card:nth-child(6) .feature-list li:hover::before { color: #0E7490; }
+        .guide-card:nth-child(1) .feature-list li a:hover { background-color: #EFF6FF; color: var(--primary-hover); font-weight: 700; }
+        .guide-card:nth-child(2) .feature-list li a:hover { background-color: #FFF7ED; color: #D97706; font-weight: 700; }
+        .guide-card:nth-child(3) .feature-list li a:hover { background-color: #F5F3FF; color: #6D28D9; font-weight: 700; }
+        .guide-card:nth-child(4) .feature-list li a:hover { background-color: #ECFDF5; color: #059669; font-weight: 700; }
+        .guide-card:nth-child(5) .feature-list li a:hover { background-color: #FEF2F2; color: #DC2626; font-weight: 700; }
+        .guide-card:nth-child(6) .feature-list li a:hover { background-color: #CFFAFE; color: #0E7490; font-weight: 700; }
 
-        .card-footer { margin-top: 15px; font-size: 0.85rem; font-weight: 700; color: var(--text-sub); display: flex; align-items: center; gap: 8px; padding-top: 15px; border-top: 1px dashed var(--border-color); transition: color 0.3s; text-decoration: none;}
-        .card-footer i { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .guide-card:hover .card-footer { color: var(--primary); } .guide-card:hover .card-footer i { transform: translateX(8px); }
+        .card-footer { margin-top: 12px; font-size: 0.82rem; font-weight: 700; color: var(--text-sub); display: flex; align-items: center; gap: 6px; padding-top: 12px; border-top: 1px dashed var(--border-color); text-decoration: none; transition: color 0.2s;}
+        .guide-card:hover .card-footer { color: var(--primary); }
 
-        /* Responsive cho thiết bị nhỏ */
+        /* Responsive */
         @media (max-width: 768px) {
-            .onboarding-banner { flex-direction: column; align-items: flex-start; padding: 25px 20px; }
-            .onb-left { flex-direction: column; gap: 15px; }
-            .onb-icon { margin-top: 0; }
+            .hero { flex-direction: column; align-items: flex-start; gap: 10px; padding: 15px; }
+            .hero-left h1 { font-size: 1.1rem; }
+            .onboarding-banner { flex-direction: column; align-items: flex-start; padding: 18px; }
             .onb-right { width: 100%; flex-direction: row; flex-wrap: wrap; }
-            .btn-onb, .btn-onb-outline { flex: 1; min-width: 200px; justify-content: center;}
-            .section-divider { justify-content: center; }
-            .section-divider::before { display: none; }
+            .btn-onb, .btn-onb-outline { flex: 1; min-width: 150px; justify-content: center; }
+            .tab-menu { padding: 6px; justify-content: flex-start; overflow-x: auto; }
+            .tab-btn { padding: 8px 10px; font-size: 0.78rem; flex-shrink: 0; }
+            .pdf-embed-wrapper { height: 60vh; }
         }
     </style>
 </head>
 <body>
 
     <div class="hero">
-        <h1>HƯỚNG DẪN SỬ DỤNG PHẦN MỀM - EVDDN</h1>
-        <p>Khám phá tài liệu hướng dẫn và tối ưu hóa việc quản lý trung tâm của bạn.</p>
+        <div class="hero-left">
+            <h1>HƯỚNG DẪN SỬ DỤNG PHẦN MỀM - EVDDN</h1>
+        </div>
+        <div class="hero-right">
+            <div class="hero-support">
+                <i class="fas fa-headset"></i> Hỗ trợ kỹ thuật / Zalo: <a href="tel:0393393386">0393.393.386</a>
+            </div>
+        </div>
     </div>
 
     <div class="container">
 
-        <div class="onboarding-banner">
-            <div class="onb-left">
-                <div class="onb-icon"><i class="fas fa-rocket"></i></div>
-                <div class="onb-text-wrapper">
-                    <div class="onb-header-text">
-                        <span>Bước đệm bắt buộc</span>
-                        <h2>Khởi tạo dữ liệu ban đầu</h2>
+        <!-- --- TAB NAVIGATION MENU --- -->
+        <div class="tab-menu">
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-khoitao')">
+                <i class="fas fa-rocket"></i> KHỞI TẠO BAN ĐẦU
+            </button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-mobile')">
+                <i class="fas fa-mobile-alt"></i> CÀI ĐẶT TRÊN ĐIỆN THOẠI
+            </button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-phanhe')">
+                <i class="fas fa-cogs"></i> PHÂN HỆ 01: VẬN HÀNH TRUNG TÂM
+            </button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-kehoach')">
+                <i class="fas fa-child"></i> PHÂN HỆ 02: KẾ HOẠCH CAN THIỆP
+            </button>
+        </div>
+
+        <!-- --- TAB 1: KHỞI TẠO DỮ LIỆU BAN ĐẦU --- -->
+        <div id="tab-khoitao" class="tab-pane active">
+            <div class="onboarding-banner">
+                <div class="onb-left">
+                    <div class="onb-icon"><i class="fas fa-rocket"></i></div>
+                    <div class="onb-text-wrapper">
+                        <div class="onb-header-text">
+                            <span>Bước đệm bắt buộc</span>
+                            <h2>Khởi tạo dữ liệu ban đầu</h2>
+                        </div>
+                        <p class="onb-desc">Để hệ thống vận hành trơn tru, đội ngũ kỹ thuật eVDDN sẽ hỗ trợ nạp tự động toàn bộ dữ liệu hiện tại của Trung tâm (Học sinh, Giáo viên, Học phí...) thông qua biểu mẫu chuẩn. Bạn cần hoàn thành bước này trước tiên.</p>
                     </div>
-                    <p class="onb-desc">Để hệ thống vận hành trơn tru, đội ngũ kỹ thuật eVDDN sẽ hỗ trợ nạp tự động toàn bộ dữ liệu hiện tại của Trung tâm (Học sinh, Giáo viên, Học phí...) thông qua biểu mẫu chuẩn. Bạn cần hoàn thành bước này trước tiên.</p>
                 </div>
-            </div>
-            <div class="onb-right">
-                <a href="khoitao/khoitao.html" class="btn-onb">Xem quy trình Khởi tạo <i class="fas fa-arrow-right"></i></a>
-                <a href="khoitao/eVDDN_Đăng ký trung tâm.xlsx" class="btn-onb-outline"><i class="fas fa-file-excel"></i> Tải biểu mẫu Excel</a>
+                <div class="onb-right">
+                    <a href="khoitao/khoitao.html" class="btn-onb">Xem quy trình Khởi tạo <i class="fas fa-arrow-right"></i></a>
+                    <a href="khoitao/eVDDN_Đăng ký trung tâm.xlsx" class="btn-onb-outline"><i class="fas fa-file-excel"></i> Tải biểu mẫu Excel</a>
+                </div>
             </div>
         </div>
 
-        <div class="section-divider">Khám phá các phân hệ của phần mềm(dành cho các trung tâm)</div>
-
-        <div class="guide-grid">
-
-            <div class="guide-card">
-                <div class="card-header">
-                    <div class="icon-box bg-blue"><i class="fas fa-cogs"></i></div>
-                    <div class="card-title"><span>Phần A</span><h2>Thiết lập thông tin trước khi hoạt động</h2></div>
+        <!-- --- TAB 2: CÀI ĐẶT ỨNG DỤNG TRÊN ĐIỆN THOẠI --- -->
+        <div id="tab-mobile" class="tab-pane">
+            <div class="pdf-embed-wrapper">
+                <div class="compact-toolbar">
+                    <div class="os-tabs">
+                        <div class="os-tab active" id="btn-android" onclick="switchOS('android')">
+                            <i class="fab fa-android" style="color: #A4C639;"></i> Android
+                        </div>
+                        <div class="os-tab" id="btn-ios" onclick="switchOS('ios')">
+                            <i class="fab fa-apple" style="font-size: 1.05rem;"></i> Iphone (iOS)
+                        </div>
+                    </div>
+                    <a href="mobile/mobile-android.pdf" target="_blank" id="pdf-download" class="download-btn" title="Tải PDF về máy">
+                        <i class="fas fa-cloud-download-alt"></i> <span>Tải PDF</span>
+                    </a>
                 </div>
-                <div class="card-body">
-                    <ul class="feature-list">
-                        <li><a href="thietlapbandau/thongtin.html">Thiết lập thông tin ban đầu (làm duy nhất lần đầu)</a></li>
-                        <li><a href="thietlapbandau/cauhinh_hocphi.html"><strong style="color:red">Thiết lập các khoản thu học phí</strong></a></li>
-                        <li><a href="thietlapbandau/cauhinh_cautrucluong.html"><strong style="color:red">Thiết lập cấu trúc lương</strong></a></li>
-
-                        <li><a href="thietlapbandau/nghile.html">Quản lý ngày nghỉ lễ, tết trong năm</a></li>
-                    </ul>
+                <div class="pdf-viewer-container">
+                    <iframe id="pdf-iframe" src="mobile/mobile-android.pdf#view=FitH" title="Tài liệu hướng dẫn cài đặt">
+                        Trình duyệt của bạn không hỗ trợ nhúng file PDF. Vui lòng tải file về máy để xem.
+                    </iframe>
                 </div>
-                <a href="thietlapbandau/thongtin.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
             </div>
-
-            <div class="guide-card">
-                <div class="card-header">
-                    <div class="icon-box bg-orange"><i class="fas fa-user-graduate"></i></div>
-                    <div class="card-title"><span>Phần B</span><h2>Hồ sơ học sinh & Học phí</h2></div>
-                </div>
-                <div class="card-body">
-                    <ul class="feature-list">
-                        <li><a href="hocsinh/hosohocsinh.html">Quản lý hồ sơ điện tử - Học sinh</a></li>
-                        <li><a href="hocsinh/diemdanh.html">Điểm danh đi học và ca can thiệp của trẻ</a></li>
-                        <li><a href="hocsinh/tinhhocphi.html"><strong style="color:red">Tính học phí hàng tháng</strong></a></li>
-                        <li><a href="hocsinh/cauhinh.html">Quản lý các khoản thu, lên lịch ca học tập cho học sinh</a></li>
-                    </ul>
-                </div>
-                <a href="hocsinh/hosohocsinh.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <div class="guide-card">
-                <div class="card-header">
-                    <div class="icon-box bg-purple"><i class="fas fa-chalkboard-teacher"></i></div>
-                    <div class="card-title"><span>Phần C</span><h2>Hồ sơ giáo viên & Lương</h2></div>
-                </div>
-                <div class="card-body">
-                    <ul class="feature-list">
-                        <li><a href="giaovien/hosogiaovien.html">Quản lý hồ sơ điện tử - Giáo viên</a></li>
-                        <li><a href="giaovien/chamcong.html">Chấm công đi làm hàng ngày</a></li>
-                        <li><a href="giaovien/chamcongdichvu.html">Chấm công/ghi nhận các dịch vụ khác (ca ngoài giờ...)</a></li>
-                        <li><a href="giaovien/kpi.html">Các nhiệm vụ mục tiêu (KPI) - Hoàn thành trong tháng</a></li>
-                        <li><a href="giaovien/tinhluong.html"><strong style="color:red">Tính lương hàng tháng cho giáo viên</strong></a></li>
-                    </ul>
-                </div>
-                <a href="giaovien/hosogiaovien.html" class="card-footer" style="color: var(--primary);">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <div class="guide-card">
-                <div class="card-header"><div class="icon-box bg-green"><i class="fas fa-coins"></i></div><div class="card-title"><span>Phần D</span><h2>Ghi nhận thu chi hàng tháng</h2></div></div>
-                <div class="card-body">
-                    <ul class="feature-list">
-                        <li><a href="thuchi/thuchi.html">Quản lý các khoản thu/chi hàng tháng của trung tâm</a></li>
-                        <li><a href="thuchi/cauhinh_loaithuchi.html">Quản lý danh mục [Loại Thu/Chi] để phân loại</a></li>
-                    </ul>
-                </div>
-                <a href="thuchi/thuchi.html" class="card-footer" style="color: var(--primary);">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <div class="guide-card">
-                <div class="card-header"><div class="icon-box bg-red"><i class="fas fa-chart-line"></i></div><div class="card-title"><span>Phần E</span><h2>Báo cáo hoạt động trung tâm</h2></div></div>
-                <div class="card-body">
-                    <ul class="feature-list">
-                        <li><a href="baocao/loinhuan.html">Báo cáo lợi nhuận hàng tháng (theo năm tài chính)</a></li>
-                        <li><a href="baocao/tanggiam_hocsinh_gv.html">Báo cáo tình hình tăng giảm lượng học sinh và số lượng giáo viên hàng tháng</a></li>
-                    </ul>
-                </div>
-                <a href="baocao/loinhuan.html" class="card-footer" style="color: var(--primary);">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
-            </div>
-
-            <div class="guide-card">
-                <div class="card-header">
-                    <div class="icon-box bg-cyan"><i class="fas fa-mobile-alt"></i></div>
-                    <div class="card-title"><span>Phần F</span><h2>Cài đặt ứng dụng trên điện thoại</h2></div>
-                </div>
-                <div class="card-body">
-                    <ul class="feature-list">
-                        <li><a href="mobile/mobile.html">Cài đặt cho điện thoại Android và Iphone (IOS)</a></li>
-                        <li><a href="mobile/mobile.html">Dành cho Quản lý, Giáo viên và Phụ huynh</a></li>
-                    </ul>
-                </div>
-                <a href="mobile/mobile.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
-            </div>
-
         </div>
+
+        <!-- --- TAB 3: PHÂN HỆ 01 - VẬN HÀNH KHAI THÁC TRUNG TÂM CHUYÊN BIỆT --- -->
+        <div id="tab-phanhe" class="tab-pane">
+            <div class="guide-grid">
+                <div class="guide-card">
+                    <div class="card-header">
+                        <div class="icon-box bg-blue"><i class="fas fa-cogs"></i></div>
+                        <div class="card-title"><span>Phần A</span><h2>Thiết lập thông tin trước khi hoạt động</h2></div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="thietlapbandau/thongtin.html">Thiết lập thông tin ban đầu (làm duy nhất lần đầu)</a></li>
+                            <li><a href="thietlapbandau/cauhinh_hocphi.html"><strong style="color:red">Thiết lập các khoản thu học phí</strong></a></li>
+                            <li><a href="thietlapbandau/cauhinh_cautrucluong.html"><strong style="color:red">Thiết lập cấu trúc lương</strong></a></li>
+                            <li><a href="thietlapbandau/nghile.html">Quản lý ngày nghỉ lễ, tết trong năm</a></li>
+                        </ul>
+                    </div>
+                    <a href="thietlapbandau/thongtin.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="guide-card">
+                    <div class="card-header">
+                        <div class="icon-box bg-orange"><i class="fas fa-user-graduate"></i></div>
+                        <div class="card-title"><span>Phần B</span><h2>Hồ sơ học sinh & Học phí</h2></div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="hocsinh/hosohocsinh.html">Quản lý hồ sơ điện tử - Học sinh</a></li>
+                            <li><a href="hocsinh/diemdanh.html">Điểm danh đi học và ca can thiệp của trẻ</a></li>
+                            <li><a href="hocsinh/tinhhocphi.html"><strong style="color:red">Tính học phí hàng tháng</strong></a></li>
+                            <li><a href="hocsinh/cauhinh.html">Quản lý các khoản thu, lên lịch ca học tập cho học sinh</a></li>
+                        </ul>
+                    </div>
+                    <a href="hocsinh/hosohocsinh.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="guide-card">
+                    <div class="card-header">
+                        <div class="icon-box bg-purple"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <div class="card-title"><span>Phần C</span><h2>Hồ sơ giáo viên & Lương</h2></div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="giaovien/hosogiaovien.html">Quản lý hồ sơ điện tử - Giáo viên</a></li>
+                            <li><a href="giaovien/chamcong.html">Chấm công đi làm hàng ngày</a></li>
+                            <li><a href="giaovien/chamcongdichvu.html">Chấm công/ghi nhận các dịch vụ khác (ca ngoài giờ...)</a></li>
+                            <li><a href="giaovien/kpi.html">Các nhiệm vụ mục tiêu (KPI) - Hoàn thành trong tháng</a></li>
+                            <li><a href="giaovien/tinhluong.html"><strong style="color:red">Tính lương hàng tháng cho giáo viên</strong></a></li>
+                        </ul>
+                    </div>
+                    <a href="giaovien/hosogiaovien.html" class="card-footer" style="color: var(--primary);">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="guide-card">
+                    <div class="card-header"><div class="icon-box bg-green"><i class="fas fa-coins"></i></div><div class="card-title"><span>Phần D</span><h2>Ghi nhận thu chi hàng tháng</h2></div></div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="thuchi/thuchi.html">Quản lý các khoản thu/chi hàng tháng của trung tâm</a></li>
+                            <li><a href="thuchi/cauhinh_loaithuchi.html">Quản lý danh mục [Loại Thu/Chi] để phân loại</a></li>
+                        </ul>
+                    </div>
+                    <a href="thuchi/thuchi.html" class="card-footer" style="color: var(--primary);">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="guide-card">
+                    <div class="card-header"><div class="icon-box bg-red"><i class="fas fa-chart-line"></i></div><div class="card-title"><span>Phần E</span><h2>Báo cáo hoạt động trung tâm</h2></div></div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="baocao/loinhuan.html">Báo cáo lợi nhuận hàng tháng (theo năm tài chính)</a></li>
+                            <li><a href="baocao/tanggiam_hocsinh_gv.html">Báo cáo tình hình tăng giảm lượng học sinh và số lượng giáo viên hàng tháng</a></li>
+                        </ul>
+                    </div>
+                    <a href="baocao/loinhuan.html" class="card-footer" style="color: var(--primary);">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- --- TAB 4: LẬP KẾ HOẠCH CAN THIỆP CHO TRẺ (6 KHỐI CHI TIẾT) --- -->
+        <div id="tab-kehoach" class="tab-pane">
+            <div class="guide-grid">
+                <div class="guide-card">
+                    <div class="card-header">
+                        <div class="icon-box bg-blue"><i class="fas fa-file-alt"></i></div>
+                        <div class="card-title"><span>Khối 01</span><h2>Quản lý kết luận, lên khung chương trình</h2></div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="kehoach/ketluan.html">Tiếp nhận và quản lý kết luận đánh giá chuyên môn của trẻ</a></li>
+                            <li><a href="kehoach/khungchuongtrinh.html">Thiết lập khung chương trình can thiệp chuẩn theo từng độ tuổi/lĩnh vực</a></li>
+                        </ul>
+                    </div>
+                    <a href="kehoach/ketluan.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="guide-card">
+                    <div class="card-header">
+                        <div class="icon-box bg-orange"><i class="fas fa-tasks"></i></div>
+                        <div class="card-title"><span>Khối 02</span><h2>Lập kế hoạch can thiệp cho trẻ</h2></div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="kehoach/lapkehoach.html">Xây dựng mục tiêu và nội dung can thiệp cá nhân hóa</a></li>
+                            <li><a href="kehoach/phancong.html">Phân công giáo viên và sắp xếp thời gian biểu can thiệp</a></li>
+                        </ul>
+                    </div>
+                    <a href="kehoach/lapkehoach.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="guide-card">
+                    <div class="card-header">
+                        <div class="icon-box bg-purple"><i class="fas fa-check-circle"></i></div>
+                        <div class="card-title"><span>Khối 03</span><h2>Kiểm duyệt chuyên môn kế hoạch</h2></div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="kehoach/kiemduyet.html">Quy trình rà soát và phê duyệt kế hoạch của cấp quản lý/chuyên môn</a></li>
+                            <li><a href="kehoach/gopy.html">Góp ý, chỉnh sửa và phản hồi nội dung kế hoạch can thiệp</a></li>
+                        </ul>
+                    </div>
+                    <a href="kehoach/kiemduyet.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="guide-card">
+                    <div class="card-header">
+                        <div class="icon-box bg-green"><i class="fas fa-calendar-check"></i></div>
+                        <div class="card-title"><span>Khối 04</span><h2>Cập nhật kết quả can thiệp hàng ngày</h2></div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="kehoach/ketquahangngay.html">Ghi nhận tiến độ, mức độ hoàn thành mục tiêu sau mỗi buổi</a></li>
+                            <li><a href="kehoach/nhatky.html">Nhật ký theo dõi hành vi và sự tiến bộ từng ngày của trẻ</a></li>
+                        </ul>
+                    </div>
+                    <a href="kehoach/ketquahangngay.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="guide-card">
+                    <div class="card-header">
+                        <div class="icon-box bg-red"><i class="fas fa-chart-bar"></i></div>
+                        <div class="card-title"><span>Khối 05</span><h2>Kiểm tra, đánh giá lại kết quả (cuối tháng)</h2></div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="kehoach/danhgiacuoisthang.html">Tổng kết số liệu và đánh giá mức độ đạt được cuối tháng</a></li>
+                            <li><a href="kehoach/dieuchinh.html">Đề xuất điều chỉnh mục tiêu và phương pháp cho giai đoạn tiếp theo</a></li>
+                        </ul>
+                    </div>
+                    <a href="kehoach/danhgiacuoisthang.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="guide-card">
+                    <div class="card-header">
+                        <div class="icon-box bg-cyan"><i class="fas fa-share-alt"></i></div>
+                        <div class="card-title"><span>Khối 06</span><h2>Chia sẻ kế hoạch & Báo cáo phụ huynh</h2></div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="kehoach/chiasephuhuynh.html">Gửi kế hoạch và báo cáo định kỳ qua ứng dụng di động</a></li>
+                            <li><a href="kehoach/tuongtac.html">Tương tác, hướng dẫn phụ huynh phối hợp can thiệp tại nhà</a></li>
+                        </ul>
+                    </div>
+                    <a href="kehoach/chiasephuhuynh.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <!-- --- JAVASCRIPT ĐIỀU KHIỂN TAB VÀ ĐỔI PDF MOBILE --- -->
+    <script>
+        function switchTab(evt, tabId) {
+            const panes = document.getElementsByClassName("tab-pane");
+            for (let i = 0; i < panes.length; i++) {
+                panes[i].classList.remove("active");
+            }
+
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        function switchOS(os) {
+            const btnAndroid = document.getElementById('btn-android');
+            const btnIos = document.getElementById('btn-ios');
+            const iframe = document.getElementById('pdf-iframe');
+            const downloadBtn = document.getElementById('pdf-download');
+
+            if (os === 'android') {
+                btnAndroid.classList.add('active');
+                btnIos.classList.remove('active');
+                iframe.src = 'mobile/mobile-android.pdf#view=FitH';
+                downloadBtn.href = 'mobile/mobile-android.pdf';
+            }
+            else if (os === 'ios') {
+                btnIos.classList.add('active');
+                btnAndroid.classList.remove('active');
+                iframe.src = 'mobile/mobile-iphone.pdf#view=FitH';
+                downloadBtn.href = 'mobile/mobile-iphone.pdf';
+            }
+        }
+    </script>
 </body>
 </html>
