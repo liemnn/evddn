@@ -165,6 +165,7 @@
         .guide-card:nth-child(4)::before { background: var(--c-green); }
         .guide-card:nth-child(5)::before { background: var(--c-red); }
         .guide-card:nth-child(6)::before { background: var(--c-cyan); }
+        .guide-card:nth-child(7)::before { background: var(--c-indigo); }
 
         .guide-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px -4px rgba(0, 0, 0, 0.06); }
         .guide-card:hover::before { transform: scaleX(1); }
@@ -178,6 +179,7 @@
         .bg-green { background: var(--c-green); }
         .bg-red { background: var(--c-red); }
         .bg-cyan { background: var(--c-cyan); }
+        .bg-indigo { background: var(--c-indigo); }
 
         .card-title { flex: 1; }
         .card-title h2 { font-size: 1rem; font-weight: 800; color: var(--text-main); line-height: 1.25; }
@@ -195,6 +197,7 @@
         .guide-card:nth-child(4) .feature-list li a:hover { background-color: #ECFDF5; color: #059669; font-weight: 700; }
         .guide-card:nth-child(5) .feature-list li a:hover { background-color: #FEF2F2; color: #DC2626; font-weight: 700; }
         .guide-card:nth-child(6) .feature-list li a:hover { background-color: #CFFAFE; color: #0E7490; font-weight: 700; }
+        .guide-card:nth-child(7) .feature-list li a:hover { background-color: #EEF2FF; color: #4338CA; font-weight: 700; }
 
         .card-footer { margin-top: 12px; font-size: 0.82rem; font-weight: 700; color: var(--text-sub); display: flex; align-items: center; gap: 6px; padding-top: 12px; border-top: 1px dashed var(--border-color); text-decoration: none; transition: color 0.2s;}
         .guide-card:hover .card-footer { color: var(--primary); }
@@ -363,13 +366,28 @@
             </div>
         </div>
 
-        <!-- --- TAB 4: LẬP KẾ HOẠCH CAN THIỆP CHO TRẺ (6 KHỐI CHI TIẾT) --- -->
+        <!-- --- TAB 4: PHÂN HỆ 02 - KẾ HOẠCH CAN THIỆP CHO TRẺ (7 KHỐI CHI TIẾT) --- -->
         <div id="tab-kehoach" class="tab-pane">
             <div class="guide-grid">
+
+                <div class="guide-card">
+                    <div class="card-header">
+                        <div class="icon-box bg-indigo"><i class="fas fa-database"></i></div>
+                        <div class="card-title"><span>Khối 01</span><h2>Xây dựng kho dữ liệu Chương trình can thiệp</h2></div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="feature-list">
+                            <li><a href="kehoach/khodulieu.html">Quản lý và xây dựng hệ thống ngân hàng mục tiêu, bài tập chuẩn</a></li>
+                            <li><a href="kehoach/danhmuc.html">Phân loại dữ liệu chương trình theo lĩnh vực và độ tuổi phát triển</a></li>
+                        </ul>
+                    </div>
+                    <a href="kehoach/khodulieu.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
+                </div>
+
                 <div class="guide-card">
                     <div class="card-header">
                         <div class="icon-box bg-blue"><i class="fas fa-file-alt"></i></div>
-                        <div class="card-title"><span>Khối 01</span><h2>Quản lý kết luận, lên khung chương trình</h2></div>
+                        <div class="card-title"><span>Khối 02</span><h2>Quản lý kết luận, lên khung chương trình</h2></div>
                     </div>
                     <div class="card-body">
                         <ul class="feature-list">
@@ -383,7 +401,7 @@
                 <div class="guide-card">
                     <div class="card-header">
                         <div class="icon-box bg-orange"><i class="fas fa-tasks"></i></div>
-                        <div class="card-title"><span>Khối 02</span><h2>Lập kế hoạch can thiệp cho trẻ</h2></div>
+                        <div class="card-title"><span>Khối 03</span><h2>Lập kế hoạch can thiệp cho trẻ</h2></div>
                     </div>
                     <div class="card-body">
                         <ul class="feature-list">
@@ -397,7 +415,7 @@
                 <div class="guide-card">
                     <div class="card-header">
                         <div class="icon-box bg-purple"><i class="fas fa-check-circle"></i></div>
-                        <div class="card-title"><span>Khối 03</span><h2>Kiểm duyệt chuyên môn kế hoạch</h2></div>
+                        <div class="card-title"><span>Khối 04</span><h2>Kiểm duyệt chuyên môn kế hoạch</h2></div>
                     </div>
                     <div class="card-body">
                         <ul class="feature-list">
@@ -411,7 +429,7 @@
                 <div class="guide-card">
                     <div class="card-header">
                         <div class="icon-box bg-green"><i class="fas fa-calendar-check"></i></div>
-                        <div class="card-title"><span>Khối 04</span><h2>Cập nhật kết quả can thiệp hàng ngày</h2></div>
+                        <div class="card-title"><span>Khối 05</span><h2>Cập nhật kết quả can thiệp hàng ngày</h2></div>
                     </div>
                     <div class="card-body">
                         <ul class="feature-list">
@@ -425,7 +443,7 @@
                 <div class="guide-card">
                     <div class="card-header">
                         <div class="icon-box bg-red"><i class="fas fa-chart-bar"></i></div>
-                        <div class="card-title"><span>Khối 05</span><h2>Kiểm tra, đánh giá lại kết quả (cuối tháng)</h2></div>
+                        <div class="card-title"><span>Khối 06</span><h2>Kiểm tra, đánh giá lại kết quả (cuối tháng)</h2></div>
                     </div>
                     <div class="card-body">
                         <ul class="feature-list">
@@ -439,7 +457,7 @@
                 <div class="guide-card">
                     <div class="card-header">
                         <div class="icon-box bg-cyan"><i class="fas fa-share-alt"></i></div>
-                        <div class="card-title"><span>Khối 06</span><h2>Chia sẻ kế hoạch & Báo cáo phụ huynh</h2></div>
+                        <div class="card-title"><span>Khối 07</span><h2>Chia sẻ kế hoạch & Báo cáo phụ huynh</h2></div>
                     </div>
                     <div class="card-body">
                         <ul class="feature-list">
@@ -449,6 +467,7 @@
                     </div>
                     <a href="kehoach/chiasephuhuynh.html" class="card-footer">Xem tài liệu <i class="fas fa-arrow-right"></i></a>
                 </div>
+
             </div>
         </div>
 
@@ -490,6 +509,77 @@
                 downloadBtn.href = 'mobile/mobile-iphone.pdf';
             }
         }
+    </script>
+    <!-- --- JAVASCRIPT ĐIỀU KHIỂN TAB VÀ NHỚ VỊ TRÍ KHI QUAY VỀ --- -->
+    <script>
+        function switchTab(evt, tabId, updateHash = true) {
+            // Ẩn tất cả các tab content
+            const panes = document.getElementsByClassName("tab-pane");
+            for (let i = 0; i < panes.length; i++) {
+                panes[i].classList.remove("active");
+            }
+
+            // Xóa class active của tất cả các nút tab
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+
+            // Hiển thị tab được chọn
+            const targetPane = document.getElementById(tabId);
+            if (targetPane) {
+                targetPane.classList.add("active");
+            }
+
+            // Kích hoạt nút tab tương ứng
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add("active");
+            } else {
+                // Trường hợp gọi tự động từ URL Hash, tìm nút tương ứng để active
+                for (let i = 0; i < buttons.length; i++) {
+                    if (buttons[i].getAttribute('onclick').includes(tabId)) {
+                        buttons[i].classList.add("active");
+                    }
+                }
+            }
+
+            // Cập nhật URL Hash trên thanh địa chỉ mà không làm giật trang
+            if (updateHash) {
+                history.pushState(null, null, '#' + tabId.replace('tab-', ''));
+            }
+        }
+
+        function switchOS(os) {
+            const btnAndroid = document.getElementById('btn-android');
+            const btnIos = document.getElementById('btn-ios');
+            const iframe = document.getElementById('pdf-iframe');
+            const downloadBtn = document.getElementById('pdf-download');
+
+            if (os === 'android') {
+                btnAndroid.classList.add('active');
+                btnIos.classList.remove('active');
+                iframe.src = 'mobile/mobile-android.pdf#view=FitH';
+                downloadBtn.href = 'mobile/mobile-android.pdf';
+            }
+            else if (os === 'ios') {
+                btnIos.classList.add('active');
+                btnAndroid.classList.remove('active');
+                iframe.src = 'mobile/mobile-iphone.pdf#view=FitH';
+                downloadBtn.href = 'mobile/mobile-iphone.pdf';
+            }
+        }
+
+        // Tự động kiểm tra URL khi vừa tải xong trang chủ để mở đúng Tab
+        window.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                const tabId = 'tab-' + hash;
+                const targetPane = document.getElementById(tabId);
+                if (targetPane) {
+                    switchTab(null, tabId, false);
+                }
+            }
+        });
     </script>
 </body>
 </html>
