@@ -45,6 +45,24 @@ class DanhMucCa(models.Model):
                                    , column2="hocsinh_id"
                                    , string="Các Học sinh")
 
+    is_hoan_hocphi = fields.Boolean(compute="_is_hoan_hocphi")
+    tyle_hoan_hocphi = fields.Char(compute="_is_hoan_hocphi")
+
+    def _is_hoan_hocphi(self):
+
+        for record in self:
+            is_hoan_hocphi = False
+            tyle_hoan_hocphi = "0"
+            if record.is_hoantien_khi_nghi == True:
+                is_hoan_hocphi = True
+                tyle_hoan_hocphi = str(record.coso_id.tyle_tralai_hs_vangmat)
+            elif record.tyle_hoan_rieng > 0:
+                is_hoan_hocphi = True
+                tyle_hoan_hocphi = str(record.tyle_hoan_rieng)
+            record.is_hoan_hocphi = is_hoan_hocphi
+            record.tyle_hoan_hocphi = tyle_hoan_hocphi
+
+
     @api.model_create_multi
     def create(self, vals_list):
         records = []

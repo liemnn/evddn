@@ -38,6 +38,26 @@ class DanhMucThuBanTru(models.Model):
 
     is_hocphi = fields.Boolean(string="Là khoản thu phục vụ học tập", default=False)
 
+    is_hoan_hocphi = fields.Boolean(compute="_is_hoan_hocphi")
+    tyle_hoan_hocphi = fields.Char(compute="_is_hoan_hocphi")
+
+    def _is_hoan_hocphi(self):
+
+        for record in self:
+            is_hoan_hocphi = False
+            tyle_hoan_hocphi= "0"
+            if record.is_hoantien_khi_nghi == True:
+                is_hoan_hocphi = True
+                tyle_hoan_hocphi = str(record.coso_id.tyle_tralai_hs_vangmat)
+            elif record.tyle_hoan_rieng >0:
+                is_hoan_hocphi = True
+                tyle_hoan_hocphi = str(record.tyle_hoan_rieng)
+            record.is_hoan_hocphi = is_hoan_hocphi
+            record.tyle_hoan_hocphi = tyle_hoan_hocphi
+
+
+
+
     @api.depends("loai")
     def _compute_is_formula(self):
 

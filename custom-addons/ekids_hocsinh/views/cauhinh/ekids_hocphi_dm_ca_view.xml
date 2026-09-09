@@ -22,7 +22,8 @@
                     <field name="name"/>
                     <field name="tien"/>
                     <field name="desc"/>
-                    <field name="is_hoantien_khi_nghi"  width="100" widget="boolean_toggle" string="Hoàn tiền"/>
+                    <field name="is_hoan_hocphi"  width="100" widget="boolean_toggle" string="Hoàn tiền"/>
+                    <field name="tyle_hoan_hocphi"  string="% Hoàn"/>
                     <field name="is_giam_hocphi"  width="100" widget="boolean_toggle" string="Giảm học phí"/>
                     <field name="trangthai"
                             decoration-success="trangthai == '1'"
