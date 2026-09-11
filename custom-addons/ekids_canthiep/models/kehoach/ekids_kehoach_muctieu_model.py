@@ -23,7 +23,7 @@ class KeHoach2MucTieu(models.Model):
     _description = 'Các mục tiêu cho kế hoạch'
     _order = 'sequence asc,id asc'
 
-    sequence = fields.Integer(string="STT", compute="_compute_sequence",store=True)
+    sequence = fields.Integer(string="STT", compute="_compute_sequence",recursive=True,store=True)
     index = fields.Integer(string="STT", default=1,compute="_compute_index")
 
     coso_id = fields.Many2one("ekids.coso"

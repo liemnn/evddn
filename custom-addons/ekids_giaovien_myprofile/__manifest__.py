@@ -2,6 +2,7 @@
 {
     'name': "E-kids ứng dụng cho Giáo viên",
      # any module necessary for this one to work correctly
+    'license': 'LGPL-3',  # 🌟 Đặt ở đây
     'depends': ['base','ekids_core','ekids_hocsinh','ekids_giaovien','ekids_diemdanh'],
 
     # always loaded

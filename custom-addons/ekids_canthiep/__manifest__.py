@@ -12,7 +12,7 @@ Long description of module's purpose
 
     'category': 'Uncategorized',
     'version': '0.1',
-
+    'license': 'LGPL-3',  # 🌟 Đặt ở đây
     # any module necessary for this one to work correctly
     'depends': ['base', 'ekids_core','ekids_func','ekids_hocsinh','ekids_giaovien','ekids_diemdanh'],
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': "E-kids Học sinh",
-
+    'license': 'LGPL-3',  # 🌟 Đặt ở đây
 
 
     # any module necessary for this one to work correctly

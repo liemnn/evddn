@@ -3,6 +3,7 @@
     'description': 'Widgets dành cho hệ thống E-kids.',
     'category': 'Tools',
     'version': '1.0',
+    'license': 'LGPL-3',  # 🌟 Đặt ở đây
     'depends': ['base', 'web', 'mail'],
     'data': [
     ],

@@ -1,6 +1,7 @@
 {
     "name": "Ekids Hiệu chỉnh Odoo18",
     "version": "18.0",
+    'license': 'LGPL-3',  # 🌟 Đặt ở đây
     "summary": "Hiệu chỉnh Odoo18",
     "category": "Web",
     "author": "Ekids",
