@@ -94,6 +94,34 @@ class CoSo(models.Model):
             'context': {'default_coso_id': self.id},
         }
 
+    def action_xem_chuongtrinh_coso_khac_kanban(self):
+
+
+        kanban_view_id = self.env.ref('ekids_canthiep.ct_chuongtrinh_chiase_kanban').id
+
+
+        domain = [
+            ("coso_ids", "in", [self.id]),
+            ("coso_id", "!=", self.id)
+        ]
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'CHƯƠNG TRÌNH TRUNG TÂM KHÁC CHIA SẺ',
+            'res_model': 'ekids.ct_chuongtrinh',
+            'views': [(kanban_view_id, 'kanban')],
+            'view_mode': 'kanban,list',
+            'domain': domain,
+            'target': 'current',
+
+            'context': {
+                'default_coso_id': self.id,
+                'create': False,
+                'edit': False,
+                'delete': False,
+            },
+        }
+
     def action_xem_danhmuc_roiloan(self):
         return {
             'type': 'ir.actions.act_window',

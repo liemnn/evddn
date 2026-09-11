@@ -88,6 +88,22 @@ class ChuongTrinh(models.Model):
             }
 
         }
+    def action_xem_tuoi_chiase(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': "ĐỘ TUỔI",
+            'res_model': 'ekids.ct_tuoi',
+            'view_mode': 'kanban,list,form',
+            'target': 'current',
+            'domain': [('chuongtrinh_id', '=', self.id)],
+            'context': {
+                'default_chuongtrinh_id': self.id,
+                'create': False,
+                'edit': False,
+                'delete': False,
+            },
+
+        }
 
     def action_xem_linhvuc(self):
         return {
@@ -102,6 +118,23 @@ class ChuongTrinh(models.Model):
             }
 
         }
+    def action_xem_linhvuc_chiase(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': "LĨNH VỰC",
+            'res_model': 'ekids.ct_linhvuc',
+            'view_mode': 'kanban,list,form',
+            'target': 'current',
+            'domain': [('chuongtrinh_id', '=', self.id)],
+            'context': {
+                'default_chuongtrinh_id': self.id,
+                'create': False,
+                'edit': False,
+                'delete': False,
+
+            },
+
+        }
 
     def action_xem_muctieu(self):
         return {
@@ -114,6 +147,25 @@ class ChuongTrinh(models.Model):
             'context': {
                 'default_chuongtrinh_id': self.id
             }
+
+        }
+
+    def action_xem_muctieu_chiase(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': "MỤC TIÊU",
+            'res_model': 'ekids.ct_muctieu',
+            'view_mode': 'kanban',
+            'target': 'current',
+            'domain': [('chuongtrinh_id', '=', self.id)],
+            'context': {
+                'default_chuongtrinh_id': self.id,
+                'create': False,
+                'edit': False,
+                'delete': False,
+                "no_export": True,  # Kích hoạt logic get_views ở Bước 1
+            },
+
 
         }
 

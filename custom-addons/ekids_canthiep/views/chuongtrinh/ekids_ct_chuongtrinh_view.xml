@@ -128,6 +128,116 @@
             </field>
         </record>
 
+        <record id="ekids_canthiep.ct_chuongtrinh_chiase_kanban" model="ir.ui.view">
+            <field name="name">CHƯƠNG TRÌNH</field>
+            <field name="model">ekids.ct_chuongtrinh</field>
+            <field name="type">kanban</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban archivable="false" sample="1" action="action_xem_muctieu">
+                    <field name="name"/>
+                    <field name="desc"/>
+                    <field name="tong_tuoi"/>
+                    <field name="tong_linhvuc"/>
+                    <field name="tong_muctieu"/>
+
+                    <field name="trangthai"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+
+                            <div t-attf-class="oe_kanban_global_click o_kanban_record d-flex flex-column p-0 book-card"
+                                 type="object"
+                                 name="action_xem_muctieu"
+                                 style="border: 1px solid #e2e8f0; border-left: 12px solid #017e84; border-radius: 4px 12px 12px 4px; box-shadow: 6px 8px 15px rgba(0,0,0,0.06); background-color: #fdfbf7; overflow: hidden; position: relative;">
+
+
+
+                                <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 15px; background: linear-gradient(to right, rgba(0,0,0,0.08), transparent);"></div>
+
+                                <div class="p-4 d-flex flex-column h-100" style="position: relative; z-index: 1;">
+
+                                    <div class="book-ribbon" style="position: absolute; top: -10px; right: 20px; width: 30px; height: 40px; background-color: #f59e0b; clip-path: polygon(100% 0, 100% 100%, 50% 75%, 0 100%, 0 0); box-shadow: 2px 2px 5px rgba(0,0,0,0.1);"></div>
+
+                                    <div class="d-flex justify-content-between align-items-start mb-3" style="border-bottom: 2px solid #cbd5e1; padding-bottom: 12px;">
+                                        <h3 class="fw-bolder m-0 d-flex align-items-center gap-2 flex-wrap" style="color: #0f172a; max-width: 85%;">
+                                            <i class="fa fa-book text-muted" style="font-size: 1.1rem;"></i>
+
+                                            <field name="title"/>
+
+                                            <span class="ms-1 flex-shrink-0">
+                                                    <span class="badge" style="background-color: #EFF6FF;
+                                                        color:red; border: 1px solid #BFDBFE; font-size: 12px;
+                                                        padding: 3px 6px; border-radius: 4px;margin-right:10px;
+                                                        font-weight: 700; letter-spacing: 0.3px;">
+                                                        <field name="coso_id"/>
+                                                    </span>
+
+
+                                            </span>
+                                            <span class="ms-1 flex-shrink-0">
+
+                                                    <span class="badge" style="background-color: #EFF6FF;
+                                                        color:red; border: 1px solid #BFDBFE; font-size: 12px;
+                                                        padding: 3px 6px; border-radius: 4px;margin-right:10px;
+                                                        font-weight: 700; letter-spacing: 0.3px;">
+                                                        <field name="name"/>
+                                                    </span>
+
+                                                    <span class="badge" style="background-color: #EFF6FF;
+                                                        color: #2563EB; border: 1px solid #BFDBFE;
+                                                        font-size: 12px; padding: 3px 6px; border-radius: 4px; font-weight: 700; letter-spacing: 0.3px;">
+                                                        <field name="trangthai"/>
+                                                    </span>
+
+                                            </span>
+                                        </h3>
+                                    </div>
+
+                                    <div style="font-size: 0.9rem;color: #475569;">
+                                        <field name="desc"/>
+                                    </div>
+
+                                    <div class="d-flex justify-content-around py-2 mt-auto"
+                                         style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+
+                                        <button name="action_xem_tuoi_chiase" type="object" class="btn btn-link text-decoration-none text-center flex-fill border-end p-2 stat-box" style="color: inherit;">
+                                            <div style="font-size: 1.8rem; font-weight: 300; color: #017e84; line-height: 1;">
+                                                <field name="tong_tuoi"/>
+                                            </div>
+                                            <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px;">
+                                                <i class="fa fa-users me-1" style="color: #94a3b8;"></i> Độ tuổi
+                                            </div>
+                                        </button>
+
+                                        <button name="action_xem_linhvuc_chiase" type="object" class="btn btn-link text-decoration-none text-center flex-fill border-end p-2 stat-box" style="color: inherit;">
+                                            <div style="font-size: 1.8rem; font-weight: 300; color: #017e84; line-height: 1;">
+                                                <field name="tong_linhvuc"/>
+                                            </div>
+                                            <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px;">
+                                                <i class="fa fa-sitemap me-1" style="color: #94a3b8;"></i> Lĩnh vực
+                                            </div>
+                                        </button>
+
+                                        <button name="action_xem_muctieu_chiase" type="object" class="btn btn-link text-decoration-none text-center flex-fill p-2 stat-box" style="color: inherit;">
+                                            <div style="font-size: 1.8rem; font-weight: 300; color: #e11d48; line-height: 1;">
+                                                <field name="tong_muctieu"/>
+                                            </div>
+                                            <div style="font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px;">
+                                                <i class="fa fa-bullseye me-1" style="color: #94a3b8;"></i> Mục tiêu
+                                            </div>
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
         <record id="ekids_canthiep.ct_chuongtrinh_form" model="ir.ui.view">
             <field name="name">Thêm mới Chương trình - Premium Super Compact UI</field>
             <field name="model">ekids.ct_chuongtrinh</field>

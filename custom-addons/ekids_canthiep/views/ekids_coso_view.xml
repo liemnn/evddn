@@ -38,13 +38,20 @@
                                             invisible="is_ql_chuongtrinh==False"
                                             type="object">
                                         <i class="fa fa-book"/>
-                                        CHƯƠNG TRÌNH CAN THIỆP
+                                        CHƯƠNG TRÌNH CAN THIỆP CỦA TRUNG TÂM
+                                    </button>
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_xem_chuongtrinh_coso_khac_kanban"
+                                            invisible="is_ql_chuongtrinh==False"
+                                            type="object">
+                                        <i class="fa fa-share-alt"/>
+                                        CHƯƠNG TRÌNH CAN THIỆP [TRUNG TÂM KHÁC CHIA SẺ]
                                     </button>
 
                                     <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                             name="action_kiemduyet_noidung_thietke"
                                             type="object">
-                                        <i class="fa fa-book"/>
+                                        <i class="fa fa-check-square-o"/>
                                         Duyệt [THIẾT KẾ] mục tiêu
                                     </button>
 
