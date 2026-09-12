@@ -123,7 +123,14 @@
             <field name="name">ekids.ct_muctieu.kanban</field>
             <field name="model">ekids.ct_muctieu</field>
             <field name="arch" type="xml">
-                <kanban default_order="sequence" default_group_by="linhvuc_id" class="ekids_master_muctieu_kanban" create="false">
+                <kanban default_order="sequence"
+                        default_group_by="linhvuc_id"
+                        class="ekids_master_muctieu_kanban"
+                        create="false"
+                        group_create="false"
+                        group_delete="false"
+                        group_edit="false">
+                >
 
                     <field name="id"/>
                     <field name="index"/>

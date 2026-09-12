@@ -100,7 +100,86 @@
         .tab-pane { display: none; animation: fadeUp 0.3s ease-out forwards; }
         .tab-pane.active { display: block; }
 
-        /* --- KHUNG BANNER CHUNG (CHO TAB 1) --- */
+        /* --- STYLES CHO PHẦN TỔNG QUAN HỆ THỐNG TRONG TAB 1 --- */
+        .overview-section {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+        }
+        .overview-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .overview-title h2 { font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
+        .overview-title p { font-size: 0.95rem; color: var(--text-sub); }
+
+        /* Sơ đồ cấu trúc 3 cột mô phỏng ảnh 1 */
+        .system-flow-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            align-items: center;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .flow-col-box {
+            background: white;
+            border: 2px dashed #CBD5E1;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .flow-col-box.highlight {
+            border: 2px dashed #F87171;
+            background: #FFFBFA;
+        }
+        .flow-col-box h4 { font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px; }
+        .flow-col-box ul { text-align: left; font-size: 0.85rem; color: var(--text-sub); padding-left: 15px; line-height: 1.5; }
+        .flow-col-box ul li { margin-bottom: 6px; }
+        .flow-arrow-icon { text-align: center; color: #22C55E; font-size: 2rem; }
+
+        /* Sơ đồ 3 khối chức năng mô phỏng ảnh 2 */
+        .features-map-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 25px;
+        }
+        .map-card {
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+        .map-card.col-green { background: #F0FDF4; border-color: #BBF7D0; }
+        .map-card.col-blue { background: #EFF6FF; border-color: #BFDBFE; }
+        .map-card.col-orange { background: #FFFBEB; border-color: #FDE68A; }
+
+        .map-card h3 { font-size: 1.05rem; font-weight: 800; text-align: center; margin-bottom: 15px; }
+        .map-card.col-green h3 { color: #166534; }
+        .map-card.col-blue h3 { color: #1E40AF; }
+        .map-card.col-orange h3 { color: #92400E; }
+
+        .map-item {
+            background: white;
+            border: 1px dashed #94A3B8;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .map-item:last-child { margin-bottom: 0; }
+        .map-item h5 { font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 3px; }
+        .map-item p { font-size: 0.78rem; color: var(--text-sub); line-height: 1.3; }
+
+        /* --- KHUNG BANNER CHUNG (CHO TAB 1 - NÚT XEM QUY TRÌNH) --- */
         .onboarding-banner {
             background: linear-gradient(135deg, #EEF2FF 0%, #FFFFFF 100%);
             border: 1px solid #C7D2FE;
@@ -203,6 +282,10 @@
         .guide-card:hover .card-footer { color: var(--primary); }
 
         /* Responsive */
+        @media (max-width: 900px) {
+            .system-flow-grid { grid-template-columns: 1fr; }
+            .features-map-grid { grid-template-columns: 1fr; }
+        }
         @media (max-width: 768px) {
             .hero { flex-direction: column; align-items: flex-start; gap: 10px; padding: 15px; }
             .hero-left h1 { font-size: 1.1rem; }
@@ -246,9 +329,11 @@
             </button>
         </div>
 
-        <!-- --- TAB 1: KHỞI TẠO DỮ LIỆU BAN ĐẦU --- -->
+        <!-- --- TAB 1: KHỞI TẠO DỮ LIỆU BAN ĐẦU (TÍCH HỢP 2 ẢNH TỔNG QUAN HỆ THỐNG) --- -->
         <div id="tab-khoitao" class="tab-pane active">
-            <div class="onboarding-banner">
+
+            <!-- Phần Banner khởi tạo file mẫu Excel cũ -->
+            <div class="onboarding-banner" style="margin-bottom: 30px;">
                 <div class="onb-left">
                     <div class="onb-icon"><i class="fas fa-rocket"></i></div>
                     <div class="onb-text-wrapper">
@@ -264,6 +349,125 @@
                     <a href="khoitao/eVDDN_Đăng ký trung tâm.xlsx" class="btn-onb-outline"><i class="fas fa-file-excel"></i> Tải biểu mẫu Excel</a>
                 </div>
             </div>
+
+            <!-- Khung Tổng quan hệ thống dựa trên 2 sơ đồ bạn cung cấp -->
+            <div class="overview-section">
+                <div class="overview-title">
+                    <h2>TỔNG QUAN HỆ THỐNG VẬN HÀNH eVDDN</h2>
+                    <p>Sơ đồ cấu trúc chức năng và cách thức phối hợp hoạt động giữa các nhân sự trong trung tâm</p>
+                </div>
+
+                <!-- Sơ đồ luồng phối hợp (Dựa trên ảnh 1) -->
+                <div class="system-flow-grid">
+                    <div class="flow-col-box">
+                        <i class="fas fa-user-cog" style="font-size: 2rem; color: #2563EB; margin-bottom: 8px;"></i>
+                        <h4>Quản lý</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 10px;">Trung tâm can thiệp<br>(Web & Mobile App)</p>
+                    </div>
+                    <div class="flow-col-box highlight">
+                        <h4 style="color: #DC2626; margin-bottom: 12px;"><i class="fas fa-sitemap"></i> CẤU TRÚC 2 PHÂN HỆ CHÍNH</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left;">
+                            <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #FECACA;">
+                                <strong style="color: #1E40AF; font-size: 0.85rem;"><i class="fas fa-building"></i> PHÂN HỆ 01</strong>
+                                <ul style="font-size: 0.78rem; margin-top: 4px;">
+                                    <li>Hồ sơ học sinh, giáo viên</li>
+                                    <li>Điểm danh, chấm công</li>
+                                    <li>Tính lương, học phí</li>
+                                    <li>Quản lý thu chi</li>
+                                    <li>Báo cáo lỗ lãi</li>
+                                </ul>
+                            </div>
+                            <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #FECACA;">
+                                <strong style="color: #047857; font-size: 0.85rem;"><i class="fas fa-child"></i> PHÂN HỆ 02</strong>
+                                <ul style="font-size: 0.78rem; margin-top: 4px;">
+                                    <li>Kho chương trình can thiệp</li>
+                                    <li>Kết luận & Khung chương trình</li>
+                                    <li>Lập kế hoạch can thiệp</li>
+                                    <li>Kiểm duyệt chuyên môn</li>
+                                    <li>Cập nhật kết quả hàng ngày</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flow-col-box">
+                        <i class="fas fa-users" style="font-size: 2rem; color: #10B981; margin-bottom: 8px;"></i>
+                        <h4>Phụ huynh & Giáo viên</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 6px;">Sử dụng cả máy tính và điện thoại</p>
+                        <ul style="font-size: 0.8rem;">
+                            <li>Tương tác phụ huynh</li>
+                            <li>Theo dõi tiến trình trẻ</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Sơ đồ các khối nghiệp vụ chi tiết (Dựa trên ảnh 2) -->
+                <div style="font-weight: 800; font-size: 1.1rem; color: var(--text-main); margin-bottom: 5px; text-align: center;">
+                    <i class="fas fa-layer-group text-primary"></i> SƠ ĐỒ CHI TIẾT CÁC KHỐI NGHIỆP VỤ HỆ THỐNG
+                </div>
+
+                <div class="features-map-grid">
+                    <!-- Cột 1: Lưu trữ hồ sơ điện tử -->
+                    <div class="map-card col-green">
+                        <h3><i class="fas fa-archive"></i> Lưu trữ Hồ sơ điện tử</h3>
+                        <div class="map-item">
+                            <h5>Hồ sơ HỌC SINH</h5>
+                            <p>Thông tin cơ bản, bệnh án, liên hệ phụ huynh</p>
+                        </div>
+                        <div class="map-item">
+                            <h5>Hồ sơ GIÁO VIÊN</h5>
+                            <p>Hợp đồng, bằng cấp chuyên môn, kinh nghiệm</p>
+                        </div>
+                    </div>
+
+                    <!-- Cột 2: Hỗ trợ nghiệp vụ hàng ngày -->
+                    <div class="map-card col-blue">
+                        <h3><i class="fas fa-calendar-check"></i> Hỗ trợ nghiệp vụ hàng ngày</h3>
+                        <div class="map-item">
+                            <h5>Điểm danh</h5>
+                            <p>Điểm danh đi học tham gia ca can thiệp / dịch vụ khác</p>
+                        </div>
+                        <div class="map-item">
+                            <h5>Chấm công</h5>
+                            <p>Chấm công đi làm, nghỉ, đi muộn, quản lý ngày nghỉ</p>
+                        </div>
+                        <div class="map-item">
+                            <h5>KPI</h5>
+                            <p>Ghi nhận kết quả hoàn thành các chỉ tiêu KPI của Giáo viên</p>
+                        </div>
+                        <div class="map-item">
+                            <h5>Chi tiêu</h5>
+                            <p>Ghi các chi tiêu, đầu tư cơ sở hàng tháng</p>
+                        </div>
+                        <div class="map-item">
+                            <h5>Kế hoạch can thiệp</h5>
+                            <p>Kho chương trình, lên phác đồ, lập kế hoạch, can thiệp hàng ngày</p>
+                        </div>
+                    </div>
+
+                    <!-- Cột 3: Tự động hóa -->
+                    <div class="map-card col-orange">
+                        <h3><i class="fas fa-robot"></i> Tự động hóa</h3>
+                        <div class="map-item">
+                            <h5>HỌC PHÍ</h5>
+                            <p>Tự động đối soát ca học và tính học phí</p>
+                        </div>
+                        <div class="map-item">
+                            <h5>LƯƠNG</h5>
+                            <p>Tự động tính lương & phụ cấp cho giáo viên</p>
+                        </div>
+                        <div class="map-item">
+                            <h5>Báo cáo tài chính</h5>
+                            <p>Tổng thu/chi và Lãi trên tháng và năm</p>
+                        </div>
+                        <div class="map-item">
+                            <h5>Báo cáo kết quả can thiệp</h5>
+                            <p>Tổng hợp tình hình tiến bộ và kết quả can thiệp của trẻ</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
         <!-- --- TAB 2: CÀI ĐẶT ỨNG DỤNG TRÊN ĐIỆN THOẠI --- -->
@@ -473,69 +677,27 @@
 
     </div>
 
-    <!-- --- JAVASCRIPT ĐIỀU KHIỂN TAB VÀ ĐỔI PDF MOBILE --- -->
-    <script>
-        function switchTab(evt, tabId) {
-            const panes = document.getElementsByClassName("tab-pane");
-            for (let i = 0; i < panes.length; i++) {
-                panes[i].classList.remove("active");
-            }
-
-            const buttons = document.getElementsByClassName("tab-btn");
-            for (let i = 0; i < buttons.length; i++) {
-                buttons[i].classList.remove("active");
-            }
-
-            document.getElementById(tabId).classList.add("active");
-            evt.currentTarget.classList.add("active");
-        }
-
-        function switchOS(os) {
-            const btnAndroid = document.getElementById('btn-android');
-            const btnIos = document.getElementById('btn-ios');
-            const iframe = document.getElementById('pdf-iframe');
-            const downloadBtn = document.getElementById('pdf-download');
-
-            if (os === 'android') {
-                btnAndroid.classList.add('active');
-                btnIos.classList.remove('active');
-                iframe.src = 'mobile/mobile-android.pdf#view=FitH';
-                downloadBtn.href = 'mobile/mobile-android.pdf';
-            }
-            else if (os === 'ios') {
-                btnIos.classList.add('active');
-                btnAndroid.classList.remove('active');
-                iframe.src = 'mobile/mobile-iphone.pdf#view=FitH';
-                downloadBtn.href = 'mobile/mobile-iphone.pdf';
-            }
-        }
-    </script>
     <!-- --- JAVASCRIPT ĐIỀU KHIỂN TAB VÀ NHỚ VỊ TRÍ KHI QUAY VỀ --- -->
     <script>
         function switchTab(evt, tabId, updateHash = true) {
-            // Ẩn tất cả các tab content
             const panes = document.getElementsByClassName("tab-pane");
             for (let i = 0; i < panes.length; i++) {
                 panes[i].classList.remove("active");
             }
 
-            // Xóa class active của tất cả các nút tab
             const buttons = document.getElementsByClassName("tab-btn");
             for (let i = 0; i < buttons.length; i++) {
                 buttons[i].classList.remove("active");
             }
 
-            // Hiển thị tab được chọn
             const targetPane = document.getElementById(tabId);
             if (targetPane) {
                 targetPane.classList.add("active");
             }
 
-            // Kích hoạt nút tab tương ứng
             if (evt && evt.currentTarget) {
                 evt.currentTarget.classList.add("active");
             } else {
-                // Trường hợp gọi tự động từ URL Hash, tìm nút tương ứng để active
                 for (let i = 0; i < buttons.length; i++) {
                     if (buttons[i].getAttribute('onclick').includes(tabId)) {
                         buttons[i].classList.add("active");
@@ -543,7 +705,6 @@
                 }
             }
 
-            // Cập nhật URL Hash trên thanh địa chỉ mà không làm giật trang
             if (updateHash) {
                 history.pushState(null, null, '#' + tabId.replace('tab-', ''));
             }
@@ -569,7 +730,6 @@
             }
         }
 
-        // Tự động kiểm tra URL khi vừa tải xong trang chủ để mở đúng Tab
         window.addEventListener('DOMContentLoaded', () => {
             const hash = window.location.hash.replace('#', '');
             if (hash) {

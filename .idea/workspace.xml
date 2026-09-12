@@ -6,20 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_baocao/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_baocao/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_chitieu/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_chitieu/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_core/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_core/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_custom_odoo/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hdsd/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hdsd/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_phuhuynh/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_widgets/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_widgets/__manifest__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose/odoo18/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/odoo18/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_linhvuc_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_linhvuc_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_tuoi_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_tuoi_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/chuongtrinh/ekids_ct_muctieu_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/chuongtrinh/ekids_ct_muctieu_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hdsd/static/src/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hdsd/static/src/html/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,19 +48,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Run",
-    "Python.formula_util.executor": "Run",
-    "Python.python_util.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/odoo/evddn",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.evddn.executor&quot;: &quot;Run&quot;,
+    &quot;Python.formula_util.executor&quot;: &quot;Run&quot;,
+    &quot;Python.python_util.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/odoo/evddn&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\depend-addons" />
@@ -175,14 +165,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00393" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1786007260410</created>
-      <option name="number" value="00393" />
-      <option name="presentableId" value="LOCAL-00393" />
-      <option name="project" value="LOCAL" />
-      <updated>1786007260410</updated>
     </task>
     <task id="LOCAL-00394" summary="liemnn">
       <option name="closed" value="true" />
@@ -568,7 +550,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789113026021</updated>
     </task>
-    <option name="localTasksCounter" value="442" />
+    <task id="LOCAL-00442" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1789114280953</created>
+      <option name="number" value="00442" />
+      <option name="presentableId" value="LOCAL-00442" />
+      <option name="project" value="LOCAL" />
+      <updated>1789114280954</updated>
+    </task>
+    <option name="localTasksCounter" value="443" />
     <servers />
   </component>
   <component name="UnknownFeatures">
