@@ -53,7 +53,8 @@ class MucTieu(models.Model):
 
 
     trangthai_canthiep = fields.Selection([("0", "Chưa can thiệp")
-                                     , ("1", "Đạt(+) từ tháng trước")],compute="_compute_trangthai_canthiep" )
+                                     ,("1", "Đạt(+) từ tháng trước")
+                                     ,("2", "Đã có trong kế hoạch giáo viên khác")],compute="_compute_trangthai_canthiep" )
 
     @api.depends('linhvuc_id', 'sequence')
     def _compute_index(self):
@@ -86,11 +87,18 @@ class MucTieu(models.Model):
                 domain =[
                     ('kehoach_id.hocsinh_id','=',hocsinh_id),
                     ('muctieu_id', '=', record.id),
-                    ('trangthai_kiemduyet', '=','1'),
+
                 ]
-                count = self.env['ekids.kehoach_muctieu'].search_count(domain)
-                if count >0:
-                    trangthai_canthiep = "1"
+                # xem  da co o ke hoạch nao ko  va da dạt chưa
+                kehoach_muctieus = self.env['ekids.kehoach_muctieu'].search(domain)
+                if kehoach_muctieus:
+                    trangthai_canthiep ="2"
+                    for kehoach_muctieu in kehoach_muctieus:
+                        if kehoach_muctieu.trangthai_kiemduyet == "1":
+                            trangthai_canthiep="1"
+
+
+
             record.trangthai_canthiep = trangthai_canthiep
 
     def action_xoa_muctieu_khoi_wizard(self):

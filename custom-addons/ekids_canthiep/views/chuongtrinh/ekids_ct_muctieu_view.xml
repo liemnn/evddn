@@ -106,7 +106,9 @@
                     <field name="trangthai_canthiep" string="Can thiệp"
                            class="text-wrap"
                            decoration-success="trangthai_canthiep == '1'"
-                           decoration-danger="trangthai_canthiep == '0'"/>
+                           decoration-danger="trangthai_canthiep == '0'"
+                           decoration-warning="trangthai_canthiep == '2'"
+                    />
                     <button string="Chọn"
                             name="action_chon_muctieu_vao_kehoach"
                             type="object"
