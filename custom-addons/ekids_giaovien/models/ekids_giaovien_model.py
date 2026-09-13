@@ -81,7 +81,7 @@ class GiaoVien(models.Model):
     hd_t8 = fields.Boolean(string="CN")
 
 
-    user_id = fields.Many2one("res.users",string="Tài khoản")
+    user_id = fields.Many2one("res.users",string="Tài khoản",ondelete="cascade")
 
     group_ids =fields.One2many("res.groups",string="Quyền truy cập",inverse_name="id")
 

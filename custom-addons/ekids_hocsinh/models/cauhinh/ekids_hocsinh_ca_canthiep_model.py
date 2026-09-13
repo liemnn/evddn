@@ -45,7 +45,7 @@ class HocSinhCaCanThiep(models.Model):
 
     dm_ca_id = fields.Many2one('ekids.hocphi_dm_ca', string="Loại hình(ca) can thiệp",required=True,ondelete="cascade")
     is_ganthucong =fields.Boolean(string="Người dùng gán thủ công",default=True)
-    giaovien_id = fields.Many2one("ekids.giaovien" , string="Giáo viên",ondelete="restrict")
+    giaovien_id = fields.Many2one("ekids.giaovien" , string="Giáo viên",ondelete="cascade")
     tien = fields.Float(string='Số tiền(vnđ)', digits=(10, 0),required=True)
     is_hoantien_khi_nghi = fields.Boolean(string="Sẽ [Hoàn tiền] theo quy định khi [Nghỉ]", default=True)
 
