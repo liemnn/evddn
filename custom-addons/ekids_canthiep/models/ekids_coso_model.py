@@ -26,6 +26,10 @@ class CoSo(models.Model):
 
     is_ql_chuongtrinh = fields.Boolean(compute="_compute_is_ql_chuongtrinh")
 
+    is_theodoi_kehoach = fields.Boolean(compute="_compute_is_theodoi_kehoach")
+
+
+
     def _compute_is_ql_chuongtrinh(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
@@ -52,6 +56,18 @@ class CoSo(models.Model):
                     is_duyet_kehoach = True
             record.is_duyet_kehoach = is_duyet_kehoach
 
+    def _compute_is_theodoi_kehoach(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_ql_coso = user.has_group('ekids_core.quanlycoso')
+
+        for record in self:
+            is_theodoi_kehoach = False
+            if is_admin  or is_ql_coso:
+                is_theodoi_kehoach = True
+
+            record.is_theodoi_kehoach = is_theodoi_kehoach
+
 
     def _compute_is_ketluan(self):
         user = self.env.user
@@ -76,6 +92,34 @@ class CoSo(models.Model):
             'domain': [('coso_id', '=', self.id)],
             'target': 'current',
             'context': {'default_coso_id': self.id},
+        }
+
+    def action_xem_chuongtrinh_coso_khac_kanban(self):
+
+
+        kanban_view_id = self.env.ref('ekids_canthiep.ct_chuongtrinh_chiase_kanban').id
+
+
+        domain = [
+            ("coso_ids", "in", [self.id]),
+            ("coso_id", "!=", self.id)
+        ]
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'CHƯƠNG TRÌNH TRUNG TÂM KHÁC CHIA SẺ',
+            'res_model': 'ekids.ct_chuongtrinh',
+            'views': [(kanban_view_id, 'kanban')],
+            'view_mode': 'kanban,list',
+            'domain': domain,
+            'target': 'current',
+
+            'context': {
+                'default_coso_id': self.id,
+                'create': False,
+                'edit': False,
+                'delete': False,
+            },
         }
 
     def action_xem_danhmuc_roiloan(self):
@@ -239,6 +283,27 @@ class CoSo(models.Model):
             },
         }
 
+    def action_danhsach_hocsinh_theodoi_kehoach(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_ql_coso = user.has_group('ekids_core.quanlycoso')
+        if is_admin or is_ql_coso:
+            list_view_id = self.env.ref('ekids_canthiep.hocsinh_theodoi_kehoach_inherit_list').id
+            domain = [('coso_id', '=', self.id)]
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'DANH SÁCH',
+                'res_model': 'ekids.hocsinh',
+                'view_mode': 'list',
+                'views': [(list_view_id, 'list')],
+                'target': 'current',
+                'domain': domain,
+                'context': {
+                    'default_coso_id': self.id,
+                    'search_default_trangthai': '1',
+                },
+            }
+
     def action_kiemduyet_noidung_thietke(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
@@ -248,17 +313,34 @@ class CoSo(models.Model):
         search_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_search').id
         #giaovien = giaovien_util.func_get_giaovien_tu_user(self)
 
+        # Tập các giá trị đại diện cho HTML rỗng
+        EMPTY_HTML = [False, '', '<p><br></p>', '<p></p>', '<p><br/></p>', '<p>&nbsp;</p>']
 
-        domain = [
-            ('kehoach_id.coso_id', '=', self.id),
+        # 1. Điều kiện chung: thuộc cơ sở, có mục tiêu và bản ghi temp PHẢI có nội dung
+        domain_base = [
+            #('kehoach_id.coso_id', '=', self.id),
+            ('chuongtrinh_id.coso_id', '=', self.id),
             ('muctieu_id', '!=', False),
-            # 1. Loại trừ giá trị NULL/False và chuỗi rỗng hoàn toàn
-            ('thietke_temp', '!=', False),
-            ('thietke_temp', '!=', ''),
-            # 2. Loại trừ các thẻ HTML rỗng phổ biến của Editor Odoo 18
-            ('thietke_temp', 'not ilike', '<p><br></p>'),
-            ('thietke_temp', 'not ilike', '<p></p>'),
+            ('thietke_temp', 'not in', EMPTY_HTML),
         ]
+
+        # 2. Nhánh 1: Chưa xem ('0') VÀ mục tiêu gốc CHƯA CÓ thiết kế
+        domain_chua_xem = [
+            ('trangthai_thietke', '=', '0'),
+            ('muctieu_id.thietke', 'in', EMPTY_HTML),
+        ]
+
+        # 3. Nhánh 2: Đã xem / đã xử lý (khác '0')
+        domain_da_xu_ly = [
+            ('trangthai_thietke', '!=', '0'),
+        ]
+
+        # Kết hợp: domain_base AND (domain_chua_xem OR domain_da_xu_ly)
+        domain = expression.AND([
+            domain_base,
+            expression.OR([domain_chua_xem, domain_da_xu_ly])
+        ])
+
 
 
 

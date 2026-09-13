@@ -22,7 +22,16 @@
                             <div class="kh-premium-slogan"><field name="slogan"/></div>
                         </div>
 
-                        <div class="kh-premium-body">
+                         <div class="kh-premium-body" invisible="is_thue_quantricoso==True">
+                              <div class="kh-description" style="color:red;">
+                                  Hiện trung tâm không thuê [Phần vận hành] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                              </div>
+
+                          </div>
+
+                         <div class="kh-premium-body" invisible="is_thue_quantricoso==False">
+
+
                             <div class="kh-premium-desc">(Công tác tính lương cho giáo viên)</div>
 
                             <button class="oe_kanban_action kh-btn-action kh-btn-main"

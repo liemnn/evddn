@@ -20,7 +20,16 @@
                                     <div class="kh-premium-slogan"><field name="slogan"/></div>
                                 </div>
 
-                                <div class="kh-premium-body">
+                                 <div class="kh-premium-body" invisible="is_thue_quantricoso==True">
+                                      <div class="kh-description" style="color:red;">
+                                          Hiện trung tâm không thuê [Phần vận hành] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                                      </div>
+
+                                  </div>
+
+                                 <div class="kh-premium-body" invisible="is_thue_quantricoso==False">
+
+
                                     <div class="kh-premium-desc">(Thực hiện công tác điểm danh học sinh đến học tại cơ sở)</div>
 
                                     <button class="oe_kanban_action kh-btn-action kh-btn-main"

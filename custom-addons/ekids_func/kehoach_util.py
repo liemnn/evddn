@@ -121,12 +121,12 @@ def func_get_kehoach_can_canthiep_hocsinh_trangthai_ngay(self, hocsinh, trangtha
 def func_get_kehoach_can_kiemduyet_hocsinh_trangthai(self, hocsinh, trangthais):
     user = self.env.user
     is_admin = user.has_group('base.group_system')
-    giaovien = giaovien_util.func_get_giaovien_tu_user(self)
-    if giaovien:
+    giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
+    if giaoviens:
         domain = [('hocsinh_id', '=', hocsinh.id),
                   ('trangthai', 'in', trangthais)]
         if is_admin == False:
-            domain_gv =[('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
+            domain_gv =[('ketluan_id.gv_kiemduyet_id', 'in', giaoviens.ids)]
             domain = expression.AND([domain, domain_gv])
 
 
@@ -200,10 +200,10 @@ def func_get_ids_hocsinh_theo_vaitro_lap_kehoach(self):
     return None
 
 def func_get_ids_hocsinh_theo_vaitro_duyet_kehoach(self):
-    giaovien = giaovien_util.func_get_giaovien_tu_user(self)
-    if giaovien:
+    giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
+    if giaoviens:
         # 1. Khai báo các điều kiện độc lập cho rõ ràng
-        domain = [("ketluan_id.gv_kiemduyet_id","=", giaovien.id)
+        domain = [("ketluan_id.gv_kiemduyet_id","in", giaoviens.ids)
             ,("ketluan_id.trangthai",'in', ['1', '-1'])]
 
         # 3. Tìm kiếm

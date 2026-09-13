@@ -29,14 +29,19 @@
                     <field name="ngaysinh"/>
                     <field name="cccd" string="CCCD"/>
                     <field name="dienthoai" string="Điện thoại"/>
-                    <field name="tinhtrang_honnhan" string="Tình trạng"/>
+                    <field name="tinhtrang_honnhan" string="Tình trạng" optional="hide"/>
                     <field name="dilam_tungay"/>
                     <field name="tham_nien"/>
                     <field name="is_hoanthien_hoso" width="70"
                            widget="boolean_toggle" readonly="true"/>
+
                     <field name="trangthai"
                         decoration-success="trangthai == '1'"
                         decoration-danger="trangthai == '0'"/>
+                    <field name="desc" string="Chức vụ"  optional="hide"/>
+                    <field name="trinhdo" string="Trình độ"  optional="hide"/>
+                    <field name="chuyennganh" string="Chuyên môn"  optional="hide"/>
+                    <field name="so_hopdong_laodong" string="Hợp đồng"  optional="hide"/>
                 </list>
             </field>
         </record>

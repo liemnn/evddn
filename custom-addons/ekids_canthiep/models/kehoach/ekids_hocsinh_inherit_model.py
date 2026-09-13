@@ -82,6 +82,8 @@ class HocSinhInherit(models.Model
     ngay_conlai_kehoach = fields.Integer(compute="_compute_ngay_conlai_kehoach",string="Ngày còn lại [Kế hoạch]")
 
 
+
+
     def _compute_ngay_conlai_kehoach(self):
         today = date.today()
         for hs in self:
@@ -113,7 +115,7 @@ class HocSinhInherit(models.Model
     def _compute_tong_kehoach_doiduyet(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for hs in self:
             if hs.kehoach_ids:
                 tong =0
@@ -129,7 +131,7 @@ class HocSinhInherit(models.Model
 
                             if is_admin:
                                 tong +=1
-                            elif (kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id):
+                            elif (kh.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids):
                                 tong +=1
 
                 hs.tong_kehoach_doiduyet = tong
@@ -186,7 +188,7 @@ class HocSinhInherit(models.Model
         is_admin = user.has_group('base.group_system')
 
         context_type = self.env.context.get("default_context_type","-1")
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for hs in self:
             if hs.kehoach_ids:
                 tong =0
@@ -199,13 +201,13 @@ class HocSinhInherit(models.Model
                                     #TH: Kiem duyet
                                     if is_admin:
                                         tong += 1
-                                    elif (kh.ketluan_id.gv_kiemduyet_id.id == giaovien.id):
+                                    elif (kh.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids):
                                         tong += 1
                                 elif context_type =="3":
                                     #TH can thiep
                                     if is_admin:
                                         tong += 1
-                                    elif (kh.gv_lapkehoach_id.id == giaovien.id):
+                                    elif (kh.gv_lapkehoach_id.id in giaoviens.ids):
                                         tong +=1
 
 
@@ -222,8 +224,7 @@ class HocSinhInherit(models.Model
                 tong =0
                 if hs.kehoach_ids:
                     for kh in hs.kehoach_ids:
-                        if (kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP
-                                or kh.trangthai == kehoach_util.KEHOACH_HET_HIEULUC):
+                        if kh.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
                             if is_admin:
                                 tong += 1
                             elif (kh.gv_lapkehoach_id.id == giaovien.id):
@@ -231,6 +232,8 @@ class HocSinhInherit(models.Model
                 hs.tong_kehoach_da_canthiep = tong
             else:
                 hs.tong_kehoach_da_canthiep = 0
+
+
 
 
     def _compute_is_tao_ketluan(self):
@@ -274,7 +277,6 @@ class HocSinhInherit(models.Model
 
     def _compute_is_lap_kehoach(self):
         user = self.env.user
-        is_admin = user.has_group('base.group_system')
         for hs in self:
             trangthais = [kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]
             ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self,hs,trangthais)
@@ -331,6 +333,7 @@ class HocSinhInherit(models.Model
     def _compute_is_kiemduyet(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens =giaovien_util.func_get_giaoviens_tu_user(self)
         for hs in self:
             is_kiemduyet = False
             trangthais =[kehoach_util.KEHOACH_DANG_PHEDUYET]
@@ -341,7 +344,7 @@ class HocSinhInherit(models.Model
                         is_kiemduyet = True
                     else:
                         giaovien = kehoach.ketluan_id.gv_kiemduyet_id
-                        if giaovien.user_id.id == user.id:
+                        if giaovien.id in giaoviens.ids:
                             is_kiemduyet = True
             hs.is_kiemduyet = is_kiemduyet
 
@@ -354,6 +357,7 @@ class HocSinhInherit(models.Model
         today = date.today()
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens =giaovien_util.func_get_giaoviens_tu_user(self)
         today =date.today()
         for hs in self:
             # LƯU Ý SỐNG CÒN: Luôn gán mặc định False đầu vòng lặp cho từng học sinh
@@ -384,7 +388,7 @@ class HocSinhInherit(models.Model
                                 is_canthiep = True
                         else:
                             giaovien = kehoach.ketluan_id.gv_kiemduyet_id
-                            if giaovien and giaovien.user_id and giaovien.user_id.id == user.id:
+                            if (giaovien and giaovien.id in giaoviens.ids):
                                 # cho phép giáo viên vào kiểm duyệt
                                 is_canthiep = True
             hs.is_canthiep = is_canthiep
@@ -462,23 +466,7 @@ class HocSinhInherit(models.Model
 
 
 
-    def func_get_default_kehoach_tu_ngay(self,kehoach_gan_nhat):
-        tu_ngay = fields.Date.context_today(self)
-        if kehoach_gan_nhat and kehoach_gan_nhat.den_ngay:
-            # 2. Bốc được ngày kết thúc, tiến hành cộng thêm 1 ngày tịnh tiến
-            tu_ngay = fields.Date.to_date(kehoach_gan_nhat.den_ngay)
-            tu_ngay =tu_ngay + timedelta(days=1)
-           
-        return tu_ngay
 
-    # Default = Hôm nay + 31 ngày (Dùng hàm lambda để tính toán nhanh)
-
-    def func_get_default_kehoach_den_ngay(self,tu_ngay):
-        if tu_ngay:
-            songay_str = coso_util.func_cauhinh_canthiep(self,self.coso_id,"macdinh_songay_kehoach","30")
-            songay =int(songay_str)-1
-            return fields.Date.to_date(tu_ngay) + timedelta(days=songay)
-        return False
 
 
 

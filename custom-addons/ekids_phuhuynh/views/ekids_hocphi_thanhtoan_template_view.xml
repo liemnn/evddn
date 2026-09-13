@@ -51,7 +51,7 @@
                 .page-title { font-size: 1.1rem; font-weight: 700; }
                 .dummy-space { width: 36px; }
 
-                /* Tăng padding-bottom lên 170px để cuộn không bị che bởi 2 thanh công cụ */
+                /* Tăng padding-bottom để cuộn không bị che bởi thanh công cụ */
                 .main-scroll { flex: 1; overflow-y: auto; padding: 20px 15px 170px; z-index: 2; position: relative; scrollbar-width: none; }
                 .main-scroll::-webkit-scrollbar { display: none; }
 
@@ -79,9 +79,22 @@
 
                 /* THẺ QR */
                 .qr-section { text-align: center; }
-                .qr-section h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 15px; color: var(--text-main); }
-                .qr-box { background: white; width: 200px; height: 200px; margin: 0 auto 20px; border-radius: 16px; padding: 10px; border: 2px solid var(--primary-light); box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2); position: relative; }
-                .qr-box img { width: 100%; height: 100%; object-fit: contain; }
+                .qr-section h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
+                .qr-box {
+                    background: white;
+                    width: 210px;
+                    height: 210px;
+                    margin: 0 auto 12px;
+                    border-radius: 16px;
+                    padding: 8px;
+                    border: 2px solid var(--primary-light);
+                    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .qr-box img { width: 100%; height: 100%; object-fit: contain; display: block; }
+                .qr-sub-text { font-size: 0.78rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
 
                 /* CSS XỬ LÝ HTML BACKEND ODOO */
                 .bank-details-wrapper { background: #F8FAFC; border-radius: 12px; padding: 15px; border: 1px solid #E2E8F0; margin-bottom: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
@@ -98,9 +111,9 @@
                 /* KHỐI NÚT XÁC NHẬN (Nằm trên Menu) */
                 .fixed-bottom-bar {
                     position: fixed;
-                    bottom: 75px; /* Cân đối chiều cao với thanh menu bên dưới */
+                    bottom: 75px;
                     left: 0; right: 0;
-                    background: transparent; /* Nền trong suốt để hiện background mây */
+                    background: transparent;
                     padding: 0 15px 15px;
                     z-index: 999;
                 }
@@ -190,32 +203,31 @@
                     </div>
                 </div>
 
+                <!-- 🌟 KHỐI HIỂN THỊ MÃ QR CODE VIETQR ĐỘNG THEO HỌC PHÍ -->
                 <div class="glass-card qr-section">
-                    <h3>Quét mã QR để thanh toán</h3>
+                    <h3>Quét mã QR để chuyển khoản</h3>
 
                     <div class="qr-box">
-                        <t t-if="coso.qrcode_thu_hocphi">
-                            <img t-attf-src="/web/image/ekids.coso/#{coso.id}/qrcode_thu_hocphi" alt="QR Code"/>
+                        <!-- 1. Ưu tiên QR VietQR động sinh theo hóa đơn học phí -->
+                        <t t-if="hp.qr_code_image and coso.bank_bin">
+                            <img t-att-src="'data:image/png;base64,' + (hp.qr_code_image.decode('utf-8') if isinstance(hp.qr_code_image, bytes) else hp.qr_code_image)" alt="QR VietQR"/>
                         </t>
+
+                        <!-- 3. Chưa có thông tin QR -->
                         <t t-else="">
                             <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#94A3B8; font-size:0.75rem; background:#F1F5F9; border-radius:12px;">Chưa cập nhật QR</div>
                         </t>
                     </div>
 
-                    <div class="bank-details-wrapper">
-                        <t t-if="coso.ghichu_thu_hocphi">
-                            <t t-out="coso.ghichu_thu_hocphi"/>
-                        </t>
-                        <t t-else="">
-                            <div style="text-align: center; color: #64748B;">
-                                Vui lòng thanh toán theo nội dung và tài khoản mà nhà trường đã thông báo.
-                            </div>
-                        </t>
+                    <div class="qr-sub-text">
+                        <i class="fas fa-qrcode"></i> Quét mã trên App Ngân hàng (Tự động điền số tiền &amp; nội dung)
                     </div>
+
+
 
                     <div class="note-text">
                         <i class="fas fa-exclamation-triangle" style="margin-top: 2px;"></i>
-                        Vui lòng chuyển đúng số tiền và nội dung. Bấm "Xác nhận" sau khi chuyển khoản thành công.
+                        Vui lòng chuyển đúng số tiền và nội dung. Bấm "Tôi đã chuyển khoản xong" sau khi hoàn tất giao dịch.
                     </div>
                 </div>
 
@@ -267,7 +279,6 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            // Viết && thoải mái không sợ lỗi
                             if(data.result && data.result.success) {
                                 alert("Bạn đã xác nhận thanh toán thành công ! Bạn đợi nhà trường đối soát lại");
                                 window.location.href = '/ph/hocphi';

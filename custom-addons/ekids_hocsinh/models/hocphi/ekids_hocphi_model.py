@@ -217,8 +217,8 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                                                                                         ngay_cuoithang)
 
         thu_bantrus = hocsinh.thu_bantru_ids
-        ca_canthieps = self.func_get_danhmuc_ca_cua_hocsinh(hocsinh)
-        ca2thus = self.func_get_dm_ca_hocsinh_ngay_trong_tuan(hocsinh, ca_canthieps)
+        ca_canthieps = hocsinh_util.func_get_hocsinh_ca_canthieps(self,hocsinh,ngay_dauthang,ngay_cuoithang)
+
         ngay_dihoc_cosos = (hocsinh_util
                             .func_get_ngay_dihoc_cua_coso(coso, nghiles_thangtruoc, ngay_dauthang, ngay_cuoithang))
         nhatruong_nghi_bu_thangtruoc = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, coso, ['2'],
@@ -235,7 +235,6 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                                              , hocsinh
                                              , thu_bantrus
                                              , ca_canthieps
-                                             , ca2thus
                                              , ngay_dauthang
                                              , ngay_cuoithang
                                              , ngay_dihoc_cosos
@@ -255,6 +254,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
             is_show_vi_thanhtoan = False
             if record.trangthai in ['1','0','2']:
                 is_show_vi_thanhtoan =True
+            record._compute_is_dong_hocphi_theoky()
             if record.is_dong_hocphi_theoky == False:
                 is_show_vi_thanhtoan = False
             record.is_show_vi_thanhtoan =is_show_vi_thanhtoan
@@ -270,6 +270,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 is_dong_hocphi_theoky = True
             else:
                 is_dong_hocphi_theoky = False
+
             if record.hocsinh_id.tien <=0:
                 #het tien
                 is_dong_hocphi_theoky = False

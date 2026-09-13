@@ -79,7 +79,16 @@
                                     <div class="kh-premium-slogan"><field name="slogan"/></div>
                                 </div>
 
-                                <div class="kh-premium-body">
+                                 <div class="kh-premium-body" invisible="is_thue_quantricoso==True">
+                                      <div class="kh-description" style="color:red;">
+                                          Hiện trung tâm không thuê [Phần vận hành] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                                      </div>
+
+                                  </div>
+
+                                 <div class="kh-premium-body" invisible="is_thue_quantricoso==False">
+
+
                                     <div class="kh-premium-desc">(Thực hiện công tác chấm công cho Giáo viên để tính Lương)</div>
 
                                     <div class="kh-divider"><span>Thực hiện [Tháng này]</span></div>

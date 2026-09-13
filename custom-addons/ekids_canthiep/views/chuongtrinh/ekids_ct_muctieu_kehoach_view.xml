@@ -32,31 +32,33 @@
                 <list string="Danh sách mục tiêu kế hoạch"
                       default_order="create_date desc" limit="200" create="0" delete="0" edit="0">
 
+
                     <!-- 1. STT VÀ SEQUENCE HỖ TRỢ KÉO THẢ -->
 
-                    <field name="index" string="STT" readonly="1" optional="show"/>
+                    <field name="index" string="STT" readonly="1" optional="show" width="10"/>
 
                     <!-- 2. THÔNG TIN PHÂN LOẠI (Related Fields) -->
                     <field name="chuongtrinh_id" string="Chương trình" readonly="1" optional="show"/>
-                    <field name="linhvuc_id" string="Lĩnh vực" readonly="1" optional="show"/>
+                    <field name="linhvuc_id" string="Lĩnh vực" readonly="1" optional="show" class="text-wrap"/>
                     <field name="tuoi_id" string="Độ tuổi" readonly="1" optional="show"/>
 
                     <!-- 3. TÊN MỤC TIÊU -->
-                    <field name="name" string="Tên mục tiêu" readonly="1" class="fw-bold"/>
+                    <field name="name" string="Tên mục tiêu" readonly="1" class="text-wrap"/>
 
                     <!-- 4. THÔNG TIN GIÁO VIÊN VÀ NGÀY BIÊN TẬP -->
                     <!-- Lấy giáo viên lập từ Kế hoạch cha -->
 
-                    <field name="gv_lapkehoach_id" string="Giáo viên" width="100" optional="show"/>
+                    <field name="gv_lapkehoach_id" string="Giáo viên"  optional="show" class="text-wrap"/>
+
                     <field name="create_date" string="Ngày biên tập"
-                           widget="date"
-                           width="100"/>
+                           widget="date" />
+                    <field name="coso_id" string="Cơ sở" optional="show" class="text-wrap"/>
 
 
                     <!-- 5. CÁC TRẠNG THÁI KIỂM DUYỆT & CAN THIỆP -->
                     <field name="trangthai_thietke"
                            string="Trạng thái"
-                           width="100"
+
                            widget="badge"
                            decoration-success="trangthai_thietke == '1'"
                            decoration-info="trangthai_thietke == '-1'"
@@ -350,8 +352,12 @@
                                 <div class="kh-meta-item">
                                     <i class="fa fa-user-circle-o" style="color: #6366f1;"></i>
                                     <span class="lbl">Giáo viên:</span>
-                                    <span class="val"><field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/></span>
+                                    <span class="val">
+                                        <field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/>
+                                    </span>
                                 </div>
+
+
                                 <div style="color: #cbd5e1;">|</div>
                                 <div class="kh-meta-item">
                                     <i class="fa fa-clock-o" style="color: #0ea5e9;"></i>
@@ -359,10 +365,23 @@
                                     <span class="val"><field name="create_date" readonly="1"/></span>
                                 </div>
 
+
+                            </div>
+
+                            <div class="kh-meta-bar">
+
+                                 <div class="kh-meta-item">
+                                    <i class="fa fa-graduation-cap" style="color: #6366f1;"></i>
+                                    <span class="lbl">Cơ sở:</span>
+                                    <span class="val">
+                                        <field name="coso_id" readonly="1" options="{'no_open': True}"/>
+                                    </span>
+                                </div>
+
                                 <!-- 🌟 CĂN PHẢI TOÀN BỘ CẢNH BÁO + NÚT BẤM -->
                                 <div class="kh-meta-right-container" invisible="is_co_thietke == False">
                                     <span class="txt-has-design-alert">
-                                        <i class="fa fa-exclamation-circle"></i> Xem chi tiết nội dung mục tiêu trong [Chương trình] trước khi thay đổi
+                                        <i class="fa fa-exclamation-circle"></i> Xem chi thiêt mục tiêu trong [Chương trình] trước khi thay đổi
                                     </span>
                                     <button name="action_xem_chitiet_muctieu"
                                             string="Xem chi tiết"
@@ -370,6 +389,8 @@
                                             class="btn-sm btn-outline-primary"
                                             icon="fa-external-link"/>
                                 </div>
+
+
                             </div>
 
                             <!-- KHỐI 3 CỘT (CHƯƠNG TRÌNH, LĨNH VỰC, ĐỘ TUỔI) -->

@@ -57,8 +57,7 @@ class CoSo(models.Model):
 
     bank_bin = fields.Selection(
         selection='_get_vietnam_banks',
-        string="Ngân hàng thụ hưởng",
-        required=True
+        string="Ngân hàng thụ hưởng"
     )
     bank_acc_number = fields.Char("Số tài khoản")
 
@@ -88,6 +87,9 @@ class CoSo(models.Model):
     trangthai_luong_khoa_dl = fields.Char(string="Thiết lập Trạng thái [Lương] cho phép sửa dữ liệu",default="")
 
     cauhinh = fields.Text(string="Thiết lập cấu hình cho Cơ sở", default="")
+
+    is_thue_quantricoso = fields.Boolean(string="Thuê Module [Quản trị/vận hành cơ sở]", default=True)
+    is_thue_canthiep = fields.Boolean(string="Thuê Module [Chương trình can thiệp]", default=True)
 
     def _get_vietnam_banks(self):
         return [

@@ -108,50 +108,62 @@
                 </list>
             </field>
         </record>
-        <record model="ir.ui.view" id="ekids_diemdanh.chamcong_congviec2thang_form">
-            <field name="name">chamcong_congviec2thang Form</field>
+         <record model="ir.ui.view" id="ekids_diemdanh.chamcong_congviec2thang_form">
+            <field name="name">chamcong_congviec2thang Form (Optimized)</field>
             <field name="model">ekids.chamcong_congviec2thang</field>
             <field name="arch" type="xml">
-                <form string="Cơ sở">
-                    <sheet>
-                        <group col="2">
-                            <group>
-                                <field name="coso_id" invisible="1"/>
-                                <field name="giaovien_id" readonly="true"/>
-                            </group>
-                            <group>
-                                <field name="tong_ca_daythay"/>
-                            </group>
+                <form string="Quản lý Dạy thay của giáo viên" class="o_form_sheet_bg">
+                    <sheet class="p-3 p-lg-4" style="background-color: #f8fafc; max-width: 1400px; margin: 0 auto;">
+                        <field name="coso_id" invisible="1"/>
 
-                        </group>
-                        <group>
-                            <h4>Nhập và xac thực khối lượng thực tế: <field name="tong_temps"/></h4>
-                        </group>
+                        <!-- 1. HEADER THÔNG TIN GIÁO VIÊN & TỔNG KẾT NHANH (KPI BANNER) -->
+                        <div class="bg-white p-3 rounded-3 shadow-sm mb-3 d-flex flex-wrap justify-content-between align-items-center" style="border-left: 5px solid #0284c7 !important;">
+                            <div class="d-flex align-items-center" style="gap: 20px;">
+                                <div class="d-flex align-items-center justify-content-center bg-light text-primary rounded-circle shadow-sm" style="width: 48px; height: 48px; font-size: 1.3rem;">
+                                    <i class="fa fa-user-tie"/>
+                                </div>
+                                <div>
+                                    <span class="text-muted fw-bold d-block text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">Giáo viên</span>
+                                    <field name="giaovien_id" readonly="1" class="fw-black fs-4 text-dark mb-0" options="{'no_open': True}"/>
+                                </div>
+                            </div>
 
+                            <!-- Các chỉ số KPI tổng hợp ngay trên header -->
+                            <div class="d-flex align-items-center" style="gap: 15px;">
+                                <div class="bg-light border rounded-3 px-3 py-1.5 text-center">
+                                    <span class="text-muted fw-bold d-block" style="font-size: 0.8rem; text-transform: uppercase;">Tổng [Ca] trong tháng</span>
+                                    <field name="tong_temps" class="fw-bold fs-5 text-success"/>
+                                </div>
+                                <div class="bg-light border rounded-3 px-3 py-1.5 text-center">
+                                    <span class="text-muted fw-bold d-block" style="font-size: 0.8rem; text-transform: uppercase;">[Dạy thay] trong tháng</span>
+                                    <field name="tong_ca_daythay" class="fw-bold fs-5 text-primary"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. KHU VỰC CHI TIẾT DẠNG BẢNG PHẲNG (TÍCH HỢP TRỰC TIẾP LIST VIEW) -->
+                        <div class="bg-white rounded-3 shadow-sm p-3 border-0">
+                            <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom">
+                                <span class="fw-bold text-uppercase text-dark" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                                    <i class="fa fa-list-alt text-primary me-2"/> Chi tiết nhật ký các ca dạy thay
+                                </span>
+                                <span class="badge bg-soft-info text-info px-2 py-1" style="background: #e0f2fe; font-size: 0.7rem;">Dữ liệu tự động đồng bộ</span>
+                            </div>
+
+                            <field name="ca2ngay_daythay_ids"
+                                   context="{'default_coso_id': coso_id, 'default_giaovien_id': giaovien_id}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="ngay" string="Ngày"/>
+                                    <field name="hocsinh_id" domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
+                                    <field name="giaovien_nghi_id" domain="[('coso_id','=',coso_id)]"/>
+                                    <field name="desc"/>
+                                </list>
+                            </field>
+                        </div>
 
                     </sheet>
-                    <notebook>
-                        <page name="ca2ngay_daythay_ids" string="THÔNG TIN DẠY THAY CỦA GIÁO VIÊN">
-                            <field name="ca2ngay_daythay_ids" context="{'default_coso_id':coso_id,'default_giaovien_id':giaovien_id}"/>
-                        </page>
-                    </notebook>
-
-
                 </form>
-            </field>
-        </record>
-
-        <record model="ir.ui.view" id="ekids_diemdanh.chamcong_ca2ngay_daythay_list">
-            <field name="name">chamcong_ca2ngay_daythay Form</field>
-            <field name="model">ekids.chamcong_ca2ngay_daythay</field>
-            <field name="arch" type="xml">
-                <list editable="bottom">
-                    <field name="sequence" widget="handle"/>
-                    <field name="ngay"/>
-                    <field name="hocsinh_id" domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
-                    <field name="giaovien_nghi_id" domain="[('coso_id','=',coso_id)]"/>
-                    <field name="desc"/>
-                </list>
             </field>
         </record>
     </data>

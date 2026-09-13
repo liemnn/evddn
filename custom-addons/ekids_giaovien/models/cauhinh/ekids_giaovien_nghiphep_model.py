@@ -11,7 +11,7 @@ class GiaoVienNghiPhep(models.Model):
 
 
     coso_id = fields.Many2one("ekids.coso",string="Cơ sở",related="giaovien_id.coso_id", store=True)
-    giaovien_id = fields.Many2one("ekids.giaovien", string="Giáo viên",required=True, ondelete="restrict")
+    giaovien_id = fields.Many2one("ekids.giaovien", string="Giáo viên",required=True, ondelete="cascade")
 
     tu_ngay = fields.Date(string="Nghỉ từ ngày",required=True)
     den_ngay = fields.Date(string="Nghỉ đến ngày",required=True)

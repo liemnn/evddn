@@ -23,8 +23,14 @@ class KeHoach2MucTieu(models.Model):
     _description = 'Các mục tiêu cho kế hoạch'
     _order = 'sequence asc,id asc'
 
-    sequence = fields.Integer(string="STT", compute="_compute_sequence",store=True)
+    sequence = fields.Integer(string="STT", compute="_compute_sequence",recursive=True,store=True)
     index = fields.Integer(string="STT", default=1,compute="_compute_index")
+
+    coso_id = fields.Many2one("ekids.coso"
+                              ,related="kehoach_id.gv_lapkehoach_id.coso_id"
+                              , string="Cơ sở"
+                              ,required=True,
+                              ondelete="restrict")
 
     kehoach_id = fields.Many2one("ekids.kehoach",
                                  related="kehoach_linhvuc_id.kehoach_id",
@@ -183,6 +189,7 @@ class KeHoach2MucTieu(models.Model):
     def _compute_is_kiemduyet_readonly(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for record in self:
             is_kiemduyet_readonly = True
             if is_admin:
@@ -192,7 +199,7 @@ class KeHoach2MucTieu(models.Model):
                 if kehoach:
                     gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
 
-                    if gv_kiemduyet.user_id.id == user.id:
+                    if gv_kiemduyet.id in giaoviens.ids:
                         if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
                             is_kiemduyet_readonly= False
 
@@ -201,7 +208,6 @@ class KeHoach2MucTieu(models.Model):
     def _compute_is_canthiep_readonly(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
-
         for record in self:
             is_canthiep_readonly = True
             if is_admin:
@@ -220,7 +226,7 @@ class KeHoach2MucTieu(models.Model):
     def _compute_is_canthiep(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
-
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for record in self:
             is_canthiep = False
             if is_admin:
@@ -230,7 +236,7 @@ class KeHoach2MucTieu(models.Model):
                 if kehoach:
                     gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
                     gv_lap = kehoach.gv_lapkehoach_id
-                    if gv_kiemduyet.user_id.id == user.id:
+                    if gv_kiemduyet.id in giaoviens.ids:
                         #if record.trangthai == '1':
                         is_canthiep = True
                     elif gv_lap.user_id.id == user.id:
@@ -242,6 +248,7 @@ class KeHoach2MucTieu(models.Model):
     def _compute_is_kiemduyet(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for record in self:
             is_kiemduyet = False
             if is_admin:
@@ -251,7 +258,7 @@ class KeHoach2MucTieu(models.Model):
                 if kehoach:
                     gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
                     gv_lap = kehoach.gv_lapkehoach_id
-                    if gv_kiemduyet.user_id.id == user.id:
+                    if gv_kiemduyet.id in giaoviens.ids:
                         #if record.trangthai == "1":
                          is_kiemduyet = True
                     elif gv_lap.user_id.id == user.id:
@@ -264,6 +271,7 @@ class KeHoach2MucTieu(models.Model):
     def _compute_is_delete(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for record in self:
             is_delete = False
             if is_admin:
@@ -281,7 +289,7 @@ class KeHoach2MucTieu(models.Model):
                 # TH2: Đagn phê duyệt thì người duoc xóa thoải mái
                 if kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
                     giaovien = kehoach.ketluan_id.gv_kiemduyet_id
-                    if giaovien.user_id.id == user.id:
+                    if giaovien.id in giaoviens.ids:
                         is_delete = True
 
             record.is_delete = is_delete

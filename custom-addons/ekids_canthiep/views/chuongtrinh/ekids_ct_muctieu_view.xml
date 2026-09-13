@@ -106,7 +106,9 @@
                     <field name="trangthai_canthiep" string="Can thiệp"
                            class="text-wrap"
                            decoration-success="trangthai_canthiep == '1'"
-                           decoration-danger="trangthai_canthiep == '0'"/>
+                           decoration-danger="trangthai_canthiep == '0'"
+                           decoration-warning="trangthai_canthiep == '2'"
+                    />
                     <button string="Chọn"
                             name="action_chon_muctieu_vao_kehoach"
                             type="object"
@@ -123,7 +125,14 @@
             <field name="name">ekids.ct_muctieu.kanban</field>
             <field name="model">ekids.ct_muctieu</field>
             <field name="arch" type="xml">
-                <kanban default_order="sequence" default_group_by="linhvuc_id" class="ekids_master_muctieu_kanban" create="false">
+                <kanban default_order="sequence"
+                        default_group_by="linhvuc_id"
+                        class="ekids_master_muctieu_kanban"
+                        create="false"
+                        group_create="false"
+                        group_delete="false"
+                        group_edit="false">
+                >
 
                     <field name="id"/>
                     <field name="index"/>

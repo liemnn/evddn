@@ -19,7 +19,16 @@
                                     <div class="kh-premium-slogan"><field name="slogan"/></div>
                                 </div>
 
-                                <div class="kh-premium-body">
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==True">
+                                      <div class="kh-description" style="color:red;">
+                                          Hiện trung tâm không thuê [Chương trình can thiệp] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                                      </div>
+
+                                  </div>
+
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==False">
+
+
                                     <div class="kh-premium-desc">
                                         (Quản lý chương trình can thiệp cho trẻ)
                                     </div>
@@ -29,13 +38,20 @@
                                             invisible="is_ql_chuongtrinh==False"
                                             type="object">
                                         <i class="fa fa-book"/>
-                                        CHƯƠNG TRÌNH CAN THIỆP
+                                        CHƯƠNG TRÌNH CAN THIỆP CỦA TRUNG TÂM
+                                    </button>
+                                    <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_xem_chuongtrinh_coso_khac_kanban"
+                                            invisible="is_ql_chuongtrinh==False"
+                                            type="object">
+                                        <i class="fa fa-share-alt"/>
+                                        CHƯƠNG TRÌNH CAN THIỆP [TRUNG TÂM KHÁC CHIA SẺ]
                                     </button>
 
                                     <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                             name="action_kiemduyet_noidung_thietke"
                                             type="object">
-                                        <i class="fa fa-book"/>
+                                        <i class="fa fa-check-square-o"/>
                                         Duyệt [THIẾT KẾ] mục tiêu
                                     </button>
 
@@ -66,7 +82,15 @@
                                     <div class="kh-premium-slogan"><field name="slogan"/></div>
                                 </div>
 
-                                <div class="kh-premium-body">
+
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==True">
+                                      <div class="kh-description" style="color:red;">
+                                          Hiện trung tâm không thuê [Chương trình can thiệp] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                                      </div>
+
+                                  </div>
+
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==False">
                                     <div class="kh-premium-desc">
                                         (Quản lý Các Danh mục và Chuyên gia đánh giá)
                                     </div>
@@ -128,6 +152,7 @@
                          <t t-name="kanban-box">
                              <div class="oe_kanban_global_click kh-premium-card">
                                  <field name="is_ketluan" invisible="1"/>
+                                 <field name="is_theodoi_kehoach" invisible="1"/>
 
                                  <style>
                                     /* 1. Khung thẻ chính - Hiệu ứng 3D Layering */
@@ -262,7 +287,15 @@
                                      <div class="kh-premium-slogan"><field name="slogan"/></div>
                                  </div>
 
-                                 <div class="kh-premium-body">
+
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==True">
+                                      <div class="kh-description" style="color:red;">
+                                          Hiện trung tâm không thuê [Chương trình can thiệp] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                                      </div>
+
+                                  </div>
+
+                                 <div class="kh-premium-body" invisible="is_thue_canthiep==False">
                                      <div class="kh-description">(Quản lý kết luận, lập kế hoạch và thực hiện can thiệp hàng ngày cho trẻ)</div>
                                   <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                              name="action_danhsach_hocsinh_ketluan"
@@ -296,6 +329,16 @@
                                          <i class="fa fa-play-circle"></i>
                                          <span>Can thiệp [Hàng ngày]</span>
                                      </button>
+
+                                      <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                            name="action_danhsach_hocsinh_theodoi_kehoach"
+                                            invisible="is_theodoi_kehoach == False"
+                                            context="{'default_context_type':'3'}"
+                                            type="object">
+                                        <!-- Icon lịch kiểm tra tiến độ theo ngày -->
+                                        <i class="fa fa-calendar-check-o"></i>
+                                        <span>Theo dõi [Kế hoạch]</span>
+                                    </button>
 
 
                                  </div>

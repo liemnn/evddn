@@ -52,7 +52,7 @@
                                 </div>
 
                                  <div class="item">
-                                  <div class="item-text">Tổng học phí</div>
+                                  <div class="item-text">Tổng học phí(chưa giảm)</div>
                                   <div class="item-info">
                                      <field name="tong_hocphi" widget="integer"/>
                                   </div>
@@ -65,8 +65,8 @@
                                   </div>
                                 </div>
                                 <div class="item">
-                                  <div class="item-text">Thực thu</div>
-                                  <div class="item-info">
+                                  <div class="item-text" style="color:red">Thực thu</div>
+                                  <div class="item-info" style="color:red;">
                                      <field name="tong_hocphi_thucthu" widget="integer"/>
                                   </div>
                                 </div>

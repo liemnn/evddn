@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': "E-kids Phụ huynh",
+    'license': 'LGPL-3',  # 🌟 Đặt ở đây
      # any module necessary for this one to work correctly
     'depends': ['base','ekids_core','ekids_hocsinh','ekids_func','ekids_diemdanh'],
     "icons": [
@@ -25,6 +26,7 @@
         'views/ekids_chat_template_view.xml',
         'views/ekids_hocphi_thanhtoan_template_view.xml',
         'views/ekids_nghiphep_template_view.xml',
+        'views/ekids_canthiep_template_view.xml',
         'views/ekids_info_template_view.xml',
 
 

@@ -73,37 +73,85 @@
             </field>
         </record>
         <record id="ekids_diemdanh.chamcong_giaovien2thang_form" model="ir.ui.view">
-            <field name="name">Form</field>
+            <field name="name">Form Chấm Công Giáo Viên Nâng Cấp</field>
             <field name="model">ekids.chamcong_giaovien2thang</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form>
+                <form string="Chấm công giáo viên tháng">
                     <sheet>
-                        <group>
-                            <h3><field name="giaovien_id" readonly="true"/></h3>
-                        </group>
+                        <!-- 1. Header Tên Giáo Viên Gọn Gàng -->
+                        <div class="card border-0 shadow-sm px-3 py-2 mb-3 bg-white rounded" style="border-left: 4px solid #0984e3 !important;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h3 class="mb-0 font-weight-bold text-dark" style="font-size: 20px;">
+                                    <i class="fa fa-user-tie text-primary mr-2"/>
+                                    <field name="giaovien_id" readonly="1" options="{'no_open': True}"/>
+                                </h3>
+                                <span class="badge badge-pill badge-light text-muted border px-2 py-1" style="font-size: 11px;">
+                                    <i class="fa fa-calendar-alt mr-1"/> Chấm công tháng
+                                </span>
+                            </div>
+                        </div>
 
-                        <group col="2">
+                        <!-- 2. Khu vực thống kê 2 cột có Icon sinh động và Font số to rõ -->
+                        <div class="row">
+                            <!-- Cột 1: Thông tin chấm công trong tháng -->
+                            <div class="col-12 col-lg-7 mb-2">
+                                <div class="card border-0 shadow-sm p-3 bg-white rounded h-100" style="border-left: 3px solid #0984e3 !important;">
+                                    <div class="font-weight-bold text-primary mb-3" style="font-size: 12px; letter-spacing: 0.5px;">
+                                        <i class="fa fa-clock-o mr-1"/> THÔNG TIN CHẤM CÔNG TRONG THÁNG
+                                    </div>
+                                    <div class="o_stat_container">
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-flag text-info mr-2" style="width: 16px; text-align: center;"/> Quy định đi làm</span>
+                                            <field name="tong_dilam_kehoach" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-check-circle text-success mr-2" style="width: 16px; text-align: center;"/> Thực tế đi làm</span>
+                                            <field name="tong_dilam_chamcong" readonly="1" class="font-weight-bold text-success" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-exclamation-triangle text-warning mr-2" style="width: 16px; text-align: center;"/> Số ngày đi muộn</span>
+                                            <field name="tong_dilam_muon" readonly="1" class="font-weight-bold text-warning" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-moon-o text-secondary mr-2" style="width: 16px; text-align: center;"/> Nghỉ làm cả ngày</span>
+                                            <field name="tong_nghi_cangay" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-1 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-hourglass-half text-info mr-2" style="width: 16px; text-align: center;"/> Đi làm nửa buổi</span>
+                                            <field name="tong_dilam_nuabuoi" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between pt-1">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-envelope-o text-primary mr-2" style="width: 16px; text-align: center;"/> Ngày phép xin nghỉ</span>
+                                            <field name="tong_nghiphep" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <group>
-                                <separator string="THÔNG TIN CHẤM CÔNG TRONG THÁNG" />
-                                <field name="tong_dilam_kehoach" readonly="true" string="Số ngay đi làm theo quy định"/>
-                                <field name="tong_dilam_chamcong" readonly="true" string="Số ngay đi làm thực tế"/>
-                                 <field name="tong_dilam_muon" readonly="true" string="Số ngay đi muộn"/>
-                                <field name="tong_nghi_cangay" readonly="true" string="Số ngay nghỉ làm cả ngày"/>
-                                <field name="tong_dilam_nuabuoi" readonly="true" string="Số ngay đi làm nửa ngày"/>
-                                <field name="tong_nghiphep" readonly="true" string="Ngày phép xin nghỉ"/>
-
-                            </group>
-                            <group>
-                                <separator string="NGÀY PHÉP GIÁO VIÊN" />
-                                <field name="phep_duocphep" readonly="true" />
-                                <field name="phep_da_sudung" readonly="true" />
-                                <field name="phep_con_trongnam" readonly="true" />
-
-
-                            </group>
-                        </group>
+                            <!-- Cột 2: Ngày phép giáo viên -->
+                            <div class="col-12 col-lg-5 mb-2">
+                                <div class="card border-0 shadow-sm p-3 bg-white rounded h-100" style="border-left: 3px solid #00b894 !important;">
+                                    <div class="font-weight-bold mb-3" style="font-size: 12px; letter-spacing: 0.5px; color: #00b894 !important;">
+                                        <i class="fa fa-calendar-check-o mr-1"/> NGÀY PHÉP GIÁO VIÊN
+                                    </div>
+                                    <div class="o_stat_container">
+                                        <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-ticket text-info mr-2" style="width: 16px; text-align: center;"/> Được phép</span>
+                                            <field name="phep_duocphep" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                                            <span class="text-muted" style="font-size: 13px;"><i class="fa fa-check-square-o text-success mr-2" style="width: 16px; text-align: center;"/> Đã sử dụng</span>
+                                            <field name="phep_da_sudung" readonly="1" class="font-weight-bold text-dark" style="font-size: 16px;"/>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between pt-2">
+                                            <span class="text-muted font-weight-bold" style="font-size: 13px;"><i class="fa fa-star text-warning mr-2" style="width: 16px; text-align: center;"/> Còn trong năm</span>
+                                            <field name="phep_con_trongnam" readonly="1" class="font-weight-bold text-success" style="font-size: 18px;"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </sheet>
                 </form>
             </field>

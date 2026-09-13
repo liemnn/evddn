@@ -115,9 +115,52 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     is_show_wiget_canthiep = fields.Boolean(compute="_compute_is_show_wiget_canthiep")
     is_xoa = fields.Boolean(compute="_compute_is_xoa")
 
+    ngay_conlai_kehoach = fields.Integer(compute="_compute_ngay_conlai_kehoach", string="Ngày còn lại [Kế hoạch]")
+
     access_token = fields.Char(string="Thẻ truy cập nhanh", readonly=True, copy=False)
     share_full_url = fields.Char("Chia sẻ full", compute="_compute_urls")
     share_short_url = fields.Char("Chia sẻ short", compute="_compute_urls")
+
+    tong_muctieu = fields.Integer(compute="_compute_tong_ketqua_canthiep")
+    tong_dat_canthiep = fields.Integer(compute="_compute_tong_ketqua_canthiep")
+    tong_dat_kiemduyet = fields.Integer(compute="_compute_tong_ketqua_canthiep")
+    tyle_dat_canthiep = fields.Integer(compute="_compute_tong_ketqua_canthiep")
+    tyle_dat_kiemduyet = fields.Integer(compute="_compute_tong_ketqua_canthiep")
+
+    def _compute_tong_ketqua_canthiep(self):
+        for kh in self:
+            # Lấy toàn bộ danh sách mục tiêu thuộc kế hoạch
+            muctieus = kh.kehoach_linhvuc_ids.mapped('kehoach_muctieu_ids')
+            tong_mt = len(muctieus)
+
+            if muctieus:
+                # Gọi compute trạng thái cho toàn bộ recordset cùng lúc
+                muctieus._compute_trangthai()
+
+                # Đếm số lượng mục tiêu đạt
+                dat_ct = len(muctieus.filtered(lambda m: m.trangthai == '1'))
+                dat_kd = len(muctieus.filtered(lambda m: m.trangthai_kiemduyet == '1'))
+            else:
+                dat_ct = 0
+                dat_kd = 0
+
+            kh.tong_muctieu = tong_mt
+            kh.tong_dat_canthiep = dat_ct
+            kh.tong_dat_kiemduyet = dat_kd
+
+            # Tính tỷ lệ % (nếu bạn có dùng trường hiển thị tỷ lệ trên form)
+            kh.tyle_dat_canthiep = round((dat_ct / tong_mt * 100), 1) if tong_mt > 0 else 0.0
+            kh.tyle_dat_kiemduyet = round((dat_kd / tong_mt * 100), 1) if tong_mt > 0 else 0.0
+
+    def _compute_ngay_conlai_kehoach(self):
+        today = date.today()
+        for kh in self:
+            so_ngay = 0
+            if kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                so_ngay = (kh.den_ngay - today).days
+                if so_ngay <= 0:
+                    so_ngay=0
+            kh.ngay_conlai_kehoach = so_ngay
 
     @api.depends('access_token')
     def _compute_urls(self):
@@ -157,7 +200,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def _compute_is_readonly(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
-
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for record in self:
             if not record.access_token:
                 record.access_token=str(uuid.uuid4())
@@ -176,7 +219,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                     if (record.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
                         and record.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET):
                         giaovien = self.ketluan_id.gv_kiemduyet_id
-                        if giaovien.user_id.id == user.id:
+                        if giaovien.id in giaoviens.ids:
                             is_readonly= False
 
 
@@ -255,10 +298,11 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def _compute_is_pheduyet(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for kehoach in self:
             if (kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
                 and kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET):
-                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.user_id.id == user.id):
+                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids):
                     kehoach.is_pheduyet = True
                 else:
                     kehoach.is_pheduyet = False
@@ -268,9 +312,10 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def _compute_is_kiemduyet(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens=giaovien_util.func_get_giaoviens_tu_user(self)
         for kehoach in self:
             if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.user_id.id == user.id):
+                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids):
                     kehoach.is_kiemduyet = True
                 else:
                     kehoach.is_kiemduyet = False
@@ -527,12 +572,13 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             is_chophep_ketthuc =False
             user = self.env.user
             is_admin = user.has_group('base.group_system')
+            giaoviens =giaovien_util.func_get_giaoviens_tu_user(self)
             if is_admin:
                 is_chophep_ketthuc =True
             else:
                 giaovien = self.ketluan_id.gv_kiemduyet_id
                 # Phòng thủ kiểm tra chắc chắn để tránh lỗi sập hệ thống (Null Pointer) khi chưa chọn giáo viên
-                if giaovien and giaovien.user_id and giaovien.user_id.id == user.id:
+                if giaovien and giaovien.id in giaoviens.ids:
                    is_chophep_ketthuc = True
         if is_chophep_ketthuc:
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC

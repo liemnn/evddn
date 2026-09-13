@@ -10,6 +10,7 @@
                 <field name="sequence" widget="handle"/>
                 <field name="name" width="350"/>
                 <field name="code" width="100"/>
+                <field name="tien" string="Tiền (vnđ)" sum="Total"/>
                 <field name="luong_cocau"/>
                 <field name="luong_loai" string="Phần lương"/>
                 <field name="dieukien_loai" string="Loại" optional="hide"/>
@@ -141,12 +142,13 @@
                         </group>
                          <group>
                              <separator string="3. GIÁ TRỊ/CÔNG THỨC TÍNH" />
-                                <field name="formula"/>
-                                <field name="desc"/>
+                                <field name="formula" string="Giá trị/Công thức (để tính ra lương)"/>
+                                <field name="desc" string="Mô tả/làm rõ trên phiếu lương cho giáo viên"/>
+                                <field name="tien" string="Mô tả số tiền tối đa nhận (chú ý: Chỉ để mô tả/làm rõ)"/>
                          </group>
 
 
-                        <group col="2" >
+                        <group col="2">
                              <separator string="4. CÁC BIẾN CÓ THỂ SỬ DỤNG KHI ĐƯA VÀO CÔNG THỨC" />
                             <group>
                                 <di>

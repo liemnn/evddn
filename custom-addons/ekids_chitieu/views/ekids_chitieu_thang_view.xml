@@ -1,6 +1,26 @@
 <odoo>
     <data>
 
+         <record model="ir.ui.view" id="ekids_chitieu.chitieu_thang_list">
+            <field name="name">Chi</field>
+            <field name="model">ekids.chitieu_thang</field>
+            <field name="arch" type="xml">
+                 <list editable="bottom" limit="300"  default_order="sequence asc">
+                    <field name="sequence" string="STT" width="5"/>
+                    <field name="sequence" widget="handle" width="20"/>
+                    <field name="nam_id" width="70"/>
+                    <field name="name" width="150"/>
+
+                    <field name="tong_chi"/>
+
+                    <field name="tong_chi_tm" string="Chi tiền mặt"/>
+                    <field name="tong_chi_ck" string="Chi chuyển khoản"/>
+                    <field name="tong_thu"/>
+
+                 </list>
+            </field>
+        </record>
+
 
         <!-- explicit list view definition -->
         <record id="ekids_chitieu.chitieu_thang_kanban" model="ir.ui.view">

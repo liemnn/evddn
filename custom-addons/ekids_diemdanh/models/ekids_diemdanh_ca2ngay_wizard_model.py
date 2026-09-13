@@ -22,8 +22,8 @@ class DiemDanhCa2NgayWizard(models.TransientModel):
     tu = fields.Char(string="Từ (HH:MM)", help='Format: HH:MM')
     den = fields.Char(string="Đến (HH:MM)", help='Format: HH:MM')
 
-    hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="restrict", index=True)
-    giaovien_id = fields.Many2one("ekids.giaovien", string="Giáo viên thực hiện", required=True, ondelete="restrict",
+    hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True,ondelete="cascade", index=True)
+    giaovien_id = fields.Many2one("ekids.giaovien", string="Giáo viên thực hiện", required=True, ondelete="cascade",
                                   index=True)
     is_diemdanh_hocsinh =fields.Boolean(string="Là học sinh")
     loai = fields.Selection([

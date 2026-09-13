@@ -12,7 +12,7 @@ Long description of module's purpose
 
     'category': 'Uncategorized',
     'version': '0.1',
-
+    'license': 'LGPL-3',  # 🌟 Đặt ở đây
     # any module necessary for this one to work correctly
     'depends': ['base', 'ekids_core','ekids_func','ekids_hocsinh','ekids_giaovien','ekids_diemdanh'],
 
@@ -48,6 +48,8 @@ Long description of module's purpose
         'views/kehoach/ekids_hocsinh_lap_kehoach_inherit_view.xml',
         'views/kehoach/ekids_hocsinh_duyet_kehoach_inherit_view.xml',
         'views/kehoach/ekids_hocsinh_canthiep_inherit_view.xml',
+        'views/kehoach/ekids_hocsinh_theodoi_kehoach_inherit_view.xml',
+
         'views/kehoach/ekids_kehoach_ketluan_view.xml',
         'views/kehoach/ekids_kehoach_ketluan_phancong_lai_wizard_view.xml',
 

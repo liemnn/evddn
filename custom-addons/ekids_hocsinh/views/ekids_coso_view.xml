@@ -287,8 +287,14 @@
                                      <div class="kh-premium-title"><field name="name"/></div>
                                      <div class="kh-premium-slogan"><field name="slogan"/></div>
                                  </div>
+                                  <div class="kh-premium-body" invisible="is_thue_quantricoso==True">
+                                      <div class="kh-description" style="color:red;">
+                                          Hiện trung tâm không thuê [Phần vận hành] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                                      </div>
 
-                                 <div class="kh-premium-body">
+                                  </div>
+
+                                 <div class="kh-premium-body" invisible="is_thue_quantricoso==False">
                                      <div class="kh-description">(Tính học phí hàng tháng cho Học sinh đang can thiệp tại Cơ sở)</div>
 
                                      <button class="oe_kanban_action kh-btn-action kh-btn-main"
@@ -313,6 +319,20 @@
                                          <i class="fa fa-history"></i>
                                          <span>Xem [Học phí] các tháng trước</span>
                                      </button>
+
+                                     <button class="oe_kanban_action kh-btn-action btn-outline-warning"
+                                            name="action_tinh_hocphi_thang_tieptheo"
+                                            invisible="is_thu_hocphi_dauthang == False"
+                                            type="object"
+                                            confirm="⚠️ CẢNH BÁO NGUY HIỂM: Tháng hiện tại chưa kết thúc và chưa hoàn tất điểm danh/chấm công. Việc lập trước học phí tháng tiếp theo có thể dẫn đến sai lệch số buổi hoàn trả. Bạn có chắc chắn muốn tiếp tục?">
+                                        <i class="fa fa-exclamation-triangle text-warning"></i>
+                                        <span class="d-flex flex-column text-start ms-1">
+                                            <strong style="font-size: 13px;">TÍNH HỌC PHÍ THÁNG TIẾP THEO</strong>
+                                            <span style="font-size: 11.5px; color: #dc3545; font-style: italic; font-weight: normal;">
+                                                (Tạo trước - Điểm danh tháng này chưa chốt)
+                                            </span>
+                                        </span>
+                                    </button>
 
                                      <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                              name="action_quanly_khoan_thungoai"
@@ -381,7 +401,14 @@
                                     <div class="kh-premium-slogan"><field name="slogan"/></div>
                                 </div>
 
-                                <div class="kh-premium-body">
+                                 <div class="kh-premium-body" invisible="is_thue_quantricoso==True">
+                                      <div class="kh-description" style="color:red;">
+                                          Hiện trung tâm không thuê [Phần vận hành] vui lòng liên hệ nhà cung cấp phần mềm để bật tính năng này
+                                      </div>
+
+                                  </div>
+
+                                <div class="kh-premium-body" invisible="is_thue_quantricoso==False">
                                     <div class="kh-premium-desc">
                                         (Thiết lập thông tin phục vụ quản lý học phí/học sinh của trung tâm)
                                     </div>

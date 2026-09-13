@@ -87,6 +87,9 @@ def func_is_dl_luong_locked(self,coso,trangthai):
 
 
 def func_is_dl_hocphi_locked(self,coso,trangthai):
+    if self.env.context.get('unlink_by_system'):
+        return False
+
     if self.env.is_admin():
         return False
     # 1. Nếu chuỗi JSON rỗng (chưa cấu hình), mặc định cho phép sửa (hoặc tùy logic của anh)
@@ -154,7 +157,7 @@ def func_cauhinh_luong(self,coso,thamso,default):
 def func_cauhinh(self,coso,loai,thamso,default):
     json_string = coso.cauhinh
     if not json_string:
-        return None
+        return default
 
     try:
         config_data = json.loads(json_string)

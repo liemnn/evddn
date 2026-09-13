@@ -42,18 +42,41 @@ class LinhVuc(models.Model):
     def action_xem_muctieu(self):
         list_view_id = self.env.ref('ekids_canthiep.ct_muctieu_vitri_list').id
         form_view_id = self.env.ref('ekids_canthiep.ct_muctieu_form').id
-        return {
-            'type': 'ir.actions.act_window',
-            'name': "LĨNH VỰC:"+ self.name,
-            'res_model': 'ekids.ct_muctieu',
-            'view_mode': 'list,kanban,form',
-            'views': [(list_view_id, 'list'),(form_view_id, 'form')],
-            'target': 'current',
-            'domain': [('linhvuc_id', '=', self.id)],
-            'context': {
-                'default_chuongtrinh_id': self.chuongtrinh_id.id,
-                'default_linhvuc_id': self.id,
+        coso_id = self.env.context.get("default_coso_id")
+
+        if (coso_id
+            and coso_id == self.coso_id.id):
+            return {
+                'type': 'ir.actions.act_window',
+                'name': "LĨNH VỰC:" + self.name,
+                'res_model': 'ekids.ct_muctieu',
+                'view_mode': 'list,kanban,form',
+                'views': [(list_view_id, 'list'), (form_view_id, 'form')],
+                'target': 'current',
+                'domain': [('linhvuc_id', '=', self.id)],
+                'context': {
+                    'default_chuongtrinh_id': self.chuongtrinh_id.id,
+                    'default_linhvuc_id': self.id,
+                }
+
+            }
+        else:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': "LĨNH VỰC:" + self.name,
+                'res_model': 'ekids.ct_muctieu',
+                'view_mode': 'kanban',
+                'target': 'current',
+                'domain': [('linhvuc_id', '=', self.id)],
+                'context': {
+                    'default_chuongtrinh_id': self.chuongtrinh_id.id,
+                    'default_linhvuc_id': self.id,
+                    'create': False,
+                    'edit': False,
+                    'delete': False,
+
+                },
+
             }
 
-        }
 
