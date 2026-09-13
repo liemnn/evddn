@@ -31,7 +31,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
     diemdanh_id = fields.Many2one("ekids.diemdanh", string="Thuộc"
                                   ,index=True,required=True, ondelete="cascade")
 
-    hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên",
+    hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên",ondelete="cascade",
                                  domain="[('coso_id','=',coso_id)]",required=True)
 
 

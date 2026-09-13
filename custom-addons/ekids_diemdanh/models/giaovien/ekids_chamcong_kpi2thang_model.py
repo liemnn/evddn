@@ -30,7 +30,7 @@ class ChamCongKPI2Thang(models.Model):
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở",required=True)
 
     chamcong_loai2thang_id = fields.Many2one("ekids.chamcong_loai2thang", string="Thuộc",required=True, ondelete="cascade")
-    giaovien_id = fields.Many2one('ekids.giaovien', string="Họ và tên",
+    giaovien_id = fields.Many2one('ekids.giaovien', string="Họ và tên",ondelete="cascade",
                                  domain="[('coso_id','=',coso_id)]",required=True)
 
     desc = fields.Text(string="Ghi chú")

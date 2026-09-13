@@ -25,7 +25,7 @@ class DiemDanhHocSinh2Ngay(models.Model):
 
     coso_id = fields.Many2one("ekids.coso", related="hocsinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
-    hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="restrict", index=True)
+    hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="cascade", index=True)
     ngay =fields.Date(string="Ngày")
     trangthai = fields.Selection([
         ('1', "Đi học"),

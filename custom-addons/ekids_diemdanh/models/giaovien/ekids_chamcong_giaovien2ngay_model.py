@@ -25,7 +25,7 @@ class ChamCongGiaoVien2Ngay(models.Model):
 
     coso_id = fields.Many2one("ekids.coso", related="giaovien_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
-    giaovien_id = fields.Many2one("ekids.giaovien", string="Giáo viên", required=True, ondelete="restrict", index=True)
+    giaovien_id = fields.Many2one("ekids.giaovien", string="Giáo viên", required=True,ondelete="cascade", index=True)
     ngay =fields.Date(string="Ngày")
     trangthai = fields.Selection([
         ('1', "Đi Làm"),
