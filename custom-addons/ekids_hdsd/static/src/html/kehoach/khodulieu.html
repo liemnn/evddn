@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Xây dựng kho dữ liệu chương trình can thiệp</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #22C55E; --c-indigo: #4F46E5; --c-orange: #F59E0B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR --- */
+        .top-bar { height: 55px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 15px; }
+        .back-btn { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 6px 12px; border-radius: 6px; background: #EFF6FF; border: 1px solid #BFDBFE; transition: 0.2s;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+
+        .top-center { font-size: 0.85rem; font-weight: 600; color: var(--text-sub); }
+        .top-center strong { color: #DC2626; font-size: 1rem; }
+
+        .header-title-right { font-weight: 700; font-size: 0.95rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; width: 100%; }
+        .content-area { flex: 1; overflow-y: auto; padding: 30px 20px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%; display: flex; justify-content: center; }
+        .doc-container { max-width: 1000px; width: 100%; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color); margin-bottom: 40px;}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h2 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        /* --- CÁC BƯỚC HƯỚNG DẪN --- */
+        .step-detail-box {
+            background: white; border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 30px; margin-bottom: 25px; position: relative; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .step-detail-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--primary); }
+        .step-detail-box h3.step-title {
+            font-size: 1.3rem; color: #1E293B; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .step-detail-box h3.step-title span { background: #EEF2FF; color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; }
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.6; }
+        .doc-content p { margin-bottom: 12px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content li { margin-bottom: 8px; }
+
+        .highlight-box { background: #EFF6FF; border-left: 4px solid var(--primary); padding: 15px; border-radius: 0 8px 8px 0; margin: 15px 0; font-size: 0.95rem; color: #1E40AF; }
+
+        /* --- CSS MOCKUP GIAO DIỆN PHẦN MỀM (THAY THẾ ẢNH) --- */
+        .ui-mockup {
+            background: #F8FAFC;
+            border: 1px solid #CBD5E1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .ui-card-group {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 25px;
+            max-width: 450px;
+            margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .ui-school-avatar {
+            width: 60px; height: 60px; background: #E2E8F0; border-radius: 14px; margin: 0 auto 10px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #64748B;
+        }
+        .ui-btn-menu {
+            display: block; width: 100%; padding: 12px 16px; border-radius: 10px; font-weight: 800; font-size: 0.9rem;
+            text-decoration: none; margin-bottom: 10px; text-align: left; display: flex; align-items: center; gap: 10px;
+        }
+        .ui-btn-blue { background: #2563EB; color: white; box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
+        .ui-btn-white { background: #FFFFFF; color: var(--text-main); border: 1px solid #CBD5E1; }
+
+        /* Mockup Form */
+        .ui-form-box { background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; }
+        .ui-input-line { border-bottom: 1px solid #9333EA; padding-bottom: 5px; margin-bottom: 15px; font-weight: 700; color: #94A3B8; font-size: 0.95rem; }
+        .ui-badge-row { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap; }
+        .ui-tag { background: #FEE2E2; color: #DC2626; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; }
+        .ui-status-on { background: #DCFCE7; color: #15803D; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; }
+
+        /* Mockup Stat Cards */
+        .ui-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
+        .ui-stat-card { background: white; border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; border-left: 4px solid #0D9488; }
+        .ui-stat-nums { display: flex; justify-content: space-around; margin-top: 10px; padding-top: 10px; border-top: 1px solid #F1F5F9; text-align: center; font-size: 0.8rem; color: var(--text-sub); }
+        .ui-stat-nums strong { display: block; font-size: 1.1rem; color: #EF4444; }
+
+        /* Mockup Table */
+        .ui-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: white; }
+        .ui-table th, .ui-table td { border: 1px solid #CBD5E1; padding: 8px 10px; text-align: left; }
+        .ui-table th { background: #F1F5F9; font-weight: 700; color: var(--text-main); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 10px; height: auto; min-height: 55px; flex-wrap: wrap; padding-top: 6px; padding-bottom: 6px; }
+            .top-center { width: 100%; text-align: center; order: 3; margin-top: 4px; font-size: 0.8rem; }
+            .content-area { padding: 10px; }
+            .doc-container { padding: 15px; border-radius: 12px; }
+            .doc-header h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="../index.html#kehoach" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
+        </div>
+        <div class="top-center">
+            Hỗ trợ kỹ thuật / Zalo: <strong>0393.393.386</strong>
+        </div>
+        <div class="top-right">
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phân hệ 02: Kế hoạch can thiệp <i class="fas fa-chevron-right"></i> <span>Xây dựng kho dữ liệu chương trình</span>
+                </div>
+
+                <div class="doc-header">
+                    <h2>Khối 01: Xây dựng kho dữ liệu Chương trình can thiệp</h2>
+                    <p>Hướng dẫn chi tiết quy trình quản lý ngân hàng mục tiêu, bài tập chuẩn, phân loại theo độ tuổi, lĩnh vực và chia sẻ chương trình giữa các cơ sở bằng giao diện trực quan.</p>
+                </div>
+
+                <!-- BƯỚC 1 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Bước 1</span> Lựa chọn nguồn dữ liệu chương trình</h3>
+                    <div class="doc-content">
+                        <p>Khi truy cập vào phần quản lý kho dữ liệu, màn hình chính sẽ hiển thị các nhóm chức năng cốt lõi giúp bạn dễ dàng thao tác:</p>
+
+                        <!-- MOCKUP 1: MENU LỰA CHỌN -->
+                        <div class="ui-mockup">
+                            <div class="ui-card-group">
+                                <div class="ui-school-avatar"><i class="fas fa-school"></i></div>
+                                <h4 style="font-weight: 800; font-size: 1.1rem; margin-bottom: 4px;">Trường Ví dụ</h4>
+                                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 15px;">(Quản lý chương trình can thiệp cho trẻ)</p>
+
+                                <div class="ui-btn-menu ui-btn-blue">
+                                    <i class="fas fa-book"></i> CHƯƠNG TRÌNH CAN THIỆP CỦA TRUNG TÂM
+                                </div>
+                                <div class="ui-btn-menu ui-btn-white">
+                                    <i class="fas fa-share-alt"></i> CHƯƠNG TRÌNH CAN THIỆP [TRUNG TÂM KHÁC CHIA SẺ]
+                                </div>
+                                <div class="ui-btn-menu ui-btn-white">
+                                    <i class="fas fa-check-square"></i> Duyệt [THIẾT KẾ] mục tiêu
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul>
+                            <li><strong>Chương trình can thiệp của trung tâm:</strong> Quản lý danh mục các bộ chương trình độc quyền do trung tâm tự thiết kế.</li>
+                            <li><strong>Chương trình can thiệp [Trung tâm khác chia sẻ]:</strong> Tiếp nhận các bộ chương trình chuẩn từ các đơn vị liên kết khác.</li>
+                            <li><strong>Duyệt [Thiết kế] mục tiêu:</strong> Phê duyệt nội dung các mục tiêu can thiệp trước khi đưa vào áp dụng chính thức.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 2 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Bước 2</span> Khai báo thông tin chi tiết chương trình</h3>
+                    <div class="doc-content">
+                        <p>Sau khi bấm nút tạo mới, bạn tiến hành nhập liệu các thông số định danh cho chương trình:</p>
+
+                        <!-- MOCKUP 2: FORM NHẬP LIỆU -->
+                        <div class="ui-mockup">
+                            <div class="ui-form-box">
+                                <div class="ui-input-line">Nhập tên chương trình... (Ví dụ: Chương trình can thiệp sớm Portage)</div>
+                                <div class="ui-badge-row">
+                                    <span class="ui-tag">TÊN VIẾT TẮT: PORTAGES</span>
+                                    <span class="ui-status-on">TRẠNG THÁI: Đang hoạt động</span>
+                                </div>
+                                <div style="font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 6px;"><i class="fas fa-info-circle"></i> MÔ TẢ CHUNG</div>
+                                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 10px; border-radius: 6px; font-size: 0.85rem; color: var(--text-sub);">
+                                    Dành cho trẻ chậm/trễ phát triển, đặc biệt là chậm/trễ phát triển về ngôn ngữ...
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul>
+                            <li>Nhập tên chương trình, mã tên viết tắt và bật trạng thái <strong>Đang hoạt động</strong>.</li>
+                            <li>Khai báo mục đích hoặc đối tượng sử dụng tại khung <strong>Mô tả chung</strong> bên dưới.</li>
+                            <li>Bấm nút <strong>LƯU</strong> ở góc trên để ghi nhận vào hệ thống.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 3 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Bước 3</span> Quản lý Lĩnh vực, Độ tuổi, Mục tiêu & Cơ sở sử dụng</h3>
+                    <div class="doc-content">
+                        <p>Bên trong mỗi chương trình, hệ thống tổng hợp trực quan số liệu cấu trúc qua các thẻ thống kê và hệ thống tab quản lý:</p>
+
+                        <!-- MOCKUP 3: THẺ THỐNG KÊ CHƯƠNG TRÌNH -->
+                        <div class="ui-mockup">
+                            <div class="ui-stats-grid">
+                                <div class="ui-stat-card">
+                                    <h5 style="font-weight: 800; font-size: 0.95rem;">Chương trình can thiệp sớm Portage</h5>
+                                    <p style="font-size: 0.75rem; color: var(--text-sub); margin-top: 2px;">Chuyên biệt Từ Sơn - Trụ sở chính</p>
+                                    <div class="ui-stat-nums">
+                                        <div><strong>7</strong> Độ tuổi</div>
+                                        <div><strong>6</strong> Lĩnh vực</div>
+                                        <div><strong>618</strong> Mục tiêu</div>
+                                    </div>
+                                </div>
+                                <div class="ui-stat-card" style="border-left-color: #3B82F6;">
+                                    <h5 style="font-weight: 800; font-size: 0.95rem;">Giáo dục mầm non</h5>
+                                    <p style="font-size: 0.75rem; color: var(--text-sub); margin-top: 2px;">Chuyên biệt Từ Sơn - Trụ sở chính</p>
+                                    <div class="ui-stat-nums">
+                                        <div><strong>9</strong> Độ tuổi</div>
+                                        <div><strong>7</strong> Lĩnh vực</div>
+                                        <div><strong>447</strong> Mục tiêu</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>Bên trong chi tiết chương trình, bạn cấu hình lần lượt qua các tab:</p>
+                        <ul>
+                            <li><strong>Tab Lĩnh vực & Độ tuổi:</strong> Thiết lập các mốc tháng tuổi (ví dụ: <em>Tuổi ẩm ngửa, 0-12 tháng, 12-24 tháng...</em>) và các lĩnh vực phát triển chuyên môn.</li>
+                            <li><strong>Tab Cơ sở được phép sử dụng:</strong> Quản lý danh sách các chi nhánh hoặc trung tâm liên kết được phân quyền sử dụng chung bộ chương trình này.</li>
+                        </ul>
+
+                        <!-- MOCKUP 4: BẢNG CƠ SỞ SỬ DỤNG -->
+                        <div class="ui-mockup">
+                            <div style="font-weight: 800; font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main);">Danh sách cơ sở được phép sử dụng:</div>
+                            <table class="ui-table">
+                                <thead>
+                                    <tr>
+                                        <th>Mã</th>
+                                        <th>Tên cơ sở</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Phường/Xã</th>
+                                        <th>Tỉnh/Thành phố</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>TS</strong></td>
+                                        <td>Trường Ví dụ</td>
+                                        <td>0393393386</td>
+                                        <td>Xã Y Tý</td>
+                                        <td>Lào Cai</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>TS01</strong></td>
+                                        <td>Chuyên biệt Từ Sơn - Trụ sở chính</td>
+                                        <td>0369683345</td>
+                                        <td>Phường Từ Sơn</td>
+                                        <td>Bắc Ninh</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>TS.TT2</strong></td>
+                                        <td>Chuyên biệt Từ Sơn - Chi nhánh Thuận Thành 2</td>
+                                        <td>0393393386</td>
+                                        <td>Phường Thuận Thành</td>
+                                        <td>Bắc Ninh</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

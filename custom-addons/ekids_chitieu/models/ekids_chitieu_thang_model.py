@@ -48,7 +48,12 @@ class ChiTieuThang(models.Model):
 
         for record in self:
             coso = record.coso_id
-            sothang_khoa = int(coso.sothang_khoa_dl_chitieu)
+            sothang_coso=int(coso.sothang_khoa_dl_chitieu)
+            if sothang_coso >0:
+                sothang_khoa = int(coso.sothang_khoa_dl_chitieu)
+            else:
+                sothang_khoa=2
+
             sothang_dl = (int(record.nam_id.name) * 12) +int(record.name)
             if (sothang_today - sothang_dl)>= sothang_khoa:
                 record.is_dl_locked =True

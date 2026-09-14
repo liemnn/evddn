@@ -70,7 +70,7 @@ class CoSo(models.Model):
          ('6', '6 Tháng'), ('7', '7 Tháng'), ('8', '8 Tháng'), ('9', '9 Tháng'), ('10', '10 Tháng'),
          ('11', '11 Tháng'), ('12', '12 Tháng')],
         string='Sẽ khóa dữ liệu [Chi/Tiêu] sau số tháng',
-        default='0',
+        default='2',
         required=True
     )
 

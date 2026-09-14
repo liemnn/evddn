@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Xây dựng kho dữ liệu chương trình can thiệp</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #22C55E; --c-indigo: #4F46E5; --c-orange: #F59E0B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR --- */
+        .top-bar { height: 55px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 15px; }
+        .back-btn { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 6px 12px; border-radius: 6px; background: #EFF6FF; border: 1px solid #BFDBFE; transition: 0.2s;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+
+        .top-center { font-size: 0.85rem; font-weight: 600; color: var(--text-sub); }
+        .top-center strong { color: #DC2626; font-size: 1rem; }
+
+        .top-right { display: flex; align-items: center; }
+        .header-title-right { font-weight: 700; font-size: 0.95rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; width: 100%; }
+        .content-area { flex: 1; overflow-y: auto; padding: 30px 20px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%; display: flex; justify-content: center; }
+        .doc-container { max-width: 1000px; width: 100%; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color); margin-bottom: 40px;}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h2 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        /* --- CÁC BƯỚC HƯỚNG DẪN --- */
+        .step-detail-box {
+            background: white; border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 30px; margin-bottom: 25px; position: relative; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .step-detail-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--primary); }
+        .step-detail-box h3.step-title {
+            font-size: 1.3rem; color: #1E293B; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .step-detail-box h3.step-title span { background: #EEF2FF; color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; }
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.6; }
+        .doc-content p { margin-bottom: 12px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content li { margin-bottom: 8px; }
+
+        .highlight-box { background: #EFF6FF; border-left: 4px solid var(--primary); padding: 15px; border-radius: 0 8px 8px 0; margin: 15px 0; font-size: 0.95rem; color: #1E40AF; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 10px; height: auto; min-height: 55px; flex-wrap: wrap; padding-top: 6px; padding-bottom: 6px; }
+            .top-center { width: 100%; text-align: center; order: 3; margin-top: 4px; font-size: 0.8rem; }
+            .content-area { padding: 10px; }
+            .doc-container { padding: 15px; border-radius: 12px; }
+            .doc-header h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <!-- Khi bấm về trang chủ sẽ tự động nhảy về đúng Tab Phân hệ 02: Kế hoạch can thiệp -->
+            <a href="../index.html#kehoach" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
+        </div>
+        <div class="top-center">
+            Hỗ trợ kỹ thuật / Zalo: <strong>0393.393.386</strong>
+        </div>
+        <div class="top-right">
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phân hệ 02: Kế hoạch can thiệp <i class="fas fa-chevron-right"></i> <span>Xây dựng kho dữ liệu chương trình</span>
+                </div>
+
+                <div class="doc-header">
+                    <h2>Khối 01: Xây dựng kho dữ liệu Chương trình can thiệp riêng cho trung tâm</h2>
+                    <p>Hướng dẫn chi tiết quy trình thiết lập ngân hàng mục tiêu, bài tập chuẩn, phân loại theo lĩnh vực, độ tuổi và chia sẻ quyền sử dụng chương trình giữa các cơ sở, chi nhánh.</p>
+                </div>
+
+                <!-- BƯỚC 1 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Bước 1</span> Tạo lập chương trình can thiệp mới</h3>
+                    <div class="doc-content">
+                        <p>Để bắt đầu xây dựng kho dữ liệu độc quyền cho trung tâm của bạn, hãy thực hiện các thao tác sau trên hệ thống:</p>
+                        <ul>
+                            <li><strong>Đường dẫn Menu:</strong> Truy cập vào hệ thống, chọn mục <strong>Kế hoạch</strong> <i class="fas fa-chevron-right"></i> <strong>Chương trình</strong> <i class="fas fa-chevron-right"></i> <strong>Chương trình can thiệp</strong>.</li>
+                            <li><strong>Thao tác tạo mới:</strong> Tại giao diện quản lý danh sách chương trình, click vào nút <span style="background: var(--primary); color: white; padding: 2px 10px; border-radius: 4px; font-weight: bold;">Mới</span> ở góc trên bên trái.</li>
+                            <li><strong>Nhập thông tin định danh:</strong> Điền tên chương trình (Ví dụ: <em>CTCTTD-TỪ SƠN</em>), tên viết tắt và cấu hình trạng thái hoạt động của chương trình.</li>
+                        </ul>
+                        <div class="highlight-box">
+                            <i class="fas fa-info-circle"></i> <strong>Mẹo:</strong> Phần mô tả chung giúp bạn ghi chú rõ nguồn gốc, phiên bản hoặc đối tượng áp dụng chính của chương trình can thiệp này.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 2 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Bước 2</span> Thêm các Lĩnh vực và Độ tuổi phát triển</h3>
+                    <div class="doc-content">
+                        <p>Sau khi tạo chương trình, bạn cần cấu trúc hóa các danh mục chuyên môn bên trong:</p>
+                        <ul>
+                            <li><strong>Thêm Lĩnh vực:</strong> Chuyển sang tab <strong>LĨNH VỰC</strong>, click vào dòng <em>"Thêm một dòng"</em> để bổ sung các lĩnh vực chuyên biệt (Ví dụ: <em>Giao tiếp tiếp nhận, Giao tiếp biểu đạt, Kỹ năng xã hội, Nhận thức, Vận động tinh, Vận động thô, Hành vi...</em>).</li>
+                            <li><strong>Thêm Độ tuổi:</strong> Chuyển sang tab <strong>ĐỘ TUỔI</strong> để thiết lập các nhóm mốc tháng tuổi áp dụng (Ví dụ: <em>0-4 tháng, 4-6 tháng, 6-9 tháng, 9-12 tháng...</em>).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 3 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Bước 3</span> Thiết lập hệ thống Mục tiêu chi tiết</h3>
+                    <div class="doc-content">
+                        <p>Xây dựng hệ thống ngân hàng bài tập và mục tiêu chuẩn hóa bám sát theo từng lĩnh vực và độ tuổi:</p>
+                        <ul>
+                            <li>Chuyển sang tab <strong>MỤC TIÊU</strong> để tạo lập danh sách các mục tiêu cụ thể (Ví dụ trong lĩnh vực <em>Tự phục vụ</em> với độ tuổi <em>0-4 tháng</em> có mục tiêu: "Phối hợp mút - nuốt - thở nhịp nhàng khi bú sữa").</li>
+                            <li>Khai báo chi tiết các cấu phần đánh giá, tiêu chí đạt được để giáo viên dễ dàng áp dụng vào phác đồ cá nhân hóa sau này.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 4 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Bước 4</span> Chia sẻ chương trình cho các cơ sở / chi nhánh khác</h3>
+                    <div class="doc-content">
+                        <p>Nếu trung tâm hoạt động theo hệ thống nhiều cơ sở và có sự thống nhất về phương pháp chuyên môn chung:</p>
+                        <ul>
+                            <li>Chuyển sang tab <strong>CƠ SỞ ĐƯỢC PHÉP SỬ DỤNG</strong>.</li>
+                            <li>Hệ thống liệt kê danh sách các chi nhánh liên kết (Ví dụ: <em>Cơ sở A, Cơ sở B, Cơ sở C...</em>).</li>
+                            <li>Bạn có thể thêm mới hoặc phân quyền sử dụng chương trình này cho các đơn vị khác cùng đơn vị hoặc chi nhánh trực thuộc một cách thuận tiện, bảo mật.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
