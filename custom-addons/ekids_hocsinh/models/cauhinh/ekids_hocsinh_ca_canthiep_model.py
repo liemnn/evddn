@@ -61,31 +61,26 @@ class HocSinhCaCanThiep(models.Model):
     @api.depends('tu_ngay', 'den_ngay')
     def _compute_trangthai(self):
         today = date.today()
-        thang = today.month
-        nam = today.year
-        days = ngay_util.func_get_cacngay_trong_thang(nam,thang)
-        ngay_dauthang = days[0]
-        ngay_cuoithang = days[len(days)-1]
 
         for record in self:
-            trangthai = record.func_tinhtoan_trangthai_theo_ngay(ngay_dauthang,ngay_cuoithang)
+            trangthai = record.func_tinhtoan_trangthai_theo_ngay(today,today)
             record.trangthai = trangthai
 
     def func_tinhtoan_trangthai_theo_ngay(self, tu_ngay, den_ngay):
-        trangthai = "1"
+        trangthai = "1"  # Mặc định là Còn hiệu lực
 
         # Ép kiểu an toàn về Date để tránh lỗi so sánh datetime vs date
-        d_tu_ngay = fields.Date.to_date(self.tu_ngay) if self.tu_ngay else None
-        d_den_ngay = fields.Date.to_date(self.den_ngay) if self.den_ngay else None
-        arg_tu = fields.Date.to_date(tu_ngay) if tu_ngay else None
-        arg_den = fields.Date.to_date(den_ngay) if den_ngay else None
+        hs_tu_ngay = fields.Date.to_date(self.tu_ngay) if self.tu_ngay else None
+        hs_den_ngay = fields.Date.to_date(self.den_ngay) if self.den_ngay else None
+        tu_ngay = fields.Date.to_date(tu_ngay) if tu_ngay else None
+        den_ngay = fields.Date.to_date(den_ngay) if den_ngay else None
 
-        # Nếu self.tu_ngay có giá trị VÀ lớn hơn ngày kết thúc khoảng xét (den_ngay) -> Hết hiệu lực ("0")
-        if d_tu_ngay and arg_den and d_tu_ngay > arg_den:
+        # Điều kiện 1: Ngày kết thúc của hồ sơ nhỏ hơn ngày bắt đầu khoảng thời gian xét -> Đã qua / Hết hiệu lực ("0")
+        if hs_den_ngay and tu_ngay and hs_den_ngay < tu_ngay:
             trangthai = "0"
 
-        # Nếu self.den_ngay có giá trị VÀ nhỏ hơn ngày bắt đầu khoảng xét (tu_ngay) -> Hết hiệu lực ("0")
-        elif d_den_ngay and arg_tu and d_den_ngay < arg_tu:
+        # Điều kiện 2: Ngày bắt đầu của hồ sơ lớn hơn ngày kết thúc khoảng thời gian xét -> Chưa tới / Hết hiệu lực ("0")
+        elif hs_tu_ngay and den_ngay and hs_tu_ngay > den_ngay:
             trangthai = "0"
 
         return trangthai
