@@ -216,3 +216,5 @@ class KeHoach2LinhVuc(models.Model):
                                 if kehoach_muctieu.muctieu_id.id == muctieu.id:
                                     return kehoach_muctieu
 
+
+

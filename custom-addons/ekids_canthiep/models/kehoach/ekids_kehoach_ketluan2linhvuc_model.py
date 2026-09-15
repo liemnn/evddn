@@ -21,3 +21,28 @@ class KetLuan2LinhVuc(models.Model):
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực', required=True, ondelete="cascade")
     tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi', required=True, ondelete="cascade")
 
+
+    def action_xem_danhsach_muctieu(self):
+        # Lấy ID của danh sách list view danh mục mục tiêu mẫu
+        list_view_id = self.env.ref('ekids_canthiep.ct_muctieu_list').id
+        domain=[('linhvuc_id','=',self.linhvuc_id.id)
+            ,('tuoi_id','=',self.tuoi_id.id)]
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'LỰA CHỌN MỤC TIÊU CHO KẾ HOẠCH',
+            'res_model': 'ekids.ct_muctieu',
+            'view_mode': 'list',  # 🌟 SỬA TỪ 'form' THÀNH 'list' để hiện danh sách
+            'views': [(list_view_id, 'list')],  # Chuẩn Odoo 18
+            'target': 'new',  # Mở dạng Pop-up
+            'domain:':domain,
+            'context': {
+                # Ép bộ lọc tự động chỉ hiển thị các mục tiêu thuộc Lĩnh vực và Độ tuổi này
+                'search_default_linhvuc_id': self.linhvuc_id.id,
+                'search_default_tuoi_id': self.tuoi_id.id,
+
+                'edit': False,  # 🚫 Tắt hoàn toàn tính năng và ẩn nút [Sửa]
+                'create': False,  # 🚫 Tắt tính năng và ẩn nút [Tạo mới]
+                'delete': False,  # 🚫 Tắt tính năng và ẩn nút [Xóa]
+            },
+        }

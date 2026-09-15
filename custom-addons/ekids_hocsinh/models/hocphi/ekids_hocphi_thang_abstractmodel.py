@@ -83,7 +83,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                          ,nghiles
                                                          ,nghiles_thangtruoc
                                                          ,ngay_dihoc_cosos
-                                                          ,hocsinh
+                                                         ,hocsinh
                                                          ,ngay_dauthang_thucte
                                                          ,ngay_cuoithang
                                                          ,thangtruoc_days

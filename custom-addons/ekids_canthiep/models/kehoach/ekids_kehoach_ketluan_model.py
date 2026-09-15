@@ -8,6 +8,7 @@ try:
     from odoo.addons.ekids_func import kehoach_util
     from odoo.addons.ekids_func import coso_util
     from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import giaovien_util
 
 except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
@@ -108,6 +109,17 @@ class KetLuan(models.Model):
     )
 
     chuongtrinh = fields.Char(string="Tên chương trình", compute="_compute_chuongtrinh")
+
+    is_xoa = fields.Boolean(compute="_compute_is_xoa")
+
+    def _compute_is_xoa(self):
+        for record in self:
+            is_xoa=False
+            if record.trangthai in [kehoach_util.KETLUAN_DANG_TAO,kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]:
+                if len(record.kehoach_ids)>0:
+
+                    is_xoa = True
+            record.is_xoa = is_xoa
 
     # 2. Viết hàm tính toán tự động phụ thuộc vào bảng chi tiết
     @api.depends('linhvuc_ids.chuongtrinh_id')
@@ -392,6 +404,21 @@ class KetLuan(models.Model):
                 'domain': [('coso_id', '=', self.coso_id.id)],
                 'context': {'default_coso_id': self.coso_id.id},
             }
+
+    def action_xoa_kehoach_cua_ketluan(self):
+        # day la quyet dinh nguy hiem
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        kehoach_ids =self.kehoach_ids
+        is_admin=self.env.is_admin()
+        trangthais=[kehoach_util.KEHOACH_DANG_LAP
+            ,kehoach_util.KEHOACH_DANG_PHEDUYET
+            ,kehoach_util.KEHOACH_DANG_CANTHIEP]
+        if kehoach_ids:
+            for kehoach_id in kehoach_ids:
+                if (kehoach_id.trangthai in trangthais
+                    and (is_admin == True or giaovien.id == kehoach_id.ketluan_id.gv_kiemduyet_id.id)):
+                    kehoach_id.unlink()
+
 
     def func_tao_macdinh_kehoach_ketluan_phancong_lai_wizard_form(self):
         self.ensure_one()

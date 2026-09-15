@@ -365,6 +365,7 @@
             <field name="arch" type="xml">
                 <form class="o_premium_layout">
                     <field name="is_phancong_lai" invisible="1"/>
+                     <field name="is_xoa" invisible="1"/>
                     <header>
                         <button name="action_phancong_lai_giaovien"
                             string="Phân công lại"
@@ -374,6 +375,14 @@
                             class="btn-default"
                             />
 
+                        <button name="action_xoa_kehoach_cua_ketluan"
+                            string="Xóa toàn bộ [Kế hoạch]"
+                            type="object"
+                            icon="fa-trash-o"
+                            confirm="CẢNH BÁO: Toàn bộ Kế hoạch của Kết luận này sẽ bị XÓA VĨNH VIỄN và KHÔNG THỂ KHÔI PHỤC! Bạn có chắc chắn muốn tiếp tục?"
+                            invisible="is_xoa == False"
+                            class="btn-outline-danger"
+                        />
 
                         <field name="trangthai" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': true}"/>
                     </header>
@@ -634,6 +643,14 @@
                                                    readonly="parent.is_readonly"
                                                    domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
                                                    options="{'no_open': True,'no_create': True}"/>
+
+                                           <button name="action_xem_danhsach_muctieu"
+                                            type="object"
+                                            string=""
+                                            icon="fa-bullseye"
+                                            title="Xem danh sách mục tiêu của lĩnh vực và độ tuổi này"
+                                            class="btn-sm btn-outline-primary"
+                                        />
                                         </list>
                                     </field>
                                 </div>
