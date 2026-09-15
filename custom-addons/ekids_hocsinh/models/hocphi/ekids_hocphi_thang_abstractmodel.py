@@ -489,16 +489,14 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                     }
                     self.env['ekids.hocphi_duoctru'].create(data)
 
-
-
-    def func_func_hoantra_hocphi_do_nghiphep_ca(self,lydo
-                                                             , hocphi
-                                                             , is_tyle_hoan_theo_nghiphep
-                                                             , tyle_hoantra
-                                                             , days
-                                                             , ca_canthieps
-                                                             , ngay_dihoc_kehoachs
-                                                             , ngay_dihoc_cosos):
+    def func_func_hoantra_hocphi_do_nghiphep_ca(self, lydo
+                                                , hocphi
+                                                , is_tyle_hoan_theo_nghiphep
+                                                , tyle_hoantra
+                                                , days
+                                                , ca_canthieps
+                                                , ngay_dihoc_kehoachs
+                                                , ngay_dihoc_cosos):
 
         if ca_canthieps and days:
             dm_ca_ids = list(set(ca_canthieps.mapped('dm_ca_id')))
@@ -509,22 +507,27 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 ('trangthai', 'in', ['3']),
             ])
 
-            tien=0
-            soca=0
-            dongia=0
+            tien = 0
+            soca = 0
+            dongia = 0
             ca_hoc = None
 
             for dm_ca in dm_ca_ids:
                 for ca in ca_canthieps:
                     if ca.dm_ca_id.id == dm_ca.id:
-                        ca_hoc =dm_ca
+                        ca_hoc = dm_ca
                         for daystr in days:
-                            ngay = string_util.string2date(daystr)
+                            # Ép kiểu date an toàn
+                            ngay = fields.Date.to_date(string_util.string2date(daystr))
                             weekday = ngay.weekday() + 2  # t2, t3, ... t8
                             thu_field = 't' + str(weekday)
 
-                            check_tu_ngay = (not ca.tu_ngay) or (ca.tu_ngay <= ngay)
-                            check_den_ngay = (not ca.den_ngay) or (ca.den_ngay >= ngay)
+                            # Ép kiểu ca.tu_ngay và ca.den_ngay về date trước khi so sánh
+                            ca_tu_ngay = fields.Date.to_date(ca.tu_ngay)
+                            ca_den_ngay = fields.Date.to_date(ca.den_ngay)
+
+                            check_tu_ngay = (not ca_tu_ngay) or (ca_tu_ngay <= ngay)
+                            check_den_ngay = (not ca_den_ngay) or (ca_den_ngay >= ngay)
                             if getattr(ca, thu_field, False) and check_tu_ngay and check_den_ngay:
                                 # ngay nay co di hoc
                                 if (dm_ca.is_hoantien_khi_nghi == False
@@ -542,27 +545,24 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                     # Chặn lỗi ZeroDivisionError
                                     dongia = (dm_ca.tien / len(ngay_dihoc_kehoachs))
 
-
-                                tien += (dongia/100)*tyle_hoantra
+                                tien += (dongia / 100) * tyle_hoantra
                                 soca += 1
-                                dongia = self.func_thongtin_duoctru_hocphi_tien(dongia,dm_ca, hocphi)
-            if soca_hocbu>0:
+                                dongia = self.func_thongtin_duoctru_hocphi_tien(dongia, dm_ca, hocphi)
+            if soca_hocbu > 0:
                 soca = soca - soca_hocbu
                 tien = soca * ca_hoc.tien
 
-
-
-            if ((tien >0 and tyle_hoantra>0)
-                    or soca_hocbu>0):
-                tien = self.func_thongtin_duoctru_hocphi_tien(tien,ca_hoc, hocphi)
-                name = self.func_get_name_hoantra_hocphi_ca(hocphi,lydo
-                                                               ,len(days)
-                                                               ,ca_hoc
-                                                               ,tyle_hoantra
-                                                               ,soca
-                                                               ,soca_hocbu
-                                                               ,tien
-                                                               ,dongia)
+            if ((tien > 0 and tyle_hoantra > 0)
+                    or soca_hocbu > 0):
+                tien = self.func_thongtin_duoctru_hocphi_tien(tien, ca_hoc, hocphi)
+                name = self.func_get_name_hoantra_hocphi_ca(hocphi, lydo
+                                                            , len(days)
+                                                            , ca_hoc
+                                                            , tyle_hoantra
+                                                            , soca
+                                                            , soca_hocbu
+                                                            , tien
+                                                            , dongia)
 
                 data = {
                     'hocphi_id': hocphi.id,
@@ -608,24 +608,32 @@ class HocPhiThangAbstractModel(models.AbstractModel):
     # 1. lay ra so ngay trong thang
     # tru di ngay co so không hoat dong
     # tinh toan so ngay nghi le va lam bu
-    def func_get_tong_soca_macdinh_trong_khoang_thoigian(self,ca_canthieps,dm_ca,ngay_dihoc_kehoachs):
+
+
+    def func_get_tong_soca_macdinh_trong_khoang_thoigian(self, ca_canthieps, dm_ca, ngay_dihoc_kehoachs):
         total = 0
         if not ngay_dihoc_kehoachs:
             return total
 
         # 2. Duyệt qua từng ngày trong tháng cần tính
         for key, ngay in ngay_dihoc_kehoachs.items():
-            weekday = ngay.weekday() + 2  # t2, t3, ... t8
+            # Ép kiểu date an toàn cho biến ngay
+            ngay_val = fields.Date.to_date(ngay)
+            weekday = ngay_val.weekday() + 2  # t2, t3, ... t8
             thu_field = 't' + str(weekday)
 
             # 3. Với mỗi ngày, kiểm tra xem có cấu hình nào khớp không
             for ca in ca_canthieps:
                 if ca.dm_ca_id.id == dm_ca.id:
+                    # Ép kiểu date an toàn cho ca.tu_ngay và ca.den_ngay
+                    ca_tu_ngay = fields.Date.to_date(ca.tu_ngay)
+                    ca_den_ngay = fields.Date.to_date(ca.den_ngay)
+
                     # Kiểm tra 2 điều kiện:
                     # - Có chọn thứ trong tuần đó (t2=True, ...)
                     # - Ngày nằm trong khoảng tu_ngay và den_ngay
-                    check_tu_ngay = (not ca.tu_ngay) or (ca.tu_ngay <= ngay)
-                    check_den_ngay = (not ca.den_ngay) or (ca.den_ngay >= ngay)
+                    check_tu_ngay = (not ca_tu_ngay) or (ca_tu_ngay <= ngay_val)
+                    check_den_ngay = (not ca_den_ngay) or (ca_den_ngay >= ngay_val)
 
                     if (getattr(ca, thu_field, False)
                             and check_tu_ngay
@@ -633,7 +641,6 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                         # Nếu thỏa mãn, cộng số ca (giả định 1 cấu hình = 1 ca)
                         total += 1
                         # Nếu một học sinh chỉ học 1 ca đó trong 1 ngày, thoát vòng lặp ca để tránh cộng trùng
-
 
         return total
 
