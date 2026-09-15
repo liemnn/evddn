@@ -18,7 +18,16 @@ except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
 
 
-
+EXPORT_MAP_DIEMDANH = {
+    "Đi học": "+",
+    "Học sinh nghỉ có phép": "-",
+    "Nghỉ không phép": "-",
+    "Học nửa buổi": "+/-",
+    "Nghỉ lễ": "N",
+    "Nhà trường cho nghỉ": "N",
+    "Đi học - Có ca [Học bù /Tăng cường]": "+",
+    "Không đăng ký học -Nghỉ": "N",
+}
 
 class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
     _name = "ekids.diemdanh_hocsinh2thang"
@@ -89,6 +98,16 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
 
     is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
 
+    # 🌟 OVERRIDE export_data: Tự động mã hóa thành ký tự ngắn khi xuất file Excel
+    @api.model
+    def export_data(self, fields_to_export):
+        response = super().export_data(fields_to_export)
+        datas = response.get('datas', [])
+        for row in datas:
+            for idx, cell_val in enumerate(row):
+                if isinstance(cell_val, str) and cell_val in EXPORT_MAP_DIEMDANH:
+                    row[idx] = EXPORT_MAP_DIEMDANH[cell_val]
+        return response
 
     def _compute_is_dl_locked(self):
         today = date.today()

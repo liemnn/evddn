@@ -134,6 +134,31 @@ class ChamCongCongViec2Thang(models.Model,ChamCongFuncAbstractModel):
 
     tong_ca_daythay = fields.Integer(string="Tổng ca đã dạy thay trong tháng", compute="_compute_tong_ca_daythay", digits=(10, 1), defaul=0)
     is_ca_daythay = fields.Boolean("Có ca dạy thay")
+
+    @api.model
+    def export_data(self, fields_to_export):
+        response = super().export_data(fields_to_export)
+        datas = response.get('datas', [])
+
+        # Tập hợp tên các field ngày cần chuyển đổi
+        day_fields = {f'd{i}' for i in range(1, 32)}
+
+        # Tìm các chỉ mục (index) của cột ngày trong danh sách xuất
+        day_indices = [
+            idx for idx, fname in enumerate(fields_to_export)
+            if fname in day_fields
+        ]
+
+        # Duyệt qua từng dòng và chỉ chuyển đổi tại các cột ngày
+        for row in datas:
+            for idx in day_indices:
+                if idx < len(row):
+                    cell_val = row[idx]
+                    if cell_val is True:
+                        row[idx] = "+"
+                    elif cell_val is False:
+                        row[idx] = ""
+
     def action_capnhat_ketqua_tong(self):
         form_view_id = self.env.ref('ekids_diemdanh.chamcong_congviec2thang_form').id  # chú ý id chính xác
         self.tong_temps =self.tong

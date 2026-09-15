@@ -51,8 +51,37 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
     tong2 = fields.Float(string="Tổng", digits=(10, 1), store=True, defaul=0)
     tong3 = fields.Float(string="Tổng", digits=(10, 1), store=True, defaul=0)
 
+    # 🌟 OVERRIDE export_data: Áp dụng cho cả d1..d31 và các cột tổng (tong, tong1, tong2, tong3)
+    @api.model
+    def export_data(self, fields_to_export):
+        response = super().export_data(fields_to_export)
+        datas = response.get('datas', [])
 
+        # Tập hợp tên các field ngày d1..d31 VÀ các field tổng
+        target_fields = {f'd{i}' for i in range(1, 32)} | {'tong', 'tong1', 'tong2', 'tong3'}
 
+        # Tìm index của các cột mục tiêu trong danh sách xuất
+        target_indices = [
+            idx for idx, fname in enumerate(fields_to_export)
+            if fname in target_fields
+        ]
+
+        # Duyệt qua từng dòng và format giá trị hiển thị
+        for row in datas:
+            for idx in target_indices:
+                if idx < len(row):
+                    cell_val = row[idx]
+                    try:
+                        val_float = float(cell_val)
+                        if val_float <= 0.0:
+                            row[idx] = ""
+                        else:
+                            # Tự động loại bỏ số 0 thừa ở đuôi (vd: 0.5 thay vì 0.50, 1 thay vì 1.00)
+                            row[idx] = f"{val_float:g}"
+                    except (ValueError, TypeError):
+                        pass
+
+        return response
 
     @api.depends(
         'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10',
