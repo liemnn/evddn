@@ -643,6 +643,7 @@
                                                    readonly="parent.is_readonly"
                                                    domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
                                                    options="{'no_open': True,'no_create': True}"/>
+                                            <field name="tong_muctieu" string="Tổng mục tiêu"/>
 
                                            <button name="action_xem_danhsach_muctieu"
                                             type="object"

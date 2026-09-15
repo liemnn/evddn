@@ -21,6 +21,16 @@ class KetLuan2LinhVuc(models.Model):
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực', required=True, ondelete="cascade")
     tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi', required=True, ondelete="cascade")
 
+    tong_muctieu = fields.Integer(string="Tổng mục tiêu",compute="_compute_tong_muctieu")
+
+    @api.depends("chuongtrinh_id","linhvuc_id","tuoi_id")
+    def _compute_tong_muctieu(self):
+        for record in self:
+
+            domain =[('linhvuc_id','=',record.linhvuc_id.id)
+                ,('tuoi_id','=',record.tuoi_id.id)]
+            tong_muctieu = self.env['ekids.ct_muctieu'].search_count(domain)
+            record.tong_muctieu = tong_muctieu
 
     def action_xem_danhsach_muctieu(self):
         # Lấy ID của danh sách list view danh mục mục tiêu mẫu
