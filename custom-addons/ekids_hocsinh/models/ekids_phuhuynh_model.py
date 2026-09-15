@@ -16,6 +16,7 @@ class PhuHuynh(models.Model,ReadGroupAbstractModel):
     hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="restrict", index=True)
 
     name = fields.Char(string="Họ và tên",required=True)
+    cccd = fields.Char(string="CCCD(nếu có)")
     dienthoai = fields.Char(string="Điện thoại",required=True)
     email = fields.Char(string="Email")
     dm_tinh_id = fields.Many2one("ekids.dm_tinh", string="Tỉnh",required=True)

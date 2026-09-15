@@ -7,6 +7,7 @@
                 <list>
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
+                    <field name="cccd"/>
                     <field name="dienthoai"/>
                     <field name="email"/>
                     <field name="dm_xa_id"/>
@@ -157,10 +158,13 @@
 
                     <div class="row mb-3">
                         <div class="col-6">
-                            <div class="p-3 bg-white rounded-3 border">
-                                <div class="section-title"><i class="fa fa-phone text-success"></i> Thông tin liên hệ</div>
+                            <div class="p-3 bg-white rounded-3 border h-100">
+                                <div class="section-title"><i class="fa fa-id-card-o text-success"></i> Thông tin định danh &amp; Liên hệ</div>
                                 <div class="row">
-                                    <div class="col-12 mb-2">
+                                    <div class="col-6 mb-2">
+                                        <field name="cccd" class="modern-input" placeholder="Số CCCD / CMND..."/>
+                                    </div>
+                                    <div class="col-6 mb-2">
                                         <field name="dienthoai" class="modern-input" placeholder="Số điện thoại..."/>
                                     </div>
                                     <div class="col-12">
@@ -170,7 +174,7 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="p-3 bg-white rounded-3 border">
+                            <div class="p-3 bg-white rounded-3 border h-100">
                                 <div class="section-title"><i class="fa fa-graduation-cap text-primary"></i> Nghề nghiệp &amp; Học vấn</div>
                                 <div class="row">
                                     <div class="col-12 mb-2">

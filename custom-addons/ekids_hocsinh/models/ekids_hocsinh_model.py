@@ -71,6 +71,38 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
 
     is_dong_hocphi_theoky = fields.Boolean(compute="_compute_is_dong_hocphi_theoky")
 
+    ph_ten = fields.Char(string="Phụ huynh",compute="_compute_is_phuhuynh")
+    ph_cccd = fields.Char(string="CCCD",compute="_compute_is_phuhuynh")
+    ph_dienthoai = fields.Char(string="Điện thoại",compute="_compute_is_phuhuynh")
+    ph_diachi= fields.Char(string="Địa chỉ",compute="_compute_is_phuhuynh")
+
+    def _compute_is_phuhuynh(self):
+        for record in self:
+            ph_ten=""
+            ph_cccd=""
+            ph_dienthoai=""
+            ph_diachi=""
+            phuhuynh_ids = record.phuhuynh_ids
+            if phuhuynh_ids:
+                for ph in phuhuynh_ids:
+                    ph_ten = ph.name
+                    ph_cccd =ph.cccd
+                    ph_dienthoai = ph.dienthoai
+                    if ph.diachi_chitiet:
+                        ph_diachi = str(ph.diachi_chitiet)
+                    if ph.dm_xa_id:
+                        ph_diachi += "," + ph.dm_xa_id.name
+                    if ph.dm_tinh_id:
+                        ph_diachi += ","+ ph.dm_tinh_id.name
+
+                    break
+
+
+            record.ph_ten = ph_ten
+            record.ph_cccd = ph_cccd
+            record.ph_dienthoai = ph_dienthoai
+            record.ph_diachi = ph_diachi
+
     @api.onchange("trangthai")
     def _onchage_trangthai(self):
         for record in self:
