@@ -113,7 +113,6 @@
                             name="action_chon_muctieu_vao_kehoach"
                             type="object"
                             class="btn-primary"
-                            invisible="trangthai_canthiep=='1'"
                             icon="fa-plus"
                             context="{'default_kehoach_linhvuc_id': context.get('default_kehoach_linhvuc_id')}"
                             title="Lựa chọn mục tiêu này bổ sung vào kế hoạch"/>

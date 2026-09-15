@@ -53,9 +53,10 @@
 
                         .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; table-layout: fixed; }
                         .profile-grid-table td { border: 1px solid #000000 !important; padding: 7px 9px; font-size: 15px !important; vertical-align: middle; color: #000000 !important; }
-                        .col-lbl-left  { width: 12%; font-weight: bold !important; background-color: #eeeeee !important; }
-                        .col-val-left  { width: 21%; }
-                        .col-linhvuc   { width: 25%; }
+                        .col-lbl-left { width: 12%; font-weight: bold !important; background-color: #eeeeee !important; }
+                        .col-val-left { width: 21%; }
+                        .col-linhvuc  { width: 33.5%; }
+                        .col-tuoi     { width: 33.5%; text-align: center; }
 
                         /* ======================================================== */
                         /* GIAO DIỆN CÁC TRANG SAU (HỆ THỐNG MỤC TIÊU CO GIÃN ĐỘNG) */
@@ -314,60 +315,73 @@
 
                         <t t-set="lv_list" t-value="o.kehoach_linhvuc_ids"/>
                         <t t-set="total_lv" t-value="len(lv_list)"/>
-                        <t t-set="max_rows" t-value="total_lv if total_lv &gt; 8 else 8"/>
+                        <!-- Đảm bảo tối thiểu 7 dòng danh sách lĩnh vực để cân đối với thông tin học sinh bên trái -->
+                        <t t-set="max_rows" t-value="total_lv if total_lv &gt; 7 else 7"/>
 
                         <table class="profile-grid-table">
+                            <!-- HÀNG 1: Tiêu đề lớn LĨNH VỰC CAN THIỆP -->
                             <tr>
                                 <td class="col-lbl-left">Họ và tên HS:</td>
                                 <td class="col-val-left text-bold"><span t-field="o.hocsinh_id.name"/></td>
-                                <td colspan="4" style="font-weight: bold; text-align: center; font-size: 14px; background-color: #ffffff; text-transform: uppercase;">
-                                    LĨNH VỰC CAN THIỆP CHÍNH TRONG THÁNG
+                                <td colspan="2" style="font-weight: bold; text-align: center; font-size: 14px; background-color: #eeeeee; text-transform: uppercase; color: #000000;">
+
                                 </td>
                             </tr>
 
+                            <!-- HÀNG 2: 2 Tiêu đề con (Lĩnh vực | Độ tuổi phát triển tương ứng) -->
+                            <tr>
+                                <td class="col-lbl-left">Tuổi thực tế:</td>
+                                <td class="col-val-left"><span t-field="o.hocsinh_id.tuoi"/></td>
+                                <td class="col-linhvuc" style="font-weight: bold !important; text-align: center; background-color: #f5f5f5 !important;">
+                                    Lĩnh vực
+                                </td>
+                                <td class="col-tuoi" style="font-weight: bold !important; text-align: center; background-color: #f5f5f5 !important;">
+                                    Độ tuổi phát triển tương ứng
+                                </td>
+                            </tr>
+
+                            <!-- CÁC HÀNG DANH SÁCH LĨNH VỰC VÀ THÔNG TIN TRẺ TIẾP THEO -->
                             <t t-foreach="range(max_rows)" t-as="idx">
                                 <t t-set="current_lv" t-value="lv_list[idx] if idx &lt; total_lv else False"/>
                                 <tr>
                                     <t t-if="idx == 0">
-                                        <td class="col-lbl-left">Tuổi thực tế:</td>
-                                        <td class="col-val-left"><span t-field="o.hocsinh_id.tuoi"/></td>
-                                    </t>
-                                    <t t-if="idx == 1">
                                         <td class="col-lbl-left">Giới tính:</td>
                                         <td class="col-val-left"><span t-field="o.hocsinh_id.gioitinh"/></td>
                                     </t>
-                                    <t t-if="idx == 2">
+                                    <t t-if="idx == 1">
                                         <td class="col-lbl-left">Ngày sinh:</td>
                                         <td class="col-val-left"><span t-field="o.hocsinh_id.ngaysinh" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/></td>
                                     </t>
-                                    <t t-if="idx == 3">
+                                    <t t-if="idx == 2">
                                         <td class="col-lbl-left">Liều lượng CT:</td>
                                         <td class="col-val-left"><span t-field="o.ketluan_id.dm_lieuluong_id"/></td>
                                     </t>
-                                    <t t-if="idx == 4">
+                                    <t t-if="idx == 3">
                                         <td class="col-lbl-left" rowspan="2">Dạng rối loạn:</td>
                                         <td class="col-val-left" rowspan="2"><span t-out="', '.join(o.ketluan_id.dm_roiloan_ids.mapped('name')) if o.ketluan_id.dm_roiloan_ids else ''"/></td>
                                     </t>
+                                    <t t-if="idx == 4">
+                                    </t>
                                     <t t-if="idx == 5">
-                                        </t>
-                                    <t t-if="idx == 6">
                                         <td class="col-lbl-left">Mức độ:</td>
                                         <td class="col-val-left"><span t-field="o.ketluan_id.dm_mucdo_id"/></td>
                                     </t>
-                                    <t t-if="idx == 7">
+                                    <t t-if="idx == 6">
                                         <td class="col-lbl-left">Hình thức CT:</td>
                                         <td class="col-val-left">Bán trú / Cá nhân 1/1</td>
                                     </t>
-                                    <t t-if="idx &gt; 7">
+                                    <t t-if="idx &gt; 6">
                                         <td class="col-lbl-left" style="background:#ffffff;"></td>
                                         <td class="col-val-left" style="background:#ffffff;"></td>
                                     </t>
 
-                                    <td class="col-linhvuc" colspan="2">
+                                    <!-- Cột dữ liệu Lĩnh vực -->
+                                    <td class="col-linhvuc">
                                         <span t-if="current_lv" t-field="current_lv.linhvuc_id.name"/>
                                         <span t-if="not current_lv">....</span>
                                     </td>
-                                    <td class="col-linhvuc" colspan="2">
+                                    <!-- Cột dữ liệu Độ tuổi -->
+                                    <td class="col-tuoi">
                                         <span t-if="current_lv" t-field="current_lv.tuoi_id.name"/>
                                         <span t-if="not current_lv">...</span>
                                     </td>
@@ -376,30 +390,27 @@
 
                             <tr>
                                 <td class="col-lbl-left">Chương trình chính:</td>
-                                <td colspan="5" class="text-bold">
+                                <td colspan="3" class="text-bold">
                                     <span t-out="o.with_context(lang='vi_VN').ketluan_id.chuongtrinh if o.ketluan_id and o.ketluan_id.chuongtrinh else 'CHƯƠNG TRÌNH CAN THIỆP TOÀN DIỆN TỪ SƠN DÀNH CHO TRẺ RỐI LẠN PHÁT TRIỂN'"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-lbl-left">Quản lý chuyên môn:</td>
                                 <td class="col-val-left"><span t-field="o.gv_kiemduyet_id.name"/></td>
-                                <td class="col-lbl-left" style="text-align:right;" colspan="2">Giáo viên dạy:</td>
-                                <td colspan="2" class="text-bold"><span t-field="o.gv_lapkehoach_id.name"/></td>
+                                <td class="col-lbl-left" style="text-align:right;">Giáo viên dạy:</td>
+                                <td class="text-bold"><span t-field="o.gv_lapkehoach_id.name"/></td>
                             </tr>
                             <tr>
-                                <td class="col-lbl-left">Tâm lý hành vi:</td>
-                                <td colspan="5">
+                                <td class="col-lbl-left">Tâm lý và hành vi:</td>
+                                <td colspan="3">
                                     - Điều trẻ thích: .........................................................................................<br/>
                                     - Điều trẻ sợ: ............................................................................................
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="col-lbl-left">Sức khoẻ thể chất:</td>
-                                <td colspan="5">.........................................................................................................</td>
-                            </tr>
+
                             <tr>
                                 <td class="col-lbl-left">Ghi chú:</td>
-                                <td colspan="5">Luôn trợ giúp/làm mẫu hướng dẫn trẻ thực hiện và giảm dần gợi nhắc để trẻ tự thực hiện, khái quát hóa trong cuộc sống of trẻ.</td>
+                                <td colspan="3"><span t-field="o.ketluan_id.desc"/></td>
                             </tr>
                         </table>
 
@@ -507,7 +518,7 @@
                                                 Đạt (+): <span class="lbl-summary-dat"><span t-field="muctieu.ketqua_dat"/></span>
                                             </div>
 
-                                            <!-- DÒNG 2: 🌟 ĐÁNH GIÁ VÀ GHI CHÚ KIỂM DUYỆT CHUYÊN MÔN (CHỈ HIỆN KHI KHÁC '0') -->
+                                            <!-- DÒNG 2: ĐÁNH GIÁ VÀ GHI CHÚ KIỂM DUYỆT CHUYÊN MÔN -->
                                             <t t-if="muctieu.trangthai_kiemduyet and muctieu.trangthai_kiemduyet != '0'">
                                                 <div class="goal-kiemduyet-row">
                                                     <span class="text-bold">Đánh giá của giáo viên chuyên môn:</span>
@@ -517,7 +528,6 @@
                                                         <t t-elif="muctieu.trangthai_kiemduyet == '-2'">Dừng lại(-)</t>
                                                     </span>
 
-                                                    <!-- Hiển thị ghi chú kiểm duyệt nếu có nội dung -->
                                                     <t t-if="muctieu.ghichu_kiemduyet">
                                                         <div class="goal-kiemduyet-ghichu">
                                                             <strong>Ý kiến/Định hướng:</strong> <t t-out="muctieu.ghichu_kiemduyet"/>

@@ -54,7 +54,7 @@ class MucTieu(models.Model):
 
     trangthai_canthiep = fields.Selection([("0", "Chưa can thiệp")
                                      ,("1", "Đạt(+) từ tháng trước")
-                                     ,("2", "Đã có trong kế hoạch giáo viên khác")],compute="_compute_trangthai_canthiep" )
+                                     ,("2", "Hiện đang can thiệp")],compute="_compute_trangthai_canthiep" )
 
     @api.depends('linhvuc_id', 'sequence')
     def _compute_index(self):

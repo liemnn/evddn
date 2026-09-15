@@ -6,10 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_congviec2thang_giatri_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_congviec2thang_giatri_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_congviec2thang_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_congviec2thang_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_giaovien2thang_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/giaovien/ekids_chamcong_giaovien2thang_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_muctieu_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_muctieu_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/chuongtrinh/ekids_ct_muctieu_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/chuongtrinh/ekids_ct_muctieu_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_kehoach_ketluan_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/ekids_kehoach_ketluan_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_gon_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_gon_template.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/views/kehoach/report/ekids_kehoach_in_giaovien_template.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/odoo18/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/odoo18/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/odoo18/odoo.conf" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/odoo18/odoo.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/odoo18/pg_hba.conf" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/odoo18/pg_hba.conf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,19 +52,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Run",
-    "Python.formula_util.executor": "Run",
-    "Python.python_util.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_hdsd/static/src/html/kehoach",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.evddn.executor&quot;: &quot;Run&quot;,
+    &quot;Python.formula_util.executor&quot;: &quot;Run&quot;,
+    &quot;Python.python_util.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/odoo/evddn/custom-addons/ekids_hdsd/static/src/html/kehoach&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_hdsd\static\src\html\kehoach" />
@@ -165,22 +169,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00403" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1786508889008</created>
-      <option name="number" value="00403" />
-      <option name="presentableId" value="LOCAL-00403" />
-      <option name="project" value="LOCAL" />
-      <updated>1786508889008</updated>
-    </task>
-    <task id="LOCAL-00404" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1786591468210</created>
-      <option name="number" value="00404" />
-      <option name="presentableId" value="LOCAL-00404" />
-      <option name="project" value="LOCAL" />
-      <updated>1786591468210</updated>
     </task>
     <task id="LOCAL-00405" summary="liemnn">
       <option name="closed" value="true" />
@@ -558,7 +546,23 @@
       <option name="project" value="LOCAL" />
       <updated>1789465711405</updated>
     </task>
-    <option name="localTasksCounter" value="452" />
+    <task id="LOCAL-00452" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1789468669466</created>
+      <option name="number" value="00452" />
+      <option name="presentableId" value="LOCAL-00452" />
+      <option name="project" value="LOCAL" />
+      <updated>1789468669466</updated>
+    </task>
+    <task id="LOCAL-00453" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1789480731581</created>
+      <option name="number" value="00453" />
+      <option name="presentableId" value="LOCAL-00453" />
+      <option name="project" value="LOCAL" />
+      <updated>1789480731581</updated>
+    </task>
+    <option name="localTasksCounter" value="454" />
     <servers />
   </component>
   <component name="UnknownFeatures">

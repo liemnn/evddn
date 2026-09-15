@@ -42,7 +42,7 @@
                             padding: 2mm !important;
                         }
 
-                        /* Header  Profile Table */
+                        /* Header Profile Table */
                         .header-main-table { width: 100%; margin-bottom: 6px; }
                         .header-main-table td { padding: 3px 6px; vertical-align: middle; color: #000000 !important; font-size: 14px !important; }
                         .top-main-title { font-size: 17px !important; font-weight: bold !important; text-transform: uppercase; color: #000000 !important; }
@@ -51,11 +51,11 @@
                         .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; table-layout: fixed; }
                         .profile-grid-table td { border: 1px solid #000000 !important; padding: 4px 6px; font-size: 13px !important; vertical-align: middle; color: #000000 !important; }
 
-                        .col-lbl-left  { width: 11%; font-weight: bold !important; background-color: #eeeeee !important; }
-                        .col-val-left  { width: 22%; }
-                        .col-linhvuc   { width: 25%; }
+                        .col-lbl-left { width: 11%; font-weight: bold !important; background-color: #eeeeee !important; }
+                        .col-val-left { width: 22%; }
+                        .col-linhvuc  { width: 33.5%; }
+                        .col-tuoi     { width: 33.5%; text-align: center; }
 
-                        /* 🌟 TRIỆT HẠ LỖI KÉO TRANG: Cho phép .print-container vỡ dòng tự nhiên lấp đầy khoảng trống */
                         .print-container {
                             width: 100%;
                             border: 1px solid #000000 !important;
@@ -63,12 +63,12 @@
                             margin-bottom: 8px;
                             page-break-before: auto !important;
                             page-break-after: auto !important;
-                            page-break-inside: auto !important; /* 🌟 BỎ AVOID ĐỂ KHÔNG BỊ TRỐNG TRANG */
+                            page-break-inside: auto !important;
                             background-color: #ffffff !important;
                         }
 
                         .print-title-section { display: table; width: 100%; border-bottom: 1px solid #000000 !important; padding-bottom: 3px; margin-bottom: 4px; }
-                        .print-main-title { display: table-cell; width: 55%; font-size: 14px !important; vertical-align: bottom; text-align: left; color: #000000 !important; }
+                        .print-main-title { display: table-cell; width: 55%; font-size: 16px !important; vertical-align: bottom; text-align: left; color: #000000 !important; }
 
                         .goal-note-text {
                             font-size: 13px !important;
@@ -91,7 +91,7 @@
                             text-decoration: underline;
                             margin-bottom: 2px;
                             color: #000000 !important;
-                            page-break-after: avoid !important; /* Giữ tiêu đề đi liền với nội dung */
+                            page-break-after: avoid !important;
                         }
 
                         .text-paragraph {
@@ -117,19 +117,17 @@
                             text-align: justify;
                         }
 
-                        /* 🌟 Khối Theo dõi: Giữ nguyên khối nhỏ này liền nhau */
                         .tracking-diary-content {
                             width: 100%;
                             margin-top: 4px;
                             display: flex;
                             flex-direction: column;
                             gap: 3px;
-                            page-break-inside: avoid !important; /* Giữ bảng theo dõi không bị cắt ngang */
+                            page-break-inside: avoid !important;
                         }
 
                         .day-boxes-horizontal-flow { display: flex; flex-wrap: wrap; gap: 2px; width: 100%; }
 
-                        /* Ô CHẤM ĐIỂM GIẢM KÍCH THƯỚC NHỎ GỌN */
                         .day-tracking-box {
                             width: 28px;
                             height: 35px;
@@ -186,14 +184,6 @@
                             .box-print-dat, .box-print-hinhthanh, .box-print-chuadat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                             .cell-write-space { color: #000000 !important; font-weight: bold !important; }
                         }
-                        h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
-                            margin-top: 0;
-                            margin-bottom: 0.75rem;
-                            font-family: inherit;
-                            font-size: 16px !important;
-                            line-height: 1.2;
-                            color: var(--heading-color);
-                        }
                     </style>
 
                     <div class="o_compact_print_body">
@@ -230,60 +220,73 @@
 
                         <t t-set="lv_list" t-value="o.kehoach_linhvuc_ids"/>
                         <t t-set="total_lv" t-value="len(lv_list)"/>
-                        <t t-set="max_rows" t-value="total_lv if total_lv &gt; 8 else 8"/>
+                        <!-- Đảm bảo tối thiểu 7 dòng danh sách lĩnh vực để cân đối với thông tin học sinh bên trái -->
+                        <t t-set="max_rows" t-value="total_lv if total_lv &gt; 7 else 7"/>
 
                         <table class="profile-grid-table">
+                            <!-- HÀNG 1: Tiêu đề lớn LĨNH VỰC CAN THIỆP -->
                             <tr>
                                 <td class="col-lbl-left">Họ và tên HS:</td>
                                 <td class="col-val-left text-bold"><span t-field="o.hocsinh_id.name"/></td>
-                                <td colspan="4" style="font-weight: bold; text-align: center; font-size: 13px; background-color: #eeeeee; text-transform: uppercase; color: #000000;">
-                                    LĨNH VỰC CAN THIỆP
+                                <td colspan="2" style="font-weight: bold; text-align: center; font-size: 13px; background-color: #eeeeee; text-transform: uppercase; color: #000000;">
+
                                 </td>
                             </tr>
 
+                            <!-- HÀNG 2: 2 Tiêu đề con (Lĩnh vực | Độ tuổi phát triển tương ứng) -->
+                            <tr>
+                                <td class="col-lbl-left">Tuổi thực tế:</td>
+                                <td class="col-val-left"><span t-field="o.hocsinh_id.tuoi"/></td>
+                                <td class="col-linhvuc" style="font-weight: bold !important; text-align: center; background-color: #f5f5f5 !important;">
+                                    Lĩnh vực
+                                </td>
+                                <td class="col-tuoi" style="font-weight: bold !important; text-align: center; background-color: #f5f5f5 !important;">
+                                    Độ tuổi phát triển tương ứng
+                                </td>
+                            </tr>
+
+                            <!-- CÁC HÀNG DANH SÁCH LĨNH VỰC VÀ THÔNG TIN TRẺ TIẾP THEO -->
                             <t t-foreach="range(max_rows)" t-as="idx">
                                 <t t-set="current_lv" t-value="lv_list[idx] if idx &lt; total_lv else False"/>
                                 <tr>
                                     <t t-if="idx == 0">
-                                        <td class="col-lbl-left">Tuổi thực tế:</td>
-                                        <td class="col-val-left"><span t-field="o.hocsinh_id.tuoi"/></td>
-                                    </t>
-                                    <t t-if="idx == 1">
                                         <td class="col-lbl-left">Giới tính:</td>
                                         <td class="col-val-left"><span t-field="o.hocsinh_id.gioitinh"/></td>
                                     </t>
-                                    <t t-if="idx == 2">
+                                    <t t-if="idx == 1">
                                         <td class="col-lbl-left">Ngày sinh:</td>
                                         <td class="col-val-left"><span t-field="o.hocsinh_id.ngaysinh" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/></td>
                                     </t>
-                                    <t t-if="idx == 3">
+                                    <t t-if="idx == 2">
                                         <td class="col-lbl-left">Liều lượng CT:</td>
                                         <td class="col-val-left"><span t-field="o.ketluan_id.dm_lieuluong_id"/></td>
                                     </t>
-                                    <t t-if="idx == 4">
+                                    <t t-if="idx == 3">
                                         <td class="col-lbl-left" rowspan="2">Dạng rối loạn:</td>
                                         <td class="col-val-left" rowspan="2"><span t-out="', '.join(o.ketluan_id.dm_roiloan_ids.mapped('name')) if o.ketluan_id.dm_roiloan_ids else ''"/></td>
                                     </t>
+                                    <t t-if="idx == 4">
+                                    </t>
                                     <t t-if="idx == 5">
-                                        </t>
-                                    <t t-if="idx == 6">
                                         <td class="col-lbl-left">Mức độ:</td>
                                         <td class="col-val-left"><span t-field="o.ketluan_id.dm_mucdo_id"/></td>
                                     </t>
-                                    <t t-if="idx == 7">
+                                    <t t-if="idx == 6">
                                         <td class="col-lbl-left">Hình thức CT:</td>
                                         <td class="col-val-left">Bán trú / Cá nhân 1/1</td>
                                     </t>
-                                    <t t-if="idx &gt; 7">
+                                    <t t-if="idx &gt; 6">
                                         <td class="col-lbl-left" style="background:#ffffff;"></td>
                                         <td class="col-val-left" style="background:#ffffff;"></td>
                                     </t>
 
-                                    <td class="col-linhvuc" colspan="2">
+                                    <!-- Cột dữ liệu Lĩnh vực -->
+                                    <td class="col-linhvuc">
                                         <span t-if="current_lv" t-field="current_lv.linhvuc_id.name"/>
                                         <span t-if="not current_lv">....</span>
                                     </td>
-                                    <td class="col-linhvuc" colspan="2">
+                                    <!-- Cột dữ liệu Độ tuổi -->
+                                    <td class="col-tuoi">
                                         <span t-if="current_lv" t-field="current_lv.tuoi_id.name"/>
                                         <span t-if="not current_lv">...</span>
                                     </td>
@@ -292,33 +295,30 @@
 
                             <tr>
                                 <td class="col-lbl-left">Chương trình chính:</td>
-                                <td colspan="5" class="text-bold">
+                                <td colspan="3" class="text-bold">
                                     <span t-out="o.with_context(lang='vi_VN').ketluan_id.chuongtrinh if o.ketluan_id and o.ketluan_id.chuongtrinh else 'CHƯƠNG TRÌNH CAN THIỆP TOÀN DIỆN TỪ SƠN DÀNH CHO TRẺ RỐI LẠN PHÁT TRIỂN'"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-lbl-left">Quản lý chuyên môn:</td>
                                 <td class="col-val-left"><span t-field="o.gv_kiemduyet_id.name"/></td>
-                                <td class="col-lbl-left" style="text-align:right;" colspan="2">Giáo viên dạy:</td>
-                                <td colspan="2" class="text-bold"><span t-field="o.gv_lapkehoach_id.name"/></td>
+                                <td class="col-lbl-left" style="text-align:right;">Giáo viên dạy:</td>
+                                <td class="text-bold"><span t-field="o.gv_lapkehoach_id.name"/></td>
                             </tr>
                             <tr>
-                                <td class="col-lbl-left">Tâm lý hành vi:</td>
-                                <td colspan="5">
+                                <td class="col-lbl-left">Tâm lý và hành vi:</td>
+                                <td colspan="3">
                                     - Điều trẻ thích: .........................................................................................<br/>
                                     - Điều trẻ sợ: ............................................................................................
                                 </td>
                             </tr>
                             <tr>
-                                <td class="col-lbl-left">Lưu ý về sức khoẻ thể chất:</td>
-                                <td colspan="5">
-                                    .........................................................................................................
+                                <td class="col-lbl-left">Lưu ý</td>
+                                <td colspan="3">
+                                    <span t-field="o.ketluan_id.desc"/>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="col-lbl-left">Ghi chú:</td>
-                                <td colspan="5">Luôn trợ giúp/làm mẫu hướng dẫn trẻ thực hiện và giảm dần gợi nhắc để trẻ tự thực hiện, khái quát hóa trong cuộc sống của trẻ.</td>
-                            </tr>
+
                         </table>
 
                         <t t-foreach="o.kehoach_linhvuc_ids" t-as="lv">
