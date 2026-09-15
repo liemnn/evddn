@@ -30,7 +30,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
     coso_id = fields.Many2one("ekids.coso", related="hocsinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
     sequence = fields.Integer(string="TT", compute="_compute_sequence")
-    hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="restrict",index=True)
+    hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="cascade",index=True)
     ngay_nhaphoc = fields.Date(string="Ngày bắt đầu(đi học, đánh giá..)", compute="_compute_ngay_nhaphoc")
     ngay_nghihoc = fields.Date(string="Ngày nghỉ học",compute="_compute_ngay_nghihoc")
     thoigian_hoc = fields.Char(string="Thời gian theo học", compute="_compute_thoigian_hoc", store=False)
