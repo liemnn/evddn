@@ -19,7 +19,7 @@ class KetLuan2LinhVuc(models.Model):
 
 
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực', required=True, ondelete="cascade")
-    tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi', required=True, ondelete="cascade")
+    tuoi_id = fields.Many2one('ekids.ct_tuoi', string='Độ tuổi', required=False, ondelete="cascade")
 
     tong_muctieu = fields.Integer(string="Tổng mục tiêu",compute="_compute_tong_muctieu")
 

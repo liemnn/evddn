@@ -1,5 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError,UserError
+from odoo import models, fields, api, Command
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -66,6 +68,20 @@ class KetLuan(models.Model):
         string="Các lĩnh vực thuộc kết luận"
     )  #
 
+    chon_chuongtrinh_id = fields.Many2one(
+        'ekids.ct_chuongtrinh',
+        string="Chương trình can thiệp",
+        help="Chọn chương trình để tải danh sách lĩnh vực tương ứng"
+    )
+    chon_linhvuc_ids = fields.Many2many(
+        'ekids.ct_linhvuc',  # Hoặc model lĩnh vực của bạn
+        'ekids_ketluan_chon_linhvuc_rel',
+        'ketluan_id',
+        'linhvuc_id',
+        string="Lĩnh vực cần can thiệp",
+        domain="[('chuongtrinh_id', '=', chon_chuongtrinh_id)]"
+    )
+
 
 
     dm_gv_danhgia_id = fields.Many2one('ekids.ct_dm_cg_danhgia', string='Chuyên gia đánh giá', ondelete="restrict")
@@ -111,6 +127,47 @@ class KetLuan(models.Model):
     chuongtrinh = fields.Char(string="Tên chương trình", compute="_compute_chuongtrinh")
 
     is_xoa = fields.Boolean(compute="_compute_is_xoa")
+
+
+
+    @api.onchange('chon_chuongtrinh_id')
+    def _onchange_chon_chuongtrinh_id(self):
+        """Khi đổi chương trình thì xóa các lĩnh vực cũ đang chọn dở"""
+        self.chon_linhvuc_ids = [Command.clear()]
+
+    def action_them_linhvuc_nhanh(self):
+        self.ensure_one()
+        if not self.chon_chuongtrinh_id:
+            raise UserError("Vui lòng chọn Chương trình can thiệp trước!")
+        if not self.chon_linhvuc_ids:
+            raise UserError("Vui lòng chọn ít nhất một Lĩnh vực cần can thiệp!")
+
+        existing_pairs = set()
+        for line in self.linhvuc_ids:
+            existing_pairs.add((line.chuongtrinh_id.id, line.linhvuc_id.id))
+
+        commands = []
+        for lv in self.chon_linhvuc_ids:
+            pair = (self.chon_chuongtrinh_id.id, lv.id)
+            if pair in existing_pairs:
+                continue
+
+            commands.append(Command.create({
+                'chuongtrinh_id': self.chon_chuongtrinh_id.id,
+                'linhvuc_id': lv.id,
+                'tuoi_id': False,
+            }))
+
+        if not commands:
+            raise UserError("Tất cả các lĩnh vực được chọn đã có sẵn trong bảng bên dưới!")
+
+        # Dùng with_context để bỏ qua kiểm tra tuổi khi bấm nút này
+        self.with_context(skip_check_tuoi=True).write({
+            'linhvuc_ids': commands,
+            'chon_linhvuc_ids': [Command.clear()],
+        })
+        return True
+
 
     def _compute_is_xoa(self):
         for record in self:
@@ -278,6 +335,7 @@ class KetLuan(models.Model):
 
                 # Chỉ xử lý kiểm tra nếu trạng thái MỚI khác trạng thái CŨ
                 if trangthai_cu != trangthai_moi:
+                    rec.func_write_chuyen_trangthai_chophep_lapkehoach(trangthai_moi)
 
                     # TH1: Từ [Cho phép lập KH] quay về [Đang lập] -> Check xem có kế hoạch con chưa
                     if trangthai_cu == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH:
@@ -298,7 +356,30 @@ class KetLuan(models.Model):
                             )
 
         # 3. Gọi hàm super() ở cuối cùng sau khi đã vượt qua tất cả các tầng kiểm duyệt bảo mật
-        return super(KetLuan, self).write(vals)
+        res = super(KetLuan, self).write(vals)
+
+        return res
+
+    def func_write_chuyen_trangthai_chophep_lapkehoach(self,trangthai_moi):
+        # TH1: Chuyển sang [Cho phép lập KH] -> BẮT BUỘC toàn bộ linhvuc_ids phải có đủ tuoi_id
+        if trangthai_moi == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH:
+            if not self.linhvuc_ids:
+                raise UserError(
+                    "Chưa có [Lĩnh vực can thiệp] nào trong khung chương trình! "
+                    "Vui lòng thiết lập ít nhất một lĩnh vực trước khi chuyển sang trạng thái [Cho phép lập Kế hoạch]."
+                )
+
+            missing_tuoi = self.linhvuc_ids.filtered(lambda l: not l.tuoi_id)
+            if missing_tuoi:
+                missing_names = ", ".join(
+                    f"[{line.chuongtrinh_id.name if line.chuongtrinh_id else 'Chưa có CT'}] {line.linhvuc_id.name}"
+                    for line in missing_tuoi
+                )
+                raise ValidationError(
+                    f"Không thể chuyển sang trạng thái [Cho phép lập Kế hoạch]!\n"
+                    f"Tất cả các lĩnh vực can thiệp đều phải được chọn Độ tuổi cụ thể.\n\n"
+                    f"Các lĩnh vực chưa có độ tuổi: {missing_names}"
+                )
 
 
 
