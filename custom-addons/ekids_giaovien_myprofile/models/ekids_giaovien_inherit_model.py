@@ -6,6 +6,8 @@ from odoo.exceptions import ValidationError
 class GiaoVienInherit(models.Model):
     _inherit = "ekids.giaovien"
 
+    is_readonly = fields.Boolean(compute="compute_is_readonly")
+
 
 
 
@@ -24,7 +26,12 @@ class GiaoVienInherit(models.Model):
                     'view_mode': 'form',
                     'res_id': giaovien.id,
                     'target': 'current',
-                    'context': {'form_view_initial_mode': 'view'}
+                    'context': {
+                        'form_view_initial_mode': 'view',
+                        'create': False,  # Không cho tạo mới
+                        'edit': False,  # Ẩn nút Edit / Sửa
+                        'delete': False,  # Không cho xóa
+                    }
 
                 }
 
