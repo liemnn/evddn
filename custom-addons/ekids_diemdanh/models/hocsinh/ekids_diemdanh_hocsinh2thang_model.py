@@ -43,7 +43,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên",ondelete="cascade",
                                  domain="[('coso_id','=',coso_id)]",required=True)
 
-
+    hs_hinhthuc_theohoc = fields.Char(compute="_compute_hocsinh",)
 
     # --- sinh tự động các field d1..d31 và is_d1_nghi..is_d31_nghi ---
     # sinh field d1..d31 và is_d1_nghi..is_d31_nghi
@@ -109,6 +109,15 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                     row[idx] = EXPORT_MAP_DIEMDANH[cell_val]
         return response
 
+    def _compute_hocsinh(self):
+        label_map = {
+            "0": "Bán trú",
+            "1": "Cá nhân",
+            "2": "Khác",
+        }
+        for record in self:
+            val = record.hocsinh_id.hinhthuc_theohoc
+            record.hs_hinhthuc_theohoc = label_map.get(str(val), "")
     def _compute_is_dl_locked(self):
         today = date.today()
         sothang_today = (today.year * 12) + today.month

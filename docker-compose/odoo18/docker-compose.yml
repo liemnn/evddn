@@ -77,9 +77,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     entrypoint: ["/entrypoint.sh"]
-    ports:
-      - "8080:8069"
-      - "8072:8072"
+    #ports:
+      #- "8080:8069"
+      #- "8072:8072"
     restart: always
 
   nginx:
