@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eKids - Hướng dẫn: Xây dựng kho dữ liệu chương trình can thiệp</title>
+    <title>eKids - Hướng dẫn: Kho dữ liệu Chương trình can thiệp</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -11,7 +11,7 @@
         :root {
             --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
             --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
-            --c-green: #22C55E; --c-indigo: #4F46E5; --c-orange: #F59E0B;
+            --c-green: #10B981; --c-orange: #F59E0B; --c-red: #EF4444; --c-cyan: #0891B2;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -37,7 +37,7 @@
         .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
 
         .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
-        .doc-header h2 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header h2 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.3px; line-height: 1.3;}
         .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
 
         /* --- CÁC BƯỚC HƯỚNG DẪN --- */
@@ -58,52 +58,40 @@
         .doc-content li { margin-bottom: 8px; }
 
         .highlight-box { background: #EFF6FF; border-left: 4px solid var(--primary); padding: 15px; border-radius: 0 8px 8px 0; margin: 15px 0; font-size: 0.95rem; color: #1E40AF; }
+        .warning-box { background: #FFFBEB; border-left: 4px solid var(--c-orange); padding: 15px; border-radius: 0 8px 8px 0; margin: 15px 0; font-size: 0.95rem; color: #92400E; }
 
-        /* --- CSS MOCKUP GIAO DIỆN PHẦN MỀM (THAY THẾ ẢNH) --- */
-        .ui-mockup {
-            background: #F8FAFC;
-            border: 1px solid #CBD5E1;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        /* --- MOCKUP GIAO DIỆN HỆ THỐNG VẼ BẰNG HTML/CSS --- */
+        .mockup-ui {
+            background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 12px; padding: 20px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.04);
         }
-        .ui-card-group {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 25px;
-            max-width: 450px;
-            margin: 0 auto;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .ui-school-avatar {
-            width: 60px; height: 60px; background: #E2E8F0; border-radius: 14px; margin: 0 auto 10px;
-            display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #64748B;
-        }
-        .ui-btn-menu {
-            display: block; width: 100%; padding: 12px 16px; border-radius: 10px; font-weight: 800; font-size: 0.9rem;
-            text-decoration: none; margin-bottom: 10px; text-align: left; display: flex; align-items: center; gap: 10px;
-        }
-        .ui-btn-blue { background: #2563EB; color: white; box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
-        .ui-btn-white { background: #FFFFFF; color: var(--text-main); border: 1px solid #CBD5E1; }
+        .ui-header-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #E2E8F0; font-size: 0.82rem; color: var(--text-sub); }
+        .ui-btn { background: #2563EB; color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; }
+        .ui-btn-green { background: #10B981; }
 
-        /* Mockup Form */
-        .ui-form-box { background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; }
-        .ui-input-line { border-bottom: 1px solid #9333EA; padding-bottom: 5px; margin-bottom: 15px; font-weight: 700; color: #94A3B8; font-size: 0.95rem; }
-        .ui-badge-row { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap; }
-        .ui-tag { background: #FEE2E2; color: #DC2626; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; }
-        .ui-status-on { background: #DCFCE7; color: #15803D; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; }
+        /* Card chương trình */
+        .program-card {
+            background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 16px; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border-left: 6px solid #0F766E;
+        }
+        .program-card::after {
+            content: ''; position: absolute; right: 16px; top: 0; width: 20px; height: 30px; background: #F59E0B; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+        }
 
-        /* Mockup Stat Cards */
-        .ui-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; }
-        .ui-stat-card { background: white; border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; border-left: 4px solid #0D9488; }
-        .ui-stat-nums { display: flex; justify-content: space-around; margin-top: 10px; padding-top: 10px; border-top: 1px solid #F1F5F9; text-align: center; font-size: 0.8rem; color: var(--text-sub); }
-        .ui-stat-nums strong { display: block; font-size: 1.1rem; color: #EF4444; }
+        /* Thẻ độ tuổi & lĩnh vực dạng lưới */
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; margin-top: 10px; }
+        .mini-card {
+            background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 8px; padding: 14px; position: relative; border-left: 5px solid #10B981; box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .mini-card::after {
+            content: ''; position: absolute; right: 12px; top: 0; width: 16px; height: 24px; background: #3B82F6; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+        }
 
-        /* Mockup Table */
-        .ui-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: white; }
+        .grid-shared-programs { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; margin-top: 10px; }
+        .grid-columns-field { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; margin-top: 10px; }
+        .field-column-box { background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 8px; padding: 12px; }
+        .goal-item-box { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 10px; margin-bottom: 8px; font-size: 0.78rem; }
+
+        .ui-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: white; margin-top: 8px; }
         .ui-table th, .ui-table td { border: 1px solid #CBD5E1; padding: 8px 10px; text-align: left; }
         .ui-table th { background: #F1F5F9; font-weight: 700; color: var(--text-main); }
 
@@ -114,6 +102,7 @@
             .content-area { padding: 10px; }
             .doc-container { padding: 15px; border-radius: 12px; }
             .doc-header h2 { font-size: 1.4rem; }
+            .grid-cards, .grid-shared-programs, .grid-columns-field { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -136,123 +125,96 @@
             <div class="doc-container">
 
                 <div class="breadcrumb">
-                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phân hệ 02: Kế hoạch can thiệp <i class="fas fa-chevron-right"></i> <span>Xây dựng kho dữ liệu chương trình</span>
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phân hệ 02: Kế hoạch can thiệp <i class="fas fa-chevron-right"></i> <span>Kho dữ liệu Chương trình can thiệp</span>
                 </div>
 
                 <div class="doc-header">
-                    <h2>Khối 01: Xây dựng kho dữ liệu Chương trình can thiệp</h2>
-                    <p>Hướng dẫn chi tiết quy trình quản lý ngân hàng mục tiêu, bài tập chuẩn, phân loại theo độ tuổi, lĩnh vực và chia sẻ chương trình giữa các cơ sở bằng giao diện trực quan.</p>
+                    <h2>E. Kho dữ liệu Chương trình can thiệp</h2>
+                    <p><strong>Mục tiêu:</strong> Kho dữ liệu chương trình can thiệp bao gồm toàn bộ các chương trình can thiệp khác nhau, phục vụ cho giáo viên trong công tác lập kế hoạch và tiến hành can thiệp chuyên sâu tại trung tâm.</p>
+                    <p style="margin-top: 8px; font-size: 0.95rem;"><strong>Cấu trúc của một chương trình can thiệp:</strong> Bao gồm các thông tin cơ bản: <em>Tên chương trình, Lĩnh vực, Độ tuổi</em> và <em>Hệ thống mục tiêu trong chương trình</em>. Các mục tiêu được phân chia khoa học từ dễ đến khó trong mỗi lĩnh vực tương ứng với từng độ tuổi phát triển của trẻ.</p>
                 </div>
 
-                <!-- BƯỚC 1 -->
+                <!-- PHẦN 1: CHƯƠNG TRÌNH DO TRUNG TÂM TỰ XÂY DỰNG -->
                 <div class="step-detail-box">
-                    <h3 class="step-title"><span>Bước 1</span> Lựa chọn nguồn dữ liệu chương trình</h3>
+                    <h3 class="step-title"><span>Phần 1</span> Chương trình can thiệp do trung tâm tự xây dựng</h3>
                     <div class="doc-content">
-                        <p>Khi truy cập vào phần quản lý kho dữ liệu, màn hình chính sẽ hiển thị các nhóm chức năng cốt lõi giúp bạn dễ dàng thao tác:</p>
+                        <p>Để bắt đầu, tại màn hình kho dữ liệu, bạn chọn nút <strong style="color: var(--primary);">CHƯƠNG TRÌNH CAN THIỆP CỦA TRUNG TÂM</strong>.</p>
 
-                        <!-- MOCKUP 1: MENU LỰA CHỌN -->
-                        <div class="ui-mockup">
-                            <div class="ui-card-group">
-                                <div class="ui-school-avatar"><i class="fas fa-school"></i></div>
-                                <h4 style="font-weight: 800; font-size: 1.1rem; margin-bottom: 4px;">Trường Ví dụ</h4>
-                                <p style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 15px;">(Quản lý chương trình can thiệp cho trẻ)</p>
+                        <!-- MOCKUP MENU CHỌN PHẦN 1 -->
+                        <div class="mockup-ui" style="max-width: 420px; margin: 15px auto; text-align: center;">
+                            <div style="background: white; padding: 14px; border-radius: 10px; border: 2px solid #2563EB; font-weight: 800; color: #1E3A8A; box-shadow: 0 4px 12px rgba(37,99,235,0.15); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; margin-bottom: 6px;">
+                                <i class="fas fa-book" style="color: #2563EB;"></i> CHƯƠNG TRÌNH CAN THIỆP CỦA TRUNG TÂM
+                            </div>
+                            <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #CBD5E1; font-weight: 700; color: #64748B; font-size: 0.8rem;">
+                                <i class="fas fa-share-alt"></i> CHƯƠNG TRÌNH CAN THIỆP [TRUNG TÂM KHÁC CHIA SẺ]
+                            </div>
+                        </div>
 
-                                <div class="ui-btn-menu ui-btn-blue">
-                                    <i class="fas fa-book"></i> CHƯƠNG TRÌNH CAN THIỆP CỦA TRUNG TÂM
+                        <p>Trung tâm có thể tự chủ xây dựng chương trình can thiệp riêng của mình thông qua 2 cách:</p>
+
+                        <p><strong>a. Cách 1: Sử dụng công cụ có sẵn trực tiếp trên phần mềm</strong></p>
+                        <ul>
+                            <li>Truy cập vào mục <strong>Chương trình</strong> <i class="fas fa-chevron-right"></i> Chọn <strong>Tạo mới một chương trình</strong>: Nhập tên, tác giả, mô tả.</li>
+                            <li>Tạo danh sách các lĩnh vực và danh sách độ tuổi trực thuộc chương trình.</li>
+                            <li>Tạo lập và thiết kế chi tiết các mục tiêu, gắn liền với mỗi lĩnh vực và độ tuổi tương ứng.</li>
+                        </ul>
+
+                        <!-- MOCKUP THẺ & FORM TẠO MỚI -->
+                        <div class="mockup-ui">
+                            <div class="ui-header-bar">
+                                <span>CHƯƠNG TRÌNH / CHƯƠNG TRÌNH</span>
+                                <span><span class="ui-btn ui-btn-green" style="padding: 2px 6px;">Mới</span></span>
+                            </div>
+                            <div class="program-card">
+                                <div style="font-size: 0.95rem; font-weight: 800; color: #0F172A; margin-bottom: 6px;">
+                                    Chương trình can thiệp toàn diện Từ Sơn dành cho trẻ Rối loạn phát triển.
                                 </div>
-                                <div class="ui-btn-menu ui-btn-white">
-                                    <i class="fas fa-share-alt"></i> CHƯƠNG TRÌNH CAN THIỆP [TRUNG TÂM KHÁC CHIA SẺ]
+                                <div style="display: flex; gap: 6px; margin-bottom: 8px;">
+                                    <span style="background: #FEE2E2; color: #DC2626; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700;">CTCTTD-TỪ SƠN</span>
+                                    <span style="background: #EFF6FF; color: #1E40AF; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700;">Đang hoạt động</span>
                                 </div>
-                                <div class="ui-btn-menu ui-btn-white">
-                                    <i class="fas fa-check-square"></i> Duyệt [THIẾT KẾ] mục tiêu
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; border-top: 1px solid #E2E8F0; padding-top: 8px; text-align: center; font-size: 0.75rem;">
+                                    <div><strong>10</strong><br><span style="font-size: 0.62rem; color: #64748B;">ĐỘ TUỔI</span></div>
+                                    <div style="border-left: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0;"><strong>10</strong><br><span style="font-size: 0.62rem; color: #64748B;">LĨNH VỰC</span></div>
+                                    <div><strong style="color: #DC2626;">271</strong><br><span style="font-size: 0.62rem; color: #64748B;">MỤC TIÊU</span></div>
                                 </div>
                             </div>
                         </div>
 
+                        <p><strong>b. Cách 2: Sử dụng công cụ Import từ file Excel</strong></p>
                         <ul>
-                            <li><strong>Chương trình can thiệp của trung tâm:</strong> Quản lý danh mục các bộ chương trình độc quyền do trung tâm tự thiết kế.</li>
-                            <li><strong>Chương trình can thiệp [Trung tâm khác chia sẻ]:</strong> Tiếp nhận các bộ chương trình chuẩn từ các đơn vị liên kết khác.</li>
-                            <li><strong>Duyệt [Thiết kế] mục tiêu:</strong> Phê duyệt nội dung các mục tiêu can thiệp trước khi đưa vào áp dụng chính thức.</li>
+                            <li>Sử dụng các mẫu file Excel chuẩn cung cấp từ đơn vị phần mềm để nhập thông tin về lĩnh vực, độ tuổi, mục tiêu.</li>
+                            <li>Trên giao diện danh sách, click vào menu <span class="ui-btn" style="background: #475569;"><i class="fas fa-bars"></i></span> <i class="fas fa-chevron-right"></i> Chọn <strong>Nhập bản ghi</strong> (Import) để tải file lên hệ thống và cấu hình ánh xạ trường dữ liệu Odoo.</li>
                         </ul>
-                    </div>
-                </div>
 
-                <!-- BƯỚC 2 -->
-                <div class="step-detail-box">
-                    <h3 class="step-title"><span>Bước 2</span> Khai báo thông tin chi tiết chương trình</h3>
-                    <div class="doc-content">
-                        <p>Sau khi bấm nút tạo mới, bạn tiến hành nhập liệu các thông số định danh cho chương trình:</p>
-
-                        <!-- MOCKUP 2: FORM NHẬP LIỆU -->
-                        <div class="ui-mockup">
-                            <div class="ui-form-box">
-                                <div class="ui-input-line">Nhập tên chương trình... (Ví dụ: Chương trình can thiệp sớm Portage)</div>
-                                <div class="ui-badge-row">
-                                    <span class="ui-tag">TÊN VIẾT TẮT: PORTAGES</span>
-                                    <span class="ui-status-on">TRẠNG THÁI: Đang hoạt động</span>
-                                </div>
-                                <div style="font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 6px;"><i class="fas fa-info-circle"></i> MÔ TẢ CHUNG</div>
-                                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 10px; border-radius: 6px; font-size: 0.85rem; color: var(--text-sub);">
-                                    Dành cho trẻ chậm/trễ phát triển, đặc biệt là chậm/trễ phát triển về ngôn ngữ...
-                                </div>
+                        <!-- MOCKUP IMPORT EXCEL -->
+                        <div class="mockup-ui" style="background: white;">
+                            <div class="ui-header-bar">
+                                <span>CHƯƠNG TRÌNH / MỤC TIÊU / NHẬP MỘT TỆP</span>
+                                <div><span class="ui-btn ui-btn-green">Nhập</span> <span class="ui-btn" style="background: #64748B;">Kiểm thử</span></div>
+                            </div>
+                            <div style="font-size: 0.8rem; background: #F8FAFC; padding: 10px; border: 1px solid #CBD5E1; border-radius: 6px;">
+                                <div style="color: #2563EB; font-weight: 700; margin-bottom: 4px;"><i class="fas fa-file-excel" style="color: #10B981;"></i> ABLLS-R.xlsx</div>
+                                <div style="color: #64748B; font-size: 0.75rem;">Cột tệp: Tên <i class="fas fa-arrow-right"></i> Trường Odoo: Tên</div>
                             </div>
                         </div>
 
-                        <ul>
-                            <li>Nhập tên chương trình, mã tên viết tắt và bật trạng thái <strong>Đang hoạt động</strong>.</li>
-                            <li>Khai báo mục đích hoặc đối tượng sử dụng tại khung <strong>Mô tả chung</strong> bên dưới.</li>
-                            <li>Bấm nút <strong>LƯU</strong> ở góc trên để ghi nhận vào hệ thống.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- BƯỚC 3 -->
-                <div class="step-detail-box">
-                    <h3 class="step-title"><span>Bước 3</span> Quản lý Lĩnh vực, Độ tuổi, Mục tiêu & Cơ sở sử dụng</h3>
-                    <div class="doc-content">
-                        <p>Bên trong mỗi chương trình, hệ thống tổng hợp trực quan số liệu cấu trúc qua các thẻ thống kê và hệ thống tab quản lý:</p>
-
-                        <!-- MOCKUP 3: THẺ THỐNG KÊ CHƯƠNG TRÌNH -->
-                        <div class="ui-mockup">
-                            <div class="ui-stats-grid">
-                                <div class="ui-stat-card">
-                                    <h5 style="font-weight: 800; font-size: 0.95rem;">Chương trình can thiệp sớm Portage</h5>
-                                    <p style="font-size: 0.75rem; color: var(--text-sub); margin-top: 2px;">Chuyên biệt Từ Sơn - Trụ sở chính</p>
-                                    <div class="ui-stat-nums">
-                                        <div><strong>7</strong> Độ tuổi</div>
-                                        <div><strong>6</strong> Lĩnh vực</div>
-                                        <div><strong>618</strong> Mục tiêu</div>
-                                    </div>
-                                </div>
-                                <div class="ui-stat-card" style="border-left-color: #3B82F6;">
-                                    <h5 style="font-weight: 800; font-size: 0.95rem;">Giáo dục mầm non</h5>
-                                    <p style="font-size: 0.75rem; color: var(--text-sub); margin-top: 2px;">Chuyên biệt Từ Sơn - Trụ sở chính</p>
-                                    <div class="ui-stat-nums">
-                                        <div><strong>9</strong> Độ tuổi</div>
-                                        <div><strong>7</strong> Lĩnh vực</div>
-                                        <div><strong>447</strong> Mục tiêu</div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="warning-box">
+                            <i class="fas fa-shield-alt"></i> <strong>QUYỀN SỞ HỮU & CƠ CHẾ CHIA SẺ:</strong><br>
+                            Cả 2 cách trên đều tạo ra chương trình thuộc <strong>toàn quyền sở hữu của trung tâm</strong>. Trung tâm có thể chia sẻ quyền sử dụng cho các cơ sở khác bằng cách truy cập chương trình <i class="fas fa-chevron-right"></i> Chọn tab <strong>"Cơ sở được phép sử dụng"</strong> để quản lý danh sách phân quyền chi tiết (hiển thị mã cơ sở, tên trường, số điện thoại, địa chỉ và thao tác gỡ bỏ).
                         </div>
 
-                        <p>Bên trong chi tiết chương trình, bạn cấu hình lần lượt qua các tab:</p>
-                        <ul>
-                            <li><strong>Tab Lĩnh vực & Độ tuổi:</strong> Thiết lập các mốc tháng tuổi (ví dụ: <em>Tuổi ẩm ngửa, 0-12 tháng, 12-24 tháng...</em>) và các lĩnh vực phát triển chuyên môn.</li>
-                            <li><strong>Tab Cơ sở được phép sử dụng:</strong> Quản lý danh sách các chi nhánh hoặc trung tâm liên kết được phân quyền sử dụng chung bộ chương trình này.</li>
-                        </ul>
-
-                        <!-- MOCKUP 4: BẢNG CƠ SỞ SỬ DỤNG -->
-                        <div class="ui-mockup">
-                            <div style="font-weight: 800; font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main);">Danh sách cơ sở được phép sử dụng:</div>
+                        <!-- MOCKUP TAB CƠ SỞ ĐƯỢC PHÉP SỬ DỤNG -->
+                        <div class="mockup-ui">
+                            <div style="font-weight: 700; font-size: 0.85rem; color: var(--primary); margin-bottom: 8px;"><i class="fas fa-house-user"></i> Quản lý tab Cơ sở được phép sử dụng:</div>
                             <table class="ui-table">
                                 <thead>
                                     <tr>
                                         <th>Mã</th>
                                         <th>Tên cơ sở</th>
                                         <th>Số điện thoại</th>
-                                        <th>Phường/Xã</th>
                                         <th>Tỉnh/Thành phố</th>
+                                        <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -260,27 +222,137 @@
                                         <td><strong>TS</strong></td>
                                         <td>Trường Ví dụ</td>
                                         <td>0393393386</td>
-                                        <td>Xã Y Tý</td>
                                         <td>Lào Cai</td>
+                                        <td><span style="color: #EF4444; font-weight: bold;">✕</span></td>
                                     </tr>
                                     <tr>
                                         <td><strong>TS01</strong></td>
                                         <td>Chuyên biệt Từ Sơn - Trụ sở chính</td>
                                         <td>0369683345</td>
-                                        <td>Phường Từ Sơn</td>
                                         <td>Bắc Ninh</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>TS.TT2</strong></td>
-                                        <td>Chuyên biệt Từ Sơn - Chi nhánh Thuận Thành 2</td>
-                                        <td>0393393386</td>
-                                        <td>Phường Thuận Thành</td>
-                                        <td>Bắc Ninh</td>
+                                        <td><span style="color: #EF4444; font-weight: bold;">✕</span></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
 
+                <!-- PHẦN 2: CHƯƠNG TRÌNH ĐƯỢC CHIA SẺ TỪ CƠ SỞ KHÁC -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Phần 2</span> Chương trình được chia sẻ từ cơ sở khác</h3>
+                    <div class="doc-content">
+                        <p>Đây là các chương trình không thuộc quyền sở hữu của trung tâm bạn, nhưng được cơ sở khác chia sẻ để trung tâm có thể tiếp cận và sử dụng:</p>
+
+                        <p><strong>Bước 1: Truy cập từ màn hình chính</strong></p>
+                        <ul>
+                            <li>Tại màn hình quản lý kho dữ liệu, click chọn vào nút chức năng <strong style="color: var(--primary);">CHƯƠNG TRÌNH CAN THIỆP [TRUNG TÂM KHÁC CHIA SẺ]</strong>.</li>
+                        </ul>
+
+                        <!-- MOCKUP MENU TRUY CẬP CHIA SẺ -->
+                        <div class="mockup-ui" style="max-width: 420px; margin: 15px auto; text-align: center;">
+                            <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #CBD5E1; margin-bottom: 6px; font-weight: 700; color: #64748B; font-size: 0.8rem;">
+                                <i class="fas fa-book"></i> CHƯƠNG TRÌNH CAN THIỆP CỦA TRUNG TÂM
+                            </div>
+                            <div style="background: white; padding: 14px; border-radius: 10px; border: 2px solid #EF4444; font-weight: 800; color: #1E3A8A; box-shadow: 0 4px 12px rgba(239,68,68,0.15); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem;">
+                                <i class="fas fa-share-alt" style="color: #2563EB;"></i> CHƯƠNG TRÌNH CAN THIỆP [TRUNG TÂM KHÁC CHIA SẺ]
+                            </div>
+                        </div>
+
+                        <p><strong>Bước 2: Xem danh sách và chi tiết mục tiêu</strong></p>
+                        <ul>
+                            <li>Giao diện hiển thị danh sách các chương trình được chia sẻ (như <em>Portage, Giáo dục mầm non, ESDM...</em>) kèm thông tin biên tập viên và thống kê số độ tuổi, lĩnh vực, mục tiêu.</li>
+                        </ul>
+
+                        <!-- MOCKUP LƯỚI THẺ CHƯƠNG TRÌNH ĐƯỢC CHIA SẺ -->
+                        <div class="mockup-ui">
+                            <div class="ui-header-bar">
+                                <span>CHƯƠNG TRÌNH / CHƯƠNG TRÌNH TRUNG TÂM KHÁC CHIA SẺ</span>
+                                <span>1-9 / 9 <i class="fas fa-chevron-left"></i> <i class="fas fa-chevron-right"></i></span>
+                            </div>
+                            <div class="grid-shared-programs">
+                                <div class="program-card">
+                                    <div style="font-size: 0.85rem; font-weight: 800; color: #0F172A; margin-bottom: 6px;">
+                                        Chương trình can thiệp sớm Portage
+                                    </div>
+                                    <div style="display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
+                                        <span style="background: #FEF3C7; color: #92400E; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700;">Biên tập:Tổ chuyên gia VDDN</span>
+                                        <span style="background: #FEE2E2; color: #DC2626; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700;">PORTAGES</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; border-top: 1px solid #E2E8F0; padding-top: 8px; text-align: center; font-size: 0.75rem;">
+                                        <div><strong>7</strong><br><span style="font-size: 0.62rem; color: #64748B;">ĐỘ TUỔI</span></div>
+                                        <div style="border-left: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0;"><strong>6</strong><br><span style="font-size: 0.62rem; color: #64748B;">LĨNH VỰC</span></div>
+                                        <div><strong style="color: #DC2626;">618</strong><br><span style="font-size: 0.62rem; color: #64748B;">MỤC TIÊU</span></div>
+                                    </div>
+                                </div>
+                                <div class="program-card">
+                                    <div style="font-size: 0.85rem; font-weight: 800; color: #0F172A; margin-bottom: 6px;">
+                                        Giáo dục mầm non
+                                    </div>
+                                    <div style="display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
+                                        <span style="background: #FEF3C7; color: #92400E; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700;">Biên tập:Tổ chuyên gia VDDN</span>
+                                        <span style="background: #FEE2E2; color: #DC2626; padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700;">GDMN</span>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; border-top: 1px solid #E2E8F0; padding-top: 8px; text-align: center; font-size: 0.75rem;">
+                                        <div><strong>9</strong><br><span style="font-size: 0.62rem; color: #64748B;">ĐỘ TUỔI</span></div>
+                                        <div style="border-left: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0;"><strong>7</strong><br><span style="font-size: 0.62rem; color: #64748B;">LĨNH VỰC</span></div>
+                                        <div><strong style="color: #DC2626;">447</strong><br><span style="font-size: 0.62rem; color: #64748B;">MỤC TIÊU</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul>
+                            <li>Khi click vào chương trình, hệ thống hiển thị danh sách mục tiêu chi tiết được phân chia trực quan theo từng cột lĩnh vực chuyên sâu.</li>
+                        </ul>
+
+                        <!-- MOCKUP DANH SÁCH MỤC TIÊU PHÂN THEO CỘT LĨNH VỰC -->
+                        <div class="mockup-ui" style="background: white;">
+                            <div class="ui-header-bar">
+                                <span>CHƯƠNG TRÌNH TRUNG TÂM KHÁC CHIA SẺ / MỤC TIÊU</span>
+                                <span>Tìm kiếm...</span>
+                            </div>
+                            <div class="grid-columns-field">
+                                <div class="field-column-box">
+                                    <div style="font-weight: 800; font-size: 0.85rem; color: #1E3A8A; margin-bottom: 8px; border-bottom: 2px solid #E2E8F0; padding-bottom: 4px;">
+                                        Vận động thô (88)
+                                    </div>
+                                    <div class="goal-item-box">
+                                        <div style="display: flex; gap: 4px; margin-bottom: 4px;">
+                                            <span style="background: #2563EB; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 700; font-size: 0.68rem;">1</span>
+                                            <span style="background: #E0E7FF; color: #3730A3; padding: 1px 5px; border-radius: 3px; font-size: 0.68rem;">Vận động thô</span>
+                                        </div>
+                                        <div style="font-weight: 700; color: #0F172A; margin-bottom: 4px;">Tập lẫy</div>
+                                        <span style="background: #DCFCE7; color: #166534; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; font-weight: 700;">Đang hoạt động</span>
+                                    </div>
+                                </div>
+                                <div class="field-column-box">
+                                    <div style="font-weight: 800; font-size: 0.85rem; color: #1E3A8A; margin-bottom: 8px; border-bottom: 2px solid #E2E8F0; padding-bottom: 4px;">
+                                        Vận động tinh (59)
+                                    </div>
+                                    <div class="goal-item-box">
+                                        <div style="display: flex; gap: 4px; margin-bottom: 4px;">
+                                            <span style="background: #2563EB; color: white; padding: 1px 5px; border-radius: 3px; font-weight: 700; font-size: 0.68rem;">1</span>
+                                            <span style="background: #E0E7FF; color: #3730A3; padding: 1px 5px; border-radius: 3px; font-size: 0.68rem;">Vận động tinh</span>
+                                        </div>
+                                        <div style="font-weight: 700; color: #0F172A; margin-bottom: 4px;">Xoè và nắm bàn tay</div>
+                                        <span style="background: #DCFCE7; color: #166534; padding: 1px 4px; border-radius: 3px; font-size: 0.65rem; font-weight: 700;">Đang hoạt động</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PHẦN 3: CHÚ Ý -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Lưu ý</span> Nguyên tắc sử dụng chương trình</h3>
+                    <div class="doc-content">
+                        <p>Về cơ bản trong quá trình nghiệp vụ:</p>
+                        <ul>
+                            <li>Đối với cả chương trình do chính trung tâm tự tạo ra hoặc chương trình do cơ sở khác chia sẻ, giáo viên đều <strong>được sử dụng như nhau</strong> trong suốt quá trình lập kế hoạch và can thiệp hằng ngày cho trẻ.</li>
+                            <li><strong>Quy định chỉnh sửa:</strong> Đối với các chương trình <em>không thuộc quyền sở hữu của trung tâm</em> (chương trình được chia sẻ), giáo viên và quản lý chỉ có quyền <strong>xem và sử dụng</strong>, tuyệt đối <strong>không được sửa đổi</strong> nội dung bên trong chương trình đó.</li>
+                        </ul>
                     </div>
                 </div>
 
