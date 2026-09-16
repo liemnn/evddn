@@ -190,7 +190,7 @@
                         </div>
 
                         <notebook class="mt-2">
-                            <page name="working_time" string="THỜI GIAN HOẠT ĐỘNG">
+                            <page name="working_time" string="HOẠT ĐỘNG">
                                 <div class="p-3">
                                     <div class="fw-bold mb-3 text-muted"><i class="fa fa-calendar-check-o me-2"/> CÁC NGÀY LÀM VIỆC TRONG TUẦN</div>
                                     <div class="ekids_toggle_row d-flex justify-content-between align-items-center" style="max-width: 600px;">
@@ -226,7 +226,7 @@
                                 </div>
                             </page>
 
-                            <page name="config_lock" string="CẤU HÌNH KHÓA DỮ LIỆU">
+                            <page name="config_lock" string="KHÓA DỮ LIỆU">
                                 <div class="p-3">
                                     <div class="row mb-4">
                                         <div class="col-md-6">
@@ -297,7 +297,7 @@
                                 </div>
                             </page>
 
-                            <page name="config_lock" string="THIẾT LẬP THAM SỐ PHỤC VỤ HOẠT ĐỘNG CƠ SỞ">
+                            <page name="config_lock" string="THAM SỐ">
                                 <div class="p-3">
 
                                     <div class="row">
@@ -343,7 +343,7 @@
                             </page>
 
 
-                            <page name="branches" string="CƠ SỞ THÀNH VIÊN">
+                            <page name="branches" string="THÀNH VIÊN">
                                 <div class="p-3">
                                     <field name="coso_ids" widget="many2many_tags" placeholder="Chọn các cơ sở trực thuộc..."/>
                                 </div>

@@ -350,6 +350,47 @@
              </field>
          </record>
 
+        <record id="ekids_canthiep.coso_form_view_inherit" model="ir.ui.view">
+            <field name="name">ekids.coso.form.inherit.canthiep</field>
+            <field name="model">ekids.coso</field>
+            <!-- Tham chiếu chính xác ID của view gốc ở module ekids_core -->
+            <field name="inherit_id" ref="ekids_core.coso_form_view"/>
+            <field name="arch" type="xml">
+                <!-- Cách 1: Thêm vào cuối cùng của notebook -->
+                <xpath expr="//notebook" position="inside">
+                    <page name="chuongtrinh_canthiep" string="CHƯƠNG TRÌNH CAN THIỆP">
+                        <div class="p-3">
+                            <div class="fw-bold mb-3 text-muted">
+                                <i class="fa fa-book me-2"/> DANH SÁCH CHƯƠNG TRÌNH ÁP DỤNG TẠI CƠ SỞ
+                            </div>
+
+                            <div class="alert alert-info mb-3 small" role="alert">
+                                <i class="fa fa-info-circle me-1"/>
+                                Các giáo viên và chuyên gia thuộc cơ sở này chỉ được phép lên khung và lập kế hoạch can thiệp dựa trên các chương trình được chọn dưới đây.
+                            </div>
+
+                            <!-- Lựa chọn 1: Hiển thị dạng bảng (Tree/List) đầy đủ, rõ ràng -->
+                            <field name="chuongtrinh_ids">
+                                <list string="Chương trình áp dụng" editable="bottom">
+
+                                    <field name="name" string="Mã viết tắt" optional="show"/>
+                                    <field name="title" string="Tên chương trình"/>
+                                    <field name="tacgia"/>
+                                    <field name="desc" string="Mô tả" optional="show"/>
+                                </list>
+                            </field>
+
+                            <!-- Lựa chọn 2: Nếu muốn hiển thị dạng Tags hoặc Checkboxes gọn gàng thì thay bằng:
+                            <field name="chuongtrinh_ids" widget="many2many_checkboxes"/>
+                            hoặc:
+                            <field name="chuongtrinh_ids" widget="many2many_tags" placeholder="Chọn các chương trình áp dụng..."/>
+                            -->
+                        </div>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
 
 
 

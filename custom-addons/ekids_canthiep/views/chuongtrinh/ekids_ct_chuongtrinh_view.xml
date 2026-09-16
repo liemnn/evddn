@@ -170,7 +170,7 @@
                                                         color:red; border: 1px solid #BFDBFE; font-size: 12px;
                                                         padding: 3px 6px; border-radius: 4px;margin-right:10px;
                                                         font-weight: 700; letter-spacing: 0.3px;">
-                                                        <field name="coso_id"/>
+                                                        Biên tập:<field name="tacgia"/>
                                                     </span>
 
 
@@ -297,9 +297,9 @@
 
                             .kh-footer-info {
                                 display: flex;
-                                gap: 15px;
+                                gap: 12px;
                                 align-items: center;
-                                justify-content: space-between;
+                                justify-content: flex-start;
                                 width: 100%;
                                 flex-wrap: wrap;
                             }
@@ -315,8 +315,23 @@
                                 border: 1px solid #ffe4e6;
                                 gap: 6px;
                             }
-                            .kh-code-box .o_field_widget { width: 160px !important; }
+                            .kh-code-box .o_field_widget { width: 140px !important; }
                             .kh-code-box .o_input { font-weight: 900 !important; color: #e11d48 !important; font-size: 13.5px !important; }
+
+                            /* Khối hiển thị Tác giả */
+                            .kh-author-box {
+                                display: inline-flex;
+                                align-items: center;
+                                background: #faf5ff;
+                                padding: 6px 14px;
+                                border-radius: 8px;
+                                font-weight: 800;
+                                color: #7e22ce;
+                                border: 1px solid #f3e8ff;
+                                gap: 6px;
+                            }
+                            .kh-author-box .o_field_widget { width: 180px !important; }
+                            .kh-author-box .o_input { font-weight: 800 !important; color: #7e22ce !important; font-size: 13.5px !important; }
 
                             .kh-status-box {
                                 display: inline-flex;
@@ -328,6 +343,7 @@
                                 transition: all 0.2s ease;
                                 background: #f0fdf4;
                                 border: 1px solid #bbf7d0;
+                                margin-left: auto; /* Đẩy trạng thái sang sát mép phải */
                             }
                             .kh-status-box .o_field_widget { width: 140px !important; }
                             .kh-status-box .o_input {
@@ -374,8 +390,8 @@
                                 .kh-name-input .o_input { font-size: 16px !important; text-align: center; }
 
                                 .kh-footer-info { flex-direction: column; align-items: stretch; gap: 10px; }
-                                .kh-code-box, .kh-status-box { width: 100% !important; justify-content: center; }
-                                .kh-code-box .o_field_widget, .kh-status-box .o_field_widget { width: auto !important; flex-grow: 1; }
+                                .kh-code-box, .kh-author-box, .kh-status-box { width: 100% !important; justify-content: center; margin-left: 0 !important; }
+                                .kh-code-box .o_field_widget, .kh-author-box .o_field_widget, .kh-status-box .o_field_widget { width: auto !important; flex-grow: 1; }
                             }
 
                             /* 3. Vùng nội dung mô tả */
@@ -402,11 +418,19 @@
                                     </div>
 
                                     <div class="kh-footer-info">
+                                        <!-- Mã / Tên viết tắt -->
                                         <div class="kh-code-box">
                                             <i class="fa fa-barcode"></i> TÊN VIẾT TẮT:
                                             <field name="name" nolabel="1" placeholder="Nhập tên viết tắt..."/>
                                         </div>
 
+                                        <!-- Tác giả -->
+                                        <div class="kh-author-box">
+                                            <i class="fa fa-user-pen"></i> TÁC GIẢ:
+                                            <field name="tacgia" nolabel="1" placeholder="Tác giả / Viện nghiên cứu..."/>
+                                        </div>
+
+                                        <!-- Trạng thái -->
                                         <div class="kh-status-box">
                                             <i class="fa fa-toggle-on"></i> TRẠNG THÁI:
                                             <field name="trangthai" nolabel="1" class="fw-bold"/>
@@ -435,27 +459,15 @@
                                     <field name="muctieu_ids" context="{'default_chuongtrinh_id': id}"/>
                                 </page>
 
-                                <!-- TAB CƠ SỞ CHIA SẺ -->
                                 <!-- TAB CƠ SỞ ĐƯỢC CHIA SẺ -->
                                 <page name="coso_ids" string="CƠ SỞ ĐƯỢC PHÉP SỬ DỤNG">
                                     <field name="coso_ids" nolabel="1">
                                         <list string="Danh sách cơ sở được chia sẻ" editable="bottom">
-                                            <!-- 1. Mã cơ sở -->
                                             <field name="ma" string="Mã" style="width: 10%;" class="fw-bold text-danger"/>
-
-                                            <!-- 2. Tên đầy đủ của cơ sở (cho phép text-wrap không lo bị cắt ngắn) -->
                                             <field name="name" string="Tên cơ sở" class="fw-bold text-wrap"/>
-
-                                            <!-- 3. Số điện thoại -->
                                             <field name="dienthoai" string="Số điện thoại" style="width: 15%;"/>
-
-                                            <!-- 4. Tỉnh / Thành phố -->
-
-
-                                            <!-- 5. Phường / Xã (ràng buộc lọc theo tỉnh đã chọn) -->
+                                            <field name="dm_tinh_id" string="Tỉnh/Thành phố" options="{'no_open': True, 'no_create': True}" style="width: 18%;"/>
                                             <field name="dm_xa_id" string="Phường/Xã" domain="[('dm_tinh_id', '=', dm_tinh_id)]" options="{'no_open': True, 'no_create': True}" style="width: 18%;"/>
-
-                                             <field name="dm_tinh_id" string="Tỉnh/Thành phố" options="{'no_open': True, 'no_create': True}" style="width: 18%;"/>
                                         </list>
                                     </field>
                                 </page>
@@ -466,6 +478,5 @@
                 </form>
             </field>
         </record>
-
     </data>
 </odoo>

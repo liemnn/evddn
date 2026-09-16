@@ -28,6 +28,11 @@ class CoSo(models.Model):
 
     is_theodoi_kehoach = fields.Boolean(compute="_compute_is_theodoi_kehoach")
 
+    chuongtrinh_ids = fields.Many2many(comodel_name="ekids.ct_chuongtrinh",
+                                relation="ekids_ct_chuongtrinh4coso_ids_rel",
+                                column1="coso_id",
+                                column2="ct_chuongtrinh_id"
+                                , string="Các chương trình áp dụng")
 
 
     def _compute_is_ql_chuongtrinh(self):
