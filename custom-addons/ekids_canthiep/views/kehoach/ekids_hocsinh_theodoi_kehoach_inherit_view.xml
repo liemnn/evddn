@@ -44,6 +44,26 @@
                         context="{'default_context_type':'0'}"
                         title="Xem toàn bộ [Kế hoạch] của trẻ"/>
 
+                <field name="kehoach_thangtruoc"
+                       string="Tháng trước"
+                       widget="badge"
+                       decoration-success="kehoach_thangtruoc == 'Có'"
+                       decoration-danger="kehoach_thangtruoc == 'Không'"/>
+
+                <field name="kehoach_thangnay"
+                       string="Tháng này"
+                       widget="badge"
+                       decoration-success="kehoach_thangnay == 'Có'"
+                       decoration-danger="kehoach_thangnay == 'Không'"/>
+
+                <field name="kehoach_thangsau"
+                       string="Tháng sau"
+                       widget="badge"
+                       decoration-success="kehoach_thangsau == 'Có'"
+                       decoration-danger="kehoach_thangsau == 'Không'"/>
+
+
+
 
 
             </list>

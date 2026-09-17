@@ -1,5 +1,6 @@
 from odoo import models, fields, api, exceptions
 from datetime import  timedelta,date,datetime
+from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError
 
 
@@ -81,7 +82,53 @@ class HocSinhInherit(models.Model
 
     ngay_conlai_kehoach = fields.Integer(compute="_compute_ngay_conlai_kehoach",string="Ngày còn lại [Kế hoạch]")
 
+    kehoach_thangnay = fields.Char(compute="_compute_kehoach_thang", string="Có kế hoạch tháng này")
+    kehoach_thangtruoc = fields.Char(compute="_compute_kehoach_thang", string="Có kế hoạch tháng trước")
+    kehoach_thangsau = fields.Char(compute="_compute_kehoach_thang", string="Có kế hoạch tháng sau")
 
+    def _compute_kehoach_thang(self):
+        today = fields.Date.today()
+
+        # 1. Tháng này: từ ngày 01 đến ngày 15
+        dau_thang_nay = today.replace(day=1)
+        ngay15_thang_nay = today.replace(day=15)
+
+        # 2. Tháng trước: từ ngày 01 đến ngày 15 tháng trước
+        dau_thang_truoc = dau_thang_nay - relativedelta(months=1)
+        ngay15_thang_truoc = dau_thang_truoc.replace(day=15)
+
+        # 3. Tháng sau: từ ngày 01 đến ngày 15 tháng sau
+        dau_thang_sau = dau_thang_nay + relativedelta(months=1)
+        ngay15_thang_sau = dau_thang_sau.replace(day=15)
+
+        for hs in self:
+            has_thangtruoc = False
+            has_thangnay = False
+            has_thangsau = False
+
+            for kh in hs.kehoach_ids:
+                if not kh.tu_ngay or not kh.den_ngay:
+                    continue
+
+                # Check giao cắt với kỳ [01 -> 15] tháng trước
+                if not has_thangtruoc and (kh.tu_ngay <= ngay15_thang_truoc and kh.den_ngay >= dau_thang_truoc):
+                    has_thangtruoc = True
+
+                # Check giao cắt với kỳ [01 -> 15] tháng này
+                if not has_thangnay and (kh.tu_ngay <= ngay15_thang_nay and kh.den_ngay >= dau_thang_nay):
+                    has_thangnay = True
+
+                # Check giao cắt với kỳ [01 -> 15] tháng sau
+                if not has_thangsau and (kh.tu_ngay <= ngay15_thang_sau and kh.den_ngay >= dau_thang_sau):
+                    has_thangsau = True
+
+                # Thoát vòng lặp sớm nếu cả 3 kỳ đều đã có kế hoạch
+                if has_thangtruoc and has_thangnay and has_thangsau:
+                    break
+
+            hs.kehoach_thangtruoc = "Có" if has_thangtruoc else "Không"
+            hs.kehoach_thangnay = "Có" if has_thangnay else "Không"
+            hs.kehoach_thangsau = "Có" if has_thangsau else "Không"
 
 
     def _compute_ngay_conlai_kehoach(self):
