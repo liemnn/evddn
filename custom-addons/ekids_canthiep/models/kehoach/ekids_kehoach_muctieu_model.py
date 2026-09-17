@@ -174,6 +174,67 @@ class KeHoach2MucTieu(models.Model):
     is_canthiep_readonly = fields.Boolean(compute="_compute_is_canthiep_readonly")
     is_kiemduyet_readonly = fields.Boolean(compute="_compute_is_kiemduyet_readonly")
 
+    solan_thu = fields.Integer(string="Số làn thử",default=10)
+    solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
+    tyle_thu = fields.Integer(string="Tỷ lệ %",compute="_compute_tyle_thu")
+
+    @api.constrains('solan_thu', 'solan_thu_dat')
+    def _check_solan_thu_hop_le(self):
+        for rec in self:
+            # Nếu đã nhập số lần đạt hoặc số lần thử thì bắt buộc số lần thử > 0
+            if rec.solan_thu < 0 or rec.solan_thu_dat < 0:
+                raise ValidationError("Số lần thử và số lần đạt (+) không được là số âm!")
+
+            if rec.solan_thu == 0 and rec.solan_thu_dat > 0:
+                raise ValidationError("Tổng số lần thử phải lớn hơn 0 khi đã có số lần đạt (+)! ")
+
+            if rec.solan_thu_dat > rec.solan_thu:
+                raise ValidationError(
+                    f"Dữ liệu không hợp lệ!\n"
+                    f"• Số lần đạt (+): {rec.solan_thu_dat}\n"
+                    f"• Tổng số lần thử: {rec.solan_thu}\n\n"
+                    f"Số lần đạt (+) không được lớn hơn tổng số lần thử."
+                )
+
+    # 2. CẢNH BÁO TỨC THÌ (ONCHANGE) KHI VỪA NHẬP TRÊN GIAO DIỆN
+    @api.onchange('solan_thu', 'solan_thu_dat')
+    def _onchange_check_solan_thu(self):
+        if self.solan_thu < 0:
+            self.solan_thu = 0
+            return {
+                'warning': {
+                    'title': 'Cảnh báo nhập liệu',
+                    'message': 'Tổng số lần thử không thể là số âm!'
+                }
+            }
+
+        if self.solan_thu_dat < 0:
+            self.solan_thu_dat = 0
+            return {
+                'warning': {
+                    'title': 'Cảnh báo nhập liệu',
+                    'message': 'Số lần đạt (+) không thể là số âm!'
+                }
+            }
+
+        if self.solan_thu > 0 and self.solan_thu_dat > self.solan_thu:
+            return {
+                'warning': {
+                    'title': 'Số liệu chưa hợp lệ',
+                    'message': f'Số lần đạt ({self.solan_thu_dat}) đang vượt quá tổng số lần thử ({self.solan_thu})!'
+                }
+            }
+
+    @api.depends("solan_thu","solan_thu_dat")
+    def _compute_tyle_thu(self):
+        for record in self:
+            if record.solan_thu >0:
+                tyle = (record.solan_thu_dat/record.solan_thu)*100
+            else:
+                tyle=0
+            record.tyle_thu = tyle
+
+
 
     def _compute_is_bientap_temp(self):
 
@@ -634,7 +695,12 @@ class KeHoach2MucTieu(models.Model):
                         and ngay<= today):
                        if ketqua2muctieu.trangthai == '0':
                            if max_lientiep_dat < int(soluong_dat_lientiep_str):
-                               setattr(ketqua2muctieu,'trangthai',last_ketqua2muctieu.trangthai)
+                               ketqua2muctieu.write({
+                                   'trangthai': last_ketqua2muctieu.trangthai,
+                                   'solan_thu_dat': last_ketqua2muctieu.solan_thu_dat,
+                               })
+
+
 
 
         else:
@@ -817,6 +883,20 @@ class KeHoach2MucTieu(models.Model):
             return True
         else:
             return False
+
+    def action_capnhat_tyle_thu(self):
+        self.ensure_one()
+        view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_bientap_tyle_thu_form').id
+        return {
+            'name': 'Kết quả [Thử] trước khi lập kế hoạch',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach_muctieu',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'views': [(view_id, 'form')],
+            'target': 'new',
+            'context': self.env.context,
+        }
 
 
 

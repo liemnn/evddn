@@ -213,6 +213,9 @@
                                 <field name="loai"/>
 
                                 <field name="is_date_status" invisible="1"/>
+                                <field name="solan_thu" invisible="1"/>
+                                <field name="solan_thu_dat" invisible="1"/>
+                                <field name="tyle_thu" invisible="1"/>
                             </list>
                         </field>
 
@@ -964,6 +967,138 @@
 
                     </div>
                 </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ekids_canthiep.kehoach_muctieu_bientap_tyle_thu_form" model="ir.ui.view">
+        <field name="name">ekids.kehoach_muctieu.capnhat_tyle.form</field>
+        <field name="model">ekids.kehoach_muctieu</field>
+        <field name="priority">999</field>
+        <field name="arch" type="xml">
+            <form string="Kết quả thử nghiệm" class="o_micro_trial_dialog">
+                <sheet class="p-3 bg-white">
+                    <style>
+                        /* Thu gọn popup ôm vừa vặn nội dung */
+                        .modal-dialog:has(.o_micro_trial_dialog) {
+                            max-width: 440px !important;
+                            margin: 10vh auto !important;
+                        }
+
+                        /* Tắt mũi tên tăng giảm số mặc định của trình duyệt */
+                        .o_micro_trial_dialog input::-webkit-outer-spin-button,
+                        .o_micro_trial_dialog input::-webkit-inner-spin-button {
+                            -webkit-appearance: none;
+                            margin: 0;
+                        }
+                        .o_micro_trial_dialog input[type=number] {
+                            -moz-appearance: textfield;
+                        }
+
+                        /* 1. Ô SỐ LẦN ĐẠT (+) */
+                        .box-trial-green input {
+                            font-size: 26px !important;
+                            font-weight: 800 !important;
+                            text-align: center !important;
+                            width: 90px !important;
+                            height: 52px !important;
+                            color: #16A34A !important;
+                            background: #F0FDF4 !important;
+                            border: 1.5px solid #86EFAC !important;
+                            border-radius: 8px !important;
+                            padding: 0 !important;
+                        }
+
+                        /* 2. Ô TỔNG LẦN THỬ */
+                        .box-trial-gray input {
+                            font-size: 26px !important;
+                            font-weight: 800 !important;
+                            text-align: center !important;
+                            width: 90px !important;
+                            height: 52px !important;
+                            color: #1E293B !important;
+                            background: #FFFFFF !important;
+                            border: 1.5px solid #CBD5E1 !important;
+                            border-radius: 8px !important;
+                            padding: 0 !important;
+                        }
+
+                        /* 3. HUY HIỆU TỶ LỆ KÈM DẤU % */
+                        .badge-pill-capsule .o_field_widget {
+                            display: inline-flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            font-size: 19px !important;
+                            font-weight: 800 !important;
+                            min-width: 76px !important;
+                            height: 44px !important;
+                            border-radius: 24px !important;
+                            border: none !important;
+                            margin: 0 !important;
+                            padding: 0 10px !important;
+                        }
+
+                        /* Tự động gắn thêm ký hiệu % ngay sau số tỷ lệ */
+                        .badge-pill-capsule .o_field_widget::after {
+                            content: "%";
+                            font-size: 15px;
+                            font-weight: 700;
+                            margin-left: 2px;
+                        }
+                    </style>
+
+                    <!-- DÒNG HIỂN THỊ CHÍNH CĂN GIỮA -->
+                    <div class="d-flex align-items-center justify-content-center pt-2 pb-1" style="gap: 12px;">
+
+                        <!-- Cột 1: SỐ LẦN ĐẠT (+) -->
+                        <div class="d-flex flex-column align-items-center" style="width: 90px;">
+                            <span class="fw-bold text-success text-uppercase mb-1" style="font-size: 11px; letter-spacing: 0.2px;">
+                                Số lần đạt(+)
+                            </span>
+                            <field name="solan_thu_dat" nolabel="1" class="box-trial-green"/>
+                        </div>
+
+                        <!-- Dấu gạch chéo / -->
+                        <div class="text-secondary fw-light d-flex align-items-center justify-content-center"
+                             style="font-size: 32px; height: 52px; margin-top: 18px; user-select: none; color: #94A3B8 !important;">
+                            /
+                        </div>
+
+                        <!-- Cột 2: SỐ LẦN THỬ (Đổi màu chữ rõ nét: #475569) -->
+                        <div class="d-flex flex-column align-items-center" style="width: 90px;">
+                            <span class="fw-bold text-uppercase mb-1" style="font-size: 11px; letter-spacing: 0.2px; color: #475569 !important;">
+                                Số lần thử
+                            </span>
+                            <field name="solan_thu" nolabel="1" class="box-trial-gray"/>
+                        </div>
+
+                        <!-- Mũi tên xám -> -->
+                        <div class="d-flex align-items-center justify-content-center"
+                             style="font-size: 18px; height: 52px; margin-top: 18px;">
+                            <i class="fa fa-arrow-right" style="color: #64748B !important;"/>
+                        </div>
+
+                        <!-- Cột 3: TỶ LỆ (Đổi màu chữ rõ nét: #475569) -->
+                        <div class="d-flex flex-column align-items-center badge-pill-capsule" style="width: 76px;">
+                            <span class="fw-bold text-uppercase mb-1" style="font-size: 11px; letter-spacing: 0.2px; color: #475569 !important;">
+                                Đạt tỷ lệ
+                            </span>
+                            <div class="d-flex align-items-center justify-content-center" style="height: 52px;">
+                                <field name="tyle_thu"
+                                       nolabel="1"
+                                       readonly="1"
+                                       widget="badge"
+                                       decoration-success="tyle_thu &gt;= 80"
+                                       decoration-warning="tyle_thu &lt; 80"/>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+
+                <footer class="d-flex justify-content-center gap-2 pb-3 pt-0 border-0 bg-white">
+                    <button string="Lưu" type="object" name="write" class="btn btn-primary fw-bold px-4 py-1.5 shadow-sm" special="save"/>
+                    <button string="Đóng" class="btn btn-light border px-3 py-1.5" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>

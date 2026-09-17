@@ -86,7 +86,7 @@
                             background-color: #ffffff !important;
                         }
 
-                        /* HÀNG TRÊN: Cơ chế dòng chảy tự động Flexbox bọc dòng động */
+                        /* HÀNG TRÊN */
                         .goal-top-row {
                             width: 100%;
                             display: flex;
@@ -94,28 +94,31 @@
                             align-items: center;
                             justify-content: flex-start;
                             margin-bottom: 8px;
-                            gap: 12px;
+                            gap: 10px;
                         }
 
                         .goal-title-cell {
-                            font-size: 16px !important;
+                            font-size: 15.5px !important;
                             line-height: 1.35;
                             display: inline-block;
                             color: #000000 !important;
+                            flex: 1;
+                            min-width: 300px;
                         }
 
                         .goal-note-text {
-                            font-size: 15px !important;
+                            font-size: 14px !important;
                             font-weight: normal !important;
                             font-style: italic;
                             color: #000000 !important;
-                            margin-top: 4px;
+                            margin-top: 3px;
                             display: block;
                         }
 
                         .goal-meta-cell {
                             display: flex;
                             flex-wrap: wrap;
+                            align-items: center;
                             gap: 6px;
                             margin-left: auto;
                         }
@@ -124,14 +127,27 @@
                             display: inline-block;
                             background: transparent !important;
                             border: 1px dashed #000000 !important;
-                            padding: 2px 8px;
+                            padding: 2px 7px;
                             border-radius: 4px;
-                            font-size: 14px !important;
+                            font-size: 13px !important;
                             color: #000000 !important;
                             white-space: nowrap;
                         }
 
-                        /* HÀNG DƯỚI: Tách biệt khối theo dõi chạy phẳng ngang 100% */
+                        /* 🌟 BADGE DỮ LIỆU BAN ĐẦU */
+                        .meta-baseline-tag {
+                            display: inline-block;
+                            background-color: #f5f5f5 !important;
+                            border: 1px solid #000000 !important;
+                            padding: 1px 7px;
+                            border-radius: 3px;
+                            font-size: 12.5px !important;
+                            color: #000000 !important;
+                            white-space: nowrap;
+                            font-weight: bold;
+                        }
+
+                        /* HÀNG DƯỚI */
                         .goal-bottom-row {
                             width: 100%;
                             display: flex;
@@ -143,24 +159,39 @@
 
                         .tracking-container-row {
                             display: flex;
-                            align-items: flex-start;
-                            justify-content: flex-start;
+                            flex-direction: column;
+                            gap: 4px;
                             width: 100%;
+                        }
+
+                        /* 🌟 HÀNG TIÊU ĐỀ THEO DÕI VÀ DỮ LIỆU BAN ĐẦU CÙNG HÀNG */
+                        .tracking-header-row {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            width: 100%;
+                            margin-bottom: 2px;
+                        }
+
+                        .tracking-header-label {
+                            font-size: 13.5px !important;
+                            font-weight: bold;
+                            color: #000000 !important;
                         }
 
                         .day-boxes-horizontal-flow {
                             display: flex;
                             flex-wrap: wrap;
-                            gap: 4px;
-                            flex-grow: 1;
+                            gap: 3px;
+                            width: 100%;
                         }
 
-                        /* TỐI ƯU Ô CHẤM ĐIỂM SẮC NÉT THEO NGÀY THỰC TẾ */
+                        /* Ô CHẤM ĐIỂM 3 TẦNG ĐỒNG BỘ */
                         .day-tracking-box {
-                            width: 32px;
-                            height: 40px;
-                            border: 1px dashed #000000 !important;
-                            border-radius: 4px;
+                            width: 28px;
+                            height: 46px;
+                            border: 1px solid #000000 !important;
+                            border-radius: 2px;
                             display: flex;
                             flex-direction: column;
                             justify-content: space-between;
@@ -170,15 +201,15 @@
                         }
 
                         .day-num-indicator {
-                            font-size: 11px !important;
+                            font-size: 9.5px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
-                            line-height: 1.2;
-                            background-color: #ffffff !important;
+                            line-height: 14px;
+                            background-color: #f0f0f0 !important;
                             width: 100%;
                             text-align: center;
-                            padding: 1px 0;
                             border-bottom: 1px solid #000000 !important;
+                            height: 14px;
                         }
 
                         .day-write-space {
@@ -187,9 +218,22 @@
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 16px !important;
+                            font-size: 12px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
+                            border-bottom: 1px dotted #000000 !important;
+                        }
+
+                        .day-rate-space {
+                            height: 13px;
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 8.5px !important;
+                            font-weight: bold !important;
+                            color: #000000 !important;
+                            line-height: 1;
                         }
 
                         /* Lớp tô xám nhẹ cho ngày nghỉ, tương lai */
@@ -197,32 +241,17 @@
                             background-color: #eeeeee !important;
                         }
                         .box-print-rest .day-num-indicator {
-                            background-color: #eeeeee !important;
+                            background-color: #dddddd !important;
                             color: #000000 !important;
                         }
-                        .box-print-rest .day-write-space {
-                            color: #000000 !important;
-                            font-size: 14px !important;
-                            font-weight: bold !important;
-                        }
 
-                        /* NỀN TRẮNG, VIỀN ĐEN, CHỮ ĐEN */
-                        .box-print-dat { background-color: #ffffff !important; border-color: #000000 !important; }
-                        .box-print-dat .day-write-space { color: #000000 !important; }
-
-                        .box-print-hinhthanh { background-color: #ffffff !important; border-color: #000000 !important; }
-                        .box-print-hinhthanh .day-write-space { color: #000000 !important; }
-
-                        .box-print-chuadat { background-color: #ffffff !important; border-color: #000000 !important; }
-                        .box-print-chuadat .day-write-space { color: #000000 !important; }
-
-                        .lbl-summary-chuadat { color: #000000 !important; font-weight: bold !important; font-size:15px !important; }
-                        .lbl-summary-hinhthanh { color: #000000 !important; font-weight: bold !important; font-size:15px !important; }
-                        .lbl-summary-dat { color: #000000 !important; font-weight: bold !important; font-size:15px !important; }
+                        .lbl-summary-chuadat { color: #000000 !important; font-weight: bold !important; font-size:14.5px !important; }
+                        .lbl-summary-hinhthanh { color: #000000 !important; font-weight: bold !important; font-size:14.5px !important; }
+                        .lbl-summary-dat { color: #000000 !important; font-weight: bold !important; font-size:14.5px !important; }
 
                         .goal-summary-badge-row {
                             width: 100%;
-                            font-size: 15px !important;
+                            font-size: 14px !important;
                             color: #000000 !important;
                             border-top: 1px dashed #000000 !important;
                             padding-top: 5px;
@@ -230,10 +259,9 @@
                             text-align: left;
                         }
 
-                        /* CSS CHO ĐÁNH GIÁ VÀ GHI CHÚ CHUYÊN MÔN */
                         .goal-kiemduyet-row {
                             width: 100%;
-                            font-size: 14.5px !important;
+                            font-size: 14px !important;
                             color: #000000 !important;
                             border-top: 1px dashed #000000 !important;
                             padding-top: 5px;
@@ -250,14 +278,14 @@
                             padding: 1px 8px;
                             border-radius: 3px;
                             font-weight: bold !important;
-                            font-size: 13.5px !important;
+                            font-size: 13px !important;
                             text-transform: uppercase;
                             background-color: #f5f5f5 !important;
                         }
 
                         .goal-kiemduyet-ghichu {
                             width: 100%;
-                            font-size: 14px !important;
+                            font-size: 13.5px !important;
                             font-style: italic;
                             color: #000000 !important;
                             padding-left: 8px;
@@ -271,11 +299,8 @@
                             .goal-block-item { border: 1px solid #000000 !important; }
                             .day-tracking-box { border: 1px solid #000000 !important; }
                             .box-print-rest { background-color: #eeeeee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-dat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-hinhthanh { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .box-print-chuadat { background-color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .day-write-space { color: #000000 !important; font-weight: bold !important; }
                             .meta-label-tag { border: 1px dashed #000000 !important; color: #000000 !important; }
+                            .meta-baseline-tag { border: 1px solid #000000 !important; background-color: #f5f5f5 !important; }
                             .tag-kiemduyet-status { border: 1px solid #000000 !important; background-color: #f5f5f5 !important; }
                         }
                     </style>
@@ -315,20 +340,16 @@
 
                         <t t-set="lv_list" t-value="o.kehoach_linhvuc_ids"/>
                         <t t-set="total_lv" t-value="len(lv_list)"/>
-                        <!-- Đảm bảo tối thiểu 7 dòng danh sách lĩnh vực để cân đối với thông tin học sinh bên trái -->
                         <t t-set="max_rows" t-value="total_lv if total_lv &gt; 7 else 7"/>
 
                         <table class="profile-grid-table">
-                            <!-- HÀNG 1: Tiêu đề lớn LĨNH VỰC CAN THIỆP -->
                             <tr>
                                 <td class="col-lbl-left">Họ và tên HS:</td>
                                 <td class="col-val-left text-bold"><span t-field="o.hocsinh_id.name"/></td>
                                 <td colspan="2" style="font-weight: bold; text-align: center; font-size: 14px; background-color: #eeeeee; text-transform: uppercase; color: #000000;">
-
+                                    LĨNH VỰC CAN THIỆP
                                 </td>
                             </tr>
-
-                            <!-- HÀNG 2: 2 Tiêu đề con (Lĩnh vực | Độ tuổi phát triển tương ứng) -->
                             <tr>
                                 <td class="col-lbl-left">Tuổi thực tế:</td>
                                 <td class="col-val-left"><span t-field="o.hocsinh_id.tuoi"/></td>
@@ -340,7 +361,6 @@
                                 </td>
                             </tr>
 
-                            <!-- CÁC HÀNG DANH SÁCH LĨNH VỰC VÀ THÔNG TIN TRẺ TIẾP THEO -->
                             <t t-foreach="range(max_rows)" t-as="idx">
                                 <t t-set="current_lv" t-value="lv_list[idx] if idx &lt; total_lv else False"/>
                                 <tr>
@@ -375,12 +395,10 @@
                                         <td class="col-val-left" style="background:#ffffff;"></td>
                                     </t>
 
-                                    <!-- Cột dữ liệu Lĩnh vực -->
                                     <td class="col-linhvuc">
                                         <span t-if="current_lv" t-field="current_lv.linhvuc_id.name"/>
                                         <span t-if="not current_lv">....</span>
                                     </td>
-                                    <!-- Cột dữ liệu Độ tuổi -->
                                     <td class="col-tuoi">
                                         <span t-if="current_lv" t-field="current_lv.tuoi_id.name"/>
                                         <span t-if="not current_lv">...</span>
@@ -414,22 +432,16 @@
                             </tr>
                         </table>
 
-
-                        <!-- ======================================================================== -->
-                        <!-- ================= TRANG 2 TRỞ ĐI: HỆ THỐNG MỤC TIÊU VÀ NHẬT KÝ THEO DÕI ================= -->
-                        <!-- ======================================================================== -->
+                        <!-- ================= TRANG 2 TRỞ ĐI ================= -->
                         <div class="tracking-page-section">
                             <div class="tracking-table-title">Hệ thống Mục tiêu can thiệp và Nhật ký đánh giá mức độ thành thục</div>
 
-                            <!-- Vòng lặp cha: Quét qua từng Lĩnh vực -->
                             <t t-foreach="o.kehoach_linhvuc_ids" t-as="lv">
-
-                                <!-- Vòng lặp con: Quét qua từng Mục tiêu con thuộc lĩnh vực -->
                                 <t t-foreach="lv.kehoach_muctieu_ids" t-as="muctieu">
 
                                     <div class="goal-block-item">
 
-                                        <!-- HÀNG TRÊN -->
+                                        <!-- HÀNG TRÊN: TIÊU ĐỀ + METADATA -->
                                         <div class="goal-top-row">
                                             <div class="goal-title-cell">
                                                 <strong>Mục tiêu <t t-out="muctieu_index + 1"/>:</strong> <span t-field="muctieu.name"/>
@@ -445,49 +457,67 @@
                                             </div>
                                         </div>
 
-                                        <!-- HÀNG DƯỚI: THỂ HIỆN DỮ LIỆU ĐỒNG BỘ THEO DÒNG PHẲNG NGANG -->
+                                        <!-- HÀNG DƯỚI: THEO DÕI HÀNG NGANG -->
                                         <div class="goal-bottom-row">
 
                                             <div class="tracking-container-row">
+                                                <!-- 🌟 HÀNG TIÊU ĐỀ THEO DÕI & DỮ LIỆU BAN ĐẦU (NẰM CÙNG HÀNG) -->
+                                                <div class="tracking-header-row">
+                                                    <div class="tracking-header-label">
+                                                        Theo dõi
+                                                        <span style="font-weight: normal;">
+                                                            (Số lần thử là <strong style="color:red;"><span t-field="muctieu.solan_thu"/></strong> lần)
+                                                        </span>
+                                                    </div>
+
+                                                    <!-- 🌟 DỮ LIỆU BAN ĐẦU ĐƯỢC CHUYỂN SANG BÊN PHẢI CÙNG HÀNG -->
+                                                    <div class="meta-baseline-tag">
+                                                        Dữ liệu ban đầu: Đạt (+)
+                                                        <strong><span t-field="muctieu.solan_thu_dat"/></strong>/<strong><span t-field="muctieu.solan_thu"/></strong> lần
+                                                        <t t-if="muctieu.tyle_thu">
+                                                            (<strong><span t-field="muctieu.tyle_thu"/>%</strong>)
+                                                        </t>
+                                                    </div>
+                                                </div>
 
                                                 <div class="day-boxes-horizontal-flow">
-                                                    <!-- TRƯỜNG HỢP 1: ĐÃ KHỞI TẠO DỮ LIỆU CAN THIỆP THỰC TẾ -->
                                                     <t t-if="muctieu.ketqua2muctieu_ids">
                                                         <t t-foreach="muctieu.ketqua2muctieu_ids" t-as="kq">
 
                                                             <t t-set="is_future_status" t-value="kq.is_date_status == '1'"/>
                                                             <t t-set="rest_class" t-value="(kq.loai in ['0', '-1'] or is_future_status) and 'box-print-rest' or ''"/>
 
-                                                            <!-- Xác định class màu Pastel động tương ứng cho ngày đi học -->
-                                                            <t t-set="color_class" t-value="''"/>
-                                                            <t t-if="not is_future_status and kq.loai == '1'">
-                                                                <t t-if="kq.trangthai == '1'"><t t-set="color_class" t-value="'box-print-dat'"/></t>
-                                                                <t t-elif="kq.trangthai == '2'"><t t-set="color_class" t-value="'box-print-hinhthanh'"/></t>
-                                                                <t t-elif="kq.trangthai == '-1'"><t t-set="color_class" t-value="'box-print-chuadat'"/></t>
-                                                            </t>
-
-                                                            <div t-attf-class="day-tracking-box #{rest_class} #{color_class}">
+                                                            <div t-attf-class="day-tracking-box #{rest_class}">
+                                                                <!-- Tầng 1: Ngày/Tháng -->
                                                                 <span class="day-num-indicator">
                                                                     <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
                                                                 </span>
+
+                                                                <!-- Tầng 2: Số lần đạt (hoặc N khi nghỉ) -->
                                                                 <div class="day-write-space">
                                                                     <t t-if="is_future_status"></t>
                                                                     <t t-else="">
                                                                         <t t-if="kq.loai == '-1'">N</t>
                                                                         <t t-elif="kq.loai == '0'"></t>
                                                                         <t t-else="">
-                                                                            <t t-if="kq.trangthai == '1'">+</t>
-                                                                            <t t-if="kq.trangthai == '2'">+/-</t>
-                                                                            <t t-if="kq.trangthai == '-1'">-</t>
-                                                                            <t t-if="kq.trangthai == '0' or not kq.trangthai"></t>
+                                                                            <t t-if="kq.trangthai != '0' and kq.solan_thu &gt; 0">
+                                                                                <span t-field="kq.solan_thu_dat"/>
+                                                                            </t>
                                                                         </t>
+                                                                    </t>
+                                                                </div>
+
+                                                                <!-- Tầng 3: Tỷ lệ % -->
+                                                                <div class="day-rate-space">
+                                                                    <t t-if="not is_future_status and kq.loai == '1' and kq.trangthai != '0' and kq.solan_thu &gt; 0">
+                                                                        <span><t t-esc="kq.tyle_thu"/>%</span>
                                                                     </t>
                                                                 </div>
                                                             </div>
                                                         </t>
                                                     </t>
 
-                                                    <!-- TRƯỜNG HỢP 2: FALLBACK KHI CHƯA KHỞI TẠO -->
+                                                    <!-- FALLBACK KHI CHƯA CÓ KẾT QUẢ -->
                                                     <t t-else="">
                                                         <t t-set="total_days" t-value="int(o.songay or 30)"/>
                                                         <t t-foreach="range(total_days)" t-as="day_idx">
@@ -504,13 +534,14 @@
                                                                     <t t-if="is_fallback_future"></t>
                                                                     <t t-elif="is_fallback_sunday">N</t>
                                                                 </div>
+                                                                <div class="day-rate-space"></div>
                                                             </div>
                                                         </t>
                                                     </t>
                                                 </div>
                                             </div>
 
-                                            <!-- DÒNG 1: Khối hiển thị kết quả can thiệp biên dưới -->
+                                            <!-- DÒNG 1: TỔNG KẾT KẾT QUẢ CAN THIỆP -->
                                             <div class="goal-summary-badge-row">
                                                 <span class="text-bold">Kết quả <strong><span t-out="o.songay"/></strong> ngày can thiệp của giáo viên:</span>
                                                 Chưa đạt (-): <span class="lbl-summary-chuadat"><span t-field="muctieu.ketqua_khongdat"/></span> |
@@ -518,7 +549,7 @@
                                                 Đạt (+): <span class="lbl-summary-dat"><span t-field="muctieu.ketqua_dat"/></span>
                                             </div>
 
-                                            <!-- DÒNG 2: ĐÁNH GIÁ VÀ GHI CHÚ KIỂM DUYỆT CHUYÊN MÔN -->
+                                            <!-- DÒNG 2: ĐÁNH GIÁ VÀ GHI CHÚ KIỂM DUYỆT -->
                                             <t t-if="muctieu.trangthai_kiemduyet and muctieu.trangthai_kiemduyet != '0'">
                                                 <div class="goal-kiemduyet-row">
                                                     <span class="text-bold">Đánh giá của giáo viên chuyên môn:</span>

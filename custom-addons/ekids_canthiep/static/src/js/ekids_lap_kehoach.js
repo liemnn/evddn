@@ -1,6 +1,5 @@
 /** @odoo-module **/
 
-// 🌟 BỔ SUNG: Import thêm 'markup' để OWL Component chịu render định dạng HTML giàu định dạng
 import { Component, useState, onWillStart, markup } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
@@ -27,7 +26,6 @@ export class LapKehoachWidget extends Component {
         });
     }
 
-    /* 🌟 HÀM PHỤ TRỢ CHUẨN: Giải mã các ký tự thực thể HTML lồng nhau */
     decodeHtmlText(htmlTrack) {
         if (!htmlTrack) return "";
         let decoded = htmlTrack
@@ -41,7 +39,7 @@ export class LapKehoachWidget extends Component {
 
         try {
             const parser = new DOMParser();
-            const dom = parser.parseFromString(decoded, 'text/html');
+            const dom = parser.parseFromString(decoded, "text/html");
             return dom.body.innerHTML || decoded;
         } catch (e) {
             return decoded;
@@ -64,52 +62,33 @@ export class LapKehoachWidget extends Component {
                 return;
             }
 
-            const linhVucLineIds = linhVucLines.map(line => line.id);
+            const linhVucLineIds = linhVucLines.map((line) => line.id);
 
             const muctieus_returns = await this.orm.searchRead(
                 "ekids.kehoach_muctieu",
                 [["kehoach_linhvuc_id", "in", linhVucLineIds]],
-                ["id"
-                ,"index"
-                ,"name"
-                ,"muctieu_id"
-                ,"muctieu_them"
-                ,"ghichu"
-                ,"kehoach_muctieu_thangtruoc_id"
-                ,"sothang_da_chuyenttiep"
-                ,"kehoach_linhvuc_id"
-                ,"chucnang"
-                ,"thietke"
-                ,"tieuchi_chuadat"
-                ,"tieuchi_hinhthanh"
-                ,"tieuchi_dat"
-                ,'is_bientap_temp'
-                ,"is_readonly"
-                ,"is_delete"
-                ,"ketqua_dat_lientiep_thangtruoc"
-                ,"ketqua_hinhthanh_thangtruoc"
+                [
+                    "id", "index", "name", "muctieu_id", "muctieu_them", "ghichu",
+                    "kehoach_muctieu_thangtruoc_id", "sothang_da_chuyenttiep", "kehoach_linhvuc_id",
+                    "chucnang", "thietke", "tieuchi_chuadat", "tieuchi_hinhthanh", "tieuchi_dat",
+                    "is_bientap_temp", "is_readonly", "is_delete",
+                    "ketqua_dat_lientiep_thangtruoc", "ketqua_hinhthanh_thangtruoc",
+                    "solan_thu", "solan_thu_dat", "tyle_thu"
                 ],
                 { order: "sequence asc, id asc" }
             );
 
-            this.state.groupedData = linhVucLines.map(line => {
-                const muctieus = muctieus_returns.filter(t => t.kehoach_linhvuc_id[0] === line.id);
+            this.state.groupedData = linhVucLines.map((line) => {
+                const muctieus = muctieus_returns.filter((t) => t.kehoach_linhvuc_id[0] === line.id);
 
-                muctieus.forEach(t => {
-                    // 🌟 MẤU CHỐT: Bọc hàm decode vào markup() để thông báo cho OWL render đúng format HTML
-                    t.chucnang = markup(this.decodeHtmlText(t.chucnang) || 'Không có');
-                    t.thietke = markup(this.decodeHtmlText(t.thietke) || 'Không có');
-                    t.tieuchi_chuadat = markup(this.decodeHtmlText(t.tieuchi_chuadat) || 'Chưa định nghĩa tiêu chí chưa đạt.');
-                    t.tieuchi_hinhthanh = markup(this.decodeHtmlText(t.tieuchi_hinhthanh) || 'Chưa định nghĩa tiêu chí đang hình thành.');
-                    t.tieuchi_dat = markup(this.decodeHtmlText(t.tieuchi_dat) || 'Chưa định nghĩa tiêu chí đạt.');
+                muctieus.forEach((t) => {
+                    t.chucnang = markup(this.decodeHtmlText(t.chucnang) || "Không có");
+                    t.thietke = markup(this.decodeHtmlText(t.thietke) || "Không có");
+                    t.tieuchi_chuadat = markup(this.decodeHtmlText(t.tieuchi_chuadat) || "Chưa định nghĩa tiêu chí chưa đạt.");
+                    t.tieuchi_hinhthanh = markup(this.decodeHtmlText(t.tieuchi_hinhthanh) || "Chưa định nghĩa tiêu chí đang hình thành.");
+                    t.tieuchi_dat = markup(this.decodeHtmlText(t.tieuchi_dat) || "Chưa định nghĩa tiêu chí đạt.");
 
-                    if (t.ghichu) {
-                        t.ghichu_clean = this.decodeHtmlText(t.ghichu)
-                            .replace(/<[^>]*>/g, '')
-                            .trim();
-                    } else {
-                        t.ghichu_clean = '';
-                    }
+                    t.ghichu_clean = t.ghichu ? this.decodeHtmlText(t.ghichu).replace(/<[^>]*>/g, "").trim() : "";
                 });
 
                 if (this.state.collapsedLinhVuc[line.id] === undefined) {
@@ -123,12 +102,37 @@ export class LapKehoachWidget extends Component {
                     chuongtrinh: line.chuongtrinh_id ? line.chuongtrinh_id[1] : "",
                     is_readonly: line.is_readonly,
                     tong_muctieu: muctieus.length,
-                    muctieus: muctieus
+                    muctieus: muctieus,
                 };
             });
 
         } catch (error) {
-            console.error("Lỗi đồng bộ cấu trúc dữ liệu phẳng:", error);
+            console.error("Lỗi tải dữ liệu kế hoạch:", error);
+        }
+    }
+
+    /* 🌟 MỞ FORM VIEW POPUP CỦA ODOO BẰNG PYTHON ACTION */
+    async openModalTyLeThu(targetId) {
+        if (this.props.readonly) {
+            this.notification.add("Kế hoạch đã khóa (Chỉ đọc), không thể điều chỉnh kết quả!", { type: "warning" });
+            return;
+        }
+
+        try {
+            const action = await this.orm.call(
+                "ekids.kehoach_muctieu",
+                "action_capnhat_tyle_thu",
+                [targetId]
+            );
+            if (action) {
+                this.actionService.doAction(action, {
+                    onClose: async () => {
+                        await this.loadAllPlanData();
+                    },
+                });
+            }
+        } catch (error) {
+            console.error("Lỗi khi gọi action cập nhật tỷ lệ thử:", error);
         }
     }
 
@@ -141,17 +145,15 @@ export class LapKehoachWidget extends Component {
     }
 
     async them_MucTieu_Vao_KeHoach_LinhVuc(lineId) {
-        // 🌟 CHỐT CHẶN 1: Nếu form đang readonly, chặn không cho mở Wizard thêm/xóa mục tiêu
         if (this.props.readonly) {
             this.notification.add("Kế hoạch đã khóa (Read-only), không thể thay đổi danh sách mục tiêu!", { type: "danger" });
             return;
         }
-
         try {
             const action = await this.orm.call("ekids.kehoach_linhvuc", "action_them_muctieu_vao_kehoach_linhvuc", [lineId]);
             if (action) {
                 this.actionService.doAction(action, {
-                    onClose: async () => { await this.loadAllPlanData(); }
+                    onClose: async () => { await this.loadAllPlanData(); },
                 });
             }
         } catch (error) {
@@ -160,17 +162,15 @@ export class LapKehoachWidget extends Component {
     }
 
     async open_GV_TaoMoi_MucTieu(lineId) {
-        // 🌟 CHỐT CHẶN 1: Nếu form đang readonly, chặn không cho mở Wizard thêm/xóa mục tiêu
         if (this.props.readonly) {
             this.notification.add("Kế hoạch đã khóa (Read-only), không thể thay đổi danh sách mục tiêu!", { type: "danger" });
             return;
         }
-
         try {
             const action = await this.orm.call("ekids.kehoach_linhvuc", "action_gv_tu_taomoi_muctieu", [lineId]);
             if (action) {
                 this.actionService.doAction(action, {
-                    onClose: async () => { await this.loadAllPlanData(); }
+                    onClose: async () => { await this.loadAllPlanData(); },
                 });
             }
         } catch (error) {
@@ -179,27 +179,23 @@ export class LapKehoachWidget extends Component {
     }
 
     async open_GV_BienTap_NoiDung_MucTieu(targetId) {
-    // 🌟 CHỐT CHẶN: Nếu form đang readonly, chặn không cho mở form biên tập chuyên môn
-    if (this.props.readonly) {
-        this.notification.add("Kế hoạch đã khóa (Read-only), không thể biên tập nội dung chuyên môn!", { type: "danger" });
-        return;
-    }
-
-    try {
-        // Gọi hàm Python từ model ekids.kehoach_muctieu để xin cấu hình Action popup
-        const action = await this.orm.call("ekids.kehoach_muctieu", "action_giaovien_bientap_thietke_muctieu", [targetId]);
-        if (action) {
-            this.actionService.doAction(action, {
-                onClose: async () => {
-                    // Tự động load lại dữ liệu phẳng để cập nhật nội dung HTML vừa sửa lên widget
-                    await this.loadAllPlanData();
-                }
-            });
+        if (this.props.readonly) {
+            this.notification.add("Kế hoạch đã khóa (Read-only), không thể biên tập nội dung chuyên môn!", { type: "danger" });
+            return;
         }
-    } catch (error) {
-        console.error("Lỗi khi gọi action biên tập mục tiêu từ backend:", error);
+        try {
+            const action = await this.orm.call("ekids.kehoach_muctieu", "action_giaovien_bientap_thietke_muctieu", [targetId]);
+            if (action) {
+                this.actionService.doAction(action, {
+                    onClose: async () => {
+                        await this.loadAllPlanData();
+                    },
+                });
+            }
+        } catch (error) {
+            console.error("Lỗi khi gọi action biên tập mục tiêu:", error);
+        }
     }
-}
 
     toggleNoteInline(targetId) {
         this.state.activeNotes[targetId] = !this.state.activeNotes[targetId];
@@ -209,28 +205,20 @@ export class LapKehoachWidget extends Component {
     }
 
     async saveNoteInline(target, event) {
-        // 🌟 CHỐT CHẶN 2: Chặn tuyệt đối hành động ghi đè dữ liệu Note nếu đang xem bản ghi dạng chỉ đọc
         if (this.props.readonly) {
             this.notification.add("Không thể lưu ghi chú do kế hoạch đã ở trạng thái chỉ đọc!", { type: "danger" });
             return;
         }
 
         try {
-            const textarea = event.target.closest('.inline-note-box').querySelector('.note-textarea');
-            let newNote = textarea.value;
-
-            if (newNote) {
-                newNote = newNote.replace(/<\/?[^>]+(>|$)/g, "").trim();
-            }
+            const textarea = event.target.closest(".inline-note-box").querySelector(".note-textarea");
+            let newNote = textarea.value ? textarea.value.replace(/<\/?[^>]+(>|$)/g, "").trim() : "";
 
             await this.orm.write("ekids.kehoach_muctieu", [target.id], { ghichu: newNote });
-
             target.ghichu = newNote;
             target.ghichu_clean = newNote;
-
             this.state.activeNotes[target.id] = false;
-            this.notification.add("Đã cập nhật nhật ký tiến độ mục tiêu thô sạch!", { type: "success" });
-
+            this.notification.add("Đã cập nhật ghi chú thành công!", { type: "success" });
             await this.loadAllPlanData();
         } catch (error) {
             console.error(error);
@@ -238,12 +226,10 @@ export class LapKehoachWidget extends Component {
     }
 
     async removeTargetFromPlan(targetId) {
-        // 🌟 CHỐT CHẶN 3: Chặn hành động xóa mục tiêu ra khỏi kế hoạch khi form đang khóa
         if (this.props.readonly) {
             this.notification.add("Kế hoạch đã khóa, không cho phép xóa mục tiêu!", { type: "danger" });
             return;
         }
-
         if (confirm("Bạn có chắc chắn muốn bỏ chọn mục tiêu này khỏi kế hoạch không?")) {
             try {
                 await this.orm.unlink("ekids.kehoach_muctieu", [targetId]);

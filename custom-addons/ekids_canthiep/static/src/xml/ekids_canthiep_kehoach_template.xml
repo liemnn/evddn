@@ -62,7 +62,7 @@
                     transform: translateY(-0.5px);
                 }
 
-                /* Khung chứa cố định kích thước bổ sung - Sẽ tự động ẩn thu gọn bằng flexbox nếu không được render */
+                /* Khung chứa cố định kích thước bổ sung */
                 .fixed-kiemduyet-slot {
                     width: 95px !important;
                     height: 28px;
@@ -84,6 +84,15 @@
 
                 .target-left-block { display: flex; align-items: start; gap: 12px; flex: 1; min-width: 0; }
                 .target-text-wrap { font-size: 13.5px; color: #1E293B; text-align: left; word-break: break-word; line-height: 1.5; }
+
+                /* 🌟 STYLE HUY HIỆU TỶ LỆ THỬ CHO MỤC TIÊU (KIỂM DUYỆT) */
+                .badge-trial-metric {
+                    height: 28px;
+                    border-radius: 6px;
+                    padding: 0 6px 0 8px;
+                    white-space: nowrap;
+                    user-select: none;
+                }
 
                 /* RESPONSIVE CHO DI ĐỘNG */
                 @media (max-width: 768px) {
@@ -161,55 +170,57 @@
                                             </span>
                                         </div>
 
-                                        <!-- HÀNG THAO TÁC THÔNG MINH CHỐNG KHOẢNG TRỐNG THỪA -->
+                                        <!-- HÀNG THAO TÁC -->
                                         <div class="target-right-actions d-flex align-items-center gap-2 justify-content-end" t-on-click.stop="">
 
                                             <div class="d-flex align-items-center flex-shrink-0" style="min-width: 90px; justify-content: flex-end;">
-                                            <!-- 1. Loại 1: Mục tiêu chuyển tiếp từ tháng trước sang -->
-
-                                                <t t-if="muctieu.kehoach_muctieu_thangtruoc_id">
-                                                    <span class="badge px-2.5 py-1 d-inline-flex align-items-center gap-1.5"
-                                                          style="font-size: 12.5px; color: #991B1B; background-color: #FEF2F2; border: 1px solid #FECACA; border-radius: 6px; cursor: help; white-space: nowrap;"
-                                                          t-attf-data-bs-toggle="tooltip"
-                                                          t-attf-data-bs-placement="top"
-                                                          t-attf-title="Số tháng chuyển tiếp: #{muctieu.sothang_da_chuyenttiep} tháng&#10;• Hình thành (+/-): #{muctieu.ketqua_hinhthanh_thangtruoc} ngày&#10;• Đạt (+) liên tiếp: #{muctieu.ketqua_dat_lientiep_thangtruoc} ngày">
-                                                        <i class="fa fa-history text-danger" style="font-size: 13px;"></i>
-                                                        <span class="fw-bold text-danger"> Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)</span>
-
-                                                        <!-- Thẻ Vàng cho Hình Thành -->
-                                                        <span class="badge fw-bold px-2 py-0.5"
-                                                              style="font-size: 11.5px; background-color: #FEF9C3; color: #A16207; border: 1px solid #FDE047; border-radius: 4px;">
-                                                            +/-(<t t-esc="muctieu.ketqua_hinhthanh_thangtruoc"/>)
-                                                        </span>
-
-                                                        <!-- Thẻ Xanh cho Đạt -->
-                                                        <span class="badge fw-bold px-2 py-0.5"
-                                                              style="font-size: 11.5px; background-color: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; border-radius: 4px;">
-                                                            +(<t t-esc="muctieu.ketqua_dat_lientiep_thangtruoc"/>)
-                                                        </span>
-                                                    </span>
-                                                </t>
-
-                                                <!-- 2. Loại 2: Mục tiêu do Giáo viên tự viết tay/tạo mới hoàn toàn (muctieu_id rỗng) -->
-                                                <t t-elif="!muctieu.muctieu_id">
-                                                   <span class="badge fw-bold px-2 py-0.5"
-                                                          style="font-size: 12px; color: #DC2626; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px; white-space: nowrap;">
-                                                        <i class="fa fa-star me-0.5"></i> Giáo viên [Tạo]
-                                                    </span>
-                                                </t>
-
-                                                <!-- 3. Loại 3: Mục tiêu mới được chọn từ thư viện chuẩn -->
-                                                <t t-else="">
+                                                <!-- Loại 1: Mục tiêu chuyển tiếp từ tháng trước sang -->
+                                                <span t-if="muctieu.kehoach_muctieu_thangtruoc_id"
+                                                      class="badge px-2.5 py-1 d-inline-flex align-items-center gap-1.5"
+                                                      style="font-size: 12.5px; color: #991B1B; background-color: #FEF2F2; border: 1px solid #FECACA; border-radius: 6px; cursor: help; white-space: nowrap;"
+                                                      t-attf-data-bs-toggle="tooltip"
+                                                      t-attf-data-bs-placement="top"
+                                                      t-attf-title="Số tháng chuyển tiếp: #{muctieu.sothang_da_chuyenttiep} tháng&#10;• Hình thành (+/-): #{muctieu.ketqua_hinhthanh_thangtruoc} ngày&#10;• Đạt (+) liên tiếp: #{muctieu.ketqua_dat_lientiep_thangtruoc} ngày">
+                                                    <i class="fa fa-history text-danger" style="font-size: 13px;"></i>
+                                                    <span class="fw-bold text-danger"> Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)</span>
                                                     <span class="badge fw-bold px-2 py-0.5"
-                                                          style="font-size: 12px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
-                                                        <i class="fa fa-star me-0.5"></i> Mới
+                                                          style="font-size: 11.5px; background-color: #FEF9C3; color: #A16207; border: 1px solid #FDE047; border-radius: 4px;">
+                                                        +/-(<t t-esc="muctieu.ketqua_hinhthanh_thangtruoc"/>)
                                                     </span>
-                                                </t>
+                                                    <span class="badge fw-bold px-2 py-0.5"
+                                                          style="font-size: 11.5px; background-color: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; border-radius: 4px;">
+                                                        +(<t t-esc="muctieu.ketqua_dat_lientiep_thangtruoc"/>)
+                                                    </span>
+                                                </span>
+
+                                                <!-- Loại 2: Mục tiêu do Giáo viên tự tạo mới -->
+                                                <span t-elif="!muctieu.muctieu_id"
+                                                      class="badge fw-bold px-2 py-0.5"
+                                                      style="font-size: 12px; color: #DC2626; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px; white-space: nowrap;">
+                                                    <i class="fa fa-star me-0.5"></i> Giáo viên [Tạo]
+                                                </span>
+
+                                                <!-- Loại 3: Mục tiêu mới từ thư viện chuẩn -->
+                                                <span t-else=""
+                                                      class="badge fw-bold px-2 py-0.5"
+                                                      style="font-size: 12px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
+                                                    <i class="fa fa-star me-0.5"></i> Mới
+                                                </span>
                                             </div>
 
+                                            <!-- 🌟 BỔ SUNG: HUY HIỆU TỶ LỆ THỬ LÂM SÀNG CỦA MỤC TIÊU -->
+                                            <span class="badge badge-trial-metric d-inline-flex align-items-center gap-1.5 flex-shrink-0"
+                                                  t-attf-style="font-size: 12px; #{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0;' : 'background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A;') : 'background-color: #F8FAFC; color: #475569; border: 1px dashed #CBD5E1;'}"
+                                                  t-attf-title="Thử: #{muctieu.solan_thu_dat || 0}/#{muctieu.solan_thu || 0} lần | Tỷ lệ: #{muctieu.tyle_thu || 0}%">
+                                                <i class="fa fa-crosshairs opacity-75" style="font-size: 11px;"></i>
+                                                <span class="fw-bold">Thử: <t t-esc="muctieu.solan_thu_dat || 0"/>/<t t-esc="muctieu.solan_thu || 0"/></span>
+                                                <span class="badge px-1.5 py-0.5 rounded-pill fw-bolder"
+                                                      t-attf-style="#{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #16A34A; color: white;' : 'background-color: #F59E0B; color: white;') : 'background-color: #94A3B8; color: white;'}">
+                                                    <t t-esc="muctieu.tyle_thu || 0"/>%
+                                                </span>
+                                            </span>
 
-
-                                            <!-- Ô 1 CỐ ĐỊNH: Nút bấm Can thiệp -->
+                                            <!-- Ô 1: Nút bấm Can thiệp -->
                                             <t t-if="muctieu.is_canthiep">
                                                 <button type="button"
                                                         t-att-disabled="muctieu.trangthai === '0'"
@@ -217,12 +228,10 @@
                                                         t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_canthiep', ev)">
                                                     <i t-attf-class="fa #{muctieu.trangthai === '1' ? 'fa-check-circle' : 'fa-bolt'}"></i>
                                                     <span t-out="muctieu.trangthai === '1' ? 'Đạt' : 'Can thiệp'"/>
-
                                                 </button>
                                             </t>
 
-                                            <!-- Ô 2 ĐỘNG: 🌟 CHỈ bật khung slot 95px khi trong màn hình có mục tiêu đạt cần kiểm duyệt -->
-
+                                            <!-- Ô 2: Nút xác duyệt theo trangthai_kiemduyet -->
                                             <div class="fixed-kiemduyet-slot">
                                                 <t t-if="muctieu.is_kiemduyet">
                                                     <button t-if="muctieu.trangthai_kiemduyet === '0'"
@@ -232,24 +241,23 @@
                                                     </button>
                                                     <button t-if="muctieu.trangthai_kiemduyet === '1'"
                                                             type="button" class="btn-canthiep-status btn-kd-green"
-                                                             t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
+                                                            t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
                                                         <i class="fa fa-check-circle"/> Đạt (+)
                                                     </button>
                                                     <button t-if="muctieu.trangthai_kiemduyet === '-1'"
                                                             type="button" class="btn-canthiep-status btn-kd-yellow"
-                                                             t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
+                                                            t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
                                                         <i class="fa fa-arrow-circle-right"/> Chuyển (-)
                                                     </button>
                                                     <button t-if="muctieu.trangthai_kiemduyet === '-2'"
                                                             type="button" class="btn-canthiep-status btn-kd-red"
-                                                             t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
+                                                            t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
                                                         <i class="fa fa-minus-circle"/> Dừng (-)
                                                     </button>
                                                 </t>
                                             </div>
 
-
-                                            <!-- Nút tiện ích Ghi chú dạt lề -->
+                                            <!-- Nút tiện ích Ghi chú -->
                                             <button type="button" class="btn btn-link p-1 text-decoration-none shadow-none d-flex align-items-center gap-1 flex-shrink-0"
                                                     t-on-click="() => this.toggleNoteInline(muctieu.id)"
                                                     style="height: 24px; cursor: pointer; white-space: nowrap;">
@@ -265,7 +273,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- VÙNG CHI TIẾT MỞ RỘNG (GIỮ NGUYÊN) -->
+                                    <!-- VÙNG CHI TIẾT MỞ RỘNG -->
                                     <div t-if="state.expandedTargets[muctieu.id]" class="w-100 p-3 border-top d-flex flex-column gap-3"
                                          style="background-color: #FAFAFA; border-color: #E2E8F0;">
 

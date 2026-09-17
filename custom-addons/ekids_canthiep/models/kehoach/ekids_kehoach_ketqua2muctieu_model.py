@@ -36,7 +36,7 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("2", "Đang hình thành (+/-)"),
 
 
-    ], string="Trạng thái",default="0")
+    ], string="Trạng thái",compute="_compute_trangthai",store=True)
 
 
     desc = fields.Html(string="Mô tả")
@@ -54,6 +54,36 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("0", "Ngày trong tương lai"),
         ("-1", "Ngày không đi hoc"),
     ], string="Phân loại", default="1", compute="_compute_loai")
+
+    solan_thu = fields.Integer(string="Số làn thử",compute="_compute_solan_thu")
+    solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
+    tyle_thu = fields.Integer(string="Tỷ lệ %", compute="_compute_tyle_thu")
+
+    def _compute_trangthai(self):
+        for record in self:
+           record._compute_tyle_thu()
+           if record.tyle_thu >=80:
+               record.trangthai="1"
+           elif record.tyle_thu >0:
+               record.trangthai = "2"
+           else:
+               record.trangthai = "-1"
+    def _compute_solan_thu(self):
+        for record in self:
+            solan_thu = record.kehoach_muctieu_id.solan_thu
+            if solan_thu <= 0:
+                solan_thu=10
+            record.solan_thu = solan_thu
+    @api.depends("solan_thu_dat")
+    def _compute_tyle_thu(self):
+        for record in self:
+            tyle=0
+            if record.solan_thu > 0:
+                tyle = (record.solan_thu_dat / record.solan_thu) * 100
+            else:
+                tyle = 0
+            record.tyle_thu = tyle
+
 
     @api.depends("kehoach_muctieu_id.kehoach_id.is_readonly", "ngay")
     def _compute_loai(self):
