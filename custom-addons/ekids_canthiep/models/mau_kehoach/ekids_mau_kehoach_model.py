@@ -34,7 +34,7 @@ class MauKeHoachCanThiep(models.Model):
     chinh_ct_chuongtrinh_id = fields.Many2one("ekids.ct_chuongtrinh", string="[Chương trình] can thiệp")
     chinh_dm_capdo_id = fields.Many2one("ekids.ct_dm_capdo", string="[Cấp độ] can thiệp")
     roiloan_dikem_ids = fields.One2many("ekids.mau_kehoach_roiloan_dikem",
-                                  "mau_kehoach_id", string="Rối loạn đi kèm",ondelete='cascade')
+                                  "mau_kehoach_id", string="Rối loạn đi kèm")
 
     @api.depends('mau_review_ids')
     def _compute_mau_rating(self):

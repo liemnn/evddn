@@ -64,6 +64,7 @@ class CoSo(models.Model):
 
     is_thu_hocphi_dauthang =fields.Boolean(string="Thiết lập thu [Học phí] đầu tháng",default=True)
     is_dong_hocphi_theoky= fields.Boolean(string="Đóng học phí theo kỳ/Gộp kỳ", default=False)
+    is_canthiep_theo_dulieu = fields.Boolean(string="Can thiệp dựa trên dữ liệu", default=False)
 
     sothang_khoa_dl_chitieu = fields.Selection(
         [('0', 'Không khóa'),('1', '1 Tháng'), ('2', '2 Tháng'), ('3', '3 Tháng'), ('4', '4 Tháng'), ('5', '5 Tháng'),

@@ -132,7 +132,9 @@ class ChamCongCongViec2Thang(models.Model,ChamCongFuncAbstractModel):
     ca2ngay_daythay_ids = fields.One2many("ekids.chamcong_ca2ngay_daythay", "congviec2thang_id"
                                   , string="Thông tin dạy thay")
 
-    tong_ca_daythay = fields.Integer(string="Tổng ca đã dạy thay trong tháng", compute="_compute_tong_ca_daythay", digits=(10, 1), defaul=0)
+    tong_ca_daythay = fields.Integer(string="Tổng ca đã dạy thay trong tháng"
+                                     , compute="_compute_tong_ca_daythay"
+                                     , default=0)
     is_ca_daythay = fields.Boolean("Có ca dạy thay")
 
     @api.model
