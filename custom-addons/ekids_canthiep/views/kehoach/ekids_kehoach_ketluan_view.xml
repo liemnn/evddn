@@ -730,13 +730,13 @@
                                                    decoration-danger="is_lapkehoach_thangnay == False"
                                                    />
 
-                                            <field name="tong_muctieu" string="Tổng mục tiêu" width="120"/>
+                                            <field name="tong_muctieu" string="Mục tiêu [chương trình]" width="120"/>
 
                                             <button name="action_xem_danhsach_muctieu"
                                                    type="object"
                                                    string=""
                                                    icon="fa-bullseye"
-                                                   title="Xem danh sách mục tiêu của lĩnh vực và độ tuổi này"
+                                                   title="Xem danh sách [Mục tiêu] Trong kho Chương trình"
                                                    class="btn-sm btn-outline-primary"/>
                                         </list>
                                     </field>

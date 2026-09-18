@@ -192,7 +192,7 @@
 
                                                 <!-- 🌟 1. BADGE TỶ LỆ THỬ (CLICK ĐỂ MỞ FORM POPUP PYTHON ACTION) -->
                                                 <span class="badge px-2 py-1 d-inline-flex align-items-center gap-1 badge-trial-action"
-                                                      t-attf-style="font-size: 12px; border-radius: 6px; white-space: nowrap; #{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0;' : 'background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A;') : 'background-color: #F8FAFC; color: #64748B; border: 1px dashed #CBD5E1;'}"
+                                                      t-attf-style="font-size: 13px; border-radius: 6px; white-space: nowrap; #{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0;' : 'background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A;') : 'background-color: #F8FAFC; color: #64748B; border: 1px dashed #CBD5E1;'}"
                                                       title="Bấm để cập nhật kết quả thử nghiệm"
                                                       t-on-click="() => this.openModalTyLeThu(muctieu.id)">
                                                     <i class="fa fa-crosshairs" style="font-size: 11px;"></i>
