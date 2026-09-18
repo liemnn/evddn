@@ -116,6 +116,7 @@ class KeHoach2LinhVuc(models.Model):
     def action_them_muctieu_vao_kehoach_linhvuc(self):
 
         self.ensure_one()
+
         ct_muctieu_ids =[]
         kehoach_muctieus = self.kehoach_muctieu_ids
         if kehoach_muctieus:
@@ -125,6 +126,12 @@ class KeHoach2LinhVuc(models.Model):
         if len(ct_muctieu_ids)>0:
             domain_muctieu = [("id", "not in", ct_muctieu_ids)]
             domain = expression.AND([domain, domain_muctieu])
+
+        # lay từ mục tiêu giới hạn (nếu có)
+        muctieu_ids =  self.func_get_muctieu_ids_tu_ketluan2linhvuc(self.linhvuc_id.id,self.tuoi_id.id)
+        if muctieu_ids:
+            domain_ids = [("id", "in", muctieu_ids)]
+            domain = expression.AND([domain, domain_ids])
 
 
         list_view_id = self.env.ref('ekids_canthiep.ct_muctieu_lap_kehoach_list').id
@@ -155,6 +162,22 @@ class KeHoach2LinhVuc(models.Model):
             }
 
         }
+
+    def func_get_muctieu_ids_tu_ketluan2linhvuc(self,linhvuc_id,tuoi_id):
+        if (self.kehoach_id
+            and self.kehoach_id.ketluan_id):
+            ketluan = self.kehoach_id.ketluan_id
+            if ketluan:
+                ketluan2linhvucs = ketluan.linhvuc_ids
+                if ketluan2linhvucs:
+                    for ketluan2linhvuc in ketluan2linhvucs:
+                        if (ketluan2linhvuc.is_muctieu_kho == False
+                                and ketluan2linhvuc.linhvuc_id.id == linhvuc_id
+                            and ketluan2linhvuc.tuoi_id.id == tuoi_id):
+                            return ketluan2linhvuc.muctieu_ids.ids
+        return None
+
+
 
 
     def action_gv_tu_taomoi_muctieu(self):
