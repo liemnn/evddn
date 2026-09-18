@@ -46,7 +46,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
     def action_sua_ketluan(self):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
         ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self, self,
-                                                                          [kehoach_util.KETLUAN_DANG_TAO])
+                                                                          [kehoach_util.KETLUAN_DANG_TAO,kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH])
         if ketluan:
             url= {
                 'type': 'ir.actions.act_window',

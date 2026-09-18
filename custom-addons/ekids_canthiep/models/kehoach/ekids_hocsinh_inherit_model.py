@@ -311,7 +311,7 @@ class HocSinhInherit(models.Model
             is_sua_ketluan = False
 
             ketluan_danglap = kehoach_util.func_get_ketluan_hocsinh_trangthai(self, rec,
-                                                                          [kehoach_util.KETLUAN_DANG_TAO])
+                                                                          [kehoach_util.KETLUAN_DANG_TAO,kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH])
             if ketluan_danglap:
                 if is_admin:
                     is_sua_ketluan = True
