@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ekids_canthiep.kehoach_hoso_template">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="data" t-value="doc._get_hoso_report_data()"/>
+
+                <div class="page" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0F172A; font-size: 11.5px; line-height: 1.45;">
+
+                    <!-- ================= MASTER HEADER ================= -->
+                    <div style="background: #1E3A8A; color: #FFFFFF; border-radius: 8px; padding: 14px 18px; margin-bottom: 14px; border-bottom: 3.5px solid #2563EB;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="width: 18%; padding: 4px; color: #93C5FD; font-weight: bold;">Họ và tên trẻ:</td>
+                                <td style="width: 32%; padding: 4px; color: #FDE047; font-size: 15px; font-weight: bold;">
+                                    <span t-out="data['child']['name']"/>
+                                </td>
+                                <td style="width: 18%; padding: 4px; color: #93C5FD; font-weight: bold;">Ngày sinh:</td>
+                                <td style="width: 32%; padding: 4px; font-weight: bold;">
+                                    <span t-out="data['child']['ngaysinh']"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Thời gian can thiệp:</td>
+                                <td style="padding: 4px;"><span t-out="data['child']['thoigian']"/></td>
+                                <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Tuổi can thiệp:</td>
+                                <td style="padding: 4px;"><span t-out="data['child']['tuoi']"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Giáo viên phụ trách:</td>
+                                <td style="padding: 4px;"><span t-out="data['child']['giaovien']"/></td>
+                                <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Quản lý chuyên môn:</td>
+                                <td style="padding: 4px;"><span t-out="data['child']['quanly']"/></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- ================= PHẦN 1: BÁO CÁO GẦN NHẤT ================= -->
+                    <!-- 4 Thẻ KPI -->
+                    <table style="width: 100%; border-collapse: separate; border-spacing: 6px 0; margin-bottom: 14px;">
+                        <tr>
+                            <td style="width: 25%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #2563EB; border-radius: 6px; padding: 8px 10px;">
+                                <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B;">Tổng mục tiêu kế hoạch</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #1D4ED8; margin: 2px 0;">
+                                    <span t-out="data['tab1']['total']"/> mục tiêu
+                                </div>
+                                <div style="font-size: 10px; color: #475569;">Lĩnh vực 12 - 18 tháng</div>
+                            </td>
+                            <td style="width: 25%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #0D9488; border-radius: 6px; padding: 8px 10px;">
+                                <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B;">Kết quả đạt được</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #15803D; margin: 2px 0;">
+                                    <span t-out="data['tab1']['achieved']"/> / <span t-out="data['tab1']['total']"/> mục tiêu
+                                </div>
+                                <div style="font-size: 10px; color: #475569;">Đạt: <strong><span t-out="data['tab1']['rate']"/>% KH tháng</strong></div>
+                            </td>
+                            <td style="width: 25%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #E11D48; border-radius: 6px; padding: 8px 10px;">
+                                <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B;">Điểm trũng cần ưu tiên</div>
+                                <div style="font-size: 11.5px; font-weight: 800; color: #DC2626; margin: 4px 0;">
+                                    <span t-out="data['tab1']['diem_trung']"/>
+                                </div>
+                                <div style="font-size: 10px; color: #475569;">Dung nạp giác quan &amp; xã hội</div>
+                            </td>
+                            <td style="width: 25%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #D97706; border-radius: 6px; padding: 8px 10px;">
+                                <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B;">Lĩnh vực bứt phá nhất</div>
+                                <div style="font-size: 11.5px; font-weight: 800; color: #B45309; margin: 4px 0;">
+                                    <span t-out="data['tab1']['but_pha']"/>
+                                </div>
+                                <div style="font-size: 10px; color: #475569;">Bật âm chủ động &amp; yêu cầu</div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Bảng 13 mục tiêu chi tiết -->
+                    <div style="font-size: 12.5px; font-weight: 800; color: #1E3A8A; margin-bottom: 6px; border-bottom: 1.5px solid #CBD5E1; padding-bottom: 3px;">
+                        1. Mức độ ban đầu và kết quả sau can thiệp: <span t-out="data['child']['ky_hientai']"/>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10.5px;">
+                        <thead>
+                            <tr style="background: #F1F5F9; color: #334155; text-transform: uppercase;">
+                                <th style="border: 1px solid #CBD5E1; padding: 5px; width: 4%; text-align: center;">STT</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 5px; width: 15%; text-align: left;">Lĩnh vực</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 5px; width: 11%; text-align: center;">Độ tuổi</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 5px; width: 34%; text-align: left;">Mục tiêu can thiệp</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 5px; width: 10%; text-align: center;">Trước CT</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 5px; width: 10%; text-align: center;">Sau CT</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 5px; width: 16%; text-align: left;">Ý kiến / Định hướng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="data['tab1']['targets']" t-as="mt">
+                                <tr t-attf-style="background-color: #{'#FFFFFF' if mt['is_mastered'] else '#FFFBEB'};">
+                                    <td style="border: 1px solid #CBD5E1; padding: 4px; text-align: center;"><span t-out="mt['stt']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 4px; font-weight: bold;"><span t-out="mt['linhvuc']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 4px; text-align: center; color: #64748B;"><span t-out="mt['tuoi']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 4px;"><span t-out="mt['name']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 4px; text-align: center;"><span t-out="mt['truoc_ct']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 4px; text-align: center; font-weight: bold;">
+                                        <span t-attf-style="padding: 1px 4px; border-radius: 3px; background-color: #{'#DCFCE7' if mt['is_mastered'] else '#FEF3C7'}; color: #{'#15803D' if mt['is_mastered'] else '#B45309'}; border: 1px solid #{'#BBF7D0' if mt['is_mastered'] else '#FDE68A'};">
+                                            <span t-out="mt['sau_ct_rate']"/>%
+                                        </span>
+                                    </td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 4px;">
+                                        <span t-out="mt['dinh_huong']"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- Định hướng chuyển tiếp 3 cột -->
+                    <div style="font-size: 12.5px; font-weight: 800; color: #1E3A8A; margin-bottom: 6px; border-bottom: 1.5px solid #CBD5E1; padding-bottom: 3px;">
+                        2. Định hướng can thiệp chuyển tiếp
+                    </div>
+
+                    <table style="width: 100%; border-collapse: separate; border-spacing: 6px 0; margin-bottom: 14px;">
+                        <tr>
+                            <td style="width: 33.33%; border: 1px solid #CBD5E1; border-top: 3.5px solid #0D9488; border-radius: 6px; padding: 8px; background: #FFFFFF; vertical-align: top;">
+                                <div style="color: #0D9488; font-weight: 800; font-size: 11px; margin-bottom: 2px;">CỦNG CỐ (80% - 100%)</div>
+                                <div style="font-size: 9px; color: #64748B; margin-bottom: 4px; font-style: italic;">Người thực hiện: Gia đình mọi lúc mọi nơi</div>
+                                <ul style="padding-left: 14px; margin: 0; font-size: 10px; color: #334155;">
+                                    <li>Ngồi đối diện, đáp ứng tiếng nói khi gọi tên.</li>
+                                    <li>Chơi phù hợp đặc tính 5 đồ vật.</li>
+                                    <li>Tiếp nhận hoạt động giác quan xã hội.</li>
+                                </ul>
+                            </td>
+                            <td style="width: 33.33%; border: 1px solid #CBD5E1; border-top: 3.5px solid #D97706; border-radius: 6px; padding: 8px; background: #FFFFFF; vertical-align: top;">
+                                <div style="color: #D97706; font-weight: 800; font-size: 11px; margin-bottom: 2px;">DUY TRÌ (CHƯA ĐẠT 80%)</div>
+                                <div style="font-size: 9px; color: #64748B; margin-bottom: 4px; font-style: italic;">Người thực hiện: GV Trung tâm + Gia đình</div>
+                                <ul style="padding-left: 14px; margin: 0; font-size: 10px; color: #334155;">
+                                    <li>Dõi theo hướng tay chỉ cự ly gần (70%).</li>
+                                    <li>Bắt chước hành động 1 bước (40%).</li>
+                                    <li>Tự cầm cốc nước đưa lên miệng (60%).</li>
+                                </ul>
+                            </td>
+                            <td style="width: 33.33%; border: 1px solid #CBD5E1; border-top: 3.5px solid #2563EB; border-radius: 6px; padding: 8px; background: #FFFFFF; vertical-align: top;">
+                                <div style="color: #2563EB; font-weight: 800; font-size: 11px; margin-bottom: 2px;">PHÁT TRIỂN MỚI</div>
+                                <div style="font-size: 9px; color: #64748B; margin-bottom: 4px; font-style: italic;">Người thực hiện: Giáo viên chuyên biệt</div>
+                                <ul style="padding-left: 14px; margin: 0; font-size: 10px; color: #334155;">
+                                    <li>Chơi đơn giản trên ghế/sàn trong 5 phút.</li>
+                                    <li>Yêu cầu giúp đỡ bằng cách đưa đồ vật.</li>
+                                    <li>Xếp tháp vòng và phân loại 5 vật giống nhau.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Nhận xét cuối kỳ -->
+                    <div style="font-size: 12.5px; font-weight: 800; color: #1E3A8A; margin-bottom: 4px;">
+                        3. Nhận xét đánh giá của giáo viên
+                    </div>
+                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 6px; padding: 8px 12px; margin-bottom: 20px; font-size: 10.5px; line-height: 1.5; color: #334155;">
+                        <span t-out="data['tab1']['nhan_xet']"/>
+                    </div>
+
+                    <!-- Chữ ký ba bên -->
+                    <table style="width: 100%; text-align: center; border-collapse: collapse; margin-bottom: 30px;">
+                        <tr>
+                            <td style="width: 33.33%; vertical-align: top;">
+                                <div style="font-size: 10.5px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 50px;">
+                                    Giáo viên phụ trách
+                                </div>
+                                <div style="font-size: 12px; font-weight: 800; color: #0F172A;">
+                                    <span t-out="data['child']['giaovien']"/>
+                                </div>
+                            </td>
+                            <td style="width: 33.33%; vertical-align: top;">
+                                <div style="font-size: 10.5px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 50px;">
+                                    Quản lý chuyên môn
+                                </div>
+                                <div style="font-size: 12px; font-weight: 800; color: #0F172A;">
+                                    <span t-out="data['child']['quanly']"/>
+                                </div>
+                            </td>
+                            <td style="width: 33.33%; vertical-align: top;">
+                                <div style="font-size: 10.5px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 50px;">
+                                    Đại diện Phụ huynh
+                                </div>
+                                <div style="font-size: 12px; font-weight: 800; color: #0F172A;">
+                                    <span t-out="data['child']['phuhuynh']"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Ngắt trang sang các phần tiếp theo -->
+                    <div style="page-break-before: always;"/>
+
+                    <!-- ================= PHẦN 2: LỊCH SỬ CÁC THÁNG ================= -->
+                    <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-bottom: 8px; border-bottom: 2px solid #2563EB; padding-bottom: 4px;">
+                        PHẦN II: LỊCH SỬ TIẾN TRÌNH CAN THIỆP QUA CÁC KỲ THÁNG
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10.5px;">
+                        <thead>
+                            <tr style="background: #F1F5F9; color: #334155; text-transform: uppercase;">
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 25%; text-align: left;">Kỳ can thiệp</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 25%; text-align: center;">Thời gian thực hiện</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 15%; text-align: center;">Mục tiêu đạt</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 15%; text-align: center;">Tỷ lệ hoàn thành</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 20%; text-align: left;">Giáo viên phụ trách</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="data['tab2']" t-as="hist">
+                                <tr t-attf-style="background-color: #{'#EFF6FF' if hist['is_current'] else '#FFFFFF'};">
+                                    <td style="border: 1px solid #CBD5E1; padding: 6px; font-weight: bold;">
+                                        <span t-out="hist['name']"/>
+                                        <t t-if="hist['is_current']"> <span style="color: #2563EB; font-size: 9.5px;">(Kỳ này)</span></t>
+                                    </td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 6px; text-align: center;"><span t-out="hist['thoigian']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 6px; text-align: center;"><span t-out="hist['dat']"/> / <span t-out="hist['total']"/> MT</td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 6px; text-align: center; font-weight: bold; color: #16A34A;">
+                                        <span t-out="hist['rate']"/>%
+                                    </td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 6px;"><span t-out="hist['gv']"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- ================= PHẦN 3: KẾ HOẠCH THÁNG TỚI ================= -->
+                    <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-bottom: 8px; border-bottom: 2px solid #2563EB; padding-bottom: 4px;">
+                        PHẦN III: KẾ HOẠCH CAN THIỆP DỰ KIẾN KỲ KẾ TIẾP (<span t-out="data['tab3']['title']"/>)
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10.5px;">
+                        <thead>
+                            <tr style="background: #F1F5F9; color: #334155; text-transform: uppercase;">
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 5%; text-align: center;">STT</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 16%; text-align: left;">Lĩnh vực</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 12%; text-align: center;">Độ tuổi</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 45%; text-align: left;">Mục tiêu can thiệp dự kiến</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 22%; text-align: left;">Phân loại</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="data['tab3']['targets']" t-as="nxt">
+                                <tr>
+                                    <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center;"><span t-out="nxt['stt']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 5px; font-weight: bold;"><span t-out="nxt['linhvuc']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center; color: #475569;"><span t-out="nxt['tuoi']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 5px;"><span t-out="nxt['name']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 5px; color: #B45309; font-weight: bold;">
+                                        <span t-out="nxt['loai']"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- ================= PHẦN 4: ĐÁNH GIÁ BAN ĐẦU (BASELINE) ================= -->
+                    <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-bottom: 8px; border-bottom: 2px solid #2563EB; padding-bottom: 4px;">
+                        PHẦN IV: KẾT QUẢ ĐÁNH GIÁ LÂM SÀNG BAN ĐẦU (BASELINE ASSESSMENT)
+                    </div>
+
+                    <div style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 6px; padding: 8px 12px; margin-bottom: 10px; font-size: 10.5px;">
+                        <strong>Chuyên gia lượng giá:</strong> <span t-out="data['tab4']['chuyengia']"/>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; font-size: 10.5px;">
+                        <thead>
+                            <tr style="background: #F1F5F9; color: #334155; text-transform: uppercase;">
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 5%; text-align: center;">STT</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 25%; text-align: left;">Lĩnh vực phát triển</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 15%; text-align: center;">Mức năng lực Baseline</th>
+                                <th style="border: 1px solid #CBD5E1; padding: 6px; width: 55%; text-align: left;">Ghi nhận lâm sàng ban đầu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="data['tab4']['lines']" t-as="bline">
+                                <tr>
+                                    <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center;"><span t-out="bline['stt']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 5px; font-weight: bold;"><span t-out="bline['linhvuc']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center; font-weight: bold;"><span t-out="bline['rate']"/></td>
+                                    <td style="border: 1px solid #CBD5E1; padding: 5px;"><span t-out="bline['desc']"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

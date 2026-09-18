@@ -22,9 +22,8 @@ except ImportError as e:
 
 
 class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
-    _name = 'ekids.hocsinh_kehoach_action_abstractmodel'
+    _register = False
     _description = 'Kế hoạch can thiệp của học sinh'
-    _abstract = True
 
 
     def action_taomoi_ketluan(self):

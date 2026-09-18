@@ -58,6 +58,7 @@ Long description of module's purpose
 
         'views/kehoach/report/ekids_kehoach_in_giaovien_template.xml',
         'views/kehoach/report/ekids_kehoach_in_giaovien_gon_template.xml',
+        'views/kehoach/report/ekids_kehoach_hoso_template.xml',
         'views/kehoach/report/ekids_kehoach_in_giaovien_action.xml',
 
 

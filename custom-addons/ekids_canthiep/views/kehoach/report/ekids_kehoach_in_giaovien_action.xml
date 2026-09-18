@@ -42,6 +42,19 @@
             <field name="paperformat_id" ref="ekids_canthiep.paperformat_a4_landscape"/>
         </record>
 
+         <record id="ekids_canthiep.kehoach_hoso_template_action" model="ir.actions.report">
+            <field name="name">Bộ hồ sơ [Can thiệp] Của học sinh</field>
+            <field name="model">ekids.hocsinh</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_canthiep.kehoach_hoso_template</field>
+            <field name="report_file">ekids_canthiep.kehoach_hoso_template</field>
+            <field name="print_report_name">'Hồ sơ_Can_thiep_' + (object.hocsinh_id.name or '')</field>
+            <field name="binding_model_id" ref="model_ekids_hocsinh"/>
+            <field name="binding_type">report</field>
+            <!-- Khóa cứng khổ giấy A4 Ngang (Landscape) trơn tru -->
+            <field name="paperformat_id" ref="ekids_canthiep.paperformat_a4_landscape"/>
+        </record>
+
 
     </data>
 </odoo>
