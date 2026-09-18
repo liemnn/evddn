@@ -234,7 +234,7 @@
                                             <!-- Ô 2: Nút xác duyệt theo trangthai_kiemduyet -->
                                             <div class="fixed-kiemduyet-slot">
                                                 <t t-if="muctieu.is_kiemduyet">
-                                                    <button t-if="muctieu.trangthai_kiemduyet === '0'"
+                                                    <button t-if="!['1', '-1', '-2'].includes(muctieu.trangthai_kiemduyet)"
                                                             type="button" class="btn-canthiep-status btn-kd-grey"
                                                             t-on-click="(ev) => this.onMucTieuClick(muctieu,'action_kiemduyet', ev)">
                                                         <i class="fa fa-gavel"/> Đợi xác nhận

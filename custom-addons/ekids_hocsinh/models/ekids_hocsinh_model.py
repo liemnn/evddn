@@ -246,7 +246,7 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
         today = fields.Date.today()
 
         for hs in self:
-            # 1. Chặn các trạng thái không cần tính toán số tháng
+            # 1. Chặn các trạng thái không tính thời gian theo học
             if hs.trangthai == "2":
                 hs.thoigian_hoc = "Đợi đánh giá"
                 continue
@@ -254,30 +254,40 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
                 hs.thoigian_hoc = "Đã đánh giá nhưng không học"
                 continue
 
-            # 2. Xử lý các trạng thái cần tính toán (1 và 3)
+            tong_ngay = 0
+
+            # 2. Tính thời gian từ quá trình học chính thức tại cơ sở
             if hs.ngay_nhaphoc:
-                # Xác định mốc thời gian chốt sổ (end_date)
+                # Nếu trạng thái là "Đã nghỉ" (3), ưu tiên lấy ngay_nghihoc. Nếu quên nhập thì lấy tạm hôm nay.
+                # Nếu trạng thái là "Đang theo học" (1), tính đến ngày hôm nay (today).
                 if hs.trangthai == "3":
-                    # Nếu đã nghỉ, tính đến ngày nghỉ. Nếu quên chưa nhập ngày nghỉ thì tạm lấy ngày hôm nay
                     end_date = hs.ngay_nghihoc if hs.ngay_nghihoc else today
                 else:
-                    # Nếu đang theo học (trangthai == "1"), tính đến ngày hôm nay
                     end_date = today
 
-                # Thuật toán quy đổi ra tháng của anh
-                nam_diff = end_date.year - hs.ngay_nhaphoc.year
-                thang_diff = end_date.month - hs.ngay_nhaphoc.month
+                # Đảm bảo mốc kết thúc không nhỏ hơn ngày nhập học
+                if end_date >= hs.ngay_nhaphoc:
+                    delta_hientai = (end_date - hs.ngay_nhaphoc).days
+                    tong_ngay += max(0, delta_hientai)
 
-                # Tổng số tháng tạm tính
-                tong_thang = (nam_diff * 12) + thang_diff
+            # 3. Cộng dồn thời gian từ lịch sử can thiệp trước đây (nếu có)
+            if hs.lichsu_canthiep_ids:
+                for ls in hs.lichsu_canthiep_ids:
+                    if ls.tu_ngay:
+                        ls_end_date = ls.den_ngay if ls.den_ngay else today
+                        if ls_end_date >= ls.tu_ngay:
+                            delta_ls = (ls_end_date - ls.tu_ngay).days
+                            tong_ngay += max(0, delta_ls)
 
-                # Hiệu chỉnh: Nếu ngày chốt sổ chưa đến ngày nhập học của tháng đó
-                if end_date.day < hs.ngay_nhaphoc.day:
-                    tong_thang -= 1
+            # 4. Quy đổi tổng số ngày tích lũy ra năm và tháng để hiển thị trực quan
+            if tong_ngay <= 0:
+                hs.thoigian_hoc = "Mới nhập học"
+            else:
+                # Quy đổi tương đối theo tháng (1 tháng = 30 ngày)
+                tong_thang = tong_ngay // 30
 
-                # Xử lý kết quả hiển thị
                 if tong_thang <= 0:
-                    hs.thoigian_hoc = "Mới nhập học"
+                    hs.thoigian_hoc = f"{tong_ngay} ngày"
                 else:
                     nam = tong_thang // 12
                     thang = tong_thang % 12
@@ -288,10 +298,7 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
                     if thang > 0:
                         parts.append(f"{thang} tháng")
 
-                    hs.thoigian_hoc = " ".join(parts)
-            else:
-                # Không có ngày nhập học
-                hs.thoigian_hoc = "Chưa có dữ liệu"
+                    hs.thoigian_hoc = " ".join(parts) if parts else "Dưới 1 tháng"
 
     @api.model_create_multi
     def create(self, vals_list):

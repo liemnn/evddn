@@ -159,14 +159,15 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             if kehoach:
                 linhvucs = ketluan.linhvuc_ids
                 for linhvuc in linhvucs:
-                    data2={
-                        'sequence':linhvuc.sequence,
-                        'kehoach_id':kehoach.id,
-                        'chuongtrinh_id': linhvuc.chuongtrinh_id.id,
-                        'linhvuc_id': linhvuc.linhvuc_id.id,
-                        'tuoi_id': linhvuc.tuoi_id.id,
-                    }
-                    self.env['ekids.kehoach_linhvuc'].create(data2)
+                    if linhvuc.is_lapkehoach_thangnay == True:
+                        data2={
+                            'sequence':linhvuc.sequence,
+                            'kehoach_id':kehoach.id,
+                            'chuongtrinh_id': linhvuc.chuongtrinh_id.id,
+                            'linhvuc_id': linhvuc.linhvuc_id.id,
+                            'tuoi_id': linhvuc.tuoi_id.id,
+                        }
+                        self.env['ekids.kehoach_linhvuc'].create(data2)
                 kehoach.func_copy_muctieu_thangtruoc_khongdat_sang()
         return kehoach
 

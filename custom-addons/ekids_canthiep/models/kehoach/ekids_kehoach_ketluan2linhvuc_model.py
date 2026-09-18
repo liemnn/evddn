@@ -23,6 +23,8 @@ class KetLuan2LinhVuc(models.Model):
 
     tong_muctieu = fields.Integer(string="Tổng mục tiêu",compute="_compute_tong_muctieu")
 
+    is_lapkehoach_thangnay = fields.Boolean(string="Cho phép lập kế hoạch tháng này",default=True)
+
     @api.depends("chuongtrinh_id","linhvuc_id","tuoi_id")
     def _compute_tong_muctieu(self):
         for record in self:
