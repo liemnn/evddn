@@ -709,19 +709,20 @@
                                                    string="Chương trình"
                                                    readonly="parent.is_readonly"
                                                    options="{'no_open': True,'no_create': True}"
-                                                   width="260"/>
+                                                   />
                                             <field name="linhvuc_id"
                                                    string="Lĩnh vực"
                                                    readonly="parent.is_readonly"
                                                    domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
                                                    options="{'no_open': True,'no_create': True}"
-                                                   width="280"/>
+                                                   />
                                             <field name="tuoi_id"
                                                    string="Độ tuổi"
                                                    readonly="parent.is_readonly"
                                                    domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
                                                    options="{'no_open': True,'no_create': True}"
                                                    required="1"/>
+
 
                                             <field name="is_lapkehoach_thangnay"
                                                    widget="boolean_toggle"
@@ -730,11 +731,20 @@
                                                    decoration-danger="is_lapkehoach_thangnay == False"
                                                    />
 
-                                            <field name="tong_muctieu" string="Mục tiêu [chương trình]" width="120"/>
+
+                                            <button name="action_thietke_khung_muctieu"
+                                                    type="object"
+                                                    string="Thiết kế"
+                                                    icon="fa-sitemap"
+                                                    title="Thiết kế [Độ tuổi / Mục tiêu] cho lĩnh vực này"
+                                                    class="btn btn-sm btn-outline-info fw-bold"
+                                                    style="border-color: #6366F1; color: #4F46E5; background-color: #EEF2FF;"/>
+
+                                            <field name="tong_muctieu" string="Tổng [Mục tiêu]" width="120"/>
 
                                             <button name="action_xem_danhsach_muctieu"
                                                    type="object"
-                                                   string=""
+                                                   string="Xem"
                                                    icon="fa-bullseye"
                                                    title="Xem danh sách [Mục tiêu] Trong kho Chương trình"
                                                    class="btn-sm btn-outline-primary"/>

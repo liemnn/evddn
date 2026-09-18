@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.osv import expression
 from odoo.exceptions import ValidationError
 
 
@@ -25,13 +26,58 @@ class KetLuan2LinhVuc(models.Model):
 
     is_lapkehoach_thangnay = fields.Boolean(string="Cho phép lập kế hoạch tháng này",default=True)
 
+    is_muctieu_kho = fields.Boolean(
+        string="Cho phép giáo viên lập kế hoạch lựa các mục tiêu trong kho",
+        default=True
+    )
+    muctieu_ids = fields.Many2many(
+        'ekids.ct_muctieu',
+        'ekids_kehoach_ketluan2linhvuc2ct_muctieu_rel',  # Lưu ý tên bảng rel không dùng dấu chấm
+        'ketluan2linhvuc_id',
+        'muctieu_id',
+        string="Danh sách mục tiêu lựa chọn thiết kế"
+    )
+
+    @api.onchange('tuoi_id')
+    def _onchange_tuoi_id(self):
+        if self.tuoi_id:
+            # Xóa trắng danh sách mục tiêu khi đổi tuổi
+            self.muctieu_ids = [(5, 0, 0)]
+
+        domain = []
+        if self.linhvuc_id:
+            domain.append(('linhvuc_id', '=', self.linhvuc_id.id))
+        if self.tuoi_id:
+            domain.append(('tuoi_id', '=', self.tuoi_id.id))
+
+        return {'domain': {'muctieu_ids': domain}}
+
+    def action_thietke_khung_muctieu(self):
+        self.ensure_one()
+        view_id = self.env.ref('ekids_canthiep.kehoach_ketluan2linhvuc_form').id
+        return {
+            'name': f"Thiết kế khung mục tiêu: {self.linhvuc_id.name}",
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach_ketluan2linhvuc',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'views': [(view_id, 'form')],
+            'target': 'new',
+            'context': self.env.context,
+        }
+
     @api.depends("chuongtrinh_id","linhvuc_id","tuoi_id")
     def _compute_tong_muctieu(self):
         for record in self:
+            tong_muctieu =0
+            if record.is_muctieu_kho == True:
 
-            domain =[('linhvuc_id','=',record.linhvuc_id.id)
-                ,('tuoi_id','=',record.tuoi_id.id)]
-            tong_muctieu = self.env['ekids.ct_muctieu'].search_count(domain)
+                domain =[('linhvuc_id','=',record.linhvuc_id.id)
+                    ,('tuoi_id','=',record.tuoi_id.id)]
+                tong_muctieu = self.env['ekids.ct_muctieu'].search_count(domain)
+            else:
+                tong_muctieu = len(record.muctieu_ids)
+
             record.tong_muctieu = tong_muctieu
 
     def action_xem_danhsach_muctieu(self):
@@ -39,6 +85,10 @@ class KetLuan2LinhVuc(models.Model):
         list_view_id = self.env.ref('ekids_canthiep.ct_muctieu_list').id
         domain=[('linhvuc_id','=',self.linhvuc_id.id)
             ,('tuoi_id','=',self.tuoi_id.id)]
+        if self.is_muctieu_kho == False:
+            domain_ids = [('id','in',self.muctieu_ids.ids)]
+            domain = expression.AND([domain, domain_ids])
+
 
         return {
             'type': 'ir.actions.act_window',
