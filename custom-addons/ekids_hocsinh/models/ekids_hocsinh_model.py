@@ -391,7 +391,8 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
         if user:
             self.user_id = False
             self.is_taikhoan = False
-            user.unlink()
+            user.sudo().unlink()
+           
 
     def action_nap_rut_tien(self):
         self.ensure_one()  # Đảm bảo đang đứng ở 1 bản ghi học sinh cụ thể

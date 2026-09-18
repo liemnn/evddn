@@ -178,6 +178,29 @@ class KeHoach2MucTieu(models.Model):
     solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
     tyle_thu = fields.Integer(string="Tỷ lệ %",compute="_compute_tyle_thu")
 
+    tyle_canthiep = fields.Integer(string="Tỷ lệ đạt %", compute="_compute_tyle_canthiep")
+
+
+
+    def _compute_solan_dat_lientiep(self):
+
+        for rec in self:
+
+            solan = rec.func_ketqua_dat_lientiep_lonnhat()
+            rec.solan_dat_lientiep = solan
+
+    def _compute_tyle_canthiep(self):
+        for rec in self:
+            soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, rec.coso_id,
+                                                                       "muctieu_soluong_dat_lientiep", "5")
+            soluong_dat_lientiep_quydinh = int(soluong_dat_lientiep_str)
+            solan = rec.func_ketqua_dat_lientiep_lonnhat()
+            tyle = (solan/soluong_dat_lientiep_quydinh)*100
+            rec.tyle_canthiep = tyle
+
+
+
+
     @api.constrains('solan_thu', 'solan_thu_dat')
     def _check_solan_thu_hop_le(self):
         for rec in self:
@@ -405,7 +428,7 @@ class KeHoach2MucTieu(models.Model):
                 mt.trangthai = "0"
             else:
                 #TH2: Da cho can thiep
-                soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, kehoach.coso_id, "muctieu_soluong_dat_lientiep", "6")
+                soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, kehoach.coso_id, "muctieu_soluong_dat_lientiep", "5")
 
                 ketqua_dat_lientiep= mt.func_ketqua_dat_lientiep_lonnhat()
                 if ketqua_dat_lientiep >= int(soluong_dat_lientiep_str):
@@ -684,7 +707,7 @@ class KeHoach2MucTieu(models.Model):
                 if (ngay <today and ketqua2muctieu.trangthai in ['1','-1','2']):
                     last_ketqua2muctieu = ketqua2muctieu
             #TON TAI ban ghi cuoi co ngay:
-            soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_dat_lientiep", "6")
+            soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_dat_lientiep", "5")
             max_lientiep_dat = self.func_ketqua_dat_lientiep_lonnhat()
 
             if last_ketqua2muctieu:
@@ -692,7 +715,7 @@ class KeHoach2MucTieu(models.Model):
                 for ketqua2muctieu in ketqua2muctieus:
                     ngay = fields.Date.to_date(ketqua2muctieu.ngay)
                     if (ngay >last_ngay
-                        and ngay<= today):
+                        and ngay<= today):# tinh toan đến tận hôm nay
                        if ketqua2muctieu.trangthai == '0':
                            if max_lientiep_dat < int(soluong_dat_lientiep_str):
                                ketqua2muctieu.write({

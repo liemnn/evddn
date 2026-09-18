@@ -246,7 +246,7 @@ class GiaoVien(models.Model):
             if coso.user_id.id != self.user_id.id:
                 self.user_id =False
                 self.is_taikhoan = False
-                user.unlink()
+                user.sudo().unlink()
             else:
                 raise ValidationError(
                     _("Tài khoản này là tài khoản Quản trị/ Quản lý cơ sở được cấp khi thuê bạn không thể xóa !"))
