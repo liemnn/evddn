@@ -197,7 +197,7 @@
                         <!-- BẢNG TIÊU ĐỀ TRÊN CÙNG -->
                         <table class="header-main-table">
                             <tr>
-                                <td style="width: 15%;">
+                                <td style="width: 10%;">
                                     <t t-if="o.coso_id and o.coso_id.logo">
                                        <span t-field="o.coso_id.logo" t-options="{'widget': 'image', 'style': 'max-height: 45px; max-width: 100%; display: block; margin-bottom: 2px;'}"/>
                                     </t>
@@ -205,18 +205,16 @@
                                         <div style="display: inline-block; width: 45px; height: 25px; border: 1px dashed #000; text-align: center; line-height: 25px; font-weight: bold; font-size: 10px; margin-bottom: 2px; color: #000000;">LOGO</div>
                                     </t>
                                 </td>
-                                <td style="width: 35%;">
+                                <td style="width: 45%;">
                                     <t t-if="o.coso_id and o.coso_id.header_thu_hocphi">
                                         <span t-out="o.coso_id.header_thu_hocphi"/>
                                     </t>
-                                    <t t-if="not (o.coso_id and o.coso_id.header_thu_hocphi)">
-                                        SỞ GIÁO DỤC VÀ ĐÀO TẠO TỈNH BẮC NINH<br/>
-                                        TRUNG TÂM HTGD HÒA NHẬP TỪ SƠN
+                                     <t t-else="">
+                                        <span t-out="o.coso_id.name"/>
                                     </t>
                                 </td>
-                                <td class="top-title-area" style="width: 50%; text-align: right;">
-                                    <div class="top-main-title">KẾ HOẠCH CAN THIỆP CÁ NHÂN THÁNG</div>
-                                    <div class="top-main-title" style="font-size: 14.5px; margin-top: 1px;"><span t-field="o.name"/></div>
+                                <td class="top-title-area" style="width: 45%; text-align: right;">
+                                    <div class="top-main-title">KẾ HOẠCH CAN THIỆP CÁ NHÂN <span t-field="o.name"/></div>
                                     <div class="top-sub-title">
                                         (Từ ngày <span t-field="o.tu_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>
                                         đến ngày <span t-field="o.den_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>)

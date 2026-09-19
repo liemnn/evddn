@@ -194,266 +194,298 @@
           </field>
       </record>
 
-      <record id="ekids_canthiep.kehoach_muctieu_capnhat_ketqua_form" model="ir.ui.view">
-            <field name="name">ekids.kehoach_muctieu.form</field>
-            <field name="model">ekids.kehoach_muctieu</field>
-            <field name="priority" eval="2"/>
-            <field name="arch" type="xml">
-                <form string="Kết quả can thiệp">
-                    <sheet class="p-2">
+    <record id="ekids_canthiep.kehoach_muctieu_kiemduyet_ketqua_form" model="ir.ui.view">
+        <field name="name">ekids.kehoach_muctieu.kiemduyet.form</field>
+        <field name="model">ekids.kehoach_muctieu</field>
+        <field name="priority" eval="100"/>
+        <field name="arch" type="xml">
+            <form string="Xác nhận kết quả can thiệp" class="o_compact_popup_form">
 
+                <style>
+                    /* Bố cục khung ngoài Popup */
+                    .o_compact_popup_form {
+                        padding: 16px !important;
+                        background-color: #F8FAFC !important;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 14px;
+                    }
 
-                        <field name="ketqua2muctieu_ids"
-                               widget="ekids_canthiep_ketqua"
-                               nolabel="1">
-                            <list>
-                                <field name="ngay"/>
-                                <field name="trangthai"/>
-                                <field name="desc"/>
-                                <field name="loai"/>
+                    /* 1. Tiêu đề mục tiêu */
+                    .kh-compact-header-row {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 100%;
+                        padding-bottom: 8px;
+                        border-bottom: 1px solid #E2E8F0;
+                    }
+                    .kh-compact-target-title {
+                        font-size: 14px;
+                        color: #0F172A;
+                        font-weight: 700;
+                        line-height: 1.4;
+                    }
 
-                                <field name="is_date_status" invisible="1"/>
-                                <field name="solan_thu" invisible="1"/>
-                                <field name="solan_thu_dat" invisible="1"/>
-                                <field name="tyle_thu" invisible="1"/>
-                            </list>
-                        </field>
+                    /* 2. Khung chứa 3 nút chọn kết luận to ở trên cùng */
+                    .kh-big-actions-container {
+                        background: #FFFFFF;
+                        border: 1px solid #E2E8F0;
+                        border-radius: 10px;
+                        padding: 12px 14px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                    }
+                    .kh-big-actions-title {
+                        font-size: 11px;
+                        font-weight: 800;
+                        color: #475569;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                    }
+                    .custom_ketqua_3btns {
+                        display: flex !important;
+                        align-items: center;
+                        gap: 10px;
+                        width: 100%;
+                    }
+                    .custom_ketqua_3btns .o_selection_badge {
+                        flex: 1 !important;
+                        margin: 0 !important;
+                        border-radius: 8px !important;
+                        padding: 12px 14px !important;
+                        font-size: 14px !important;
+                        font-weight: 800 !important;
+                        border: 1.5px solid #CBD5E1 !important;
+                        background-color: #F8FAFC !important;
+                        color: #475569 !important;
+                        cursor: pointer;
+                        text-align: center;
+                        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                    }
+                    /* Ẩn trạng thái 0 (Chờ duyệt) */
+                    .custom_ketqua_3btns span.o_selection_badge[value='"0"'] {
+                        display: none !important;
+                    }
+                    /* Nút 1: Đạt (+) */
+                    .custom_ketqua_3btns span.o_selection_badge[value='"1"']:hover,
+                    .custom_ketqua_3btns span.o_selection_badge[value='"1"'].active {
+                        background-color: #DCFCE7 !important;
+                        border-color: #16A34A !important;
+                        color: #15803D !important;
+                        box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15) !important;
+                    }
+                    /* Nút -1: Chuyển (-) */
+                    .custom_ketqua_3btns span.o_selection_badge[value='"-1"']:hover,
+                    .custom_ketqua_3btns span.o_selection_badge[value='"-1"'].active {
+                        background-color: #FEF3C7 !important;
+                        border-color: #D97706 !important;
+                        color: #B45309 !important;
+                        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15) !important;
+                    }
+                    /* Nút -2: Dừng (-) */
+                    .custom_ketqua_3btns span.o_selection_badge[value='"-2"']:hover,
+                    .custom_ketqua_3btns span.o_selection_badge[value='"-2"'].active {
+                        background-color: #FEE2E2 !important;
+                        border-color: #DC2626 !important;
+                        color: #B91C1C !important;
+                        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15) !important;
+                    }
 
-                    </sheet>
+                    /* Khối ghi chú cảnh báo đỏ khi Chuyển / Dừng */
+                    .note-alert-red {
+                        background-color: #FEF2F2;
+                        border: 1px solid #FCA5A5;
+                        color: #B91C1C;
+                        border-radius: 6px;
+                        padding: 7px 12px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
 
-                    <footer class="d-flex justify-content-start align-items-center bg-light border-top px-3 py-2"
-                            style="background-color: #F8FAFC !important; border-color: #E2E8F0 !important;">
-                        <button string="Đóng lại"
-                                name="action_donglai_ve_kehoach"
-                                type="object"
-                                class="btn btn-secondary d-flex align-items-center gap-1.5 fw-bold shadow-sm"
-                                icon="fa-arrow-left"
-                                style="border-radius: 6px; padding: 5px 14px; font-size: 12.5px; background-color: #64748B; color: #FFFFFF; border-color: #64748B;"/>
-                    </footer>
-                </form>
-            </field>
-      </record>
+                    /* 3. Khung Score Counter Card nổi bật */
+                    .kh-score-highlight-panel {
+                        background: #FFFFFF;
+                        border: 1px solid #CBD5E1;
+                        border-radius: 12px;
+                        padding: 14px 18px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 16px;
+                        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+                    }
+                    .score-input-wrapper {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        background: #F8FAFC;
+                        border: 1.5px solid #E2E8F0;
+                        border-radius: 10px;
+                        padding: 6px 14px;
+                        transition: all 0.2s ease;
+                    }
+                    .score-input-wrapper:focus-within {
+                        background: #FFFFFF;
+                        border-color: #2563EB;
+                        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+                    }
+                    .score-input-wrapper input.o_input {
+                        width: 65px !important;
+                        height: 42px !important;
+                        font-size: 24px !important;
+                        font-weight: 800 !important;
+                        color: #16A34A !important;
+                        text-align: center !important;
+                        background: #FFFFFF !important;
+                        border: 1.5px solid #CBD5E1 !important;
+                        border-radius: 8px !important;
+                        padding: 2px !important;
+                        outline: none !important;
+                    }
+                    .score-input-wrapper input.o_input:focus {
+                        border-color: #16A34A !important;
+                        box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.15) !important;
+                    }
+                    .score-denominator-text {
+                        font-size: 15px;
+                        font-weight: 700;
+                        color: #475569;
+                        white-space: nowrap;
+                    }
+                    .score-panel-divider {
+                        width: 1px;
+                        height: 52px;
+                        background-color: #E2E8F0;
+                    }
 
-      <record id="ekids_canthiep.kehoach_muctieu_kiemduyet_ketqua_form" model="ir.ui.view">
-          <field name="name">ekids.kehoach_muctieu.form</field>
-          <field name="model">ekids.kehoach_muctieu</field>
-          <field name="priority" eval="100"/>
-          <field name="arch" type="xml">
-              <form string="Chi tiết Can thiệp" class="o_compact_popup_form">
+                    /* 4. Nhãn tiêu đề các ô nhập text */
+                    .kh-section-label {
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: #475569;
+                        text-transform: uppercase;
+                        margin-bottom: 4px;
+                    }
+                </style>
 
-                 <style>
-                      /* Loại bỏ viền đệm mặc định của Odoo Popup */
-                      .o_compact_popup_form {
-                          padding: 14px !important;
-                          background-color: #F8FAFC !important;
-                          display: flex;
-                          flex-direction: column;
-                          gap: 12px;
-                      }
+                <!-- ================= 1. HEADER: TÊN MỤC TIÊU ================= -->
+                <div class="kh-compact-header-row">
+                    <div class="kh-compact-target-title">
+                        <i class="fa fa-bullseye text-primary me-1.5"/>
+                        <span>Mục tiêu: </span>
+                        <field name="name" readonly="1" class="text-primary fw-bold"/>
+                    </div>
+                </div>
 
-                      /* Vùng chứa chính thay thế cho thẻ sheet cũ */
-                      .kh-compact-container {
-                          width: 100%;
-                          background: #FFFFFF;
-                          border: 1px solid #E2E8F0;
-                          border-radius: 8px;
-                          padding: 14px;
-                          display: flex;
-                          flex-direction: column;
-                          gap: 12px;
-                          box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-                      }
+                <!-- ================= 2. KHỐI 3 NÚT TO RÕ RÀNG TRÊN CÙNG ================= -->
+                <div class="kh-big-actions-container shadow-sm">
+                    <div class="kh-big-actions-title">Kết luận [kiểm Duyệt] cuối cùng:</div>
+                    <div class="custom_ketqua_3btns">
+                        <field name="trangthai_kiemduyet" widget="selection_badge" nolabel="1"/>
+                    </div>
 
-                      /* Hàng Header ngang chứa duy nhất tên Mục tiêu và nút Đóng X */
-                      .kh-compact-header-row {
-                          display: flex;
-                          align-items: center;
-                          justify-content: space-between;
-                          width: 100%;
-                          padding-bottom: 8px;
-                          border-bottom: 1px solid #F1F5F9;
-                          gap: 16px;
-                      }
+                    <!-- GHI CHÚ ĐỎ KHI CHỌN CHUYỂN (-) -->
+                    <div invisible="trangthai_kiemduyet != '-1'" class="note-alert-red mt-1">
+                        <i class="fa fa-arrow-right-arrow-left me-1"/>
+                        <span>Mục tiêu sẽ được chuyển sang tháng sau tiếp tục can thiệp.</span>
+                    </div>
 
-                      .kh-compact-date-label {
-                          font-size: 13.5px;
-                          color: #1E293B;
-                          font-weight: 700;
-                          flex: 1;
-                          min-width: 0;
-                      }
-                      .kh-compact-date-label .o_field_widget {
-                          display: inline !important;
-                          font-weight: 700 !important;
-                          color: #1E293B !important;
-                      }
+                    <!-- GHI CHÚ ĐỎ KHI CHỌN DỪNG (-) -->
+                    <div invisible="trangthai_kiemduyet != '-2'" class="note-alert-red mt-1">
+                        <i class="fa fa-ban me-1"/>
+                        <span>Mục tiêu sẽ dừng lại không tiếp tục tiến hành can thiệp trong các tháng tiếp.</span>
+                    </div>
+                </div>
 
-                      /* 🌟 BOX KHỐI XÁC NHẬN MÀU XÁM NHẸ THEO YÊU CẦU */
-                      .kh-action-gray-box {
-                          background-color: #F8FAFC !important;
-                          border: 1px solid #E2E8F0 !important;
-                          border-radius: 6px !important;
-                          padding: 10px 12px !important;
-                          display: flex;
-                          flex-direction: column;
-                          gap: 8px;
-                          width: 100%;
-                      }
+                <!-- ================= 3. KHỐI NHẬP SỐ LẦN ĐẠT & TỶ LỆ HOÀN THÀNH ================= -->
+                <div class="kh-score-highlight-panel">
+                    <!-- Cột trái: Ô nhập số lần đạt nổi bật -->
+                    <div class="d-flex flex-column gap-1.5">
+                        <div class="text-muted fw-bold small text-uppercase d-flex align-items-center gap-1.5" style="font-size: 11px; letter-spacing: 0.4px;">
+                            <i class="fa fa-pen-to-square text-primary"/>
+                            <span>Số lần kiểm tra đạt (+)/ lần thử:</span>
+                        </div>
 
-                      /* Tiêu đề phía trên của khối xám */
-                      .kh-action-box-title {
-                          font-size: 12px;
-                          font-weight: 700;
-                          color: #475569;
-                          text-transform: uppercase;
-                          letter-spacing: 0.3px;
-                      }
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="score-input-wrapper">
+                                <field name="solan_kiemduyet_dat" nolabel="1"/>
+                                <div class="score-denominator-text">
+                                    / <span class="fw-bolder text-dark fs-5"><field name="solan_thu" readonly="1"/></span> lần thử
+                                </div>
+                            </div>
+                        </div>
 
-                      /* Cấu hình bộ khay chứa button nằm dàn ngang bên dưới */
-                      .custom_ketqua_badge {
-                          display: flex !important;
-                          align-items: center;
-                          gap: 6px;
-                          width: 100%;
-                      }
+                        <div invisible="trangthai_kiemduyet != '1'" class="text-success fw-bold d-flex align-items-center gap-1 mt-0.5" style="font-size: 11px;">
+                            <i class="fa fa-circle-check"/>
+                            <span>Yêu cầu đạt chuẩn: từ 8/10 (≥ 80%)</span>
+                        </div>
+                    </div>
 
-                      /* Tối ưu nút bấm dàn đều, chiếm full không gian chiều ngang */
-                      .custom_ketqua_badge .o_selection_badge {
-                          flex: 1 !important;
-                          margin-right: 0px !important;
-                          margin-bottom: 0px !important;
-                          border-radius: 4px !important;
-                          padding: 6px 12px !important;
-                          font-size: 12.5px !important;
-                          font-weight: bold !important;
-                          border: 1px solid #CBD5E1 !important;
-                          background-color: #FFFFFF !important;
-                          color: #475569 !important;
-                          cursor: pointer;
-                          text-align: center;
-                          transition: all 0.15s ease-in-out !important;
-                          white-space: nowrap;
-                      }
+                    <!-- Đường vạch kẻ phân cách giữa 2 cột -->
+                    <div class="score-panel-divider d-none d-sm-block"/>
 
-                      /* Ẩn trạng thái Chờ duyệt */
-                      .custom_ketqua_badge span.o_selection_badge[value='"0"'] {
-                          display: none !important;
-                      }
+                    <!-- Cột phải: Tỷ lệ % và Badge phân loại -->
+                    <div class="d-flex flex-column align-items-end justify-content-center gap-1">
+                        <div class="text-muted fw-bold small text-uppercase" style="font-size: 11px; letter-spacing: 0.4px;">
+                            Tỷ lệ đạt(+):
+                        </div>
 
-                      /* TRẠNG THÁI ACTIVE: Đóng viền rõ nét (2px solid) */
-                      .custom_ketqua_badge span.o_selection_badge[value='"1"']:hover,
-                      .custom_ketqua_badge span.o_selection_badge[value='"1"'].active {
-                          background-color: #DCFCE7 !important;
-                          border: 2px solid #22C55E !important;
-                          color: #15803D !important;
-                      }
+                        <div class="d-flex align-items-center gap-2.5">
+                            <span class="fw-bolder" style="font-size: 26px; color: #0F172A; line-height: 1;">
+                                <field name="tyle_kiemduyet" readonly="1"/>%
+                            </span>
 
-                      .custom_ketqua_badge span.o_selection_badge[value='"-1"']:hover,
-                      .custom_ketqua_badge span.o_selection_badge[value='"-1"'].active {
-                          background-color: #FEF3C7 !important;
-                          border: 2px solid #F59E0B !important;
-                          color: #B45309 !important;
-                      }
+                            <span invisible="tyle_kiemduyet &lt; 80"
+                                  class="badge bg-success text-white px-3 py-2 fw-bold"
+                                  style="font-size: 11.5px; border-radius: 8px;">
+                                <i class="fa fa-check me-1"/>Đạt( cần đảm bảo ≥ 80%)
+                            </span>
 
-                      .custom_ketqua_badge span.o_selection_badge[value='"-2"']:hover,
-                      .custom_ketqua_badge span.o_selection_badge[value='"-2"'].active {
-                          background-color: #FEF2F2 !important;
-                          border: 2px solid #EF4444 !important;
-                          color: #B91C1C !important;
-                      }
+                            <span invisible="tyle_kiemduyet &gt;= 80"
+                                  class="badge text-white px-3 py-2 fw-bold"
+                                  style="background-color: #F59E0B; font-size: 11.5px; border-radius: 8px;">
+                                <i class="fa fa-clock-rotate-left me-1"/>Chưa đạt (&lt; 80%) trẻ mới đang hình thành
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
-                      /* Nút tắt X phẳng */
-                      .btn-compact-close-x {
-                          background: transparent;
-                          border: none;
-                          color: #94A3B8;
-                          font-size: 15px;
-                          cursor: pointer;
-                          padding: 2px;
-                          display: inline-flex;
-                          align-items: center;
-                          transition: color 0.15s;
-                      }
-                      .btn-compact-close-x:hover { color: #475569; }
+                <!-- ================= 4. KHU VỰC MÔ TẢ TIẾN TRÌNH ================= -->
+                <div class="w-100 d-flex flex-column mt-1">
+                    <div class="kh-section-label">Ghi chú lại nội dung kiểm tra lại</div>
+                    <field name="ghichu_kiemduyet"
+                           nolabel="1"
+                           placeholder="Nhập ghi chú hoặc biểu hiện lâm sàng cụ thể của trẻ trong tháng..."
+                           style="width: 100%; min-height: 80px;"/>
+                </div>
 
-                      /* Khung tiêu đề nhập liệu tiến trình */
-                      .kh-compact-input-title {
-                          font-size: 11.5px;
-                          font-weight: 700;
-                          color: #64748B;
-                          text-transform: uppercase;
-                          letter-spacing: 0.5px;
-                      }
+                <!-- ================= 5. KHU VỰC Ý KIẾN / ĐỊNH HƯỚNG ================= -->
+                <div class="w-100 d-flex flex-column mt-1">
+                    <div class="kh-section-label">Ý kiến / Định hướng can thiệp:</div>
+                    <field name="dinhhuong_kiemduyet"
+                           nolabel="1"
+                           placeholder="Gợi ý định hướng: Khái quát hóa tại gia đình, tiếp tục duy trì sang tháng sau, thay đổi phương pháp can thiệp..."
+                           style="width: 100%; min-height: 80px;"/>
+                </div>
 
-                      /* Thanh Footer ngang dạt phải tinh gọn */
-                      .kh-compact-footer {
-                          display: flex;
-                          justify-content: flex-end;
-                          align-items: center;
-                          gap: 8px;
-                          width: 100%;
-                      }
-                      .btn-flat-compact {
-                          height: 32px;
-                          padding: 0 16px !important;
-                          font-size: 13px !important;
-                          font-weight: 700 !important;
-                          border-radius: 6px !important;
-                          display: inline-flex;
-                          align-items: center;
-                          justify-content: center;
-                          cursor: pointer;
-                          transition: all 0.15s ease;
-                      }
-                      .btn-flat-compact-light {
-                          background-color: #FFFFFF !important;
-                          border: 1px solid #CBD5E1 !important;
-                          color: #475569 !important;
-                      }
-                      .btn-flat-compact-light:hover { background-color: #F8FAFC !important; color: #1E293B !important; }
+                <!-- ================= FOOTER NÚT LƯU & ĐÓNG ================= -->
+                <footer class="mt-2 pt-2 border-top d-flex justify-content-end gap-2">
+                    <button string="Lưu &amp; Đóng" special="save" class="btn btn-primary fw-bold px-3"/>
+                    <button string="Đóng" class="btn btn-secondary px-3" special="cancel"/>
+                </footer>
 
-                      .btn-flat-compact-primary {
-                          background-color: #2563EB !important;
-                          border: none !important;
-                          color: #FFFFFF !important;
-                      }
-                      .btn-flat-compact-primary:hover { filter: brightness(0.92); }
-                 </style>
-                         <!-- DÒNG ĐẦU CÙNG: TIÊU ĐỀ MỤC TIÊU VÀ NÚT TẮT X -->
-                  <div class="kh-compact-header-row">
-                      <div class="kh-compact-date-label">
-                          <i class="fa fa-bullseye text-muted me-1.5"/>
-                          <span>Mục tiêu: </span>
-                          <span style="font-style: italic;">"<field name="muctieu_id" readonly="1" options="{'no_open': True}"/>"</span>
-                      </div>
-                  </div>
-
-                  <!-- 🌟 KHỐI XÁC NHẬN MÀU XÁM NHẸ MỚI TÁCH BIỆT -->
-                  <div class="kh-action-gray-box">
-                      <!-- Text Tiêu đề phía trên -->
-                      <div class="kh-action-box-title">Xác nhận kết quả can thiệp:</div>
-
-                      <!-- 3 Button nằm ngang phía dưới -->
-                      <div class="custom_ketqua_badge">
-                          <field name="trangthai_kiemduyet" widget="selection_badge" nolabel="1"/>
-                      </div>
-                  </div>
-
-                  <!-- KHU VỰC NHẬP TIẾN TRÌNH -->
-                  <div class="w-100 d-flex flex-column gap-1.5 mt-1">
-                      <div class="kh-compact-input-title">Mô tả chi tiết tiến trình:</div>
-                      <field name="ghichu_kiemduyet"
-                             nolabel="1"
-                             placeholder="Nhập ghi chú hoặc biểu hiện cụ thể của học sinh trong ngày..."
-                             style="width: 100%; min-height: 90px; border: 1px solid #CBD5E1; border-radius: 6px; padding: 12px; font-size: 14px; background-color: #FFFFFF; transition: border-color 0.2s; outline: none;"/>
-                  </div>
-
-
-
-
-             </form>
-         </field>
+            </form>
+        </field>
     </record>
+
+
+
+
     <record model="ir.ui.view" id="ekids_canthiep.kehoach_muctieu_gv_tu_taomoi_form">
         <field name="name">ekids.kehoach_muctieu.form.super.compact</field>
         <field name="model">ekids.kehoach_muctieu</field>

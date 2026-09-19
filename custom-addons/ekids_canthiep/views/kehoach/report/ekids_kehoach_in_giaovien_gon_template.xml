@@ -44,12 +44,12 @@
                             width: 100%;
                         }
 
-                        /* TRANG 1: HÀNH CHÍNH VÀ LĨNH VỰC TỔNG QUAN */
-                        .header-main-table { width: 100%; margin-bottom: 15px; }
-                        .header-main-table td { padding: 4px 8px; vertical-align: middle; font-size: 15px !important; color: #000000 !important; }
-                        .top-title-area { width: 50%; text-align: center; }
-                        .top-main-title { font-size: 20px !important; font-weight: bold !important; text-transform: uppercase; color: #000000 !important; }
-                        .top-sub-title { font-size: 15px !important; font-style: italic; margin-top: 2px; color: #000000 !important; }
+                        /* ================= BẢNG TIÊU ĐỀ TRÊN CÙNG ================= */
+                        .header-main-table { width: 100%; margin-bottom: 12px; }
+                        .header-main-table td { padding: 2px 4px; vertical-align: middle; color: #000000 !important; font-size: 15px !important; }
+                        .top-title-area { width: 45%; text-align: right; }
+                        .top-main-title { font-size: 18px !important; font-weight: bold !important; text-transform: uppercase; color: #000000 !important; }
+                        .top-sub-title { font-size: 13.5px !important; font-style: italic; color: #000000 !important; margin-top: 2px; }
 
                         .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; table-layout: fixed; }
                         .profile-grid-table td { border: 1px solid #000000 !important; padding: 7px 9px; font-size: 15px !important; vertical-align: middle; color: #000000 !important; }
@@ -134,7 +134,7 @@
                             white-space: nowrap;
                         }
 
-                        /* 🌟 BADGE DỮ LIỆU BAN ĐẦU */
+                        /* BADGE DỮ LIỆU BAN ĐẦU */
                         .meta-baseline-tag {
                             display: inline-block;
                             background-color: #f5f5f5 !important;
@@ -164,7 +164,6 @@
                             width: 100%;
                         }
 
-                        /* 🌟 HÀNG TIÊU ĐỀ THEO DÕI VÀ DỮ LIỆU BAN ĐẦU CÙNG HÀNG */
                         .tracking-header-row {
                             display: flex;
                             align-items: center;
@@ -307,29 +306,27 @@
 
                     <div class="o_compact_print_body">
 
-                        <!-- ================= TRANG 1: TRANG BÌA TỔNG QUAN HÀNH CHÍNH ================= -->
+                        <!-- ================= TRANG 1: HEADER TIÊU ĐỀ TRÊN CÙNG ================= -->
                         <table class="header-main-table">
                             <tr>
-                                <td>
+                                <td style="width: 10%;">
                                     <t t-if="o.coso_id and o.coso_id.logo">
-                                       <span t-field="o.coso_id.logo" t-options="{'widget': 'image', 'style': 'max-height: 55px; max-width: 100%; display: block; margin-bottom: 5px;'}"/>
+                                       <span t-field="o.coso_id.logo" t-options="{'widget': 'image', 'style': 'max-height: 45px; max-width: 100%; display: block; margin-bottom: 2px;'}"/>
                                     </t>
                                     <t t-if="not (o.coso_id and o.coso_id.logo)">
-                                        <div style="display: inline-block; width: 55px; height: 30px; border: 1px dashed #000; text-align: center; line-height: 30px; font-weight: bold; font-size: 11px; margin-bottom: 5px;">LOGO</div>
+                                        <div style="display: inline-block; width: 45px; height: 25px; border: 1px dashed #000; text-align: center; line-height: 25px; font-weight: bold; font-size: 10px; margin-bottom: 2px; color: #000000;">LOGO</div>
                                     </t>
                                 </td>
-                                <td>
+                                <td style="width: 45%;">
                                     <t t-if="o.coso_id and o.coso_id.header_thu_hocphi">
                                         <span t-out="o.coso_id.header_thu_hocphi"/>
                                     </t>
-                                    <t t-if="not (o.coso_id and o.coso_id.header_thu_hocphi)">
-                                        SỞ GIÁO DỤC VÀ ĐÀO TẠO TỈNH BẮC NINH<br/>
-                                        TRUNG TÂM HTGD HÒA NHẬP TỪ SƠN
+                                    <t t-else="">
+                                        <span t-out="o.coso_id.name"/>
                                     </t>
                                 </td>
-                                <td class="top-title-area">
-                                    <div class="top-main-title">KẾ HOẠCH CAN THIỆP CÁ NHÂN THÁNG</div>
-                                    <div class="top-main-title" style="font-size: 17px; margin-top: 3px;"><span t-field="o.name"/></div>
+                                <td class="top-title-area" style="width: 45%; text-align: right;">
+                                    <div class="top-main-title">KẾ HOẠCH CAN THIỆP CÁ NHÂN <span t-field="o.name"/></div>
                                     <div class="top-sub-title">
                                         (Từ ngày <span t-field="o.tu_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>
                                         đến ngày <span t-field="o.den_ngay" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/>)
@@ -338,6 +335,7 @@
                             </tr>
                         </table>
 
+                        <!-- ================= BẢNG HÀNH CHÍNH & LĨNH VỰC ================= -->
                         <t t-set="lv_list" t-value="o.kehoach_linhvuc_ids"/>
                         <t t-set="total_lv" t-value="len(lv_list)"/>
                         <t t-set="max_rows" t-value="total_lv if total_lv &gt; 7 else 7"/>
@@ -432,7 +430,7 @@
                             </tr>
                         </table>
 
-                        <!-- ================= TRANG 2 TRỞ ĐI ================= -->
+                        <!-- ================= TRANG 2 TRỞ ĐI: THEO DÕI MỤC TIÊU ================= -->
                         <div class="tracking-page-section">
                             <div class="tracking-table-title">Hệ thống Mục tiêu can thiệp và Nhật ký đánh giá mức độ thành thục</div>
 
@@ -461,7 +459,6 @@
                                         <div class="goal-bottom-row">
 
                                             <div class="tracking-container-row">
-                                                <!-- 🌟 HÀNG TIÊU ĐỀ THEO DÕI & DỮ LIỆU BAN ĐẦU (NẰM CÙNG HÀNG) -->
                                                 <div class="tracking-header-row">
                                                     <div class="tracking-header-label">
                                                         Theo dõi
@@ -470,7 +467,6 @@
                                                         </span>
                                                     </div>
 
-                                                    <!-- 🌟 DỮ LIỆU BAN ĐẦU ĐƯỢC CHUYỂN SANG BÊN PHẢI CÙNG HÀNG -->
                                                     <div class="meta-baseline-tag">
                                                         Dữ liệu ban đầu: Đạt (+)
                                                         <strong><span t-field="muctieu.solan_thu_dat"/></strong>/<strong><span t-field="muctieu.solan_thu"/></strong> lần

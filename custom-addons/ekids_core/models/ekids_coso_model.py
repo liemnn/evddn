@@ -49,7 +49,7 @@ class CoSo(models.Model):
         store=False
     )
 
-    header_thu_hocphi = fields.Html(string="Tiêu đề [Phần đầu] Phiếu [Học phí/Lương]")
+    header_thu_hocphi = fields.Html(string="Phần tiêu đề trong các bản In của trung tâm")
 
     ghichu_thu_hocphi = fields.Html(string="Ghi chú [Phần cuối] Phiếu [Học phí]")
     qrcode_thu_hocphi = fields.Binary(string="QR-Code [Chuyển khoản] thu Học phí")

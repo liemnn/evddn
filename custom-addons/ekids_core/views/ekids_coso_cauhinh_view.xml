@@ -415,11 +415,11 @@
                         </page>
 
                         <!-- TAB 2: THÔNG TIN PHIẾU THU & NGÂN HÀNG -->
-                        <page string="THÔNG TIN PHIẾU THU &amp; NGÂN HÀNG" name="receipt_config">
+                        <page string="THÔNG TIN &amp; NGÂN HÀNG" name="receipt_config">
                             <div class="kh-receipt-grid">
                                 <!-- Cột trái: Nội dung phiếu -->
                                 <div class="kh-card">
-                                    <div class="kh-card-title"><i class="fa fa-file-text-o" title="Phiếu thu"/> Nội dung phiếu thu</div>
+                                    <div class="kh-card-title"><i class="fa fa-file-text-o" title="Phiếu thu"/> NỘI DUNG TIÊU ĐỀ</div>
                                     <label for="header_thu_hocphi" class="fw-bold text-muted small"/>
                                     <field name="header_thu_hocphi" placeholder="Ví dụ: PHIẾU THU HỌC PHÍ &amp; PHÍ BÁN TRÚ" class="mb-3"/>
 

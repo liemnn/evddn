@@ -151,6 +151,7 @@ class KeHoach2MucTieu(models.Model):
 
     # ghi chú kiểm duyet
     ghichu_kiemduyet = fields.Html(string="Nội dung kiểm duyệt")
+    dinhhuong_kiemduyet = fields.Html(string="Ý kiến/ Định hướng")
 
 
 
@@ -178,9 +179,74 @@ class KeHoach2MucTieu(models.Model):
     solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
     tyle_thu = fields.Integer(string="Tỷ lệ %",compute="_compute_tyle_thu")
 
+    solan_kiemduyet_dat = fields.Integer(string="Số lần đạt(+)")
+    tyle_kiemduyet = fields.Integer(string="Tỷ lệ %", compute="_compute_tyle_kiemduyet")
+
+
     tyle_canthiep = fields.Integer(string="Tỷ lệ đạt %", compute="_compute_tyle_canthiep")
 
+    @api.onchange('trangthai_kiemduyet')
+    def _onchange_trangthai_kiemduyet(self):
+        """Khi bấm nút Đạt (+), nếu số lần đạt đang < 80% thì tự động gợi ý mốc 8/10"""
+        tong_thu = self.solan_thu if self.solan_thu > 0 else 10
+        nguong_dat = int(tong_thu * 0.8)  # 80% của tổng lần thử (ví dụ 8/10)
 
+        if self.trangthai_kiemduyet == '1':
+            if self.solan_kiemduyet_dat < nguong_dat:
+                self.solan_kiemduyet_dat = nguong_dat
+
+    @api.onchange('solan_kiemduyet_dat')
+    def _onchange_solan_kiemduyet_dat(self):
+        """Khi nhập số lần đạt, tự động điều chỉnh tỷ lệ và đồng bộ nút bấm"""
+        tong_thu = self.solan_thu if self.solan_thu > 0 else 10
+
+        # 1. Chống nhập vượt quá tổng số lần thử
+        if self.solan_kiemduyet_dat > tong_thu:
+            self.solan_kiemduyet_dat = tong_thu
+            return {
+                'warning': {
+                    'title': 'Cảnh báo số liệu',
+                    'message': f'Số lần đạt không thể vượt quá tổng số lần thử ({tong_thu})!'
+                }
+            }
+        if self.solan_kiemduyet_dat < 0:
+            self.solan_kiemduyet_dat = 0
+
+        # 2. Tính tỷ lệ %
+        nguong_dat = int(tong_thu * 0.8)
+        if self.solan_kiemduyet_dat >= nguong_dat:
+            # Từ 80% trở lên tự động đồng bộ sang nút Đạt (+)
+            self.trangthai_kiemduyet = '1'
+        else:
+            # Dưới 80% mà đang để Đạt (+) thì chuyển sang Chuyển (-)
+            if self.trangthai_kiemduyet == '1':
+                self.trangthai_kiemduyet = '-1'
+
+    @api.constrains('trangthai_kiemduyet', 'solan_kiemduyet_dat', 'solan_thu')
+    def _check_kiemduyet_dat_hople(self):
+        """Ràng buộc cứng khi Lưu (Save): Đã chọn Đạt (+) thì bắt buộc >= 80%"""
+        for rec in self:
+            tong_thu = rec.solan_thu if rec.solan_thu > 0 else 10
+            nguong_dat = int(tong_thu * 0.8)
+
+            if rec.trangthai_kiemduyet == '1' and rec.solan_kiemduyet_dat < nguong_dat:
+                raise ValidationError(
+                    f"Không thể xác nhận trạng thái [Đạt (+)]!\n"
+                    f"Tiêu chuẩn đánh giá lâm sàng bắt buộc đạt từ 80% trở lên.\n"
+                    f"• Số lần đạt hiện tại: {rec.solan_kiemduyet_dat}/{tong_thu} ({rec.tyle_kiemduyet}%)\n"
+                    f"• Yêu cầu tối thiểu: từ {nguong_dat}/{tong_thu} (≥ 80%) trở lên.\n\n"
+                    f"Vui lòng điều chỉnh lại số lần đạt hoặc chọn [Chuyển (-)] / [Dừng (-)]."
+                )
+
+    @api.depends("solan_kiemduyet_dat")
+    def _compute_tyle_kiemduyet(self):
+        for record in self:
+            tyle = 0
+            if record.solan_thu > 0:
+                tyle = (record.solan_kiemduyet_dat / record.solan_thu) * 100
+            else:
+                tyle = 0
+            record.tyle_kiemduyet = tyle
 
     def _compute_solan_dat_lientiep(self):
 
