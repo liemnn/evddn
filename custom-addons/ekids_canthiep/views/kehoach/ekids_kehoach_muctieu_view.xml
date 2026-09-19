@@ -194,6 +194,46 @@
           </field>
       </record>
 
+    <record id="ekids_canthiep.kehoach_muctieu_capnhat_ketqua_form" model="ir.ui.view">
+            <field name="name">ekids.kehoach_muctieu.form</field>
+            <field name="model">ekids.kehoach_muctieu</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <form string="Kết quả can thiệp">
+                    <sheet class="p-2">
+
+
+                        <field name="ketqua2muctieu_ids"
+                               widget="ekids_canthiep_ketqua"
+                               nolabel="1">
+                            <list>
+                                <field name="ngay"/>
+                                <field name="trangthai"/>
+                                <field name="desc"/>
+                                <field name="loai"/>
+
+                                <field name="is_date_status" invisible="1"/>
+                                <field name="solan_thu" invisible="1"/>
+                                <field name="solan_thu_dat" invisible="1"/>
+                                <field name="tyle_thu" invisible="1"/>
+                            </list>
+                        </field>
+
+                    </sheet>
+
+                    <footer class="d-flex justify-content-start align-items-center bg-light border-top px-3 py-2"
+                            style="background-color: #F8FAFC !important; border-color: #E2E8F0 !important;">
+                        <button string="Đóng lại"
+                                name="action_donglai_ve_kehoach"
+                                type="object"
+                                class="btn btn-secondary d-flex align-items-center gap-1.5 fw-bold shadow-sm"
+                                icon="fa-arrow-left"
+                                style="border-radius: 6px; padding: 5px 14px; font-size: 12.5px; background-color: #64748B; color: #FFFFFF; border-color: #64748B;"/>
+                    </footer>
+                </form>
+            </field>
+      </record>
+
     <record id="ekids_canthiep.kehoach_muctieu_kiemduyet_ketqua_form" model="ir.ui.view">
         <field name="name">ekids.kehoach_muctieu.kiemduyet.form</field>
         <field name="model">ekids.kehoach_muctieu</field>
