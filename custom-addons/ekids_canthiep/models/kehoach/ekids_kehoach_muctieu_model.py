@@ -770,7 +770,9 @@ class KeHoach2MucTieu(models.Model):
             last_ketqua2muctieu = None
             for ketqua2muctieu in ketqua2muctieus:
                 ngay =  fields.Date.to_date(ketqua2muctieu.ngay)
-                if (ngay <today and ketqua2muctieu.trangthai in ['1','-1','2']):
+                if (ngay <today
+                        and ketqua2muctieu.trangthai in ['1','-1','2']
+                        and ketqua2muctieu.is_giaovien_capnhat == True): # phai la giao vien tu cap nhat
                     last_ketqua2muctieu = ketqua2muctieu
             #TON TAI ban ghi cuoi co ngay:
             soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_dat_lientiep", "5")
@@ -778,15 +780,19 @@ class KeHoach2MucTieu(models.Model):
 
             if last_ketqua2muctieu:
                 last_ngay =fields.Date.to_date(last_ketqua2muctieu.ngay)
+                next_ngay = last_ngay + timedelta(days=3)
+                # ngay cap nhat 3 ngay tức chỉ tự động 3 ngày tiếp theo thôi
+
                 for ketqua2muctieu in ketqua2muctieus:
                     ngay = fields.Date.to_date(ketqua2muctieu.ngay)
                     if (ngay >last_ngay
-                        and ngay<= today):# tinh toan đến tận hôm nay
+                        and ngay<= next_ngay):# tinh toan đến tận hôm nay
                        if ketqua2muctieu.trangthai == '0':
                            if max_lientiep_dat < int(soluong_dat_lientiep_str):
                                ketqua2muctieu.write({
                                    'trangthai': last_ketqua2muctieu.trangthai,
                                    'solan_thu_dat': last_ketqua2muctieu.solan_thu_dat,
+                                   'is_giaovien_capnhat': False,
                                })
 
 

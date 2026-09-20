@@ -33,6 +33,29 @@ class KeHoach2LinhVuc(models.Model):
 
     tong_muctieu_dat= fields.Integer(compute="_compute_tong_muctieu_dat")
 
+    tyle_thu = fields.Integer(string="Tỷ lệ thử ban đầu (%)", compute="_compute_tyle", store=True)
+    tyle_dat = fields.Integer(string="Tỷ lệ đạt can thiệp (%)", compute="_compute_tyle", store=True)
+
+
+    def _compute_tyle(self):
+        for record in self:
+            muctieus = record.kehoach_muctieu_ids
+            tong_mt = len(muctieus)
+
+            if tong_mt > 0:
+                # Tính tổng phần trăm của các mục tiêu con
+                tong_tyle_thu = sum(mt.tyle_thu for mt in muctieus)
+                tong_tyle_dat = sum(mt.tyle_kiemduyet for mt in muctieus)
+
+                # Trung bình cộng chính xác (làm tròn số nguyên)
+                record.tyle_thu = round(tong_tyle_thu / tong_mt)
+                record.tyle_dat = round(tong_tyle_dat / tong_mt)
+            else:
+                record.tyle_thu = 0
+                record.tyle_dat = 0
+
+
+
 
     def func_capnhat_kehoach_muctieu_truoc(self):
         kehoach_muctieus = self.kehoach_muctieu_ids

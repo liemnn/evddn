@@ -4,6 +4,9 @@
         <t t-call="web.basic_layout">
             <t t-foreach="docs" t-as="doc">
                 <t t-set="data" t-value="doc._get_hoso_report_data()"/>
+                <t t-set="tab1" t-value="data.get('tab1', {})"/>
+                <t t-set="hs" t-value="data.get('hocsinh', {})"/>
+                <t t-set="chart" t-value="tab1.get('chart', {})"/>
 
                 <div class="container-fluid p-3" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0F172A; font-size: 12px; line-height: 1.45;">
 
@@ -48,24 +51,24 @@
                             <tr>
                                 <td style="width: 18%; padding: 4px; color: #93C5FD; font-weight: bold;">Họ và tên trẻ:</td>
                                 <td style="width: 32%; padding: 4px; color: #FDE047; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">
-                                    <span t-out="data['hocsinh']['name']"/>
+                                    <span t-out="hs.get('name', '')"/>
                                 </td>
                                 <td style="width: 18%; padding: 4px; color: #93C5FD; font-weight: bold;">Ngày sinh:</td>
                                 <td style="width: 32%; padding: 4px; font-weight: bold;">
-                                    <span t-out="data['hocsinh']['ngaysinh']"/>
+                                    <span t-out="hs.get('ngaysinh', '')"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Tuổi can thiệp:</td>
-                                <td style="padding: 4px;"><span t-out="data['hocsinh']['tuoi']"/></td>
+                                <td style="padding: 4px;"><span t-out="hs.get('tuoi', '')"/></td>
                                 <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Đại diện Phụ huynh:</td>
-                                <td style="padding: 4px;"><span t-out="data['hocsinh']['phuhuynh']"/></td>
+                                <td style="padding: 4px;"><span t-out="hs.get('phuhuynh', '')"/></td>
                             </tr>
                             <tr>
                                 <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Giáo viên phụ trách:</td>
-                                <td style="padding: 4px;"><span t-out="data['tab1']['giaovien']"/></td>
+                                <td style="padding: 4px;"><span t-out="tab1.get('giaovien', '')"/></td>
                                 <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Quản lý chuyên môn:</td>
-                                <td style="padding: 4px;"><span t-out="data['tab1']['quanly']"/></td>
+                                <td style="padding: 4px;"><span t-out="tab1.get('quanly', '')"/></td>
                             </tr>
                         </table>
                     </div>
@@ -74,18 +77,18 @@
                     <ul class="nav hoso-tabs-nav mb-3" id="hosoCanThiepTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link hoso-tab-btn active" type="button">
-                                <span class="tab-icon-badge"><i class="fa fa-file-waveform"></i></span>
-                                <span>Báo cáo: <t t-out="data['tab1']['ten']"/></span>
+                                <span class="tab-icon-badge"><i class="fa fa-chart-line"></i></span>
+                                <span>Báo cáo: <t t-out="tab1.get('ten', 'Chưa có kế hoạch')"/></span>
                                 <t t-if="data.get('has_plan')">
                                     <span class="badge bg-primary rounded-pill ms-1" style="font-size: 10px;">
-                                        <t t-out="data['tab1']['tyle_dat']"/>%
+                                        <t t-out="tab1.get('tyle_dat', 0)"/>%
                                     </span>
                                 </t>
                             </button>
                         </li>
                     </ul>
 
-                    <!-- ================= 3. NỘI DUNG TAB 1 ================= -->
+                    <!-- ================= 3. NỘI DUNG BÁO CÁO TAB 1 ================= -->
                     <t t-if="not data.get('has_plan')">
                         <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; padding: 20px; text-align: center; color: #B45309; margin: 15px 0; font-size: 12.5px;">
                             <i class="fa fa-circle-exclamation me-1" style="font-size: 15px;"></i>
@@ -96,48 +99,153 @@
                         <!-- Thông tin kỳ can thiệp -->
                         <div class="d-flex justify-content-between align-items-center mb-2 px-1">
                             <span class="text-muted">
-                                <strong>Kỳ can thiệp:</strong> <span t-out="data['tab1']['ten']"/>
-                                <t t-if="data['tab1']['thoigian']">
-                                    (<span t-out="data['tab1']['thoigian']"/>)
+                                <strong>Kỳ can thiệp:</strong> <span t-out="tab1.get('ten', '')"/>
+                                <t t-if="tab1.get('thoigian')">
+                                    (<span t-out="tab1.get('thoigian')"/>)
                                 </t>
                             </span>
                         </div>
 
-                        <!-- 4 Khối Chỉ Số KPI -->
+                        <!-- 4 Khối Chỉ Số KPI Tự Động -->
                         <table style="width: 100%; border-collapse: separate; border-spacing: 8px 0; margin-bottom: 16px;">
                             <tr>
                                 <td style="width: 25%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #2563EB; border-radius: 8px; padding: 10px 12px;">
-                                    <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B;">Tổng mục tiêu</div>
+                                    <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B;">Tổng mục tiêu kế hoạch</div>
                                     <div style="font-size: 17px; font-weight: 800; color: #1D4ED8; margin: 2px 0;">
-                                        <span t-out="data['tab1']['tong_muctieu']"/> mục tiêu
+                                        <span t-out="tab1.get('tong_muctieu', 0)"/> mục tiêu
                                     </div>
-                                    <div style="font-size: 10px; color: #475569;">Kế hoạch tháng đã đóng (-1)</div>
+                                    <div style="font-size: 10px; color: #475569;">Kỳ kế hoạch đã đóng</div>
                                 </td>
                                 <td style="width: 25%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #0D9488; border-radius: 8px; padding: 10px 12px;">
-                                    <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B;">Mục tiêu đạt</div>
+                                    <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B;">Kết quả đạt được</div>
                                     <div style="font-size: 17px; font-weight: 800; color: #15803D; margin: 2px 0;">
-                                        <span t-out="data['tab1']['dat_muctieu']"/> / <span t-out="data['tab1']['tong_muctieu']"/>
+                                        <span t-out="tab1.get('tong_muctieu_dat', 0)"/> / <span t-out="tab1.get('tong_muctieu', 0)"/> mục tiêu
                                     </div>
-                                    <div style="font-size: 10px; color: #475569;">Đạt: <strong><span t-out="data['tab1']['tyle_dat']"/>% KH</strong></div>
+                                    <div style="font-size: 10px; color: #475569;">Tỷ lệ hoàn thành: <strong><span t-out="tab1.get('tyle_dat', 0)"/>% KH tháng</strong></div>
                                 </td>
                                 <td style="width: 25%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #E11D48; border-radius: 8px; padding: 10px 12px;">
                                     <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B;">Điểm trũng cần ưu tiên</div>
                                     <div style="font-size: 12px; font-weight: 800; color: #DC2626; margin: 4px 0;">
-                                        Kỹ năng xã hội (40%)
+                                        <span t-out="tab1.get('diem_trung', 'Chưa có')"/>
                                     </div>
-                                    <div style="font-size: 10px; color: #475569;">Dung nạp giác quan &amp; xã hội</div>
+                                    <div style="font-size: 10px; color: #475569;">Lĩnh vực tỷ lệ đạt thấp nhất</div>
                                 </td>
                                 <td style="width: 25%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #D97706; border-radius: 8px; padding: 10px 12px;">
                                     <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B;">Lĩnh vực bứt phá nhất</div>
                                     <div style="font-size: 12px; font-weight: 800; color: #B45309; margin: 4px 0;">
-                                        Giao tiếp biểu đạt (100%)
+                                        <span t-out="tab1.get('but_pha', 'Chưa có')"/>
                                     </div>
-                                    <div style="font-size: 10px; color: #475569;">Bật âm chủ động &amp; yêu cầu</div>
+                                    <div style="font-size: 10px; color: #475569;">Lĩnh vực tỷ lệ đạt cao nhất</div>
                                 </td>
                             </tr>
                         </table>
 
-                        <!-- Bảng chi tiết từng mục tiêu -->
+                        <!-- ================= SƠ ĐỒ ĐỐI CHIẾU TIẾN BỘ LÂM SÀNG (SVG LINE CHART) ================= -->
+                        <div class="mb-3" style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 10px; padding: 14px 18px;">
+
+                            <!-- Header của sơ đồ -->
+                            <div class="d-flex justify-content-between align-items-center mb-2 pb-2" style="border-bottom: 1px solid #F1F5F9;">
+                                <div style="font-size: 13px; font-weight: 800; color: #1E293B;">
+                                    <i class="fa fa-chart-line text-primary me-1.5"/>
+                                    <span>Sơ đồ đối chiếu tiến bộ lâm sàng (Baseline vs <t t-out="tab1.get('ten', '')"/>)</span>
+                                </div>
+                                <div style="font-size: 11px; font-weight: 700; color: #64748B;">
+                                    Mức đạt chuẩn từ 80% trở lên
+                                </div>
+                            </div>
+
+                            <!-- Legend chú thích màu sắc -->
+                            <div class="d-flex justify-content-center align-items-center gap-4 mb-2" style="font-size: 11px; font-weight: 700;">
+                                <div class="d-flex align-items-center gap-1.5" style="color: #64748B;">
+                                    <svg width="24" height="12">
+                                        <line x1="0" y1="6" x2="24" y2="6" stroke="#64748B" stroke-width="2.5" stroke-dasharray="3,3"/>
+                                        <polygon points="12,2 16,6 12,10 8,6" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
+                                    </svg>
+                                    <span>Đánh giá ban đầu (Baseline)</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-1.5" style="color: #DC2626;">
+                                    <svg width="24" height="12">
+                                        <line x1="0" y1="6" x2="24" y2="6" stroke="#DC2626" stroke-width="2.5"/>
+                                        <circle cx="12" cy="6" r="4" fill="#DC2626"/>
+                                    </svg>
+                                    <span>Đánh giá sau can thiệp (<t t-out="tab1.get('ten', '')"/>)</span>
+                                </div>
+                            </div>
+
+                            <!-- Khung vẽ đồ thị đường SVG -->
+                            <div style="width: 100%; overflow-x: auto;">
+                                <svg viewBox="0 0 900 215" style="width: 100%; height: auto; display: block; font-family: sans-serif;">
+
+                                    <!-- Các đường lưới ngang tỷ lệ % -->
+                                    <!-- 110% -->
+                                    <line x1="50" y1="25" x2="860" y2="25" stroke="#F1F5F9" stroke-width="1"/>
+                                    <text x="42" y="29" font-size="10" fill="#94A3B8" text-anchor="end">110%</text>
+
+                                    <!-- 100% -->
+                                    <line x1="50" y1="38" x2="860" y2="38" stroke="#E2E8F0" stroke-width="1"/>
+                                    <text x="42" y="42" font-size="10" fill="#94A3B8" text-anchor="end">100%</text>
+
+                                    <!-- 80% (Đường tham chiếu chuẩn đạt) -->
+                                    <line x1="50" y1="64" x2="860" y2="64" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="2,2"/>
+                                    <text x="42" y="68" font-size="10" fill="#64748B" font-weight="bold" text-anchor="end">80%</text>
+
+                                    <!-- 60% -->
+                                    <line x1="50" y1="91" x2="860" y2="91" stroke="#F1F5F9" stroke-width="1"/>
+                                    <text x="42" y="95" font-size="10" fill="#94A3B8" text-anchor="end">60%</text>
+
+                                    <!-- 40% -->
+                                    <line x1="50" y1="117" x2="860" y2="117" stroke="#F1F5F9" stroke-width="1"/>
+                                    <text x="42" y="121" font-size="10" fill="#94A3B8" text-anchor="end">40%</text>
+
+                                    <!-- 20% -->
+                                    <line x1="50" y1="144" x2="860" y2="144" stroke="#F1F5F9" stroke-width="1"/>
+                                    <text x="42" y="148" font-size="10" fill="#94A3B8" text-anchor="end">20%</text>
+
+                                    <!-- 0% (Trục hoành cơ sở) -->
+                                    <line x1="50" y1="170" x2="860" y2="170" stroke="#CBD5E1" stroke-width="1.5"/>
+                                    <text x="42" y="174" font-size="10" fill="#94A3B8" text-anchor="end">0%</text>
+
+                                    <!-- Diện tích đổ bóng màu hồng nhạt dưới đường can thiệp -->
+                                    <t t-if="chart.get('polygon_dat')">
+                                        <polygon t-att-points="chart['polygon_dat']" fill="#FEE2E2" opacity="0.45"/>
+                                    </t>
+
+                                    <!-- Đường Baseline (Nét đứt màu xám) -->
+                                    <t t-if="chart.get('points_thu')">
+                                        <polyline t-att-points="chart['points_thu']" fill="none" stroke="#64748B" stroke-width="2.5" stroke-dasharray="4,4"/>
+                                    </t>
+
+                                    <!-- Đường Sau can thiệp (Nét liền màu đỏ) -->
+                                    <t t-if="chart.get('points_dat')">
+                                        <polyline t-att-points="chart['points_dat']" fill="none" stroke="#DC2626" stroke-width="3"/>
+                                    </t>
+
+                                    <!-- Các điểm nút tọa độ và nhãn của từng lĩnh vực -->
+                                    <t t-foreach="chart.get('items', [])" t-as="pt">
+                                        <!-- Điểm Baseline (Hình thoi trắng viền xám) -->
+                                        <polygon t-attf-points="#{pt['x']},#{pt['y_thu'] - 5} #{pt['x'] + 5},#{pt['y_thu']} #{pt['x']},#{pt['y_thu'] + 5} #{pt['x'] - 5},#{pt['y_thu']}"
+                                                 fill="#FFFFFF" stroke="#64748B" stroke-width="1.8"/>
+                                        <text t-att-x="pt['x']" t-att-y="pt['y_thu'] - 8" font-size="9.5" fill="#475569" font-weight="bold" text-anchor="middle">
+                                            <t t-out="pt['tyle_thu']"/>%
+                                        </text>
+
+                                        <!-- Điểm Sau can thiệp (Hình tròn đỏ) -->
+                                        <circle t-att-cx="pt['x']" t-att-cy="pt['y_dat']" r="5.5" fill="#DC2626" stroke="#FFFFFF" stroke-width="2"/>
+                                        <text t-att-x="pt['x']" t-att-y="pt['y_dat'] - 9" font-size="10.5" fill="#B91C1C" font-weight="800" text-anchor="middle">
+                                            <t t-out="pt['tyle_dat']"/>%
+                                        </text>
+
+                                        <!-- Tên lĩnh vực trên trục X -->
+                                        <text t-att-x="pt['x']" y="193" font-size="10.5" font-weight="700" fill="#334155" text-anchor="middle">
+                                            <t t-out="pt['short_name']"/>
+                                        </text>
+                                    </t>
+
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- ================= BẢNG CHI TIẾT TỪNG MỤC TIÊU ================= -->
                         <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-bottom: 8px; border-bottom: 1.5px solid #CBD5E1; padding-bottom: 4px;">
                             I. Chi tiết mức độ ban đầu và kết quả can thiệp
                         </div>
@@ -151,39 +259,39 @@
                                     <th style="border: 1px solid #CBD5E1; padding: 6px; width: 33%; text-align: left;">Mục tiêu can thiệp</th>
                                     <th style="border: 1px solid #CBD5E1; padding: 6px; width: 10%; text-align: center;">Trước CT</th>
                                     <th style="border: 1px solid #CBD5E1; padding: 6px; width: 10%; text-align: center;">Sau CT</th>
-                                    <th style="border: 1px solid #CBD5E1; padding: 6px; width: 16%; text-align: left;">Định hướng</th>
+                                    <th style="border: 1px solid #CBD5E1; padding: 6px; width: 16%; text-align: left;">Ý kiến / Định hướng</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <t t-foreach="data['tab1']['targets']" t-as="mt">
-                                    <tr t-attf-style="background-color: #{'#FFFFFF' if mt['is_mastered'] else '#FFFBEB'};">
-                                        <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center;"><span t-out="mt['stt']"/></td>
-                                        <td style="border: 1px solid #CBD5E1; padding: 5px; font-weight: bold;"><span t-out="mt['linhvuc']"/></td>
-                                        <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center; color: #475569;"><span t-out="mt['tuoi']"/></td>
-                                        <td style="border: 1px solid #CBD5E1; padding: 5px;"><span t-out="mt['name']"/></td>
-                                        <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center;"><span t-out="mt['truoc_ct']"/></td>
+                                <t t-foreach="tab1.get('linhvucs', [])" t-as="mt">
+                                    <tr t-attf-style="background-color: #{'#FFFFFF' if mt.get('mucdo') else '#FFFBEB'};">
+                                        <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center;"><span t-out="mt.get('stt')"/></td>
+                                        <td style="border: 1px solid #CBD5E1; padding: 5px; font-weight: bold;"><span t-out="mt.get('linhvuc')"/></td>
+                                        <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center; color: #475569;"><span t-out="mt.get('tuoi')"/></td>
+                                        <td style="border: 1px solid #CBD5E1; padding: 5px;"><span t-out="mt.get('muctieu')"/></td>
+                                        <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center;"><span t-out="mt.get('truoc')"/></td>
                                         <td style="border: 1px solid #CBD5E1; padding: 5px; text-align: center; font-weight: bold;">
-                                            <span t-attf-style="padding: 2px 5px; border-radius: 4px; background-color: #{'#DCFCE7' if mt['is_mastered'] else '#FEF3C7'}; color: #{'#15803D' if mt['is_mastered'] else '#B45309'}; border: 1px solid #{'#BBF7D0' if mt['is_mastered'] else '#FDE68A'};">
-                                                <span t-out="mt['sau_ct_rate']"/>%
+                                            <span t-attf-style="padding: 2px 5px; border-radius: 4px; background-color: #{'#DCFCE7' if mt.get('mucdo') else '#FEF3C7'}; color: #{'#15803D' if mt.get('mucdo') else '#B45309'}; border: 1px solid #{'#BBF7D0' if mt.get('mucdo') else '#FDE68A'};">
+                                                <span t-out="mt.get('sau')"/>%
                                             </span>
                                         </td>
                                         <td style="border: 1px solid #CBD5E1; padding: 5px;">
-                                            <span t-out="mt['dinh_huong']"/>
+                                            <span t-out="mt.get('dinh_huong')"/>
                                         </td>
                                     </tr>
                                 </t>
                             </tbody>
                         </table>
 
-                        <!-- Nhận xét cuối kỳ -->
+                        <!-- ================= NHẬN XÉT ĐÁNH GIÁ CUỐI KỲ ================= -->
                         <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-bottom: 6px;">
                             II. Nhận xét đánh giá của giáo viên
                         </div>
                         <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 6px; padding: 10px 14px; margin-bottom: 24px; font-size: 11px; line-height: 1.55; color: #334155;">
-                            <span t-out="data['tab1']['nhan_xet']"/>
+                            <span t-out="tab1.get('nhan_xet', '')"/>
                         </div>
 
-                        <!-- Chữ ký ba bên -->
+                        <!-- ================= CHỮ KÝ XÁC NHẬN BA BÊN ================= -->
                         <table style="width: 100%; text-align: center; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px;">
                             <tr>
                                 <td style="width: 33.33%; vertical-align: top;">
@@ -191,7 +299,7 @@
                                         Giáo viên phụ trách
                                     </div>
                                     <div style="font-size: 12.5px; font-weight: 800; color: #0F172A;">
-                                        <span t-out="data['tab1']['giaovien']"/>
+                                        <span t-out="tab1.get('giaovien', '')"/>
                                     </div>
                                 </td>
                                 <td style="width: 33.33%; vertical-align: top;">
@@ -199,7 +307,7 @@
                                         Quản lý chuyên môn
                                     </div>
                                     <div style="font-size: 12.5px; font-weight: 800; color: #0F172A;">
-                                        <span t-out="data['tab1']['quanly']"/>
+                                        <span t-out="tab1.get('quanly', '')"/>
                                     </div>
                                 </td>
                                 <td style="width: 33.33%; vertical-align: top;">
@@ -207,7 +315,7 @@
                                         Đại diện Phụ huynh
                                     </div>
                                     <div style="font-size: 12.5px; font-weight: 800; color: #0F172A;">
-                                        <span t-out="data['hocsinh']['phuhuynh']"/>
+                                        <span t-out="hs.get('phuhuynh', '')"/>
                                     </div>
                                 </td>
                             </tr>

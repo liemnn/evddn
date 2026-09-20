@@ -59,6 +59,8 @@ class KeHoachKetQua2MucTieu(models.Model):
     solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
     tyle_thu = fields.Integer(string="Tỷ lệ %", compute="_compute_tyle_thu")
 
+    is_giaovien_capnhat = fields.Boolean(string="Hệ thống tự câ nhật kết quả",default=True)
+
     def _compute_trangthai(self):
         for record in self:
            record._compute_tyle_thu()
