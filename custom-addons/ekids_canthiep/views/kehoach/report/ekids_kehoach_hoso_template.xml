@@ -5,12 +5,56 @@
             <t t-foreach="docs" t-as="doc">
                 <t t-set="data" t-value="doc._get_hoso_report_data()"/>
                 <t t-set="tab1" t-value="data.get('tab1', {})"/>
+                <t t-set="tab2" t-value="data.get('tab2', {})"/>
                 <t t-set="hs" t-value="data.get('hocsinh', {})"/>
                 <t t-set="chart" t-value="tab1.get('chart', {})"/>
+                <t t-set="active_tab" t-value="data.get('active_tab', 'tab1')"/>
 
-                <div class="container-fluid p-3" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0F172A; font-size: 12px; line-height: 1.45;">
+                <div class="container-fluid p-3" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1E293B; font-size: 12px; line-height: 1.45;">
 
                     <style>
+                        .hs-profile-card {
+                            background-color: #FFFFFF;
+                            border: 1px solid #E2E8F0;
+                            border-radius: 14px;
+                            padding: 16px 22px;
+                            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+                            position: relative;
+                        }
+                        .hs-avatar-box {
+                            width: 68px;
+                            height: 68px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+                            border: 2px solid #BFDBFE;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: #2563EB;
+                            font-size: 28px;
+                            flex-shrink: 0;
+                            overflow: hidden;
+                        }
+                        .hs-avatar-img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                        .hs-meta-item {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 6px;
+                            color: #475569;
+                            font-size: 11.5px;
+                        }
+                        .hs-meta-label {
+                            color: #64748B;
+                            font-weight: 500;
+                        }
+                        .hs-meta-val {
+                            color: #0F172A;
+                            font-weight: 700;
+                        }
                         .hoso-tabs-nav {
                             background-color: #F1F5F9;
                             border: 1px solid #E2E8F0;
@@ -18,31 +62,48 @@
                             padding: 6px;
                             display: flex;
                             align-items: center;
-                            justify-content: space-between;
+                            gap: 10px;
                         }
-                        .hoso-select-btn {
+                        .hoso-tab-btn {
                             border: 1px solid transparent !important;
                             border-radius: 8px !important;
-                            padding: 6px 14px !important;
+                            padding: 8px 14px !important;
                             font-size: 13px !important;
                             font-weight: 700 !important;
-                            color: #1D4ED8 !important;
-                            background-color: #FFFFFF !important;
-                            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06) !important;
+                            color: #64748B !important;
+                            background-color: transparent !important;
+                            cursor: pointer;
                             display: inline-flex !important;
                             align-items: center !important;
                             gap: 8px !important;
+                            transition: all 0.2s ease;
+                        }
+                        .hoso-tab-btn.active {
+                            color: #1D4ED8 !important;
+                            background-color: #FFFFFF !important;
+                            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06) !important;
                         }
                         .tab-icon-badge {
                             width: 24px;
                             height: 24px;
                             border-radius: 6px;
-                            background-color: #DBEAFE;
-                            color: #1D4ED8;
+                            background-color: #E2E8F0;
+                            color: #64748B;
                             display: inline-flex;
                             align-items: center;
                             justify-content: center;
                             font-size: 11px;
+                        }
+                        .hoso-tab-btn.active .tab-icon-badge {
+                            background-color: #DBEAFE;
+                            color: #1D4ED8;
+                        }
+                        .hoso-tab-btn-success.active .tab-icon-badge {
+                            background-color: #DCFCE7 !important;
+                            color: #047857 !important;
+                        }
+                        .hoso-tab-btn-success.active {
+                            color: #047857 !important;
                         }
                         .hoso-dropdown-select {
                             appearance: none;
@@ -58,6 +119,9 @@
                             padding-right: 18px;
                             margin: 0;
                         }
+                        .hoso-dropdown-select-green {
+                            color: #047857 !important;
+                        }
                         .hoso-dropdown-wrapper {
                             position: relative;
                             display: inline-flex;
@@ -72,46 +136,88 @@
                             right: 2px;
                             pointer-events: none;
                         }
+                        .hoso-dropdown-wrapper-green::after {
+                            color: #047857 !important;
+                        }
                     </style>
 
-                    <!-- MASTER HEADER: THÔNG TIN HỌC SINH -->
-                    <div class="shadow-sm mb-3" style="background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%); color: #FFFFFF; border-radius: 12px; padding: 16px 20px; border-bottom: 3.5px solid #2563EB;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <tr>
-                                <td style="width: 18%; padding: 4px; color: #93C5FD; font-weight: bold;">Họ và tên trẻ:</td>
-                                <td style="width: 32%; padding: 4px; color: #FDE047; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">
-                                    <span t-out="hs.get('name', '')"/>
-                                </td>
-                                <td style="width: 18%; padding: 4px; color: #93C5FD; font-weight: bold;">Ngày sinh:</td>
-                                <td style="width: 32%; padding: 4px; font-weight: bold;"><span t-out="hs.get('ngaysinh', '')"/></td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Tuổi can thiệp:</td>
-                                <td style="padding: 4px;"><span t-out="hs.get('tuoi', '')"/></td>
-                                <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Đại diện Phụ huynh:</td>
-                                <td style="padding: 4px;"><span t-out="hs.get('phuhuynh', '')"/></td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Giáo viên phụ trách:</td>
-                                <td style="padding: 4px;"><span t-out="tab1.get('giaovien', '')"/></td>
-                                <td style="padding: 4px; color: #93C5FD; font-weight: bold;">Quản lý chuyên môn:</td>
-                                <td style="padding: 4px;"><span t-out="tab1.get('quanly', '')"/></td>
-                            </tr>
-                        </table>
+                    <!-- ================= 1. HỒ SƠ HỌC SINH CARD SÁNG MÀU ================= -->
+                    <div class="hs-profile-card mb-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="hs-avatar-box">
+                                    <t t-if="hs.get('has_avatar')">
+                                        <img t-attf-src="/web/image?model=ekids.hocsinh&amp;id=#{hs['id']}&amp;field=#{hs['avatar_field']}"
+                                             class="hs-avatar-img" alt="Avatar"/>
+                                    </t>
+                                    <t t-else="">
+                                        <i class="fa fa-user-graduate"></i>
+                                    </t>
+                                </div>
+
+                                <div>
+                                    <div style="font-size: 10px; font-weight: 700; color: #2563EB; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
+                                        <i class="fa fa-school me-1 text-primary"/> <span t-out="hs.get('co_so', '')"/>
+                                    </div>
+
+                                    <div style="font-size: 19px; font-weight: 800; color: #0F172A; letter-spacing: -0.2px; line-height: 1.25; margin-bottom: 5px;">
+                                        <span t-out="hs.get('name', '')"/>
+                                    </div>
+
+                                    <div class="d-flex flex-wrap align-items-center gap-3 pt-1">
+                                        <div class="hs-meta-item">
+                                            <i class="fa fa-cake-candles text-muted" style="font-size: 11px;"/>
+                                            <span class="hs-meta-label">Ngày sinh:</span>
+                                            <span class="hs-meta-val"><span t-out="hs.get('ngaysinh', '')"/></span>
+                                        </div>
+                                        <span style="color: #CBD5E1;">•</span>
+                                        <div class="hs-meta-item">
+                                            <i class="fa fa-child-reaching text-muted" style="font-size: 11px;"/>
+                                            <span class="hs-meta-label">Tuổi can thiệp:</span>
+                                            <span class="hs-meta-val"><span t-out="hs.get('tuoi', '')"/></span>
+                                        </div>
+                                        <span style="color: #CBD5E1;">•</span>
+                                        <div class="hs-meta-item">
+                                            <i class="fa fa-users text-muted" style="font-size: 11px;"/>
+                                            <span class="hs-meta-label">Phụ huynh:</span>
+                                            <span class="hs-meta-val"><span t-out="hs.get('phuhuynh', '')"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-end ps-3" style="border-left: 1px dashed #E2E8F0;">
+                                <div class="mb-2">
+                                    <span class="badge" style="background-color: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; font-size: 11.5px; font-weight: 700; padding: 5px 12px; border-radius: 20px;">
+                                        <i class="fa fa-circle text-success me-1" style="font-size: 8px;"/>
+                                        <span t-out="hs.get('trang_thai', 'Đang theo học')"/>
+                                    </span>
+                                </div>
+                                <div class="hs-meta-item justify-content-end mb-1">
+                                    <span class="hs-meta-label">GV can thiệp:</span>
+                                    <span class="hs-meta-val text-primary"><span t-out="tab1.get('giaovien', 'Chưa phân công')"/></span>
+                                </div>
+                                <div class="hs-meta-item justify-content-end">
+                                    <span class="hs-meta-label">Quản lý chuyên môn:</span>
+                                    <span class="hs-meta-val"><span t-out="tab1.get('quanly', 'Trần Thị Ngọc Ánh')"/></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- THANH CHỌN KỲ BÁO CÁO (DROPDOWN CHỌN NHANH) -->
+                    <!-- ================= 2. THANH ĐIỀU HƯỚNG 2 TAB ================= -->
                     <div class="hoso-tabs-nav mb-3">
-                        <div class="hoso-select-btn">
+                        <!-- TAB 1: BÁO CÁO -->
+                        <div id="btn_main_tab1" t-attf-class="hoso-tab-btn #{'active' if active_tab == 'tab1' else ''}" onclick="switchHosoMainTab('content_tab1', this)">
                             <span class="tab-icon-badge"><i class="fa fa-chart-line"/></span>
-                            <span style="font-weight: 800; color: #1D4ED8; font-size: 13px;">Báo cáo:</span>
+                            <span style="font-weight: 800; font-size: 13px;">Báo cáo:</span>
 
-                            <div class="hoso-dropdown-wrapper">
+                            <div class="hoso-dropdown-wrapper" onclick="event.stopPropagation();">
                                 <select id="select_ky_baocao" class="hoso-dropdown-select" onchange="onChangeKyBaoCao(this)">
                                     <t t-foreach="data.get('ds_baocao', [])" t-as="ky">
                                         <option t-att-value="ky['id']"
                                                 t-att-selected="ky['id'] == data.get('current_plan_id') and 'selected' or None">
-                                            <t t-out="ky['ten']"/> (<t t-out="ky['tu_ngay']"/> - <t t-out="ky['den_ngay']"/>)
+                                            <t t-out="ky['label']"/>
                                         </option>
                                     </t>
                                 </select>
@@ -122,30 +228,49 @@
                             </span>
                         </div>
 
-                        <div style="font-size: 11.5px; color: #64748B; font-weight: 600; padding-right: 8px;">
-                            Tổng số: <strong><t t-out="len(data.get('ds_baocao', []))"/></strong> kỳ can thiệp
+                        <!-- TAB 2: KẾ HOẠCH THÁNG TỚI -->
+                        <div id="btn_main_tab2" t-attf-class="hoso-tab-btn hoso-tab-btn-success #{'active' if active_tab == 'tab2' else ''}" onclick="switchHosoMainTab('content_tab2', this)">
+                            <span class="tab-icon-badge"><i class="fa fa-clipboard-list"/></span>
+                            <span style="font-weight: 800; font-size: 13px;">Kế hoạch:</span>
+
+                            <t t-if="data.get('ds_kehoach_thangtoi')">
+                                <div class="hoso-dropdown-wrapper hoso-dropdown-wrapper-green" onclick="event.stopPropagation();">
+                                    <select id="select_ky_thangtoi" class="hoso-dropdown-select hoso-dropdown-select-green" onchange="onChangeKyThangToi(this)">
+                                        <t t-foreach="data.get('ds_kehoach_thangtoi', [])" t-as="kh_tt">
+                                            <option t-att-value="kh_tt['id']"
+                                                    t-att-selected="kh_tt['id'] == data.get('current_thangtoi_id') and 'selected' or None">
+                                                <t t-out="kh_tt['label']"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <span class="badge rounded-pill ms-1" style="background-color: #059669; font-size: 10.5px; padding: 3px 8px;">
+                                    <t t-out="len(data.get('ds_kehoach_thangtoi', []))"/> KH
+                                </span>
+                            </t>
+                            <t t-else="">
+                                <span style="font-weight: 700; color: #94A3B8;">Chưa có kế hoạch</span>
+                            </t>
                         </div>
                     </div>
 
-                    <!-- VÙNG NỘI DUNG CHI TIẾT BÁO CÁO -->
-                    <div id="baocao_detail_container">
+                    <!-- ========================================================================= -->
+                    <!-- NỘI DUNG TAB 1: BÁO CÁO KẾT QUẢ KỲ ĐÃ KẾT THÚC                             -->
+                    <!-- ========================================================================= -->
+                    <div id="content_tab1" class="hoso-tab-view" t-attf-style="display: #{'block' if active_tab == 'tab1' else 'none'};">
                         <t t-if="not data.get('has_plan')">
                             <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; padding: 20px; text-align: center; color: #B45309; margin: 15px 0;">
-                                <i class="fa fa-circle-exclamation me-1"/> Học sinh hiện tại chưa có kế hoạch can thiệp nào đã kết thúc để trích xuất báo cáo.
+                                <i class="fa fa-circle-exclamation me-1"/> Chưa có kế hoạch nào đã hoàn thành (-1) để trích xuất báo cáo.
                             </div>
                         </t>
                         <t t-else="">
-                            <!-- Thông tin kỳ can thiệp -->
-                            <div class="d-flex justify-content-between align-items-center mb-2 px-1">
-                                <span class="text-muted">
-                                    <strong>Kỳ can thiệp:</strong> <span t-out="tab1.get('ten', '')"/>
-                                    <t t-if="tab1.get('thoigian')">
-                                        (<span t-out="tab1.get('thoigian')"/>)
-                                    </t>
+                            <div class="mb-2 px-1">
+                                <span class="text-muted" style="font-size: 13px;">
+                                    <strong>Kỳ can thiệp:</strong>
+                                    <span style="color: #1E3A8A; font-weight: 800;" t-out="tab1.get('tieu_de_hien_thi', '')"/>
                                 </span>
                             </div>
 
-                            <!-- 4 Khối Chỉ Số KPI -->
                             <table style="width: 100%; border-collapse: separate; border-spacing: 8px 0; margin-bottom: 16px;">
                                 <tr>
                                     <td style="width: 25%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #2563EB; border-radius: 8px; padding: 10px 12px;">
@@ -179,7 +304,6 @@
                                 </tr>
                             </table>
 
-                            <!-- Sơ đồ đối chiếu tiến bộ lâm sàng (SVG Line Chart) -->
                             <div class="mb-3" style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 10px; padding: 14px 18px;">
                                 <div class="d-flex justify-content-between align-items-center mb-2 pb-2" style="border-bottom: 1px solid #F1F5F9;">
                                     <div style="font-size: 13px; font-weight: 800; color: #1E293B;">
@@ -191,17 +315,11 @@
 
                                 <div class="d-flex justify-content-center align-items-center gap-4 mb-2" style="font-size: 11px; font-weight: 700;">
                                     <div class="d-flex align-items-center gap-1.5" style="color: #64748B;">
-                                        <svg width="24" height="12">
-                                            <line x1="0" y1="6" x2="24" y2="6" stroke="#64748B" stroke-width="2.5" stroke-dasharray="3,3"/>
-                                            <polygon points="12,2 16,6 12,10 8,6" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/>
-                                        </svg>
+                                        <svg width="24" height="12"><line x1="0" y1="6" x2="24" y2="6" stroke="#64748B" stroke-width="2.5" stroke-dasharray="3,3"/><polygon points="12,2 16,6 12,10 8,6" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/></svg>
                                         <span>Đánh giá ban đầu (Baseline)</span>
                                     </div>
                                     <div class="d-flex align-items-center gap-1.5" style="color: #DC2626;">
-                                        <svg width="24" height="12">
-                                            <line x1="0" y1="6" x2="24" y2="6" stroke="#DC2626" stroke-width="2.5"/>
-                                            <circle cx="12" cy="6" r="4" fill="#DC2626"/>
-                                        </svg>
+                                        <svg width="24" height="12"><line x1="0" y1="6" x2="24" y2="6" stroke="#DC2626" stroke-width="2.5"/><circle cx="12" cy="6" r="4" fill="#DC2626"/></svg>
                                         <span>Đánh giá sau can thiệp (<t t-out="tab1.get('ten', '')"/>)</span>
                                     </div>
                                 </div>
@@ -216,22 +334,15 @@
                                         <line x1="50" y1="139" x2="860" y2="139" stroke="#F1F5F9" stroke-width="1"/><text x="42" y="143" font-size="10" fill="#94A3B8" text-anchor="end">20%</text>
                                         <line x1="50" y1="165" x2="860" y2="165" stroke="#CBD5E1" stroke-width="1.5"/><text x="42" y="169" font-size="10" fill="#94A3B8" text-anchor="end">0%</text>
 
-                                        <t t-if="chart.get('polygon_dat')">
-                                            <polygon t-att-points="chart['polygon_dat']" fill="#FEE2E2" opacity="0.45"/>
-                                        </t>
-                                        <t t-if="chart.get('points_thu')">
-                                            <polyline t-att-points="chart['points_thu']" fill="none" stroke="#64748B" stroke-width="2.5" stroke-dasharray="4,4"/>
-                                        </t>
-                                        <t t-if="chart.get('points_dat')">
-                                            <polyline t-att-points="chart['points_dat']" fill="none" stroke="#DC2626" stroke-width="3"/>
-                                        </t>
+                                        <t t-if="chart.get('polygon_dat')"><polygon t-att-points="chart['polygon_dat']" fill="#FEE2E2" opacity="0.45"/></t>
+                                        <t t-if="chart.get('points_thu')"><polyline t-att-points="chart['points_thu']" fill="none" stroke="#64748B" stroke-width="2.5" stroke-dasharray="4,4"/></t>
+                                        <t t-if="chart.get('points_dat')"><polyline t-att-points="chart['points_dat']" fill="none" stroke="#DC2626" stroke-width="3"/></t>
 
                                         <t t-foreach="chart.get('items', [])" t-as="pt">
                                             <polygon t-attf-points="#{pt['x']},#{pt['y_thu'] - 5} #{pt['x'] + 5},#{pt['y_thu']} #{pt['x']},#{pt['y_thu'] + 5} #{pt['x'] - 5},#{pt['y_thu']}" fill="#FFFFFF" stroke="#64748B" stroke-width="1.8"/>
                                             <text t-att-x="pt['x']" t-att-y="pt['y_thu'] - 8" font-size="9.5" fill="#475569" font-weight="bold" text-anchor="middle"><t t-out="pt['tyle_thu']"/>%</text>
                                             <circle t-att-cx="pt['x']" t-att-cy="pt['y_dat']" r="5.5" fill="#DC2626" stroke="#FFFFFF" stroke-width="2"/>
                                             <text t-att-x="pt['x']" t-att-y="pt['y_dat'] - 9" font-size="10.5" fill="#B91C1C" font-weight="800" text-anchor="middle"><t t-out="pt['tyle_dat']"/>%</text>
-
                                             <text t-att-x="pt['x']" y="185" font-size="9.5" font-weight="700" fill="#334155" text-anchor="middle">
                                                 <t t-foreach="pt.get('lines', [])" t-as="line">
                                                     <tspan t-att-x="pt['x']" t-att-dy="line_index == 0 and '0' or '11'"><t t-out="line"/></tspan>
@@ -242,7 +353,6 @@
                                 </div>
                             </div>
 
-                            <!-- Bảng mục tiêu phân nhóm theo Lĩnh vực (CÓ CỘT MỨC ĐỘ) -->
                             <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-bottom: 8px; border-bottom: 1.5px solid #CBD5E1; padding-bottom: 4px;">
                                 I. Chi tiết mức độ ban đầu và kết quả can thiệp
                             </div>
@@ -286,62 +396,210 @@
                                                         <span t-out="mt.get('sau')"/>%
                                                     </span>
                                                 </td>
-                                                <!-- CỘT MỨC ĐỘ -->
                                                 <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; font-weight: 700;">
-                                                    <span t-if="mt.get('muc_do') == 'Củng cố'"
-                                                          style="display: inline-block; padding: 2px 8px; border-radius: 4px; background-color: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; font-size: 10px;">
-                                                        Củng cố
-                                                    </span>
-                                                    <span t-else=""
-                                                          style="display: inline-block; padding: 2px 8px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 10px;">
-                                                        Duy trì
-                                                    </span>
+                                                    <span t-if="mt.get('muc_do') == 'Củng cố'" style="display: inline-block; padding: 2px 8px; border-radius: 4px; background-color: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; font-size: 10px;">Củng cố</span>
+                                                    <span t-else="" style="display: inline-block; padding: 2px 8px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 10px;">Duy trì</span>
                                                 </td>
-                                                <!-- Ý KIẾN / ĐỊNH HƯỚNG TỪ DINHHUONG_KIEMDUYET -->
-                                                <td style="border: 1px solid #E2E8F0; padding: 6px 10px; color: #334155;">
-                                                    <span t-out="mt.get('dinh_huong')"/>
-                                                </td>
+                                                <td style="border: 1px solid #E2E8F0; padding: 6px 10px; color: #334155;"><span t-out="mt.get('dinh_huong')"/></td>
                                             </tr>
                                         </t>
                                     </t>
                                 </tbody>
                             </table>
 
-                            <!-- Nhận xét cuối kỳ -->
                             <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-bottom: 6px;">II. Nhận xét đánh giá của giáo viên</div>
                             <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 6px; padding: 10px 14px; margin-bottom: 24px; font-size: 11px; line-height: 1.55; color: #334155;">
                                 <span t-out="tab1.get('nhan_xet', '')"/>
                             </div>
+                        </t>
+                    </div>
 
-                            <!-- Chữ ký ba bên -->
-                            <table style="width: 100%; text-align: center; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px;">
+                    <!-- ========================================================================= -->
+                    <!-- NỘI DUNG TAB 2: KẾ HOẠCH THÁNG TỚI                                         -->
+                    <!-- ========================================================================= -->
+                    <div id="content_tab2" class="hoso-tab-view" t-attf-style="display: #{'block' if active_tab == 'tab2' else 'none'};">
+                        <t t-if="not data.get('has_plan_thangtoi')">
+                            <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 20px; text-align: center; color: #1D4ED8; margin: 15px 0;">
+                                <i class="fa fa-circle-info me-1"/> Hiện tại học sinh chưa có Kế hoạch can thiệp nào ở trạng thái Đang can thiệp (1).
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="d-flex justify-content-between align-items-center mb-3 px-1 pb-2" style="border-bottom: 2px solid #E2E8F0;">
+                                <div>
+                                    <div style="font-size: 15px; font-weight: 800; color: #065F46;">
+                                        <i class="fa fa-file-signature text-success me-1"/>
+                                        <span t-out="tab2.get('tieu_de_hien_thi', '')"/>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge" style="background-color: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; font-size: 11px; padding: 5px 10px;">
+                                        Trạng thái: <strong t-out="tab2.get('trangthai_text', '')"/>
+                                    </span>
+                                    <span class="badge" style="background-color: #DBEAFE; color: #1D4ED8; border: 1px solid #BFDBFE; font-size: 11px; padding: 5px 10px;">
+                                        Quy mô: <strong><t t-out="tab2.get('tong_muctieu', 0)"/> mục tiêu</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- 2 Thẻ Giáo viên phụ trách & Quản lý kiểm duyệt của Kế hoạch được chọn -->
+                            <table style="width: 100%; border-collapse: separate; border-spacing: 8px 0; margin-bottom: 16px;">
                                 <tr>
-                                    <td style="width: 33.33%; vertical-align: top;">
-                                        <div style="font-size: 10.5px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 45px;">Giáo viên phụ trách</div>
-                                        <div style="font-size: 12.5px; font-weight: 800; color: #0F172A;"><span t-out="tab1.get('giaovien', '')"/></div>
+                                    <td style="width: 50%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #059669; border-radius: 8px; padding: 10px 14px;">
+                                        <div style="font-size: 9.5px; font-weight: bold; text-transform: uppercase; color: #64748B;">
+                                            <i class="fa fa-user-tie text-success me-1"/> Giáo viên can thiệp 1:1 phụ trách
+                                        </div>
+                                        <div style="font-size: 15px; font-weight: 800; color: #065F46; margin-top: 3px;">
+                                            <span t-out="tab2.get('giaovien', 'Chưa phân công')"/>
+                                        </div>
+                                        <div style="font-size: 10px; color: #475569;">Trực tiếp lập kế hoạch &amp; triển khai can thiệp</div>
                                     </td>
-                                    <td style="width: 33.33%; vertical-align: top;">
-                                        <div style="font-size: 10.5px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 45px;">Quản lý chuyên môn</div>
-                                        <div style="font-size: 12.5px; font-weight: 800; color: #0F172A;"><span t-out="tab1.get('quanly', '')"/></div>
-                                    </td>
-                                    <td style="width: 33.33%; vertical-align: top;">
-                                        <div style="font-size: 10.5px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 45px;">Đại diện Phụ huynh</div>
-                                        <div style="font-size: 12.5px; font-weight: 800; color: #0F172A;"><span t-out="hs.get('phuhuynh', '')"/></div>
+                                    <td style="width: 50%; background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4px solid #2563EB; border-radius: 8px; padding: 10px 14px;">
+                                        <div style="font-size: 9.5px; font-weight: bold; text-transform: uppercase; color: #64748B;">
+                                            <i class="fa fa-user-check text-primary me-1"/> Quản lý / Giáo viên chuyên môn kiểm duyệt
+                                        </div>
+                                        <div style="font-size: 15px; font-weight: 800; color: #1D4ED8; margin-top: 3px;">
+                                            <span t-out="tab2.get('quanly', 'Ngô Thị Ngọc Hoàn')"/>
+                                        </div>
+                                        <div style="font-size: 10px; color: #475569;">Thẩm định &amp; phê duyệt mục tiêu can thiệp</div>
                                     </td>
                                 </tr>
+                            </table>
+
+                            <div style="font-size: 13px; font-weight: 800; color: #047857; margin-bottom: 8px; border-bottom: 1.5px solid #A7F3D0; padding-bottom: 4px;">
+                                Danh mục mục tiêu kế hoạch can thiệp
+                            </div>
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 11px; background: #FFFFFF;">
+                                <thead>
+                                    <tr style="background: #ECFDF5; color: #065F46; text-transform: uppercase;">
+                                        <th style="border: 1px solid #CBD5E1; padding: 7px 6px; width: 4%; text-align: center;">TT</th>
+                                        <th style="border: 1px solid #CBD5E1; padding: 7px 10px; width: 46%; text-align: left;">Tên mục tiêu</th>
+                                        <th style="border: 1px solid #CBD5E1; padding: 7px 6px; width: 14%; text-align: center;">% Trước can thiệp</th>
+                                        <th style="border: 1px solid #CBD5E1; padding: 7px 6px; width: 16%; text-align: center;">Loại mục tiêu</th>
+                                        <th style="border: 1px solid #CBD5E1; padding: 7px 10px; width: 20%; text-align: left;">Ghi chú</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="tab2.get('linhvucs_grouped', [])" t-as="grp2">
+                                        <tr style="background-color: #F0FDF4; border-top: 2px solid #86EFAC; border-bottom: 1px solid #CBD5E1;">
+                                            <td colspan="5" style="padding: 7px 12px;">
+                                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                                        <i class="fa fa-folder-tree text-success" style="font-size: 13px;"/>
+                                                        <span style="font-size: 12px; font-weight: 800; color: #065F46; text-transform: uppercase;">
+                                                            <t t-out="grp2['linhvuc']"/>
+                                                        </span>
+                                                        <t t-if="grp2['tuoi']">
+                                                            <span class="badge" style="background-color: #DCFCE7; color: #166534; font-size: 10px; padding: 3px 7px; border-radius: 4px; font-weight: bold;">
+                                                                <t t-out="grp2['tuoi']"/>
+                                                            </span>
+                                                        </t>
+                                                        <span style="font-size: 10.5px; color: #4B5563;">
+                                                            (<t t-out="grp2['total_mt']"/> mục tiêu)
+                                                        </span>
+                                                    </div>
+                                                    <div style="font-size: 11px; font-weight: 700; color: #047857;">
+                                                        Đầu vào TB: <strong><t t-out="grp2['avg_thu']"/>%</strong>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <t t-foreach="grp2['targets']" t-as="mt2">
+                                            <tr style="background-color: #FFFFFF;">
+                                                <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; color: #64748B;">
+                                                    <span t-out="mt2.get('stt')"/>
+                                                </td>
+                                                <td style="border: 1px solid #E2E8F0; padding: 6px 10px; font-weight: 500; color: #0F172A; line-height: 1.4;">
+                                                    <span t-out="mt2.get('muctieu')"/>
+                                                </td>
+                                                <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; color: #1E293B; font-weight: 600;">
+                                                    <span t-out="mt2.get('solan_thu')"/> (<span t-out="mt2.get('truoc_pct')"/>)
+                                                </td>
+                                                <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; font-weight: 700;">
+                                                    <span t-if="mt2.get('is_chuyen_tiep')"
+                                                          style="display: inline-block; padding: 2.5px 8px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 10px;">
+                                                        <i class="fa fa-arrow-rotate-right me-1"/> Tháng trước chuyển qua
+                                                    </span>
+                                                    <span t-else=""
+                                                          style="display: inline-block; padding: 2.5px 8px; border-radius: 4px; background-color: #DBEAFE; color: #1E40AF; border: 1px solid #BFDBFE; font-size: 10px;">
+                                                        <i class="fa fa-sparkles me-1"/> Mới
+                                                    </span>
+                                                </td>
+                                                <td style="border: 1px solid #E2E8F0; padding: 6px 10px; color: #334155;">
+                                                    <span t-out="mt2.get('ghichu')"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </tbody>
                             </table>
                         </t>
                     </div>
 
-                    <!-- SCRIPT ĐIỀU HƯỚNG URL KHI CHỌN KỲ BÁO CÁO (ĐƯỢC BỌC CDATA) -->
+                    <!-- ================= CHỮ KÝ XÁC NHẬN BA BÊN ================= -->
+                    <table style="width: 100%; text-align: center; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px;">
+                        <tr>
+                            <td style="width: 33.33%; vertical-align: top;">
+                                <div style="font-size: 10.5px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 45px;">
+                                    Giáo viên can thiệp 1:1
+                                </div>
+                                <div style="font-size: 12.5px; font-weight: 800; color: #0F172A;">
+                                    <span t-out="tab1.get('giaovien', '')"/>
+                                </div>
+                            </td>
+                            <td style="width: 33.33%; vertical-align: top;">
+                                <div style="font-size: 10.5px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 45px;">
+                                    Quản lý chuyên môn duyệt
+                                </div>
+                                <div style="font-size: 12.5px; font-weight: 800; color: #0F172A;">
+                                    <span t-out="tab1.get('quanly', '')"/>
+                                </div>
+                            </td>
+                            <td style="width: 33.33%; vertical-align: top;">
+                                <div style="font-size: 10.5px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 45px;">
+                                    Đại diện Phụ huynh học sinh
+                                </div>
+                                <div style="font-size: 12.5px; font-weight: 800; color: #0F172A;">
+                                    <span t-out="hs.get('phuhuynh', '')"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- JAVASCRIPT ĐIỀU HƯỚNG TAB VÀ 2 DROPDOWN CHỌN KỲ -->
                     <script type="text/javascript">
                         <![CDATA[
+                        function switchHosoMainTab(tabContentId, btnEl) {
+                            document.getElementById('content_tab1').style.display = 'none';
+                            document.getElementById('content_tab2').style.display = 'none';
+
+                            document.getElementById('btn_main_tab1').classList.remove('active');
+                            document.getElementById('btn_main_tab2').classList.remove('active');
+
+                            document.getElementById(tabContentId).style.display = 'block';
+                            btnEl.classList.add('active');
+
+                            const currentUrl = new URL(window.location.href);
+                            currentUrl.searchParams.set('active_tab', tabContentId === 'content_tab2' ? 'tab2' : 'tab1');
+                            window.history.replaceState({}, '', currentUrl.toString());
+                        }
+
                         function onChangeKyBaoCao(selectEl) {
                             const kehoachId = selectEl.value;
                             if (!kehoachId) return;
 
                             const url = new URL(window.location.href);
                             url.searchParams.set('kehoach_id', kehoachId);
+                            url.searchParams.set('active_tab', 'tab1');
+                            window.location.href = url.toString();
+                        }
+
+                        function onChangeKyThangToi(selectEl) {
+                            const thangToiId = selectEl.value;
+                            if (!thangToiId) return;
+
+                            const url = new URL(window.location.href);
+                            url.searchParams.set('thangtoi_id', thangToiId);
+                            url.searchParams.set('active_tab', 'tab2');
                             window.location.href = url.toString();
                         }
                         ]]>
