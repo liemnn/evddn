@@ -22,6 +22,9 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
     _register = False
     _description = 'Abstract Xử lý dữ liệu Hồ sơ can thiệp'
 
+
+
+
     def action_print_hoso_report(self):
         self.ensure_one()
         return self.env.ref('ekids_canthiep.action_report_kehoach_hoso').report_action(self)

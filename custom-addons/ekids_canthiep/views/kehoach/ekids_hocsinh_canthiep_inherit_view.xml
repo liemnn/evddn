@@ -73,6 +73,29 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="ekids_canthiep.ekids_hocsinh_form_inherit_hoso">
+        <field name="name">ekids.hocsinh.form.inherit.hoso.report</field>
+        <field name="model">ekids.hocsinh</field>
+        <field name="inherit_id" ref="ekids_hocsinh.hocsinh_form"/>
+        <field name="arch" type="xml">
+
+            <!-- 1. Header (Nút Action chính ở thanh trạng thái nếu form view có header) -->
+            <!-- Moola view nalli <header> illa, aadrinda <sheet> modalu <header> serisabahudu -->
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
+                            string="Hồ sơ can thiệp"
+                            type="action"
+                            icon="fa-medkit"
+                            class="btn btn-sm"
+                            />
+                </header>
+            </xpath>
+
+
+        </field>
+    </record>
+
 
 
 

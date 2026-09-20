@@ -24,6 +24,13 @@
             <list create="false" delete="false" limit="200" default_order="id asc">
                 <field name="sequence" width="25"/>
                 <field name="name" width="170"/>
+                <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
+                            string=""
+                            width="25"
+                            type="action"
+                            icon="fa-medkit"
+                            class="btn btn-sm"
+                            />
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
                 <field name="gioitinh"/>
                 <field name="ngaysinh" optional="hide"/>

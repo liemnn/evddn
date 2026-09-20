@@ -12,6 +12,13 @@
                 <!-- ================= 1. THÔNG TIN HỌC SINH ================= -->
                 <field name="sequence" width="35" string="TT"/>
                 <field name="name" width="160" class="fw-bold text-wrap" string="Họ và tên"/>
+                <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
+                            string=""
+                            width="25"
+                            type="action"
+                            icon="fa-medkit"
+                            class="btn btn-sm"
+                            />
                 <field name="gioitinh" width="70" string="Giới tính"/>
                 <field name="tuoi" optional="hide" string="Tuổi"/>
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
