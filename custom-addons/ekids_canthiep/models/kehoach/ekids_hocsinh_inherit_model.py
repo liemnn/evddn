@@ -91,7 +91,6 @@ class HocSinhInherit(models.Model
     kehoach_thangtruoc = fields.Char(compute="_compute_kehoach_thang", string="Có kế hoạch tháng trước")
     kehoach_thangsau = fields.Char(compute="_compute_kehoach_thang", string="Có kế hoạch tháng sau")
 
-      # Khai báo trường với default uuid chuẩn
     access_token = fields.Char(
         string="Thẻ truy cập nhanh",
         readonly=True,
@@ -99,13 +98,13 @@ class HocSinhInherit(models.Model
         default=lambda self: str(uuid.uuid4())
     )
 
-    hare_url = fields.Char("Chia sẻ Hồ sơ", compute="_compute_urls")
+    share_url = fields.Char("Chia sẻ Hồ sơ", compute="_compute_urls")
 
     @api.depends('access_token')
     def _compute_urls(self):
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         for rec in self:
-            token = rec.access_token or str(uuid.uuid4())  # Fallback an toàn
+            token = rec.access_token or str(uuid.uuid4())
             rec.share_url = f"{base_url}/hocsinh/hosocanthiep/{token}"
 
 
