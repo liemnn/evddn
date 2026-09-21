@@ -10,17 +10,18 @@
                 <t t-set="chart" t-value="tab1.get('chart', {})"/>
                 <t t-set="active_tab" t-value="data.get('active_tab', 'tab1')"/>
 
-                <div class="hoso-container" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1E293B; font-size: 12px; line-height: 1.45; padding: 12px; max-width: 1040px; margin: 0 auto;">
+                <!-- NÂNG TIẾP FONT CƠ BẢN LÊN 14.5px, CHỮ TO RÕ, NÉT THANH DỄ CHỊU -->
+                <div class="hoso-container" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1E293B; font-size: 14.5px; line-height: 1.6; padding: 14px; max-width: 1060px; margin: 0 auto;">
 
                     <style>
                         /* ================= KHUNG PROFILE HỌC SINH ================= */
                         .hs-profile-card {
                             background-color: #FFFFFF;
-                            border: 1px solid #E2E8F0;
+                            border: 1px solid #CBD5E1;
                             border-radius: 14px;
-                            padding: 16px 20px;
-                            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
-                            margin-bottom: 12px;
+                            padding: 18px 22px;
+                            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+                            margin-bottom: 16px;
                         }
                         .hs-profile-main {
                             display: flex;
@@ -29,16 +30,16 @@
                             gap: 16px;
                         }
                         .hs-avatar-box {
-                            width: 64px;
-                            height: 64px;
+                            width: 72px;
+                            height: 72px;
                             border-radius: 50%;
                             background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
-                            border: 2px solid #BFDBFE;
+                            border: 2.5px solid #BFDBFE;
                             display: flex;
                             align-items: center;
                             justify-content: center;
                             color: #2563EB;
-                            font-size: 26px;
+                            font-size: 30px;
                             flex-shrink: 0;
                             overflow: hidden;
                         }
@@ -50,50 +51,51 @@
                         .hs-info-left {
                             display: flex;
                             align-items: center;
-                            gap: 14px;
+                            gap: 18px;
                             flex: 1;
                         }
                         .hs-meta-row {
                             display: flex;
                             flex-wrap: wrap;
                             align-items: center;
-                            gap: 8px 14px;
-                            margin-top: 4px;
+                            gap: 10px 20px;
+                            margin-top: 6px;
                         }
                         .hs-meta-item {
                             display: inline-flex;
                             align-items: center;
-                            gap: 5px;
+                            gap: 6px;
                             color: #475569;
-                            font-size: 11.5px;
+                            font-size: 14px;
+                            font-weight: 400;
                         }
-                        .hs-meta-label { color: #64748B; font-weight: 500; }
-                        .hs-meta-val { color: #0F172A; font-weight: 700; }
+                        .hs-meta-label { color: #64748B; font-weight: 400; }
+                        .hs-meta-val { color: #0F172A; font-weight: 600; }
 
                         .hs-side-right {
                             text-align: right;
-                            padding-left: 16px;
-                            border-left: 1px dashed #E2E8F0;
+                            padding-left: 20px;
+                            border-left: 1.5px dashed #CBD5E1;
                             flex-shrink: 0;
                         }
 
-                        /* ================= THANH TABS CO GIÃN THÔNG MINH ================= */
+                        /* ================= THANH TABS ================= */
                         .hoso-tabs-nav {
                             background-color: #F1F5F9;
-                            border: 1px solid #E2E8F0;
+                            border: 1px solid #CBD5E1;
                             border-radius: 12px;
                             padding: 6px;
                             display: flex;
                             flex-wrap: wrap;
                             align-items: stretch;
                             gap: 8px;
-                            margin-bottom: 14px;
+                            margin-bottom: 16px;
                         }
 
                         .hoso-tab-btn {
-                            border: 1px solid transparent !important;
+                            border: 1.5px solid transparent !important;
                             border-radius: 10px !important;
-                            padding: 8px 12px !important;
+                            padding: 10px 16px !important;
                             background-color: #FFFFFF !important;
                             cursor: pointer;
                             display: flex !important;
@@ -102,17 +104,17 @@
                             flex: 1 1 320px;
                             box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03) !important;
                             transition: all 0.2s ease;
-                            opacity: 0.75;
+                            opacity: 0.82;
                         }
                         .hoso-tab-btn.active {
                             opacity: 1 !important;
                             background-color: #FFFFFF !important;
-                            border-color: #BFDBFE !important;
-                            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08) !important;
+                            border-color: #93C5FD !important;
+                            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.09) !important;
                         }
                         .hoso-tab-btn-success.active {
-                            border-color: #A7F3D0 !important;
-                            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08) !important;
+                            border-color: #86EFAC !important;
+                            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.09) !important;
                         }
 
                         .hoso-tab-header {
@@ -120,14 +122,14 @@
                             align-items: center;
                             justify-content: space-between;
                             gap: 8px;
-                            margin-bottom: 4px;
+                            margin-bottom: 5px;
                         }
                         .hoso-tab-title {
                             display: inline-flex;
                             align-items: center;
-                            gap: 6px;
-                            font-size: 12.5px;
-                            font-weight: 800;
+                            gap: 8px;
+                            font-size: 14.5px;
+                            font-weight: 700;
                             color: #1E3A8A;
                         }
                         .hoso-tab-btn-success .hoso-tab-title {
@@ -135,15 +137,15 @@
                         }
 
                         .tab-icon-badge {
-                            width: 22px;
-                            height: 22px;
+                            width: 26px;
+                            height: 26px;
                             border-radius: 6px;
                             background-color: #DBEAFE;
                             color: #1D4ED8;
                             display: inline-flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 11px;
+                            font-size: 13px;
                         }
                         .hoso-tab-btn-success .tab-icon-badge {
                             background-color: #DCFCE7;
@@ -162,18 +164,18 @@
                             background: transparent;
                             border: none;
                             outline: none;
-                            font-size: 12px;
-                            font-weight: 700;
+                            font-size: 13.5px;
+                            font-weight: 600;
                             color: #1E293B;
                             cursor: pointer;
-                            padding-right: 18px;
+                            padding-right: 22px;
                             margin: 0;
-                            line-height: 1.4;
+                            line-height: 1.45;
                             white-space: normal;
                             word-break: break-word;
                         }
                         .hoso-dropdown-select option {
-                            font-size: 12px;
+                            font-size: 13.5px;
                             padding: 6px 8px;
                             white-space: normal;
                         }
@@ -183,11 +185,11 @@
                             top: 50%;
                             transform: translateY(-50%);
                             pointer-events: none;
-                            font-size: 10px;
+                            font-size: 12px;
                             color: #64748B;
                         }
 
-                        /* ================= CONTAINER NỘI DUNG TỪNG TAB ================= */
+                        /* ================= CONTAINER NỘI DUNG ================= */
                         .hoso-tab-view {
                             width: 100%;
                             clear: both;
@@ -197,44 +199,44 @@
                         .kpi-grid {
                             display: grid;
                             grid-template-columns: repeat(4, 1fr);
-                            gap: 8px;
-                            margin-bottom: 14px;
+                            gap: 10px;
+                            margin-bottom: 16px;
                         }
                         .kpi-card {
                             background: #F8FAFC;
                             border: 1px solid #CBD5E1;
-                            border-radius: 8px;
-                            padding: 10px 12px;
+                            border-radius: 10px;
+                            padding: 12px 14px;
                         }
-                        .kpi-title { font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 2px; }
-                        .kpi-value { font-size: 15px; font-weight: 800; line-height: 1.3; }
-                        .kpi-sub { font-size: 10px; color: #475569; margin-top: 2px; }
+                        .kpi-title { font-size: 11.5px; font-weight: 600; text-transform: uppercase; color: #64748B; margin-bottom: 3px; }
+                        .kpi-value { font-size: 17.5px; font-weight: 700; line-height: 1.3; }
+                        .kpi-sub { font-size: 12.5px; color: #64748B; margin-top: 3px; font-weight: 400; }
 
                         /* ================= BẢNG VÀ CUỘN ================= */
                         .table-responsive-box {
                             width: 100%;
                             overflow-x: auto;
                             -webkit-overflow-scrolling: touch;
-                            margin-bottom: 16px;
+                            margin-bottom: 20px;
                         }
                         .custom-report-table {
                             width: 100%;
                             border-collapse: collapse;
-                            font-size: 11px;
+                            font-size: 14.5px; /* Nâng font to hơn 1 cỡ cho toàn bộ bảng */
                             background: #FFFFFF;
-                            min-width: 620px;
+                            min-width: 700px;
                         }
 
                         .canbo-grid {
                             display: grid;
                             grid-template-columns: 1fr 1fr;
-                            gap: 10px;
-                            margin-bottom: 14px;
+                            gap: 12px;
+                            margin-bottom: 16px;
                         }
 
-                        /* ================= RESPONSIVE CHO MOBILE ( 768px) ================= */
+                        /* ================= RESPONSIVE CHO MOBILE (768px) ================= */
                         @media (max-width: 768px) {
-                            .hoso-container { padding: 4px !important; }
+                            .hoso-container { padding: 4px !important; font-size: 13.5px !important; }
                             .hs-profile-card { padding: 12px !important; }
                             .hs-profile-main {
                                 flex-direction: column !important;
@@ -251,7 +253,7 @@
                                 text-align: left !important;
                                 padding-left: 0 !important;
                                 border-left: none !important;
-                                border-top: 1px dashed #E2E8F0 !important;
+                                border-top: 1.5px dashed #CBD5E1 !important;
                                 padding-top: 8px !important;
                                 display: flex !important;
                                 flex-wrap: wrap !important;
@@ -291,27 +293,27 @@
                                 </div>
 
                                 <div style="flex: 1;">
-                                    <div style="font-size: 10px; font-weight: 700; color: #2563EB; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
+                                    <div style="font-size: 12px; font-weight: 700; color: #2563EB; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
                                         <i class="fa fa-school me-1 text-primary"/> <span t-out="hs.get('co_so', '')"/>
                                     </div>
 
-                                    <div style="font-size: 18px; font-weight: 800; color: #0F172A; letter-spacing: -0.2px; line-height: 1.25; margin-bottom: 3px;">
+                                    <div style="font-size: 21px; font-weight: 700; color: #0F172A; letter-spacing: -0.2px; line-height: 1.25; margin-bottom: 4px;">
                                         <span t-out="hs.get('name', '')"/>
                                     </div>
 
                                     <div class="hs-meta-row">
                                         <div class="hs-meta-item">
-                                            <i class="fa fa-cake-candles text-muted" style="font-size: 10px;"/>
+                                            <i class="fa fa-cake-candles text-muted" style="font-size: 13px;"/>
                                             <span class="hs-meta-label">Ngày sinh:</span>
                                             <span class="hs-meta-val"><span t-out="hs.get('ngaysinh', '')"/></span>
                                         </div>
                                         <div class="hs-meta-item">
-                                            <i class="fa fa-child-reaching text-muted" style="font-size: 10px;"/>
+                                            <i class="fa fa-child-reaching text-muted" style="font-size: 13px;"/>
                                             <span class="hs-meta-label">Tuổi:</span>
                                             <span class="hs-meta-val"><span t-out="hs.get('tuoi', '')"/></span>
                                         </div>
                                         <div class="hs-meta-item">
-                                            <i class="fa fa-users text-muted" style="font-size: 10px;"/>
+                                            <i class="fa fa-users text-muted" style="font-size: 13px;"/>
                                             <span class="hs-meta-label">Phụ huynh:</span>
                                             <span class="hs-meta-val"><span t-out="hs.get('phuhuynh', '')"/></span>
                                         </div>
@@ -320,24 +322,24 @@
                             </div>
 
                             <div class="hs-side-right">
-                                <div class="d-flex align-items-center gap-2 mb-1.5" style="justify-content: inherit;">
+                                <div class="d-flex align-items-center gap-2 mb-2" style="justify-content: inherit;">
                                     <button type="button"
-                                            class="btn btn-sm d-inline-flex align-items-center gap-1"
+                                            class="btn btn-sm d-inline-flex align-items-center gap-1.5"
                                             t-att-data-url="hs.get('share_url', '')"
                                             onclick="copyShareUrl(this)"
                                             title="Sao chép liên kết chia sẻ hồ sơ"
-                                            style="font-size: 11px; font-weight: 700; border-radius: 20px; padding: 3px 10px; border: 1px solid #CBD5E1; color: #475569; background: #F8FAFC; cursor: pointer;">
+                                            style="font-size: 13px; font-weight: 600; border-radius: 20px; padding: 4px 12px; border: 1px solid #CBD5E1; color: #475569; background: #F8FAFC; cursor: pointer;">
                                         <i class="fa fa-link text-primary"/>
                                         <span class="copy-btn-text">Chia sẻ</span>
                                     </button>
 
-                                    <span class="badge" style="background-color: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px;">
+                                    <span class="badge" style="background-color: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 20px;">
                                         <i class="fa fa-circle text-success me-1" style="font-size: 7px;"/>
                                         <span t-out="hs.get('trang_thai', 'Đang theo học')"/>
                                     </span>
                                 </div>
 
-                                <div class="d-flex flex-column gap-1" style="font-size: 11px;">
+                                <div class="d-flex flex-column gap-1" style="font-size: 13px;">
                                     <div class="hs-meta-item">
                                         <span class="hs-meta-label">Giáo viên:</span>
                                         <span class="hs-meta-val text-primary"><span t-out="tab1.get('giaovien', 'Chưa phân công')"/></span>
@@ -361,7 +363,7 @@
                                     <span class="tab-icon-badge"><i class="fa fa-chart-line"/></span>
                                     <span>Báo cáo kết quả can thiệp</span>
                                 </span>
-                                <span id="current_plan_badge" class="badge rounded-pill" style="background-color: #2563EB; color: #FFFFFF; font-size: 10.5px; padding: 3px 8px;">
+                                <span id="current_plan_badge" class="badge rounded-pill" style="background-color: #2563EB; color: #FFFFFF; font-size: 12px; font-weight: 600; padding: 4px 10px;">
                                     Đạt <span><t t-out="tab1.get('tyle_dat', 0)"/></span>%
                                 </span>
                             </div>
@@ -387,7 +389,7 @@
                                     <span>Kế hoạch đang can thiệp</span>
                                 </span>
                                 <t t-if="data.get('ds_kehoach_thangtoi')">
-                                    <span class="badge rounded-pill" style="background-color: #059669; color: #FFFFFF; font-size: 10.5px; padding: 3px 8px;">
+                                    <span class="badge rounded-pill" style="background-color: #059669; color: #FFFFFF; font-size: 12px; font-weight: 600; padding: 4px 10px;">
                                         <t t-out="len(data.get('ds_kehoach_thangtoi', []))"/> kế hoạch
                                     </span>
                                 </t>
@@ -406,7 +408,7 @@
                                     <i class="fa fa-chevron-down hoso-dropdown-icon" style="color: #059669;"/>
                                 </t>
                                 <t t-else="">
-                                    <span style="font-size: 12px; font-weight: 700; color: #94A3B8;">Chưa có kế hoạch tháng tới</span>
+                                    <span style="font-size: 13px; font-weight: 500; color: #94A3B8;">Chưa có kế hoạch tháng tới</span>
                                 </t>
                             </div>
                         </div>
@@ -417,72 +419,72 @@
                     <!-- ========================================================================= -->
                     <div id="content_tab1" class="hoso-tab-view" t-attf-style="display: #{'block' if active_tab == 'tab1' else 'none'};">
                         <t t-if="not data.get('has_plan')">
-                            <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; padding: 16px; text-align: center; color: #B45309; margin: 10px 0;">
+                            <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; padding: 18px; text-align: center; color: #B45309; margin: 10px 0; font-size: 14.5px;">
                                 <i class="fa fa-circle-exclamation me-1"/> Chưa có kế hoạch nào đã hoàn thành (-1) để trích xuất báo cáo.
                             </div>
                         </t>
                         <t t-else="">
                             <div class="mb-2 px-1">
-                                <span class="text-muted" style="font-size: 12.5px;">
+                                <span class="text-muted" style="font-size: 14px;">
                                     <strong>Kỳ can thiệp:</strong>
-                                    <span style="color: #1E3A8A; font-weight: 800;" t-out="tab1.get('tieu_de_hien_thi', '')"/>
+                                    <span style="color: #1E3A8A; font-weight: 700;" t-out="tab1.get('tieu_de_hien_thi', '')"/>
                                 </span>
                             </div>
 
-                            <!-- 4 Khối KPI (Grid 4 cột trên Desktop, 2 cột x 2 hàng trên Mobile) -->
+                            <!-- 4 Khối KPI -->
                             <div class="kpi-grid">
-                                <div class="kpi-card" style="border-left: 4px solid #2563EB;">
+                                <div class="kpi-card" style="border-left: 4.5px solid #2563EB;">
                                     <div class="kpi-title">Tổng mục tiêu</div>
                                     <div class="kpi-value" style="color: #1D4ED8;"><span t-out="tab1.get('tong_muctieu', 0)"/> mục tiêu</div>
                                     <div class="kpi-sub">Kỳ kế hoạch đã đóng</div>
                                 </div>
-                                <div class="kpi-card" style="border-left: 4px solid #0D9488;">
+                                <div class="kpi-card" style="border-left: 4.5px solid #0D9488;">
                                     <div class="kpi-title">Kết quả đạt được</div>
                                     <div class="kpi-value" style="color: #15803D;"><span t-out="tab1.get('tong_muctieu_dat', 0)"/> / <span t-out="tab1.get('tong_muctieu', 0)"/></div>
                                     <div class="kpi-sub">Đạt: <strong><span t-out="tab1.get('tyle_dat', 0)"/>% KH tháng</strong></div>
                                 </div>
-                                <div class="kpi-card" style="border-left: 4px solid #E11D48;">
+                                <div class="kpi-card" style="border-left: 4.5px solid #E11D48;">
                                     <div class="kpi-title">Điểm trũng cần ưu tiên</div>
-                                    <div class="kpi-value" style="color: #DC2626; font-size: 12px; margin: 2px 0;"><span t-out="tab1.get('diem_trung', 'Chưa có')"/></div>
+                                    <div class="kpi-value" style="color: #DC2626; font-size: 14.5px; margin: 2px 0;"><span t-out="tab1.get('diem_trung', 'Chưa có')"/></div>
                                     <div class="kpi-sub">Lĩnh vực tỷ lệ thấp nhất</div>
                                 </div>
-                                <div class="kpi-card" style="border-left: 4px solid #D97706;">
+                                <div class="kpi-card" style="border-left: 4.5px solid #D97706;">
                                     <div class="kpi-title">Lĩnh vực bứt phá</div>
-                                    <div class="kpi-value" style="color: #B45309; font-size: 12px; margin: 2px 0;"><span t-out="tab1.get('but_pha', 'Chưa có')"/></div>
+                                    <div class="kpi-value" style="color: #B45309; font-size: 14.5px; margin: 2px 0;"><span t-out="tab1.get('but_pha', 'Chưa có')"/></div>
                                     <div class="kpi-sub">Lĩnh vực tỷ lệ cao nhất</div>
                                 </div>
                             </div>
 
                             <!-- Sơ đồ đường SVG lâm sàng -->
-                            <div class="mb-3" style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 10px; padding: 12px 14px;">
+                            <div class="mb-3" style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 12px; padding: 14px 16px;">
                                 <div class="d-flex justify-content-between align-items-center mb-2 pb-2" style="border-bottom: 1px solid #F1F5F9;">
-                                    <div style="font-size: 12.5px; font-weight: 800; color: #1E293B;">
+                                    <div style="font-size: 14.5px; font-weight: 700; color: #1E293B;">
                                         <i class="fa fa-chart-line text-primary me-1"/>
                                         <span>Sơ đồ tiến bộ lâm sàng (<t t-out="tab1.get('ten', '')"/>)</span>
                                     </div>
-                                    <div style="font-size: 10.5px; font-weight: 700; color: #64748B;">Đạt chuẩn ≥ 80%</div>
+                                    <div style="font-size: 12.5px; font-weight: 600; color: #64748B;">Đạt chuẩn ≥ 80%</div>
                                 </div>
 
-                                <div class="d-flex justify-content-center align-items-center gap-3 mb-2" style="font-size: 10.5px; font-weight: 700; flex-wrap: wrap;">
-                                    <div class="d-flex align-items-center gap-1" style="color: #64748B;">
-                                        <svg width="20" height="10"><line x1="0" y1="5" x2="20" y2="5" stroke="#64748B" stroke-width="2" stroke-dasharray="2,2"/><polygon points="10,1 14,5 10,9 6,5" fill="#FFFFFF" stroke="#64748B" stroke-width="1.2"/></svg>
+                                <div class="d-flex justify-content-center align-items-center gap-3 mb-2" style="font-size: 12.5px; font-weight: 600; flex-wrap: wrap;">
+                                    <div class="d-flex align-items-center gap-1.5" style="color: #64748B;">
+                                        <svg width="22" height="12"><line x1="0" y1="6" x2="22" y2="6" stroke="#64748B" stroke-width="2" stroke-dasharray="3,3"/><polygon points="11,2 15,6 11,10 7,6" fill="#FFFFFF" stroke="#64748B" stroke-width="1.5"/></svg>
                                         <span>Trước can thiệp</span>
                                     </div>
-                                    <div class="d-flex align-items-center gap-1" style="color: #DC2626;">
-                                        <svg width="20" height="10"><line x1="0" y1="5" x2="20" y2="5" stroke="#DC2626" stroke-width="2"/><circle cx="10" cy="5" r="3.5" fill="#DC2626"/></svg>
+                                    <div class="d-flex align-items-center gap-1.5" style="color: #DC2626;">
+                                        <svg width="22" height="12"><line x1="0" y1="6" x2="22" y2="6" stroke="#DC2626" stroke-width="2.5"/><circle cx="11" cy="6" r="4" fill="#DC2626"/></svg>
                                         <span>Sau can thiệp (<t t-out="tab1.get('ten', '')"/>)</span>
                                     </div>
                                 </div>
 
                                 <div style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
                                     <svg viewBox="0 0 900 250" style="min-width: 600px; width: 100%; height: auto; display: block; font-family: sans-serif;">
-                                        <line x1="50" y1="22" x2="860" y2="22" stroke="#F1F5F9" stroke-width="1"/><text x="42" y="26" font-size="10" fill="#94A3B8" text-anchor="end">110%</text>
-                                        <line x1="50" y1="35" x2="860" y2="35" stroke="#E2E8F0" stroke-width="1"/><text x="42" y="39" font-size="10" fill="#94A3B8" text-anchor="end">100%</text>
-                                        <line x1="50" y1="61" x2="860" y2="61" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="2,2"/><text x="42" y="65" font-size="10" fill="#64748B" font-weight="bold" text-anchor="end">80%</text>
-                                        <line x1="50" y1="87" x2="860" y2="87" stroke="#F1F5F9" stroke-width="1"/><text x="42" y="91" font-size="10" fill="#94A3B8" text-anchor="end">60%</text>
-                                        <line x1="50" y1="113" x2="860" y2="113" stroke="#F1F5F9" stroke-width="1"/><text x="42" y="117" font-size="10" fill="#94A3B8" text-anchor="end">40%</text>
-                                        <line x1="50" y1="139" x2="860" y2="139" stroke="#F1F5F9" stroke-width="1"/><text x="42" y="143" font-size="10" fill="#94A3B8" text-anchor="end">20%</text>
-                                        <line x1="50" y1="165" x2="860" y2="165" stroke="#CBD5E1" stroke-width="1.5"/><text x="42" y="169" font-size="10" fill="#94A3B8" text-anchor="end">0%</text>
+                                        <line x1="50" y1="22" x2="860" y2="22" stroke="#F1F5F9" stroke-width="1"/><text x="42" y="26" font-size="11" fill="#94A3B8" text-anchor="end">110%</text>
+                                        <line x1="50" y1="35" x2="860" y2="35" stroke="#E2E8F0" stroke-width="1"/><text x="42" y="39" font-size="11" fill="#94A3B8" text-anchor="end">100%</text>
+                                        <line x1="50" y1="61" x2="860" y2="61" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="2,2"/><text x="42" y="65" font-size="11" fill="#64748B" font-weight="bold" text-anchor="end">80%</text>
+                                        <line x1="50" y1="87" x2="860" y2="87" stroke="#F1F5F9" stroke-width="1"/><text x="42" y="91" font-size="11" fill="#94A3B8" text-anchor="end">60%</text>
+                                        <line x1="50" y1="113" x2="860" y2="113" stroke="#F1F5F9" stroke-width="1"/><text x="42" y="117" font-size="11" fill="#94A3B8" text-anchor="end">40%</text>
+                                        <line x1="50" y1="139" x2="860" y2="139" stroke="#F1F5F9" stroke-width="1"/><text x="42" y="143" font-size="11" fill="#94A3B8" text-anchor="end">20%</text>
+                                        <line x1="50" y1="165" x2="860" y2="165" stroke="#CBD5E1" stroke-width="1.5"/><text x="42" y="169" font-size="11" fill="#94A3B8" text-anchor="end">0%</text>
 
                                         <t t-if="chart.get('polygon_dat')"><polygon t-att-points="chart['polygon_dat']" fill="#FEE2E2" opacity="0.45"/></t>
                                         <t t-if="chart.get('points_thu')"><polyline t-att-points="chart['points_thu']" fill="none" stroke="#64748B" stroke-width="2.5" stroke-dasharray="4,4"/></t>
@@ -490,12 +492,12 @@
 
                                         <t t-foreach="chart.get('items', [])" t-as="pt">
                                             <polygon t-attf-points="#{pt['x']},#{pt['y_thu'] - 5} #{pt['x'] + 5},#{pt['y_thu']} #{pt['x']},#{pt['y_thu'] + 5} #{pt['x'] - 5},#{pt['y_thu']}" fill="#FFFFFF" stroke="#64748B" stroke-width="1.8"/>
-                                            <text t-att-x="pt['x']" t-att-y="pt['y_thu'] - 8" font-size="9.5" fill="#475569" font-weight="bold" text-anchor="middle"><t t-out="pt['tyle_thu']"/>%</text>
+                                            <text t-att-x="pt['x']" t-att-y="pt['y_thu'] - 8" font-size="11" fill="#475569" font-weight="600" text-anchor="middle"><t t-out="pt['tyle_thu']"/>%</text>
                                             <circle t-att-cx="pt['x']" t-att-cy="pt['y_dat']" r="5.5" fill="#DC2626" stroke="#FFFFFF" stroke-width="2"/>
-                                            <text t-att-x="pt['x']" t-att-y="pt['y_dat'] - 9" font-size="10.5" fill="#B91C1C" font-weight="800" text-anchor="middle"><t t-out="pt['tyle_dat']"/>%</text>
-                                            <text t-att-x="pt['x']" y="185" font-size="9.5" font-weight="700" fill="#334155" text-anchor="middle">
+                                            <text t-att-x="pt['x']" t-att-y="pt['y_dat'] - 9" font-size="12" fill="#B91C1C" font-weight="700" text-anchor="middle"><t t-out="pt['tyle_dat']"/>%</text>
+                                            <text t-att-x="pt['x']" y="185" font-size="11" font-weight="500" fill="#334155" text-anchor="middle">
                                                 <t t-foreach="pt.get('lines', [])" t-as="line">
-                                                    <tspan t-att-x="pt['x']" t-att-dy="line_index == 0 and '0' or '11'"><t t-out="line"/></tspan>
+                                                    <tspan t-att-x="pt['x']" t-att-dy="line_index == 0 and '0' or '12'"><t t-out="line"/></tspan>
                                                 </t>
                                             </text>
                                         </t>
@@ -503,68 +505,68 @@
                                 </div>
                             </div>
 
-                            <!-- 1. Bảng mục tiêu phân nhóm -->
-                            <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-bottom: 6px;">
+                            <!-- 1. BẢNG MỤC TIÊU PHÂN NHÓM: FONT 14.5px, HẠN CHẾ BÔI ĐẬM -->
+                            <div style="font-size: 15px; font-weight: 700; color: #1E3A8A; margin-bottom: 8px;">
                                 1. Chi tiết mức độ ban đầu và kết quả can thiệp
                             </div>
                             <div class="table-responsive-box">
                                 <table class="custom-report-table">
                                     <thead>
-                                        <tr style="background: #F1F5F9; color: #334155; text-transform: uppercase;">
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 6px; width: 5%; text-align: center;">STT</th>
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 10px; width: 43%; text-align: left;">Mục tiêu can thiệp</th>
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 6px; width: 12%; text-align: center;">Trước</th>
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 6px; width: 10%; text-align: center;">Sau</th>
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 6px; width: 10%; text-align: center;">Mức độ</th>
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 10px; width: 20%; text-align: left;">Ý kiến / Định hướng</th>
+                                        <tr style="background: #F1F5F9; color: #1E293B; text-transform: uppercase; font-size: 13.5px;">
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 6px; width: 5%; text-align: center; font-weight: 600;">STT</th>
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 12px; width: 43%; text-align: left; font-weight: 600;">Mục tiêu can thiệp</th>
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 6px; width: 12%; text-align: center; font-weight: 600;">Trước</th>
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 6px; width: 10%; text-align: center; font-weight: 600;">Sau</th>
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 6px; width: 10%; text-align: center; font-weight: 600;">Mức độ</th>
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 10px; width: 20%; text-align: left; font-weight: 600;">Ý kiến / Định hướng</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <t t-foreach="tab1.get('linhvucs_grouped', [])" t-as="grp">
                                             <!-- TIÊU ĐỀ LĨNH VỰC VỚI 3 MINI BADGE TRÊN CÙNG 1 DÒNG NGANG -->
                                             <tr style="background-color: #F8FAFC; border-top: 2px solid #94A3B8; border-bottom: 1px solid #CBD5E1;">
-                                                <td colspan="6" style="padding: 7px 12px;">
+                                                <td colspan="6" style="padding: 9px 14px;">
                                                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
                                                         <!-- Cột Trái: Tên lĩnh vực + Tuổi + Số lượng mục tiêu -->
                                                         <div style="display: flex; align-items: center; gap: 8px;">
-                                                            <i class="fa fa-folder-open text-primary" style="font-size: 13.5px;"/>
-                                                            <span style="font-size: 12px; font-weight: 800; color: #1E3A8A; text-transform: uppercase;">
+                                                            <i class="fa fa-folder-open text-primary" style="font-size: 15px;"/>
+                                                            <span style="font-size: 14.5px; font-weight: 700; color: #1E3A8A; text-transform: uppercase;">
                                                                 <t t-out="grp['linhvuc']"/>
                                                             </span>
                                                             <t t-if="grp['tuoi']">
-                                                                <span class="badge" style="background-color: #E2E8F0; color: #334155; font-size: 9.5px; padding: 2px 6px; border-radius: 4px; font-weight: bold;">
+                                                                <span class="badge" style="background-color: #E2E8F0; color: #334155; font-size: 12px; padding: 3px 8px; border-radius: 4px; font-weight: 600;">
                                                                     <t t-out="grp['tuoi']"/>
                                                                 </span>
                                                             </t>
-                                                            <span style="font-size: 10px; color: #64748B;">
+                                                            <span style="font-size: 13px; color: #64748B; font-weight: 400;">
                                                                 (<t t-out="grp['total_mt']"/> mục tiêu)
                                                             </span>
                                                         </div>
 
-                                                        <!-- Cột Phải: HIỂN THỊ CÙNG 1 HÀNG - TO, RÕ RÀNG VÀ TIẾT KIỆM KHÔNG GIAN -->
+                                                        <!-- Cột Phải: HIỂN THỊ CÙNG 1 HÀNG - FONT TO, NÉT THANH GỌN -->
                                                         <t t-set="diff" t-value="grp.get('tien_bo', grp['avg_dat'] - grp['avg_thu'])"/>
-                                                        <div style="display: flex; align-items: center; gap: 7px; font-size: 11px;">
+                                                        <div style="display: flex; align-items: center; gap: 8px; font-size: 13.5px;">
                                                             <!-- Pill 1: Trước -->
-                                                            <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 3px 8px; display: inline-flex; align-items: center; gap: 4px;">
-                                                                <span style="color: #64748B;">Trước:</span>
-                                                                <strong style="color: #334155; font-size: 12px;"><t t-out="grp['avg_thu']"/>%</strong>
+                                                            <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px;">
+                                                                <span style="color: #64748B; font-weight: 400;">Trước:</span>
+                                                                <strong style="color: #334155; font-weight: 600; font-size: 14px;"><t t-out="grp['avg_thu']"/>%</strong>
                                                             </div>
 
                                                             <!-- Mũi tên liên kết luồng -->
-                                                            <i class="fa fa-arrow-right text-muted" style="font-size: 9px; opacity: 0.55;"/>
+                                                            <i class="fa fa-arrow-right text-muted" style="font-size: 11px; opacity: 0.55;"/>
 
                                                             <!-- Pill 2: Sau can thiệp -->
-                                                            <div t-attf-style="border-radius: 6px; padding: 3px 8px; display: inline-flex; align-items: center; gap: 4px; background: #{'#DCFCE7' if grp['avg_dat'] &gt;= 80 else '#FEF3C7'}; border: 1px solid #{'#BBF7D0' if grp['avg_dat'] &gt;= 80 else '#FDE68A'};">
-                                                                <span t-attf-style="color: #{'#166534' if grp['avg_dat'] &gt;= 80 else '#92400E'};">Sau can thiệp:</span>
-                                                                <strong t-attf-style="font-size: 13px; font-weight: 800; color: #{'#15803D' if grp['avg_dat'] &gt;= 80 else '#B45309'};">
+                                                            <div t-attf-style="border-radius: 6px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; background: #{'#DCFCE7' if grp['avg_dat'] &gt;= 80 else '#FEF3C7'}; border: 1px solid #{'#BBF7D0' if grp['avg_dat'] &gt;= 80 else '#FDE68A'};">
+                                                                <span t-attf-style="font-weight: 400; color: #{'#166534' if grp['avg_dat'] &gt;= 80 else '#92400E'};">Sau can thiệp:</span>
+                                                                <strong t-attf-style="font-size: 14.5px; font-weight: 700; color: #{'#15803D' if grp['avg_dat'] &gt;= 80 else '#B45309'};">
                                                                     <t t-out="grp['avg_dat']"/>%
                                                                 </strong>
                                                             </div>
 
                                                             <!-- Pill 3: Tiến bộ ròng -->
-                                                            <div t-attf-style="border-radius: 6px; padding: 3px 8px; display: inline-flex; align-items: center; gap: 4px; background: #{'#F0FDF4' if diff &gt; 0 else ('#FEF2F2' if diff &lt; 0 else '#F8FAFC')}; border: 1px solid #{'#86EFAC' if diff &gt; 0 else ('#FCA5A5' if diff &lt; 0 else '#E2E8F0')};">
-                                                                <span t-attf-style="font-weight: 600; color: #{'#166534' if diff &gt; 0 else ('#991B1B' if diff &lt; 0 else '#64748B')};">Tiến bộ:</span>
-                                                                <strong t-attf-style="font-size: 13px; font-weight: 800; color: #{'#15803D' if diff &gt; 0 else ('#DC2626' if diff &lt; 0 else '#475569')};">
+                                                            <div t-attf-style="border-radius: 6px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; background: #{'#F0FDF4' if diff &gt; 0 else ('#FEF2F2' if diff &lt; 0 else '#F8FAFC')}; border: 1px solid #{'#86EFAC' if diff &gt; 0 else ('#FCA5A5' if diff &lt; 0 else '#E2E8F0')};">
+                                                                <span t-attf-style="font-weight: 400; color: #{'#166534' if diff &gt; 0 else ('#991B1B' if diff &lt; 0 else '#64748B')};">Tiến bộ:</span>
+                                                                <strong t-attf-style="font-size: 14.5px; font-weight: 700; color: #{'#15803D' if diff &gt; 0 else ('#DC2626' if diff &lt; 0 else '#475569')};">
                                                                     <t t-if="diff &gt; 0">+</t><t t-out="diff"/>%
                                                                 </strong>
                                                             </div>
@@ -574,19 +576,33 @@
                                             </tr>
                                             <t t-foreach="grp['targets']" t-as="mt">
                                                 <tr t-attf-style="background-color: #{'#FFFFFF' if mt.get('muc_do') == 'Củng cố' else '#FFFDF5'};">
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; color: #64748B;"><span t-out="mt.get('stt')"/></td>
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px 10px; font-weight: 500; color: #0F172A; line-height: 1.4;"><span t-out="mt.get('muctieu')"/></td>
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; color: #475569;"><span t-out="mt.get('truoc')"/></td>
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; font-weight: bold;">
-                                                        <span t-attf-style="display: inline-block; min-width: 40px; padding: 2px 4px; border-radius: 4px; background-color: #{'#DCFCE7' if mt.get('sau') &gt;= 80 else '#FEF3C7'}; color: #{'#15803D' if mt.get('sau') &gt;= 80 else '#B45309'}; border: 1px solid #{'#BBF7D0' if mt.get('sau') &gt;= 80 else '#FDE68A'};">
+                                                    <!-- STT: chữ thường -->
+                                                    <td style="border: 1px solid #CBD5E1; padding: 8px 6px; text-align: center; color: #64748B; font-weight: 400; font-size: 13.5px;">
+                                                        <span t-out="mt.get('stt')"/>
+                                                    </td>
+                                                    <!-- MỤC TIÊU: FONT TO 14.5px, HẠN CHẾ BÔI ĐẬM (font-weight: 400) -->
+                                                    <td style="border: 1px solid #CBD5E1; padding: 8px 12px; font-weight: 400; color: #0F172A; line-height: 1.55; font-size: 14.5px;">
+                                                        <span t-out="mt.get('muctieu')"/>
+                                                    </td>
+                                                    <!-- TRƯỚC: chữ thường, font 14px -->
+                                                    <td style="border: 1px solid #CBD5E1; padding: 8px 6px; text-align: center; color: #334155; font-weight: 400; font-size: 14px;">
+                                                        <span t-out="mt.get('truoc')"/>
+                                                    </td>
+                                                    <!-- SAU: pill màu, font vừa phải 600, 13.5px -->
+                                                    <td style="border: 1px solid #CBD5E1; padding: 8px 6px; text-align: center;">
+                                                        <span t-attf-style="display: inline-block; min-width: 44px; padding: 3px 6px; border-radius: 4px; font-size: 13.5px; font-weight: 600; background-color: #{'#DCFCE7' if mt.get('sau') &gt;= 80 else '#FEF3C7'}; color: #{'#15803D' if mt.get('sau') &gt;= 80 else '#B45309'}; border: 1px solid #{'#BBF7D0' if mt.get('sau') &gt;= 80 else '#FDE68A'};">
                                                             <span t-out="mt.get('sau')"/>%
                                                         </span>
                                                     </td>
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; font-weight: 700;">
-                                                        <span t-if="mt.get('muc_do') == 'Củng cố'" style="display: inline-block; padding: 2px 6px; border-radius: 4px; background-color: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; font-size: 9.5px;">Củng cố</span>
-                                                        <span t-else="" style="display: inline-block; padding: 2px 6px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 9.5px;">Duy trì</span>
+                                                    <!-- MỨC ĐỘ: nhãn pill mềm mại -->
+                                                    <td style="border: 1px solid #CBD5E1; padding: 8px 6px; text-align: center;">
+                                                        <span t-if="mt.get('muc_do') == 'Củng cố'" style="display: inline-block; padding: 3px 8px; border-radius: 4px; background-color: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; font-size: 12px; font-weight: 600;">Củng cố</span>
+                                                        <span t-else="" style="display: inline-block; padding: 3px 8px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 12px; font-weight: 600;">Duy trì</span>
                                                     </td>
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px 10px; color: #334155;"><span t-out="mt.get('dinh_huong')"/></td>
+                                                    <!-- Ý KIẾN / ĐỊNH HƯỚNG: chữ thường, font 14px -->
+                                                    <td style="border: 1px solid #CBD5E1; padding: 8px 10px; color: #334155; font-weight: 400; font-size: 14px; line-height: 1.5;">
+                                                        <span t-out="mt.get('dinh_huong')"/>
+                                                    </td>
                                                 </tr>
                                             </t>
                                         </t>
@@ -594,11 +610,11 @@
                                 </table>
                             </div>
 
-                            <!-- ================= 2. NHẬN XÉT ĐÁNH GIÁ (ĐƯỢC ĐƯA LÊN TRƯỚC) ================= -->
-                            <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-bottom: 6px;">
+                            <!-- ================= 2. NHẬN XÉT ĐÁNH GIÁ (FIELD: nhanxet) ================= -->
+                            <div style="font-size: 15px; font-weight: 700; color: #1E3A8A; margin-bottom: 8px;">
                                 <i class="fa fa-commenting-o text-primary me-1"/> NHẬN XÉT CHUNG
                             </div>
-                            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 4px solid #2563EB; border-radius: 6px; padding: 10px 14px; margin-bottom: 18px; font-size: 11.5px; line-height: 1.6; color: #334155;">
+                            <div style="background: #F8FAFC; border: 1px solid #CBD5E1; border-left: 4.5px solid #2563EB; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 14.5px; line-height: 1.65; color: #334155; font-weight: 400;">
                                 <t t-if="tab1.get('nhan_xet')">
                                     <t t-out="tab1.get('nhan_xet')"/>
                                 </t>
@@ -607,29 +623,27 @@
                                 </t>
                             </div>
 
-                            <!-- ================= 3. ĐỊNH HƯỚNG CAN THIỆP THÁNG TỚI (CĂN ĐẦU DÒNG CHUẨN ĐỒNG BỘ) ================= -->
-                            <div style="margin-bottom: 20px;">
-                                <!-- Tiêu đề khối căn đầu dòng chuẩn -->
-                                <div style="font-size: 13px; font-weight: 800; color: #1E4E79; margin-bottom: 8px; text-transform: uppercase;">
+                            <!-- ================= 3. ĐỊNH HƯỚNG CAN THIỆP THÁNG TỚI ================= -->
+                            <div style="margin-bottom: 22px;">
+                                <div style="font-size: 15px; font-weight: 700; color: #1E4E79; margin-bottom: 10px; text-transform: uppercase;">
                                     <i class="fa fa-bullseye text-primary me-1"/> 2. ĐỊNH HƯỚNG CAN THIỆP <t t-out="tab1.get('ten_thang_toi', 'THÁNG TỚI')"/>
                                 </div>
 
-                                <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 8px; padding: 12px 16px; font-size: 11.5px; line-height: 1.6; color: #1E293B;">
+                                <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 10px; padding: 16px 20px; font-size: 14.5px; line-height: 1.7; color: #1E293B;">
                                     <!-- KHỐI CỦNG CỐ -->
-                                    <div style="margin-bottom: 14px;">
-                                        <div style="font-weight: 800; color: #1E3A8A; font-size: 12px; margin-bottom: 4px;">
+                                    <div style="margin-bottom: 16px;">
+                                        <div style="font-weight: 700; color: #1E3A8A; font-size: 14px; margin-bottom: 5px;">
                                             CỦNG CỐ
                                         </div>
 
-
                                         <t t-if="tab1.get('dinh_huong_cung_co')">
                                             <t t-foreach="tab1['dinh_huong_cung_co']" t-as="cc">
-                                                <div style="margin-bottom: 6px; padding-left: 4px;">
-                                                    <div style="font-weight: 700; color: #1E4E79;">
+                                                <div style="margin-bottom: 8px; padding-left: 4px;">
+                                                    <div style="font-weight: 600; color: #1E4E79; font-size: 14px;">
                                                         - <t t-out="cc['linhvuc']"/>
                                                     </div>
                                                     <t t-foreach="cc['targets']" t-as="mt_name">
-                                                        <div style="padding-left: 14px; color: #0F172A;">
+                                                        <div style="padding-left: 16px; color: #0F172A; font-weight: 400; font-size: 14.5px;">
                                                             + <t t-out="mt_name"/>
                                                         </div>
                                                     </t>
@@ -637,29 +651,29 @@
                                             </t>
                                         </t>
                                         <t t-else="">
-                                            <div class="text-muted fst-italic ps-2">Không có mục tiêu nào trong kỳ đạt mức củng cố.</div>
+                                            <div class="text-muted fst-italic ps-2" style="font-weight: 400;">Không có mục tiêu nào trong kỳ đạt mức củng cố.</div>
                                         </t>
                                     </div>
 
-                                    <div style="border-top: 1px dashed #E2E8F0; margin-bottom: 12px;"/>
+                                    <div style="border-top: 1px dashed #E2E8F0; margin-bottom: 14px;"/>
 
                                     <!-- KHỐI DUY TRÌ -->
                                     <div>
-                                        <div style="font-weight: 800; color: #B45309; font-size: 12px; margin-bottom: 4px;">
+                                        <div style="font-weight: 700; color: #B45309; font-size: 14px; margin-bottom: 5px;">
                                             DUY TRÌ
                                         </div>
-                                        <div style="color: #475569; font-style: italic; margin-bottom: 6px;">
+                                        <div style="color: #64748B; font-style: italic; margin-bottom: 8px; font-weight: 400; font-size: 13.5px;">
                                             Tiếp tục thực hiện những mục tiêu chưa đạt (chuyển sang tháng tiếp theo):
                                         </div>
 
                                         <t t-if="tab1.get('dinh_huong_duy_tri')">
                                             <t t-foreach="tab1['dinh_huong_duy_tri']" t-as="dt">
-                                                <div style="margin-bottom: 6px; padding-left: 4px;">
-                                                    <div style="font-weight: 700; color: #B45309;">
-                                                        - <t t-out="dt['linhvuc']"/>
+                                                <div style="margin-bottom: 8px; padding-left: 4px;">
+                                                    <div style="font-weight: 600; color: #B45309; font-size: 14px;">
+                                                        - <t t-out="dt['linhvuc']"/>:
                                                     </div>
                                                     <t t-foreach="dt['targets']" t-as="mt_dt">
-                                                        <div style="padding-left: 14px; color: #0F172A;">
+                                                        <div style="padding-left: 16px; color: #0F172A; font-weight: 400; font-size: 14.5px;">
                                                             + <t t-out="mt_dt"/>
                                                         </div>
                                                     </t>
@@ -667,17 +681,17 @@
                                             </t>
                                         </t>
                                         <t t-else="">
-                                            <div class="text-muted fst-italic ps-2">Tất cả các mục tiêu trong kỳ đều đã đạt yêu cầu.</div>
+                                            <div class="text-muted fst-italic ps-2" style="font-weight: 400;">Tất cả các mục tiêu trong kỳ đều đã đạt yêu cầu.</div>
                                         </t>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- ================= 4. ĐỊNH HƯỚNG KẾ HOẠCH THÁNG TỚI (FIELD: dinhhuong) ================= -->
-                            <div style="font-size: 13px; font-weight: 800; color: #065F46; margin-bottom: 6px;">
+                            <div style="font-size: 15px; font-weight: 700; color: #065F46; margin-bottom: 8px;">
                                 <i class="fa fa-compass text-success me-1"/> GHI CHÚ (định hướng)
                             </div>
-                            <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-left: 4px solid #059669; border-radius: 6px; padding: 10px 14px; margin-bottom: 24px; font-size: 11.5px; line-height: 1.6; color: #065F46;">
+                            <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-left: 4.5px solid #059669; border-radius: 8px; padding: 14px 18px; margin-bottom: 26px; font-size: 14.5px; line-height: 1.65; color: #065F46; font-weight: 400;">
                                 <t t-if="tab1.get('dinh_huong_thang_toi')">
                                     <t t-out="tab1.get('dinh_huong_thang_toi')"/>
                                 </t>
@@ -693,22 +707,22 @@
                     <!-- ========================================================================= -->
                     <div id="content_tab2" class="hoso-tab-view" t-attf-style="display: #{'block' if active_tab == 'tab2' else 'none'};">
                         <t t-if="not data.get('has_plan_thangtoi')">
-                            <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 16px; text-align: center; color: #1D4ED8; margin: 10px 0;">
+                            <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 10px; padding: 18px; text-align: center; color: #1D4ED8; margin: 10px 0; font-size: 14.5px;">
                                 <i class="fa fa-circle-info me-1"/> Hiện tại học sinh chưa có Kế hoạch can thiệp nào ở trạng thái Đang can thiệp (1).
                             </div>
                         </t>
                         <t t-else="">
                             <!-- Header kỳ kế hoạch -->
                             <div class="d-flex justify-content-between align-items-center mb-2 px-1 pb-2" style="border-bottom: 2px solid #E2E8F0; flex-wrap: wrap; gap: 8px;">
-                                <div style="font-size: 14px; font-weight: 800; color: #065F46;">
+                                <div style="font-size: 15.5px; font-weight: 700; color: #065F46;">
                                     <i class="fa fa-file-signature text-success me-1"/>
                                     <span t-out="tab2.get('tieu_de_hien_thi', '')"/>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
-                                    <span class="badge" style="background-color: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; font-size: 10.5px; padding: 4px 8px;">
+                                    <span class="badge" style="background-color: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; font-size: 12.5px; font-weight: 600; padding: 4px 10px;">
                                         Trạng thái: <strong t-out="tab2.get('trangthai_text', '')"/>
                                     </span>
-                                    <span class="badge" style="background-color: #DBEAFE; color: #1D4ED8; border: 1px solid #BFDBFE; font-size: 10.5px; padding: 4px 8px;">
+                                    <span class="badge" style="background-color: #DBEAFE; color: #1D4ED8; border: 1px solid #BFDBFE; font-size: 12.5px; font-weight: 600; padding: 4px 10px;">
                                         <strong t-out="tab2.get('tong_muctieu', 0)"/> mục tiêu
                                     </span>
                                 </div>
@@ -716,45 +730,45 @@
 
                             <!-- 2 Thẻ Giáo viên & Quản lý duyệt -->
                             <div class="canbo-grid">
-                                <div class="kpi-card" style="border-left: 4px solid #059669;">
+                                <div class="kpi-card" style="border-left: 4.5px solid #059669;">
                                     <div class="kpi-title"><i class="fa fa-user-tie text-success me-1"/> Giáo viên can thiệp 1:1</div>
-                                    <div class="kpi-value" style="color: #065F46; font-size: 14px;"><span t-out="tab2.get('giaovien', 'Chưa phân công')"/></div>
+                                    <div class="kpi-value" style="color: #065F46; font-size: 15px;"><span t-out="tab2.get('giaovien', 'Chưa phân công')"/></div>
                                     <div class="kpi-sub">Trực tiếp lập kế hoạch &amp; can thiệp</div>
                                 </div>
-                                <div class="kpi-card" style="border-left: 4px solid #2563EB;">
+                                <div class="kpi-card" style="border-left: 4.5px solid #2563EB;">
                                     <div class="kpi-title"><i class="fa fa-user-check text-primary me-1"/> Quản lý chuyên môn duyệt</div>
-                                    <div class="kpi-value" style="color: #1D4ED8; font-size: 14px;"><span t-out="tab2.get('quanly', 'Ngô Thị Ngọc Hoàn')"/></div>
+                                    <div class="kpi-value" style="color: #1D4ED8; font-size: 15px;"><span t-out="tab2.get('quanly', 'Ngô Thị Ngọc Hoàn')"/></div>
                                     <div class="kpi-sub">Thẩm định &amp; phê duyệt mục tiêu</div>
                                 </div>
                             </div>
 
                             <!-- Bảng danh mục mục tiêu kế hoạch -->
-                            <div style="font-size: 13px; font-weight: 800; color: #047857; margin-bottom: 6px;">
+                            <div style="font-size: 15px; font-weight: 700; color: #047857; margin-bottom: 8px;">
                                 Danh mục mục tiêu kế hoạch can thiệp
                             </div>
                             <div class="table-responsive-box">
                                 <table class="custom-report-table">
                                     <thead>
-                                        <tr style="background: #ECFDF5; color: #065F46; text-transform: uppercase;">
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 6px; width: 5%; text-align: center;">TT</th>
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 10px; width: 45%; text-align: left;">Tên mục tiêu</th>
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 6px; width: 14%; text-align: center;">% Trước can thiệp</th>
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 6px; width: 16%; text-align: center;">Loại mục tiêu</th>
-                                            <th style="border: 1px solid #CBD5E1; padding: 7px 10px; width: 20%; text-align: left;">Ghi chú</th>
+                                        <tr style="background: #ECFDF5; color: #065F46; text-transform: uppercase; font-size: 13.5px;">
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 6px; width: 5%; text-align: center; font-weight: 600;">TT</th>
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 12px; width: 45%; text-align: left; font-weight: 600;">Tên mục tiêu</th>
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 6px; width: 14%; text-align: center; font-weight: 600;">% Trước can thiệp</th>
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 6px; width: 16%; text-align: center; font-weight: 600;">Loại mục tiêu</th>
+                                            <th style="border: 1px solid #CBD5E1; padding: 9px 10px; width: 20%; text-align: left; font-weight: 600;">Ghi chú</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <t t-foreach="tab2.get('linhvucs_grouped', [])" t-as="grp2">
                                             <tr style="background-color: #F0FDF4; border-top: 2px solid #86EFAC; border-bottom: 1px solid #CBD5E1;">
-                                                <td colspan="5" style="padding: 7px 10px;">
+                                                <td colspan="5" style="padding: 9px 12px;">
                                                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
                                                         <div style="display: flex; align-items: center; gap: 6px;">
-                                                            <i class="fa fa-folder-tree text-success" style="font-size: 12px;"/>
-                                                            <span style="font-size: 11.5px; font-weight: 800; color: #065F46; text-transform: uppercase;"><t t-out="grp2['linhvuc']"/></span>
-                                                            <t t-if="grp2['tuoi']"><span class="badge" style="background-color: #DCFCE7; color: #166534; font-size: 9.5px; padding: 2px 6px;"><t t-out="grp2['tuoi']"/></span></t>
-                                                            <span style="font-size: 10px; color: #4B5563;">(<t t-out="grp2['total_mt']"/> mục tiêu)</span>
+                                                            <i class="fa fa-folder-tree text-success" style="font-size: 15px;"/>
+                                                            <span style="font-size: 14.5px; font-weight: 700; color: #065F46; text-transform: uppercase;"><t t-out="grp2['linhvuc']"/></span>
+                                                            <t t-if="grp2['tuoi']"><span class="badge" style="background-color: #DCFCE7; color: #166534; font-size: 12px; padding: 2px 6px; font-weight: 600;"><t t-out="grp2['tuoi']"/></span></t>
+                                                            <span style="font-size: 13px; color: #4B5563; font-weight: 400;">(<t t-out="grp2['total_mt']"/> mục tiêu)</span>
                                                         </div>
-                                                        <div style="font-size: 10.5px; font-weight: 700; color: #047857;">
+                                                        <div style="font-size: 13.5px; font-weight: 600; color: #047857;">
                                                             Đầu vào TB: <strong><t t-out="grp2['avg_thu']"/>%</strong>
                                                         </div>
                                                     </div>
@@ -762,22 +776,22 @@
                                             </tr>
                                             <t t-foreach="grp2['targets']" t-as="mt2">
                                                 <tr style="background-color: #FFFFFF;">
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; color: #64748B;"><span t-out="mt2.get('stt')"/></td>
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px 10px; font-weight: 500; color: #0F172A; line-height: 1.4;"><span t-out="mt2.get('muctieu')"/></td>
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; color: #1E293B; font-weight: 600;">
+                                                    <td style="border: 1px solid #E2E8F0; padding: 8px 6px; text-align: center; color: #64748B; font-weight: 400; font-size: 13.5px;"><span t-out="mt2.get('stt')"/></td>
+                                                    <td style="border: 1px solid #E2E8F0; padding: 8px 12px; font-weight: 400; color: #0F172A; line-height: 1.55; font-size: 14.5px;"><span t-out="mt2.get('muctieu')"/></td>
+                                                    <td style="border: 1px solid #E2E8F0; padding: 8px 6px; text-align: center; color: #1E293B; font-weight: 500; font-size: 14px;">
                                                         <span t-out="mt2.get('solan_thu')"/> (<span t-out="mt2.get('truoc_pct')"/>)
                                                     </td>
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px; text-align: center; font-weight: 700;">
+                                                    <td style="border: 1px solid #E2E8F0; padding: 8px 6px; text-align: center;">
                                                         <span t-if="mt2.get('is_chuyen_tiep')"
-                                                              style="display: inline-block; padding: 2px 6px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 9.5px;">
+                                                              style="display: inline-block; padding: 3px 8px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 12px; font-weight: 600;">
                                                             <i class="fa fa-arrow-rotate-right me-0.5"/> Tháng trước chuyển qua
                                                         </span>
                                                         <span t-else=""
-                                                              style="display: inline-block; padding: 2px 6px; border-radius: 4px; background-color: #DBEAFE; color: #1E40AF; border: 1px solid #BFDBFE; font-size: 9.5px;">
+                                                              style="display: inline-block; padding: 3px 8px; border-radius: 4px; background-color: #DBEAFE; color: #1E40AF; border: 1px solid #BFDBFE; font-size: 12px; font-weight: 600;">
                                                             <i class="fa fa-sparkles me-0.5"/> Mới
                                                         </span>
                                                     </td>
-                                                    <td style="border: 1px solid #E2E8F0; padding: 6px 10px; color: #334155;"><span t-out="mt2.get('ghichu')"/></td>
+                                                    <td style="border: 1px solid #E2E8F0; padding: 8px 10px; color: #334155; font-weight: 400; font-size: 14px; line-height: 1.5;"><span t-out="mt2.get('ghichu')"/></td>
                                                 </tr>
                                             </t>
                                         </t>
@@ -788,29 +802,29 @@
                     </div>
 
                     <!-- ================= CHỮ KÝ XÁC NHẬN BA BÊN ================= -->
-                    <table style="width: 100%; text-align: center; border-collapse: collapse; margin-top: 15px; margin-bottom: 25px;">
+                    <table style="width: 100%; text-align: center; border-collapse: collapse; margin-top: 20px; margin-bottom: 30px;">
                         <tr>
                             <td style="width: 33.33%; vertical-align: top; padding: 4px;">
-                                <div style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 35px;">
+                                <div style="font-size: 12.5px; font-weight: 600; text-transform: uppercase; color: #64748B; margin-bottom: 38px;">
                                     Giáo viên can thiệp 1:1
                                 </div>
-                                <div style="font-size: 12px; font-weight: 800; color: #0F172A;">
+                                <div style="font-size: 14.5px; font-weight: 700; color: #0F172A;">
                                     <span t-out="tab1.get('giaovien', '')"/>
                                 </div>
                             </td>
                             <td style="width: 33.33%; vertical-align: top; padding: 4px;">
-                                <div style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 35px;">
+                                <div style="font-size: 12.5px; font-weight: 600; text-transform: uppercase; color: #64748B; margin-bottom: 38px;">
                                     Quản lý chuyên môn
                                 </div>
-                                <div style="font-size: 12px; font-weight: 800; color: #0F172A;">
+                                <div style="font-size: 14.5px; font-weight: 700; color: #0F172A;">
                                     <span t-out="tab1.get('quanly', '')"/>
                                 </div>
                             </td>
                             <td style="width: 33.33%; vertical-align: top; padding: 4px;">
-                                <div style="font-size: 10px; font-weight: bold; text-transform: uppercase; color: #64748B; margin-bottom: 35px;">
+                                <div style="font-size: 12.5px; font-weight: 600; text-transform: uppercase; color: #64748B; margin-bottom: 38px;">
                                     Đại diện Phụ huynh
                                 </div>
-                                <div style="font-size: 12px; font-weight: 800; color: #0F172A;">
+                                <div style="font-size: 14.5px; font-weight: 700; color: #0F172A;">
                                     <span t-out="hs.get('phuhuynh', '')"/>
                                 </div>
                             </td>

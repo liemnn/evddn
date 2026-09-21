@@ -42,7 +42,7 @@
                     border-bottom: 1px solid rgba(0,0,0,0.04);
                 }
 
-                /* Tầng giữa: Số đạt to bản  Ký hiệu phụ trợ */
+                /* Tầng giữa: Số đạt to bản &amp; Ký hiệu phụ trợ */
                 .card-body-metric {
                     flex: 1;
                     display: flex;
@@ -125,9 +125,23 @@
                 .trial-calc-bar input::-webkit-outer-spin-button,
                 .trial-calc-bar input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
                 .trial-calc-bar input[type=number] { -moz-appearance: textfield; }
+
+                /* 🌿 DẢI GHI CHÚ MÀU XANH HƯỚNG DẪN TIÊU CHUẨN ĐẠT */
+                .clinical-standard-notice {
+                    background-color: #F0FDF4;
+                    border: 1px solid #86EFAC;
+                    border-radius: 8px;
+                    padding: 7px 12px;
+                    color: #166534;
+                    font-size: 12.5px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    line-height: 1.4;
+                }
             </style>
 
-            <!-- THANH TIÊU ĐỀ & BADGES TỔNG KẾT -->
+            <!-- THANH TIÊU ĐỀ &amp; BADGES TỔNG KẾT -->
             <div class="d-flex flex-wrap align-items-center justify-content-between border-bottom pb-2 mb-1 gap-2">
                 <div class="fw-bold text-dark d-flex align-items-center gap-2" style="font-size: 14px;">
                     <i class="fa fa-calendar text-primary"></i> LỊCH TIẾN TRÌNH CAN THIỆP
@@ -185,7 +199,13 @@
                 </t>
             </div>
 
-            <!-- 🌟 KHAY FORM CHI TIẾT ĐÃ THIẾT KẾ LẠI: BỎ 3 NÚT THỦ CÔNG, TỰ ĐỘNG HÓA KẾT QUẢ -->
+            <!-- 🌿 PHẦN GHI CHÚ MÀU XANH XUỐNG DÒNG NẰM NGAY SAU DANH SÁCH CÁC NGÀY -->
+            <div class="clinical-standard-notice">
+                <i class="fa fa-info-circle text-success fs-6 flex-shrink-0"></i>
+                <span>Ghi chú: Mục tiêu <strong>Đạt (+)</strong> khi số lần thử thành công &gt;=80%.</span>
+            </div>
+
+            <!-- 🌟 KHAY FORM CHI TIẾT ĐÃ THIẾT KẾ LẠI -->
             <t t-if="state.selectedDay">
                 <div t-if="state.selectedDay.loai === '0'"
                      class="w-100 p-3 mt-1 rounded border d-flex align-items-center justify-content-between"
@@ -223,7 +243,7 @@
                             <span class="fw-bold text-dark" style="font-size: 12.5px;">Kết quả thử nghiệm buổi tập:</span>
                         </div>
 
-                        <!-- Cụm phân số & Huy hiệu kết quả -->
+                        <!-- Cụm phân số &amp; Huy hiệu kết quả -->
                         <div class="d-flex align-items-center gap-2">
 
                             <!-- 1. Ô nhập số lần đạt (+) -->
@@ -257,7 +277,7 @@
                             <div class="d-flex align-items-center gap-1">
                                 <span class="fw-bold text-muted" style="font-size: 11.5px; text-transform: uppercase; color: #475569 !important;">Tỷ lệ:</span>
                                 <div class="badge d-flex align-items-center justify-content-center fw-bolder"
-                                     t-attf-style="height: 36px; min-width: 58px; font-size: 14.5px; border-radius: 8px; #{state.selectedDay.tyle_thu >= 80 ? 'background-color: #16A34A; color: white;' : state.selectedDay.tyle_thu >= 40 ? 'background-color: #EAB308; color: white;' : 'background-color: #EF4444; color: white;'}">
+                                     t-attf-style="height: 36px; min-width: 58px; font-size: 14.5px; border-radius: 8px; #{state.selectedDay.tyle_thu &gt;= 80 ? 'background-color: #16A34A; color: white;' : state.selectedDay.tyle_thu &gt;= 40 ? 'background-color: #EAB308; color: white;' : 'background-color: #EF4444; color: white;'}">
                                     <t t-esc="state.selectedDay.tyle_thu || 0"/>%
                                 </div>
                             </div>
@@ -265,7 +285,7 @@
                             <!-- Mũi tên dẫn trạng thái -->
                             <i class="fa fa-arrow-right text-muted opacity-50 mx-1"></i>
 
-                            <!-- 🌟 4. HUY HIỆU TRẠNG THÁI TỰ ĐỘNG CHỐT (THAY THẾ 3 NÚT THỦ CÔNG) -->
+                            <!-- 🌟 4. HUY HIỆU TRẠNG THÁI TỰ ĐỘNG CHỐT -->
                             <div class="d-flex align-items-center">
                                 <t t-if="state.selectedDay.trangthaiValue === '1'">
                                     <span class="badge px-2.5 py-1.5 rounded-pill fw-bold d-inline-flex align-items-center gap-1"
