@@ -95,6 +95,8 @@ export class CanThiepKehoachWidget extends Component {
                 ,"solan_thu"
                 ,"solan_thu_dat"
                 , "tyle_thu"
+                ,"tyle_canthiep"
+                ,"tyle_kiemduyet"
                 ],
                 { order: "sequence asc,id asc" }
             );

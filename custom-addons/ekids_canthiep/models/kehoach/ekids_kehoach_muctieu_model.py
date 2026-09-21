@@ -179,11 +179,13 @@ class KeHoach2MucTieu(models.Model):
     solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
     tyle_thu = fields.Integer(string="Tỷ lệ %",compute="_compute_tyle_thu")
 
+    tyle_canthiep = fields.Integer(string="Tỷ lệ đạt %", compute="_compute_tyle_canthiep")
+
     solan_kiemduyet_dat = fields.Integer(string="Số lần đạt(+)")
     tyle_kiemduyet = fields.Integer(string="Tỷ lệ %", compute="_compute_tyle_kiemduyet")
 
 
-    tyle_canthiep = fields.Integer(string="Tỷ lệ đạt %", compute="_compute_tyle_canthiep")
+
 
     @api.onchange('trangthai_kiemduyet')
     def _onchange_trangthai_kiemduyet(self):
@@ -257,12 +259,26 @@ class KeHoach2MucTieu(models.Model):
 
     def _compute_tyle_canthiep(self):
         for rec in self:
-            soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, rec.coso_id,
-                                                                       "muctieu_soluong_dat_lientiep", "5")
+            soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(
+                self, rec.coso_id, "muctieu_soluong_dat_lientiep", "5"
+            )
             soluong_dat_lientiep_quydinh = int(soluong_dat_lientiep_str)
             solan = rec.func_ketqua_dat_lientiep_lonnhat()
-            tyle = (solan/soluong_dat_lientiep_quydinh)*100
-            rec.tyle_canthiep = tyle
+
+            if solan > 0:
+                if solan < soluong_dat_lientiep_quydinh:
+                    # Chưa đủ số ngày đạt liên tiếp theo quy định -> lấy % tiến độ số ngày hoặc % của chuỗi đạt
+                    tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("1")
+                else:
+                    # Đã đạt liên tiếp đủ số ngày quy định -> lấy % trung bình chuỗi đạt '1'
+                    tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("1")
+            else:
+                # Chưa có ngày nào đạt liên tiếp -> lấy % trung bình của chuỗi ngày đang hình thành '2' (hoặc '-1')
+                tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("2")
+                if tyle == 0:
+                    tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("-1")
+
+            rec.tyle_canthiep = int(tyle)
 
 
 
@@ -542,6 +558,41 @@ class KeHoach2MucTieu(models.Model):
                         current_max = 0
 
         return max
+
+    def func_ketqua_tyle_lientiep_lonnhat_loai(self, trangthai):
+        self.ensure_one()
+        today = date.today()
+
+        # 1. Lọc các ngày hợp lệ (đã diễn ra và là ngày học) & Sắp xếp tăng dần theo ngày
+        valid_kqs = [
+            kq for kq in self.ketqua2muctieu_ids
+            if kq.ngay and fields.Date.to_date(kq.ngay) <= today and kq.loai == '1'
+        ]
+        valid_kqs.sort(key=lambda x: fields.Date.to_date(x.ngay))
+
+        max_len = 0  # Độ dài chuỗi liên tiếp dài nhất
+        best_tong_tyle = 0  # Tổng tỷ lệ % của chuỗi dài nhất đó
+
+        cur_len = 0  # Độ dài chuỗi hiện tại
+        cur_tong_tyle = 0  # Tổng tỷ lệ % của chuỗi hiện tại
+
+        for kq in valid_kqs:
+            if str(kq.trangthai) == str(trangthai):
+                cur_len += 1
+                cur_tong_tyle += kq.tyle_thu
+                # Cập nhật chuỗi dài nhất
+                if cur_len > max_len:
+                    max_len = cur_len
+                    best_tong_tyle = cur_tong_tyle
+            else:
+                # Đứt chuỗi liên tiếp -> Reset bộ đếm và tổng của chuỗi tạm
+                cur_len = 0
+                cur_tong_tyle = 0
+
+        # 2. Tính tỷ lệ % trung bình của chuỗi dài nhất
+        if max_len > 0:
+            return round(best_tong_tyle / max_len)
+        return 0
 
 
     def func_ketqua_tyle_canthiep(self):
