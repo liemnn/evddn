@@ -61,30 +61,31 @@ class KeHoachKetQua2MucTieu(models.Model):
 
     is_giaovien_capnhat = fields.Boolean(string="Hệ thống tự câ nhật kết quả",default=True)
 
+    @api.depends('solan_thu_dat', 'solan_thu')
+    def _compute_tyle_thu(self):
+        for record in self:
+            tong = record.solan_thu or (record.kehoach_muctieu_id.solan_thu if record.kehoach_muctieu_id else 10)
+            record.tyle_thu = round((record.solan_thu_dat / tong) * 100) if tong > 0 else 0
+
+    @api.depends('tyle_thu')
     def _compute_trangthai(self):
         for record in self:
-           record._compute_tyle_thu()
-           if record.tyle_thu >=80:
-               record.trangthai="1"
-           elif record.tyle_thu >0:
-               record.trangthai = "2"
-           else:
-               record.trangthai = "-1"
+            # Nhận trực tiếp tỷ lệ từ depends, loại bỏ hoàn toàn việc gọi _compute_tyle_thu() thủ công
+            t = record.tyle_thu
+            if t >= 80:
+                record.trangthai = "1"
+            elif t > 0:
+                record.trangthai = "2"
+            else:
+                record.trangthai = "-1"
+
     def _compute_solan_thu(self):
         for record in self:
             solan_thu = record.kehoach_muctieu_id.solan_thu
             if solan_thu <= 0:
                 solan_thu=10
             record.solan_thu = solan_thu
-    @api.depends("solan_thu_dat")
-    def _compute_tyle_thu(self):
-        for record in self:
-            tyle=0
-            if record.solan_thu > 0:
-                tyle = (record.solan_thu_dat / record.solan_thu) * 100
-            else:
-                tyle = 0
-            record.tyle_thu = tyle
+
 
 
     @api.depends("kehoach_muctieu_id.kehoach_id.is_readonly", "ngay")

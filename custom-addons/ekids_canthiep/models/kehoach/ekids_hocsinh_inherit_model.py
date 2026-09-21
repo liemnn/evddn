@@ -2,6 +2,7 @@ from odoo import models, fields, api, exceptions
 from datetime import  timedelta,date,datetime
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError
+import uuid
 
 
 from .ekids_hocsinh_kehoach_action_abstractmodel import HocSinhKeHoachActionAbstractModel
@@ -90,8 +91,15 @@ class HocSinhInherit(models.Model
     kehoach_thangtruoc = fields.Char(compute="_compute_kehoach_thang", string="Có kế hoạch tháng trước")
     kehoach_thangsau = fields.Char(compute="_compute_kehoach_thang", string="Có kế hoạch tháng sau")
 
-    access_token = fields.Char(string="Thẻ truy cập nhanh", readonly=True, copy=False)
-    share_url = fields.Char("Chia sẻ Hồ sơ", compute="_compute_urls")
+      # Khai báo trường với default uuid chuẩn
+    access_token = fields.Char(
+        string="Thẻ truy cập nhanh",
+        readonly=True,
+        copy=False,
+        default=lambda self: str(uuid.uuid4())
+    )
+
+    hare_url = fields.Char("Chia sẻ Hồ sơ", compute="_compute_urls")
 
     @api.depends('access_token')
     def _compute_urls(self):

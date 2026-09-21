@@ -129,30 +129,32 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
     nhanxet = fields.Html(string="Nhận xét cuối tháng")
     dinhhuong = fields.Html(string="Định hướng tháng tới")
+
+    @api.depends(
+        'kehoach_linhvuc_ids.kehoach_muctieu_ids.trangthai',
+        'kehoach_linhvuc_ids.kehoach_muctieu_ids.trangthai_kiemduyet'
+    )
     def _compute_tong_ketqua_canthiep(self):
         for kh in self:
-            # Lấy toàn bộ danh sách mục tiêu thuộc kế hoạch
-            muctieus = kh.kehoach_linhvuc_ids.mapped('kehoach_muctieu_ids')
+            muctieus = kh.kehoach_linhvuc_ids.kehoach_muctieu_ids
             tong_mt = len(muctieus)
 
-            if muctieus:
-                # Gọi compute trạng thái cho toàn bộ recordset cùng lúc
-                muctieus._compute_trangthai()
+            if tong_mt > 0:
+                # Đếm nhanh trên RAM, không gọi re-compute thủ công
+                dat_ct = sum(1 for m in muctieus if m.trangthai == '1')
+                dat_kd = sum(1 for m in muctieus if m.trangthai_kiemduyet == '1')
 
-                # Đếm số lượng mục tiêu đạt
-                dat_ct = len(muctieus.filtered(lambda m: m.trangthai == '1'))
-                dat_kd = len(muctieus.filtered(lambda m: m.trangthai_kiemduyet == '1'))
+                kh.tong_muctieu = tong_mt
+                kh.tong_dat_canthiep = dat_ct
+                kh.tong_dat_kiemduyet = dat_kd
+                kh.tyle_dat_canthiep = round((dat_ct / tong_mt) * 100)
+                kh.tyle_dat_kiemduyet = round((dat_kd / tong_mt) * 100)
             else:
-                dat_ct = 0
-                dat_kd = 0
-
-            kh.tong_muctieu = tong_mt
-            kh.tong_dat_canthiep = dat_ct
-            kh.tong_dat_kiemduyet = dat_kd
-
-            # Tính tỷ lệ % (nếu bạn có dùng trường hiển thị tỷ lệ trên form)
-            kh.tyle_dat_canthiep = round((dat_ct / tong_mt * 100), 1) if tong_mt > 0 else 0.0
-            kh.tyle_dat_kiemduyet = round((dat_kd / tong_mt * 100), 1) if tong_mt > 0 else 0.0
+                kh.tong_muctieu = 0
+                kh.tong_dat_canthiep = 0
+                kh.tong_dat_kiemduyet = 0
+                kh.tyle_dat_canthiep = 0
+                kh.tyle_dat_kiemduyet = 0
 
     def _compute_ngay_conlai_kehoach(self):
         today = date.today()
@@ -204,8 +206,6 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         is_admin = user.has_group('base.group_system')
         giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for record in self:
-            if not record.access_token:
-                record.access_token=str(uuid.uuid4())
 
             is_readonly= True
             if is_admin:

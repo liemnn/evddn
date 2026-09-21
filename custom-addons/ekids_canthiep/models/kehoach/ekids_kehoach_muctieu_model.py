@@ -263,20 +263,12 @@ class KeHoach2MucTieu(models.Model):
                 self, rec.coso_id, "muctieu_soluong_dat_lientiep", "5"
             )
             soluong_dat_lientiep_quydinh = int(soluong_dat_lientiep_str)
-            solan = rec.func_ketqua_dat_lientiep_lonnhat()
-
-            if solan > 0:
-                if solan < soluong_dat_lientiep_quydinh:
-                    # Chưa đủ số ngày đạt liên tiếp theo quy định -> lấy % tiến độ số ngày hoặc % của chuỗi đạt
-                    tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("1")
-                else:
-                    # Đã đạt liên tiếp đủ số ngày quy định -> lấy % trung bình chuỗi đạt '1'
-                    tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("1")
-            else:
+            # Đã đạt liên tiếp đủ số ngày quy định -> lấy % trung bình chuỗi đạt '1'
+            tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("1",soluong_dat_lientiep_quydinh)
+            if tyle< 80:
                 # Chưa có ngày nào đạt liên tiếp -> lấy % trung bình của chuỗi ngày đang hình thành '2' (hoặc '-1')
-                tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("2")
-                if tyle == 0:
-                    tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("-1")
+                tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("2",soluong_dat_lientiep_quydinh)
+
 
             rec.tyle_canthiep = int(tyle)
 
@@ -531,68 +523,59 @@ class KeHoach2MucTieu(models.Model):
             rec.state_review = 'rejected'
         return True
 
-
     def func_ketqua_dat_lientiep_lonnhat(self):
-        today =date.today()
-        max = 0
-        current_max = 0
-
-        # 🌟 BƯỚC QUY HOẠCH CHÍ MẠNG: Ép sắp xếp danh sách kết quả tịnh tiến theo ngày tăng dần
-        # Sử dụng sorted() của Python giúp chạy mượt mà trên RAM mà không cần Re-query SQL
-        ketquas = self.ketqua2muctieu_ids
-        if ketquas:
-            for kq in ketquas:
-                if kq.ngay > today:
-                    continue
-                # Nếu trạng thái bằng '1' (Đạt) dạng chuỗi hoặc số nguyên tùy cấu hình database của anh
-
-                if (kq.trangthai == '1'
-                        and  kq.loai =='1'):
-                    current_max += 1
-                    # Cập nhật lại chuỗi dài nhất nếu chuỗi hiện tại vượt mốc cũ
-                    if current_max > max:
-                        max = current_max
-                else:
-                    # Đứt gãy chuỗi đạt liên tiếp -> Reset bộ đếm tạm thời về 0
-                    if kq.loai == '1':
-                        current_max = 0
-
-        return max
-
-    def func_ketqua_tyle_lientiep_lonnhat_loai(self, trangthai):
         self.ensure_one()
         today = date.today()
-
-        # 1. Lọc các ngày hợp lệ (đã diễn ra và là ngày học) & Sắp xếp tăng dần theo ngày
-        valid_kqs = [
+        # Lấy từ cache recordset và sắp xếp tăng dần theo ngày
+        kqs = [
             kq for kq in self.ketqua2muctieu_ids
             if kq.ngay and fields.Date.to_date(kq.ngay) <= today and kq.loai == '1'
         ]
-        valid_kqs.sort(key=lambda x: fields.Date.to_date(x.ngay))
+        kqs.sort(key=lambda x: fields.Date.to_date(x.ngay))
 
-        max_len = 0  # Độ dài chuỗi liên tiếp dài nhất
-        best_tong_tyle = 0  # Tổng tỷ lệ % của chuỗi dài nhất đó
+        max_len = 0
+        cur_len = 0
+        for kq in kqs:
+            if kq.trangthai == '1':
+                cur_len += 1
+                if cur_len > max_len:
+                    max_len = cur_len
+            else:
+                cur_len = 0
+        return max_len
 
-        cur_len = 0  # Độ dài chuỗi hiện tại
-        cur_tong_tyle = 0  # Tổng tỷ lệ % của chuỗi hiện tại
+    def func_ketqua_tyle_lientiep_lonnhat_loai(self, trangthai,solan_macdinh):
+        self.ensure_one()
+        today = date.today()
+        kqs = [
+            kq for kq in self.ketqua2muctieu_ids
+            if kq.ngay and fields.Date.to_date(kq.ngay) <= today and kq.loai == '1'
+        ]
+        kqs.sort(key=lambda x: fields.Date.to_date(x.ngay))
 
-        for kq in valid_kqs:
-            if str(kq.trangthai) == str(trangthai):
+        max_len = 0
+        best_tong_tyle = 0
+        cur_len = 0
+        cur_tong_tyle = 0
+        target_str = str(trangthai)
+
+        for kq in kqs:
+            if str(kq.trangthai) == target_str:
                 cur_len += 1
                 cur_tong_tyle += kq.tyle_thu
-                # Cập nhật chuỗi dài nhất
                 if cur_len > max_len:
                     max_len = cur_len
                     best_tong_tyle = cur_tong_tyle
             else:
-                # Đứt chuỗi liên tiếp -> Reset bộ đếm và tổng của chuỗi tạm
+                # Reset sạch sẽ cả 2 biến tạm khi đứt gãy chuỗi
                 cur_len = 0
                 cur_tong_tyle = 0
 
-        # 2. Tính tỷ lệ % trung bình của chuỗi dài nhất
-        if max_len > 0:
-            return round(best_tong_tyle / max_len)
-        return 0
+        if (max_len < solan_macdinh and trangthai =="1"):
+            max_len = solan_macdinh
+        ketqua = round(best_tong_tyle / max_len) if max_len > 0 else 0
+
+        return ketqua
 
 
     def func_ketqua_tyle_canthiep(self):
@@ -666,29 +649,27 @@ class KeHoach2MucTieu(models.Model):
                 else:
                     mt.sequence = 0
 
-
-
-    def func_is_chophep_canthiep(self,index):
-        muctieu_truoc = self.kehoach_muctieu_truoc_id
-        coso = muctieu_truoc.kehoach_id.coso_id
-
-        if not muctieu_truoc:
+    def func_is_chophep_canthiep(self, index):
+        cur_mt = self.kehoach_muctieu_truoc_id
+        if not cur_mt:
             return True
-        elif muctieu_truoc.trangthai=="1":
-            # trang thai truoc đã đạt
-            return True
-        else:
-            if index <= 1:
-                return False
-            else:
-                tyle_dat_str = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_tyle_dat", "80")
-                ketqua_tyle_canthiep = muctieu_truoc.func_ketqua_tyle_canthiep()
-                if ketqua_tyle_canthiep >= int(tyle_dat_str):
-                    return True
-                else:
-                    index = index -1
-                    muctieu= self.kehoach_muctieu_truoc_id
-                    return muctieu.func_is_chophep_canthiep(index)
+
+        coso = self.kehoach_id.coso_id
+        tyle_dat_str = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_tyle_dat", "80")
+        nguong_dat = int(tyle_dat_str)
+        steps = index
+
+        while cur_mt and steps > 1:
+            if cur_mt.trangthai == "1":
+                return True
+            if cur_mt.func_ketqua_tyle_canthiep() >= nguong_dat:
+                return True
+            steps -= 1
+            cur_mt = cur_mt.kehoach_muctieu_truoc_id
+
+        return False
+
+    
 
 
 

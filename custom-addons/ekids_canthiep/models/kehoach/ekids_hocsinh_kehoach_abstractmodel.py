@@ -27,47 +27,34 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
 
     def _compute_kehoach_thang(self):
         today = fields.Date.today()
+        # 1. Tính toán mốc ngày 1 lần duy nhất ngoài vòng lặp
+        d_thangnay_1 = today.replace(day=1)
+        d_thangnay_15 = today.replace(day=15)
 
-        # 1. Tháng này: từ ngày 01 đến ngày 15
-        dau_thang_nay = today.replace(day=1)
-        ngay15_thang_nay = today.replace(day=15)
+        d_thangtruoc_1 = d_thangnay_1 - relativedelta(months=1)
+        d_thangtruoc_15 = d_thangtruoc_1.replace(day=15)
 
-        # 2. Tháng trước: từ ngày 01 đến ngày 15 tháng trước
-        dau_thang_truoc = dau_thang_nay - relativedelta(months=1)
-        ngay15_thang_truoc = dau_thang_truoc.replace(day=15)
-
-        # 3. Tháng sau: từ ngày 01 đến ngày 15 tháng sau
-        dau_thang_sau = dau_thang_nay + relativedelta(months=1)
-        ngay15_thang_sau = dau_thang_sau.replace(day=15)
+        d_thangsau_1 = d_thangnay_1 + relativedelta(months=1)
+        d_thangsau_15 = d_thangsau_1.replace(day=15)
 
         for hs in self:
-            has_thangtruoc = False
-            has_thangnay = False
-            has_thangsau = False
+            # Lọc ngay trên bộ nhớ RAM qua hs.kehoach_ids
+            has_truoc = any(
+                kh.tu_ngay and kh.den_ngay and kh.tu_ngay <= d_thangtruoc_15 and kh.den_ngay >= d_thangtruoc_1
+                for kh in hs.kehoach_ids
+            )
+            has_nay = any(
+                kh.tu_ngay and kh.den_ngay and kh.tu_ngay <= d_thangnay_15 and kh.den_ngay >= d_thangnay_1
+                for kh in hs.kehoach_ids
+            )
+            has_sau = any(
+                kh.tu_ngay and kh.den_ngay and kh.tu_ngay <= d_thangsau_15 and kh.den_ngay >= d_thangsau_1
+                for kh in hs.kehoach_ids
+            )
 
-            for kh in hs.kehoach_ids:
-                if not kh.tu_ngay or not kh.den_ngay:
-                    continue
-
-                # Check giao cắt với kỳ [01 -> 15] tháng trước
-                if not has_thangtruoc and (kh.tu_ngay <= ngay15_thang_truoc and kh.den_ngay >= dau_thang_truoc):
-                    has_thangtruoc = True
-
-                # Check giao cắt với kỳ [01 -> 15] tháng này
-                if not has_thangnay and (kh.tu_ngay <= ngay15_thang_nay and kh.den_ngay >= dau_thang_nay):
-                    has_thangnay = True
-
-                # Check giao cắt với kỳ [01 -> 15] tháng sau
-                if not has_thangsau and (kh.tu_ngay <= ngay15_thang_sau and kh.den_ngay >= dau_thang_sau):
-                    has_thangsau = True
-
-                # Thoát vòng lặp sớm nếu cả 3 kỳ đều đã có kế hoạch
-                if has_thangtruoc and has_thangnay and has_thangsau:
-                    break
-
-            hs.kehoach_thangtruoc = "Có" if has_thangtruoc else "Không"
-            hs.kehoach_thangnay = "Có" if has_thangnay else "Không"
-            hs.kehoach_thangsau = "Có" if has_thangsau else "Không"
+            hs.kehoach_thangtruoc = "Có" if has_truoc else "Không"
+            hs.kehoach_thangnay = "Có" if has_nay else "Không"
+            hs.kehoach_thangsau = "Có" if has_sau else "Không"
 
 
     def _compute_ngay_conlai_kehoach(self):
@@ -129,95 +116,58 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
 
     def _compute_ten_kehoach(self):
         for hs in self:
-            ten_kehoach=""
-            if hs.kehoach_ids:
-                tu_ngay = None
-                for kehoach in hs.kehoach_ids:
-                    if not tu_ngay:
-                        tu_ngay = kehoach.tu_ngay
-                        ten_kehoach = kehoach.name
-                    else:
-                        if tu_ngay < kehoach.tu_ngay:
-                            tu_ngay = kehoach.tu_ngay
-                            ten_kehoach = kehoach.name
-
-
-            hs.ten_kehoach = ten_kehoach
-
-
-
-   
+            # Do kehoach_ids đã có _order tu_ngay desc nên phần tử đầu tiên luôn là kế hoạch mới nhất
+            latest_kh = hs.kehoach_ids[:1]
+            hs.ten_kehoach = latest_kh.name if latest_kh else ""
 
 
     def _compute_tong_kehoach_taomoi(self):
-        user = self.env.user
-        is_admin = user.has_group('base.group_system')
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self
-                                                           )
+        is_admin = self.env.user.has_group('base.group_system')
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        gv_id = giaovien.id if giaovien else False
+
         for hs in self:
-            if hs.kehoach_ids:
-                tong = 0
-                if is_admin:
-                    tong = len(hs.kehoach_ids)
-                else:
-                    if hs.kehoach_ids:
-                        for kh in hs.kehoach_ids:
-                            if kh.gv_lapkehoach_id.id == giaovien.id:
-                                tong +=1
-                hs.tong_kehoach_taomoi = tong
+            if is_admin:
+                hs.tong_kehoach_taomoi = len(hs.kehoach_ids)
             else:
-                hs.tong_kehoach_taomoi = 0
+                hs.tong_kehoach_taomoi = sum(1 for kh in hs.kehoach_ids if kh.gv_lapkehoach_id.id == gv_id)
 
     def _compute_tong_kehoach_dang_canthiep(self):
         today = date.today()
-        user = self.env.user
-        is_admin = user.has_group('base.group_system')
-
-        context_type = self.env.context.get("default_context_type","-1")
+        is_admin = self.env.user.has_group('base.group_system')
+        context_type = self.env.context.get("default_context_type", "-1")
         giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
+        gv_ids = set(giaoviens.ids) if giaoviens else set()
+
         for hs in self:
-            if hs.kehoach_ids:
-                tong =0
-                if hs.kehoach_ids:
-                    for kh in hs.kehoach_ids:
-                        if kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                            if today>= kh.tu_ngay:
-
-                                if context_type =="2":
-                                    #TH: Kiem duyet
-                                    if is_admin:
-                                        tong += 1
-                                    elif (kh.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids):
-                                        tong += 1
-                                elif context_type =="3":
-                                    #TH can thiep
-                                    if is_admin:
-                                        tong += 1
-                                    elif (kh.gv_lapkehoach_id.id in giaoviens.ids):
-                                        tong +=1
-
-
-                hs.tong_kehoach_dang_canthiep = tong
-            else:
-                hs.tong_kehoach_dang_canthiep = 0
+            tong = 0
+            for kh in hs.kehoach_ids:
+                if kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP and kh.tu_ngay and today >= kh.tu_ngay:
+                    if is_admin:
+                        tong += 1
+                    elif context_type == "2" and kh.ketluan_id.gv_kiemduyet_id.id in gv_ids:
+                        tong += 1
+                    elif context_type == "3" and kh.gv_lapkehoach_id.id in gv_ids:
+                        tong += 1
+                    elif context_type not in ["2", "3"]:
+                        tong += 1
+            hs.tong_kehoach_dang_canthiep = tong
 
     def _compute_tong_kehoach_da_canthiep(self):
-        user = self.env.user
-        is_admin = user.has_group('base.group_system')
+        is_admin = self.env.user.has_group('base.group_system')
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        gv_id = giaovien.id if giaovien else False
+
         for hs in self:
-            if hs.kehoach_ids:
-                tong =0
-                if hs.kehoach_ids:
-                    for kh in hs.kehoach_ids:
-                        if kh.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
-                            if is_admin:
-                                tong += 1
-                            elif (kh.gv_lapkehoach_id.id == giaovien.id):
-                                tong += 1
-                hs.tong_kehoach_da_canthiep = tong
+            if is_admin:
+                hs.tong_kehoach_da_canthiep = sum(
+                    1 for kh in hs.kehoach_ids if kh.trangthai == kehoach_util.KEHOACH_HET_HIEULUC)
             else:
-                hs.tong_kehoach_da_canthiep = 0
+                hs.tong_kehoach_da_canthiep = sum(1 for kh in hs.kehoach_ids if
+                                                  kh.trangthai == kehoach_util.KEHOACH_HET_HIEULUC and kh.gv_lapkehoach_id.id == gv_id)
+
+
+
 
 
 

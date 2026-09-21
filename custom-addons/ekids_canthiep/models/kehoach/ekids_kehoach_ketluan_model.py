@@ -107,8 +107,7 @@ class KetLuan(models.Model):
 
     tong_kehoach = fields.Integer(string="Tổng kế hoạch",compute="_compute_tong_kehoach")
 
-    # Đổi kiểu dữ liệu từ Char sang Html
-    linhvucs = fields.Html(string="Lĩnh vực can thiệp", compute="_compute_linhvucs")
+
 
     # Giữ nguyên trường kiểu Text để không bị sinh thẻ <p> rác
     linhvucs = fields.Text(string="Lĩnh vực can thiệp", compute="_compute_linhvucs")
