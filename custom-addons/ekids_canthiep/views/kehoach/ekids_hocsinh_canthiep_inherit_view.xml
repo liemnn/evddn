@@ -83,11 +83,10 @@
             <!-- Moola view nalli <header> illa, aadrinda <sheet> modalu <header> serisabahudu -->
             <xpath expr="//sheet" position="before">
                 <header>
-                    <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
+                   <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
                             string="Hồ sơ can thiệp"
                             type="action"
                             icon="fa-medkit"
-                            class="btn btn-sm"
                             />
                 </header>
             </xpath>

@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError
 import logging
 import textwrap
+import uuid
 
 _logger = logging.getLogger(__name__)
 
@@ -22,18 +23,19 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
     _register = False
     _description = 'Abstract Xử lý dữ liệu Hồ sơ can thiệp'
 
-
-
-
     def action_print_hoso_report(self):
+        """Action nút bấm in báo cáo trực tiếp từ Form view"""
         self.ensure_one()
-        return self.env.ref('ekids_canthiep.action_report_kehoach_hoso').report_action(self)
+        return self.env.ref('ekids_canthiep.kehoach_hoso_template_action').report_action(self)
 
     def _get_hoso_report_data(self):
+        """Chuẩn bị dữ liệu tối ưu: Tab 1 (Báo cáo kết quả) & Tab 2 (Kế hoạch đang can thiệp)"""
         self.ensure_one()
         KeHoachModel = self.env['ekids.kehoach']
 
-        # 1. TAB 1: Danh sach bao cao da dong (-1)
+        # =========================================================================
+        # 1. TAB 1: DANH SÁCH BÁO CÁO KỲ ĐÃ KẾT THÚC (trangthai == '-1')
+        # =========================================================================
         kh_da_dong_data = KeHoachModel.search_read(
             domain=[('hocsinh_id', '=', self.id), ('trangthai', '=', '-1')],
             fields=['id', 'name', 'gv_lapkehoach_id', 'tyle_dat_canthiep'],
@@ -59,6 +61,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                 'tyle_dat': kh.get('tyle_dat_canthiep') or 0,
             })
 
+        # Nhận diện kỳ báo cáo được chọn cho Tab 1 từ URL hoặc context
         selected_kh_id = False
         try:
             if http.request and hasattr(http.request, 'params'):
@@ -78,13 +81,16 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
 
         tab1 = self.func_get_baocao_kehoach(baocao_duoc_chon)
 
-        # 2. TAB 2: Danh sach ke hoach dang can thiep (trangthai == '1')
+        # =========================================================================
+        # 2. TAB 2: TẤT CẢ KẾ HOẠCH ĐANG Ở TRẠNG THÁI ĐANG CAN THIỆP (trangthai == '1')
+        # =========================================================================
         domain_thangtoi = [
             ('hocsinh_id', '=', self.id),
             ('trangthai', '=', '1')
         ]
         kehoach_dang_canthiep_ids = KeHoachModel.search(domain_thangtoi, order='tu_ngay desc, den_ngay desc')
 
+        # Fallback qua kehoach_util nếu hệ thống dùng hằng số trạng thái
         if not kehoach_dang_canthiep_ids and hasattr(kehoach_util, 'KEHOACH_DANG_CANTHIEP'):
             val_ct = getattr(kehoach_util, 'KEHOACH_DANG_CANTHIEP')
             kehoach_dang_canthiep_ids = KeHoachModel.search([
@@ -126,7 +132,9 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         except Exception:
             pass
 
-        # Safe avatar / image detection in Python
+        # =========================================================================
+        # 3. PROFILE HỌC SINH, TOKEN & LINK CHIA SẺ
+        # =========================================================================
         has_avatar = False
         avatar_field = 'avatar_128'
         if hasattr(self, 'avatar_128') and self.avatar_128:
@@ -139,12 +147,18 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         co_so_name = self.co_so_id.name if hasattr(self,
                                                    'co_so_id') and self.co_so_id else 'CHUYÊN BIỆT TỪ SƠN - TRỤ SỞ CHÍNH'
         trang_thai_hoc = getattr(self, 'trangthai_hoc', '') or getattr(self, 'trangthai', '') or 'Đang theo học'
-        if trang_thai_hoc == 'dang_hoc' or trang_thai_hoc == '1':
-            trang_thai_label = 'Đang theo học'
-        elif isinstance(trang_thai_hoc, str) and trang_thai_hoc in ['Đang theo học', 'dang_hoc']:
+        if trang_thai_hoc in ['dang_hoc', '1', 'Đang theo học']:
             trang_thai_label = 'Đang theo học'
         else:
             trang_thai_label = trang_thai_hoc or 'Đang theo học'
+
+        # Đảm bảo token và link chia sẻ
+        if hasattr(self, 'access_token') and not self.access_token:
+            self.access_token = str(uuid.uuid4())
+
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url", "")
+        token_val = getattr(self, 'access_token', '') or str(self.id)
+        share_link = getattr(self, 'share_url', False) or f"{base_url}/hocsinh/hosocanthiep/{token_val}"
 
         return {
             'has_plan': bool(baocao_duoc_chon),
@@ -162,6 +176,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                 'phuhuynh': getattr(self, 'ten_cha_me', '') or 'Đại diện Phụ huynh',
                 'has_avatar': has_avatar,
                 'avatar_field': avatar_field,
+                'share_url': share_link,
             },
             'tab1': tab1,
             'tab2': tab2,
@@ -170,6 +185,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         }
 
     def func_get_baocao_kehoach(self, kehoach):
+        """Báo cáo kết quả can thiệp hoàn thành (Tab 1)"""
         if not kehoach:
             return {
                 'ten': 'Chưa có kế hoạch',
@@ -321,6 +337,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         }
 
     def func_get_kehoach_tomtat_thangtoi(self, kehoach, kehoach_truoc=False):
+        """Kế hoạch tháng tới tóm tắt (Tab 2) - Chi tiết mục tiêu và GV phụ trách"""
         if not kehoach:
             return {
                 'ten': 'Chưa có kế hoạch',
@@ -344,16 +361,17 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             prev_mt_names = {m.name.strip().lower() for m in prev_mts if m.name}
 
         groups = {}
-
         for idx, mt in enumerate(muctieus, 1):
             lv_name = mt.linhvuc_id.name if mt.linhvuc_id else 'Khác'
             tuoi_name = mt.tuoi_id.name if mt.tuoi_id else ''
-            lv_key = (lv_name, tuoi_name)
+            chuongtrinh = mt.tuoi_id.chuongtrinh_id.name if mt.tuoi_id.chuongtrinh_id else ''
+            lv_key = (lv_name, tuoi_name,chuongtrinh)
 
             if lv_key not in groups:
                 groups[lv_key] = {
                     'linhvuc': lv_name,
                     'tuoi': tuoi_name,
+                    'chuongtrinh': chuongtrinh,
                     'targets': [],
                     'list_thu': []
                 }
@@ -391,6 +409,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             linhvucs_grouped.append({
                 'linhvuc': g['linhvuc'],
                 'tuoi': g['tuoi'],
+                'chuongtrinh': g['chuongtrinh'],
                 'avg_thu': avg_thu,
                 'total_mt': len(g['targets']),
                 'targets': g['targets']
