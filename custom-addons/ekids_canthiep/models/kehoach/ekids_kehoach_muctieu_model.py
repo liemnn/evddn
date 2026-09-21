@@ -265,7 +265,7 @@ class KeHoach2MucTieu(models.Model):
             soluong_dat_lientiep_quydinh = int(soluong_dat_lientiep_str)
             # Đã đạt liên tiếp đủ số ngày quy định -> lấy % trung bình chuỗi đạt '1'
             tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("1",soluong_dat_lientiep_quydinh)
-            if tyle< 80:
+            if tyle <=0:
                 # Chưa có ngày nào đạt liên tiếp -> lấy % trung bình của chuỗi ngày đang hình thành '2' (hoặc '-1')
                 tyle = rec.func_ketqua_tyle_lientiep_lonnhat_loai("2",soluong_dat_lientiep_quydinh)
 
