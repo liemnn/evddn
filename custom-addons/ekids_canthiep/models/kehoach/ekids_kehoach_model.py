@@ -127,6 +127,8 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     tyle_dat_canthiep = fields.Integer(compute="_compute_tong_ketqua_canthiep")
     tyle_dat_kiemduyet = fields.Integer(compute="_compute_tong_ketqua_canthiep")
 
+    nhanxet = fields.Html(string="Nhận xét cuối tháng")
+    dinhhuong = fields.Html(string="Định hướng tháng tới")
     def _compute_tong_ketqua_canthiep(self):
         for kh in self:
             # Lấy toàn bộ danh sách mục tiêu thuộc kế hoạch
@@ -568,6 +570,21 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         return False
 
     def action_ketthuc_kehoach(self):
+        """Mở Popup cho phép nhập nhận xét và định hướng trước khi đóng kế hoạch"""
+        self.ensure_one()
+        view_id = self.env.ref('ekids_canthiep.kehoach_ketthuc_form').id
+        return {
+            'name': f'Đánh giá & Kết thúc kế hoạch: {self.name}',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'views': [(view_id, 'form')],
+            'target': 'new',
+            'context': self.env.context,
+        }
+
+    def action_xacnhan_ketthuc_kehoach(self):
         if self.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
             is_chophep_ketthuc =False
             user = self.env.user

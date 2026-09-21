@@ -61,7 +61,6 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                 'tyle_dat': kh.get('tyle_dat_canthiep') or 0,
             })
 
-        # Nhận diện kỳ báo cáo được chọn cho Tab 1 từ URL hoặc context
         selected_kh_id = False
         try:
             if http.request and hasattr(http.request, 'params'):
@@ -90,7 +89,6 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         ]
         kehoach_dang_canthiep_ids = KeHoachModel.search(domain_thangtoi, order='tu_ngay desc, den_ngay desc')
 
-        # Fallback qua kehoach_util nếu hệ thống dùng hằng số trạng thái
         if not kehoach_dang_canthiep_ids and hasattr(kehoach_util, 'KEHOACH_DANG_CANTHIEP'):
             val_ct = getattr(kehoach_util, 'KEHOACH_DANG_CANTHIEP')
             kehoach_dang_canthiep_ids = KeHoachModel.search([
@@ -144,15 +142,13 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             has_avatar = True
             avatar_field = 'image_128'
 
-        co_so_name = self.co_so_id.name if hasattr(self,
-                                                   'co_so_id') and self.co_so_id else 'CHUYÊN BIỆT TỪ SƠN - TRỤ SỞ CHÍNH'
+        co_so_name = self.co_so_id.name if hasattr(self, 'co_so_id') and self.co_so_id else 'CHUYÊN BIỆT TỪ SƠN - TRỤ SỞ CHÍNH'
         trang_thai_hoc = getattr(self, 'trangthai_hoc', '') or getattr(self, 'trangthai', '') or 'Đang theo học'
         if trang_thai_hoc in ['dang_hoc', '1', 'Đang theo học']:
             trang_thai_label = 'Đang theo học'
         else:
             trang_thai_label = trang_thai_hoc or 'Đang theo học'
 
-        # Đảm bảo token và link chia sẻ
         if hasattr(self, 'access_token') and not self.access_token:
             self.access_token = str(uuid.uuid4())
 
@@ -198,6 +194,10 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                 'diem_trung': 'Chưa xác định',
                 'but_pha': 'Chưa xác định',
                 'nhan_xet': '',
+                'dinh_huong_thang_toi': '',
+                'dinh_huong_cung_co': [],
+                'dinh_huong_duy_tri': [],
+                'ten_thang_toi': 'THÁNG TỚI',
                 'linhvucs_grouped': [],
                 'chart': {'items': [], 'points_thu': '', 'points_dat': '', 'polygon_dat': ''}
             }
@@ -208,19 +208,19 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
 
         count_dat = 0
         groups = {}
+        cung_co_dict = {}
+        duy_tri_dict = {}
 
         for idx, mt in enumerate(muctieus, 1):
-            is_mastered = (getattr(mt, 'trangthai_kiemduyet', '') == '1') or \
+            tyle_sau = getattr(mt, 'tyle_kiemduyet', 0) or getattr(mt, 'tyle_trungbinh_canthiep', 0) or getattr(mt, 'tyle_thu', 0)
+            is_mastered = (tyle_sau >= 80) or (getattr(mt, 'trangthai_kiemduyet', '') == '1') or \
                           (getattr(mt, 'trangthai', '') == '1') or \
                           (getattr(mt, 'so_ngay_dat_lientiep', 0) >= 6)
 
             if is_mastered:
                 count_dat += 1
 
-            tyle_sau = getattr(mt, 'tyle_kiemduyet', 0) or getattr(mt, 'tyle_trungbinh_canthiep', 0) or getattr(mt,
-                                                                                                                'tyle_thu',
-                                                                                                                0)
-            muc_do_label = "Củng cố" if tyle_sau >= 80 else "Duy trì"
+            muc_do_label = "Củng cố" if is_mastered else "Duy trì"
 
             dinh_huong_text = getattr(mt, 'dinhhuong_kiemduyet', False) or ''
             if not dinh_huong_text:
@@ -243,16 +243,27 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             groups[lv_key]['list_thu'].append(t_thu)
             groups[lv_key]['list_dat'].append(tyle_sau)
 
+            ten_mt = mt.name or getattr(mt, 'muctieu_them', '') or ''
+
             groups[lv_key]['targets'].append({
                 'stt': idx,
-                'muctieu': mt.name or '',
-                'truoc': f"{mt.solan_thu_dat}/{mt.solan_thu} ({mt.tyle_thu}%)" if getattr(mt, 'solan_thu',
-                                                                                          0) else "0/10 (0%)",
+                'muctieu': ten_mt,
+                'truoc': f"{mt.solan_thu_dat}/{mt.solan_thu} ({mt.tyle_thu}%)" if getattr(mt, 'solan_thu', 0) else "0/10 (0%)",
                 'sau': tyle_sau,
                 'muc_do': muc_do_label,
                 'is_mastered': is_mastered,
                 'dinh_huong': dinh_huong_text
             })
+
+            # CHỈ LẤY TÊN MỤC TIÊU THEO YÊU CẦU:
+            if is_mastered:
+                if lv_name not in cung_co_dict:
+                    cung_co_dict[lv_name] = []
+                cung_co_dict[lv_name].append(ten_mt)
+            else:
+                if lv_name not in duy_tri_dict:
+                    duy_tri_dict[lv_name] = []
+                duy_tri_dict[lv_name].append(ten_mt)
 
         linhvucs_grouped = []
         chart_linhvucs = []
@@ -260,12 +271,14 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         for g in groups.values():
             avg_thu = round(sum(g['list_thu']) / len(g['list_thu'])) if g['list_thu'] else 0
             avg_dat = round(sum(g['list_dat']) / len(g['list_dat'])) if g['list_dat'] else 0
+            tien_bo = avg_dat - avg_thu
 
             linhvucs_grouped.append({
                 'linhvuc': g['linhvuc'],
                 'tuoi': g['tuoi'],
                 'avg_thu': avg_thu,
                 'avg_dat': avg_dat,
+                'tien_bo': tien_bo,
                 'total_mt': len(g['targets']),
                 'targets': g['targets']
             })
@@ -316,6 +329,20 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         ten_kh = kehoach.name or 'Kế hoạch'
         gv_name = kehoach.gv_lapkehoach_id.name if kehoach.gv_lapkehoach_id else 'Chưa phân công'
 
+        dinh_huong_cung_co = [{'linhvuc': k, 'targets': v} for k, v in cung_co_dict.items()]
+        dinh_huong_duy_tri = [{'linhvuc': k, 'targets': v} for k, v in duy_tri_dict.items()]
+
+        ten_thang_toi = "THÁNG TỚI"
+        if kehoach.den_ngay:
+            next_date = kehoach.den_ngay + relativedelta(days=1)
+            ten_thang_toi = f"THÁNG {next_date.month}/{next_date.year}"
+        elif kehoach.tu_ngay:
+            next_date = kehoach.tu_ngay + relativedelta(months=1)
+            ten_thang_toi = f"THÁNG {next_date.month}/{next_date.year}"
+
+        val_nhanxet = getattr(kehoach, 'nhanxet', False) or kehoach.desc or ""
+        val_dinhhuong = getattr(kehoach, 'dinhhuong', False) or ""
+
         return {
             "ten": ten_kh,
             "giaovien": gv_name,
@@ -326,7 +353,11 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             "tyle_dat": rate_t1,
             "diem_trung": diem_trung_str,
             "but_pha": but_pha_str,
-            "nhan_xet": kehoach.desc or "Trong tháng, trẻ có nhiều tiến bộ rõ rệt ở các phản ứng nghe gọi, ngồi bàn tập trung và giao tiếp mắt.",
+            "nhan_xet": val_nhanxet,
+            "dinh_huong_thang_toi": val_dinhhuong,
+            "dinh_huong_cung_co": dinh_huong_cung_co,
+            "dinh_huong_duy_tri": dinh_huong_duy_tri,
+            "ten_thang_toi": ten_thang_toi,
             "linhvucs_grouped": linhvucs_grouped,
             "chart": {
                 "items": chart_items,
@@ -365,7 +396,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             lv_name = mt.linhvuc_id.name if mt.linhvuc_id else 'Khác'
             tuoi_name = mt.tuoi_id.name if mt.tuoi_id else ''
             chuongtrinh = mt.tuoi_id.chuongtrinh_id.name if mt.tuoi_id.chuongtrinh_id else ''
-            lv_key = (lv_name, tuoi_name,chuongtrinh)
+            lv_key = (lv_name, tuoi_name, chuongtrinh)
 
             if lv_key not in groups:
                 groups[lv_key] = {
@@ -390,8 +421,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                 is_chuyen_tiep = True
 
             loai_label = "Tháng trước chuyển qua" if is_chuyen_tiep else "Mới"
-            ghichu_text = getattr(mt, 'dinhhuong_kiemduyet', False) or getattr(mt, 'ghichu',
-                                                                               False) or 'Thực hiện can thiệp theo quy trình chuẩn'
+            ghichu_text = getattr(mt, 'dinhhuong_kiemduyet', False) or getattr(mt, 'ghichu', False) or 'Thực hiện can thiệp theo quy trình chuẩn'
 
             groups[lv_key]['targets'].append({
                 'stt': idx,
