@@ -82,6 +82,14 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         for lv_line in linhvuc_lines:
             lv_name = lv_line.linhvuc_id.name if lv_line.linhvuc_id else 'Khác'
             tuoi_name = lv_line.tuoi_id.name if lv_line.tuoi_id else ''
+
+            # Lấy tên chương trình an toàn
+            chuongtrinh = (
+                lv_line.tuoi_id.chuongtrinh_id.name
+                if lv_line.tuoi_id and lv_line.tuoi_id.chuongtrinh_id
+                else (lv_line.chuongtrinh_id.name if hasattr(lv_line, 'chuongtrinh_id') and lv_line.chuongtrinh_id else '')
+            )
+
             mts = lv_line.kehoach_muctieu_ids.sorted(key=lambda m: (m.sequence, m.id))
 
             targets = []
@@ -102,6 +110,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             linhvucs_grouped.append({
                 'linhvuc': lv_name,
                 'tuoi': tuoi_name,
+                'chuongtrinh': chuongtrinh,
                 'avg_thu': avg_thu,
                 'avg_dat': avg_dat,
                 'tien_bo': avg_dat - avg_thu,
@@ -162,11 +171,6 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                 'linhvucs_grouped': []
             }
 
-        prev_mt_names = set()
-        if kehoach_truoc:
-            prev_mts = kehoach_truoc.kehoach_linhvuc_ids.mapped('kehoach_muctieu_ids')
-            prev_mt_names = {m.name.strip().lower() for m in prev_mts if m.name}
-
         linhvuc_lines = kehoach.kehoach_linhvuc_ids.sorted(key=lambda r: r.sequence)
         linhvucs_grouped = []
         total_targets_count = 0
@@ -175,13 +179,17 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         for lv_line in linhvuc_lines:
             lv_name = lv_line.linhvuc_id.name if lv_line.linhvuc_id else 'Khác'
             tuoi_name = lv_line.tuoi_id.name if lv_line.tuoi_id else ''
-            chuongtrinh = lv_line.tuoi_id.chuongtrinh_id.name if lv_line.tuoi_id and lv_line.tuoi_id.chuongtrinh_id else ''
+            chuongtrinh = (
+                lv_line.tuoi_id.chuongtrinh_id.name
+                if lv_line.tuoi_id and lv_line.tuoi_id.chuongtrinh_id
+                else (lv_line.chuongtrinh_id.name if hasattr(lv_line, 'chuongtrinh_id') and lv_line.chuongtrinh_id else '')
+            )
             mts = lv_line.kehoach_muctieu_ids.sorted(key=lambda m: (m.sequence, m.id))
 
             targets = []
             for mt in mts:
                 total_targets_count += 1
-                targets.append(self._format_tab2_target(mt, global_idx, prev_mt_names))
+                targets.append(self._format_tab2_target(mt, global_idx))
                 global_idx += 1
 
             linhvucs_grouped.append({
@@ -294,15 +302,15 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             'dinh_huong': dinh_huong,
         }, is_mastered
 
-    def _format_tab2_target(self, mt, stt, prev_mt_names):
-        """Định dạng dữ liệu 1 mục tiêu của kế hoạch tháng tới Tab 2"""
+    def _format_tab2_target(self, mt, stt):
+        """Định dạng dữ liệu 1 mục tiêu của kế hoạch tháng tới Tab 2
+        Chỉ căn cứ vào kehoach_muctieu_thangtruoc_id:
+        - Có giá trị (not null): Tháng trước chuyển qua
+        - Không có giá trị (null / False): Mới
+        """
         t_thu = getattr(mt, 'tyle_thu', 0) or 0
         ten_mt = mt.name or getattr(mt, 'muctieu_them', '') or ''
-
-        # Chuẩn hóa kiểm tra: Many2one rỗng trong Odoo là False/None
         is_chuyen_tiep = bool(getattr(mt, 'kehoach_muctieu_thangtruoc_id', False))
-
-
 
         return {
             'stt': stt,

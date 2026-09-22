@@ -414,13 +414,13 @@
                     </div>
 
                     <!-- ========================================================================= -->
-                    <!-- NỘI DUNG TAB 1: BÁO CÁO KẾT QUẢ KỲ ĐÃ KẾT THÚC                             -->
+                    <!-- NỘI DUNG TAB 1: BÁO CÁO KẾT QUẢ KỲ ĐÃ KẾT THÚC (trangthai == '-1')        -->
                     <!-- ========================================================================= -->
                     <div id="content_tab1" class="hoso-tab-view" t-attf-style="display: #{'block' if active_tab == 'tab1' else 'none'};">
                         <t t-if="not data.get('has_plan')">
                             <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 13px; padding: 18px; text-align: center; color: #B45309; margin: 10px 0; font-size: 14.5px;">
                                 <i class="fa fa-circle-exclamation me-1"/>
-                                Chưa có [Kế hoạch] can thiệp nào kết thúc quá trình can thiệp để tổng hợp ra báo cáo !. Vui lòng xem chi tiêt kế hoạch .
+                                Chưa có [Kế hoạch] can thiệp nào kết thúc quá trình can thiệp để tổng hợp ra báo cáo !. Vui lòng xem chi tiết kế hoạch.
                             </div>
                         </t>
                         <t t-else="">
@@ -523,27 +523,35 @@
                                     </thead>
                                     <tbody>
                                         <t t-foreach="tab1.get('linhvucs_grouped', [])" t-as="grp">
-                                            <!-- TIÊU ĐỀ LĨNH VỰC VỚI THANH DOCK METRICS TINH GỌN (ICON THAY THẾ NHÃN DÀI) -->
+                                            <!-- TIÊU ĐỀ LĨNH VỰC VỚI BADGE TUỔI & CHƯƠNG TRÌNH -->
                                             <tr style="background-color: #F8FAFC; border-top: 2px solid #94A3B8; border-bottom: 1px solid #CBD5E1;">
                                                 <td colspan="6" style="padding: 9px 14px;">
                                                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-                                                        <!-- Cột Trái: Tên lĩnh vực + Tuổi + Số lượng mục tiêu -->
-                                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                                        <!-- Cột Trái: Tên lĩnh vực + Tuổi + Chương trình + Số lượng mục tiêu -->
+                                                        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                                                             <i class="fa fa-folder-open text-primary" style="font-size: 15px;"/>
                                                             <span style="font-size: 14.5px; font-weight: 700; color: #1E3A8A; text-transform: uppercase;">
                                                                 <t t-out="grp['linhvuc']"/>
                                                             </span>
-                                                            <t t-if="grp['tuoi']">
+                                                            <t t-if="grp.get('tuoi')">
                                                                 <span class="badge" style="background-color: #E2E8F0; color: #334155; font-size: 12px; padding: 3px 8px; border-radius: 4px; font-weight: 600;">
                                                                     <t t-out="grp['tuoi']"/>
                                                                 </span>
                                                             </t>
+                                                            <!-- 🌟 BADGE CHƯƠNG TRÌNH CHO TAB 1 -->
+                                                            <t t-if="grp.get('chuongtrinh')">
+                                                                <span class="badge" style="background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; font-size: 12px; padding: 3px 8px; border-radius: 4px; font-weight: 600;">
+                                                                    <i class="fa fa-bookmark me-1" style="font-size: 10px;"/>
+                                                                    <t t-out="grp['chuongtrinh']"/>
+                                                                </span>
+                                                            </t>
+
                                                             <span style="font-size: 13px; color: #64748B; font-weight: 400;">
                                                                 (<t t-out="grp['total_mt']"/> mục tiêu)
                                                             </span>
                                                         </div>
 
-                                                        <!-- Cột Phải: THANH DOCK THỐNG KÊ ĐỒNG NHẤT, NỀN TRUNG TÍNH, ICON TRỰC QUAN -->
+                                                        <!-- Cột Phải: THANH DOCK METRICS TINH GỌN VỚI ICON TRỰC QUAN -->
                                                         <t t-set="diff" t-value="grp.get('tien_bo', grp['avg_dat'] - grp['avg_thu'])"/>
                                                         <div style="display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; background: #FFFFFF; padding: 3px 8px; border-radius: 8px; border: 1px solid #E2E8F0; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
 
@@ -763,13 +771,24 @@
                                     </thead>
                                     <tbody>
                                         <t t-foreach="tab2.get('linhvucs_grouped', [])" t-as="grp2">
+                                            <!-- TIÊU ĐỀ LĨNH VỰC TAB 2 VỚI BADGE TUỔI & CHƯƠNG TRÌNH -->
                                             <tr style="background-color: #F0FDF4; border-top: 2px solid #86EFAC; border-bottom: 1px solid #CBD5E1;">
                                                 <td colspan="5" style="padding: 9px 12px;">
                                                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
-                                                        <div style="display: flex; align-items: center; gap: 6px;">
+                                                        <!-- Cột Trái: Tên lĩnh vực + Tuổi + Chương trình + Số lượng mục tiêu -->
+                                                        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                                                             <i class="fa fa-folder-tree text-success" style="font-size: 15px;"/>
                                                             <span style="font-size: 14.5px; font-weight: 700; color: #065F46; text-transform: uppercase;"><t t-out="grp2['linhvuc']"/></span>
-                                                            <t t-if="grp2['tuoi']"><span class="badge" style="background-color: #DCFCE7; color: #166534; font-size: 12px; padding: 2px 6px; font-weight: 600;"><t t-out="grp2['tuoi']"/></span></t>
+                                                            <t t-if="grp2.get('tuoi')">
+                                                                <span class="badge" style="background-color: #DCFCE7; color: #166534; font-size: 12px; padding: 2px 6px; font-weight: 600;"><t t-out="grp2['tuoi']"/></span>
+                                                            </t>
+                                                            <!-- 🌟 BADGE CHƯƠNG TRÌNH CHO TAB 2 -->
+                                                            <t t-if="grp2.get('chuongtrinh')">
+                                                                <span class="badge" style="background-color: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; font-size: 12px; padding: 2px 6px; font-weight: 600;">
+                                                                    <i class="fa fa-bookmark me-1" style="font-size: 10px;"/>
+                                                                    <t t-out="grp2['chuongtrinh']"/>
+                                                                </span>
+                                                            </t>
                                                             <span style="font-size: 13px; color: #4B5563; font-weight: 400;">(<t t-out="grp2['total_mt']"/> mục tiêu)</span>
                                                         </div>
                                                         <div style="font-size: 13.5px; font-weight: 600; color: #047857;">
