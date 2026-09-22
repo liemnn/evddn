@@ -418,8 +418,9 @@
                     <!-- ========================================================================= -->
                     <div id="content_tab1" class="hoso-tab-view" t-attf-style="display: #{'block' if active_tab == 'tab1' else 'none'};">
                         <t t-if="not data.get('has_plan')">
-                            <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; padding: 18px; text-align: center; color: #B45309; margin: 10px 0; font-size: 14.5px;">
-                                <i class="fa fa-circle-exclamation me-1"/> Chưa có kế hoạch nào đã hoàn thành (-1) để trích xuất báo cáo.
+                            <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 13px; padding: 18px; text-align: center; color: #B45309; margin: 10px 0; font-size: 14.5px;">
+                                <i class="fa fa-circle-exclamation me-1"/>
+                                Chưa có [Kế hoạch] can thiệp nào kết thúc quá trình can thiệp để tổng hợp ra báo cáo !. Vui lòng xem chi tiêt kế hoạch .
                             </div>
                         </t>
                         <t t-else="">
@@ -772,7 +773,7 @@
                                                             <span style="font-size: 13px; color: #4B5563; font-weight: 400;">(<t t-out="grp2['total_mt']"/> mục tiêu)</span>
                                                         </div>
                                                         <div style="font-size: 13.5px; font-weight: 600; color: #047857;">
-                                                            Đầu vào TB: <strong><t t-out="grp2['avg_thu']"/>%</strong>
+                                                            Đầu vào: <strong><t t-out="grp2['avg_thu']"/>%</strong>
                                                         </div>
                                                     </div>
                                                 </td>
