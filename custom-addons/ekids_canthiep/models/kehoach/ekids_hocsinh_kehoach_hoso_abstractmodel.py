@@ -181,7 +181,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         }
 
     def func_get_baocao_kehoach(self, kehoach):
-        """Báo cáo kết quả can thiệp hoàn thành (Tab 1)"""
+        """Báo cáo kết quả can thiệp hoàn thành (Tab 1) - Chuẩn thứ tự kế hoạch & trường tỷ lệ"""
         if not kehoach:
             return {
                 'ten': 'Chưa có kế hoạch',
@@ -202,99 +202,82 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                 'chart': {'items': [], 'points_thu': '', 'points_dat': '', 'polygon_dat': ''}
             }
 
-        muctieus = self.env['ekids.kehoach_muctieu'].search([('kehoach_id', '=', kehoach.id)])
-        if not muctieus:
-            muctieus = kehoach.kehoach_linhvuc_ids.mapped('kehoach_muctieu_ids')
-
+        # 1. DUYỆT TRỰC TIẾP THEO THỨ TỰ LĨNH VỰC CỦA KẾ HOẠCH (order="sequence asc")
+        linhvuc_lines = kehoach.kehoach_linhvuc_ids.sorted(key=lambda r: r.sequence)
+        linhvuc_lines._compute_tyle() # tinh toan ra tyle
         count_dat = 0
-        groups = {}
+        total_targets = 0
         cung_co_dict = {}
         duy_tri_dict = {}
-
-        for idx, mt in enumerate(muctieus, 1):
-            tyle_sau = getattr(mt, 'tyle_kiemduyet', 0) or getattr(mt, 'tyle_trungbinh_canthiep', 0) or getattr(mt, 'tyle_thu', 0)
-            is_mastered = (tyle_sau >= 80) or (getattr(mt, 'trangthai_kiemduyet', '') == '1') or \
-                          (getattr(mt, 'trangthai', '') == '1') or \
-                          (getattr(mt, 'so_ngay_dat_lientiep', 0) >= 6)
-
-            if is_mastered:
-                count_dat += 1
-
-            muc_do_label = "Củng cố" if is_mastered else "Duy trì"
-
-            dinh_huong_text = getattr(mt, 'dinhhuong_kiemduyet', False) or ''
-            if not dinh_huong_text:
-                dinh_huong_text = 'Khái quát hóa tại gia đình' if is_mastered else 'Tiếp tục duy trì sang tháng sau'
-
-            lv_name = mt.linhvuc_id.name if mt.linhvuc_id else 'Khác'
-            tuoi_name = mt.tuoi_id.name if mt.tuoi_id else ''
-            lv_key = (lv_name, tuoi_name)
-
-            if lv_key not in groups:
-                groups[lv_key] = {
-                    'linhvuc': lv_name,
-                    'tuoi': tuoi_name,
-                    'targets': [],
-                    'list_thu': [],
-                    'list_dat': []
-                }
-
-            t_thu = getattr(mt, 'tyle_thu', 0) or 0
-            groups[lv_key]['list_thu'].append(t_thu)
-            groups[lv_key]['list_dat'].append(tyle_sau)
-
-            ten_mt = mt.name or getattr(mt, 'muctieu_them', '') or ''
-
-            groups[lv_key]['targets'].append({
-                'stt': idx,
-                'muctieu': ten_mt,
-                'truoc': f"{mt.solan_thu_dat}/{mt.solan_thu} ({mt.tyle_thu}%)" if getattr(mt, 'solan_thu', 0) else "0/10 (0%)",
-                'sau': tyle_sau,
-                'muc_do': muc_do_label,
-                'is_mastered': is_mastered,
-                'dinh_huong': dinh_huong_text
-            })
-
-            # CHỈ LẤY TÊN MỤC TIÊU THEO YÊU CẦU:
-            if is_mastered:
-                if lv_name not in cung_co_dict:
-                    cung_co_dict[lv_name] = []
-                cung_co_dict[lv_name].append(ten_mt)
-            else:
-                if lv_name not in duy_tri_dict:
-                    duy_tri_dict[lv_name] = []
-                duy_tri_dict[lv_name].append(ten_mt)
 
         linhvucs_grouped = []
         chart_linhvucs = []
 
-        for g in groups.values():
-            avg_thu = round(sum(g['list_thu']) / len(g['list_thu'])) if g['list_thu'] else 0
-            avg_dat = round(sum(g['list_dat']) / len(g['list_dat'])) if g['list_dat'] else 0
+        global_idx = 1
+        for lv_line in linhvuc_lines:
+            lv_name = lv_line.linhvuc_id.name if lv_line.linhvuc_id else 'Khác'
+            tuoi_name = lv_line.tuoi_id.name if lv_line.tuoi_id else ''
+
+            # Lấy mục tiêu con thuộc lĩnh vực này, xếp theo sequence
+            mts = lv_line.kehoach_muctieu_ids.sorted(key=lambda m: (m.sequence, m.id))
+            targets = []
+
+            for mt in mts:
+                total_targets += 1
+                tyle_sau = mt.tyle_kiemduyet if mt.tyle_kiemduyet > 0 else (getattr(mt, 'tyle_canthiep', 0) or mt.tyle_thu)
+
+                is_mastered = (tyle_sau >= 80) or (mt.trangthai_kiemduyet == '1') or (mt.trangthai == '1')
+                if is_mastered:
+                    count_dat += 1
+
+                muc_do_label = "Củng cố" if is_mastered else "Duy trì"
+                dinh_huong_text = mt.dinhhuong_kiemduyet or ('Khái quát hóa tại gia đình' if is_mastered else 'Tiếp tục duy trì sang tháng sau')
+                ten_mt = mt.name or mt.muctieu_them or ''
+
+                targets.append({
+                    'stt': global_idx,
+                    'muctieu': ten_mt,
+                    'truoc': f"{mt.solan_thu_dat}/{mt.solan_thu} ({mt.tyle_thu}%)" if mt.solan_thu else "0/10 (0%)",
+                    'sau': tyle_sau,
+                    'muc_do': muc_do_label,
+                    'is_mastered': is_mastered,
+                    'dinh_huong': dinh_huong_text
+                })
+                global_idx += 1
+
+                if is_mastered:
+                    cung_co_dict.setdefault(lv_name, []).append(ten_mt)
+                else:
+                    duy_tri_dict.setdefault(lv_name, []).append(ten_mt)
+
+            # 2. LẤY TỶ LỆ TRỰC TIẾP TỪ BẢNG LĨNH VỰC
+            avg_thu = lv_line.tyle_thu
+            avg_dat = lv_line.tyle_dat
             tien_bo = avg_dat - avg_thu
 
             linhvucs_grouped.append({
-                'linhvuc': g['linhvuc'],
-                'tuoi': g['tuoi'],
+                'linhvuc': lv_name,
+                'tuoi': tuoi_name,
                 'avg_thu': avg_thu,
                 'avg_dat': avg_dat,
                 'tien_bo': tien_bo,
-                'total_mt': len(g['targets']),
-                'targets': g['targets']
+                'total_mt': len(targets),
+                'targets': targets
             })
 
-            wrapped_lines = textwrap.wrap(g['linhvuc'], width=9) if g['linhvuc'] else ['Khác']
+            # Giữ nguyên thứ tự tuần tự để dựng biểu đồ SVG
+            wrapped_lines = textwrap.wrap(lv_name, width=9) if lv_name else ['Khác']
             chart_linhvucs.append({
-                'name': g['linhvuc'],
+                'name': lv_name,
                 'lines': wrapped_lines,
                 'tyle_thu': avg_thu,
                 'tyle_dat': avg_dat,
             })
 
-        total_targets = len(muctieus)
         tong_dat = getattr(kehoach, 'tong_dat_kiemduyet', 0) or count_dat
         rate_t1 = round((tong_dat / total_targets * 100)) if total_targets else getattr(kehoach, 'tyle_dat_canthiep', 0)
 
+        # 3. DỰNG TỌA ĐỘ VẼ SVG THEO ĐÚNG THỨ TỰ TUẦN TỰ CỦA KẾ HOẠCH
         svg_points_thu, svg_points_dat, chart_items = [], [], []
         total_items = len(chart_linhvucs)
         x_start, x_end = 75, 845
@@ -322,9 +305,10 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         points_dat_str = " ".join(svg_points_dat)
         polygon_dat_str = f"{chart_items[0]['x']},165 " + points_dat_str + f" {chart_items[-1]['x']},165" if chart_items else ""
 
-        sorted_linhvucs = sorted(chart_linhvucs, key=lambda x: x['tyle_dat'], reverse=True)
-        but_pha_str = f"{sorted_linhvucs[0]['name']} ({sorted_linhvucs[0]['tyle_dat']}%)" if sorted_linhvucs else "Chưa có"
-        diem_trung_str = f"{sorted_linhvucs[-1]['name']} ({sorted_linhvucs[-1]['tyle_dat']}%)" if sorted_linhvucs else "Chưa có"
+        # 4. TÌM ĐIỂM BỨT PHÁ / ĐIỂM TRŨNG (Chỉ sắp xếp trên bản sao tạm, KHÔNG làm đảo lộn chart)
+        sorted_temp = sorted(chart_linhvucs, key=lambda x: x['tyle_dat'], reverse=True)
+        but_pha_str = f"{sorted_temp[0]['name']} ({sorted_temp[0]['tyle_dat']}%)" if sorted_temp else "Chưa có"
+        diem_trung_str = f"{sorted_temp[-1]['name']} ({sorted_temp[-1]['tyle_dat']}%)" if sorted_temp else "Chưa có"
 
         ten_kh = kehoach.name or 'Kế hoạch'
         gv_name = kehoach.gv_lapkehoach_id.name if kehoach.gv_lapkehoach_id else 'Chưa phân công'
@@ -368,7 +352,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         }
 
     def func_get_kehoach_tomtat_thangtoi(self, kehoach, kehoach_truoc=False):
-        """Kế hoạch tháng tới tóm tắt (Tab 2) - Chi tiết mục tiêu và GV phụ trách"""
+        """Kế hoạch tháng tới tóm tắt (Tab 2) - Chi tiết mục tiêu theo đúng thứ tự lĩnh vực"""
         if not kehoach:
             return {
                 'ten': 'Chưa có kế hoạch',
@@ -380,69 +364,61 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                 'linhvucs_grouped': []
             }
 
-        muctieus = self.env['ekids.kehoach_muctieu'].search([('kehoach_id', '=', kehoach.id)])
-        if not muctieus:
-            muctieus = kehoach.kehoach_linhvuc_ids.mapped('kehoach_muctieu_ids')
-
         prev_mt_names = set()
         if kehoach_truoc:
-            prev_mts = self.env['ekids.kehoach_muctieu'].search([('kehoach_id', '=', kehoach_truoc.id)])
-            if not prev_mts:
-                prev_mts = kehoach_truoc.kehoach_linhvuc_ids.mapped('kehoach_muctieu_ids')
+            prev_mts = kehoach_truoc.kehoach_linhvuc_ids.mapped('kehoach_muctieu_ids')
             prev_mt_names = {m.name.strip().lower() for m in prev_mts if m.name}
 
-        groups = {}
-        for idx, mt in enumerate(muctieus, 1):
-            lv_name = mt.linhvuc_id.name if mt.linhvuc_id else 'Khác'
-            tuoi_name = mt.tuoi_id.name if mt.tuoi_id else ''
-            chuongtrinh = mt.tuoi_id.chuongtrinh_id.name if mt.tuoi_id.chuongtrinh_id else ''
-            lv_key = (lv_name, tuoi_name, chuongtrinh)
-
-            if lv_key not in groups:
-                groups[lv_key] = {
-                    'linhvuc': lv_name,
-                    'tuoi': tuoi_name,
-                    'chuongtrinh': chuongtrinh,
-                    'targets': [],
-                    'list_thu': []
-                }
-
-            t_thu = getattr(mt, 'tyle_thu', 0) or 0
-            groups[lv_key]['list_thu'].append(t_thu)
-
-            ten_mt = mt.name or getattr(mt, 'muctieu_them', '') or ''
-
-            is_chuyen_tiep = False
-            if hasattr(mt, 'is_chuyen_tiep') and mt.is_chuyen_tiep:
-                is_chuyen_tiep = True
-            elif hasattr(mt, 'loai_muctieu') and mt.loai_muctieu in ['chuyen_tiep', 'duy_tri']:
-                is_chuyen_tiep = True
-            elif ten_mt.strip().lower() in prev_mt_names:
-                is_chuyen_tiep = True
-
-            loai_label = "Tháng trước chuyển qua" if is_chuyen_tiep else "Mới"
-            ghichu_text = getattr(mt, 'dinhhuong_kiemduyet', False) or getattr(mt, 'ghichu', False) or 'Thực hiện can thiệp theo quy trình chuẩn'
-
-            groups[lv_key]['targets'].append({
-                'stt': idx,
-                'muctieu': ten_mt,
-                'truoc_pct': f"{t_thu}%",
-                'solan_thu': f"{getattr(mt, 'solan_thu_dat', 0)}/{getattr(mt, 'solan_thu', 10)}",
-                'loai_muctieu': loai_label,
-                'is_chuyen_tiep': is_chuyen_tiep,
-                'ghichu': ghichu_text
-            })
-
+        # Duyệt tuần tự theo thứ tự sequence của lĩnh vực
+        linhvuc_lines = kehoach.kehoach_linhvuc_ids.sorted(key=lambda r: r.sequence)
         linhvucs_grouped = []
-        for g in groups.values():
-            avg_thu = round(sum(g['list_thu']) / len(g['list_thu'])) if g['list_thu'] else 0
+        total_targets_count = 0
+        global_idx = 1
+
+        for lv_line in linhvuc_lines:
+            lv_name = lv_line.linhvuc_id.name if lv_line.linhvuc_id else 'Khác'
+            tuoi_name = lv_line.tuoi_id.name if lv_line.tuoi_id else ''
+            chuongtrinh = lv_line.tuoi_id.chuongtrinh_id.name if lv_line.tuoi_id and lv_line.tuoi_id.chuongtrinh_id else ''
+
+            mts = lv_line.kehoach_muctieu_ids.sorted(key=lambda m: (m.sequence, m.id))
+            targets = []
+
+            for mt in mts:
+                total_targets_count += 1
+                t_thu = getattr(mt, 'tyle_thu', 0) or 0
+                ten_mt = mt.name or getattr(mt, 'muctieu_them', '') or ''
+
+                is_chuyen_tiep = False
+                if hasattr(mt, 'is_chuyen_tiep') and mt.is_chuyen_tiep:
+                    is_chuyen_tiep = True
+                elif hasattr(mt, 'loai_muctieu') and mt.loai_muctieu in ['chuyen_tiep', 'duy_tri']:
+                    is_chuyen_tiep = True
+                elif mt.kehoach_muctieu_thangtruoc_id:
+                    is_chuyen_tiep = True
+                elif ten_mt.strip().lower() in prev_mt_names:
+                    is_chuyen_tiep = True
+
+                loai_label = "Tháng trước chuyển qua" if is_chuyen_tiep else "Mới"
+                ghichu_text = getattr(mt, 'dinhhuong_kiemduyet', False) or getattr(mt, 'ghichu', False) or 'Thực hiện can thiệp theo quy trình chuẩn'
+
+                targets.append({
+                    'stt': global_idx,
+                    'muctieu': ten_mt,
+                    'truoc_pct': f"{t_thu}%",
+                    'solan_thu': f"{getattr(mt, 'solan_thu_dat', 0)}/{getattr(mt, 'solan_thu', 10)}",
+                    'loai_muctieu': loai_label,
+                    'is_chuyen_tiep': is_chuyen_tiep,
+                    'ghichu': ghichu_text
+                })
+                global_idx += 1
+
             linhvucs_grouped.append({
-                'linhvuc': g['linhvuc'],
-                'tuoi': g['tuoi'],
-                'chuongtrinh': g['chuongtrinh'],
-                'avg_thu': avg_thu,
-                'total_mt': len(g['targets']),
-                'targets': g['targets']
+                'linhvuc': lv_name,
+                'tuoi': tuoi_name,
+                'chuongtrinh': chuongtrinh,
+                'avg_thu': lv_line.tyle_thu,
+                'total_mt': len(targets),
+                'targets': targets
             })
 
         ten_kh = kehoach.name or 'Kế hoạch tháng tới'
@@ -453,7 +429,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             'giaovien': gv_name,
             'tieu_de_hien_thi': f"{ten_kh} (Giáo viên: {gv_name})",
             'quanly': kehoach.gv_kiemduyet_id.name if kehoach.gv_kiemduyet_id else 'Ngô Thị Ngọc Hoàn',
-            'tong_muctieu': len(muctieus),
+            'tong_muctieu': total_targets_count,
             'trangthai_text': 'Đang can thiệp',
             'linhvucs_grouped': linhvucs_grouped
         }

@@ -41,18 +41,22 @@ class KeHoach2LinhVuc(models.Model):
         for record in self:
             muctieus = record.kehoach_muctieu_ids
             tong_mt = len(muctieus)
+            tyle_thu=0
+            tyle_dat=0
+            if muctieus:
+                for mt in muctieus:
+                    tyle_thu += mt.tyle_thu
+                    if mt.trangthai_kiemduyet == "0":
+                        tyle_dat += mt.tyle_canthiep
+                    else:
+                        tyle_dat += mt.tyle_kiemduyet
+            tyle_thu = round(tyle_thu/tong_mt)
+            tyle_dat = round(tyle_dat / tong_mt)
 
-            if tong_mt > 0:
-                # Tính tổng phần trăm của các mục tiêu con
-                tong_tyle_thu = sum(mt.tyle_thu for mt in muctieus)
-                tong_tyle_dat = sum(mt.tyle_kiemduyet for mt in muctieus)
 
-                # Trung bình cộng chính xác (làm tròn số nguyên)
-                record.tyle_thu = round(tong_tyle_thu / tong_mt)
-                record.tyle_dat = round(tong_tyle_dat / tong_mt)
-            else:
-                record.tyle_thu = 0
-                record.tyle_dat = 0
+
+            record.tyle_thu = tyle_thu
+            record.tyle_dat = tyle_dat
 
 
 
