@@ -36,22 +36,29 @@ def func_get_hocsinh_ca_canthieps(self, hocsinh, ngay_dauthang, ngay_cuoithang):
     ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search(domain)
 
     return ca_canthieps
-def func_get_dihoc_diemdanh(self,hocsinh,ngay):
 
-    nam =ngay.year
+
+def func_get_dihoc_diemdanh(self, hocsinh, ngay):
+    nam = ngay.year
     thang = ngay.month
-    hocsinh2thang = self.env['ekids.diemdanh_hocsinh2thang'].search([
-        ('hocsinh_id', '=', hocsinh.id),
-        ('diemdanh_id.thang', '=', str(thang)),
-        ('diemdanh_id.nam', '=', str(nam))
-    ],limit=1)
+    cache_key = ('diemdanh_hs', hocsinh.id, nam, thang)
+
+    # Lưu cache an toàn trong bộ nhớ transaction registry của connection cursor
+    if not hasattr(self.env.cr, '_custom_cache'):
+        self.env.cr._custom_cache = {}
+
+    hocsinh2thang = self.env.cr._custom_cache.get(cache_key)
+    if hocsinh2thang is None:
+        hocsinh2thang = self.env['ekids.diemdanh_hocsinh2thang'].search([
+            ('hocsinh_id', '=', hocsinh.id),
+            ('diemdanh_id.thang', '=', str(thang)),
+            ('diemdanh_id.nam', '=', str(nam))
+        ], limit=1)
+        self.env.cr._custom_cache[cache_key] = hocsinh2thang or False
+
     if hocsinh2thang:
-        field_name = "d" + str(ngay.day)
-        giatri = getattr(hocsinh2thang, field_name, '-1')
-        return giatri
-    else:
-        return "1"
-    return None
+        return getattr(hocsinh2thang, f"d{ngay.day}", '-1')
+    return "1"
 
 
 def func_get_nghipheps_trong_khoang_thoigian(self,coso, hocsinh, nghiles,nhatruong_nghis, tu_ngay, den_ngay):
@@ -98,23 +105,26 @@ def func_get_nghipheps_trong_khoang_thoigian(self,coso, hocsinh, nghiles,nhatruo
                 ngay += timedelta(days=1)
     return days
 
-def func_get_nghipheps_tatca_hocsinh(self, coso,nam,thang):
-    result={}
+def func_get_nghipheps_tatca_hocsinh(self, coso, nam, thang):
+    result = {}
     days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
-    ngay_dauthang= days[0]
-    ngay_cuoithang=days[len(days)-1]
+    if not days:
+        return result
+    ngay_dauthang = days[0]
+    ngay_cuoithang = days[-1]
     nghipheps = self.env['ekids.hocsinh_nghiphep'].search([
         ('coso_id', '=', coso.id),
         ('tu_ngay', '<=', ngay_cuoithang),
         ('den_ngay', '>=', ngay_dauthang),
     ])
-    for day in days:
-        for nghiphep in nghipheps:
-            key = str(nghiphep.hocsinh_id.id)+":" +str(day)
-            if  day >= nghiphep.tu_ngay and day <= nghiphep.den_ngay:
-                result[key] = nghiphep
-            else:
-                continue
+    for np in nghipheps:
+        start = max(np.tu_ngay, ngay_dauthang)
+        end = min(np.den_ngay, ngay_cuoithang)
+        curr = start
+        hs_id = np.hocsinh_id.id
+        while curr <= end:
+            result[f"{hs_id}:{curr}"] = np
+            curr += timedelta(days=1)
     return result
 
 def func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,tu_ngay, den_ngay):

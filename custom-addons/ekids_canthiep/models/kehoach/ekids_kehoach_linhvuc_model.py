@@ -43,15 +43,15 @@ class KeHoach2LinhVuc(models.Model):
             tong_mt = len(muctieus)
             tyle_thu=0
             tyle_dat=0
-            if muctieus:
+            if muctieus and tong_mt > 0:
                 for mt in muctieus:
                     tyle_thu += mt.tyle_thu
                     if mt.trangthai_kiemduyet == "0":
                         tyle_dat += mt.tyle_canthiep
                     else:
                         tyle_dat += mt.tyle_kiemduyet
-            tyle_thu = round(tyle_thu/tong_mt)
-            tyle_dat = round(tyle_dat / tong_mt)
+                tyle_thu = round(tyle_thu/tong_mt)
+                tyle_dat = round(tyle_dat / tong_mt)
 
 
 

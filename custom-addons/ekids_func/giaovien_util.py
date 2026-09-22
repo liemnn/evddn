@@ -68,23 +68,30 @@ def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,
                 ngay += timedelta(days=1)
     return days
 
-def func_get_nghipheps_tatca_giaovien(self, coso,nam,thang):
-    result={}
+def func_get_nghipheps_tatca_giaovien(self, coso, nam, thang):
+    result = {}
     days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
-    ngay_dauthang= days[0]
-    ngay_cuoithang=days[len(days)-1]
+    if not days:
+        return result
+    ngay_dauthang = days[0]
+    ngay_cuoithang = days[-1]
+
     nghipheps = self.env['ekids.giaovien_nghiphep'].search([
         ('coso_id', '=', coso.id),
         ('tu_ngay', '<=', ngay_cuoithang),
         ('den_ngay', '>=', ngay_dauthang),
     ])
-    for day in days:
-        for nghiphep in nghipheps:
-            key = str(nghiphep.giaovien_id.id)+":" +str(day)
-            if  day >= nghiphep.tu_ngay and day <= nghiphep.den_ngay:
-                result[key] = nghiphep
-            else:
-                continue
+
+    for np in nghipheps:
+        # Thu hẹp khoảng ngày trong phạm vi tháng xét duyệt
+        start = max(np.tu_ngay, ngay_dauthang)
+        end = min(np.den_ngay, ngay_cuoithang)
+        curr = start
+        gv_id = np.giaovien_id.id
+        while curr <= end:
+            result[f"{gv_id}:{curr}"] = np
+            curr += timedelta(days=1)
+
     return result
 
 def func_get_ngay_dilam_theo_kehoach(self, coso,nghiles,tu_ngay, den_ngay):

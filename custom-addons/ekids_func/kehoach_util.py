@@ -209,11 +209,7 @@ def func_get_ids_hocsinh_theo_vaitro_duyet_kehoach(self):
 
         # 3. Tìm kiếm
         kehoachs = self.env['ekids.kehoach'].search(domain)
-        if kehoachs:
-            hocsinh_ids = []
-            for kl in kehoachs:
-                hocsinh_ids.append(kl.hocsinh_id.id)
-            return hocsinh_ids
+        return kehoachs.mapped('hocsinh_id.id') if kehoachs else []
     return None
 
 def func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self):
