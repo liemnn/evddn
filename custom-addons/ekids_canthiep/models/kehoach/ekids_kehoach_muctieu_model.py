@@ -834,67 +834,78 @@ class KeHoach2MucTieu(models.Model):
         self.ensure_one()
         return {'type': 'ir.actions.act_window_close'}
 
-
     def func_khoitao_ketqua2muctieu(self):
-        # 1. Chuẩn hóa ngày hiện tại (Nên dùng context_today để đúng múi giờ người dùng Odoo)
-        ketqua2muctieus =self.ketqua2muctieu_ids
-        coso = self.kehoach_id.coso_id
-        today =fields.Date.today()
-        # TH1: Đã tạo kết quả trước đây:
+        self.ensure_one()
+        today = fields.Date.context_today(self)
+        ketqua2muctieus = self.ketqua2muctieu_ids
+
+        # =========================================================================
+        # TH1: ĐÃ TỒN TẠI KẾT QUẢ -> TỰ ĐỘNG CẬP NHẬT 3 NGÀY TIẾP THEO
+        # =========================================================================
         if ketqua2muctieus:
-            last_ketqua2muctieu = None
-            for ketqua2muctieu in ketqua2muctieus:
-                ngay =  fields.Date.to_date(ketqua2muctieu.ngay)
-                if (ngay <today
-                        and ketqua2muctieu.trangthai in ['1','-1','2']
-                        and ketqua2muctieu.is_giaovien_capnhat == True): # phai la giao vien tu cap nhat
-                    last_ketqua2muctieu = ketqua2muctieu
-            #TON TAI ban ghi cuoi co ngay:
-            soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_dat_lientiep", "5")
+            # 1. Tìm bản ghi gần nhất trước hôm nay do giáo viên tự cập nhật (Duyệt ngược từ mới về cũ)
+            last_ketqua = None
+            for kq in reversed(ketqua2muctieus):
+                if (kq.ngay and kq.ngay < today
+                        and kq.trangthai in ['1', '-1', '2']):
+                    last_ketqua = kq
+                    break
+
+            # Nếu không tìm thấy ngày giáo viên đánh giá hợp lệ -> Dừng ngay lập tức
+            if not last_ketqua:
+                return
+            if last_ketqua.is_giaovien_capnhat == False:
+                # bản cuối đã là tự động thì cũng thôi
+                return
+
+            # 2. Chỉ tính toán cấu hình & chuỗi liên tiếp khi chắc chắn có bản ghi cần xét
+            coso = self.kehoach_id.coso_id
+            soluong_dat_lientiep_cauhinh = int(
+                coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_dat_lientiep", "5") or 5)
             max_lientiep_dat = self.func_ketqua_dat_lientiep_lonnhat()
 
-            if last_ketqua2muctieu:
-                last_ngay =fields.Date.to_date(last_ketqua2muctieu.ngay)
-                next_ngay = last_ngay + timedelta(days=3)
-                # ngay cap nhat 3 ngay tức chỉ tự động 3 ngày tiếp theo thôi
+            # Nếu đã đủ số lượng đạt liên tiếp quy định thì không tự động điền nữa
+            if max_lientiep_dat >= soluong_dat_lientiep_cauhinh:
+                return
 
-                for ketqua2muctieu in ketqua2muctieus:
-                    ngay = fields.Date.to_date(ketqua2muctieu.ngay)
-                    if (ngay >last_ngay
-                        and ngay<= next_ngay):# tinh toan đến tận hôm nay
-                       if ketqua2muctieu.trangthai == '0':
-                           if max_lientiep_dat < int(soluong_dat_lientiep_str):
-                               ketqua2muctieu.write({
-                                   'trangthai': last_ketqua2muctieu.trangthai,
-                                   'solan_thu_dat': last_ketqua2muctieu.solan_thu_dat,
-                                   'is_giaovien_capnhat': False,
-                               })
+            # 3. Lọc tập hợp các ngày trong khoảng (last_ngay -> last_ngay + 3 ngày] đang ở trạng thái '0'
+            last_ngay = last_ketqua.ngay
+            next_ngay = last_ngay + timedelta(days=4)
 
+            recs_to_update = self.env['ekids.kehoach_ketqua2muctieu']
+            for kq in ketqua2muctieus:
+                if kq.ngay and last_ngay < kq.ngay <= next_ngay and kq.trangthai == '0':
+                    recs_to_update |= kq
 
+            # 4. Batch Write: Cập nhật đồng loạt 1 câu lệnh duy nhất vào Database
+            if recs_to_update:
+                recs_to_update.write({
+                    'trangthai': last_ketqua.trangthai,
+                    'solan_thu_dat': last_ketqua.solan_thu_dat,
+                    'is_giaovien_capnhat': False,
+                })
 
-
+        # =========================================================================
+        # TH2: LẦN ĐẦU KHỞI TẠO -> BULK INSERT TOÀN BỘ CÁC NGÀY TRONG KẾ HOẠCH
+        # =========================================================================
         else:
-            #TH2: Lần đầu click
-
-            today = fields.Date.context_today(self)
-            # 2. Ép kiểu an toàn về Date, triệt tiêu hoàn toàn lỗi Datetime vs Date
             tu_ngay = fields.Date.to_date(self.kehoach_id.tu_ngay)
             den_ngay = fields.Date.to_date(self.kehoach_id.den_ngay)
+            if not tu_ngay or not den_ngay or tu_ngay > den_ngay:
+                return
 
             datas = []
-            current_date =tu_ngay
-
-            while current_date <= den_ngay:
-                data ={
-                    "kehoach_muctieu_id": self.id,
-                    "ngay": current_date,
+            curr = tu_ngay
+            target_id = self.id
+            while curr <= den_ngay:
+                datas.append({
+                    "kehoach_muctieu_id": target_id,
+                    "ngay": curr,
                     "trangthai": "0"
-                }
-                datas.append(data)
-                current_date += timedelta(days=1)
+                })
+                curr += timedelta(days=1)
 
-            # 5. Bulk Create: Đẩy toàn bộ mảng vào Database trong 1 câu query duy nhất
-            if datas and len(datas)>0:
+            if datas:
                 self.env['ekids.kehoach_ketqua2muctieu'].create(datas)
 
     def action_open_target_note(self):

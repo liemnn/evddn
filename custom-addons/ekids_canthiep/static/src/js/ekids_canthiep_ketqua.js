@@ -178,12 +178,14 @@ export class CanThiepKetQuaWidget extends Component {
         }
 
         try {
+            const isUpdatedByTeacher = nextStatus !== '0';
             // 🌟 SỬ DỤNG ORM.WRITE TRỰC TIẾP: Tránh lỗi _preprocessX2manyChanges của Record Proxy
             // Lưu ý: Không truyền `tyle_thu` vì backend đã tự compute từ `solan_thu_dat`
             await this.orm.write("ekids.kehoach_ketqua2muctieu", [day.resId], {
                 trangthai: nextStatus,
                 desc: nextComment,
                 solan_thu_dat: solanThuDat,
+                is_giaovien_capnhat: isUpdatedByTeacher,
             });
 
             // Nếu record proxy của form chính đang active, đồng bộ nhẹ lại
