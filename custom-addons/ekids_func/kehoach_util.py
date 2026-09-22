@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta,date
+from odoo import models, fields, api  # 🌟 Bổ sung 'fields' vào đây
 from odoo.osv import expression
 
 from . import  giaovien_util,coso_util,hocsinh_util
@@ -232,29 +233,32 @@ def func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self):
     return None
 
 
-def func_kehoach_ketqua2muctieu(self,hocsinh,ngay):
-    today = date.today()
-    if ngay > today:
-        return "0"
-    else:
-        is_hoc = hocsinh_util.func_is_hoc(self,hocsinh,ngay)
-        if is_hoc:
-            # TH1: Thoi gian nay trong thoi gian hoc
-            is_dangky_hoc= hocsinh_util.func_is_dangky_hoc(hocsinh,ngay)
-            if is_dangky_hoc == True:
-                hoc = hocsinh_util.func_get_dihoc_diemdanh(self,hocsinh,ngay)
-                if hoc:
-                    if hoc =="0": # hoc nưa buoi
-                        hoc="1" # phai xu ly de đỡ trùng vơi 0 ở ngày tuong lai, koi nhu di hoc
-                    return hoc
-                else:
-                    return "1"
-            else:
-                return '-1'
+def func_kehoach_ketqua2muctieu(self, hocsinh, ngay):
+    if not ngay or not hocsinh:
+        return "-1"
 
-        else:
-            #TH2: Thoi gian nay chua dang ky hoc
-            return '-1'
+    # 1. Đảm bảo ép kiểu an toàn date
+    d_ngay = fields.Date.to_date(ngay)
+    today = fields.Date.today()
+
+    # 2. Ngày tương lai: Chốt '0' ngay lập tức
+    if d_ngay > today:
+        return "0"
+
+    # 3. Kiểm tra ngày học & đăng ký học (Thoát sớm nếu không thỏa mãn)
+    if not hocsinh_util.func_is_hoc(self, hocsinh, d_ngay):
+        return "-1"
+
+    if not hocsinh_util.func_is_dangky_hoc(hocsinh, d_ngay):
+        return "-1"
+
+    # 4. Lấy dữ liệu điểm danh thực tế
+    hoc = hocsinh_util.func_get_dihoc_diemdanh(self, hocsinh, d_ngay)
+    if not hoc:
+        return "1"  # Mặc định coi như đi học nếu chưa ghi nhận điểm danh vắng
+
+    # Quy ước: Nửa buổi ('0') được tính là đi học ('1') để tránh trùng mã '0' (ngày tương lai)
+    return "1" if str(hoc) == "0" else str(hoc)
 
 
 

@@ -49,11 +49,13 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("1", "Tương lai")
     ], string="Mốc thời gian", compute="_compute_is_date_status",default="1")
 
+
+
     loai = fields.Selection([
         ("1", "Đi học"),
         ("0", "Ngày trong tương lai"),
-        ("-1", "Ngày không đi hoc"),
-    ], string="Phân loại", default="1", compute="_compute_loai")
+        ("-1", "Ngày không đi học"),
+    ], string="Phân loại", compute="_compute_loai", store=True, index=True)
 
     solan_thu = fields.Integer(string="Số làn thử",compute="_compute_solan_thu")
     solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
@@ -86,20 +88,60 @@ class KeHoachKetQua2MucTieu(models.Model):
                 solan_thu=10
             record.solan_thu = solan_thu
 
-
-
-    @api.depends("kehoach_muctieu_id.kehoach_id.is_readonly", "ngay")
+    @api.depends('ngay', 'kehoach_muctieu_id.kehoach_id.hocsinh_id')
     def _compute_loai(self):
-        for record in self:
-            hocsinh = record.kehoach_muctieu_id.kehoach_id.hocsinh_id
+        today = fields.Date.today()
 
-            loai = kehoach_util.func_kehoach_ketqua2muctieu(self,hocsinh,record.ngay)
-            if loai in ['1','11']:
-                record.loai ='1'
-            elif loai in ['0']:
-                record.loai = '0'
-            else:
+        # 1. Trích xuất học sinh trước để dùng chung, tránh duyệt 3 cấp Many2one lặp lại
+        first_rec = self[:1]
+        default_hocsinh = False
+        if first_rec and first_rec.kehoach_muctieu_id and first_rec.kehoach_muctieu_id.kehoach_id:
+            default_hocsinh = first_rec.kehoach_muctieu_id.kehoach_id.hocsinh_id
+
+        # Cache kết quả theo ngày cho cùng 1 học sinh: {ngay: '1' | '0' | '-1'}
+        cache_ngay = {}
+
+        for record in self:
+            # Phòng thủ nếu chưa có ngày
+            if not record.ngay:
                 record.loai = '-1'
+                continue
+
+            # Chặn ngay ngày tương lai mà không cần gọi hàm util bên ngoài
+            if record.ngay > today:
+                record.loai = '0'
+                continue
+
+            # Lấy đối tượng học sinh an toàn
+            hocsinh = default_hocsinh or (
+                record.kehoach_muctieu_id.kehoach_id.hocsinh_id
+                if record.kehoach_muctieu_id and record.kehoach_muctieu_id.kehoach_id else False
+            )
+            if not hocsinh:
+                record.loai = '-1'
+                continue
+
+            # Tận dụng cache RAM: Các mục tiêu khác cùng ngày sẽ lấy lại kết quả ngay lập tức
+            if record.ngay in cache_ngay:
+                record.loai = cache_ngay[record.ngay]
+                continue
+
+            # Gọi hàm tiện ích tính toán 1 lần duy nhất cho ngày đó
+            val_loai = '-1'
+            if hasattr(kehoach_util, 'func_kehoach_ketqua2muctieu'):
+                loai = kehoach_util.func_kehoach_ketqua2muctieu(self, hocsinh, record.ngay)
+                if loai in ['1', '11']:
+                    val_loai = '1'
+                elif loai == '0':
+                    val_loai = '0'
+                else:
+                    val_loai = '-1'
+            else:
+                val_loai = '1'
+
+            # Lưu vào cache và gán giá trị
+            cache_ngay[record.ngay] = val_loai
+            record.loai = val_loai
 
 
 
