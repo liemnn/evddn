@@ -142,7 +142,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             has_avatar = True
             avatar_field = 'image_128'
 
-        co_so_name = self.co_so_id.name if hasattr(self, 'co_so_id') and self.co_so_id else 'CHUYÊN BIỆT TỪ SƠN - TRỤ SỞ CHÍNH'
+        co_so_name = self.coso_id.name
         trang_thai_hoc = getattr(self, 'trangthai_hoc', '') or getattr(self, 'trangthai', '') or 'Đang theo học'
         if trang_thai_hoc in ['dang_hoc', '1', 'Đang theo học']:
             trang_thai_label = 'Đang theo học'
