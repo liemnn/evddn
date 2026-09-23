@@ -480,7 +480,7 @@
                                  invisible="not is_gui_pheduyet"/>
 
                          <button name="action_pheduyet_dat"
-                                 string="Duyệt đồng ý [Kế hoạch]"
+                                 string="Duyệt đồng ý"
                                  type="object"
                                  icon="fa-check-circle"
                                  confirm="Bạn xác nhận [Kế hoạch] đã đạt để giáo viên tiến hành can thiệp theo thời gian trong kế hoạch"
@@ -500,11 +500,16 @@
                                  type="object"
                                  icon="fa-times-circle"
                                  confirm="Bạn chắc chắn muốn xóa [Kế hoạch] chứ ?"
-                                 class="btn-secondary"
+                                 class="btn-danger"
                                  invisible="not is_xoa"/>
 
                          <button name="%(ekids_canthiep.in_kehoach_cho_giaovien_action)d"
-                            string="In"
+                            string="In(đủ)"
+                            type="action"
+                            icon="fa-print"
+                            class="btn-secondary"/>
+                         <button name="%(ekids_canthiep.in_kehoach_cho_giaovien_gon_action)d"
+                            string="In(gọn)"
                             type="action"
                             icon="fa-print"
                             class="btn-secondary"/>
