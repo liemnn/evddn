@@ -4,16 +4,27 @@
         <t t-call="web.html_container">
 
             <t t-foreach="docs" t-as="o">
-                <div class="btn-print-container" style="text-align:right; margin-bottom: 15px;">
-                    <button onclick="window.print()"
-                            style="width:30px; height:auto; border:0px; background:transparent; cursor:pointer;"
-                            title="In báo cáo" type="button">
-                        <i class="fa fa-print" style="font-size: 20px; color: #333;"></i>
+                <!-- THANH CÔNG CỤ: IN & CHIA SẺ ĐỒNG BỘ THEO HỒ SƠ CAN THIỆP -->
+                <div class="btn-print-container" style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-bottom: 14px;">
+                    <!-- Nút In ấn -->
+                    <button type="button"
+                            onclick="window.print()"
+                            class="btn btn-sm d-inline-flex align-items-center gap-1.5"
+                            title="In kế hoạch can thiệp"
+                            style="font-size: 13px; font-weight: 600; border-radius: 20px; padding: 4px 14px; border: 1px solid #CBD5E1; color: #475569; background: #F8FAFC; cursor: pointer; text-decoration: none;">
+                        <i class="fa fa-print text-primary" style="font-size: 13px; margin-right: 5px;"/>
+                        <span>In</span>
                     </button>
-                    <button t-att-data-url="o.share_full_url"
-                            style="width:30px; height:auto; border:0px; background:transparent; cursor:pointer;"
-                            onclick="navigator.clipboard.writeText(this.dataset.url); alert('Đã copy link để chia sẻ [Kế hoạch]!')">
-                        <i class="fa fa-copy" style="font-size: 18px; color: #333;"></i>
+
+                    <!-- Nút Chia sẻ đồng bộ giao diện viên thuốc -->
+                    <button type="button"
+                            class="btn btn-sm d-inline-flex align-items-center gap-1.5"
+                            t-att-data-url="o.share_full_url"
+                            onclick="copyShareUrl(this)"
+                            title="Sao chép liên kết chia sẻ kế hoạch"
+                            style="font-size: 13px; font-weight: 600; border-radius: 20px; padding: 4px 14px; border: 1px solid #CBD5E1; color: #475569; background: #F8FAFC; cursor: pointer; text-decoration: none;">
+                        <i class="fa fa-link text-primary" style="font-size: 13px; margin-right: 5px;"/>
+                        <span class="copy-btn-text">Chia sẻ</span>
                     </button>
                 </div>
 
@@ -127,7 +138,7 @@
                             width: 100%;
                         }
 
-                        /* 🌟 Ô THEO DÕI IN ẤN 3 TẦNG: NGÀY - SỐ ĐẠT - TỶ LỆ % */
+                        /* Ô THEO DÕI IN ẤN 3 TẦNG: NGÀY - SỐ ĐẠT - TỶ LỆ % */
                         .day-tracking-box-print {
                             width: 27px;
                             height: 46px;
@@ -322,6 +333,20 @@
                         <t t-foreach="o.kehoach_linhvuc_ids" t-as="lv">
                             <t t-foreach="lv.kehoach_muctieu_ids" t-as="muctieu">
 
+                                <!-- ĐÁNH GIÁ VÀ LỌC BỎ KHOẢNG TRẮNG, THẺ HTML RỖNG -->
+                                <t t-set="val_cn" t-value="(muctieu.chucnang or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
+                                <t t-set="has_chucnang" t-value="bool(val_cn)"/>
+
+                                <t t-set="val_tc1" t-value="(muctieu.tieuchi_chuadat or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
+                                <t t-set="val_tc2" t-value="(muctieu.tieuchi_hinhthanh or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
+                                <t t-set="val_tc3" t-value="(muctieu.tieuchi_dat or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
+                                <t t-set="has_tieuchi" t-value="bool(val_tc1 or val_tc2 or val_tc3)"/>
+
+                                <t t-set="val_tk" t-value="(muctieu.thietke or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
+                                <t t-set="has_thietke" t-value="bool(val_tk)"/>
+
+                                <t t-set="has_ban_dau" t-value="bool(muctieu.solan_thu and muctieu.solan_thu &gt; 0)"/>
+
                                 <div class="print-container">
 
                                     <div class="print-title-section">
@@ -338,55 +363,111 @@
                                         </div>
                                     </div>
 
-                                    <!-- KHỐI I VÀ II -->
-                                    <div class="top-row-grid">
-                                        <div class="left-sub-block">
-                                            <div class="section-header-title">I. Chức năng phát triển cốt lõi và Lập luận lâm sàng</div>
-                                            <div class="text-paragraph"><span t-raw="muctieu.chucnang"/></div>
-                                        </div>
+                                    <!-- ================= KHỐI I VÀ II ================= -->
+                                    <t t-if="has_chucnang or has_tieuchi or has_ban_dau">
+                                        <div class="top-row-grid">
 
-                                        <div class="right-sub-block">
-                                            <!-- 🌟 VÙNG NẰM RIÊNG PHÍA TRÊN TIÊU ĐỀ MỤC II -->
-                                            <div style="font-size: 12.5px; margin-bottom: 3px; text-align: right; color: #000000;">
-                                                <span style="font-weight: bold; background-color: #f5f5f5; border: 1px solid #000000; padding: 1px 6px; border-radius: 3px; display: inline-block;">
-                                                    Dữ liệu ban đầu: Đạt (+)
-                                                    <strong><span t-field="muctieu.solan_thu_dat"/></strong>/<strong><span t-field="muctieu.solan_thu"/></strong> lần
-                                                    <t t-if="muctieu.tyle_thu">
-                                                        (<strong><span t-field="muctieu.tyle_thu"/>%</strong>)
+                                            <!-- TRƯỜNG HỢP 1: CẢ 2 BÊN ĐỀU CÓ DỮ LIỆU (CHIA ĐÔI 50% - 50%) -->
+                                            <t t-if="has_chucnang and (has_tieuchi or has_ban_dau)">
+                                                <div class="left-sub-block">
+                                                    <div class="section-header-title">I. Chức năng phát triển cốt lõi và Lập luận lâm sàng</div>
+                                                    <div class="text-paragraph"><span t-out="muctieu.chucnang"/></div>
+                                                </div>
+
+                                                <div class="right-sub-block">
+                                                    <t t-if="has_ban_dau">
+                                                        <div style="font-size: 12.5px; margin-bottom: 3px; text-align: right; color: #000000;">
+                                                            <span style="font-weight: bold; background-color: #f5f5f5; border: 1px solid #000000; padding: 1px 6px; border-radius: 3px; display: inline-block;">
+                                                                Dữ liệu ban đầu: Đạt (+)
+                                                                <strong><span t-field="muctieu.solan_thu_dat"/></strong>/<strong><span t-field="muctieu.solan_thu"/></strong> lần
+                                                                <t t-if="muctieu.tyle_thu">
+                                                                    (<strong><span t-field="muctieu.tyle_thu"/>%</strong>)
+                                                                </t>
+                                                            </span>
+                                                        </div>
                                                     </t>
-                                                </span>
+
+                                                    <t t-if="has_tieuchi">
+                                                        <div class="section-header-title">II. Tiêu chí đánh giá mức độ thành thục</div>
+                                                        <table class="criteria-table">
+                                                            <thead>
+                                                                <tr>
+                                                                     <th style="width: 33.33%;">CHƯA ĐẠT (-)</th>
+                                                                     <th style="width: 33.33%;">ĐANG HÌNH THÀNH (+/-)</th>
+                                                                     <th style="width: 33.33%;">ĐẠT (+)</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><span t-out="muctieu.tieuchi_chuadat"/></td>
+                                                                    <td><span t-out="muctieu.tieuchi_hinhthanh"/></td>
+                                                                    <td><span t-out="muctieu.tieuchi_dat"/></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </t>
+                                                </div>
+                                            </t>
+
+                                            <!-- TRƯỜNG HỢP 2: CHỈ CÓ KHỐI I (100% CHIỀU NGANG) -->
+                                            <t t-elif="has_chucnang and not (has_tieuchi or has_ban_dau)">
+                                                <div style="width: 100%;">
+                                                    <div class="section-header-title">I. Chức năng phát triển cốt lõi và Lập luận lâm sàng</div>
+                                                    <div class="text-paragraph"><span t-out="muctieu.chucnang"/></div>
+                                                </div>
+                                            </t>
+
+                                            <!-- TRƯỜNG HỢP 3: KHÔNG CÓ KHỐI I, CHỈ CÓ KHỐI II (100% CHIỀU NGANG) -->
+                                            <t t-elif="not has_chucnang and (has_tieuchi or has_ban_dau)">
+                                                <div style="width: 100%;">
+                                                    <t t-if="has_ban_dau">
+                                                        <div style="font-size: 12.5px; margin-bottom: 3px; text-align: right; color: #000000;">
+                                                            <span style="font-weight: bold; background-color: #f5f5f5; border: 1px solid #000000; padding: 1px 6px; border-radius: 3px; display: inline-block;">
+                                                                Dữ liệu ban đầu: Đạt (+)
+                                                                <strong><span t-field="muctieu.solan_thu_dat"/></strong>/<strong><span t-field="muctieu.solan_thu"/></strong> lần
+                                                                <t t-if="muctieu.tyle_thu">
+                                                                    (<strong><span t-field="muctieu.tyle_thu"/>%</strong>)
+                                                                </t>
+                                                            </span>
+                                                        </div>
+                                                    </t>
+
+                                                    <t t-if="has_tieuchi">
+                                                        <div class="section-header-title">II. Tiêu chí đánh giá mức độ thành thục</div>
+                                                        <table class="criteria-table">
+                                                            <thead>
+                                                                <tr>
+                                                                     <th style="width: 33.33%;">CHƯA ĐẠT (-)</th>
+                                                                     <th style="width: 33.33%;">ĐANG HÌNH THÀNH (+/-)</th>
+                                                                     <th style="width: 33.33%;">ĐẠT (+)</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><span t-out="muctieu.tieuchi_chuadat"/></td>
+                                                                    <td><span t-out="muctieu.tieuchi_hinhthanh"/></td>
+                                                                    <td><span t-out="muctieu.tieuchi_dat"/></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </t>
+                                                </div>
+                                            </t>
+
+                                        </div>
+                                    </t>
+
+                                    <!-- ================= KHỐI III: THIẾT KẾ ABC ================= -->
+                                    <t t-if="has_thietke">
+                                        <div class="bottom-row-grid">
+                                            <div class="abc-procedure-content">
+                                                <div class="section-header-title">III. Thiết kế hoạt động cho giáo viên theo mô tả (ABC)</div>
+                                                <div class="text-paragraph"><span t-out="muctieu.thietke"/></div>
                                             </div>
-
-                                            <!-- TIÊU ĐỀ VÀ BẢNG MỤC II GIỮ NGUYÊN HOÀN TOÀN -->
-                                            <div class="section-header-title">II. Tiêu chí đánh giá mức độ thành thục</div>
-                                            <table class="criteria-table">
-                                                <thead>
-                                                    <tr>
-                                                         <th style="width: 33.33%;">CHƯA ĐẠT (-)</th>
-                                                         <th style="width: 33.33%;">ĐANG HÌNH THÀNH (+/-)</th>
-                                                         <th style="width: 33.33%;">ĐẠT (+)</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td><span t-raw="muctieu.tieuchi_chuadat"/></td>
-                                                        <td><span t-raw="muctieu.tieuchi_hinhthanh"/></td>
-                                                        <td><span t-raw="muctieu.tieuchi_dat"/></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
                                         </div>
-                                    </div>
+                                    </t>
 
-                                    <!-- KHỐI III: THIẾT KẾ ABC -->
-                                    <div class="bottom-row-grid">
-                                        <div class="abc-procedure-content">
-                                            <div class="section-header-title">III. Thiết kế hoạt động cho giáo viên theo mô tả (ABC)</div>
-                                            <div class="text-paragraph"><span t-raw="muctieu.thietke"/></div>
-                                        </div>
-                                    </div>
-
-                                    <!-- 🌟 KHỐI IV: THEO DÕI KÈM SỐ LẦN THỬ THIẾT LẬP VÀ 3 TẦNG KẾT QUẢ -->
+                                    <!-- ================= KHỐI IV: THEO DÕI ================= -->
                                     <div class="tracking-diary-content">
                                         <div class="section-header-title" style="margin-bottom: 3px;">
                                             IV. Theo dõi
@@ -468,6 +549,54 @@
 
                     </div>
                 </div>
+
+                <!-- SCRIPT XỬ LÝ SAO CHÉP LIÊN KẾT ĐỒNG BỘ HIỆU ỨNG HỒ SƠ CAN THIỆP -->
+                <script type="text/javascript">
+                    <![CDATA[
+                    function copyShareUrl(btnEl) {
+                        const url = btnEl.getAttribute('data-url');
+                        if (!url) {
+                            alert("Chưa có liên kết chia sẻ!");
+                            return;
+                        }
+
+                        if (navigator.clipboard && window.isSecureContext) {
+                            navigator.clipboard.writeText(url).then(onSuccess).catch(fallbackCopy);
+                        } else {
+                            fallbackCopy();
+                        }
+
+                        function fallbackCopy() {
+                            const tempInput = document.createElement("input");
+                            tempInput.value = url;
+                            document.body.appendChild(tempInput);
+                            tempInput.select();
+                            document.execCommand("copy");
+                            document.body.removeChild(tempInput);
+                            onSuccess();
+                        }
+
+                        function onSuccess() {
+                            const textSpan = btnEl.querySelector('.copy-btn-text');
+                            const iconEl = btnEl.querySelector('i');
+                            const originalText = textSpan.innerText;
+
+                            textSpan.innerText = "Đã chép!";
+                            iconEl.className = "fa fa-check text-success";
+                            btnEl.style.borderColor = "#86EFAC";
+                            btnEl.style.backgroundColor = "#F0FDF4";
+
+                            setTimeout(function() {
+                                textSpan.innerText = originalText;
+                                iconEl.className = "fa fa-link text-primary";
+                                btnEl.style.borderColor = "#CBD5E1";
+                                btnEl.style.backgroundColor = "#F8FAFC";
+                            }, 2000);
+                        }
+                    }
+                    ]]>
+                </script>
+
             </t>
         </t>
     </template>
