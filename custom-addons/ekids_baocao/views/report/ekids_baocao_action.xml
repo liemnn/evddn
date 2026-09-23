@@ -17,5 +17,15 @@
             <field name="report_file">ekids_baocao.baocao_nguonluc_template</field>
 
         </record>
+
+         <record id="ekids_baocao.action_report_view_canthiep" model="ir.actions.report">
+            <field name="name">Xem báo cáo Can thiệp</field>
+            <field name="model">ekids.coso</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_baocao.baocao_canthiep_template</field>
+            <field name="report_file">ekids_baocao.baocao_canthiep_template</field>
+
+        </record>
+
     </data>
 </odoo>

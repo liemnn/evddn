@@ -14,7 +14,7 @@ Long description of module's purpose
     'version': '0.1',
     'license': 'LGPL-3',  # 🌟 Đặt ở đây
     # any module necessary for this one to work correctly
-    'depends': ['base','ekids_func','ekids_core','ekids_giaovien','ekids_hocsinh','ekids_chitieu'],
+    'depends': ['base','ekids_func','ekids_core','ekids_giaovien','ekids_hocsinh','ekids_chitieu','ekids_canthiep'],
 
     # always loaded
     'data': [
@@ -27,6 +27,7 @@ Long description of module's purpose
         'views/report/ekids_baocao_action.xml',
         'views/report/ekids_baocao_loinhuan_template.xml',
         'views/report/ekids_baocao_nguonluc_template.xml',
+        'views/report/ekids_baocao_canthiep_template.xml',
 
     ],
     # only loaded in demonstration mode
