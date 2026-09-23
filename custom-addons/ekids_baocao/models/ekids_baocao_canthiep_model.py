@@ -36,7 +36,7 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
         d_toi = today + relativedelta(months=1)
         m_thangtoi = (d_toi.month, d_toi.year)
 
-        # 2. Lấy danh sách cơ sở
+        # 2. Lấy danh sách cơ sở (Xử lý an toàn cho Admin & User)
         cosos = user.coso_ids
         coso_ids = cosos.ids
 
@@ -54,12 +54,12 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
             dict_active_hs_by_coso.setdefault(cid, set()).add(hs_id)
             all_active_hs_ids.add(hs_id)
 
-        # 4. Lấy số học sinh có KẾT LUẬN (Chỉ học sinh đang theo học)
+        # 4. Lấy số học sinh có KẾT LUẬN (Chỉ học sinh đang theo học, mỗi em tính 1)
         kl_records = self.env['ekids.kehoach_ketluan'].search_read(
             domain=[
                 ('coso_id', 'in', coso_ids),
                 ('hocsinh_id', 'in', list(all_active_hs_ids)),
-                ('trangthai', 'in', ['0', '1', '-1'])
+                ('trangthai', 'in', ['1', '-1'])
             ],
             fields=['coso_id', 'hocsinh_id']
         )
@@ -74,7 +74,8 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
         kh_records = self.env['ekids.kehoach'].search_read(
             domain=[
                 ('coso_id', 'in', coso_ids),
-                ('hocsinh_id', 'in', list(all_active_hs_ids))
+                ('hocsinh_id', 'in', list(all_active_hs_ids)),
+
             ],
             fields=['coso_id', 'hocsinh_id', 'tu_ngay', 'trangthai']
         )
@@ -83,8 +84,9 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
         dict_hs_kh_thangnay = {}
         dict_hs_kh_thangtoi = {}
         dict_hs_kh_choxuly = {}
+        # Dùng set() để 1 học sinh có nhiều kế hoạch đang can thiệp vẫn chỉ tính là 1
+        dict_hs_kh_dangcanthiep = {}
 
-        # Trạng thái ĐÃ DUYỆT: 1 (đang can thiệp), -1 (kết thúc)
         TRANGTHAI_DADUYET = ['1', '-1']
 
         for r in kh_records:
@@ -93,6 +95,7 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
             cid = r['coso_id'][0]
             hs_id = r['hocsinh_id'][0]
             tt = str(r.get('trangthai', ''))
+            tu_ngay = fields.Date.to_date(r.get('tu_ngay')) if r.get('tu_ngay') else False
 
             # Đếm tổng học sinh đã từng có kế hoạch
             dict_hs_kehoach_all.setdefault(cid, set()).add(hs_id)
@@ -101,9 +104,13 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
             if tt == '0':
                 dict_hs_kh_choxuly.setdefault(cid, set()).add(hs_id)
 
-            # Kế hoạch Tháng này & Tháng tới: Bắt buộc đã duyệt
-            if tt in TRANGTHAI_DADUYET:
-                m_target = self._get_target_month_year(r.get('tu_ngay'))
+            # Cột: Đang can thiệp (trangthai == '1' và tu_ngay <= today, gom theo hs_id)
+            if tt == '1' and tu_ngay and tu_ngay <= today:
+                dict_hs_kh_dangcanthiep.setdefault(cid, set()).add(hs_id)
+
+            # Kế hoạch Tháng này & Tháng tới: Đã duyệt
+            if tt in TRANGTHAI_DADUYET and tu_ngay:
+                m_target = self._get_target_month_year(tu_ngay)
                 if m_target == m_thangnay:
                     dict_hs_kh_thangnay.setdefault(cid, set()).add(hs_id)
                 elif m_target == m_thangtoi:
@@ -118,6 +125,7 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
         tong_kh_nay = 0
         tong_kh_toi = 0
         tong_kh_cho = 0
+        tong_kh_dangct = 0
 
         for cs in cosos:
             so_hs = len(dict_active_hs_by_coso.get(cs.id, set()))
@@ -127,6 +135,8 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
             kh_nay = len(dict_hs_kh_thangnay.get(cs.id, set()))
             kh_toi = len(dict_hs_kh_thangtoi.get(cs.id, set()))
             kh_cho = len(dict_hs_kh_choxuly.get(cs.id, set()))
+            # Đếm số lượng học sinh duy nhất đang can thiệp
+            kh_dangct = len(dict_hs_kh_dangcanthiep.get(cs.id, set()))
 
             tong_so_hs += so_hs
             tong_hs_kl += so_hs_kl
@@ -134,6 +144,7 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
             tong_kh_nay += kh_nay
             tong_kh_toi += kh_toi
             tong_kh_cho += kh_cho
+            tong_kh_dangct += kh_dangct
 
             rows.append({
                 'stt': stt,
@@ -144,7 +155,7 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
                 'kh_thangnay': kh_nay,
                 'kh_thangtoi': kh_toi,
                 'kh_choxuly': kh_cho,
-                'ghichu': '',
+                'kh_dangcanthiep': kh_dangct,
             })
             stt += 1
 
@@ -158,6 +169,7 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
             'tong_kh_nay': tong_kh_nay,
             'tong_kh_toi': tong_kh_toi,
             'tong_kh_cho': tong_kh_cho,
+            'tong_kh_dangct': tong_kh_dangct,
         }
 
         return {

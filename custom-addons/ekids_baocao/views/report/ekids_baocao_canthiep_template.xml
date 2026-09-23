@@ -3,7 +3,7 @@
     <template id="baocao_canthiep_template">
         <t t-call="web.basic_layout">
             <t t-set="report_data" t-value="data or {}"/>
-            <div class="page" style="font-family: 'Times New Roman', Times, serif; font-size: 13.5px; line-height: 1.45; padding: 20px; color: #000000; max-width: 1020px; margin: 0 auto;">
+            <div class="page" style="font-family: 'Times New Roman', Times, serif; font-size: 13.5px; line-height: 1.45; padding: 20px; color: #000000; max-width: 1040px; margin: 0 auto;">
 
                 <!-- TIÊU ĐỀ BÁO CÁO -->
                 <div style="text-align: center; margin-bottom: 22px;">
@@ -17,29 +17,32 @@
                     <thead>
                         <tr style="font-weight: bold; text-transform: uppercase; font-size: 12.5px; background-color: #F8FAFC;">
                             <th style="border: 1px solid #000000; padding: 8px 3px; width: 4%;">STT</th>
-                            <th style="border: 1px solid #000000; padding: 8px 6px; width: 20%;">TÊN CƠ SỞ</th>
+                            <th style="border: 1px solid #000000; padding: 8px 6px; width: 18%;">TÊN CƠ SỞ</th>
                             <th style="border: 1px solid #000000; padding: 8px 4px; width: 10%;">
                                 SỐ LƯỢNG<br/>HỌC SINH
                             </th>
-                            <th style="border: 1px solid #000000; padding: 8px 4px; width: 16%;">
+                            <th style="border: 1px solid #000000; padding: 8px 4px; width: 12%;">
                                 HS ĐÃ NHẬP KẾT LUẬN<br/>&amp; CHỈ ĐỊNH
                             </th>
                             <th style="border: 1px solid #000000; padding: 8px 4px; width: 12%;">
                                 HS ĐÃ CÓ<br/>KẾ HOẠCH
                             </th>
-                            <!-- 3 CỘT MỚI: THÁNG NÀY (ĐÃ DUYỆT) - THÁNG TỚI (ĐÃ DUYỆT) - ĐỢI DUYỆT -->
-                            <th style="border: 1px solid #000000; padding: 8px 4px; width: 11%; background-color: #EFF6FF;">
+                            <th style="border: 1px solid #000000; padding: 8px 4px; width: 12%; background-color: #EFF6FF;">
                                 KH <span t-out="report_data.get('label_thangnay', 'Tháng này')"/><br/>
                                 <span style="font-size: 11px; font-weight: normal; color: #1D4ED8;">(Đã duyệt)</span>
                             </th>
-                            <th style="border: 1px solid #000000; padding: 8px 4px; width: 11%;">
+                            <th style="border: 1px solid #000000; padding: 8px 4px; width: 12%;">
                                 KH <span t-out="report_data.get('label_thangtoi', 'Tháng tới')"/><br/>
                                 <span style="font-size: 11px; font-weight: normal; color: #15803D;">(Đã duyệt)</span>
                             </th>
-                            <th style="border: 1px solid #000000; padding: 8px 4px; width: 10%; background-color: #FFFBEB;">
+                            <th style="border: 1px solid #000000; padding: 8px 4px; width: 11%; background-color: #FFFBEB;">
                                 ĐANG ĐỢI<br/>DUYỆT
                             </th>
-                            <th style="border: 1px solid #000000; padding: 8px 4px; width: 6%;">GHI CHÚ</th>
+                            <!-- CỘT ĐANG CAN THIỆP CHUYỂN VỀ SAU CÙNG -->
+                            <th style="border: 1px solid #000000; padding: 8px 4px; width: 12%; background-color: #F0FDF4;">
+                                ĐANG CAN THIỆP<br/>
+                                <span style="font-size: 11px; font-weight: normal; color: #166534;">(Hiện tại chưa kết thúc)</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,7 +63,6 @@
                                 <td style="border: 1px solid #000000; padding: 8px 4px; text-align: center;">
                                     <span t-out="row.get('so_hs_kehoach')"/>
                                 </td>
-                                <!-- GIÁ TRỊ 3 CỘT -->
                                 <td style="border: 1px solid #000000; padding: 8px 4px; text-align: center; font-weight: 600; background-color: #F8FAFC;">
                                     <span t-out="row.get('kh_thangnay', 0)"/>
                                 </td>
@@ -70,8 +72,9 @@
                                 <td style="border: 1px solid #000000; padding: 8px 4px; text-align: center; color: #B45309; font-weight: 500;">
                                     <span t-out="row.get('kh_choxuly', 0)"/>
                                 </td>
-                                <td style="border: 1px solid #000000; padding: 8px 4px; text-align: left;">
-                                    <span t-out="row.get('ghichu')"/>
+                                <!-- GIÁ TRỊ CỘT ĐANG CAN THIỆP ĐẶT Ở CUỐI BẢNG -->
+                                <td style="border: 1px solid #000000; padding: 8px 4px; text-align: center; font-weight: 700; color: #166534; background-color: #F0FDF4;">
+                                    <span t-out="row.get('kh_dangcanthiep', 0)"/>
                                 </td>
                             </tr>
                         </t>
@@ -99,7 +102,10 @@
                             <td style="border: 1px solid #000000; padding: 9px; text-align: center; color: #B45309;">
                                 <span t-out="report_data.get('tong_kh_cho', 0)"/>
                             </td>
-                            <td style="border: 1px solid #000000; padding: 9px;"></td>
+                            <!-- TỔNG CỘNG ĐANG CAN THIỆP -->
+                            <td style="border: 1px solid #000000; padding: 9px; text-align: center; color: #166534; background-color: #DCFCE7;">
+                                <span t-out="report_data.get('tong_kh_dangct', 0)"/>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
