@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/cauhinh/ekids_hocphi_dm_ca_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/cauhinh/ekids_hocphi_dm_ca_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_hocsinh2thang_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_func/hocsinh_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_func/hocsinh_util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,14 +164,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00452" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1789468669466</created>
-      <option name="number" value="00452" />
-      <option name="presentableId" value="LOCAL-00452" />
-      <option name="project" value="LOCAL" />
-      <updated>1789468669466</updated>
     </task>
     <task id="LOCAL-00453" summary="liemnn">
       <option name="closed" value="true" />
@@ -555,7 +549,15 @@
       <option name="project" value="LOCAL" />
       <updated>1790215510332</updated>
     </task>
-    <option name="localTasksCounter" value="501" />
+    <task id="LOCAL-00501" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1790218235894</created>
+      <option name="number" value="00501" />
+      <option name="presentableId" value="LOCAL-00501" />
+      <option name="project" value="LOCAL" />
+      <updated>1790218235894</updated>
+    </task>
+    <option name="localTasksCounter" value="502" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -675,11 +677,6 @@
           <option name="timeStamp" value="449" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py</url>
-          <line>330</line>
-          <option name="timeStamp" value="453" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_ketluan_model.py</url>
           <line>489</line>
           <option name="timeStamp" value="457" />
@@ -693,11 +690,6 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_func/formula_util.py</url>
           <line>26</line>
           <option name="timeStamp" value="459" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py</url>
-          <line>578</line>
-          <option name="timeStamp" value="460" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py</url>
@@ -723,6 +715,16 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_baocao/models/ekids_coso_model.py</url>
           <line>47</line>
           <option name="timeStamp" value="494" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py</url>
+          <line>591</line>
+          <option name="timeStamp" value="498" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py</url>
+          <line>162</line>
+          <option name="timeStamp" value="499" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

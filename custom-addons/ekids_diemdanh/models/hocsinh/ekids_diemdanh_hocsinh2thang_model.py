@@ -407,7 +407,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
         coso_nghiles_2 = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, self.coso_id, ['0','2'], ngay_dauthang,
                                                                           ngay_cuoithang)
 
-        ngay_dihoc_kehoachs = hocsinh_util.func_get_ngay_dihoc_kehoachs(self.coso_id,coso_nghiles_2,self.hocsinh_id,ngay_dauthang,ngay_cuoithang)
+        ngay_dihoc_kehoachs = hocsinh_util.func_get_ngay_dihoc_kehoachs(self.coso_id,coso_nghiles_2,self.hocsinh_id,ngay_dauthang,ngay_cuoithang,True)
         ngay_dihoc_cosos= hocsinh_util.func_get_ngay_dihoc_cua_coso(self.coso_id, coso_nghiles, ngay_dauthang,ngay_cuoithang)
 
         self.tong_dihoc_kehoach = len(ngay_dihoc_kehoachs)

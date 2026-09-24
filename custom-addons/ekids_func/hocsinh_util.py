@@ -127,13 +127,14 @@ def func_get_nghipheps_tatca_hocsinh(self, coso, nam, thang):
             curr += timedelta(days=1)
     return result
 
-def func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,tu_ngay, den_ngay):
+def func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,tu_ngay, den_ngay,is_theo_hocsinh):
     ngay = tu_ngay
     days = {}
-    if hocsinh.ngay_nhaphoc > tu_ngay:
+    if (is_theo_hocsinh == True
+            and hocsinh.ngay_nhaphoc > tu_ngay):
         ngay = hocsinh.ngay_nhaphoc
 
-    if  (hocsinh.trangthai == '3'
+    if  ( is_theo_hocsinh == True and hocsinh.trangthai == '3'
         and hocsinh.ngay_nghihoc
              and hocsinh.ngay_nghihoc < den_ngay):
         den_ngay = hocsinh.ngay_nghihoc

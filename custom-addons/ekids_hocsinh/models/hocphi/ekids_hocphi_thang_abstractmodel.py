@@ -84,6 +84,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                          ,nghiles_thangtruoc
                                                          ,ngay_dihoc_cosos
                                                          ,hocsinh
+                                                         ,ngay_dauthang
                                                          ,ngay_dauthang_thucte
                                                          ,ngay_cuoithang
                                                          ,thangtruoc_days
@@ -121,6 +122,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                             ,ngay_dihoc_cosos
                                             ,hocsinh
                                             ,ngay_dauthang
+                                            ,ngay_dauthang_thucte
                                             ,ngay_cuoithang
                                             ,thangtruoc_days
                                             ,is_tinhlai
@@ -159,17 +161,27 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             ca_canthieps = hocsinh_util.func_get_hocsinh_ca_canthieps(self,hocsinh,ngay_dauthang,ngay_cuoithang)
 
             ngay_dihoc_kehoachs = (hocsinh_util
-                                    .func_get_ngay_dihoc_kehoachs(coso,nghiles,hocsinh,ngay_dauthang,ngay_cuoithang))
+                                    .func_get_ngay_dihoc_kehoachs(coso,nghiles,hocsinh,ngay_dauthang,ngay_cuoithang,False))
+            ngay_dihoc_thucte_kehoachs =None
+
+            if ngay_dauthang != ngay_dauthang_thucte:
+                ngay_dihoc_thucte_kehoachs = (hocsinh_util
+                                       .func_get_ngay_dihoc_kehoachs(coso, nghiles, hocsinh, ngay_dauthang_thucte,
+                                                                     ngay_cuoithang,False))
+            else:
+                ngay_dihoc_thucte_kehoachs =ngay_dihoc_kehoachs
+
+
 
             #B2: vào tính toán các phần
             hocphi.ngay_dihoc = len(ngay_dihoc_kehoachs)
             hocphi.ngay_dihoc_coso = len(ngay_dihoc_cosos)
 
             if ngay_dihoc_kehoachs:
-                self.func_tao_macdinh_hocphi_bantru(hocphi,thu_bantrus, len(ngay_dihoc_kehoachs),len(ngay_dihoc_cosos))
+                self.func_tao_macdinh_hocphi_bantru(hocphi,thu_bantrus, len(ngay_dihoc_thucte_kehoachs),len(ngay_dihoc_cosos))
 
                 # Tinh toan khoang thu ca can thiệp
-                self.func_tao_macdinh_hocphi_ca(hocphi,ca_canthieps,ngay_dihoc_kehoachs,ngay_dihoc_cosos)
+                self.func_tao_macdinh_hocphi_ca(hocphi,ca_canthieps,ngay_dihoc_kehoachs,ngay_dihoc_thucte_kehoachs,ngay_dihoc_cosos)
                 # tin hoc phi do giam hoc phi theo so tien cu the
 
                 # tinh toan tháng trước để được trừ
@@ -302,6 +314,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                      ,ngay_dihoc_cosos
                                                      , hocsinh
                                                      , ngay_dauthang
+                                                     , ngay_dauthang_thucte
                                                      , ngay_cuoithang
                                                      , thangtruoc_days
                                                      , True
@@ -575,22 +588,36 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
 
 
-    def func_tao_macdinh_hocphi_ca(self,hocphi,ca_canthieps,ngay_dihoc_kehoachs,ngay_dihoc_cosos):
+    def func_tao_macdinh_hocphi_ca(self,hocphi,ca_canthieps,ngay_dihoc_kehoachs,ngay_dihoc_thucte_kehoachs,ngay_dihoc_cosos):
         if ca_canthieps:
             dm_ca_ids = list(set(ca_canthieps.mapped('dm_ca_id')))
             for dm_ca in dm_ca_ids:
-               soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca_canthieps,dm_ca,ngay_dihoc_kehoachs)
+               soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca_canthieps,dm_ca,ngay_dihoc_thucte_kehoachs)
+               donggia =0
+               if (dm_ca.is_tien_trongoi == True
+                       and ngay_dihoc_kehoachs != ngay_dihoc_thucte_kehoachs
+                       and len(ngay_dihoc_kehoachs)>0):
+
+                   donggia = dm_ca.tien/len(ngay_dihoc_kehoachs)
+
                if soca > 0:
                     tien =soca * dm_ca.tien
                     # tien thu tron goi theo thang
                     if dm_ca.is_tien_trongoi == True:
-                        # dongia = (dm_ca.tien/len(ngay_dihoc_kehoachs))
+
                         soca_tren_ngay = soca /len(ngay_dihoc_kehoachs)
                         lamtron = math.ceil(soca_tren_ngay)
                         if lamtron <= 0:
-                            tien = dm_ca.tien
+                            if donggia <=0:
+                                tien = dm_ca.tien
+                            else:
+                                tien = donggia * soca
                         else:
-                            tien = dm_ca.tien * lamtron
+                            if donggia <= 0:
+                                tien = dm_ca.tien * lamtron
+                            else:
+                                tien = donggia * soca
+
 
                     data = {
                         'hocphi_id': hocphi.id,
@@ -696,7 +723,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                         ,nhatruong_nghis):
 
         dihoc_kehoachs = (hocsinh_util
-                          .func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,ngay_dauthang, ngay_cuoithang))
+                          .func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,ngay_dauthang, ngay_cuoithang,False))
 
         #TH0: Nhà trường cho nghỉ bù hoàn 100% cho học sinh giáo viên bị trừ lương
 
