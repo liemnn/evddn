@@ -190,7 +190,7 @@
 
                                             <div class="d-flex align-items-center flex-shrink-0 gap-1.5">
 
-                                                <!-- 🌟 1. BADGE TỶ LỆ THỬ (CLICK ĐỂ MỞ FORM POPUP PYTHON ACTION) -->
+                                                <!-- 1. BADGE TỶ LỆ THỬ -->
                                                 <span class="badge px-2 py-1 d-inline-flex align-items-center gap-1 badge-trial-action"
                                                       t-attf-style="font-size: 13px; border-radius: 6px; white-space: nowrap; #{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0;' : 'background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A;') : 'background-color: #F8FAFC; color: #64748B; border: 1px dashed #CBD5E1;'}"
                                                       title="Bấm để cập nhật kết quả thử nghiệm"
@@ -213,7 +213,7 @@
                                                     <i class="fa fa-edit" style="font-size: 12px;"></i> Biên tập
                                                 </button>
 
-                                                <!-- 3. Chuỗi Badge Phân loại trạng thái (Liền mạch chuẩn OWL) -->
+                                                <!-- 3. Chuỗi Badge Phân loại trạng thái -->
                                                 <span t-if="muctieu.kehoach_muctieu_thangtruoc_id"
                                                       class="badge px-2.5 py-1 d-inline-flex align-items-center gap-1.5"
                                                       style="font-size: 12.5px; color: #991B1B; background-color: #FEF2F2; border: 1px solid #FECACA; border-radius: 6px; cursor: help; white-space: nowrap;"
@@ -294,46 +294,74 @@
                                             </div>
                                         </div>
 
-                                        <!-- Chức năng cốt lõi & Thiết kế hoạt động -->
-                                        <div class="row g-3 w-100 m-0 pt-1">
-                                            <div class="col-md-6 ps-0 pe-md-3 text-start">
-                                                <div class="fw-bold text-success mb-1" style="font-size: 13px; letter-spacing: 0.3px;">
-                                                    <i class="fa fa-star"></i> CHỨC NĂNG PHÁT TRIỂN CỐT LÕI:
+                                        <!-- 1. CHỨC NĂNG CỐT LÕI & THIẾT KẾ HOẠT ĐỘNG -->
+                                        <div t-if="muctieu.has_chucnang or muctieu.has_thietke" class="row g-3 w-100 m-0 pt-1">
+                                            <!-- Cả hai đều có dữ liệu: Chia 50% - 50% -->
+                                            <t t-if="muctieu.has_chucnang and muctieu.has_thietke">
+                                                <div class="col-md-6 ps-0 pe-md-3 text-start">
+                                                    <div class="fw-bold text-success mb-1" style="font-size: 13px; letter-spacing: 0.3px;">
+                                                        <i class="fa fa-star"></i> CHỨC NĂNG PHÁT TRIỂN CỐT LÕI:
+                                                    </div>
+                                                    <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                        <t t-out="muctieu.chucnang"/>
+                                                    </div>
                                                 </div>
-                                                <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
-                                                    <t t-out="muctieu.chucnang || 'Không có'"/>
-                                                </div>
-                                            </div>
 
-                                            <div class="col-md-6 pe-0 ps-md-3 text-start" style="border-left: 1px dashed #E2E8F0;">
-                                                <div class="fw-bold text-warning mb-1" style="font-size: 14px; letter-spacing: 0.3px; color: #EA580C !important;">
-                                                    <i class="fa fa-magic"></i> THIẾT KẾ HOẠT ĐỘNG CHO GIÁO VIÊN:
+                                                <div class="col-md-6 pe-0 ps-md-3 text-start" style="border-left: 1px dashed #E2E8F0;">
+                                                    <div class="fw-bold text-warning mb-1" style="font-size: 14px; letter-spacing: 0.3px; color: #EA580C !important;">
+                                                        <i class="fa fa-magic"></i> THIẾT KẾ HOẠT ĐỘNG CHO GIÁO VIÊN:
+                                                    </div>
+                                                    <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                        <t t-out="muctieu.thietke"/>
+                                                    </div>
                                                 </div>
-                                                <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
-                                                    <t t-out="muctieu.thietke || 'Không có'"/>
+                                            </t>
+
+                                            <!-- Chỉ có Chức năng cốt lõi: Chiếm 100% -->
+                                            <t t-elif="muctieu.has_chucnang and !muctieu.has_thietke">
+                                                <div class="col-12 px-0 text-start">
+                                                    <div class="fw-bold text-success mb-1" style="font-size: 13px; letter-spacing: 0.3px;">
+                                                        <i class="fa fa-star"></i> CHỨC NĂNG PHÁT TRIỂN CỐT LÕI:
+                                                    </div>
+                                                    <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                        <t t-out="muctieu.chucnang"/>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </t>
+
+                                            <!-- Chỉ có Thiết kế hoạt động: Chiếm 100% -->
+                                            <t t-elif="!muctieu.has_chucnang and muctieu.has_thietke">
+                                                <div class="col-12 px-0 text-start">
+                                                    <div class="fw-bold text-warning mb-1" style="font-size: 14px; letter-spacing: 0.3px; color: #EA580C !important;">
+                                                        <i class="fa fa-magic"></i> THIẾT KẾ HOẠT ĐỘNG CHO GIÁO VIÊN:
+                                                    </div>
+                                                    <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                        <t t-out="muctieu.thietke"/>
+                                                    </div>
+                                                </div>
+                                            </t>
                                         </div>
 
-                                        <!-- Tiêu chí đánh giá lâm sàng -->
-                                        <div class="w-100 d-flex flex-column gap-2 mt-2">
+                                        <!-- 2. TIÊU CHÍ ĐÁNH GIÁ LÂM SÀNG -->
+                                        <!-- Chỉ hiển thị khi có ít nhất một tiêu chí có nội dung -->
+                                        <div t-if="muctieu.has_tieuchi" class="w-100 d-flex flex-column gap-2 mt-2">
                                             <div class="fw-bold text-uppercase" style="font-size: 14px; color: #94A3B8; letter-spacing: 0.5px;">
                                                 <i class="fa fa-check-square-o"></i> Tiêu chí đánh giá lâm sàng phân cấp:
                                             </div>
                                             <div class="d-flex flex-wrap gap-3 w-100 m-0">
-                                                <div class="crit-box danger d-flex flex-column gap-1">
+                                                <div t-if="muctieu.has_tc1" class="crit-box danger d-flex flex-column gap-1">
                                                     <span class="fw-bold text-danger" style="font-size: 14px;">(-) Chưa đạt:</span>
-                                                    <t t-out="muctieu.tieuchi_chuadat || 'Chưa định nghĩa tiêu chí chưa đạt.'"/>
+                                                    <t t-out="muctieu.tieuchi_chuadat"/>
                                                 </div>
 
-                                                <div class="crit-box warning d-flex flex-column gap-1">
+                                                <div t-if="muctieu.has_tc2" class="crit-box warning d-flex flex-column gap-1">
                                                     <span class="fw-bold" style="font-size: 14px; color: #B45309;">(+/-) Đang hình thành:</span>
-                                                    <t t-out="muctieu.tieuchi_hinhthanh || 'Chưa định nghĩa tiêu chí đang hình thành.'"/>
+                                                    <t t-out="muctieu.tieuchi_hinhthanh"/>
                                                 </div>
 
-                                                <div class="crit-box success d-flex flex-column gap-1">
+                                                <div t-if="muctieu.has_tc3" class="crit-box success d-flex flex-column gap-1">
                                                     <span class="fw-bold text-success" style="font-size: 14px;">(+) Đạt:</span>
-                                                    <t t-out="muctieu.tieuchi_dat || 'Chưa định nghĩa tiêu chí đạt.'"/>
+                                                    <t t-out="muctieu.tieuchi_dat"/>
                                                 </div>
                                             </div>
                                         </div>

@@ -46,6 +46,14 @@ export class LapKehoachWidget extends Component {
         }
     }
 
+    /* 🌟 Hàm kiểm tra chuỗi có nội dung thực tế hay không */
+    hasValidContent(text) {
+        if (!text) return false;
+        const decoded = this.decodeHtmlText(text);
+        const clean = decoded.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+        return clean.length > 0 && clean !== "Không có";
+    }
+
     async loadAllPlanData() {
         const kehoachId = this.props.record.resId;
         if (!kehoachId) return;
@@ -82,11 +90,20 @@ export class LapKehoachWidget extends Component {
                 const muctieus = muctieus_returns.filter((t) => t.kehoach_linhvuc_id[0] === line.id);
 
                 muctieus.forEach((t) => {
-                    t.chucnang = markup(this.decodeHtmlText(t.chucnang) || "Không có");
-                    t.thietke = markup(this.decodeHtmlText(t.thietke) || "Không có");
-                    t.tieuchi_chuadat = markup(this.decodeHtmlText(t.tieuchi_chuadat) || "Chưa định nghĩa tiêu chí chưa đạt.");
-                    t.tieuchi_hinhthanh = markup(this.decodeHtmlText(t.tieuchi_hinhthanh) || "Chưa định nghĩa tiêu chí đang hình thành.");
-                    t.tieuchi_dat = markup(this.decodeHtmlText(t.tieuchi_dat) || "Chưa định nghĩa tiêu chí đạt.");
+                    // Kiểm tra cờ dữ liệu thực tế
+                    t.has_chucnang = this.hasValidContent(t.chucnang);
+                    t.has_thietke = this.hasValidContent(t.thietke);
+                    t.has_tc1 = this.hasValidContent(t.tieuchi_chuadat);
+                    t.has_tc2 = this.hasValidContent(t.tieuchi_hinhthanh);
+                    t.has_tc3 = this.hasValidContent(t.tieuchi_dat);
+                    t.has_tieuchi = t.has_tc1 || t.has_tc2 || t.has_tc3;
+
+                    // Chỉ gán markup khi thực sự có nội dung
+                    t.chucnang = t.has_chucnang ? markup(this.decodeHtmlText(t.chucnang)) : "";
+                    t.thietke = t.has_thietke ? markup(this.decodeHtmlText(t.thietke)) : "";
+                    t.tieuchi_chuadat = t.has_tc1 ? markup(this.decodeHtmlText(t.tieuchi_chuadat)) : "";
+                    t.tieuchi_hinhthanh = t.has_tc2 ? markup(this.decodeHtmlText(t.tieuchi_hinhthanh)) : "";
+                    t.tieuchi_dat = t.has_tc3 ? markup(this.decodeHtmlText(t.tieuchi_dat)) : "";
 
                     t.ghichu_clean = t.ghichu ? this.decodeHtmlText(t.ghichu).replace(/<[^>]*>/g, "").trim() : "";
                 });
@@ -111,7 +128,7 @@ export class LapKehoachWidget extends Component {
         }
     }
 
-    /* 🌟 MỞ FORM VIEW POPUP CỦA ODOO BẰNG PYTHON ACTION */
+    /* MỞ FORM VIEW POPUP BẰNG PYTHON ACTION */
     async openModalTyLeThu(targetId) {
         if (this.props.readonly) {
             this.notification.add("Kế hoạch đã khóa (Chỉ đọc), không thể điều chỉnh kết quả!", { type: "warning" });
