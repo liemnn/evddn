@@ -74,6 +74,13 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                                                            ngay_dauthang_truoc,
                                                                                            ngay_cuoithang_truoc)
 
+            # Truy vấn trước 1 lần duy nhất cho toàn bộ học sinh
+            existing_hocphis = self.env['ekids.hocphi'].search([
+                ('coso_id', '=', self.coso_id.id),
+                ('thang_id', '=', self.id),
+                ('hocsinh_id', 'in', hocsinhs.ids)
+            ])
+            existing_map = {hp.hocsinh_id.id: hp for hp in existing_hocphis}
 
             for hocsinh in hocsinhs:
                 ngay_dauthang_thucte =ngay_dauthang
@@ -90,7 +97,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                          ,thangtruoc_days
                                                          ,False
                                                          ,nhatruong_nghi_bu_thangtruoc
-                                                         ,nhatruong_nghi_thangtruoc)
+                                                         ,nhatruong_nghi_thangtruoc
+                                                         ,existing_hp=existing_map.get(hocsinh.id))
                 # Tinh toán các khoản thu ngoài
             #B2tinh toán các khoảng thu ngoài
             self.func_tao_macdinh_hocphi_thungoai(coso.id, ngay_dauthang.year, ngay_dauthang.month)
@@ -127,7 +135,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                             ,thangtruoc_days
                                             ,is_tinhlai
                                             ,nhatruong_nghi_bus
-                                            ,nhatruong_nghis):
+                                            ,nhatruong_nghis
+                                            ,existing_hp=None):
         hocphi =None
         thu_bantrus = hocsinh.thu_bantru_ids
         if is_tinhlai == True:
@@ -139,23 +148,17 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                  ],limit=1)
 
         else:
-            #TH2: Khởi tạo hoặc tính toán lại toàn bộ
-            # B2:kiem tra xem hocsinh này đã có bang tinh hoc phi chua
-            count = self.env['ekids.hocphi'].search_count(
-                [('coso_id', '=', self.coso_id.id)
-                    , ('thang_id', '=', self.id)
-                    , ('hocsinh_id', '=', hocsinh.id)
-                 ])
-            if count <= 0:
+            # Nếu đã có trong map thì bỏ qua, chưa có mới tạo
+            if existing_hp:
+                hocphi = None
+            else:
                 data = {
                     'coso_id': self.coso_id.id,
                     'thang_id': self.id,
                     'hocsinh_id': hocsinh.id,
-                    'tyle_giamhocphi':0,
+                    'tyle_giamhocphi': 0,
                     'trangthai': '-1'
                 }
-
-                #B1: Công tác tính toán đảm bảo hiệu năng
                 hocphi = self.env['ekids.hocphi'].create(data)
         if hocphi:
             ca_canthieps = hocsinh_util.func_get_hocsinh_ca_canthieps(self,hocsinh,ngay_dauthang,ngay_cuoithang)
@@ -253,18 +256,15 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         thang = int(self.thang_id.name)
         nam = int(self.nam_id.name)
         #B1 xoa dữ liệu cũ
-        bantrus = self.hocphi_bantru_ids
-        if bantrus:
-            for bantru in bantrus:
-                bantru.unlink()
-        cas = self.hocphi_ca_ids
-        if cas:
-            for ca in cas:
-                ca.unlink()
-        trus = self.hocphi_duoctru_ids
-        if trus:
-            for tru in trus:
-                tru.unlink()
+
+        if self.hocphi_bantru_ids:
+            self.hocphi_bantru_ids.unlink()
+
+        if self.hocphi_ca_ids:
+            self.hocphi_ca_ids.unlink()
+
+        if self.hocphi_duoctru_ids:
+            self.hocphi_duoctru_ids.unlink()
         #B2 tinh toán la học phí
 
         days = ngay_util.func_get_cacngay_trong_thang(nam,thang)
@@ -326,6 +326,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
     # nêu đặt  is get defaul =true có nghĩa lấy giá trị tháng trước
     def func_tao_macdinh_hocphi_bantru(self,hocphi,thu_bantrus,songay_dihoc_quydinh,songay_dihoc_coso):
         if thu_bantrus:
+            batch_data = []
             for thu_bantru in thu_bantrus:
                 tien = thu_bantru.tien
                 desc = ""
@@ -354,14 +355,15 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 namestr =thu_bantru.name
                 if desc:
                     namestr =namestr+ " "+desc
-                data = {
+
+                batch_data.append({
                     'hocphi_id': hocphi.id,
                     'name': namestr,
-                    'dm_thu_bantru_id':thu_bantru.id,
+                    'dm_thu_bantru_id': thu_bantru.id,
                     'tien': tien
-
-                }
-                self.env['ekids.hocphi_bantru'].create(data)
+                })
+            if batch_data:
+                self.env['ekids.hocphi_bantru'].create(batch_data)
 
     def func_tao_macdinh_hocphi_thungoai(self,coso_id,nam,thang):
         thungoais = self.env["ekids.hocphi_thungoai"].search([
