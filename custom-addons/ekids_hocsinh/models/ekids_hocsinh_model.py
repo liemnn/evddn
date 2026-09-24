@@ -355,6 +355,15 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
     def action_mo_popup_taikhoan_phuhuynh(self):
         self.ensure_one()
         form_view_id = self.env.ref('ekids_hocsinh.view_ekids_hocsinh_user_form').id
+        phuhuynhs = self.phuhuynh_ids
+        name =""
+        login=""
+        if phuhuynhs:
+            phuhuynh = self.phuhuynh_ids[:1]  # Lấy 1 bản ghi đầu tiên an toàn (không bao giờ văng IndexError)
+            name = phuhuynh.name or ""
+            name =name + "(PH:"+ self.name+")"
+            login = phuhuynh.dienthoai or ""
+
         if self.id:
             return {
                 'type': 'ir.actions.act_window',
@@ -366,6 +375,8 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
                 'target': 'new',
                 'context':{
                     'hocsinh_id': self.id,
+                    'default_name': name,
+                    'default_login': login,
 
                 },
             }
