@@ -584,51 +584,45 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 }
                 self.env['ekids.hocphi_duoctru'].create(data)
 
+    def func_tao_macdinh_hocphi_ca(self, hocphi, ca_canthieps, ngay_dihoc_kehoachs, ngay_dihoc_thucte_kehoachs,
+                                   ngay_dihoc_cosos):
+        if not ca_canthieps:
+            return
 
+        len_kehoach = len(ngay_dihoc_kehoachs) if ngay_dihoc_kehoachs else 0
+        data_list = []
 
+        for dm_ca in ca_canthieps.mapped('dm_ca_id'):
+            soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca_canthieps, dm_ca,
+                                                                         ngay_dihoc_thucte_kehoachs)
+            if soca <= 0:
+                continue
 
+            if not dm_ca.is_tien_trongoi:
+                # 1. Tính theo buổi thông thường
+                tien = soca * dm_ca.tien
+            else:
+                # 2. Thu trọn gói tháng (Giữ nguyên 100% logic gốc của bạn)
+                if set(ngay_dihoc_kehoachs) != set(ngay_dihoc_thucte_kehoachs) and len_kehoach > 0:
+                    # Vào giữa tháng: đơn giá theo ngày kế hoạch * số ca
+                    donggia = dm_ca.tien / len_kehoach
+                    tien = donggia * soca
+                else:
+                    # Trọn tháng: nhân hệ số làm tròn số ca / ngày
+                    soca_tren_ngay = (soca / len_kehoach) if len_kehoach > 0 else 0
+                    lamtron = math.ceil(soca_tren_ngay)
+                    tien = dm_ca.tien * (lamtron if lamtron > 0 else 1)
 
-    def func_tao_macdinh_hocphi_ca(self,hocphi,ca_canthieps,ngay_dihoc_kehoachs,ngay_dihoc_thucte_kehoachs,ngay_dihoc_cosos):
-        if ca_canthieps:
-            dm_ca_ids = list(set(ca_canthieps.mapped('dm_ca_id')))
-            for dm_ca in dm_ca_ids:
-               soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca_canthieps,dm_ca,ngay_dihoc_thucte_kehoachs)
-               donggia =0
-               if (dm_ca.is_tien_trongoi == True
-                       and ngay_dihoc_kehoachs != ngay_dihoc_thucte_kehoachs
-                       and len(ngay_dihoc_kehoachs)>0):
+            data_list.append({
+                'hocphi_id': hocphi.id,
+                'dm_ca_id': dm_ca.id,
+                'soca': soca,
+                'tien': tien,
+                'desc': dm_ca.desc or '',
+            })
 
-                   donggia = dm_ca.tien/len(ngay_dihoc_kehoachs)
-
-               if soca > 0:
-                    tien =soca * dm_ca.tien
-                    # tien thu tron goi theo thang
-                    if dm_ca.is_tien_trongoi == True:
-
-                        soca_tren_ngay = soca /len(ngay_dihoc_kehoachs)
-                        lamtron = math.ceil(soca_tren_ngay)
-                        if lamtron <= 0:
-                            if donggia <=0:
-                                tien = dm_ca.tien
-                            else:
-                                tien = donggia * soca
-                        else:
-                            if donggia <= 0:
-                                tien = dm_ca.tien * lamtron
-                            else:
-                                tien = donggia * soca
-
-
-                    data = {
-                        'hocphi_id': hocphi.id,
-                        'dm_ca_id':dm_ca.id,
-                        'soca':soca,
-                        'tien':tien,
-                        'desc': dm_ca.desc,
-
-                    }
-                    self.env['ekids.hocphi_ca'].create(data)
-
+        if data_list:
+            self.env['ekids.hocphi_ca'].create(data_list)
 
 
     # Đây là hàm tính toán số ngày hoc trong tháng của hoc sinh
