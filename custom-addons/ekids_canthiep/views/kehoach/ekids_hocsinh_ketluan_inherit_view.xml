@@ -35,9 +35,9 @@
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
                 <field name="gioitinh"/>
                 <field name="ngaysinh" optional="hide"/>
-                <field name="tuoi"/>
-                <field name="ngay_nhaphoc" string="Nhập học" width="100"/>
-                <field name="thoigian_hoc" string="Thời gian học" width="100"/>
+                <field name="tuoi" optional="hide"/>
+                <field name="ngay_nhaphoc" string="Nhập học" width="100" optional="hide"/>
+                <field name="thoigian_hoc" string="Thời gian học" width="100" optional="hide"/>
 
                 <field name="dm_xa_id" optional="hide"/>
                 <field name="trangthai" string="Trạng thái"
