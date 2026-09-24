@@ -346,7 +346,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 domain.extend(gv_lap_domain)
             elif context_type in ["2", "4"]:
                 domain.extend(gv_duyet_domain)
-            elif context_type in ["5", None]:  # Type 5 hoặc mặc định (Đang can thiệp)
+            elif context_type in ["5"]:  # Type 5 hoặc mặc định (Đang can thiệp)
                 domain = expression.AND([domain, expression.OR([gv_duyet_domain, gv_lap_domain])])
 
         # 4. Trả về Window Action
