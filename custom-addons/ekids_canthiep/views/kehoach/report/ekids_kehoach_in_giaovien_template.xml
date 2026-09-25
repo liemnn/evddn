@@ -11,8 +11,8 @@
                             onclick="window.print()"
                             class="btn btn-sm d-inline-flex align-items-center gap-1.5"
                             title="In kế hoạch can thiệp"
-                            style="font-size: 13px; font-weight: 600; border-radius: 20px; padding: 4px 14px; border: 1px solid #CBD5E1; color: #475569; background: #F8FAFC; cursor: pointer; text-decoration: none;">
-                        <i class="fa fa-print text-primary" style="font-size: 13px; margin-right: 5px;"/>
+                            style="font-size: 14px; font-weight: 600; border-radius: 20px; padding: 5px 16px; border: 1px solid #CBD5E1; color: #475569; background: #F8FAFC; cursor: pointer; text-decoration: none;">
+                        <i class="fa fa-print text-primary" style="font-size: 14px; margin-right: 5px;"/>
                         <span>In</span>
                     </button>
 
@@ -22,8 +22,8 @@
                             t-att-data-url="o.share_full_url"
                             onclick="copyShareUrl(this)"
                             title="Sao chép liên kết chia sẻ kế hoạch"
-                            style="font-size: 13px; font-weight: 600; border-radius: 20px; padding: 4px 14px; border: 1px solid #CBD5E1; color: #475569; background: #F8FAFC; cursor: pointer; text-decoration: none;">
-                        <i class="fa fa-link text-primary" style="font-size: 13px; margin-right: 5px;"/>
+                            style="font-size: 14px; font-weight: 600; border-radius: 20px; padding: 5px 16px; border: 1px solid #CBD5E1; color: #475569; background: #F8FAFC; cursor: pointer; text-decoration: none;">
+                        <i class="fa fa-link text-primary" style="font-size: 14px; margin-right: 5px;"/>
                         <span class="copy-btn-text">Chia sẻ</span>
                     </button>
                 </div>
@@ -44,79 +44,92 @@
                             print-color-adjust: exact;
                         }
 
+                        /* FONT CHỮ CƠ BẢN TOÀN BỘ BẢN IN TỐI THIỂU 14px - 14.5px */
                         .o_compact_print_body {
                             font-family: "Times New Roman", "Arial", serif !important;
                             color: #000000 !important;
-                            font-size: 13.5px !important;
-                            line-height: 1.25;
+                            font-size: 14px !important;
+                            line-height: 1.35;
                             width: 100%;
-                            padding: 2mm !important;
+                            padding: 1.5mm !important;
                         }
 
                         /* Header Profile Table */
-                        .header-main-table { width: 100%; margin-bottom: 4px; }
-                        .header-main-table td { padding: 2px 4px; vertical-align: middle; color: #000000 !important; font-size: 13.5px !important; }
-                        .top-main-title { font-size: 16px !important; font-weight: bold !important; text-transform: uppercase; color: #000000 !important; }
-                        .top-sub-title { font-size: 12px !important; font-style: italic; color: #000000 !important; }
+                        .header-main-table { width: 100%; margin-bottom: 6px; }
+                        .header-main-table td { padding: 2px 4px; vertical-align: middle; color: #000000 !important; font-size: 14px !important; }
+                        .top-main-title { font-size: 18px !important; font-weight: bold !important; text-transform: uppercase; color: #000000 !important; }
+                        .top-sub-title { font-size: 14px !important; font-style: italic; color: #000000 !important; }
 
-                        .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; table-layout: fixed; }
-                        .profile-grid-table td { border: 1px solid #000000 !important; padding: 3px 5px; font-size: 12.5px !important; vertical-align: middle; color: #000000 !important; }
+                        .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; table-layout: fixed; }
+                        .profile-grid-table td { border: 1px solid #000000 !important; padding: 5px 7px; font-size: 14px !important; vertical-align: middle; color: #000000 !important; }
 
-                        .col-lbl-left { width: 11%; font-weight: bold !important; background-color: #eeeeee !important; }
-                        .col-val-left { width: 22%; }
+                        .col-lbl-left { width: 12%; font-weight: bold !important; background-color: #eeeeee !important; }
+                        .col-val-left { width: 21%; }
                         .col-linhvuc  { width: 33.5%; }
                         .col-tuoi     { width: 33.5%; text-align: center; }
 
                         .print-container {
                             width: 100%;
                             border: 1px solid #000000 !important;
-                            padding: 5px 7px;
-                            margin-bottom: 6px;
+                            padding: 6px 8px;
+                            margin-bottom: 8px;
                             page-break-inside: avoid !important;
                             background-color: #ffffff !important;
                         }
 
-                        .print-title-section { display: table; width: 100%; border-bottom: 1px solid #000000 !important; padding-bottom: 2px; margin-bottom: 4px; }
-                        .print-main-title { display: table-cell; width: 60%; font-size: 15px !important; vertical-align: bottom; text-align: left; color: #000000 !important; }
+                        .print-title-section { display: table; width: 100%; border-bottom: 1px solid #000000 !important; padding-bottom: 3px; margin-bottom: 5px; }
+
+                        /* 🌟 TIÊU ĐỀ MỤC TIÊU CHUẨN 16px */
+                        .print-main-title {
+                            display: table-cell;
+                            width: 60%;
+                            font-size: 16px !important;
+
+                            vertical-align: bottom;
+                            text-align: left;
+                            color: #000000 !important;
+                        }
 
                         .goal-note-text {
-                            font-size: 12.5px !important;
+                            font-size: 14px !important;
                             font-weight: normal !important;
                             font-style: italic;
                             color: #000000 !important;
                             display: block;
+                            margin-top: 2px;
                         }
 
-                        .print-meta-text { display: table-cell; width: 40%; font-size: 12px !important; vertical-align: bottom; text-align: right; color: #000000 !important; }
+                        .print-meta-text { display: table-cell; width: 40%; font-size: 14px !important; vertical-align: bottom; text-align: right; color: #000000 !important; }
 
-                        .top-row-grid { display: table; width: 100%; border-bottom: 1px dashed #000000 !important; padding-bottom: 4px; margin-bottom: 4px; }
+                        .top-row-grid { display: table; width: 100%; border-bottom: 1px dashed #000000 !important; padding-bottom: 5px; margin-bottom: 5px; }
                         .left-sub-block { display: table-cell; width: 50%; padding-right: 8px; border-right: 1px dashed #000000 !important; vertical-align: top !important; }
                         .right-sub-block { display: table-cell; width: 50%; padding-left: 8px; vertical-align: top !important; }
 
                         .section-header-title {
-                            font-size: 13px !important;
+                            font-size: 14.5px !important;
                             font-weight: bold !important;
                             text-transform: uppercase;
                             text-decoration: underline;
-                            margin-bottom: 2px;
+                            margin-bottom: 3px;
                             color: #000000 !important;
                             page-break-after: avoid !important;
                         }
 
                         .text-paragraph {
-                            margin-bottom: 2px;
-                            font-size: 12.5px !important;
+                            margin-bottom: 3px;
+                            font-size: 14px !important;
                             color: #000000 !important;
+                            line-height: 1.4;
                         }
 
-                        .criteria-table { width: 100%; border-collapse: collapse; page-break-inside: avoid !important; }
-                        .criteria-table th, .criteria-table td { border: 1px solid #000000 !important; padding: 3px; font-size: 11.5px !important; vertical-align: top !important; color: #000000 !important; }
-                        .criteria-table th { background-color: #eeeeee !important; font-weight: bold !important; }
+                        .criteria-table { width: 100%; border-collapse: collapse; page-break-inside: avoid !important; margin-top: 3px; }
+                        .criteria-table th, .criteria-table td { border: 1px solid #000000 !important; padding: 4px; font-size: 14px !important; vertical-align: top !important; color: #000000 !important; line-height: 1.35; }
+                        .criteria-table th { background-color: #eeeeee !important; font-weight: bold !important; text-align: center; }
 
                         .bottom-row-grid {
                             width: 100%;
-                            margin-bottom: 4px;
-                            padding-bottom: 3px;
+                            margin-bottom: 5px;
+                            padding-bottom: 4px;
                             border-bottom: 1px dashed #000000 !important;
                         }
 
@@ -124,24 +137,24 @@
 
                         .tracking-diary-content {
                             width: 100%;
-                            margin-top: 3px;
+                            margin-top: 4px;
                             display: flex;
                             flex-direction: column;
-                            gap: 2px;
+                            gap: 3px;
                             page-break-inside: avoid !important;
                         }
 
                         .day-boxes-horizontal-flow {
                             display: flex;
                             flex-wrap: wrap;
-                            gap: 2px;
+                            gap: 3px;
                             width: 100%;
                         }
 
-                        /* Ô THEO DÕI IN ẤN 3 TẦNG: NGÀY - SỐ ĐẠT - TỶ LỆ % */
+                        /* 🌟 Ô THEO DÕI IN ẤN 3 TẦNG: NỚI KÍCH THƯỚC CHỨA VỪA CHỮ 14px */
                         .day-tracking-box-print {
-                            width: 27px;
-                            height: 46px;
+                            width: 31px;
+                            height: 50px;
                             border: 1px solid #000000 !important;
                             border-radius: 2px;
                             display: flex;
@@ -153,36 +166,36 @@
                         }
 
                         .cell-print-date {
-                            font-size: 9px !important;
+                            font-size: 11px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
-                            line-height: 14px;
+                            line-height: 15px;
                             background-color: #f0f0f0 !important;
                             border-bottom: 1px solid #000000 !important;
                             width: 100%;
                             text-align: center;
-                            height: 14px;
+                            height: 15px;
                         }
 
                         .cell-print-val {
-                            height: 18px;
+                            height: 20px;
                             width: 100%;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 12px !important;
+                            font-size: 14px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
                             border-bottom: 1px dotted #000000 !important;
                         }
 
                         .cell-print-rate {
-                            height: 13px;
+                            height: 14px;
                             width: 100%;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 8.5px !important;
+                            font-size: 10px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
                             line-height: 1;
@@ -192,7 +205,14 @@
                         .box-print-rest { background-color: #eeeeee !important; }
                         .box-print-rest .cell-print-date { background-color: #dddddd !important; }
 
-                        .lbl-summary-chuadat, .lbl-summary-hinhthanh, .lbl-summary-dat { color: #000000 !important; font-weight: bold !important; font-size: 12.5px !important; }
+                        .lbl-summary-chuadat,
+                        .lbl-summary-hinhthanh,
+                        .lbl-summary-dat {
+                            color: #000000 !important;
+                            font-weight: bold !important;
+                            font-size: 14.5px !important;
+                        }
+
                         .text-bold { font-weight: bold !important; }
 
                         @media print {
@@ -210,10 +230,10 @@
                             <tr>
                                 <td style="width: 10%;">
                                     <t t-if="o.coso_id and o.coso_id.logo">
-                                       <span t-field="o.coso_id.logo" t-options="{'widget': 'image', 'style': 'max-height: 45px; max-width: 100%; display: block; margin-bottom: 2px;'}"/>
+                                       <span t-field="o.coso_id.logo" t-options="{'widget': 'image', 'style': 'max-height: 48px; max-width: 100%; display: block; margin-bottom: 2px;'}"/>
                                     </t>
                                     <t t-if="not (o.coso_id and o.coso_id.logo)">
-                                        <div style="display: inline-block; width: 45px; height: 25px; border: 1px dashed #000; text-align: center; line-height: 25px; font-weight: bold; font-size: 10px; margin-bottom: 2px; color: #000000;">LOGO</div>
+                                        <div style="display: inline-block; width: 48px; height: 26px; border: 1px dashed #000; text-align: center; line-height: 26px; font-weight: bold; font-size: 11px; margin-bottom: 2px; color: #000000;">LOGO</div>
                                     </t>
                                 </td>
                                 <td style="width: 45%;">
@@ -242,8 +262,8 @@
                             <tr>
                                 <td class="col-lbl-left">Họ và tên HS:</td>
                                 <td class="col-val-left text-bold"><span t-field="o.hocsinh_id.name"/></td>
-                                <td colspan="2" style="font-weight: bold; text-align: center; font-size: 13px; background-color: #eeeeee; text-transform: uppercase; color: #000000;">
-                                    LĨNH VỰC CAN THIỆP
+                                <td colspan="2" style="font-weight: bold; text-align: center; font-size: 14.5px; background-color: #eeeeee; text-transform: uppercase; color: #000000;">
+
                                 </td>
                             </tr>
                             <tr>
@@ -350,8 +370,9 @@
                                 <div class="print-container">
 
                                     <div class="print-title-section">
+                                        <!-- 🌟 TIÊU ĐỀ MỤC TIÊU 16px -->
                                         <div class="print-main-title">
-                                            <strong>Mục tiêu <span t-out="muctieu_index + 1"/>:</strong> <span t-field="muctieu.name"/>
+                                            <span>Mục tiêu <span t-out="muctieu_index + 1"/>:</span> <span t-field="muctieu.name"/>
                                             <t t-if="muctieu.ghichu">
                                                 <span class="goal-note-text">Ghi chú: <span t-field="muctieu.ghichu"/></span>
                                             </t>
@@ -376,8 +397,8 @@
 
                                                 <div class="right-sub-block">
                                                     <t t-if="has_ban_dau">
-                                                        <div style="font-size: 12.5px; margin-bottom: 3px; text-align: right; color: #000000;">
-                                                            <span style="font-weight: bold; background-color: #f5f5f5; border: 1px solid #000000; padding: 1px 6px; border-radius: 3px; display: inline-block;">
+                                                        <div style="font-size: 14px; margin-bottom: 4px; text-align: right; color: #000000;">
+                                                            <span style="font-weight: bold; background-color: #f5f5f5; border: 1px solid #000000; padding: 2px 8px; border-radius: 3px; display: inline-block;">
                                                                 Dữ liệu ban đầu: Đạt (+)
                                                                 <strong><span t-field="muctieu.solan_thu_dat"/></strong>/<strong><span t-field="muctieu.solan_thu"/></strong> lần
                                                                 <t t-if="muctieu.tyle_thu">
@@ -421,8 +442,8 @@
                                             <t t-elif="not has_chucnang and (has_tieuchi or has_ban_dau)">
                                                 <div style="width: 100%;">
                                                     <t t-if="has_ban_dau">
-                                                        <div style="font-size: 12.5px; margin-bottom: 3px; text-align: right; color: #000000;">
-                                                            <span style="font-weight: bold; background-color: #f5f5f5; border: 1px solid #000000; padding: 1px 6px; border-radius: 3px; display: inline-block;">
+                                                        <div style="font-size: 14px; margin-bottom: 4px; text-align: right; color: #000000;">
+                                                            <span style="font-weight: bold; background-color: #f5f5f5; border: 1px solid #000000; padding: 2px 8px; border-radius: 3px; display: inline-block;">
                                                                 Dữ liệu ban đầu: Đạt (+)
                                                                 <strong><span t-field="muctieu.solan_thu_dat"/></strong>/<strong><span t-field="muctieu.solan_thu"/></strong> lần
                                                                 <t t-if="muctieu.tyle_thu">
@@ -488,7 +509,7 @@
                                                             <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
                                                         </span>
 
-                                                        <!-- Tầng 2: Số lần đạt (hoặc N khi nghỉ) -->
+                                                        <!-- Tầng 2: Điểm đạt / Ký hiệu N (14px) -->
                                                         <div class="cell-print-val">
                                                             <t t-if="is_future_status"></t>
                                                             <t t-else="">
@@ -535,7 +556,7 @@
                                             </t>
                                         </div>
 
-                                        <div style="margin-top: 3px; padding-top: 3px; font-size: 12.5px; text-align: left; color: #000000; border-top: 1px dashed #000000;">
+                                        <div style="margin-top: 4px; padding-top: 4px; font-size: 14px; text-align: left; color: #000000; border-top: 1px dashed #000000;">
                                             <span class="text-bold">Kết quả <strong><span t-out="o.songay"/></strong> ngày của kế hoạch:</span>
                                             Chưa đạt (-): <span class="lbl-summary-chuadat"><span t-field="muctieu.ketqua_khongdat"/></span> |
                                             Hình thành (+/-): <span class="lbl-summary-hinhthanh"><span t-field="muctieu.ketqua_hinhthanh"/></span> |
