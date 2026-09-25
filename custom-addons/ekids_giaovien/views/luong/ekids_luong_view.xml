@@ -191,15 +191,14 @@
             </kanban>
         </field>
     </record>
-
     <record id="ekids_giaovien.luong_form" model="ir.ui.view">
-        <field name="name">Thông tin lương giáo viên (Hoàn thiện)</field>
+        <field name="name">Thông tin lương giáo viên - Standard Polished UI</field>
         <field name="model">ekids.luong</field>
         <field name="arch" type="xml">
             <form string="Quản lý lương giáo viên">
                 <header>
-                     <button name="%(ekids_giaovien.action_phieuluong)d" type="action" string="In Phiếu Lương" class="btn btn-primary"/>
-                     <button name="action_xacthuc_tinhlai_luong_giaovien" type="object" invisible="is_show_tinhtoan_lai==False" string="Tính lại Lương" confirm="Khi tính lại Lương dữ liệu cũ sẽ bị xóa. Bạn muốn tính lại chứ?" class="btn btn-secondary"/>
+                     <button name="%(ekids_giaovien.action_phieuluong)d" type="action" string="In Phiếu Lương" icon="fa-print" class="btn btn-primary fw-bold px-3 shadow-sm"/>
+                     <button name="action_xacthuc_tinhlai_luong_giaovien" type="object" invisible="is_show_tinhtoan_lai==False" string="Tính lại Lương" icon="fa-refresh" confirm="Khi tính lại Lương dữ liệu cũ sẽ bị xóa. Bạn muốn tính lại chứ?" class="btn btn-outline-secondary fw-semibold"/>
 
                      <field name="trangthai" widget="statusbar" statusbar_visible="-1,0,1"
                             statusbar_colors='{"-1":"blue","0":"green","1":"red"}'
@@ -210,157 +209,349 @@
 
                 <sheet>
                     <field name="is_dl_locked" invisible="1"/>
-                    <div class="row align-items-center mb-3 pb-2 border-bottom w-100 mx-0">
-                        <div class="col-4 d-flex align-items-baseline ps-0">
-                            <span class="fw-bold text-dark me-2" style="font-size: 1.1rem;">Giáo viên:</span>
-                            <field name="giaovien_id" readonly="1" class="fw-bolder fs-4 text-primary mb-0" options="{'no_open': True}" style="font-weight: 800;"/>
+                    <style>
+                        /* 1. Header trên cùng */
+                        .ekids-header-bar {
+                            padding-bottom: 12px;
+                            margin-bottom: 14px;
+                            border-bottom: 2px solid #e2e8f0;
+                        }
+
+                        .ekids-day-badge {
+                            background: #f0f9ff;
+                            border: 1.5px solid #0284c7;
+                            border-radius: 9px;
+                            padding: 6px 14px;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 8px;
+                            box-shadow: 0 1px 3px rgba(2, 132, 199, 0.1);
+                        }
+
+                        /* 2. Hộp Card 2 cột chính */
+                        .ekids-panel {
+                            background: #ffffff;
+                            border: 1.5px solid #cbd5e1;
+                            border-radius: 12px;
+                            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+                            height: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
+                        }
+                        .ekids-panel-header {
+                            background: #f1f5f9;
+                            border-bottom: 1.5px solid #cbd5e1;
+                            padding: 10px 16px;
+                            font-size: 14px;
+                            font-weight: 800;
+                            color: #1e293b;
+                            text-transform: uppercase;
+                            letter-spacing: 0.3px;
+                        }
+
+                        /* 3. Bảng các dòng số liệu */
+                        .ekids-row-item {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            padding: 12px 16px;
+                            border-bottom: 1px dashed #e2e8f0;
+                            font-size: 15px;
+                        }
+                        .ekids-row-item:last-child {
+                            border-bottom: none;
+                        }
+
+                        .ekids-num-badge {
+                            width: 24px;
+                            height: 24px;
+                            background: #e2e8f0;
+                            color: #1e293b;
+                            font-size: 12px;
+                            font-weight: 800;
+                            border-radius: 6px;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            margin-right: 10px;
+                            flex-shrink: 0;
+                        }
+
+                        /* Thanh Banner tổng tiền dùng Table Layout chống tràn tuyệt đối */
+                        .ekids-banner-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+                        .ekids-banner-table td {
+                            padding: 0 !important;
+                            vertical-align: middle !important;
+                            border: none !important;
+                        }
+
+                        .ekids-total-banner-green {
+                            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+                            border-radius: 10px;
+                            padding: 14px 14px;
+                            margin: 12px;
+                            color: #ffffff;
+                            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+                        }
+                        .ekids-total-banner-blue {
+                            background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+                            border-radius: 10px;
+                            padding: 14px 14px;
+                            margin: 12px;
+                            color: #ffffff;
+                            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+                        }
+
+                        /* 4. Font chữ Notebook bảng dưới */
+                        .o_notebook .nav-tabs .nav-link {
+                            font-size: 14px !important;
+                            font-weight: 800 !important;
+                            padding: 10px 18px !important;
+                        }
+                        .o_notebook .o_list_table {
+                            font-size: 15px !important;
+                        }
+                        .o_notebook .o_list_table th {
+                            font-size: 14px !important;
+                            font-weight: 800 !important;
+                            color: #1e293b !important;
+                            background-color: #f8fafc !important;
+                            padding: 10px 12px !important;
+                        }
+                        .o_notebook .o_list_table td {
+                            padding: 10px 12px !important;
+                            color: #0f172a !important;
+                            font-weight: 500 !important;
+                        }
+                    </style>
+
+                    <!-- ================= HEADER: GIÁO VIÊN + THÁNG + SỐ NGÀY CÔNG ================= -->
+                    <div class="d-flex flex-wrap justify-content-between align-items-center ekids-header-bar">
+                        <!-- Trái: Tên giáo viên -->
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa fa-user-circle text-primary" style="font-size: 26px;"/>
+                            <span class="text-muted fw-bold" style="font-size: 14.5px;">Giáo viên:</span>
+                            <field name="giaovien_id" readonly="1" options="{'no_open': True}"
+                                   class="fw-bolder text-dark mb-0"
+                                   style="font-size: 21px !important; font-weight: 900 !important;"/>
                         </div>
 
-                        <div class="col-4 text-center">
-                            <h4 class="text-uppercase fw-bold mb-0" style="letter-spacing: 0.5px; font-size: 1.1rem; color: #444;">
-                                LƯƠNG THÁNG <field name="thang_id" readonly="1" class="oe_inline"/>
-                            </h4>
-                        </div>
+                        <!-- Phải: Tháng lương + Số ngày công -->
+                        <div class="d-flex align-items-center flex-wrap" style="gap: 16px;">
+                            <div class="fw-bold text-dark" style="font-size: 15px; letter-spacing: 0.3px;">
+                                <i class="fa fa-calendar-o me-1 text-primary"/> LƯƠNG THÁNG <field name="thang_id" readonly="1" class="oe_inline text-primary fw-bolder"/>
+                            </div>
 
-                        <div class="col-4 text-end pe-0 d-flex align-items-baseline justify-content-end">
-                            <span class="fw-bold text-dark me-2" style="font-size: 1.1rem;">Số ngày công đi làm:</span>
-                            <span class="badge bg-light border border-secondary-subtle px-3 py-1 shadow-sm d-flex align-items-baseline">
-                                <field name="so_ngaycong" readonly="1" class="fw-bolder text-info oe_inline mb-0" style="font-size: 1.1rem; font-weight: 800;"/>
-                                <span class="ms-1 fw-bold text-dark" style="font-size: 0.95rem;">ngày</span>
-                            </span>
+                            <div class="ekids-day-badge">
+                                <i class="fa fa-clock-o" style="font-size: 18px; color: #0284c7;"/>
+                                <span style="font-size: 14px; font-weight: 700; color: #0369a1;">Số ngày công đi làm:</span>
+                                <span style="font-size: 18px; font-weight: 900; color: #0f172a; line-height: 1;">
+                                    <field name="so_ngaycong" readonly="1" class="oe_inline mb-0"/>
+                                </span>
+                                <span style="font-size: 13.5px; font-weight: 700; color: #475569;">ngày</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row d-flex align-items-stretch mb-4 mx-0">
+                    <!-- ================= 2 KHỐI CARD CÂN XỨNG: LƯƠNG GV & NHÀ TRƯỜNG CHI ================= -->
+                    <div class="row align-items-stretch mb-3 mx-0">
 
-                        <div class="col-md-7 px-0 pe-md-3 d-flex flex-column">
-                            <div class="border rounded shadow-sm bg-white overflow-hidden d-flex flex-column flex-grow-1">
-                                <div class="border-bottom p-2 px-3" style="background-color: #e9ecef;">
-                                    <span class="fw-bold text-dark" style="font-size: 0.95rem;">
-                                        <i class="fa fa-money me-2 text-secondary"/> I.LƯƠNG GIÁO VIÊN
-                                    </span>
-                                </div>
+                        <!-- CỘT TRÁI (COL-6): I. LƯƠNG GIÁO VIÊN -->
+                        <div class="col-md-6 ps-0 pe-md-2 mb-3 mb-md-0">
+                            <div class="ekids-panel">
+                                <div>
+                                    <div class="ekids-panel-header d-flex justify-content-between align-items-center">
+                                        <span><i class="fa fa-money me-1.5 text-success"/> I. LƯƠNG GIÁO VIÊN</span>
+                                        <span class="badge bg-secondary-subtle text-secondary" style="font-size: 11px;">Thực lĩnh</span>
+                                    </div>
 
-                                <div class="p-3 d-flex flex-column flex-grow-1">
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                                            <div class="flex-shrink-0">
-                                                <span class="badge bg-secondary me-2" style="font-size: 0.75rem;">1</span>
-                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Các khoảng được cộng [+]</span>
-                                            </div>
-                                            <div class="d-flex align-items-baseline justify-content-end">
-                                                <field name="tong_cong" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
-                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
-                                            </div>
+                                    <!-- 1. Các khoản được cộng -->
+                                    <div class="ekids-row-item">
+                                        <div class="d-flex align-items-center">
+                                            <span class="ekids-num-badge">1</span>
+                                            <i class="fa fa-plus-circle text-success me-2"/>
+                                            <span class="fw-bold text-dark">Các khoản được cộng [+]</span>
                                         </div>
+                                        <div class="d-flex align-items-center" style="gap: 4px;">
+                                            <span class="text-muted fw-bold me-1">+</span>
+                                            <field name="tong_cong" class="oe_inline fw-bold text-dark"
+                                                   style="font-size: 17px !important; display: inline-block !important;" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 fw-bold text-muted small">VNĐ</span>
+                                        </div>
+                                    </div>
 
-                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                                            <div class="flex-shrink-0">
-                                                <span class="badge bg-secondary me-2" style="font-size: 0.75rem;">2</span>
-                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Các khoản bị trừ [-]
-                                                    - trong đó nhà trường thu hộ <field name="nhatruong_thuho" readonly="1" class="oe_inline"/> vnđ
+                                    <!-- 2. Các khoản bị trừ -->
+                                    <div class="ekids-row-item" style="padding-top: 13px; padding-bottom: 13px;">
+                                        <div class="d-flex flex-column gap-1">
+                                            <!-- Tiêu đề khoản trừ -->
+                                            <div class="d-flex align-items-center">
+                                                <span class="ekids-num-badge" style="background: #fee2e2; color: #dc2626;">2</span>
+                                                <i class="fa fa-minus-circle text-danger me-2"/>
+                                                <span class="fw-bold text-danger" style="font-size: 15.5px;">Các khoản bị trừ [-]</span>
+                                            </div>
+
+                                            <!-- Dòng text thu hộ -->
+                                            <div class="ms-4 ps-2 mt-1">
+                                                <span style="font-size: 14px; font-weight: 700; color: #475569;">
+                                                    (Nhà trường thu hộ:
+                                                    <strong style="font-size: 16px; font-weight: 900; color: #b91c1c;">
+                                                        <field name="nhatruong_thuho" readonly="1" class="oe_inline" widget="integer"/>
+                                                    </strong>
+                                                    <span style="font-size: 13px; font-weight: 800; color: #b91c1c;"> đ</span>)
                                                 </span>
                                             </div>
-                                            <div class="d-flex align-items-baseline justify-content-end text-dark">
-                                                <span class="me-1 fw-bold">-</span>
-                                                <field name="tong_tru" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
-                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
-                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center" style="gap: 4px;">
+                                            <span class="text-danger fw-bold me-1" style="font-size: 18px;">-</span>
+                                            <field name="tong_tru" class="oe_inline fw-bold text-danger"
+                                                   style="font-size: 18px !important; font-weight: 900 !important; display: inline-block !important;" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 fw-bold text-muted small">VNĐ</span>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="d-flex justify-content-between align-items-center bg-success text-white rounded p-2 shadow-sm mt-2">
-                                        <span class="fw-bold ps-2 flex-shrink-1" style="font-size: 0.8rem;">LƯƠNG GIÁO VIÊN THỰC LĨNH = [1] - [2]</span>
-                                        <div class="d-flex align-items-baseline justify-content-end pe-2 flex-shrink-0">
-                                            <field name="luong" class="fw-black mb-0 oe_inline text-end" style="font-size: 1.15rem; font-weight: 900; line-height: 1;" widget="integer" nolabel="1"/>
-                                            <span class="ms-1 fw-bold opacity-75" style="font-size: 0.75rem;">VNĐ</span>
-                                        </div>
-                                    </div>
+                                <!-- BANNER TỔNG LƯƠNG THỰC LĨNH: DÙNG BẢNG CHỐNG TRÀN VÀ ĐÈ CHỮ -->
+                                <div class="ekids-total-banner-green">
+                                    <table class="ekids-banner-table">
+                                        <tr>
+                                            <td class="text-start" style="width: 45%;">
+                                                <span class="fw-bold text-uppercase" style="font-size: 13px; letter-spacing: 0.3px;">THỰC LĨNH = [1] - [2]</span>
+                                            </td>
+                                            <td class="text-end" style="width: 55%; white-space: nowrap;">
+                                                <field name="luong" class="oe_inline mb-0"
+                                                       style="font-size: 23px !important; font-weight: 900 !important; color: #ffffff !important; line-height: 1 !important; display: inline !important;"
+                                                       widget="integer" nolabel="1"/>
+                                                <span class="ms-1.5 fw-bold" style="font-size: 13.5px !important; color: #ffffff !important; display: inline !important;">VNĐ</span>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-5 px-0 d-flex flex-column">
-                            <div class="border rounded shadow-sm bg-white overflow-hidden d-flex flex-column flex-grow-1">
-                                <div class="border-bottom p-2 px-3" style="background-color: #e9ecef;">
-                                    <span class="fw-bold text-dark" style="font-size: 0.95rem;">
-                                        <i class="fa fa-building me-2 text-secondary"/> II. THÔNG TIN KHÁC
-                                    </span>
+                        <!-- CỘT PHẢI (COL-6): II. THÔNG TIN KHÁC & NHÀ TRƯỜNG THỰC CHI -->
+                        <div class="col-md-6 pe-0 ps-md-2">
+                            <div class="ekids-panel">
+                                <div>
+                                    <div class="ekids-panel-header d-flex justify-content-between align-items-center">
+                                        <span><i class="fa fa-building-o me-1.5 text-primary"/> II. THÔNG TIN KHÁC &amp; CHI PHÍ</span>
+                                        <span class="badge bg-secondary-subtle text-secondary" style="font-size: 11px;">Thực chi</span>
+                                    </div>
+
+                                    <!-- 3. Nhà trường chi cho giáo viên -->
+                                    <div class="ekids-row-item">
+                                        <div class="d-flex align-items-center">
+                                            <span class="ekids-num-badge">3</span>
+                                            <i class="fa fa-handshake-o text-primary me-2"/>
+                                            <span class="fw-bold text-dark">Nhà trường chi cho giáo viên</span>
+                                        </div>
+                                        <div class="d-flex align-items-center" style="gap: 4px;">
+                                            <field name="tong_thongtin" class="oe_inline fw-bold text-dark"
+                                                   style="font-size: 17px !important; display: inline-block !important;" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 fw-bold text-muted small">VNĐ</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- 4. Thông tin khác -->
+                                    <div class="ekids-row-item">
+                                        <div class="d-flex align-items-center">
+                                            <span class="ekids-num-badge">4</span>
+                                            <i class="fa fa-info-circle text-secondary me-2"/>
+                                            <span class="fw-bold text-dark">Thông tin khác</span>
+                                        </div>
+                                        <div class="d-flex align-items-center" style="gap: 4px;">
+                                            <field name="tong_thongtin_2" class="oe_inline fw-bold text-dark"
+                                                   style="font-size: 17px !important; display: inline-block !important;" widget="integer" nolabel="1"/>
+                                            <span class="ms-1 fw-bold text-muted small">VNĐ</span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="p-3 d-flex flex-column flex-grow-1">
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
-                                            <div class="flex-shrink-0">
-                                                <span class="badge bg-secondary me-2" style="font-size: 0.75rem;">3</span>
-                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Nhà trường chi cho giáo viên</span>
-                                            </div>
-                                            <div class="d-flex align-items-baseline justify-content-end">
-                                                <field name="tong_thongtin" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
-                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-0">
-                                            <div class="flex-shrink-0">
-                                                <span class="badge bg-secondary me-2" style="font-size: 0.75rem;">4</span>
-                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">Thông tin khác</span>
-                                            </div>
-                                            <div class="d-flex align-items-baseline justify-content-end">
-                                                <field name="tong_thongtin_2" class="oe_inline text-end mb-0" style="font-weight: 700; color: #000; font-size: 1rem;" widget="integer" nolabel="1"/>
-                                                <span class="ms-1 fw-bold text-muted" style="font-size: 11px;">VNĐ</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex justify-content-between align-items-center bg-primary text-white rounded p-2 shadow-sm mt-2">
-                                        <span class="fw-bold ps-2 flex-shrink-1" style="font-size: 0.8rem;">NHÀ TRƯỜNG THỰC CHI  = [I] + [3]</span>
-                                        <div class="d-flex align-items-baseline justify-content-end pe-2 flex-shrink-0">
-                                            <field name="tong_nhatruong_chi" class="fw-black mb-0 oe_inline text-end" style="font-size: 1.15rem; font-weight: 900; line-height: 1;" widget="integer" nolabel="1"/>
-                                            <span class="ms-1 fw-bold opacity-75" style="font-size: 0.75rem;">VNĐ</span>
-                                        </div>
-                                    </div>
+                                <!-- BANNER TỔNG NHÀ TRƯỜNG THỰC CHI: DÙNG BẢNG CHỐNG TRÀN VÀ ĐÈ CHỮ -->
+                                <div class="ekids-total-banner-blue">
+                                    <table class="ekids-banner-table">
+                                        <tr>
+                                            <td class="text-start" style="width: 45%;">
+                                                <span class="fw-bold text-uppercase" style="font-size: 13px; letter-spacing: 0.3px;">THỰC CHI = [I] + [3]</span>
+                                            </td>
+                                            <td class="text-end" style="width: 55%; white-space: nowrap;">
+                                                <field name="tong_nhatruong_chi" class="oe_inline mb-0"
+                                                       style="font-size: 23px !important; font-weight: 900 !important; color: #ffffff !important; line-height: 1 !important; display: inline !important;"
+                                                       widget="integer" nolabel="1"/>
+                                                <span class="ms-1.5 fw-bold" style="font-size: 13.5px !important; color: #ffffff !important; display: inline !important;">VNĐ</span>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
+                    <!-- ================= NOTEBOOK CHI TIẾT BẢNG LƯƠNG ================= -->
                     <notebook>
                         <page name="luong_cong_ids" string="1. ĐƯỢC CỘNG (+)">
                             <field name="luong_cong_ids"
-                                   context="{'default_luong_id':id ,'default_loai':'1'}"
-                                   domain="[('luong_id','=',id),('loai','=','1')]"
+                                   context="{'default_luong_id': id, 'default_loai': '1'}"
+                                   domain="[('luong_id', '=', id), ('loai', '=', '1')]"
                                    readonly="is_dl_locked"
-                            />
+                                   class="border-0 m-0">
+                                <list>
+                                    <field name="name" string="Mục lương (+)" style="font-size: 15px; font-weight: 700; color: #0f172a;"/>
+                                    <field name="desc" string="Mô tả" style="font-size: 14px; color: #475569; line-height: 1.4;"/>
+                                    <field name="tien" string="Số tiền (VNĐ)" widget="integer" style="font-size: 16px; font-weight: 800; color: #0f172a; text-align: right;"/>
+                                </list>
+                            </field>
                         </page>
                         <page name="luong_tru_ids" string="2. BỊ TRỪ (-)">
                             <field name="luong_tru_ids"
                                    context="{'default_luong_id': id, 'default_loai': '-1'}"
                                    domain="[('luong_id', '=', id), ('loai', 'in', ['-1', '-2'])]"
                                    readonly="is_dl_locked"
-                            />
+                                   class="border-0 m-0">
+                                <list>
+                                    <field name="name" string="Khoản trừ (-)" style="font-size: 15px; font-weight: 700; color: #dc2626;"/>
+                                    <field name="desc" string="Mô tả / Lý do trừ" style="font-size: 14px; color: #475569; line-height: 1.4;"/>
+                                    <field name="tien" string="Số tiền trừ (VNĐ)" widget="integer" style="font-size: 16px; font-weight: 800; color: #dc2626; text-align: right;"/>
+                                </list>
+                            </field>
                         </page>
                         <page name="nhatruong_chitra_ids" string="3. NHÀ TRƯỜNG CHI">
                             <field name="nhatruong_chitra_ids"
-                                   context="{'default_luong_id':id ,'default_loai':'0'}"
-                                   domain="[('luong_id','=',id),('loai','=','0')]"
+                                   context="{'default_luong_id': id, 'default_loai': '0'}"
+                                   domain="[('luong_id', '=', id), ('loai', '=', '0')]"
                                    readonly="is_dl_locked"
-                            />
+                                   class="border-0 m-0">
+                                <list>
+                                    <field name="name" string="Nội dung chi trả" style="font-size: 15px; font-weight: 700; color: #0f172a;"/>
+                                    <field name="desc" string="Mô tả" style="font-size: 14px; color: #475569; line-height: 1.4;"/>
+                                    <field name="tien" string="Số tiền (VNĐ)" widget="integer" style="font-size: 16px; font-weight: 800; color: #0f172a; text-align: right;"/>
+                                </list>
+                            </field>
                         </page>
                         <page name="luong_thongtin_ids" string="4. THÔNG TIN KHÁC">
                             <field name="luong_thongtin_ids"
-                                   context="{'default_luong_id':id ,'default_loai':'0'}"
-                                   domain="[('luong_id','=',id),('loai','=','2')]"
+                                   context="{'default_luong_id': id, 'default_loai': '2'}"
+                                   domain="[('luong_id', '=', id), ('loai', '=', '2')]"
                                    readonly="is_dl_locked"
-                            />
+                                   class="border-0 m-0">
+                                <list>
+                                    <field name="name" string="Tiêu đề thông tin" style="font-size: 15px; font-weight: 700; color: #0f172a;"/>
+                                    <field name="desc" string="Chi tiết" style="font-size: 14px; color: #475569; line-height: 1.4;"/>
+                                    <field name="tien" string="Giá trị quy đổi (VNĐ)" widget="integer" style="font-size: 16px; font-weight: 800; color: #0f172a; text-align: right;"/>
+                                </list>
+                            </field>
                         </page>
                     </notebook>
+
                 </sheet>
             </form>
         </field>
     </record>
-
      <record id="action_force_recompute_thuho" model="ir.actions.server">
         <field name="name">Tinh lai nha truong chi</field>
         <field name="model_id" ref="ekids_giaovien.model_ekids_luong"/>
