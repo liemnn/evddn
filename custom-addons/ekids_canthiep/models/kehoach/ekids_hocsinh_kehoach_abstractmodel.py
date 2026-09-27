@@ -349,50 +349,31 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
 
 
     def _compute_trangthai_kehoach(self):
-        # Lấy ngày hôm nay chuẩn dạng date
-        today = date.today()
-        context_type = self.env.context.get("default_context_type")
-
-        for hs in self:
+         for hs in self:
             kehoach = kehoach_util.func_get_kehoach_hocsinh(self,hs)
             trangthai = ""
 
-            if context_type == "1":
-                # TH1: Lập kế hoạch:
-                if not kehoach:
-                    trangthai = kehoach_util.HOCSINH_CHUA_CO_KEHOACH
-                else:
-                    if not kehoach:
-                        trangthai = kehoach_util.HOCSINH_CHUA_CO_KEHOACH
-                    else:
-                        # --- ÉP KIỂU NGÀY AN TOÀN TRÁNH LỖI DATETIME VS DATE ---
-                        if kehoach.trangthai == kehoach_util.KEHOACH_DANG_LAP:
-                            trangthai = kehoach_util.HOCSINH_DANG_LAP_KEHOACH
-
-                        elif kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
-                            if kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET:
-                                trangthai = kehoach_util.HOCSINH_DOI_DUYET
-                            elif kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH:
-                                trangthai = kehoach_util.HOCSINH_CAN_DIEUCHINH
-                            else:
-                                # Đã duyệt -> Chuyển trạng thái học sinh thành ĐÃ DUYỆT
-                                trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
-                        else:
-
-                            if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                                trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
-                            elif kehoach.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
-                                trangthai = kehoach_util.HOCSINH_HET_HIEULUC
+            # TH1: Lập kế hoạch:
+            if not kehoach:
+                trangthai = kehoach_util.HOCSINH_CHUA_CO_KEHOACH
             else:
-                if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                    if today < kehoach.tu_ngay:
-                        trangthai = kehoach_util.HOCSINH_DA_DUYET
+                if kehoach.trangthai == kehoach_util.KEHOACH_DANG_LAP:
+                    trangthai = kehoach_util.HOCSINH_DANG_LAP_KEHOACH
+
+                elif kehoach.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
+                    if kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_DOI_DUYET:
+                        trangthai = kehoach_util.HOCSINH_DOI_DUYET
+                    elif kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH:
+                        trangthai = kehoach_util.HOCSINH_CAN_DIEUCHINH
                     else:
+                        # Đã duyệt -> Chuyển trạng thái học sinh thành ĐÃ DUYỆT
                         trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
+                else:
 
-
-
-
+                    if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                        trangthai = kehoach_util.HOCSINH_DANG_CANTHIEP
+                    elif kehoach.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
+                        trangthai = kehoach_util.HOCSINH_HET_HIEULUC
             hs.trangthai_kehoach = trangthai
 
 

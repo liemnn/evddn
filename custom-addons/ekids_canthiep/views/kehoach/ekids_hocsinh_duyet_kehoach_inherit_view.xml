@@ -58,7 +58,7 @@
                         type="object"
                         class="btn-info btn-sm text-white fw-bold"
                         icon="fa-paper-plane"
-                        invisible="is_kiemduyet == False"
+                        invisible="tong_kehoach_doiduyet == 0"
                         title="Kế hoạch này cần Duyệt để đưa vào can thiệp"/>
 
                 <!-- ================= 4. KHỐI GIAI ĐOẠN 2: ĐANG CAN THIỆP & XÁC NHẬN ================= -->
