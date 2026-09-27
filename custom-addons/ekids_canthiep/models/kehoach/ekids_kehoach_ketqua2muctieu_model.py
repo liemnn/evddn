@@ -74,12 +74,13 @@ class KeHoachKetQua2MucTieu(models.Model):
         for record in self:
             # Nhận trực tiếp tỷ lệ từ depends, loại bỏ hoàn toàn việc gọi _compute_tyle_thu() thủ công
             t = record.tyle_thu
-            if t >= 80:
-                record.trangthai = "1"
-            elif t > 0:
-                record.trangthai = "2"
-            else:
-                record.trangthai = "-1"
+            if record.trangthai != "0":
+                if t >= 80:
+                    record.trangthai = "1"
+                elif t > 0:
+                    record.trangthai = "2"
+                else:
+                    record.trangthai = "-1"
 
     def _compute_solan_thu(self):
         for record in self:

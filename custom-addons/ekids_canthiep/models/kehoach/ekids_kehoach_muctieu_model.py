@@ -785,7 +785,6 @@ class KeHoach2MucTieu(models.Model):
 
     def action_canthiep(self):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_capnhat_ketqua_form').id
-        self._compute_is_canthiep_readonly()
         is_canthiep_readonly = self.is_canthiep_readonly
         self.func_khoitao_ketqua2muctieu()
         url= {
@@ -872,14 +871,17 @@ class KeHoach2MucTieu(models.Model):
             last_ngay = last_ketqua.ngay
             next_ngay = last_ngay + timedelta(days=4)
 
-            recs_to_update = self.env['ekids.kehoach_ketqua2muctieu']
+            capnhat_ketqua2muctieus = self.env['ekids.kehoach_ketqua2muctieu']
             for kq in ketqua2muctieus:
-                if kq.ngay and last_ngay < kq.ngay <= next_ngay and kq.trangthai == '0':
-                    recs_to_update |= kq
+                if (kq.ngay
+                        and last_ngay < kq.ngay <= next_ngay
+                        and next_ngay <= today
+                        and kq.trangthai == '0'):
+                    capnhat_ketqua2muctieus |= kq
 
             # 4. Batch Write: Cập nhật đồng loạt 1 câu lệnh duy nhất vào Database
-            if recs_to_update:
-                recs_to_update.write({
+            if capnhat_ketqua2muctieus:
+                capnhat_ketqua2muctieus.write({
                     'trangthai': last_ketqua.trangthai,
                     'solan_thu_dat': last_ketqua.solan_thu_dat,
                     'is_giaovien_capnhat': False,

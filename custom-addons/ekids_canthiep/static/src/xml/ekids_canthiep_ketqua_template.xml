@@ -192,7 +192,7 @@
                             </div>
                             <div class="card-ftr-pill">
                                 <t t-if="day.trangthaiValue !== '0'"><t t-esc="day.tyle_thu || 0"/>%</t>
-                                <t t-else=""><span>--</span></t>
+                                <t t-else=""><span>-</span></t>
                             </div>
                         </t>
                     </div>
