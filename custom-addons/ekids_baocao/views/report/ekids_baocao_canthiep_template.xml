@@ -2,16 +2,16 @@
 <odoo>
     <template id="ekids_baocao.baocao_canthiep_template">
         <t t-call="web.html_container">
-            <div class="article" style="font-family: 'Times New Roman', serif; color: #000000; padding: 10px;">
+            <div class="article" style="font-family: 'Times New Roman', serif; color: #000000; padding: 8px;">
                 <style>
                     @page {
                         size: A4 landscape;
-                        margin: 6mm 5mm !important;
+                        margin: 6mm 4mm !important;
                     }
                     .table-report {
                         width: 100%;
                         border-collapse: collapse;
-                        font-size: 12px;
+                        font-size: 11.5px;
                         text-align: center;
                     }
                     .table-report th, .table-report td {
@@ -24,48 +24,56 @@
                         font-weight: bold;
                         text-transform: uppercase;
                     }
-                    .text-left { text-align: left !important; padding-left: 6px !important; }
+                    .text-left { text-align: left !important; padding-left: 5px !important; }
                     .fw-bold { font-weight: bold !important; }
                     .bg-total { background-color: #E2E8F0; font-weight: bold; }
                 </style>
 
                 <!-- HEADER TIÊU ĐỀ -->
-                <div style="text-align: center; margin-bottom: 14px;">
-                    <h3 style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-bottom: 3px;">
+                <div style="text-align: center; margin-bottom: 12px;">
+                    <h3 style="font-size: 16.5px; font-weight: bold; text-transform: uppercase; margin-bottom: 2px;">
                         BÁO CÁO TỔNG HỢP TIẾN ĐỘ THỰC HIỆN KẾ HOẠCH CAN THIỆP
                     </h3>
-                    <div style="font-size: 13px; font-style: italic;">
+                    <div style="font-size: 12.5px; font-style: italic;">
                         (Kỳ báo cáo: <t t-out="data.get('label_thangnay')"/> - Kế hoạch kế tiếp: <t t-out="data.get('label_thangtoi')"/>)
                     </div>
                 </div>
 
-                <!-- BẢNG DỮ LIỆU ĐẦY ĐỦ 13 CỘT -->
+                <!-- BẢNG DỮ LIỆU ĐÚNG THEO 14 TIÊU CHÍ -->
                 <table class="table-report">
                     <thead>
                         <tr>
-                            <th rowspan="2" style="width: 3%;">STT</th>
-                            <th rowspan="2" style="width: 15%;">Cơ sở</th>
+                            <th rowspan="2" style="width: 2.5%;">STT</th>
+                            <th rowspan="2" style="width: 13.5%;">Cơ sở</th>
                             <th rowspan="2" style="width: 6%;">Tổng HS đang học</th>
-                            <th colspan="2" style="width: 14%;">Học sinh có Kết luận</th>
-                            <th colspan="3" style="width: 20%;">Học sinh có Kế hoạch</th>
-                            <th colspan="2" style="width: 14%;">Kế hoạch <t t-out="data.get('label_thangnay')"/></th>
-                            <th colspan="2" style="width: 14%;">Kế hoạch <t t-out="data.get('label_thangtoi')"/></th>
-                            <th rowspan="2" style="width: 7%;">Đang đợi duyệt</th>
-                            <th rowspan="2" style="width: 7%;">Đang can thiệp</th>
+                            <th colspan="2" style="width: 13%;">Học sinh có Kết luận</th>
+                            <th colspan="2" style="width: 13%;">Học sinh có Kế hoạch</th>
+                            <th colspan="2" style="width: 13%;">Tổng số Kế hoạch</th>
+                            <th colspan="2" style="width: 13%;">Kế hoạch <t t-out="data.get('label_thangnay')"/></th>
+                            <th colspan="2" style="width: 13%;">Kế hoạch <t t-out="data.get('label_thangtoi')"/></th>
+                            <th rowspan="2" style="width: 6.5%;">Đang đợi duyệt</th>
+                            <th rowspan="2" style="width: 6.5%;">Đang can thiệp</th>
                         </tr>
                         <tr>
-                            <th style="font-size: 11px;">Tổng kết luận</th>
-                            <th style="font-size: 11px;">Được lập KH</th>
+                            <!-- Kết luận -->
+                            <th style="font-size: 10.5px;">Tổng kết luận</th>
+                            <th style="font-size: 10.5px;">Được lập KH</th>
 
-                            <th style="font-size: 11px;">Đã có KH</th>
-                            <th style="font-size: 11px;">Đang soạn thảo</th>
-                            <th style="font-size: 11px;">Đã duyệt</th>
+                            <!-- Học sinh có kế hoạch -->
+                            <th style="font-size: 10.5px;">Đã có KH</th>
+                            <th style="font-size: 10.5px;">Chưa có KH</th>
 
-                            <th style="font-size: 11px;">Tổng KH</th>
-                            <th style="font-size: 11px;">Đã duyệt</th>
+                            <!-- Tổng số kế hoạch -->
+                            <th style="font-size: 10.5px;">Đang soạn thảo</th>
+                            <th style="font-size: 10.5px;">Đã phê duyệt</th>
 
-                            <th style="font-size: 11px;">Tổng KH</th>
-                            <th style="font-size: 11px;">Đã duyệt</th>
+                            <!-- Tháng này -->
+                            <th style="font-size: 10.5px;">Tổng KH</th>
+                            <th style="font-size: 10.5px;">Đã duyệt</th>
+
+                            <!-- Tháng tới -->
+                            <th style="font-size: 10.5px;">Tổng KH</th>
+                            <th style="font-size: 10.5px;">Đã duyệt</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,13 +84,18 @@
                                 <td class="fw-bold"><t t-out="r['so_hs']"/></td>
                                 <td><t t-out="r['hs_kl']"/></td>
                                 <td><t t-out="r['hs_kl_chopheplap']"/></td>
-                                <td><t t-out="r['hs_co_kh']"/></td>
-                                <td style="color: #D97706;"><t t-out="r['hs_kh_dangsoanthao']"/></td>
-                                <td class="fw-bold" style="color: #047857;"><t t-out="r['hs_kh_daduyet']"/></td>
+
+                                <td class="fw-bold" style="color: #2563EB;"><t t-out="r['hs_co_kh']"/></td>
+                                <td style="color: #DC2626;"><t t-out="r['hs_chua_co_kh']"/></td>
+
+                                <td style="color: #D97706;"><t t-out="r['kh_soanthao']"/></td>
+                                <td class="fw-bold" style="color: #047857;"><t t-out="r['kh_daduyet']"/></td>
+
                                 <td><t t-out="r['kh_nay_all']"/></td>
                                 <td><t t-out="r['kh_nay_daduyet']"/></td>
                                 <td><t t-out="r['kh_toi_all']"/></td>
                                 <td><t t-out="r['kh_toi_daduyet']"/></td>
+
                                 <td style="color: #B45309; font-weight: bold;"><t t-out="r['kh_doiduyet']"/></td>
                                 <td style="color: #1D4ED8; font-weight: bold;"><t t-out="r['kh_dangcanthiep']"/></td>
                             </tr>
@@ -95,13 +108,18 @@
                             <td><t t-out="tot.get('so_hs', 0)"/></td>
                             <td><t t-out="tot.get('hs_kl', 0)"/></td>
                             <td><t t-out="tot.get('hs_kl_chopheplap', 0)"/></td>
-                            <td><t t-out="tot.get('hs_co_kh', 0)"/></td>
-                            <td style="color: #D97706;"><t t-out="tot.get('hs_kh_dangsoanthao', 0)"/></td>
-                            <td style="color: #047857;"><t t-out="tot.get('hs_kh_daduyet', 0)"/></td>
+
+                            <td style="color: #2563EB;"><t t-out="tot.get('hs_co_kh', 0)"/></td>
+                            <td style="color: #DC2626;"><t t-out="tot.get('hs_chua_co_kh', 0)"/></td>
+
+                            <td style="color: #D97706;"><t t-out="tot.get('kh_soanthao', 0)"/></td>
+                            <td style="color: #047857;"><t t-out="tot.get('kh_daduyet', 0)"/></td>
+
                             <td><t t-out="tot.get('kh_nay_all', 0)"/></td>
                             <td><t t-out="tot.get('kh_nay_daduyet', 0)"/></td>
                             <td><t t-out="tot.get('kh_toi_all', 0)"/></td>
                             <td><t t-out="tot.get('kh_toi_daduyet', 0)"/></td>
+
                             <td style="color: #B45309;"><t t-out="tot.get('kh_doiduyet', 0)"/></td>
                             <td style="color: #1D4ED8;"><t t-out="tot.get('kh_dangcanthiep', 0)"/></td>
                         </tr>

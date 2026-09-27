@@ -21,12 +21,11 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
         d_toi = today + relativedelta(months=1)
         m_thangtoi = (d_toi.month, d_toi.year)
 
-        # Mốc ngày 15 chuẩn xác của tháng này, tháng trước và tháng tới
         d_thangnay_15 = date(today.year, today.month, 15)
         d_thangtruoc_15 = d_thangnay_15 - relativedelta(months=1)
         d_thangtoi_15 = d_thangnay_15 + relativedelta(months=1)
 
-        # 2. Lấy danh sách cơ sở phân quyền của người dùng
+        # 2. Lấy danh sách cơ sở
         cosos = user.coso_ids
         coso_ids = cosos.ids
 
@@ -62,40 +61,38 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
             hs_id = r['hocsinh_id'][0]
             tt_kl = str(r.get('trangthai', ''))
 
-            # Cột: Tổng HS có Kết luận bất kỳ
+            # Cột: Tổng HS có kết luận bất kỳ
             dict_hs_has_kl.setdefault(cid, set()).add(hs_id)
 
-            # Cột: Tổng HS có Kết luận cho phép lập Kế hoạch (trangthai == '1')
+            # Cột: Tổng HS có kết luận cho phép lập KH (có ít nhất 1 kết luận trangthai == '1')
             if tt_kl == '1':
                 dict_hs_kl_chopheplap.setdefault(cid, set()).add(hs_id)
 
         # 5. Lấy KẾ HOẠCH (Chỉ học sinh đang theo học)
-        # Sắp xếp tu_ngay desc, id desc để lấy đúng kế hoạch mới nhất của mỗi học sinh
         kh_records = self.env['ekids.kehoach'].search_read(
             domain=[
                 ('coso_id', 'in', coso_ids),
                 ('hocsinh_id', 'in', list(all_active_hs_ids)),
             ],
-            fields=['coso_id', 'hocsinh_id', 'tu_ngay', 'trangthai', 'trangthai_pheduyet'],
-            order='tu_ngay desc, id desc'
+            fields=['id', 'coso_id', 'hocsinh_id', 'tu_ngay', 'trangthai', 'trangthai_pheduyet']
         )
 
+        # A. Tập hợp theo ĐẦU HỌC SINH (Dùng set để không trùng)
         dict_hs_co_kh = {}
-        dict_hs_kh_dangsoanthao = {}
-        dict_hs_kh_daduyet = {}
 
-        dict_kh_nay_all = {}
-        dict_kh_nay_daduyet = {}
-        dict_kh_toi_all = {}
-        dict_kh_toi_daduyet = {}
+        # B. Đếm SỐ LƯỢNG KẾ HOẠCH (Dùng biến int đếm số record kế hoạch)
+        dict_kh_soanthao_cnt = {}
+        dict_kh_daduyet_cnt = {}
 
-        dict_kh_doiduyet = {}
-        dict_kh_dangcanthiep = {}
+        dict_kh_nay_all_cnt = {}
+        dict_kh_nay_daduyet_cnt = {}
+        dict_kh_toi_all_cnt = {}
+        dict_kh_toi_daduyet_cnt = {}
+
+        dict_kh_doiduyet_cnt = {}
+        dict_kh_dangcanthiep_cnt = {}
 
         TRANGTHAI_DADUYET = ['1', '-1']
-
-        # Map lưu kế hoạch mới nhất / đại diện của từng học sinh: {hs_id: (trangthai, trangthai_pheduyet, coso_id)}
-        hs_latest_kh_status = {}
 
         for r in kh_records:
             if not r.get('coso_id') or not r.get('hocsinh_id'):
@@ -106,43 +103,39 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
             tt_pd = str(r.get('trangthai_pheduyet', ''))
             tu_ngay = fields.Date.to_date(r.get('tu_ngay')) if r.get('tu_ngay') else False
 
-            # Ghi nhận kế hoạch mới nhất của mỗi học sinh (do đã order desc từ đầu)
-            if hs_id not in hs_latest_kh_status:
-                hs_latest_kh_status[hs_id] = (tt, tt_pd, cid)
-
-            # Cột: Kế hoạch đang đợi duyệt (trangthai = '2' và trangthai_pheduyet = '0')[cite: 8]
-            if tt in ['2', 'dang_pheduyet'] and tt_pd in ['0', 'doi_duyet']:
-                dict_kh_doiduyet.setdefault(cid, set()).add(hs_id)
-
-            # Cột: Kế hoạch đang can thiệp thực tế (trangthai = '1' và tu_ngay <= today)[cite: 3, 8]
-            if tt in ['1', 'dang_canthiep'] and tu_ngay and tu_ngay <= today:
-                dict_kh_dangcanthiep.setdefault(cid, set()).add(hs_id)
-
-            # Chu kỳ kế hoạch tháng này: sau ngày 15 tháng trước đến hết ngày 15 tháng này
-            if tu_ngay and d_thangtruoc_15 < tu_ngay <= d_thangnay_15:
-                dict_kh_nay_all.setdefault(cid, set()).add(hs_id)
-                if tt in TRANGTHAI_DADUYET:
-                    dict_kh_nay_daduyet.setdefault(cid, set()).add(hs_id)
-
-            # Chu kỳ kế hoạch tháng tới: sau ngày 15 tháng này đến hết ngày 15 tháng tới
-            if tu_ngay and d_thangnay_15 < tu_ngay <= d_thangtoi_15:
-                dict_kh_toi_all.setdefault(cid, set()).add(hs_id)
-                if tt in TRANGTHAI_DADUYET:
-                    dict_kh_toi_daduyet.setdefault(cid, set()).add(hs_id)
-
-        # 🌟 PHÂN NHÓM CHUẨN XÁC THEO HỌC SINH:
-        # "Đang đợi duyệt" được gộp vào "Đang soạn thảo"
-        # Đảm bảo: Đang soạn thảo + Đã duyệt = Đã có KH
-        for hs_id, (tt, tt_pd, cid) in hs_latest_kh_status.items():
-            # Cột: Tổng số HS đã có Kế hoạch
+            # --- NHÓM 1: TÍNH THEO ĐẦU HỌC SINH ---
+            # Ghi nhận học sinh đã có ít nhất một kế hoạch
             dict_hs_co_kh.setdefault(cid, set()).add(hs_id)
 
-            # Nhóm 1: Đã duyệt (Sẵn sàng can thiệp / Hết hiệu lực)
-            if tt in TRANGTHAI_DADUYET or tt_pd in ['1', 'da_duyet']:
-                dict_hs_kh_daduyet.setdefault(cid, set()).add(hs_id)
-            # Nhóm 2: Đang soạn thảo (Bao gồm: Đang soạn, Cần điều chỉnh, và Đang đợi duyệt)
+            # --- NHÓM 2: TÍNH THEO SỐ LƯỢNG KẾ HOẠCH (RECORDS) ---
+            is_approved = (tt in TRANGTHAI_DADUYET or tt_pd in ['1', 'da_duyet'])
+
+            # Cột: Tổng số KH được phê duyệt
+            if is_approved:
+                dict_kh_daduyet_cnt[cid] = dict_kh_daduyet_cnt.get(cid, 0) + 1
+            # Cột: Tổng số KH đang soạn thảo (bao gồm cả bản ghi đang lập, cần điều chỉnh, chờ duyệt)
             else:
-                dict_hs_kh_dangsoanthao.setdefault(cid, set()).add(hs_id)
+                dict_kh_soanthao_cnt[cid] = dict_kh_soanthao_cnt.get(cid, 0) + 1
+
+            # Cột: Kế hoạch đang đợi duyệt (trangthai = '2' và trangthai_pheduyet = '0')
+            if tt in ['2', 'dang_pheduyet'] and tt_pd in ['0', 'doi_duyet']:
+                dict_kh_doiduyet_cnt[cid] = dict_kh_doiduyet_cnt.get(cid, 0) + 1
+
+            # Cột: Kế hoạch đang can thiệp (trangthai = '1' và tu_ngay <= today)
+            if tt in ['1', 'dang_canthiep'] and tu_ngay and tu_ngay <= today:
+                dict_kh_dangcanthiep_cnt[cid] = dict_kh_dangcanthiep_cnt.get(cid, 0) + 1
+
+            # Chu kỳ kế hoạch tháng này
+            if tu_ngay and d_thangtruoc_15 < tu_ngay <= d_thangnay_15:
+                dict_kh_nay_all_cnt[cid] = dict_kh_nay_all_cnt.get(cid, 0) + 1
+                if is_approved:
+                    dict_kh_nay_daduyet_cnt[cid] = dict_kh_nay_daduyet_cnt.get(cid, 0) + 1
+
+            # Chu kỳ kế hoạch tháng tới
+            if tu_ngay and d_thangnay_15 < tu_ngay <= d_thangtoi_15:
+                dict_kh_toi_all_cnt[cid] = dict_kh_toi_all_cnt.get(cid, 0) + 1
+                if is_approved:
+                    dict_kh_toi_daduyet_cnt[cid] = dict_kh_toi_daduyet_cnt.get(cid, 0) + 1
 
         # 6. Tổng hợp dữ liệu hiển thị theo từng cơ sở
         rows = []
@@ -152,8 +145,9 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
             'hs_kl': 0,
             'hs_kl_chopheplap': 0,
             'hs_co_kh': 0,
-            'hs_kh_dangsoanthao': 0,
-            'hs_kh_daduyet': 0,
+            'hs_chua_co_kh': 0,
+            'kh_soanthao': 0,
+            'kh_daduyet': 0,
             'kh_nay_all': 0,
             'kh_nay_daduyet': 0,
             'kh_toi_all': 0,
@@ -168,24 +162,29 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
             v_hs_kl_chopheplap = len(dict_hs_kl_chopheplap.get(cs.id, set()))
 
             v_hs_co_kh = len(dict_hs_co_kh.get(cs.id, set()))
-            v_hs_kh_dangsoanthao = len(dict_hs_kh_dangsoanthao.get(cs.id, set()))
-            v_hs_kh_daduyet = len(dict_hs_kh_daduyet.get(cs.id, set()))
+            # Học sinh chưa có KH nào = Tổng HS đang học - Đã có KH (chuẩn xác 100%)
+            v_hs_chua_co_kh = max(0, v_so_hs - v_hs_co_kh)
 
-            v_kh_nay_all = len(dict_kh_nay_all.get(cs.id, set()))
-            v_kh_nay_daduyet = len(dict_kh_nay_daduyet.get(cs.id, set()))
-            v_kh_toi_all = len(dict_kh_toi_all.get(cs.id, set()))
-            v_kh_toi_daduyet = len(dict_kh_toi_daduyet.get(cs.id, set()))
+            # Lấy số lượng bản ghi kế hoạch
+            v_kh_soanthao = dict_kh_soanthao_cnt.get(cs.id, 0)
+            v_kh_daduyet = dict_kh_daduyet_cnt.get(cs.id, 0)
 
-            v_kh_doiduyet = len(dict_kh_doiduyet.get(cs.id, set()))
-            v_kh_dangcanthiep = len(dict_kh_dangcanthiep.get(cs.id, set()))
+            v_kh_nay_all = dict_kh_nay_all_cnt.get(cs.id, 0)
+            v_kh_nay_daduyet = dict_kh_nay_daduyet_cnt.get(cs.id, 0)
+            v_kh_toi_all = dict_kh_toi_all_cnt.get(cs.id, 0)
+            v_kh_toi_daduyet = dict_kh_toi_daduyet_cnt.get(cs.id, 0)
+
+            v_kh_doiduyet = dict_kh_doiduyet_cnt.get(cs.id, 0)
+            v_kh_dangcanthiep = dict_kh_dangcanthiep_cnt.get(cs.id, 0)
 
             # Cộng dồn hàng TỔNG CỘNG
             totals['so_hs'] += v_so_hs
             totals['hs_kl'] += v_hs_kl
             totals['hs_kl_chopheplap'] += v_hs_kl_chopheplap
             totals['hs_co_kh'] += v_hs_co_kh
-            totals['hs_kh_dangsoanthao'] += v_hs_kh_dangsoanthao
-            totals['hs_kh_daduyet'] += v_hs_kh_daduyet
+            totals['hs_chua_co_kh'] += v_hs_chua_co_kh
+            totals['kh_soanthao'] += v_kh_soanthao
+            totals['kh_daduyet'] += v_kh_daduyet
             totals['kh_nay_all'] += v_kh_nay_all
             totals['kh_nay_daduyet'] += v_kh_nay_daduyet
             totals['kh_toi_all'] += v_kh_toi_all
@@ -200,8 +199,9 @@ class ReportBaoCaoCanThiep(models.AbstractModel):
                 'hs_kl': v_hs_kl,
                 'hs_kl_chopheplap': v_hs_kl_chopheplap,
                 'hs_co_kh': v_hs_co_kh,
-                'hs_kh_dangsoanthao': v_hs_kh_dangsoanthao,
-                'hs_kh_daduyet': v_hs_kh_daduyet,
+                'hs_chua_co_kh': v_hs_chua_co_kh,
+                'kh_soanthao': v_kh_soanthao,
+                'kh_daduyet': v_kh_daduyet,
                 'kh_nay_all': v_kh_nay_all,
                 'kh_nay_daduyet': v_kh_nay_daduyet,
                 'kh_toi_all': v_kh_toi_all,
