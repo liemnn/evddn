@@ -123,6 +123,14 @@
                         class="btn-primary"
                         display="always"/>
 
+                    <!-- Gọi thông qua hàm Python type="object" -->
+                    <button name="action_in_chi_tiet_hocphi"
+                        string="In chi tiết"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-print"
+                        display="always"/>
+
                 </header>
                 <field name="sequence" width="25"/>
                 <field name="hocsinh_id" width="170"/>

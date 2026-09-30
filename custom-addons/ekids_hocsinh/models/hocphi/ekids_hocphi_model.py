@@ -515,6 +515,23 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
             }
         }
 
+    def action_in_chi_tiet_hocphi(self):
+
+        context = self.env.context
+        coso_id = context.get("default_coso_id")
+        thang = context.get("default_thang")
+        nam = context.get("default_nam")
+        if (coso_id and thang and nam):
+            hocphi2thang = self.env['ekids.hocphi_thang'].search(
+                [('coso_id', '=', coso_id)
+                    , ('nam_id.name', '=', str(nam))
+                    , ('name', '=', str(thang))
+
+                 ],limit=1)
+            if hocphi2thang:
+                return self.env.ref('ekids_hocsinh.action_hocphi_thang_baocao').report_action(hocphi2thang)
+
+
     def action_chuyen_trangthai(self, trangthai):
         for record in self:
             record.write({'trangthai': trangthai})

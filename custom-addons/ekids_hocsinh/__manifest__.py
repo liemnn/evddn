@@ -26,12 +26,15 @@
         'views/cauhinh/ekids_hocphi_dm_chinhsach_giam_view.xml',
         'views/cauhinh/ekids_hocsinh_ca_canthiep_view.xml',
         'views/cauhinh/ekids_hocsinh_nghiphep_view.xml',
+        'views/cauhinh/ekids_hocphi_dm_view.xml',
+
 
         #'views/ekids_quanly_view.xml',
         #'wizard/wizard_copy_salary_view.xml',
 
         'views/hocphi/phieuthu/ekids_hocphi_in_template.xml',
         'views/hocphi/phieuthu/ekids_hocphi_in_action.xml',
+        'views/hocphi/phieuthu/ekids_hocphi_thang_template.xml',
 
         'views/hocphi/ekids_hocphi_nam_view.xml',
         'views/hocphi/ekids_hocphi_thang_view.xml',

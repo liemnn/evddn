@@ -104,7 +104,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                     cung_co_dict.setdefault(lv_name, []).append(item_data['muctieu'])
                 else:
                     duy_tri_dict.setdefault(lv_name, []).append(item_data['muctieu'])
-
+            lv_line._compute_tyle()
             avg_thu = lv_line.tyle_thu
             avg_dat = lv_line.tyle_dat
             linhvucs_grouped.append({

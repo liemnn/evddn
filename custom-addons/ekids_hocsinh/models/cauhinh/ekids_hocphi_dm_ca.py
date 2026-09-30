@@ -48,6 +48,9 @@ class DanhMucCa(models.Model):
     is_hoan_hocphi = fields.Boolean(compute="_is_hoan_hocphi")
     tyle_hoan_hocphi = fields.Char(compute="_is_hoan_hocphi")
 
+    dm_hocphi_id = fields.Many2one('ekids.hocphi_dm'
+                                   , string='Thuộc mục thu(nếu có)', ondelete="cascade")
+
     def _is_hoan_hocphi(self):
 
         for record in self:

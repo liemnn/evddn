@@ -2,7 +2,7 @@ from odoo import api, fields, models
 from datetime import datetime
 from odoo.exceptions import UserError
 from .ekids_hocphi_thang_abstractmodel import HocPhiThangAbstractModel
-
+from .ekids_hocphi_thang_baocao_model import  HocPhiThangBaoCaoAbstractModel
 import calendar
 
 
@@ -23,7 +23,8 @@ except ImportError as e:
 
 
 
-class HocPhiThang(models.Model,HocPhiThangAbstractModel):
+class HocPhiThang(models.Model,HocPhiThangAbstractModel
+    ,HocPhiThangBaoCaoAbstractModel):
     _name = 'ekids.hocphi_thang'
     _description = 'Lương của một thang của trung tâm'
     _order = "id desc"

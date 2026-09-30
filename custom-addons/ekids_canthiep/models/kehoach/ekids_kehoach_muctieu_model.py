@@ -528,7 +528,7 @@ class KeHoach2MucTieu(models.Model):
             # A. TÍNH TOÁN CHO PHÉP CAN THIỆP
             if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
                 if kehoach.tu_ngay and today >= kehoach.tu_ngay:
-                    is_chophep_canthiep = mt.func_is_chophep_canthiep(soluong_mo, tyle_dat)
+                    is_chophep_canthiep = mt.func_is_chophep_canthiep(kehoach,soluong_mo, tyle_dat)
             elif kehoach.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
                 is_chophep_canthiep = True  # Cho phép xem lại kế hoạch cũ
 
@@ -543,7 +543,24 @@ class KeHoach2MucTieu(models.Model):
                 else:
                     mt.trangthai = "-1"  # Đang can thiệp (kể cả khi chưa có ngày đạt nào)
 
-    def func_is_chophep_canthiep(self, index,tyle_dat):
+
+
+    def func_is_chophep_canthiep(self,kehoach, index,tyle_dat):
+        # TH1: ĐIỀU KIỆN MỚI: Nếu thời gian đã trôi qua >= 60% (khoảng 2/3) kế hoạch -> Luôn cho phép can thiệp
+        today = fields.Date.context_today(self)
+        tu_ngay = fields.Date.to_date(kehoach.tu_ngay)
+        den_ngay = fields.Date.to_date(kehoach.den_ngay)
+
+        if (tu_ngay and den_ngay):
+
+            tong_songay = (den_ngay - tu_ngay).days + 1
+            if today >= tu_ngay and tong_songay > 0:
+                songay_datroi = (today - tu_ngay).days + 1
+                # Đạt từ 60% thời gian kế hoạch trở lên
+                if (songay_datroi / tong_songay) >= 0.6:
+                    return True
+        #TH2 de quy
+
         muctieu_truoc = self.kehoach_muctieu_truoc_id
         if not muctieu_truoc:
             return True
@@ -560,7 +577,7 @@ class KeHoach2MucTieu(models.Model):
                     index = index - 1
                     muctieu = self.kehoach_muctieu_truoc_id
                     if muctieu:
-                        return muctieu.func_is_chophep_canthiep(index,tyle_dat)
+                        return muctieu.func_is_chophep_canthiep(kehoach,index,tyle_dat)
                     else:
                         return True
 

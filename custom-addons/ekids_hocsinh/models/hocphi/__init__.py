@@ -1,5 +1,6 @@
 from . import ekids_hocphi_nam_model
 from . import ekids_hocphi_thang_model
+from . import ekids_hocphi_thang_baocao_model
 from . import ekids_hocphi_thang_abstractmodel
 from . import ekids_hocphi_model
 from . import ekids_hocphi_bantru_model

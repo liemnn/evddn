@@ -288,6 +288,20 @@ class CoSo(models.Model):
             }
         }
 
+    def action_xem_hocphi_dm(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'CẤU HÌNH - MỤC THU HỌC PHÍ',
+            'res_model': 'ekids.hocphi_dm',
+            'view_mode': 'list,form',
+            'target': 'current',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.id,
+            }
+        }
+
 
 
 

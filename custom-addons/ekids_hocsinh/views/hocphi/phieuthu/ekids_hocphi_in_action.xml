@@ -8,5 +8,15 @@
             <field name="report_file">ekids_hocsinh.template_phieuthu</field>
 
         </record>
+
+        <record id="ekids_hocsinh.action_hocphi_thang_baocao" model="ir.actions.report">
+            <field name="name">Báo cáo tổng hợp học phí tháng chi tiết</field>
+            <field name="model">ekids.hocphi_thang</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_hocsinh.hocphi_thang_baocao_template</field>
+            <field name="report_file">ekids_hocsinh.hocphi_thang_baocao_template</field>
+            <field name="binding_model_id" ref="model_ekids_hocphi_thang"/>
+            <field name="binding_type">report</field>
+        </record>
     </data>
 </odoo>
