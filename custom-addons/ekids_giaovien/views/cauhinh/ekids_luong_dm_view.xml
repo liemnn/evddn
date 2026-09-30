@@ -1,0 +1,129 @@
+<odoo>
+  <data>
+      <!-- ================= 1. TREE / LIST VIEW ================= -->
+       <record id="ekids_giaovien.luong_dm_list" model="ir.ui.view">
+            <field name="name">ekids.luong_dm.list</field>
+            <field name="model">ekids.luong_dm</field>
+            <field name="arch" type="xml">
+                <list default_order="sequence">
+                    <!-- Hỗ trợ kéo thả sắp xếp STT -->
+                    <field name="sequence" widget="handle"/>
+
+                    <!-- Tên danh mục (Mặc định khi click vào sẽ tự động mở Form View chi tiết) -->
+                    <field name="name" width="300" string="Tên danh mục cấu hình"/>
+
+                    <!-- Cột tóm tắt nhanh các Ca / Dịch vụ -->
+                    <field name="dm_chitra_ids" widget="many2many_tags" string="Mục lương" optional="show"/>
+
+                    <!-- Trạng thái hoạt động -->
+                    <field name="trangthai" widget="badge"
+                           decoration-success="trangthai == '1'"
+                           decoration-danger="trangthai == '0'"
+                           string="Trạng thái"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="ekids_giaovien.luong_dm_form" model="ir.ui.view">
+            <field name="name">Danh mục cấu lương</field>
+            <field name="model">ekids.luong_dm</field>
+            <field name="arch" type="xml">
+                <form string="Cấu hình danh mục lương">
+                    <sheet>
+                        <!-- Trường ẩn phục vụ logic ngầm -->
+                        <field name="coso_id" invisible="1"/>
+
+                        <style>
+                            .ekids_custom_card {
+                                background: #ffffff;
+                                border-radius: 14px;
+                                box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+                                padding: 24px;
+                                border: 1px solid #e2e8f0;
+                            }
+                            .notebook-custom .nav-tabs {
+                                border-bottom: 2px solid #e2e8f0;
+                                background-color: #f8fafc;
+                                padding: 8px 12px 0 12px;
+                                border-top-left-radius: 12px;
+                                border-top-right-radius: 12px;
+                            }
+                            .notebook-custom .nav-link {
+                                font-weight: 700;
+                                color: #475569;
+                                border: none;
+                                padding: 10px 20px;
+                                border-radius: 8px 8px 0 0;
+                                transition: all 0.2s ease;
+                            }
+                            .notebook-custom .nav-link.active {
+                                color: #4f46e5 !important;
+                                background-color: #ffffff !important;
+                                box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+                                border-top: 3px solid #4f46e5 !important;
+                            }
+                            .notebook-custom .tab-content {
+                                background: #ffffff;
+                                padding: 20px;
+                                border: 1px solid #e2e8f0;
+                                border-top: none;
+                                border-bottom-left-radius: 12px;
+                                border-bottom-right-radius: 12px;
+                            }
+                            /* Tùy chỉnh màu sắc trực quan cho select trạng thái */
+                            .status-select-active {
+                                background-color: #dcfce7 !important;
+                                color: #166534 !important;
+                                border-color: #bbf7d0 !important;
+                            }
+                            .status-select-inactive {
+                                background-color: #fee2e2 !important;
+                                color: #991b1b !important;
+                                border-color: #fecaca !important;
+                            }
+                        </style>
+
+                        <!-- PHẦN PHÍA TRÊN: TIÊU ĐỀ FULL ROW & TRẠNG THÁI MÀU SẮC -->
+                        <div class="ekids_custom_card mb-4">
+                            <div class="d-flex justify-content-between align-items-start gap-4">
+                                <div class="flex-grow-1">
+                                    <label for="name" class="oe_edit_only text-secondary fw-bold" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Tên danh mục cấu hình học phí</label>
+                                    <h1 class="text-primary fw-bolder mt-1 mb-0" style="font-size: 24px;">
+                                        <field name="name" placeholder="VD: Học phí khối mẫu giáo tháng 9..." required="1"/>
+                                    </h1>
+                                </div>
+
+                                <div class="flex-shrink-0 text-end">
+                                    <span class="d-block text-muted small fw-bold mb-1" style="font-size: 11px;">TRẠNG THÁI ÁP DỤNG</span>
+                                    <field name="trangthai" widget="selection"
+                                           class="fw-bold px-3 py-2 rounded-pill shadow-sm border"
+                                           style="font-size: 13px; cursor: pointer;"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PHẦN PHÍA DƯỚI: 2 TAB HIỂN THỊ DANH SÁCH -->
+                        <div class="notebook-custom">
+                            <notebook>
+                                <!-- TAB 1: CA / DỊCH VỤ -->
+                                <page name="dm_ca_tab" string="Danh mục Lương được tính">
+                                    <div class="p-2">
+                                        <field name="dm_chitra_ids"
+                                               widget="many2many"
+                                               context="{'default_coso_id': coso_id}"
+                                               options="{'no_create': True, 'no_create_edit': True}"
+                                               class="m-0 p-0 border-0"/>
+
+                                    </div>
+                                </page>
+
+                            </notebook>
+                        </div>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+  </data>
+</odoo>

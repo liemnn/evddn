@@ -60,7 +60,8 @@ class LuongDMChiTra(models.Model):
                                     , column2="giaovien_id"
                                     , string="Các giáo viên")
 
-
+    dm_luong_id = fields.Many2one('ekids.luong_dm'
+                                   , string='Thuộc mục(nếu có)')
 
     @api.onchange("dm_chamcong_id")
     def _compute_parameters(self):

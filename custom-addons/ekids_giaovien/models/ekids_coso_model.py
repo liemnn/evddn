@@ -130,3 +130,18 @@ class CoSo(models.Model):
             }
         }
 
+
+    def action_xem_luong_dm(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'CẤU HÌNH - MỤC LƯƠNG',
+            'res_model': 'ekids.luong_dm',
+            'view_mode': 'list,form',
+            'target': 'current',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.id,
+            }
+        }
+

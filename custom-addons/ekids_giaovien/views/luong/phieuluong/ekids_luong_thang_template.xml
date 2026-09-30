@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ekids_giaovien.luong_thang_baocao_template">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page" style="font-size: 13.5px; font-family: 'Times New Roman', Times, serif; padding: 20px;">
+
+                        <!-- NÚT IN (Chỉ hiển thị trên giao diện web, ẩn khi xuất file PDF) -->
+                        <div class="text-end mb-3 print-hide">
+                            <button onclick="window.print();" class="btn btn-secondary btn-sm" style="font-size: 13.5px;">
+                                <i class="fa fa-print"/> In báo cáo
+                            </button>
+                        </div>
+
+                        <!-- CSS ẩn nút in khi in ra PDF/Giấy -->
+                        <style>
+                            @media print {
+                                .print-hide {
+                                    display: none !important;
+                                }
+                            }
+                        </style>
+
+                        <!-- HEADER BÁO CÁO -->
+                        <div class="text-center mb-4" style="margin-top: -10px;">
+                            <h3 class="fw-bold text-uppercase m-0" style="font-size: 18px; color: #000; letter-spacing: 0.5px;">
+                                BẢNG CHI TIẾT LƯƠNG THÁNG <span t-esc="data.get('thang_label', '')"/>/<span t-esc="data.get('nam_label', '')"/>
+                            </h3>
+                            <div class="fst-italic text-dark mt-1" style="font-size: 14.5px;">
+                                Cơ sở: <span t-esc="data.get('coso_name', '')"/>
+                            </div>
+                        </div>
+
+                        <!-- BẢNG DỮ LIỆU CHÍNH -->
+                        <table class="table table-bordered table-sm align-middle" style="border-color: #000; font-size: 13.5px; color: #000;">
+                            <thead>
+                                <tr class="text-center bg-light fw-bold" style="vertical-align: middle;">
+                                    <th rowspan="2" class="fw-bold" style="width: 35px;">TT</th>
+                                    <th rowspan="2" class="fw-bold" style="width: 160px;">Giáo viên</th>
+
+                                    <!-- HEADER CỘT ĐỘNG (Sinh ra theo danh mục luong_dm) -->
+                                    <th t-foreach="data.get('dynamic_columns', [])" t-as="col" class="fw-bold">
+                                        <span t-esc="col.get('name', '')"/>
+                                    </th>
+
+                                    <!-- HEADER CỐ ĐỊNH CUỐI BẢNG -->
+                                    <th rowspan="2" class="fw-bold" style="width: 110px;">Thực lĩnh</th>
+                                    <th rowspan="2" class="fw-bold" style="width: 120px;">Nhà trường thực chi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="data.get('rows', [])" t-as="r">
+                                    <td class="text-center fw-bold"><t t-esc="r.get('stt', 0)"/></td>
+                                    <td><t t-esc="r.get('giaovien_name', '')"/></td>
+
+                                    <!-- SỐ TIỀN CỘT ĐỘNG -->
+                                    <td t-foreach="data.get('dynamic_columns', [])" t-as="col" class="text-end">
+                                        <span t-esc="r.get('col_amounts', {}).get(str(col.get('id')), 0.0)" t-options="{'widget': 'integer'}"/>
+                                    </td>
+
+                                    <!-- SỐ TIỀN CỐ ĐỊNH -->
+                                    <td class="text-end fw-bold text-primary">
+                                        <span t-esc="r.get('thuc_linh', 0.0)" t-options="{'widget': 'integer'}"/>
+                                    </td>
+                                    <td class="text-end fw-bold text-success">
+                                        <span t-esc="r.get('nhatruong_thuc_chi', 0.0)" t-options="{'widget': 'integer'}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="fw-bold bg-light" style="vertical-align: middle;">
+                                    <td colspan="2" class="text-center fw-bold">TỔNG CỘNG</td>
+
+                                    <!-- TỔNG CỘNG CỘT ĐỘNG -->
+                                    <td t-foreach="data.get('dynamic_columns', [])" t-as="col" class="text-end fw-bold">
+                                        <span t-esc="data.get('totals', {}).get(str(col.get('id')), 0.0)" t-options="{'widget': 'integer'}"/>
+                                    </td>
+
+                                    <!-- TỔNG CỘNG CỐ ĐỊNH -->
+                                    <td class="text-end text-primary fw-bold">
+                                        <span t-esc="data.get('totals', {}).get('thuc_linh', 0.0)" t-options="{'widget': 'integer'}"/>
+                                    </td>
+                                    <td class="text-end text-success fw-bold">
+                                        <span t-esc="data.get('totals', {}).get('nhatruong_thuc_chi', 0.0)" t-options="{'widget': 'integer'}"/>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

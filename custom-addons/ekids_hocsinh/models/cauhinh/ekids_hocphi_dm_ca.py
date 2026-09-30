@@ -49,7 +49,7 @@ class DanhMucCa(models.Model):
     tyle_hoan_hocphi = fields.Char(compute="_is_hoan_hocphi")
 
     dm_hocphi_id = fields.Many2one('ekids.hocphi_dm'
-                                   , string='Thuộc mục thu(nếu có)', ondelete="cascade")
+                                   , string='Thuộc mục thu(nếu có)')
 
     def _is_hoan_hocphi(self):
 
