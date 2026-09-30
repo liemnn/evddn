@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 
 
-class HocPHiDanhMuc(models.Model):
+class LươngDanhMuc(models.Model):
     _name = "ekids.luong_dm"
     _description = "Cấu hình học phí để in "
     _order = 'sequence asc'
