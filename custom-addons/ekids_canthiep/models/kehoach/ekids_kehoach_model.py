@@ -117,7 +117,15 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
     ngay_conlai_kehoach = fields.Integer(compute="_compute_ngay_conlai_kehoach", string="Ngày còn lại [Kế hoạch]")
 
-    access_token = fields.Char(string="Thẻ truy cập nhanh", readonly=True, copy=False)
+
+
+    access_token = fields.Char(
+        string="Thẻ truy cập nhanh",
+        readonly=True,
+        copy=False,
+        default=lambda self: str(uuid.uuid4())
+    )
+
     share_full_url = fields.Char("Chia sẻ full", compute="_compute_urls")
     share_short_url = fields.Char("Chia sẻ short", compute="_compute_urls")
 
@@ -170,7 +178,11 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def _compute_urls(self):
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         for rec in self:
-            token = rec.access_token or str(uuid.uuid4())  # Fallback an toàn
+            if rec.access_token:
+                token = rec.access_token
+            else:
+                token = str(uuid.uuid4())  # Fallback an toàn
+                rec.access_token = token
             rec.share_short_url = f"{base_url}/kehoach/0/{token}"
             rec.share_full_url = f"{base_url}/kehoach/1/{token}"
 

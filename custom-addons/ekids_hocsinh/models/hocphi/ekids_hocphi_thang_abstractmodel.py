@@ -773,6 +773,10 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         # Bổ sung tiền ca tăng cường tháng trước
         self.func_tao_hocphi_ca_tangcuong_thangtruoc(hocphi,ngay_dauthang,ngay_cuoithang)
 
+        if coso.is_thu_hocphi_dauthang == False:
+            #tinh lại thời gian đi học cho đúng
+            hocphi.ngay_dihoc = hocphi.ngay_dihoc - len(diemdanh_nghis) -  len(nghipheps)
+
     def func_tao_hocphi_ca_tangcuong_thangtruoc(self,hocphi,tu_ngay,den_ngay):
         ca2ngays= self.env['ekids.diemdanh_ca2ngay'].search([
             ('hocsinh_id', '=', hocphi.hocsinh_id.id),
