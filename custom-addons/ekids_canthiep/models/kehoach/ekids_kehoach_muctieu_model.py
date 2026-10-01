@@ -274,11 +274,10 @@ class KeHoach2MucTieu(models.Model):
             tong_tyle = 0
 
             for kq in kqs:
-                if (
-                        kq.ngay
+                if (kq.ngay
                         and fields.Date.to_date(kq.ngay) <= today
                         and kq.loai == '1'
-
+                        and kq.trangthai != '0'
                 ):
                     index += 1
                     tong_tyle += kq.tyle_thu
