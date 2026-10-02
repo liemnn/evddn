@@ -409,23 +409,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         return trung_lich_count > 0
 
 
-    def func_tao_macdinh_kehoach_muctieu(self):
-        # unlink cái cũ
-        kh_muctieus = self.func_danhsach_kehoach_muctieu(self.id)
-        if kh_muctieus:
-            for kh_muctieu in kh_muctieus:
-                kh_muctieu.unlink()
-        # tao cai moi
-        if self.kehoach_linhvuc_ids:
-            for lv in self.kehoach_linhvuc_ids:
-                muctieus = self.func_danhsach_muctieu(lv.linhvuc_id.id,lv.tuoi_id.id)
-                if muctieus:
-                    for muctieu in muctieus:
-                        data={
-                            'kehoach_id':self.id,
-                            'muctieu_id':muctieu.id
-                        }
-                        self.env['ekids.kehoach_muctieu'].create(data)
+
 
     def func_danhsach_kehoach_muctieu(self, kehoach_id):
         domain = [('kehoach_id', '=', kehoach_id)]
@@ -612,6 +596,31 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         if is_chophep_ketthuc:
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
 
+    def action_thietke_kehoach_linhvuc(self):
+        self.ensure_one()
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_thietke_linhvuc_form').id
+        url= {
+            'name': 'Thêm lĩnh vực can thiệp',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach',
+            'view_mode': 'form',
+            'views': [(form_view_id, 'form')],
+            'res_id': self.id,
+            'target': 'new',  # 🌟 Bắt buộc 'new' để hiển thị dạng POPUP Modal
+            'context': {
+                'default_kehoach_id': self.id,
+            }
+        }
+        return url
+
+    def action_luu_refresh_lai_kehoach(self):
+        """Hàm đóng popup và ép trình duyệt refresh lại trang phía dưới"""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+        }
+
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -624,8 +633,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                     raise UserError(
                         "Kế hoạch của Học sinh [" + result.hocsinh_id.name + "] Được lập trong khoản thời gian trên đang bị trùng với thời gian của kế hoạch khác !")
 
-                # Tinh toan so ca trong
-                result.func_tao_macdinh_kehoach_muctieu()
+
                 records.append(result)
         return records[0] if len(records) == 1 else records
 
@@ -640,8 +648,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                 if is_trung:
                     raise UserError("Thời gian của [Kế hoạch] đang trùng với kế hoạch khác")
 
-            if "kehoach_linhvuc_ids" in vals:
-                self.func_tao_macdinh_kehoach_muctieu()
+
         return result
 
 

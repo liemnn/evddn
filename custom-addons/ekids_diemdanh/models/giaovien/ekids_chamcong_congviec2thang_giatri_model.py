@@ -33,12 +33,12 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
     chamcong_loai2thang_id = fields.Many2one("ekids.chamcong_loai2thang", string="Thuộc",required=True, ondelete="cascade")
     giaovien_id = fields.Many2one('ekids.giaovien', string="Họ và tên",
                                  domain="[('coso_id','=',coso_id)]",required=True,ondelete="cascade")
-    d1=fields.Float('1', digits=(6, 1))
+    d1=fields.Float('1', digits=(6, 3))
     for day in range(1, 32):
-        locals()[f'd{day}'] = fields.Float(
+        locals()[f'd{day}'] = fields.Char(
             string=str(day),
-            digits=(6, 1),
-            default=0)
+
+            default="")
         locals()[f'is_d{day}_nghi'] = fields.Boolean(
             string="Nghỉ",
             compute="_compute_all_is_d_nghi",
@@ -46,10 +46,12 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
             default=True
         )
 
-    tong = fields.Float(string="Tổng", compute="_compute_tong", digits=(10, 1),store=True,defaul=0)
-    tong1 = fields.Float(string="Tổng", digits=(10, 1), store=True, defaul=0)
-    tong2 = fields.Float(string="Tổng", digits=(10, 1), store=True, defaul=0)
-    tong3 = fields.Float(string="Tổng", digits=(10, 1), store=True, defaul=0)
+    tong_str = fields.Char(string="Tổng", compute="_compute_tong")
+
+    tong = fields.Float(string="Tổng", compute="_compute_tong", digits=(10, 3),store=True,defaul=0)
+    tong1 = fields.Float(string="Tổng", digits=(10, 3), store=True, defaul=0)
+    tong2 = fields.Float(string="Tổng", digits=(10, 3), store=True, defaul=0)
+    tong3 = fields.Float(string="Tổng", digits=(10, 3), store=True, defaul=0)
 
     # 🌟 OVERRIDE export_data: Áp dụng cho cả d1..d31 và các cột tổng (tong, tong1, tong2, tong3)
     @api.model
@@ -90,12 +92,19 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
     )
     def _compute_tong(self):
         for record in self:
+            dm_chamcong = record.chamcong_loai2thang_id.chamcong_loai_id.dm_chamcong_id
+            lamtron=1
+            if dm_chamcong:
+                lamtron = int(dm_chamcong.lamtron)
             tong = 0.0
             tong1 = 0.0
             tong2 = 0.0
             tong3 = 0.0
             for i in range(1, 32):
-                giatri = getattr(record, f'd{i}')
+                giatri_str = getattr(record, f'd{i}')
+                giatri = float(giatri_str)
+                giatri = round(giatri, lamtron)
+
                 # tinh toan ca 1, 2, 3 trong ngay
                 # tinh toan ca 1, 2, 3 trong ngay
                 if giatri > 0:
@@ -111,12 +120,16 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
                     tong3 = tong3 + float(phan_du_2)
 
 
-                tong = tong + float(giatri)
+                tong = tong + giatri
 
-            record.update({"tong":tong})
-            record.update({"tong1": tong1})
-            record.update({"tong2": tong2})
-            record.update({"tong3": tong3})
+            # Gộp tất cả giá trị vào một từ điển duy nhất và update một lần duy nhất
+            record.write({
+                "tong_str": str(round(tong, lamtron)),
+                "tong": round(tong, lamtron),
+                "tong1": round(tong1, lamtron),
+                "tong2": round(tong2, lamtron),
+                "tong3": round(tong3, lamtron)
+            })
 
 
     def _compute_sequence(self):
@@ -210,11 +223,15 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
                 nam = self.chamcong_loai2thang_id.nam
                 coso_util.func_is_dl_diemdanh_locked(self,coso,int(nam),int(thang))
                 ngay = field_name.lstrip("d")
-                day = date(int(nam), int(thang), int(ngay))
+                day = date.today()
+                if ngay != "tong_str":
+                    day = date(int(nam), int(thang), int(ngay))
+
 
                 giatri = getattr(self,field_name)
-                if giatri == 0:
-                    giatri = 1
+                if giatri == "0.0" or giatri == "":
+                    giatri = "1.0"
+
 
 
 
@@ -246,5 +263,4 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
 
         # Nếu tất cả các dòng đều không bị khóa, tiến hành lệnh xóa hệ thống
         return super().unlink()
-
 

@@ -22,6 +22,8 @@ class CoSo(models.Model):
     _inherit = "ekids.coso"
 
     is_ketluan = fields.Boolean(compute="_compute_is_ketluan")
+    is_phancong = fields.Boolean(compute="_compute_is_phancong")
+
     is_duyet_kehoach = fields.Boolean(compute="_compute_is_duyet_kehoach")
 
     is_ql_chuongtrinh = fields.Boolean(compute="_compute_is_ql_chuongtrinh")
@@ -80,12 +82,26 @@ class CoSo(models.Model):
         is_role_ketluan = user.has_group('ekids_core.ketluan')
 
         for record in self:
-           if (is_admin
-               or is_role_ketluan):
-               record.is_ketluan = True
-           else:
-               record.is_ketluan = False
+            is_ketluan = False
+            if record.is_canthiep_ketluan == True:
+               if (is_admin
+                   or is_role_ketluan):
+                is_ketluan = True
 
+            record.is_ketluan = is_ketluan
+
+    def _compute_is_phancong(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_role_ketluan = user.has_group('ekids_core.ketluan')
+
+        for record in self:
+            is_phancong= False
+            if record.is_canthiep_ketluan == False:
+                if (is_admin
+                        or is_role_ketluan):
+                    is_phancong = True
+            record.is_phancong = is_phancong
 
     def action_xem_chuongtrinh_kanban(self):
 
@@ -201,6 +217,23 @@ class CoSo(models.Model):
 
     def action_danhsach_hocsinh_ketluan(self):
         list_view_id = self.env.ref('ekids_canthiep.hocsinh_ketluan_inherit_list').id
+        domain = [('coso_id', '=', self.id)]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH SÁCH',
+            'res_model': 'ekids.hocsinh',
+            'view_mode': 'list',
+            'views': [(list_view_id, 'list')],
+            'target': 'current',
+            'domain': domain,
+            'context': {
+                'default_coso_id': self.id,
+                'search_default_trangthai': '1',
+            },
+        }
+
+    def action_danhsach_hocsinh_phancong(self):
+        list_view_id = self.env.ref('ekids_canthiep.hocsinh_phancong_inherit_list').id
         domain = [('coso_id', '=', self.id)]
         return {
             'type': 'ir.actions.act_window',

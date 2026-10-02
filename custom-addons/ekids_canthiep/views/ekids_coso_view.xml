@@ -297,12 +297,19 @@
 
                                  <div class="kh-premium-body" invisible="is_thue_canthiep==False">
                                      <div class="kh-description">(Quản lý kết luận, lập kế hoạch và thực hiện can thiệp hàng ngày cho trẻ)</div>
-                                  <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                     <button class="oe_kanban_action kh-btn-action kh-btn-sub"
                                              name="action_danhsach_hocsinh_ketluan"
                                              invisible="not is_ketluan"
                                              type="object">
                                          <i class="fa fa-clipboard"></i>
                                          <span>Kết luận/Kế hoạch 6 tháng</span>
+                                     </button>
+                                     <button class="oe_kanban_action kh-btn-action kh-btn-sub"
+                                             name="action_danhsach_hocsinh_phancong"
+                                             invisible="not is_phancong"
+                                             type="object">
+                                         <i class="fa fa-clipboard"></i>
+                                         <span>Phân công giáo viên[Can thiệp]</span>
                                      </button>
 
                                      <button class="oe_kanban_action kh-btn-action kh-btn-sub"

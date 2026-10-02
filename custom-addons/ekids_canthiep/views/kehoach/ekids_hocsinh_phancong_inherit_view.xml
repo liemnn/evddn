@@ -1,0 +1,86 @@
+<odoo>
+  <data>
+    <record id="ekids_canthiep.hocsinh_search" model="ir.ui.view">
+        <field name="name">hocsinh.search</field>
+        <field name="model">ekids.hocsinh</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter string="Đang theo học" name="trangthai" domain="[('trangthai','=','1')]"/>
+                <filter string="Đã nghỉ" name="trangthai-nghi" domain="[('trangthai','=','3')]"/>
+                <filter string="Đợi đánh giá" name="trangthai-doidanhgia" domain="[('trangthai','=','2')]"/>
+                <field name="name"/>
+                <field name="ten"/>
+                <field name="bietdanh"/>
+                <field name="gioitinh"/>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="ekids_canthiep.hocsinh_phancong_inherit_list" model="ir.ui.view">
+        <field name="name">Kế hoạch can thiệp</field>
+        <field name="model">ekids.hocsinh</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false" limit="200" default_order="id asc">
+                <field name="sequence" width="25"/>
+                <field name="name" width="170"/>
+                <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
+                            string=""
+                            width="25"
+                            type="action"
+                            icon="fa-medkit"
+                            class="btn-outline-danger"
+                            title="Hồ sơ can thiệp của trẻ"
+                            />
+                <field name="bietdanh" string="Biệt danh" optional="hide"/>
+                <field name="gioitinh"/>
+                <field name="ngaysinh" optional="hide"/>
+                <field name="tuoi" optional="hide"/>
+                <field name="ngay_nhaphoc" string="Nhập học" width="100" optional="hide"/>
+                <field name="thoigian_hoc" string="Thời gian học" width="100" optional="hide"/>
+
+                <field name="dm_xa_id" optional="hide"/>
+                <field name="trangthai" string="Trạng thái"
+                        decoration-success="trangthai == '1'"
+                        decoration-info="trangthai == '2'"
+                        decoration-danger="trangthai == '3'" width="100"/>
+               <field name="trangthai_phancong" string="Phân công"
+                        decoration-success="trangthai_phancong == '1'"
+                        decoration-danger="trangthai_phancong == '0'"/>
+                <field name="gv_canthiep_ids"
+                   string="Phân công"
+                   widget="many2many_tags"
+                   readonly="1"
+                   options="{'no_open': True}"/>
+                <field name="gv_kiemduyet_id"
+                       string="Kiểm duyệt"/>
+
+
+
+                 <button name="action_taomoi_phancong"
+                        string="Phân công"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-plus-circle"
+                        title="Phân công giáo viên can thiệp và duyệt kế hoạch"
+                />
+
+                <field name="tong_kehoach" string="Tổng kế hoạch" width="55" class="text-center fw-bold"/>
+
+                <button name="action_xem_danhsach_kehoach"
+                        string=""
+                        type="object"
+                        class="btn-secondary btn-sm"
+                        icon="fa-folder-open-o"
+                        invisible="tong_kehoach == 0"
+                        title="Xem toàn bộ lịch sử [Kế hoạch]"/>
+        </list>
+        </field>
+    </record>
+
+
+
+
+
+  </data>
+</odoo>

@@ -42,6 +42,29 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             },
         }
 
+    def action_taomoi_phancong(self):
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_phancong_form').id
+        ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self, self,
+                                                                  [kehoach_util.KETLUAN_DANG_TAO,
+                                                                   kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH])
+        url = {
+            'type': 'ir.actions.act_window',
+            'name': 'PHÂN CÔNG LẬP KẾ HOẠCH',
+            'res_model': 'ekids.kehoach_ketluan',
+            'view_mode': 'form',
+            'views': [(form_view_id, 'form')],
+            'target': 'new',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'default_hocsinh_id': self.id
+
+            },
+        }
+        if ketluan:
+            url["res_id"] = ketluan.id
+        return url
+
     def action_sua_ketluan(self):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
         ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self, self,

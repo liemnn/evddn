@@ -296,22 +296,27 @@ class KetLuan(models.Model):
             hocsinh_id = vals.get('hocsinh_id')
 
             if hocsinh_id:
-                # 2. Sử dụng search_count để đếm nhanh số phiếu [Đang lập] của học sinh này dưới DB
-                # SELECT COUNT này quét thẳng vào index nên tốc độ xử lý siêu tốc (< 5ms)
-                draft_count = self.env['ekids.kehoach_ketluan'].search_count([
-                    ('hocsinh_id', '=', hocsinh_id),
-                    ('trangthai', '=', kehoach_util.KETLUAN_DANG_TAO)
-                ])
+                hocsinh =self.env["ekids.hocsinh"].browse(hocsinh_id)
+                if hocsinh:
+                    # 2. Sử dụng search_count để đếm nhanh số phiếu [Đang lập] của học sinh này dưới DB
+                    # SELECT COUNT này quét thẳng vào index nên tốc độ xử lý siêu tốc (< 5ms)
+                    if hocsinh.coso_id.is_canthiep_ketluan == False:
+                        vals["trangthai"]="1"
+                        # khi chỉ phân công thì chuyển ngay trạng thái cho phép lập kế hoạch
+                    draft_count = self.env['ekids.kehoach_ketluan'].search_count([
+                        ('hocsinh_id', '=', hocsinh_id),
+                        ('trangthai', '=', kehoach_util.KETLUAN_DANG_TAO)
+                    ])
 
-                # 3. Chốt chặn bảo mật
-                if draft_count > 0:
-                    hocsinh = self.env['ekids.hocsinh'].browse(hocsinh_id)
-                    raise UserError(
-                        f"Học sinh [{hocsinh.name}] đang có một phiếu Kết luận ở trạng thái [Đang lập]. "
-                        f"Vui lòng hoàn thiện hoặc hủy phiếu cũ trước khi tạo kết luận mới!"
-                    )
-            else:
-                raise UserError("Không thể tạo phiếu Kết luận mới khi trường [Học sinh] đang bị bỏ trống!")
+                    # 3. Chốt chặn bảo mật
+                    if draft_count > 0:
+                        hocsinh = self.env['ekids.hocsinh'].browse(hocsinh_id)
+                        raise UserError(
+                            f"Học sinh [{hocsinh.name}] đang có một phiếu Kết luận ở trạng thái [Đang lập]. "
+                            f"Vui lòng hoàn thiện hoặc hủy phiếu cũ trước khi tạo kết luận mới!"
+                        )
+                else:
+                    raise UserError("Không thể tạo phiếu Kết luận mới khi trường [Học sinh] đang bị bỏ trống!")
 
         # 4. Gọi super() DUY NHẤT MỘT LẦN ở cuối cùng để lưu hàng loạt xuống Database
         return super(KetLuan, self).create(vals_list)
@@ -362,23 +367,24 @@ class KetLuan(models.Model):
     def func_write_chuyen_trangthai_chophep_lapkehoach(self,trangthai_moi):
         # TH1: Chuyển sang [Cho phép lập KH] -> BẮT BUỘC toàn bộ linhvuc_ids phải có đủ tuoi_id
         if trangthai_moi == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH:
-            if not self.linhvuc_ids:
-                raise UserError(
-                    "Chưa có [Lĩnh vực can thiệp] nào trong khung chương trình! "
-                    "Vui lòng thiết lập ít nhất một lĩnh vực trước khi chuyển sang trạng thái [Cho phép lập Kế hoạch]."
-                )
+            if self.coso_id.is_canthiep_ketluan == True:
+                if not self.linhvuc_ids:
+                    raise UserError(
+                        "Chưa có [Lĩnh vực can thiệp] nào trong khung chương trình! "
+                        "Vui lòng thiết lập ít nhất một lĩnh vực trước khi chuyển sang trạng thái [Cho phép lập Kế hoạch]."
+                    )
 
-            missing_tuoi = self.linhvuc_ids.filtered(lambda l: not l.tuoi_id)
-            if missing_tuoi:
-                missing_names = ", ".join(
-                    f"[{line.chuongtrinh_id.name if line.chuongtrinh_id else 'Chưa có CT'}] {line.linhvuc_id.name}"
-                    for line in missing_tuoi
-                )
-                raise ValidationError(
-                    f"Không thể chuyển sang trạng thái [Cho phép lập Kế hoạch]!\n"
-                    f"Tất cả các lĩnh vực can thiệp đều phải được chọn Độ tuổi cụ thể.\n\n"
-                    f"Các lĩnh vực chưa có độ tuổi: {missing_names}"
-                )
+                missing_tuoi = self.linhvuc_ids.filtered(lambda l: not l.tuoi_id)
+                if missing_tuoi:
+                    missing_names = ", ".join(
+                        f"[{line.chuongtrinh_id.name if line.chuongtrinh_id else 'Chưa có CT'}] {line.linhvuc_id.name}"
+                        for line in missing_tuoi
+                    )
+                    raise ValidationError(
+                        f"Không thể chuyển sang trạng thái [Cho phép lập Kế hoạch]!\n"
+                        f"Tất cả các lĩnh vực can thiệp đều phải được chọn Độ tuổi cụ thể.\n\n"
+                        f"Các lĩnh vực chưa có độ tuổi: {missing_names}"
+                    )
 
 
 

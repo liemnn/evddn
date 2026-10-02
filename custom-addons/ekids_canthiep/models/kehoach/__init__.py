@@ -10,6 +10,7 @@ from . import ekids_kehoach_ketluan_giaovien_wizard_model
 from . import ekids_kehoach_ketluan_phancong_lai_wizard_model
 from . import ekids_kehoach_ketluan2linhvuc_model
 from . import ekids_kehoach_model
+from . import ekids_kehoach_wizard_model
 from . import ekids_kehoach_copy_abstractmodel
 from . import ekids_kehoach_linhvuc_model
 from . import ekids_kehoach_linhvuc_wizard_model

@@ -39,6 +39,14 @@ class HocSinhInherit(models.Model
     ],compute="_compute_trangthai_ketluan"
     ,string="Trạng thái")
 
+    trangthai_phancong = fields.Selection([
+        ("0", "Chưa phân công"),
+        ("1", "Đã phân công"),
+
+
+    ], compute="_compute_trangthai_phancong"
+        , string="Trạng thái")
+
     trangthai_kehoach = fields.Selection([
         (kehoach_util.HOCSINH_CHUA_CO_KEHOACH, "Chưa có"),
         (kehoach_util.HOCSINH_DANG_LAP_KEHOACH, "Đang lập"),
@@ -99,6 +107,34 @@ class HocSinhInherit(models.Model
     )
 
     share_url = fields.Char("Chia sẻ Hồ sơ", compute="_compute_urls")
+
+    gv_kiemduyet_id = fields.Many2one(
+        'ekids.giaovien',
+        string='Giáo viên [Kiểm duyệt chuyên môn]',
+        compute='_compute_giaovien_tu_ketluan',
+    )
+
+    gv_canthiep_ids = fields.Many2many(
+        'ekids.giaovien',
+        string='Giáo viên [Lập kế hoạch/Can thiệp]',
+        compute='_compute_giaovien_tu_ketluan',
+
+    )
+
+
+    def _compute_giaovien_tu_ketluan(self):
+        for hs in self:
+            ketluan = kehoach_util.func_get_ketluan_hocsinh(self, hs)
+            if ketluan:
+                hs.gv_kiemduyet_id = ketluan.gv_kiemduyet_id.id if ketluan.gv_kiemduyet_id else False
+                hs.gv_canthiep_ids = [(6, 0, ketluan.gv_canthiep_ids.ids)]
+
+            else:
+                hs.gv_kiemduyet_id = False
+                hs.gv_canthiep_ids = [(5, 0, 0)]
+
+
+
 
     @api.depends('access_token')
     def _compute_urls(self):

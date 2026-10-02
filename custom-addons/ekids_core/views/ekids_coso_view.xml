@@ -10,6 +10,7 @@
             <search string="Tìm kiếm Cơ sở">
               <!-- Bộ lọc mặc định -->
               <filter string="Đang thuê" name="trangthai" domain="[('trangthai','=','1')]"/>
+              <filter string="Tạm dừng (hết hiệu lực)" name="trangthai" domain="[('trangthai','=','-1')]"/>
               <group expand="1" string="Group By">
                 <filter name="group_by_tinh"
                     string="Tỉnh thành"
@@ -49,6 +50,7 @@
                     <field name="trangthai"/>
                     <field name="is_thue_quantricoso"/>
                     <field name="is_thue_canthiep"/>
+                    <field name="is_canthiep_ketluan"/>
 
                     <templates>
                         <t t-name="kanban-box">
@@ -90,6 +92,10 @@
                                     <div class="d-flex align-items-center justify-content-between py-1">
                                         <span>Thuê [Chương trình can thiệp]:</span>
                                         <field name="is_thue_canthiep" widget="boolean_toggle"/>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between py-1">
+                                        <span>Lập kế hoạch can thiệp cần có kết luận:</span>
+                                        <field name="is_canthiep_ketluan" widget="boolean_toggle"/>
                                     </div>
                                 </div>
 
@@ -184,6 +190,7 @@
                                         <field name="desc" string="Ghi chú"/>
                                         <field name="is_thue_quantricoso" widget="boolean_toggle"/>
                                         <field name="is_thue_canthiep" widget="boolean_toggle"/>
+                                        <field name="is_canthiep_ketluan" widget="boolean_toggle"/>
                                     </group>
                                 </div>
                             </div>

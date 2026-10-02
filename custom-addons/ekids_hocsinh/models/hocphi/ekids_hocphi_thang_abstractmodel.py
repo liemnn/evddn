@@ -948,22 +948,23 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
                     tien_duoc_hoan_tra = (value['tien'] / 100) * value['tyle_hoantra']
                     tien = self.func_thongtin_duoctru_hocphi_tien(tien_duoc_hoan_tra,value['dm_ca'], hocphi)
-                    dongia = value['dongia']
-                    name =self.func_get_name_hoantra_hocphi_ca(hocphi,lydo
-                                                               ,len(days)
-                                                               ,value['dm_ca']
-                                                               ,value['tyle_hoantra']
-                                                               ,value['soca']
-                                                               ,value['ca_bu']
-                                                               ,tien
-                                                               ,dongia)
-                    #tao ban ghi
-                    data = {
-                        'hocphi_id': hocphi.id,
-                        'name': name,
-                        'tien': tien
-                    }
-                    self.env['ekids.hocphi_duoctru'].create(data)
+                    if tien >0:
+                        dongia = value['dongia']
+                        name =self.func_get_name_hoantra_hocphi_ca(hocphi,lydo
+                                                                   ,len(days)
+                                                                   ,value['dm_ca']
+                                                                   ,value['tyle_hoantra']
+                                                                   ,value['soca']
+                                                                   ,value['ca_bu']
+                                                                   ,tien
+                                                                   ,dongia)
+                        #tao ban ghi
+                        data = {
+                            'hocphi_id': hocphi.id,
+                            'name': name,
+                            'tien': tien
+                        }
+                        self.env['ekids.hocphi_duoctru'].create(data)
 
     from odoo.osv import expression
 
@@ -974,7 +975,9 @@ class HocPhiThangAbstractModel(models.AbstractModel):
     def func_thongtin_duoctru_hocphi_tien(self,tien,obj,hocphi):
         if obj.is_giam_hocphi == True:
             hocsinh =hocphi.hocsinh_id
-            if hocsinh.dm_chinhsach_giam_id:
+            if (hocsinh.dm_chinhsach_giam_id
+                    and hocsinh.dm_chinhsach_giam_id.is_giam_theo_tyle == True):
+                # phai giam theo ty le con lai giam theo tiền thì thôi
                 tyle =hocsinh.dm_chinhsach_giam_id.tyle_giam
                 if tyle >0:
                     tien = (tien/100)* (100-tyle)
@@ -993,6 +996,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
             dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
             if (dm_chinhsach_giam
+                    and dm_chinhsach_giam.is_giam_theo_tyle == True
                     and dm_chinhsach_giam.tyle_giam > 0
                     and ca.is_giam_hocphi == True):
                 name += " (Đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"
@@ -1016,6 +1020,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
 
         if (dm_chinhsach_giam
+                and dm_chinhsach_giam.is_giam_theo_tyle == True
                 and dm_chinhsach_giam.tyle_giam > 0
                 and thu_bantru.is_giam_hocphi == True):
             name += " (Đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"

@@ -28,6 +28,12 @@ class LuongDMChamCong(models.Model):
                                      , ("1", "Đang hoạt động")],default="1")
     donvi = fields.Char(string="Đơn vị", required=True,default="ca")
 
+    lamtron = fields.Selection(
+        [("0", "Làm tròn 0 đơn vị"),
+         ("1", "Làm tròn 1 đơn vị"),
+         ("2", "Làm tròn 2 đơn vị"),
+         ("3", "Làm tròn 3 đơn vị")], string="Làm tròn đến", default="1")
+
     kpi_ids = fields.One2many('ekids.luong_dm_chamcong_kpi', 'dm_chamcong_id')
 
     _sql_constraints = [

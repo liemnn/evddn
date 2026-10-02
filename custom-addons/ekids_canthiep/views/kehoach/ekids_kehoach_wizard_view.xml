@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ekids_canthiep.kehoach_wizard_form" model="ir.ui.view">
+        <field name="name">kehoach_wizard</field>
+        <field name="model">ekids.kehoach_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Thêm lĩnh vực vào Kế hoạch">
+                <field name="kehoach_id" invisible="1"/>
+                <field name="coso_id" invisible="1"/>
+
+                <div class="p-2">
+                    <p class="text-muted" style="font-size: 13px;">
+                        Vui lòng lựa chọn <strong>Chương trình</strong>, <strong>Lĩnh vực</strong> và <strong>Độ tuổi phát triển</strong> tương ứng để bổ sung vào kế hoạch can thiệp:
+                    </p>
+                    <group>
+                        <field name="chuongtrinh_id"
+                               options="{'no_create': True, 'no_open': True}"
+                               placeholder="Chọn chương trình can thiệp..."/>
+
+                        <field name="linhvuc_id"
+                               options="{'no_create': True, 'no_open': True}"
+                               placeholder="Chọn lĩnh vực..."/>
+
+                        <field name="tuoi_id"
+                               options="{'no_create': True, 'no_open': True}"
+                               placeholder="Chọn độ tuổi phát triển..."/>
+                    </group>
+                </div>
+
+                <footer>
+                    <button name="action_them_linhvuc_vao_kehoach"
+                            string="Thêm vào kế hoạch"
+                            type="object"
+                            class="btn-primary fw-bold"
+                            style="background-color: #2563EB !important;"/>
+                    <button string="Hủy bỏ" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

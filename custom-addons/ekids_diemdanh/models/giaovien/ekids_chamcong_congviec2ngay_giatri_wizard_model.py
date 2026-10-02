@@ -23,8 +23,24 @@ class ChamCongCongViec2NgayGiaTriWizard(models.TransientModel):
 
     congviec2thang_giatri_id = fields.Many2one("ekids.chamcong_congviec2thang_giatri", required=True,ondelete="cascade")
     ngay =fields.Date(string="Ngày")
-    giatri =fields.Float(string="Giá trị",digits=(6, 1),default=1)
+    giatri =fields.Char(string="Giá trị",digits=(6, 3),default="1.0")
 
+    @api.onchange('giatri')
+    def _onchange_giatri_lamtron(self):
+        for rec in self:
+            lamtron=1
+            congviec2thang_giatri = rec.congviec2thang_giatri_id
+            if (congviec2thang_giatri
+                and congviec2thang_giatri.chamcong_loai2thang_id
+                and congviec2thang_giatri.chamcong_loai2thang_id.chamcong_loai_id
+                and congviec2thang_giatri.chamcong_loai2thang_id.chamcong_loai_id.dm_chamcong_id):
+
+                dm_chamcong = congviec2thang_giatri.chamcong_loai2thang_id.chamcong_loai_id.dm_chamcong_id
+                lamtron =  int(dm_chamcong.lamtron)
+
+            if rec.giatri:
+                giatri = float(rec.giatri)
+                rec.giatri = str(round(giatri,lamtron))
 
     def action_capnhat_ketqua_congviec2ngay_giatri(self):
         context = self.env.context
@@ -39,7 +55,7 @@ class ChamCongCongViec2NgayGiaTriWizard(models.TransientModel):
             "record_id": congviec2thang.id,
             "ngay_field": field_day,
             "giatri": self.giatri,
-            'tong': congviec2thang.tong
+            'tong_str': congviec2thang.tong_str
         }
         return {
             "type": "ir.actions.client",

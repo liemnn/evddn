@@ -344,6 +344,16 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
             else:
                 hs.trangthai_ketluan =ketluan.trangthai
 
+    def _compute_trangthai_phancong(self):
+
+        for hs in self:
+            ketluan = kehoach_util.func_get_ketluan_hocsinh(self,hs)
+
+            if not ketluan:
+                hs.trangthai_phancong ="0"
+            else:
+                hs.trangthai_phancong ="1"
+
 
 
 

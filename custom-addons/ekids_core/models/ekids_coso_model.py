@@ -91,6 +91,7 @@ class CoSo(models.Model):
 
     is_thue_quantricoso = fields.Boolean(string="Thuê Module [Quản trị/vận hành cơ sở]", default=True)
     is_thue_canthiep = fields.Boolean(string="Thuê Module [Chương trình can thiệp]", default=True)
+    is_canthiep_ketluan = fields.Boolean(string="Lập kế hoạch cần có kết luận", default=True)
 
     def _get_vietnam_banks(self):
         return [
