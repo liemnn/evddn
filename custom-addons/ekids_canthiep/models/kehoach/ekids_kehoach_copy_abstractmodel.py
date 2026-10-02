@@ -24,33 +24,52 @@ class KeHoachCopyAbstractModel(models.AbstractModel):
     _abstract = True
 
     def func_copy_muctieu_thangtruoc_khongdat_sang(self):
+        coso = self.coso_id
+        if coso.is_canthiep_ketluan == True:
+            linhvucs = self.ketluan_id.linhvuc_ids
+            if linhvucs:
+                #B1: copy Linh vuc
+                for linhvuc in linhvucs:
+                    kehoach_linhvuc = self.env['ekids.kehoach_linhvuc'].search([
+                        ("kehoach_id","=",self.id)
+                        ,("linhvuc_id","=",linhvuc.linhvuc_id.id)
+                        ,("tuoi_id", "=", linhvuc.tuoi_id.id)
+                    ],limit=1)
+                    if not kehoach_linhvuc:
+                        data = {
+                            'sequence': linhvuc.sequence,
+                            'kehoach_id': self.id,
+                            'chuongtrinh_id': linhvuc.linhvuc_id.chuongtrinh_id.id,
+                            'linhvuc_id': linhvuc.linhvuc_id.id,
+                            'tuoi_id': linhvuc.tuoi_id.id,
+                        }
+                        kehoach_linhvuc = self.env['ekids.kehoach_linhvuc'].create(data)
 
-        linhvucs = self.ketluan_id.linhvuc_ids
-        if linhvucs:
-            #B1: copy Linh vuc
-            for linhvuc in linhvucs:
-                kehoach_linhvuc = self.env['ekids.kehoach_linhvuc'].search([
-                    ("kehoach_id","=",self.id)
-                    ,("linhvuc_id","=",linhvuc.linhvuc_id.id)
-                    ,("tuoi_id", "=", linhvuc.tuoi_id.id)
-                ],limit=1)
-                if not kehoach_linhvuc:
-                    data = {
-                        'sequence': linhvuc.sequence,
-                        'kehoach_id': self.id,
-                        'chuongtrinh_id': linhvuc.linhvuc_id.chuongtrinh_id.id,
-                        'linhvuc_id': linhvuc.linhvuc_id.id,
-                        'tuoi_id': linhvuc.tuoi_id.id,
-                    }
-                    kehoach_linhvuc = self.env['ekids.kehoach_linhvuc'].create(data)
+                    kehoach_truoc = self.kehoach_truoc_id
 
-                kehoach_truoc = self.kehoach_truoc_id
+                    if kehoach_truoc and kehoach_linhvuc:
+                        #copy các mục tiêu từ kế hoạch trước sang.
+                        kehoach_linhvuc_truoc = self.func_kehoach_linhvuc_truocs(kehoach_linhvuc.linhvuc_id.id,kehoach_linhvuc.tuoi_id.id,kehoach_truoc)
+                        if kehoach_linhvuc_truoc:
+                            self.func_copy_muctieu_thangtruoc_khongdat_sang_tu_linhvuc(kehoach_linhvuc,kehoach_linhvuc_truoc)
+        else:
+            # cho phép giáo viên tự lập kế hoạch thì copy kehoach trước sang.
+            kehoach_truoc = self.kehoach_truoc_id
+            if kehoach_truoc:
+                kehoach_linhvuc_truocs =kehoach_truoc.kehoach_linhvuc_ids
+                if kehoach_linhvuc_truocs:
+                    for  kehoach_linhvuc_truoc in kehoach_linhvuc_truocs:
+                        data = {
+                            'sequence': kehoach_linhvuc_truoc.linhvuc_id.sequence,
+                            'kehoach_id': self.id,
+                            'chuongtrinh_id': kehoach_linhvuc_truoc.linhvuc_id.chuongtrinh_id.id,
+                            'linhvuc_id': kehoach_linhvuc_truoc.linhvuc_id.id,
+                            'tuoi_id': kehoach_linhvuc_truoc.tuoi_id.id,
+                        }
+                        kehoach_linhvuc = self.env['ekids.kehoach_linhvuc'].create(data)
+                        self.func_copy_muctieu_thangtruoc_khongdat_sang_tu_linhvuc(kehoach_linhvuc, kehoach_linhvuc_truoc)
 
-                if kehoach_truoc and kehoach_linhvuc:
-                    #copy các mục tiêu từ kế hoạch trước sang.
-                    kehoach_linhvuc_truoc = self.func_kehoach_linhvuc_truocs(kehoach_linhvuc.linhvuc_id.id,kehoach_linhvuc.tuoi_id.id,kehoach_truoc)
-                    if kehoach_linhvuc_truoc:
-                        self.func_copy_muctieu_thangtruoc_khongdat_sang_tu_linhvuc(kehoach_linhvuc,kehoach_linhvuc_truoc)
+
 
     def func_copy_muctieu_thangtruoc_khongdat_sang_tu_linhvuc(self, kehoach_linhvuc,kehoach_linhvuc_truoc):
         kehoach_muctieu_truocs = kehoach_linhvuc_truoc.kehoach_muctieu_ids

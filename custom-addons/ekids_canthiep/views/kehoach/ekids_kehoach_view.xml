@@ -528,130 +528,243 @@
                 </form>
             </field>
         </record>
-        <record id="ekids_canthiep.kehoach_thietke_linhvuc_form" model="ir.ui.view">
-            <field name="name">kehoach.linhvuc.form</field>
-            <field name="model">ekids.kehoach</field>
-            <field name="arch" type="xml">
-                <form string="Thiết lập Lĩnh vực Kế hoạch" class="o_kehoach_linhvuc_layout">
-                    <!-- CÁC TRƯỜNG KỸ THUẬT ẨN CỦA MODEL CHA (ekids.kehoach) -->
-                    <field name="id" invisible="1"/>
-                    <field name="coso_id" invisible="1"/>
-                    <field name="is_readonly" invisible="1"/>
 
-                    <sheet class="p-3 bg-white">
+
+        <record id="ekids_canthiep.kehoach_ketthuc_form" model="ir.ui.view">
+            <field name="name">ekids.kehoach.form.ketthuc</field>
+            <field name="model">ekids.kehoach</field>
+            <field name="priority">100</field>
+            <field name="arch" type="xml">
+                <form string="Đánh giá &amp; Kết thúc kế hoạch">
+                    <sheet>
                         <style>
-                            /* Bọc toàn trang bảng */
-                            .o_kehoach_linhvuc_layout .o_list_table {
-                                border-collapse: separate !important;
-                                border-spacing: 0 !important;
-                                width: 100% !important;
+                            .o_form_view .o_form_sheet_bg { padding: 0 !important; background-color: #F8FAFC !important; }
+                            .o_form_sheet { padding: 8px 12px !important; max-width: 100% !important; border: none !important; background: transparent !important; }
+
+                            /* Header Card phong cách hiện đại */
+                            .kt-modern-card {
+                                background: #FFFFFF;
+                                border: 1px solid #E2E8F0;
+                                border-radius: 12px;
+                                padding: 12px 16px;
+                                box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+                                margin-bottom: 12px;
                             }
-                            .o_kehoach_linhvuc_layout .o_list_table th {
-                                background-color: #F8FAFC !important;
-                                color: #334155 !important;
-                                font-weight: 700 !important;
-                                font-size: 13px !important;
-                                border-bottom: 2px solid #E2E8F0 !important;
-                                padding: 8px 10px !important;
+
+                            .kt-top-row {
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                gap: 12px;
+                                padding-bottom: 10px;
+                                border-bottom: 1px solid #F1F5F9;
                             }
-                            .o_kehoach_linhvuc_layout .o_list_table td {
-                                padding: 7px 10px !important;
-                                font-size: 13.5px !important;
-                                border-bottom: 1px solid #F1F5F9 !important;
-                                vertical-align: middle !important;
-                            }
-                            /* Tay cầm kéo thả 6 chấm */
-                            .o_kehoach_linhvuc_layout .o_row_handle {
-                                cursor: grab !important;
-                                color: #94A3B8 !important;
-                                font-size: 14px !important;
-                            }
-                            .o_kehoach_linhvuc_layout .o_row_handle:active {
-                                cursor: grabbing !important;
-                            }
-                            /* Thanh tag lọc */
-                            .filter-chip-bar {
+
+                            .kt-name-badge-wrap {
                                 display: flex;
                                 align-items: center;
                                 gap: 8px;
-                                margin-bottom: 10px;
                             }
-                            .filter-chip-badge {
-                                background: #F1F5F9;
-                                border: 1px solid #CBD5E1;
-                                color: #475569;
+
+                            .kt-student-title {
+                                font-size: 19px;
+                                font-weight: 800;
+                                color: #0F172A;
+                                margin: 0;
+                                letter-spacing: -0.2px;
+                            }
+
+                            .kt-tag-student {
+                                background: #EFF6FF;
+                                color: #2563EB;
+                                font-size: 10.5px;
+                                font-weight: 700;
+                                padding: 2px 8px;
+                                border-radius: 6px;
+                                text-transform: uppercase;
+                                letter-spacing: 0.3px;
+                            }
+
+                            /* Lưới 4 ô thông số Mini Badge */
+                            .kt-pills-row {
+                                display: grid;
+                                grid-template-columns: repeat(4, 1fr);
+                                gap: 8px;
+                                margin-top: 10px;
+                                margin-bottom: 8px;
+                            }
+
+                            .kt-info-pill {
+                                background: #F8FAFC;
+                                border: 1px solid #E2E8F0;
+                                border-radius: 8px;
+                                padding: 6px 10px;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 2px;
+                            }
+
+                            .kt-pill-label {
+                                font-size: 10px;
+                                color: #64748B;
+                                font-weight: 600;
+                                display: flex;
+                                align-items: center;
+                                gap: 5px;
+                            }
+
+                            .kt-pill-val {
                                 font-size: 12px;
                                 font-weight: 700;
-                                padding: 3px 12px;
-                                border-radius: 14px;
-                                user-select: none;
+                                color: #0F172A;
+                                white-space: nowrap; /* Chống gãy dòng ngày tháng */
+                                overflow: hidden;
+                                text-overflow: ellipsis;
                             }
 
-                            /* 🌟 DẢI THÔNG BÁO HƯỚNG DẪN TRÊN BẢNG */
-                            .instruction-alert-box {
-                                background-color: #F0FDF4;
-                                border-left: 4px solid #16A34A;
-                                border-top: 1px solid #BBF7D0;
-                                border-right: 1px solid #BBF7D0;
-                                border-bottom: 1px solid #BBF7D0;
-                                border-radius: 6px;
-                                padding: 8px 12px;
-                                margin-bottom: 10px;
+                            /* Dòng cảnh báo màu đỏ */
+                            .kt-alert-warning-red {
+                                background-color: #FEF2F2;
+                                border: 1px dashed #FCA5A5;
+                                border-radius: 8px;
+                                padding: 6px 12px;
+                                font-size: 11.5px;
+                                font-weight: 600;
+                                color: #DC2626;
                                 display: flex;
                                 align-items: center;
                                 gap: 8px;
-                                color: #166534;
-                                font-size: 13px;
+                                margin-top: 4px;
+                            }
+
+                            /* Tiêu đề mục nhập liệu */
+                            .kt-field-header {
+                                font-size: 11.5px;
+                                font-weight: 800;
+                                text-transform: uppercase;
+                                letter-spacing: 0.3px;
+                                display: flex;
+                                align-items: center;
+                                gap: 6px;
+                                margin-top: 10px;
+                                margin-bottom: 4px;
+                            }
+
+                            /* Khung soạn thảo HTML */
+                            .kt-editor-compact .note-editor {
+                                border-radius: 8px !important;
+                                border-color: #CBD5E1 !important;
+                                margin-bottom: 0 !important;
+                            }
+                            .kt-editor-compact .note-editable {
+                                min-height: 85px !important;
+                                max-height: 130px !important;
+                                font-size: 12.5px !important;
+                                padding: 8px 10px !important;
+                            }
+
+                            /* Tối ưu Mobile */
+                            @media (max-width: 768px) {
+                                .o_form_sheet { padding: 4px 6px !important; }
+                                .kt-modern-card { padding: 10px 12px !important; }
+                                .kt-top-row {
+                                    flex-direction: column !important;
+                                    align-items: flex-start !important;
+                                    gap: 6px !important;
+                                }
+                                .kt-pills-row {
+                                    grid-template-columns: 1fr 1fr !important;
+                                    gap: 6px !important;
+                                }
+                                .kt-alert-warning-red {
+                                    font-size: 11px !important;
+                                    padding: 6px 8px !important;
+                                }
                             }
                         </style>
 
-                        <!-- 🌟 THÔNG BÁO HƯỚNG DẪN LỰA CHỌN -->
-                        <div class="instruction-alert-box">
-                            <i class="fa fa-info-circle fs-6 text-success flex-shrink-0"></i>
-                            <span>
-                                Lựa chọn <strong>Chương trình</strong>, <strong>Lĩnh vực</strong>, và <strong>Độ tuổi</strong> phù hợp với trẻ để đưa vào kế hoạch.
-                            </span>
+                        <!-- Khối Header Card Thông tin kế hoạch -->
+                        <div class="kt-modern-card">
+                            <!-- Hàng trên: Học sinh + Badge trạng thái -->
+                            <div class="kt-top-row">
+                                <div class="kt-name-badge-wrap">
+                                    <span class="kt-tag-student"><i class="fa fa-user me-1"/>Học sinh</span>
+                                    <h2 class="kt-student-title">
+                                        <field name="hocsinh_id" readonly="1" options="{'no_open': True}"/>
+                                    </h2>
+                                </div>
+
+                                <span class="badge" style="background-color: #16A34A; color: #FFFFFF; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px;">
+                                    <i class="fa fa-circle text-white me-1" style="font-size: 7px;"/>Đang can thiệp
+                                </span>
+                            </div>
+
+                            <!-- Hàng giữa: 4 Khối thông tin Mini Badge -->
+                            <div class="kt-pills-row">
+                                <div class="kt-info-pill">
+                                    <span class="kt-pill-label"><i class="fa fa-file-text-o text-primary"/>Kỳ kế hoạch</span>
+                                    <span class="kt-pill-val text-primary"><field name="name" readonly="1"/></span>
+                                </div>
+                                <div class="kt-info-pill">
+                                    <span class="kt-pill-label"><i class="fa fa-calendar text-warning"/>Thời gian can thiệp</span>
+                                    <span class="kt-pill-val">
+                                        <field name="tu_ngay" readonly="1"/> - <field name="den_ngay" readonly="1"/>
+                                    </span>
+                                </div>
+                                <div class="kt-info-pill">
+                                    <span class="kt-pill-label"><i class="fa fa-user-tie text-success"/>Giáo viên</span>
+                                    <span class="kt-pill-val text-success"><field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/></span>
+                                </div>
+                                <div class="kt-info-pill">
+                                    <span class="kt-pill-label"><i class="fa fa-user-check text-info"/>Chuyên môn</span>
+                                    <span class="kt-pill-val"><field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/></span>
+                                </div>
+                            </div>
+
+                            <!-- Hàng dưới: Cảnh báo đỏ -->
+                            <div class="kt-alert-warning-red">
+                                <i class="fa fa-exclamation-triangle" style="font-size: 13px; flex-shrink: 0;"/>
+                                <span>Bạn vui lòng nhận xét về kết quả can thiệp trong tháng và có định hướng trong tháng tới trước khi kết thúc.</span>
+                            </div>
                         </div>
 
-                        <!-- BẢNG DANH SÁCH LĨNH VỰC CÓ KÉO THẢ -->
-                        <field name="kehoach_linhvuc_ids" class="w-100 border rounded">
-                            <list editable="bottom" default_order="sequence asc">
-                                <!-- Icon kéo thả handle -->
-                                <field name="sequence" widget="handle"/>
+                        <!-- 1. Nhận xét đánh giá cuối tháng -->
+                        <div class="kt-field-header" style="color: #1E3A8A;">
+                            <i class="fa fa-commenting-o text-primary"/>
+                            <span>1. Nhận xét đánh giá kết quả can thiệp</span>
+                        </div>
+                        <div class="kt-editor-compact">
+                            <field name="nhanxet"
+                                   placeholder="Ghi nhận sự tiến bộ, những mục tiêu đã làm chủ và các điểm cần lưu ý của trẻ trong tháng qua..."
+                                   widget="html"
+                                   options="{'style-inline': true}"/>
+                        </div>
 
-                                <!-- Cột Chương trình -->
-                                <field name="chuongtrinh_id"
-                                       string="Chương trình"
-                                       options="{'no_create': True}"/>
-
-                                <!-- Cột Lĩnh vực: lọc theo chương trình vừa chọn -->
-                                <field name="linhvuc_id"
-                                       string="Lĩnh vực"
-                                       domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
-                                       options="{'no_create': True}"/>
-
-                                <!-- Cột Độ tuổi phát triển -->
-                                <field name="tuoi_id"
-                                       string="Độ tuổi"
-                                       domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
-                                       options="{'no_create': True}"/>
-                            </list>
-                        </field>
-
-                        <footer>
-                            <button name="action_luu_refresh_lai_kehoach"
-                                    string="Cập nhật vào [Kế hoạch]"
-                                    type="object"
-                                    class="btn-primary fw-bold"/>
-                            <button string="Đóng" class="btn-secondary" special="cancel"/>
-                        </footer>
-
+                        <!-- 2. Định hướng kế hoạch tháng tới -->
+                        <div class="kt-field-header" style="color: #065F46; margin-top: 8px;">
+                            <i class="fa fa-compass text-success"/>
+                            <span>2. Định hướng kế hoạch tháng tới</span>
+                        </div>
+                        <div class="kt-editor-compact">
+                            <field name="dinhhuong"
+                                   placeholder="Định hướng mục tiêu trọng tâm cần can thiệp, phương pháp phối hợp cùng phụ huynh ở tháng tiếp theo..."
+                                   widget="html"
+                                   options="{'style-inline': true}"/>
+                        </div>
                     </sheet>
+
+                    <footer>
+                        <button name="action_xacnhan_ketthuc_kehoach"
+                                type="object"
+                                string="Xác nhận kết thúc kế hoạch"
+                                class="btn-danger"
+                                icon="fa-check-circle"
+                                confirm="Bạn có chắc chắn muốn kết thúc kỳ kế hoạch này và chuyển trạng thái sang Đã hoàn thành (-1)?"/>
+                        <button string="Hủy / Để sau" class="btn-secondary" special="cancel"/>
+                    </footer>
                 </form>
             </field>
         </record>
-
-
 
       <record id="ekids_canthiep.kehoach_form" model="ir.ui.view">
          <field name="name">ekids.kehoach.form</field>
@@ -1082,7 +1195,7 @@
                                      type="object"
                                      icon="fa-puzzle-piece"
                                      class="btn-highlight-linhvuc"
-                                     invisible="not is_xoa"/>
+                                     invisible="is_canthiep_ketluan"/>
                          </div>
                      </div>
 

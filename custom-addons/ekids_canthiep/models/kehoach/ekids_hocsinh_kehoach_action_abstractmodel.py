@@ -193,6 +193,8 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 kehoach.func_copy_muctieu_thangtruoc_khongdat_sang()
         return kehoach
 
+
+
     def func_get_default_kehoach_tu_ngay(self, kehoach_gan_nhat):
         tu_ngay = fields.Date.context_today(self)
         if kehoach_gan_nhat and kehoach_gan_nhat.den_ngay:

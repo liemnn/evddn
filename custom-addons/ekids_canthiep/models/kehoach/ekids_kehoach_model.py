@@ -138,6 +138,17 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     nhanxet = fields.Html(string="Nhận xét cuối tháng")
     dinhhuong = fields.Html(string="Định hướng tháng tới")
 
+    is_canthiep_ketluan = fields.Boolean( compute="_compute_is_canthiep_ketluan")
+
+    def _compute_is_canthiep_ketluan(self):
+        for kh in self:
+            is_canthiep_ketluan = True
+            if kh.coso_id.is_canthiep_ketluan == False:
+                if kh.trangthai == kehoach_util.KEHOACH_DANG_LAP:
+                    is_canthiep_ketluan = False
+            kh.is_canthiep_ketluan =is_canthiep_ketluan
+
+
     @api.depends(
         'kehoach_linhvuc_ids.kehoach_muctieu_ids.trangthai',
         'kehoach_linhvuc_ids.kehoach_muctieu_ids.trangthai_kiemduyet'
