@@ -55,6 +55,7 @@
 
                 <button name="action_duyet_kehoach"
                         string="Duyệt"
+
                         type="object"
                         class="btn-info btn-sm text-white fw-bold"
                         icon="fa-paper-plane"
@@ -90,16 +91,7 @@
                         title="Đánh giá / Xác nhận kết quả can thiệp"/>
 
                 <!-- ================= 5. KHỐI GIAI ĐOẠN 3: LƯU TRỮ & TỔNG ================= -->
-                <field name="tong_kehoach_da_canthiep" string="Đã kết thúc" width="75" class="text-center"/>
 
-                <button name="action_xem_danhsach_kehoach"
-                        string=""
-                        type="object"
-                        class="btn-outline-secondary btn-sm"
-                        icon="fa-list-ul"
-                        invisible="tong_kehoach_da_canthiep == 0"
-                        context="{'default_context_type':'5','default_context_trangthai':['-1']}"
-                        title="Danh sách [Kế hoạch] đã kết thúc"/>
 
                 <field name="tong_kehoach" string="Tổng kế hoạch" width="55" class="text-center fw-bold"/>
 

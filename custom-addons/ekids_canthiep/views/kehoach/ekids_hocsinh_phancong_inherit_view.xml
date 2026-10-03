@@ -48,7 +48,7 @@
                         decoration-success="trangthai_phancong == '1'"
                         decoration-danger="trangthai_phancong == '0'"/>
                 <field name="gv_canthiep_ids"
-                   string="Phân công"
+                   string="Giáo viên"
                    widget="many2many_tags"
                    readonly="1"
                    options="{'no_open': True}"/>

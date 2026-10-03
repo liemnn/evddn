@@ -43,9 +43,20 @@
                 <field name="trangthai" string="Trạng thái"
                         decoration-success="trangthai == '1'"
                         decoration-info="trangthai == '2'"
-                        decoration-danger="trangthai == '3'" width="100"/>
-                <field name="trangthai_ketluan" string="Kết luận"/>
-                <field name="tong_ketluan" string="Tổng số kết luận"/>
+                        decoration-danger="trangthai == '3'"
+                       width="100"/>
+                <field name="trangthai_ketluan" width="130" string="Kết luận"/>
+                <field name="gv_canthiep_ids"
+                   string="Giáo viên"
+                   width="110"
+                   widget="many2many_tags"
+                   readonly="1"
+                   options="{'no_open': True}"/>
+                <field name="gv_kiemduyet_id"
+                        width="100"
+                       string="Kiểm duyệt"/>
+
+                <field name="tong_ketluan" width="30" string="Tổng"/>
 
 
 

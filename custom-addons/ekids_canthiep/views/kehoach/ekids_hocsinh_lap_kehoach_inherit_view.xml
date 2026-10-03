@@ -26,7 +26,12 @@
                 <field name="ten_kehoach" string="Của tháng" width="150" class="fw-bold text-wrap"/>
                 <field name="trangthai_kehoach" string="Kế hoạch" width="110" widget="badge" class="text-wrap"/>
 
-
+                <field name="gv_canthiep_ids"
+                   string="Giáo viên"
+                   width="110"
+                   widget="many2many_tags"
+                   readonly="1"
+                   options="{'no_open': True}"/>
                 <field name="tong_kehoach_taomoi" string="Đã lập"/>
 
                 <button name="action_xem_danhsach_kehoach"
