@@ -56,6 +56,35 @@ class DanhMucCa(models.Model):
     dm_hocphi_id = fields.Many2one('ekids.hocphi_dm'
                                    , string='Thuộc mục thu(nếu có)')
 
+    is_xem_hocsinh= fields.Boolean(string="Xem danh sách học sinh đang sử dụng", default=False)
+
+    # Hoặc nếu muốn hiển thị thẳng danh sách học sinh (ekids.hocsinh) thông qua các bản ghi đang cấu hình:
+    hocsinh_ca_ids = fields.One2many(
+        'ekids.hocsinh_ca_canthiep'
+        ,compute="_compute_hocsinh_ca_ids"
+        ,string="Cấu hình ca học của học sinh"
+    )
+
+    def _compute_hocsinh_ca_ids(self):
+        for rec in self:
+            # 1. Lọc tất cả các cấu hình ca can thiệp đang hoạt động của ca này
+            domain = [
+                ('dm_ca_id', '=', rec.id),
+                ('hocsinh_id.trangthai', '=', "1")
+            ]
+            ca_hocsinhs = self.env['ekids.hocsinh_ca_canthiep'].search(domain)
+
+            # 2. Lọc loại bỏ trùng lặp: Mỗi học sinh chỉ lấy duy nhất 1 bản ghi (ví dụ lấy bản ghi đầu tiên hoặc mới nhất)
+            hocsinh_da_lay = set()
+            ket_qua = self.env['ekids.hocsinh_ca_canthiep']
+
+            for ca in ca_hocsinhs:
+                if ca.hocsinh_id.id not in hocsinh_da_lay:
+                    hocsinh_da_lay.add(ca.hocsinh_id.id)
+                    ket_qua += ca
+
+            rec.hocsinh_ca_ids = ket_qua
+
     def _is_hoan_hocphi(self):
 
         for record in self:

@@ -146,11 +146,11 @@ def func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,tu_ngay, den_ngay,is_theo
             if nghiles:
                 is_nghile = nghiles.get(str(ngay), False)
                 if is_nghile == False:
-                    is_hoc = func_is_co_ca_trong_ngay(hocsinh, ngay)
+                    is_hoc = func_is_hocsinh_dihoc(hocsinh, ngay)
                     if is_hoc == True:
                         days[str(ngay)] = ngay
             else:
-                is_hoc =func_is_co_ca_trong_ngay(hocsinh,ngay)
+                is_hoc =func_is_hocsinh_dihoc(hocsinh,ngay)
                 if is_hoc == True:
                     days[str(ngay)] = ngay
 
@@ -221,19 +221,45 @@ def func_is_hoc_canthiep_dm_ca(hocsinh,dm_ca,ngay):
     # còn lại không có
     return False
 
-def func_is_co_ca_trong_ngay(hocsinh,ngay):
+
+
+def func_is_hocsinh_dihoc(hocsinh, ngay):
+    if not ngay or not hocsinh:
+        return False
+
     week = ngay.weekday() + 2
     field_name = "hd_t" + str(week)
-    if hocsinh.is_ngaydihoc_rieng ==True:
-        is_hoc = getattr(hocsinh,field_name)
-        if is_hoc == True:
+
+    # TH1: Kiểm tra lịch chung (Theo thiết lập riêng của học sinh hoặc theo cơ sở)
+    target_obj = hocsinh if hocsinh.is_ngaydihoc_rieng else hocsinh.coso_id
+    if target_obj and getattr(target_obj, field_name, False):
+        return True
+
+    # TH2: Kiểm tra các ca can thiệp còn hiệu lực trong ngày
+    ca_canthieps = hocsinh.ca_canthiep_ids
+    if ca_canthieps:
+        field_name_ca = "t" + str(week)
+        check_ngay = fields.Date.to_date(ngay)
+
+        for ca in ca_canthieps:
+            # Nếu ca không học vào thứ này thì bỏ qua luôn
+            if not getattr(ca, field_name_ca, False):
+                continue
+
+            # Kiểm tra từ ngày (nếu có)
+            if ca.tu_ngay and fields.Date.to_date(ca.tu_ngay) > check_ngay:
+                continue
+
+            # Kiểm tra đến ngày (nếu có)
+            if ca.den_ngay and fields.Date.to_date(ca.den_ngay) < check_ngay:
+                continue
+
+            # Thỏa mãn mọi điều kiện -> Tính là có đi học
             return True
-    else:
-        coso =hocsinh.coso_id
-        is_hoc = getattr(coso, field_name)
-        if is_hoc == True:
-            return True
+
     return False
+
+
 
 def func_is_dangky_hoc(hocsinh,ngay):
     week = ngay.weekday() + 2

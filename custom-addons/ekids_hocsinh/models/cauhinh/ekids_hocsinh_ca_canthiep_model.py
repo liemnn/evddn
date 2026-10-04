@@ -27,6 +27,7 @@ class HocSinhCaCanThiep(models.Model):
 
 
     sequence = fields.Integer(string="Thứ tự", default=1)
+    index = fields.Integer(string="TT", compute="_compute_index")
     coso_id = fields.Many2one("ekids.coso", related="hocsinh_id.coso_id", string="Cơ sở", required=True,
                               ondelete="restrict")
     hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="cascade")
@@ -56,6 +57,12 @@ class HocSinhCaCanThiep(models.Model):
     trangthai = fields.Selection([("0", "Hết hiệu lực")
                                      , ("1", "Còn hiệu lực")]
                                  , compute="_compute_trangthai")
+
+    def _compute_index(self):
+        index =1
+        for record in self:
+            record.index = index
+            index +=1
 
     # (Bổ sung vào phần tính toán trạng thái hiệu lực)
     @api.depends('tu_ngay', 'den_ngay')

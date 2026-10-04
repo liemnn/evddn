@@ -284,7 +284,8 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                 ngay = date(nam,thang,day)
                 weekday =ngay.weekday()+2
                 field_hs = "hd_t"+str(weekday)
-                is_hs_hoc = getattr(hocsinh,field_hs)
+                #is_hs_hoc = getattr(hocsinh,field_hs)
+                is_hs_hoc = hocsinh_util.func_is_hocsinh_dihoc(hocsinh,ngay)
                 giatri_old = getattr(self,field_ngay_giatri)
                 if (coso_hoatdongs.get(ngay) == False
                         or giatri_old == '0'
@@ -292,12 +293,12 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                     continue
                 elif (hocsinh.is_ngaydihoc_rieng==True and is_hs_hoc ==False):
                     key = "["+str(ngay)+"]"
-                    if (self.field_sua != None and (key in str(self.field_sua))):
-                        continue
-                    else:
-                        setattr(self, field_ngay_giatri, "10")
-                        value =str(self.field_sua) + key
-                        setattr(self, "field_sua", value)
+                    #if (self.field_sua != None and (key in str(self.field_sua))):
+                        #continue
+                    #else:
+                    setattr(self, field_ngay_giatri, "10")
+                    value =str(self.field_sua) + key
+                    setattr(self, "field_sua", value)
 
                 else:
                     giatri_new = self.func_is_tinhtoan_giatri_moi(ngay,nghiles,coso_hoatdongs,nghipheps,ca_tangcuongs)
@@ -325,8 +326,8 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                     is_tangcuong = self.func_is_co_ca_hocbu_tangcuong(ca_tangcuongs,self.hocsinh_id.id,ngay)
                     if is_tangcuong ==True:
                         giatri="11"
-                    is_ca_ngay =hocsinh_util.func_is_co_ca_trong_ngay(self.hocsinh_id,ngay)
-                    if is_ca_ngay == False:
+                    is_hocsinh_dihoc =hocsinh_util.func_is_hocsinh_dihoc(self.hocsinh_id,ngay)
+                    if is_hocsinh_dihoc == False:
                         giatri="10"
 
         return giatri
