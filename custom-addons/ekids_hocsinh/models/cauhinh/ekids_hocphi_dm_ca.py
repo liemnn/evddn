@@ -83,6 +83,11 @@ class DanhMucCa(models.Model):
                     hocsinh_da_lay.add(ca.hocsinh_id.id)
                     ket_qua += ca
 
+            # 3. Sắp xếp kết quả trong Python theo đúng thứ tự của học sinh: ngay_nhaphoc asc, create_date asc, id asc
+            ket_qua = ket_qua.sorted(key=lambda r: (
+                r.hocsinh_id.ngay_nhaphoc or fields.Date.min
+            ))
+
             rec.hocsinh_ca_ids = ket_qua
 
     def _is_hoan_hocphi(self):
