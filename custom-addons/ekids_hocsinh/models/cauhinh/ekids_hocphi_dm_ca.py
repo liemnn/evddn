@@ -3,6 +3,19 @@ from datetime import datetime
 import calendar
 from odoo.exceptions import UserError
 from odoo.exceptions import ValidationError
+import logging
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import string_util
+    from odoo.addons.ekids_func import hocsinh_util
+    from odoo.addons.ekids_func import nghile_util
+    from odoo.addons.ekids_func import coso_util
+    from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import hocsinh_util
+except ImportError as e:
+    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
+
 
 class DanhMucCa(models.Model):
     _name = 'ekids.hocphi_dm_ca'
@@ -31,19 +44,11 @@ class DanhMucCa(models.Model):
     t7 = fields.Boolean(string="T7")
     t8 = fields.Boolean(string="CN")
 
-    tu = fields.Char(string="Từ (HH:MM)", help='Format: HH:MM')
-    den = fields.Char(string="Đến (HH:MM)", help='Format: HH:MM')
+
 
     trangthai = fields.Selection([("0", "Không hoạt động")
                                      , ("1", "Đang hoạt động")],default="1",string="Trạng thái")
-    giaovien_id = fields.Many2one("ekids.giaovien"
-                                  , string="Giáo viên", ondelete="restrict")
 
-    hocsinh_ids = fields.Many2many(comodel_name="ekids.hocsinh"
-                                   , relation="ekids_hocphi_dm_ca4hocsinh_rel"
-                                   , column1="hocphi_dm_ca_id"
-                                   , column2="hocsinh_id"
-                                   , string="Các Học sinh")
 
     is_hoan_hocphi = fields.Boolean(compute="_is_hoan_hocphi")
     tyle_hoan_hocphi = fields.Char(compute="_is_hoan_hocphi")
@@ -66,55 +71,9 @@ class DanhMucCa(models.Model):
             record.tyle_hoan_hocphi = tyle_hoan_hocphi
 
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = []
-        for vals in vals_list:
-            result = super(DanhMucCa, self).create(vals)
-            if result:
-                result.func_gan_dm_ca_cho_hocsinhs(True)
-            records.append(result)
-        return records[0] if len(records) == 1 else records
 
-    def write(self, vals):
-        res = super(DanhMucCa, self).write(vals)
 
-        # Logic xử lý khi danh sách học sinh thay đổi
-        for rec in self:
-            rec.func_gan_dm_ca_cho_hocsinhs(True)
-        return res
 
-    def unlink(self):
-        for rec in self:
-            if rec.hocsinh_ids:
-                rec.func_gan_dm_ca_cho_hocsinhs(False)
-        return super().unlink()
-
-    def func_gan_dm_ca_cho_hocsinhs(self, is_create):
-        hocsinhs = self.env['ekids.hocsinh'].search([
-            ('coso_id', '=', self.coso_id.id),
-            ('trangthai', '=', '1')
-        ])
-        if hocsinhs:
-            for hocsinh in hocsinhs:
-                ca_canthiep_ids = hocsinh.ca_canthiep_ids
-                # B1: Xóa cấu trúc lương đã gán cho giáo viên này
-                if ca_canthiep_ids:
-                    for ca_canthiep_id in ca_canthiep_ids:
-                        is_ganthucong =ca_canthiep_id.is_ganthucong
-                        if (is_ganthucong == False
-                                and ca_canthiep_id.dm_ca_id.id == self.id):
-                            ca_canthiep_id.unlink()
-                        elif (is_ganthucong == True
-                                and ca_canthiep_id.dm_ca_id.id == self.id):
-                            # Cập nhật cho gán thu cong
-                            if is_create == True:
-                                self.func_update_ca_canthiep_cho_hocsinh(ca_canthiep_id, self)
-
-                # B2: Thêm mới  cho các giáo viên này
-            if (is_create==True and self.hocsinh_ids):
-                for hs in self.hocsinh_ids:
-                    self.func_taomoi_ca_canthiep_cho_hocsinh(hs, self)
     def func_update_ca_canthiep_cho_hocsinh(self,ca_canthiep,dm):
         data = {
             "name": dm.name,
@@ -147,6 +106,48 @@ class DanhMucCa(models.Model):
         if self.giaovien_id:
             data['giaovien_id']= self.giaovien_id.id
         self.env['ekids.hocsinh_ca_canthiep'].create(data)
+
+    def func_get_dongia_hocsinh(self,hocsinh,tu_ngay,den_ngay):
+        nghiles = nghile_util.func_get_nghiles_trong_khoang_thoigian(self,self.coso_id, ['0'], tu_ngay,den_ngay)
+        return self.func_get_dongia(nghiles,hocsinh,tu_ngay,den_ngay)
+
+
+    def func_get_dongia(self,nghiles,hocsinh,tu_ngay,den_ngay):
+        if self.is_tien_trongoi == True:
+            ngays = hocsinh_util.func_get_ngay_dihoc_kehoachs_dm_ca(nghiles,hocsinh,self,tu_ngay,den_ngay)
+            dongia=0
+            if len(ngays)>0:
+                dongia = self.tien /len(ngays)
+            return dongia
+        else:
+            return  self.tien
+
+    def func_is_hoc(self,hocsinh,ngay):
+        week = ngay.weekday() + 2
+        field_name_ca = "t" + str(week)
+        field_name_hs_cs = "hd_t" + str(week)
+
+        # TH1: có danh mục ca và có áp dụng riêng
+        if (self.is_apdung_rieng == True):
+            is_hoc = getattr(self, field_name_ca)
+            if is_hoc == True:
+                return True
+        else:
+
+            # TH2: Theo hồ sơ học sinh có thiết lập riêng
+            if (hocsinh and hocsinh.is_ngaydihoc_rieng == True):
+                is_hoc = getattr(hocsinh, field_name_hs_cs)
+                if is_hoc == True:
+                    return True
+            else:
+                # TH3: Theo hồ cơ sở
+                coso = self.coso_id
+                is_hoc = getattr(coso, field_name_hs_cs)
+                if is_hoc == True:
+                    return True
+
+        # còn lại không có
+        return False
 
     @api.model
     def search_fetch(self, domain, field_names, offset=0, limit=50, order=None):

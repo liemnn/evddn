@@ -234,12 +234,10 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                                              , self
                                              , hocsinh
                                              , thu_bantrus
-                                             , ca_canthieps
-                                             , ngay_dauthang
-                                             , ngay_cuoithang
-                                             , ngay_dihoc_cosos
+                                             , days
                                              , nhatruong_nghi_bu_thangtruoc
                                              , nhatruong_nghi_thangtruoc)
+
 
 
 

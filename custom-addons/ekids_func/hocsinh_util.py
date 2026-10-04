@@ -156,6 +156,23 @@ def func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,tu_ngay, den_ngay,is_theo
 
         ngay += timedelta(days=1)
     return days
+
+def func_get_ngay_dihoc_kehoachs_dm_ca(nghiles,hocsinh,dm_ca,tu_ngay, den_ngay):
+    ngay = tu_ngay
+    days = {}
+    while ngay <= den_ngay:
+        is_hoc = dm_ca.func_is_hoc(hocsinh,ngay)
+        if is_hoc == True:
+            # Co so hoat dong
+            if nghiles:
+                is_nghile = nghiles.get(str(ngay), False)
+                if is_nghile == False:
+                    days[str(ngay)] = ngay
+            else:
+                days[str(ngay)] = ngay
+
+        ngay += timedelta(days=1)
+    return days
 def func_get_ngay_dihoc_cua_coso(coso, nghiles,tu_ngay, den_ngay):
     ngay = tu_ngay
     days = {}
@@ -176,6 +193,33 @@ def func_get_ngay_dihoc_cua_coso(coso, nghiles,tu_ngay, den_ngay):
         ngay += timedelta(days=1)
     return days
 
+def func_is_hoc_canthiep_dm_ca(hocsinh,dm_ca,ngay):
+    week = ngay.weekday() + 2
+    field_name_ca = "t" + str(week)
+    field_name_hs_cs = "hd_t" + str(week)
+
+    #TH1: có danh mục ca và có áp dụng riêng
+    if (dm_ca and dm_ca.is_apdung_rieng == True):
+        is_hoc = getattr(dm_ca, field_name_ca)
+        if is_hoc == True:
+            return True
+    else:
+
+        # TH2: Theo hồ sơ học sinh có thiết lập riêng
+        if (hocsinh and hocsinh.is_ngaydihoc_rieng == True):
+            is_hoc = getattr(hocsinh, field_name_hs_cs)
+            if is_hoc == True:
+                return True
+        else:
+            # TH3: Theo hồ cơ sở
+            coso = hocsinh.coso_id
+            is_hoc = getattr(coso, field_name_hs_cs)
+            if is_hoc == True:
+                return True
+
+
+    # còn lại không có
+    return False
 
 def func_is_co_ca_trong_ngay(hocsinh,ngay):
     week = ngay.weekday() + 2
