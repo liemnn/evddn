@@ -2,129 +2,193 @@
 <odoo>
     <template id="ekids_baocao.baocao_canthiep_template">
         <t t-call="web.html_container">
-            <div class="article" style="font-family: 'Times New Roman', serif; color: #000000; padding: 8px;">
+            <div class="article" style="font-family: 'Times New Roman', serif; color: #000000; padding: 10px;">
                 <style>
                     @page {
                         size: A4 landscape;
                         margin: 6mm 4mm !important;
                     }
+
+                    /* 🌟 KHUNG CUỘN CẢ NGANG LẪN DỌC */
+                    .report-table-responsive {
+                        width: 100%;
+                        max-height: 75vh; /* 🌟 Giới hạn chiều cao để kích hoạt cuộn dọc giữ header */
+                        overflow: auto;   /* Cuộn 2 chiều: ngang trên mobile, dọc khi cuộn xuống */
+                        -webkit-overflow-scrolling: touch;
+                        margin-bottom: 15px;
+                        border: 1px solid #000000;
+                    }
+
                     .table-report {
                         width: 100%;
-                        border-collapse: collapse;
-                        font-size: 11.5px;
+                        min-width: 1250px;
+                        /* 🌟 BẮT BUỘC: separate để sticky th giữ nguyên border không bị trôi viền */
+                        border-collapse: separate !important;
+                        border-spacing: 0 !important;
+                        font-size: 14px;
                         text-align: center;
                     }
+
                     .table-report th, .table-report td {
-                        border: 1px solid #000000;
-                        padding: 4px 2px;
+                        border-right: 1px solid #000000;
+                        border-bottom: 1px solid #000000;
+                        padding: 6px 4px;
                         vertical-align: middle;
+                        white-space: nowrap;
                     }
-                    .table-report th {
-                        background-color: #F1F5F9;
+
+                    /* 🌟 HÀNG TIÊU ĐỀ 1: Ghim sát đỉnh top = 0 */
+                    .table-report thead tr:first-child th {
+                        position: sticky;
+                        top: 0;
+                        background-color: #E2E8F0 !important;
+                        z-index: 10;
                         font-weight: bold;
                         text-transform: uppercase;
+                        font-size: 14px;
+                        border-top: none;
                     }
-                    .text-left { text-align: left !important; padding-left: 5px !important; }
+
+                    /* 🌟 HÀNG TIÊU ĐỀ 2 (CÁC CỘT CON): Ghim ngay bên dưới hàng 1 */
+                    .table-report thead tr:nth-child(2) th {
+                        position: sticky;
+                        top: 36px; /* 🌟 Cố định khoảng cách bằng đúng chiều cao hàng 1 */
+                        background-color: #F1F5F9 !important;
+                        z-index: 9;
+                        font-size: 14px !important;
+                        font-weight: 600 !important;
+                    }
+
+                    .text-left {
+                        text-align: left !important;
+                        padding-left: 8px !important;
+                        white-space: normal !important;
+                        min-width: 160px;
+                    }
+
                     .fw-bold { font-weight: bold !important; }
-                    .bg-total { background-color: #E2E8F0; font-weight: bold; }
+                    .bg-total {
+                        background-color: #E2E8F0;
+                        font-weight: bold;
+                        font-size: 14.5px;
+                    }
+
+                    /* Khi in ấn ra PDF / Giấy A4: Hủy chế độ cuộn màn hình */
+                    @media print {
+                        .report-table-responsive {
+                            max-height: none !important;
+                            overflow: visible !important;
+                            border: none !important;
+                        }
+                        .table-report thead tr th {
+                            position: static !important;
+                        }
+                        .table-report {
+                            min-width: 100% !important;
+                            width: 100% !important;
+                            border-collapse: collapse !important;
+                        }
+                    }
                 </style>
 
                 <!-- HEADER TIÊU ĐỀ -->
                 <div style="text-align: center; margin-bottom: 12px;">
-                    <h3 style="font-size: 16.5px; font-weight: bold; text-transform: uppercase; margin-bottom: 2px;">
+                    <h3 style="font-size: 18px; font-weight: bold; text-transform: uppercase; margin-bottom: 4px;">
                         BÁO CÁO TỔNG HỢP TIẾN ĐỘ THỰC HIỆN KẾ HOẠCH CAN THIỆP
                     </h3>
-                    <div style="font-size: 12.5px; font-style: italic;">
+                    <div style="font-size: 14px; font-style: italic;">
                         (Kỳ báo cáo: <t t-out="data.get('label_thangnay')"/> - Kế hoạch kế tiếp: <t t-out="data.get('label_thangtoi')"/>)
                     </div>
                 </div>
 
-                <!-- BẢNG DỮ LIỆU ĐÚNG THEO 14 TIÊU CHÍ -->
-                <table class="table-report">
-                    <thead>
-                        <tr>
-                            <th rowspan="2" style="width: 2.5%;">STT</th>
-                            <th rowspan="2" style="width: 13.5%;">Cơ sở</th>
-                            <th rowspan="2" style="width: 6%;">Tổng HS đang học</th>
-                            <th colspan="2" style="width: 13%;">Học sinh có Kết luận</th>
-                            <th colspan="2" style="width: 13%;">Học sinh có Kế hoạch</th>
-                            <th colspan="2" style="width: 13%;">Tổng số Kế hoạch</th>
-                            <th colspan="2" style="width: 13%;">Kế hoạch <t t-out="data.get('label_thangnay')"/></th>
-                            <th colspan="2" style="width: 13%;">Kế hoạch <t t-out="data.get('label_thangtoi')"/></th>
-                            <th rowspan="2" style="width: 6.5%;">Đang đợi duyệt</th>
-                            <th rowspan="2" style="width: 6.5%;">Đang can thiệp</th>
-                        </tr>
-                        <tr>
-                            <!-- Kết luận -->
-                            <th style="font-size: 10.5px;">Tổng kết luận</th>
-                            <th style="font-size: 10.5px;">Được lập KH</th>
-
-                            <!-- Học sinh có kế hoạch -->
-                            <th style="font-size: 10.5px;">Đã có KH</th>
-                            <th style="font-size: 10.5px;">Chưa có KH</th>
-
-                            <!-- Tổng số kế hoạch -->
-                            <th style="font-size: 10.5px;">Đang soạn thảo</th>
-                            <th style="font-size: 10.5px;">Đã phê duyệt</th>
-
-                            <!-- Tháng này -->
-                            <th style="font-size: 10.5px;">Tổng KH</th>
-                            <th style="font-size: 10.5px;">Đã duyệt</th>
-
-                            <!-- Tháng tới -->
-                            <th style="font-size: 10.5px;">Tổng KH</th>
-                            <th style="font-size: 10.5px;">Đã duyệt</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <t t-foreach="data.get('rows', [])" t-as="r">
+                <!-- BẢNG DỮ LIỆU CỐ ĐỊNH TIÊU ĐỀ -->
+                <div class="report-table-responsive">
+                    <table class="table-report">
+                        <thead>
                             <tr>
-                                <td><t t-out="r['stt']"/></td>
-                                <td class="text-left fw-bold"><t t-out="r['ten_coso']"/></td>
-                                <td class="fw-bold"><t t-out="r['so_hs']"/></td>
-                                <td><t t-out="r['hs_kl']"/></td>
-                                <td><t t-out="r['hs_kl_chopheplap']"/></td>
-
-                                <td class="fw-bold" style="color: #2563EB;"><t t-out="r['hs_co_kh']"/></td>
-                                <td style="color: #DC2626;"><t t-out="r['hs_chua_co_kh']"/></td>
-
-                                <td style="color: #D97706;"><t t-out="r['kh_soanthao']"/></td>
-                                <td class="fw-bold" style="color: #047857;"><t t-out="r['kh_daduyet']"/></td>
-
-                                <td><t t-out="r['kh_nay_all']"/></td>
-                                <td><t t-out="r['kh_nay_daduyet']"/></td>
-                                <td><t t-out="r['kh_toi_all']"/></td>
-                                <td><t t-out="r['kh_toi_daduyet']"/></td>
-
-                                <td style="color: #B45309; font-weight: bold;"><t t-out="r['kh_doiduyet']"/></td>
-                                <td style="color: #1D4ED8; font-weight: bold;"><t t-out="r['kh_dangcanthiep']"/></td>
+                                <th rowspan="2" style="width: 35px; border-left: 1px solid #000;">STT</th>
+                                <th rowspan="2" style="width: 160px;">Cơ sở</th>
+                                <th rowspan="2">Tổng HS đang học</th>
+                                <th colspan="2">Học sinh có Kết luận</th>
+                                <th colspan="2">Học sinh có Kế hoạch</th>
+                                <th colspan="2">Tổng số Kế hoạch</th>
+                                <th colspan="2">Kế hoạch <t t-out="data.get('label_thangnay')"/></th>
+                                <th colspan="2">Kế hoạch <t t-out="data.get('label_thangtoi')"/></th>
+                                <th rowspan="2">Đang đợi duyệt</th>
+                                <th rowspan="2">Đang can thiệp</th>
                             </tr>
-                        </t>
+                            <tr>
+                                <!-- Kết luận -->
+                                <th>Tổng kết luận</th>
+                                <th>Được lập KH</th>
 
-                        <!-- DÒNG TỔNG CỘNG HỆ THỐNG -->
-                        <t t-set="tot" t-value="data.get('totals', {})"/>
-                        <tr class="bg-total">
-                            <td colspan="2">TỔNG CỘNG</td>
-                            <td><t t-out="tot.get('so_hs', 0)"/></td>
-                            <td><t t-out="tot.get('hs_kl', 0)"/></td>
-                            <td><t t-out="tot.get('hs_kl_chopheplap', 0)"/></td>
+                                <!-- Học sinh có kế hoạch -->
+                                <th>Đã có KH</th>
+                                <th>Chưa có KH</th>
 
-                            <td style="color: #2563EB;"><t t-out="tot.get('hs_co_kh', 0)"/></td>
-                            <td style="color: #DC2626;"><t t-out="tot.get('hs_chua_co_kh', 0)"/></td>
+                                <!-- Tổng số kế hoạch -->
+                                <th>Đang soạn thảo</th>
+                                <th>Đã phê duyệt</th>
 
-                            <td style="color: #D97706;"><t t-out="tot.get('kh_soanthao', 0)"/></td>
-                            <td style="color: #047857;"><t t-out="tot.get('kh_daduyet', 0)"/></td>
+                                <!-- Tháng này -->
+                                <th>Tổng KH</th>
+                                <th>Đã duyệt</th>
 
-                            <td><t t-out="tot.get('kh_nay_all', 0)"/></td>
-                            <td><t t-out="tot.get('kh_nay_daduyet', 0)"/></td>
-                            <td><t t-out="tot.get('kh_toi_all', 0)"/></td>
-                            <td><t t-out="tot.get('kh_toi_daduyet', 0)"/></td>
+                                <!-- Tháng tới -->
+                                <th>Tổng KH</th>
+                                <th>Đã duyệt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="data.get('rows', [])" t-as="r">
+                                <tr>
+                                    <td style="border-left: 1px solid #000;"><t t-out="r['stt']"/></td>
+                                    <td class="text-left fw-bold"><t t-out="r['ten_coso']"/></td>
+                                    <td class="fw-bold"><t t-out="r['so_hs']"/></td>
+                                    <td><t t-out="r['hs_kl']"/></td>
+                                    <td><t t-out="r['hs_kl_chopheplap']"/></td>
 
-                            <td style="color: #B45309;"><t t-out="tot.get('kh_doiduyet', 0)"/></td>
-                            <td style="color: #1D4ED8;"><t t-out="tot.get('kh_dangcanthiep', 0)"/></td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    <td class="fw-bold" style="color: #2563EB;"><t t-out="r['hs_co_kh']"/></td>
+                                    <td style="color: #DC2626;"><t t-out="r['hs_chua_co_kh']"/></td>
+
+                                    <td style="color: #D97706;"><t t-out="r['kh_soanthao']"/></td>
+                                    <td class="fw-bold" style="color: #047857;"><t t-out="r['kh_daduyet']"/></td>
+
+                                    <td><t t-out="r['kh_nay_all']"/></td>
+                                    <td><t t-out="r['kh_nay_daduyet']"/></td>
+                                    <td><t t-out="r['kh_toi_all']"/></td>
+                                    <td><t t-out="r['kh_toi_daduyet']"/></td>
+
+                                    <td style="color: #B45309; font-weight: bold;"><t t-out="r['kh_doiduyet']"/></td>
+                                    <td style="color: #1D4ED8; font-weight: bold;"><t t-out="r['kh_dangcanthiep']"/></td>
+                                </tr>
+                            </t>
+
+                            <!-- DÒNG TỔNG CỘNG HỆ THỐNG -->
+                            <t t-set="tot" t-value="data.get('totals', {})"/>
+                            <tr class="bg-total">
+                                <td colspan="2" style="border-left: 1px solid #000;">TỔNG CỘNG</td>
+                                <td><t t-out="tot.get('so_hs', 0)"/></td>
+                                <td><t t-out="tot.get('hs_kl', 0)"/></td>
+                                <td><t t-out="tot.get('hs_kl_chopheplap', 0)"/></td>
+
+                                <td style="color: #2563EB;"><t t-out="tot.get('hs_co_kh', 0)"/></td>
+                                <td style="color: #DC2626;"><t t-out="tot.get('hs_chua_co_kh', 0)"/></td>
+
+                                <td style="color: #D97706;"><t t-out="tot.get('kh_soanthao', 0)"/></td>
+                                <td style="color: #047857;"><t t-out="tot.get('kh_daduyet', 0)"/></td>
+
+                                <td><t t-out="tot.get('kh_nay_all', 0)"/></td>
+                                <td><t t-out="tot.get('kh_nay_daduyet', 0)"/></td>
+                                <td><t t-out="tot.get('kh_toi_all', 0)"/></td>
+                                <td><t t-out="tot.get('kh_toi_daduyet', 0)"/></td>
+
+                                <td style="color: #B45309;"><t t-out="tot.get('kh_doiduyet', 0)"/></td>
+                                <td style="color: #1D4ED8;"><t t-out="tot.get('kh_dangcanthiep', 0)"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </t>
     </template>
