@@ -6,19 +6,14 @@ services:
       POSTGRES_DB: evddn
       POSTGRES_USER: evddn
       POSTGRES_PASSWORD:
-      TZ: Asia/Ho_Chi_Minh         # Thiết lập timezone đúng
-      PGTZ: Asia/Ho_Chi_Minh       # Dành riêng cho PostgreSQL
+      TZ: UTC                      # Đưa về UTC
+      PGTZ: UTC                    # Odoo bắt buộc PostgreSQL dùng UTC
     volumes:
       - ./db_data:/var/lib/postgresql/data
       - ./backups:/backups
       - ./backup.sh:/backup.sh
       - ./postgresql.conf:/etc/postgresql/postgresql.conf
       - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
-      # Đồng bộ thời gian với máy chủ host
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-    #ports:
-      #- "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U evddn -d evddn -h localhost"]
       interval: 10s
@@ -27,22 +22,14 @@ services:
     command: >
       postgres -c listen_addresses='*'
                -c config_file=/etc/postgresql/postgresql.conf
-                
-      
 
   redis:
     image: redis:7
     container_name: odoo-redis
     restart: always
-    environment:
-      - TZ=Asia/Ho_Chi_Minh
     volumes:
-        - ./redis_data:/data
-        # Đồng bộ thời gian với máy chủ host
-        - /etc/localtime:/etc/localtime:ro
-        - /etc/timezone:/etc/timezone:ro
+      - ./redis_data:/data
     command: [ "redis-server", "--appendonly", "yes" ]
-
 
   odoo:
     build:
@@ -66,23 +53,18 @@ services:
       DB_NAME: evddn
       USER: evddn
       PASSWORD: evddn@123!@#$%
-      TZ: Asia/Ho_Chi_Minh
+      TZ: UTC                      # Odoo Core bắt buộc chạy múi giờ UTC
     volumes:
       - ./odoo_data:/var/lib/odoo
       - ./addons:/mnt/extra-addons
       - ./odoo.conf:/etc/odoo/odoo.conf
       - ./entrypoint.sh:/entrypoint.sh
-      # Đồng bộ thời gian với máy chủ host
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
+      # ĐÃ XÓA mount localtime ở đây để container không bị ép múi giờ +07 của host
     entrypoint: ["/entrypoint.sh"]
-    #ports:
-      #- "8080:8069"
-      #- "8072:8072"
     restart: always
 
   nginx:
-    image: nginx:latest   # hoặc nginx:1.29.5 để cố định
+    image: nginx:latest
     container_name: odoo-nginx
     depends_on:
       - odoo
@@ -95,11 +77,10 @@ services:
       - ./nginx_logs:/var/log/nginx
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
-      # Đồng bộ thời gian với máy chủ host
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     environment:
-      - TZ=Asia/Ho_Chi_Minh
+      - TZ=Asia/Ho_Chi_Minh        # Nginx giữ múi giờ VN để file log chuẩn giờ
     restart: always
 
   certbot:
@@ -107,9 +88,6 @@ services:
     volumes:
       - ./nginx/certbot/www:/var/www/certbot
       - ./nginx/certbot/conf:/etc/letsencrypt
-      # Đồng bộ thời gian với máy chủ host
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
 
 volumes:
   db_data:
@@ -125,5 +103,3 @@ volumes:
       type: none
       o: bind
       device: /opt/odoo18/odoo_data
-
-
