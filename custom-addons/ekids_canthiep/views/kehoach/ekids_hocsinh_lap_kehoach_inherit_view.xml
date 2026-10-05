@@ -7,7 +7,7 @@
             <list create="false" delete="false" limit="200" default_order="id asc">
 
                 <field name="sequence" width="25"/>
-                <field name="name" width="200" class="text-wrap"/>
+                <field name="name" width="200"/>
                 <field name="gioitinh" width="70" string="Giới tính"/>
                 <field name="tuoi" optional="hide" string="Tuổi"/>
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
