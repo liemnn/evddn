@@ -767,460 +767,468 @@
         </record>
 
       <record id="ekids_canthiep.kehoach_form" model="ir.ui.view">
-         <field name="name">ekids.kehoach.form</field>
-         <field name="model">ekids.kehoach</field>
-         <field name="arch" type="xml">
-             <form string="Kế hoạch Can thiệp">
-                 <!-- CÁC TRƯỜNG KỸ THUẬT ẨN -->
-                 <field name="is_pheduyet" invisible="1"/>
-                 <field name="is_xoa" invisible="1"/>
-                 <field name="is_gui_pheduyet" invisible="1"/>
-                 <field name="is_readonly" invisible="1"/>
-                 <field name="is_kiemduyet" invisible="1"/>
-                 <field name="trangthai" invisible="1"/>
-                 <field name="is_header_open" invisible="1"/>
-                 <field name="is_show_wiget_canthiep" invisible="1"/>
+             <field name="name">ekids.kehoach.form</field>
+             <field name="model">ekids.kehoach</field>
+             <field name="arch" type="xml">
+                 <form string="Kế hoạch Can thiệp">
+                     <!-- CÁC TRƯỜNG KỸ THUẬT ẨN -->
+                     <field name="is_pheduyet" invisible="1"/>
+                     <field name="is_xoa" invisible="1"/>
+                     <field name="is_gui_pheduyet" invisible="1"/>
+                     <field name="is_readonly" invisible="1"/>
+                     <field name="is_kiemduyet" invisible="1"/>
+                     <field name="trangthai" invisible="1"/>
+                     <field name="is_header_open" invisible="1"/>
+                     <field name="is_show_wiget_canthiep" invisible="1"/>
 
-                 <!-- Dữ liệu kết quả & tỷ lệ -->
-                 <field name="tong_muctieu" invisible="1"/>
-                 <field name="tong_dat_canthiep" invisible="1"/>
-                 <field name="tong_dat_kiemduyet" invisible="1"/>
-                 <field name="tyle_dat_canthiep" invisible="1"/>
-                 <field name="tyle_dat_kiemduyet" invisible="1"/>
+                     <!-- Dữ liệu kết quả & tỷ lệ -->
+                     <field name="tong_muctieu" invisible="1"/>
+                     <field name="tong_dat_canthiep" invisible="1"/>
+                     <field name="tong_dat_kiemduyet" invisible="1"/>
+                     <field name="tyle_dat_canthiep" invisible="1"/>
+                     <field name="tyle_dat_kiemduyet" invisible="1"/>
 
-                 <!-- HEADER CONTROL -->
-                 <header>
-                     <button name="action_ketthuc_kehoach"
-                             string="Kết thúc"
-                             type="object"
-                             icon="fa-archive"
-                             class="btn-success"
-                             invisible="is_kiemduyet == False"/>
+                     <!-- HEADER CONTROL -->
+                     <header>
+                         <button name="action_ketthuc_kehoach"
+                                 string="Kết thúc"
+                                 type="object"
+                                 icon="fa-archive"
+                                 class="btn-success"
+                                 invisible="is_kiemduyet == False"/>
 
-                     <button name="action_gui_pheduyet"
-                             string="Gửi phê duyệt"
-                             type="object"
-                             icon="fa-paper-plane"
-                             class="btn-success fw-bold"
-                             confirm="Bạn chắc chắn muốn gửi [Kế hoạch] lên quản lý chuyên môn để duyệt không ?"
-                             invisible="not is_gui_pheduyet"/>
+                         <button name="action_gui_pheduyet"
+                                 string="Gửi phê duyệt"
+                                 type="object"
+                                 icon="fa-paper-plane"
+                                 class="btn-success fw-bold"
+                                 confirm="Bạn chắc chắn muốn gửi [Kế hoạch] lên quản lý chuyên môn để duyệt không ?"
+                                 invisible="not is_gui_pheduyet"/>
 
-                     <button name="action_pheduyet_dat"
-                             string="Duyệt đồng ý"
-                             type="object"
-                             icon="fa-check-circle"
-                             confirm="Bạn xác nhận [Kế hoạch] đã đạt để giáo viên tiến hành can thiệp theo thời gian trong kế hoạch"
-                             class="btn-success fw-bold"
-                             invisible="not is_pheduyet"/>
+                         <button name="action_pheduyet_dat"
+                                 string="Duyệt đồng ý"
+                                 type="object"
+                                 icon="fa-check-circle"
+                                 confirm="Bạn xác nhận [Kế hoạch] đã đạt để giáo viên tiến hành can thiệp theo thời gian trong kế hoạch"
+                                 class="btn-success fw-bold"
+                                 invisible="not is_pheduyet"/>
 
-                     <button name="action_pheduyet_khongdat"
-                             string="Không đạt [Sửa lại]"
-                             type="object"
-                             icon="fa-times-circle"
-                             confirm="Bạn xác nhận [Kế hoạch] chưa đạt cần trả về cho giáo viên lập kế hoạch chỉnh sửa lại ?"
-                             class="btn-danger fw-bold"
-                             invisible="not is_pheduyet"/>
+                         <button name="action_pheduyet_khongdat"
+                                 string="Không đạt [Sửa lại]"
+                                 type="object"
+                                 icon="fa-times-circle"
+                                 confirm="Bạn xác nhận [Kế hoạch] chưa đạt cần trả về cho giáo viên lập kế hoạch chỉnh sửa lại ?"
+                                 class="btn-danger fw-bold"
+                                 invisible="not is_pheduyet"/>
 
-                     <button name="action_xoa"
-                             string="Xóa"
-                             type="object"
-                             icon="fa-times-circle"
-                             confirm="Bạn chắc chắn muốn xóa [Kế hoạch] chứ ?"
-                             class="btn-danger"
-                             invisible="not is_xoa"/>
+                         <button name="action_xoa"
+                                 string="Xóa"
+                                 type="object"
+                                 icon="fa-times-circle"
+                                 confirm="Bạn chắc chắn muốn xóa [Kế hoạch] chứ ?"
+                                 class="btn-danger"
+                                 invisible="not is_xoa"/>
 
-                     <button name="%(ekids_canthiep.in_kehoach_cho_giaovien_action)d"
-                             string="In(đủ)"
-                             type="action"
-                             icon="fa-print"
-                             class="btn-secondary"/>
+                         <button name="%(ekids_canthiep.in_kehoach_cho_giaovien_action)d"
+                                 string="In(đủ)"
+                                 type="action"
+                                 icon="fa-print"
+                                 class="btn-secondary"/>
 
-                     <button name="%(ekids_canthiep.in_kehoach_cho_giaovien_gon_action)d"
-                             string="In(gọn)"
-                             type="action"
-                             icon="fa-print"
-                             class="btn-secondary"/>
+                         <button name="%(ekids_canthiep.in_kehoach_cho_giaovien_gon_action)d"
+                                 string="In(gọn)"
+                                 type="action"
+                                 icon="fa-print"
+                                 class="btn-secondary"/>
 
-                     <button name="action_khoitao_lai_kehoach"
-                             string="Khởi tạo lại"
-                             type="object"
-                             icon="fa-refresh"
-                             confirm="Bạn chắc chắn muốn khởi tạo lại [Kế hoạch] theo kết luận mới? (Dữ liệu kế hoạch cũ sẽ bị xóa)"
-                             class="btn-outline-danger"
-                             invisible="not is_xoa"/>
+                         <button name="action_khoitao_lai_kehoach"
+                                 string="Khởi tạo lại"
+                                 type="object"
+                                 icon="fa-refresh"
+                                 confirm="Bạn chắc chắn muốn khởi tạo lại [Kế hoạch] theo kết luận mới? (Dữ liệu kế hoạch cũ sẽ bị xóa)"
+                                 class="btn-outline-danger"
+                                 invisible="not is_xoa"/>
 
-                     <field name="trangthai" widget="statusbar" statusbar_visible="0,2,1,-1" options="{'clickable': false}"/>
-                 </header>
+                         <field name="trangthai" widget="statusbar" statusbar_visible="0,2,1,-1" options="{'clickable': false}"/>
+                     </header>
 
-                 <sheet class="p-2 p-md-3 bg-white w-100 max-w-100">
-                     <style>
-                         .o_form_sheet { max-width: 100% !important; width: 100% !important; padding: 12px !important; }
+                     <sheet class="p-1 p-md-3 bg-white w-100 max-w-100">
+                         <style>
+                             /* Ép toàn bộ khung sheet và view mở rộng tràn viền 100% trên cả mobile lẫn web */
+                             .o_form_sheet_full, .o_form_sheet, .o_form_view, .page {
+                                 max-width: 100% !important;
+                                 width: 100% !important;
+                                 padding-left: 4px !important;
+                                 padding-right: 4px !important;
+                                 margin: 0 !important;
+                             }
 
-                         /* Master Header Card */
-                         .flat-accent-master-block {
-                             background-color: #F8FAFC !important;
-                             border: 1px solid #E2E8F0 !important;
-                             border-radius: 8px !important;
-                             padding: 10px 14px !important;
-                             margin-bottom: 10px !important;
-                             display: flex;
-                             flex-direction: column;
-                             width: 100% !important;
-                         }
+                             /* Master Header Card */
+                             .flat-accent-master-block {
+                                 background-color: #F8FAFC !important;
+                                 border: 1px solid #E2E8F0 !important;
+                                 border-radius: 8px !important;
+                                 padding: 8px 10px !important;
+                                 margin-bottom: 8px !important;
+                                 display: flex;
+                                 flex-direction: column;
+                                 width: 100% !important;
+                             }
 
-                         .flat_master_circle_index_top {
-                             width: 32px;
-                             height: 32px;
-                             border-radius: 50%;
-                             background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%);
-                             color: #FFFFFF !important;
-                             display: flex !important;
-                             align-items: center !important;
-                             justify-content: center !important;
-                             font-weight: 800;
-                             font-size: 13.5px;
-                             border: 2px solid #FFFFFF;
-                             box-shadow: 0 2px 5px rgba(2, 132, 199, 0.25);
-                             flex-shrink: 0;
-                         }
+                             .flat_master_circle_index_top {
+                                 width: 30px;
+                                 height: 30px;
+                                 border-radius: 50%;
+                                 background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%);
+                                 color: #FFFFFF !important;
+                                 display: flex !important;
+                                 align-items: center !important;
+                                 justify-content: center !important;
+                                 font-weight: 800;
+                                 font-size: 13px;
+                                 border: 2px solid #FFFFFF;
+                                 box-shadow: 0 2px 5px rgba(2, 132, 199, 0.25);
+                                 flex-shrink: 0;
+                             }
 
-                         .flat-header-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+                             .flat-header-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
 
-                         .lbl-flat-toggler {
-                             background-color: #FFFFFF !important;
-                             border: 1px solid #CBD5E1 !important;
-                             color: #475569 !important;
-                             padding: 4px 12px;
-                             font-weight: 700;
-                             font-size: 12px;
-                             border-radius: 5px;
-                             display: inline-flex;
-                             align-items: center;
-                             gap: 6px;
-                             cursor: pointer;
-                             user-select: none;
-                             transition: all 0.15s ease;
-                         }
-                         .lbl-flat-toggler:hover { background-color: #F1F5F9; color: #0F172A; border-color: #94A3B8; }
+                             .lbl-flat-toggler {
+                                 background-color: #FFFFFF !important;
+                                 border: 1px solid #CBD5E1 !important;
+                                 color: #475569 !important;
+                                 padding: 4px 10px;
+                                 font-weight: 700;
+                                 font-size: 11.5px;
+                                 border-radius: 5px;
+                                 display: inline-flex;
+                                 align-items: center;
+                                 gap: 5px;
+                                 cursor: pointer;
+                                 user-select: none;
+                                 transition: all 0.15s ease;
+                             }
+                             .lbl-flat-toggler:hover { background-color: #F1F5F9; color: #0F172A; border-color: #94A3B8; }
 
-                         .flat-header-middle-row {
-                             display: flex !important;
-                             align-items: center !important;
-                             justify-content: space-between !important;
-                             width: 100% !important;
-                             margin-top: 8px !important;
-                             flex-wrap: wrap !important;
-                             gap: 8px !important;
-                         }
-
-                         .flat-assignment-menu-trigger {
-                             background-color: #FFFFFF !important;
-                             border: 1px solid #CBD5E1 !important;
-                             color: #475569 !important;
-                             padding: 4px 12px !important;
-                             font-weight: 700 !important;
-                             font-size: 12px !important;
-                             border-radius: 5px !important;
-                             display: inline-flex !important;
-                             align-items: center !important;
-                             gap: 5px !important;
-                             cursor: pointer !important;
-                             user-select: none !important;
-                         }
-
-                         .btn-flat-conclusion {
-                             background-color: #FFFFFF !important;
-                             color: #475569 !important;
-                             font-weight: 700;
-                             font-size: 12px;
-                             padding: 4px 12px;
-                             border-radius: 5px;
-                             border: 1px solid #CBD5E1;
-                             height: 28px;
-                             cursor: pointer;
-                             display: inline-flex !important;
-                             align-items: center !important;
-                             gap: 5px !important;
-                         }
-                         .btn-flat-conclusion:hover { background-color: #F8FAFC; border-color: #94A3B8; color: #0F172A; }
-
-                         .flat-assignment-detail-panel {
-                             width: 100% !important;
-                             background-color: #F1F5F9 !important;
-                             border: 1px solid #CBD5E1 !important;
-                             border-radius: 6px !important;
-                             padding: 7px 12px !important;
-                             margin-top: 6px !important;
-                             display: flex !important;
-                             align-items: center !important;
-                             justify-content: flex-start !important;
-                         }
-
-                         .flat-gv-badge {
-                             display: inline-flex !important;
-                             align-items: center !important;
-                             gap: 4px !important;
-                             font-size: 12.5px !important;
-                             font-weight: 600 !important;
-                         }
-                         .c-canthiep-orange i { color: #EA580C !important; }
-                         .c-chuyenmon-teal i { color: #0D9488 !important; }
-                         .flat-gv-divider { color: #94A3B8; font-weight: 300; margin: 0 10px; font-size: 12px; opacity: 0.6; }
-
-                         /* Inputs Grid */
-                         .flat-inputs-grid { display: flex; gap: 10px; flex-wrap: wrap; width: 100%; margin-top: 8px; }
-                         .flat-input-column { flex: 1; min-width: 140px; display: flex; flex-direction: column; gap: 3px; }
-                         .flat-input-label-text { font-weight: 700; color: #64748B; font-size: 11px; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
-                         .flat-field-value-holder { width: 100%; border: 1px solid #CBD5E1; padding: 4px 8px; border-radius: 5px; font-size: 12.5px; font-weight: 800; background-color: #FFFFFF; height: 30px; display: flex; align-items: center; }
-                         .v-student .flat-field-value-holder { background-color: #EFF6FF; border-color: #BFDBFE; color: #1E40AF; }
-                         .v-duration .flat-field-value-holder { background-color: #FFFBEB; border-color: #FEF3C7; color: #92400E; justify-content: center; }
-                         .compact_editable_date input { padding: 0px !important; height: 20px !important; font-size: 12.5px !important; font-weight: 800 !important; border: none !important; background: transparent !important; color: #1E293B !important; width: 100% !important; box-shadow: none !important; }
-
-                         /* ================= VÙNG THỐNG KÊ KẾT QUẢ  NÚT BỔ SUNG (RESPONSIVE) ================= */
-                         .ekids-summary-action-bar {
-                             background-color: #F8FAFC !important;
-                             border: 1px solid #E2E8F0 !important;
-                             border-radius: 8px !important;
-                             padding: 8px 12px !important;
-                             margin-bottom: 12px !important;
-                             display: flex !important;
-                             align-items: center !important;
-                             justify-content: space-between !important;
-                             flex-wrap: wrap !important;
-                             gap: 10px !important;
-                         }
-
-                         .summary-left-zone {
-                             display: flex !important;
-                             align-items: center !important;
-                             flex-wrap: wrap !important;
-                             gap: 8px !important;
-                         }
-
-                         .summary-pill {
-                             display: inline-flex !important;
-                             align-items: center !important;
-                             gap: 4px !important;
-                             padding: 5px 10px !important;
-                             border-radius: 6px !important;
-                             font-size: 12.5px !important;
-                             font-weight: 600 !important;
-                             line-height: 1.2 !important;
-                             background: #FFFFFF !important;
-                             border: 1px solid transparent !important;
-                             white-space: nowrap !important;
-                         }
-                         .pill-total { color: #334155; border-color: #CBD5E1 !important; background: #F1F5F9 !important; }
-                         .pill-teacher { color: #15803D; border-color: #86EFAC !important; background: #F0FDF4 !important; }
-                         .pill-eval { color: #1D4ED8; border-color: #93C5FD !important; background: #EFF6FF !important; }
-
-                         .b-warn-pill {
-                             background: #FEF2F2 !important;
-                             color: #DC2626 !important;
-                             border: 1px solid #FECACA !important;
-                             font-size: 11.5px !important;
-                             padding: 4px 8px !important;
-                             font-weight: 700 !important;
-                             border-radius: 5px !important;
-                             display: inline-flex !important;
-                             align-items: center !important;
-                             gap: 4px !important;
-                             white-space: nowrap !important;
-                         }
-
-                         /* Nút Bổ sung Lĩnh vực Nổi bật */
-                         .btn-highlight-linhvuc {
-                             background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
-                             color: #FFFFFF !important;
-                             border: none !important;
-                             border-radius: 6px !important;
-                             padding: 6px 14px !important;
-                             font-size: 12.5px !important;
-                             font-weight: 700 !important;
-                             display: inline-flex !important;
-                             align-items: center !important;
-                             gap: 6px !important;
-                             box-shadow: 0 2px 6px rgba(37, 99, 235, 0.28) !important;
-                             transition: all 0.2s ease-in-out !important;
-                             white-space: nowrap !important;
-                         }
-                         .btn-highlight-linhvuc:hover {
-                             transform: translateY(-1px) !important;
-                             box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4) !important;
-                             background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
-                         }
-
-                         /* MOBILE RESPONSIVE (768px) */
-                         @media (max-width: 768px) {
-                             .flat-assignment-detail-panel { flex-direction: column !important; align-items: flex-start !important; gap: 4px !important; }
-                             .flat-gv-divider { display: none !important; }
-                             .flat-input-column { flex: 1 1 100% !important; width: 100% !important; }
-                             .flat-header-middle-row { flex-direction: column !important; align-items: flex-start !important; }
-                             .btn-flat-conclusion { width: 100% !important; justify-content: center !important; }
-
-                             .ekids-summary-action-bar {
-                                 flex-direction: column !important;
-                                 align-items: stretch !important;
-                                 padding: 10px !important;
+                             .flat-header-middle-row {
+                                 display: flex !important;
+                                 align-items: center !important;
+                                 justify-content: space-between !important;
+                                 width: 100% !important;
+                                 margin-top: 8px !important;
+                                 flex-wrap: wrap !important;
                                  gap: 8px !important;
                              }
-                             .summary-left-zone { width: 100% !important; }
-                             .summary-pill { font-size: 11.5px !important; padding: 4px 8px !important; }
-                             .action-right-zone { width: 100% !important; }
-                             .btn-highlight-linhvuc {
-                                 width: 100% !important;
-                                 justify-content: center !important;
-                                 padding: 8px 12px !important;
-                             }
-                             .b-warn-pill { width: 100% !important; justify-content: center !important; }
-                         }
-                     </style>
 
-                     <!-- MASTER HEADER -->
-                     <div class="flat-accent-master-block">
-                         <div class="flat-header-top-row">
-                             <div class="d-flex align-items-center gap-2.5">
-                                 <div class="flat_master_circle_index_top">
-                                     <field name="index" readonly="1"/>
+                             .flat-assignment-menu-trigger {
+                                 background-color: #FFFFFF !important;
+                                 border: 1px solid #CBD5E1 !important;
+                                 color: #475569 !important;
+                                 padding: 4px 10px !important;
+                                 font-weight: 700 !important;
+                                 font-size: 11.5px !important;
+                                 border-radius: 5px !important;
+                                 display: inline-flex !important;
+                                 align-items: center !important;
+                                 gap: 5px !important;
+                                 cursor: pointer !important;
+                                 user-select: none !important;
+                             }
+
+                             .btn-flat-conclusion {
+                                 background-color: #FFFFFF !important;
+                                 color: #475569 !important;
+                                 font-weight: 700;
+                                 font-size: 11.5px;
+                                 padding: 4px 10px;
+                                 border-radius: 5px;
+                                 border: 1px solid #CBD5E1;
+                                 height: 28px;
+                                 cursor: pointer;
+                                 display: inline-flex !important;
+                                 align-items: center !important;
+                                 gap: 5px !important;
+                             }
+                             .btn-flat-conclusion:hover { background-color: #F8FAFC; border-color: #94A3B8; color: #0F172A; }
+
+                             .flat-assignment-detail-panel {
+                                 width: 100% !important;
+                                 background-color: #F1F5F9 !important;
+                                 border: 1px solid #CBD5E1 !important;
+                                 border-radius: 6px !important;
+                                 padding: 6px 10px !important;
+                                 margin-top: 6px !important;
+                                 display: flex !important;
+                                 align-items: center !important;
+                                 justify-content: flex-start !important;
+                             }
+
+                             .flat-gv-badge {
+                                 display: inline-flex !important;
+                                 align-items: center !important;
+                                 gap: 4px !important;
+                                 font-size: 12px !important;
+                                 font-weight: 600 !important;
+                             }
+                             .c-canthiep-orange i { color: #EA580C !important; }
+                             .c-chuyenmon-teal i { color: #0D9488 !important; }
+                             .flat-gv-divider { color: #94A3B8; font-weight: 300; margin: 0 8px; font-size: 11px; opacity: 0.6; }
+
+                             /* Inputs Grid */
+                             .flat-inputs-grid { display: flex; gap: 8px; flex-wrap: wrap; width: 100%; margin-top: 8px; }
+                             .flat-input-column { flex: 1; min-width: 130px; display: flex; flex-direction: column; gap: 3px; }
+                             .flat-input-label-text { font-weight: 700; color: #64748B; font-size: 11px; text-transform: uppercase; display: flex; align-items: center; gap: 4px; }
+                             .flat-field-value-holder { width: 100%; border: 1px solid #CBD5E1; padding: 4px 8px; border-radius: 5px; font-size: 12px; font-weight: 800; background-color: #FFFFFF; height: 30px; display: flex; align-items: center; }
+                             .v-student .flat-field-value-holder { background-color: #EFF6FF; border-color: #BFDBFE; color: #1E40AF; }
+                             .v-duration .flat-field-value-holder { background-color: #FFFBEB; border-color: #FEF3C7; color: #92400E; justify-content: center; }
+                             .compact_editable_date input { padding: 0px !important; height: 20px !important; font-size: 12px !important; font-weight: 800 !important; border: none !important; background: transparent !important; color: #1E293B !important; width: 100% !important; box-shadow: none !important; }
+
+                             /* ================= VÙNG THỐNG KÊ KẾT QUẢ  NÚT BỔ SUNG (RESPONSIVE) ================= */
+                             .ekids-summary-action-bar {
+                                 background-color: #F8FAFC !important;
+                                 border: 1px solid #E2E8F0 !important;
+                                 border-radius: 8px !important;
+                                 padding: 8px 10px !important;
+                                 margin-bottom: 10px !important;
+                                 display: flex !important;
+                                 align-items: center !important;
+                                 justify-content: space-between !important;
+                                 flex-wrap: wrap !important;
+                                 gap: 8px !important;
+                                 width: 100% !important;
+                             }
+
+                             .summary-left-zone {
+                                 display: flex !important;
+                                 align-items: center !important;
+                                 flex-wrap: wrap !important;
+                                 gap: 6px !important;
+                             }
+
+                             .summary-pill {
+                                 display: inline-flex !important;
+                                 align-items: center !important;
+                                 gap: 4px !important;
+                                 padding: 4px 8px !important;
+                                 border-radius: 6px !important;
+                                 font-size: 12px !important;
+                                 font-weight: 600 !important;
+                                 line-height: 1.2 !important;
+                                 background: #FFFFFF !important;
+                                 border: 1px solid transparent !important;
+                                 white-space: nowrap !important;
+                             }
+                             .pill-total { color: #334155; border-color: #CBD5E1 !important; background: #F1F5F9 !important; }
+                             .pill-teacher { color: #15803D; border-color: #86EFAC !important; background: #F0FDF4 !important; }
+                             .pill-eval { color: #1D4ED8; border-color: #93C5FD !important; background: #EFF6FF !important; }
+
+                             .b-warn-pill {
+                                 background: #FEF2F2 !important;
+                                 color: #DC2626 !important;
+                                 border: 1px solid #FECACA !important;
+                                 font-size: 11px !important;
+                                 padding: 3px 6px !important;
+                                 font-weight: 700 !important;
+                                 border-radius: 5px !important;
+                                 display: inline-flex !important;
+                                 align-items: center !important;
+                                 gap: 4px !important;
+                                 white-space: nowrap !important;
+                             }
+
+                             /* Nút Bổ sung Lĩnh vực Nổi bật */
+                             .btn-highlight-linhvuc {
+                                 background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+                                 color: #FFFFFF !important;
+                                 border: none !important;
+                                 border-radius: 6px !important;
+                                 padding: 6px 12px !important;
+                                 font-size: 12px !important;
+                                 font-weight: 700 !important;
+                                 display: inline-flex !important;
+                                 align-items: center !important;
+                                 gap: 5px !important;
+                                 box-shadow: 0 2px 6px rgba(37, 99, 235, 0.28) !important;
+                                 transition: all 0.2s ease-in-out !important;
+                                 white-space: nowrap !important;
+                             }
+                             .btn-highlight-linhvuc:hover {
+                                 transform: translateY(-1px) !important;
+                                 box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4) !important;
+                                 background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
+                             }
+
+                             /* MOBILE RESPONSIVE (768px) */
+                             @media (max-width: 768px) {
+                                 .flat-assignment-detail-panel { flex-direction: column !important; align-items: flex-start !important; gap: 4px !important; }
+                                 .flat-gv-divider { display: none !important; }
+                                 .flat-input-column { flex: 1 1 100% !important; width: 100% !important; }
+                                 .flat-header-middle-row { flex-direction: column !important; align-items: flex-start !important; }
+                                 .btn-flat-conclusion { width: 100% !important; justify-content: center !important; }
+
+                                 .ekids-summary-action-bar {
+                                     flex-direction: column !important;
+                                     align-items: stretch !important;
+                                     padding: 8px !important;
+                                     gap: 6px !important;
+                                 }
+                                 .summary-left-zone { width: 100% !important; }
+                                 .summary-pill { font-size: 11px !important; padding: 3px 6px !important; width: 100% !important; justify-content: flex-start !important; }
+                                 .action-right-zone { width: 100% !important; }
+                                 .btn-highlight-linhvuc {
+                                     width: 100% !important;
+                                     justify-content: center !important;
+                                     padding: 7px 10px !important;
+                                 }
+                                 .b-warn-pill { width: 100% !important; justify-content: center !important; }
+                             }
+                         </style>
+
+                         <!-- MASTER HEADER -->
+                         <div class="flat-accent-master-block">
+                             <div class="flat-header-top-row">
+                                 <div class="d-flex align-items-center gap-2">
+                                     <div class="flat_master_circle_index_top">
+                                         <field name="index" readonly="1"/>
+                                     </div>
+                                     <span class="fw-bold" style="font-size: 15.5px; color: #1E293B;">
+                                          <field name="name" readonly="1"/>
+                                     </span>
                                  </div>
-                                 <span class="fw-bold" style="font-size: 16.5px; color: #1E293B;">
-                                      <field name="name" readonly="1"/>
+
+                                 <!-- NÚT TRIGGER ĐÓNG/MỞ HEADER -->
+                                 <a class="lbl-flat-toggler text-decoration-none"
+                                    data-bs-toggle="collapse"
+                                    href="#collapseHeaderAccentZone_Main"
+                                    role="button">
+                                     <i class="fa fa-bars"></i>
+                                     <span>Chi tiết / Thu gọn</span>
+                                 </a>
+                             </div>
+
+                             <!-- KHỐI CHI TIẾT HEADER -->
+                             <div t-attf-class="collapse w-100 #{is_header_open ? 'show' : ''}" id="collapseHeaderAccentZone_Main">
+                                 <div class="w-100 pt-2 border-top mt-2" style="border-color: #E2E8F0 !important;">
+                                      <div class="flat-header-middle-row">
+                                          <a class="flat-assignment-menu-trigger text-decoration-none" data-bs-toggle="collapse" href="#collapseStaffDetailPanel_Core" role="button">
+                                              <i class="fa fa-users me-1 text-primary"></i> Phân công giáo viên <i class="fa fa-caret-down text-muted ms-1" style="font-size: 11px;"></i>
+                                          </a>
+
+                                          <div class="d-flex align-items-center gap-2">
+                                              <button name="action_xem_ketluan" string="Xem kết luận" type="object" icon="fa-file-text-o" class="btn-flat-conclusion"/>
+                                              <div class="p-1 rounded border d-flex align-items-center bg-white shadow-sm" style="border-color: #E2E8F0 !important;">
+                                                  <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      <!-- Panel Giáo viên phân công -->
+                                      <div class="collapse w-100" id="collapseStaffDetailPanel_Core">
+                                          <div class="flat-assignment-detail-panel">
+                                               <span class="flat-gv-badge c-canthiep-orange">
+                                                   <i class="fa fa-user-md"></i>
+                                                   <span class="text-secondary fw-normal">Giáo viên:</span>
+                                                   <field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/>
+                                               </span>
+                                               <span class="flat-gv-divider">|</span>
+                                               <span class="flat-gv-badge c-chuyenmon-teal">
+                                                   <i class="fa fa-graduation-cap"></i>
+                                                   <span class="text-secondary fw-normal">Chuyên môn:</span>
+                                                   <field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/>
+                                               </span>
+                                          </div>
+                                      </div>
+
+                                      <!-- Lưới thông tin Học sinh & Ngày tháng -->
+                                      <div class="flat-inputs-grid">
+                                          <div class="flat-input-column v-student">
+                                              <span class="flat-input-label-text"><i class="fa fa-user-circle"></i> Học sinh</span>
+                                              <div class="flat-field-value-holder"><field name="hocsinh_id" readonly="1" options="{'no_open': True}"/></div>
+                                          </div>
+                                          <div class="flat-input-column v-from">
+                                              <span class="flat-input-label-text"><i class="fa fa-calendar-minus-o"></i> Từ ngày</span>
+                                              <div class="flat-field-value-holder"><field name="tu_ngay" readonly="is_readonly" class="compact_editable_date w-100"/></div>
+                                          </div>
+                                          <div class="flat-input-column v-to">
+                                              <span class="flat-input-label-text"><i class="fa fa-calendar-check-o"></i> Đến ngày</span>
+                                              <div class="flat-field-value-holder"><field name="den_ngay" readonly="is_readonly" class="compact_editable_date w-100"/></div>
+                                          </div>
+                                          <div class="flat-input-column v-duration">
+                                              <span class="flat-input-label-text"><i class="fa fa-hourglass-half"></i> Số ngày</span>
+                                              <div class="flat-field-value-holder">
+                                                    <strong><field name="songay" readonly="is_readonly"/> ngày</strong>
+                                              </div>
+                                          </div>
+                                      </div>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <!-- ================= VÙNG THỐNG KÊ & NÚT BỔ SUNG LĨNH VỰC ================= -->
+                         <div class="ekids-summary-action-bar">
+                             <!-- Nhóm số liệu bên trái -->
+                             <div class="summary-left-zone">
+                                 <span class="summary-pill pill-total">
+                                     <i class="fa fa-list-alt text-muted"></i>
+                                     <span>Tổng:</span>
+                                     <strong class="text-dark"><field name="tong_muctieu" readonly="1"/></strong>
+                                     <span>mục tiêu</span>
+                                 </span>
+
+                                 <span class="summary-pill pill-teacher">
+                                     <i class="fa fa-user-md text-success"></i>
+                                     <span>GV can thiệp (+):</span>
+                                     <strong><field name="tong_dat_canthiep" readonly="1"/></strong>/<strong><field name="tong_muctieu" readonly="1"/></strong>
+                                     <span>(<field name="tyle_dat_canthiep" readonly="1"/>%)</span>
+                                 </span>
+
+                                 <span class="summary-pill pill-eval">
+                                     <i class="fa fa-check-circle text-primary"></i>
+                                     <span>Sau đánh giá (+):</span>
+                                     <strong><field name="tong_dat_kiemduyet" readonly="1"/></strong>/<strong><field name="tong_muctieu" readonly="1"/></strong>
+                                     <span>(<field name="tyle_dat_kiemduyet" readonly="1"/>%)</span>
+                                 </span>
+
+                                 <!-- Cảnh báo giảm đánh giá nếu có -->
+                                 <span class="b-warn-pill" invisible="tong_dat_kiemduyet &gt;= tong_dat_canthiep">
+                                     <i class="fa fa-exclamation-triangle"></i>
+                                     <span>Đánh giá giảm sau kiểm duyệt</span>
                                  </span>
                              </div>
 
-                             <!-- NÚT TRIGGER ĐÓNG/MỞ HEADER -->
-                             <a class="lbl-flat-toggler text-decoration-none"
-                                data-bs-toggle="collapse"
-                                href="#collapseHeaderAccentZone_Main"
-                                role="button">
-                                 <i class="fa fa-bars"></i>
-                                 <span>Chi tiết / Thu gọn</span>
-                             </a>
-                         </div>
-
-                         <!-- KHỐI CHI TIẾT HEADER (ĐIỀU KHIỂN BẰNG CLASS SẴN CÓ) -->
-                         <div t-attf-class="collapse w-100 #{is_header_open ? 'show' : ''}" id="collapseHeaderAccentZone_Main">
-                             <div class="w-100 pt-2 border-top mt-2" style="border-color: #E2E8F0 !important;">
-                                  <div class="flat-header-middle-row">
-                                      <a class="flat-assignment-menu-trigger text-decoration-none" data-bs-toggle="collapse" href="#collapseStaffDetailPanel_Core" role="button">
-                                          <i class="fa fa-users me-1.5 text-primary"></i> Phân công giáo viên <i class="fa fa-caret-down text-muted ms-1" style="font-size: 11px;"></i>
-                                      </a>
-
-                                      <div class="d-flex align-items-center gap-2">
-                                          <button name="action_xem_ketluan" string="Xem kết luận" type="object" icon="fa-file-text-o" class="btn-flat-conclusion"/>
-                                          <div class="p-1 rounded border d-flex align-items-center bg-white shadow-sm" style="border-color: #E2E8F0 !important;">
-                                              <field name="trangthai_pheduyet" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': false}"/>
-                                          </div>
-                                      </div>
-                                  </div>
-
-                                  <!-- Panel Giáo viên phân công -->
-                                  <div class="collapse w-100" id="collapseStaffDetailPanel_Core">
-                                      <div class="flat-assignment-detail-panel">
-                                           <span class="flat-gv-badge c-canthiep-orange">
-                                               <i class="fa fa-user-md"></i>
-                                               <span class="text-secondary fw-normal">Giáo viên:</span>
-                                               <field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/>
-                                           </span>
-                                           <span class="flat-gv-divider">|</span>
-                                           <span class="flat-gv-badge c-chuyenmon-teal">
-                                               <i class="fa fa-graduation-cap"></i>
-                                               <span class="text-secondary fw-normal">Chuyên môn:</span>
-                                               <field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/>
-                                           </span>
-                                      </div>
-                                  </div>
-
-                                  <!-- Lưới thông tin Học sinh & Ngày tháng -->
-                                  <div class="flat-inputs-grid">
-                                      <div class="flat-input-column v-student">
-                                          <span class="flat-input-label-text"><i class="fa fa-user-circle"></i> Học sinh</span>
-                                          <div class="flat-field-value-holder"><field name="hocsinh_id" readonly="1" options="{'no_open': True}"/></div>
-                                      </div>
-                                      <div class="flat-input-column v-from">
-                                          <span class="flat-input-label-text"><i class="fa fa-calendar-minus-o"></i> Từ ngày</span>
-                                          <div class="flat-field-value-holder"><field name="tu_ngay" readonly="is_readonly" class="compact_editable_date w-100"/></div>
-                                      </div>
-                                      <div class="flat-input-column v-to">
-                                          <span class="flat-input-label-text"><i class="fa fa-calendar-check-o"></i> Đến ngày</span>
-                                          <div class="flat-field-value-holder"><field name="den_ngay" readonly="is_readonly" class="compact_editable_date w-100"/></div>
-                                      </div>
-                                      <div class="flat-input-column v-duration">
-                                          <span class="flat-input-label-text"><i class="fa fa-hourglass-half"></i> Số ngày</span>
-                                          <div class="flat-field-value-holder">
-                                                <strong><field name="songay" readonly="is_readonly"/> ngày</strong>
-                                          </div>
-                                      </div>
-                                  </div>
+                             <!-- Nhóm nút hành động bên phải -->
+                             <div class="action-right-zone">
+                                 <button name="action_thietke_kehoach_linhvuc"
+                                         string="Bổ sung Lĩnh vực của [Kế hoạch]"
+                                         type="object"
+                                         icon="fa-puzzle-piece"
+                                         class="btn-highlight-linhvuc"
+                                         invisible="is_canthiep_ketluan"/>
                              </div>
                          </div>
-                     </div>
 
-                     <!-- ================= VÙNG THỐNG KÊ & NÚT BỔ SUNG LĨNH VỰC ================= -->
-                     <div class="ekids-summary-action-bar">
-                         <!-- Nhóm số liệu bên trái -->
-                         <div class="summary-left-zone">
-                             <span class="summary-pill pill-total">
-                                 <i class="fa fa-list-alt text-muted"></i>
-                                 <span>Tổng:</span>
-                                 <strong class="text-dark"><field name="tong_muctieu" readonly="1"/></strong>
-                                 <span>mục tiêu</span>
-                             </span>
+                         <!-- LƯỚI WIDGET MỤC TIÊU VÀ TIẾN TRÌNH CAN THIỆP -->
+                         <group class="w-100 m-0 p-0" col="2">
+                             <field name="kehoach_linhvuc_ids"
+                                    widget="ekids_lap_kehoach"
+                                    nolabel="1"
+                                    colspan="2"
+                                    readonly="is_readonly"
+                                    invisible="is_show_wiget_canthiep == True"
+                                    class="w-100 m-0 p-0"/>
+                             <field name="kehoach_linhvuc_ids"
+                                    widget="ekids_canthiep_kehoach"
+                                    nolabel="1"
+                                    colspan="2"
+                                    readonly="is_readonly"
+                                    invisible="is_show_wiget_canthiep == False"
+                                    class="w-100 m-0 p-0"/>
+                         </group>
 
-                             <span class="summary-pill pill-teacher">
-                                 <i class="fa fa-user-md text-success"></i>
-                                 <span>GV can thiệp (+):</span>
-                                 <strong><field name="tong_dat_canthiep" readonly="1"/></strong>/<strong><field name="tong_muctieu" readonly="1"/></strong>
-                                 <span>(<field name="tyle_dat_canthiep" readonly="1"/>%)</span>
-                             </span>
-
-                             <span class="summary-pill pill-eval">
-                                 <i class="fa fa-check-circle text-primary"></i>
-                                 <span>Sau đánh giá (+):</span>
-                                 <strong><field name="tong_dat_kiemduyet" readonly="1"/></strong>/<strong><field name="tong_muctieu" readonly="1"/></strong>
-                                 <span>(<field name="tyle_dat_kiemduyet" readonly="1"/>%)</span>
-                             </span>
-
-                             <!-- Cảnh báo giảm đánh giá nếu có -->
-                             <span class="b-warn-pill" invisible="tong_dat_kiemduyet &gt;= tong_dat_canthiep">
-                                 <i class="fa fa-exclamation-triangle"></i>
-                                 <span>Đánh giá giảm sau kiểm duyệt</span>
-                             </span>
-                         </div>
-
-                         <!-- Nhóm nút hành động bên phải -->
-                         <div class="action-right-zone">
-                             <button name="action_thietke_kehoach_linhvuc"
-                                     string="Bổ sung Lĩnh vực của [Kế hoạch]"
-                                     type="object"
-                                     icon="fa-puzzle-piece"
-                                     class="btn-highlight-linhvuc"
-                                     invisible="is_canthiep_ketluan"/>
-                         </div>
-                     </div>
-
-                     <!-- LƯỚI WIDGET MỤC TIÊU VÀ TIẾN TRÌNH CAN THIỆP -->
-                     <group class="w-100 m-0 p-0" col="2">
-                         <field name="kehoach_linhvuc_ids"
-                                widget="ekids_lap_kehoach"
-                                nolabel="1"
-                                colspan="2"
-                                readonly="is_readonly"
-                                invisible="is_show_wiget_canthiep == True"
-                                class="w-100 m-0 p-0"/>
-                         <field name="kehoach_linhvuc_ids"
-                                widget="ekids_canthiep_kehoach"
-                                nolabel="1"
-                                colspan="2"
-                                readonly="is_readonly"
-                                invisible="is_show_wiget_canthiep == False"
-                                class="w-100 m-0 p-0"/>
-                     </group>
-
-                 </sheet>
-             </form>
-         </field>
-    </record>
+                     </sheet>
+                 </form>
+             </field>
+        </record>
 
 
   </data>

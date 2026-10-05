@@ -6,80 +6,107 @@
                 <t t-set="table_data" t-value="docs.get_table_data()"/>
                 <t t-set="ten_baocao" t-value="dict(docs._fields['loai'].selection).get(docs.loai)"/>
 
-                 <div class="btn-print-container" style="text-align:right; margin-bottom: 20px;">
-                   <button onclick="window.print()"
-                            class="btn btn-primary"
-                            style="padding: 8px 16px; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer;"
-                            title="In báo cáo" type="button">
-                        <i class="fa fa-print" style="margin-right: 5px;"></i>
-                    </button>
-                </div>
                 <div class="page" style="font-family: Arial, sans-serif; color: #333;">
 
+                    <!-- NÚT IN (Ẩn khi in ấn) -->
+                    <div class="text-end mb-2 px-2 print-hide" style="text-align: right;">
+                        <button onclick="window.print()"
+                                class="btn btn-primary"
+                                style="padding: 6px 14px; font-size: 13.5px; font-weight: bold; border-radius: 5px; cursor: pointer;"
+                                title="In báo cáo" type="button">
+                            <i class="fa fa-print" style="margin-right: 5px;"></i> In báo cáo
+                        </button>
+                    </div>
 
-
-                     <div style="text-align: center; margin-bottom: 25px;">
-                        <h3 style="font-weight: bold; text-transform: uppercase; font-size: 22px; margin-bottom: 5px;">
+                    <!-- HEADER BÁO CÁO -->
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h3 style="font-weight: bold; text-transform: uppercase; font-size: 20px; margin-bottom: 5px;">
                             <t t-esc="ten_baocao"/>
                         </h3>
-                        <p style="font-style: italic; font-size: 14px; color: #555;">
+                        <p style="font-style: italic; font-size: 13.5px; color: #555; margin: 0;">
                             Từ Tháng <t t-esc="docs.tu_thang"/>/<t t-esc="docs.tu_nam"/> - Đến Tháng <t t-esc="docs.den_thang"/>/<t t-esc="docs.den_nam"/>
                         </p>
                     </div>
 
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <t t-foreach="table_data[0]" t-as="header">
-                                    <th><t t-esc="header"/></th>
-                                </t>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <t t-foreach="table_data[1:]" t-as="row">
+                    <!-- BẢNG DỮ LIỆU ĐƯỢC BỌC TRONG TABLE-RESPONSIVE ĐỂ TRÀN VIỀN VÀ CUỘN NGANG -->
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
                                 <tr>
-                                    <t t-foreach="row" t-as="cell">
-                                        <td t-att-style="
-                                            'text-align: center;' if cell_index == 0
-                                            else 'text-align: right;' if str(cell).replace(',', '').replace('.', '').replace('/', '').replace('-', '').strip().isdigit()
-                                            else 'text-align: left;'">
-                                            <t t-esc="cell"/>
-                                        </td>
+                                    <t t-foreach="table_data[0]" t-as="header">
+                                        <th><t t-esc="header"/></th>
                                     </t>
                                 </tr>
-                            </t>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="table_data[1:]" t-as="row">
+                                    <tr>
+                                        <t t-foreach="row" t-as="cell">
+                                            <td t-att-style="
+                                                'text-align: center;' if cell_index == 0
+                                                else 'text-align: right;' if str(cell).replace(',', '').replace('.', '').replace('/', '').replace('-', '').strip().isdigit()
+                                                else 'text-align: left;'">
+                                                <t t-esc="cell"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 
                 <style>
-                    /* Ép lề, khổ A4 và font chữ */
+                    /* Ép toàn bộ khung layout mở rộng full màn hình, loại bỏ lề mặc định */
+                    body, .o_report_layout_standard, .o_layout, .page {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        margin: 0 !important;
+                        padding: 5px !important;
+                    }
 
                     *:not(i) {
                         font-family: Arial, sans-serif !important;
                     }
+
                     @media print {
-                        .d-print-none { display: none !important; }
+                        .print-hide { display: none !important; }
                         body, .page { margin-top: 0px !important; padding-top: 0px !important; }
                     }
 
-                    /* Bảng biểu co dãn thông minh */
+                    /* Khung cuộn ngang mượt mà trên mobile */
+                    .table-responsive {
+                        width: 100% !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        overflow-x: auto;
+                        -webkit-overflow-scrolling: touch;
+                    }
+
+                    /* Bảng biểu co dãn thông minh, tràn full chiều rộng */
                     .data-table {
                         border-collapse: collapse;
-                        width: 100%;
-                        font-size: 14px;
+                        width: 100% !important;
+                        max-width: none !important;
+                        font-size: 13.5px;
                         table-layout: auto;
                     }
                     .data-table th, .data-table td {
                         border: 1px solid #444;
-                        padding: 8px;
+                        padding: 7px 10px;
                         word-wrap: break-word;
+                        white-space: nowrap; /* Giữ nội dung không bị bóp méo, dùng cuộn ngang */
+                        vertical-align: middle;
+                    }
+                    /* Riêng cột đầu tiên (STT hoặc Tên) có thể linh hoạt */
+                    .data-table th:first-child, .data-table td:first-child {
+                        white-space: nowrap;
                     }
                     .data-table th {
                         background-color: #f2f2f2;
                         color: #212529;
-                        font-size: 15px;
+                        font-size: 14.5px;
                         font-weight: bold;
                         text-align: center;
                         vertical-align: middle;

@@ -31,7 +31,7 @@
                     <style>
                         @page {
                             size: A4 landscape;
-                            margin: 4.5mm 5mm !important; /* Mép giấy gọn gàng tối ưu diện tích */
+                            margin: 4mm 4mm !important;
                         }
 
                         * {
@@ -42,43 +42,55 @@
                             print-color-adjust: exact;
                         }
 
-                        /* FONT CHỮ CƠ BẢN TOÀN BẢN IN TỐI THIỂU 14px */
+                        /* ÉP TRÀN VIỀN 100% CHIỀU RỘNG TRÊN MỌI THIẾT BỊ (XÓA BỎ KHOẢNG TRẮNG HAI BÊN) */
+                        body, .o_report_layout_standard, .o_layout, .article, .page, .o_compact_print_body {
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            margin: 0 !important;
+                            padding: 2px !important;
+                        }
+
                         .o_compact_print_body {
                             font-family: 'Times New Roman', Times, serif !important;
                             color: #000000 !important;
-                            font-size: 14px !important;
-                            line-height: 1.35;
-                            width: 100%;
+                            font-size: 13.5px !important;
+                            line-height: 1.3;
+                            width: 100% !important;
+                        }
+
+                        .header-main-table, .profile-grid-table, .goal-block-item {
+                            width: 100% !important;
+                            max-width: 100% !important;
                         }
 
                         /* BẢNG TIÊU ĐỀ TRÊN CÙNG */
-                        .header-main-table { width: 100%; margin-bottom: 6px; }
+                        .header-main-table { margin-bottom: 4px; }
                         .header-main-table td {
                             padding: 2px 4px;
                             vertical-align: middle;
                             color: #000000 !important;
-                            font-size: 14px !important;
+                            font-size: 13.5px !important;
                         }
                         .top-title-area { width: 45%; text-align: right; }
                         .top-main-title {
-                            font-size: 18px !important;
+                            font-size: 17px !important;
                             font-weight: bold !important;
                             text-transform: uppercase;
                             color: #000000 !important;
                         }
                         .top-sub-title {
-                            font-size: 13.5px !important;
+                            font-size: 13px !important;
                             font-style: italic;
                             color: #000000 !important;
                             margin-top: 1px;
                         }
 
                         /* BẢNG HÀNH CHÍNH */
-                        .profile-grid-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; table-layout: fixed; }
+                        .profile-grid-table { border-collapse: collapse; margin-bottom: 6px; table-layout: fixed; }
                         .profile-grid-table td {
                             border: 1px solid #000000 !important;
-                            padding: 4px 6px;
-                            font-size: 13.5px !important;
+                            padding: 3px 5px;
+                            font-size: 13px !important;
                             vertical-align: middle;
                             color: #000000 !important;
                         }
@@ -87,19 +99,18 @@
                         .col-linhvuc  { width: 33.5%; }
                         .col-tuoi     { width: 33.5%; text-align: center; }
 
-                        /* 🌟 BỎ page-break-before: always ĐỂ MỤC TIÊU TỰ ĐIỀN TIẾP VÀO NỬA DƯỚI TRANG 1 */
                         .tracking-page-section {
                             width: 100%;
                             page-break-before: auto !important;
                         }
 
                         .tracking-table-title {
-                            font-size: 15.5px !important;
+                            font-size: 15px !important;
                             font-weight: bold !important;
                             text-transform: uppercase;
                             color: #000000 !important;
-                            margin-bottom: 6px;
-                            margin-top: 4px;
+                            margin-bottom: 4px;
+                            margin-top: 2px;
                             border-left: 4px solid #000000 !important;
                             padding-left: 6px;
                             page-break-after: avoid !important;
@@ -107,37 +118,44 @@
 
                         /* KHUNG MỖI MỤC TIÊU */
                         .goal-block-item {
-                            width: 100%;
                             border: 1px solid #000000 !important;
-                            padding: 6px 8px;
-                            margin-bottom: 6px;
-                            page-break-inside: avoid !important; /* Giữ nguyên từng mục tiêu không bị xé đôi */
+                            padding: 5px 7px;
+                            margin-bottom: 5px;
+                            page-break-inside: avoid !important;
                             background-color: #ffffff !important;
                         }
 
-                        /* HÀNG TRÊN */
                         .goal-top-row {
                             width: 100%;
                             display: flex;
                             flex-wrap: wrap;
                             align-items: center;
                             justify-content: flex-start;
-                            margin-bottom: 5px;
-                            gap: 8px;
+                            margin-bottom: 4px;
+                            gap: 6px;
                         }
 
                         .goal-title-cell {
-                            font-size: 15.5px !important;
-                            font-weight: bold;
-                            line-height: 1.35;
+                            font-size: 16px !important;
+                            line-height: 1.3;
                             display: inline-block;
                             color: #000000 !important;
                             flex: 1;
                             min-width: 300px;
                         }
 
+                        /* PHẦN CHỈ SỐ "Mục tiêu X:" BÔI ĐẬM */
+                        .goal-index-label {
+                            font-weight: bold !important;
+                        }
+
+                        /* TÊN MỤC TIÊU BÌNH THƯỜNG, KHÔNG BÔI ĐẬM */
+                        .goal-name-text {
+                            font-weight: normal !important;
+                        }
+
                         .goal-note-text {
-                            font-size: 13px !important;
+                            font-size: 12.5px !important;
                             font-weight: normal !important;
                             font-style: italic;
                             color: #000000 !important;
@@ -149,7 +167,7 @@
                             display: flex;
                             flex-wrap: wrap;
                             align-items: center;
-                            gap: 5px;
+                            gap: 4px;
                             margin-left: auto;
                         }
 
@@ -157,9 +175,9 @@
                             display: inline-block;
                             background: transparent !important;
                             border: 1px dashed #000000 !important;
-                            padding: 2px 7px;
+                            padding: 1px 6px;
                             border-radius: 3px;
-                            font-size: 13px !important;
+                            font-size: 12.5px !important;
                             font-weight: 500;
                             color: #000000 !important;
                             white-space: nowrap;
@@ -169,29 +187,30 @@
                             display: inline-block;
                             background-color: #f5f5f5 !important;
                             border: 1px solid #000000 !important;
-                            padding: 2px 8px;
+                            padding: 1px 7px;
                             border-radius: 3px;
-                            font-size: 13.5px !important;
+                            font-size: 13px !important;
                             color: #000000 !important;
                             white-space: nowrap;
                             font-weight: bold;
                         }
 
-                        /* HÀNG DƯỚI */
                         .goal-bottom-row {
                             width: 100%;
                             display: flex;
                             flex-direction: column;
-                            gap: 4px;
-                            padding-top: 4px;
+                            gap: 3px;
+                            padding-top: 3px;
                             border-top: 1px dashed #000000 !important;
                         }
 
                         .tracking-container-row {
                             display: flex;
                             flex-direction: column;
-                            gap: 3px;
+                            gap: 2px;
                             width: 100%;
+                            overflow-x: auto;
+                            -webkit-overflow-scrolling: touch;
                         }
 
                         .tracking-header-row {
@@ -203,24 +222,23 @@
                         }
 
                         .tracking-header-label {
-                            font-size: 13.5px !important;
+                            font-size: 13px !important;
                             font-weight: bold;
                             color: #000000 !important;
                         }
 
-                        /* 🌟 DÙNG FLEX NOWRAP ĐỂ 30 NGÀY NẰM VỪA KHÍT TRÊN 1 HÀNG DUY NHẤT */
                         .day-boxes-horizontal-flow {
                             display: flex;
                             flex-wrap: nowrap !important;
                             gap: 2px;
                             width: 100%;
-                            justify-content: space-between;
+                            min-width: 850px;
                         }
 
                         .day-tracking-box {
                             flex: 1 1 0;
-                            min-width: 0;
-                            height: 48px;
+                            min-width: 26px;
+                            height: 44px;
                             border: 1px solid #000000 !important;
                             border-radius: 2px;
                             display: flex;
@@ -232,36 +250,37 @@
                         }
 
                         .day-num-indicator {
-                            font-size: 11px !important;
+                            font-size: 10.5px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
-                            line-height: 14px;
+                            line-height: 13px;
                             background-color: #f0f0f0 !important;
                             width: 100%;
                             text-align: center;
                             border-bottom: 1px solid #000000 !important;
-                            height: 14px;
+                            height: 13px;
+                            white-space: nowrap;
                         }
 
                         .day-write-space {
-                            height: 20px;
+                            height: 18px;
                             width: 100%;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 13.5px !important;
+                            font-size: 13px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
                             border-bottom: 1px dotted #000000 !important;
                         }
 
                         .day-rate-space {
-                            height: 13px;
+                            height: 11px;
                             width: 100%;
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            font-size: 10px !important;
+                            font-size: 9.5px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
                             line-height: 1;
@@ -280,25 +299,25 @@
                         .lbl-summary-dat {
                             color: #000000 !important;
                             font-weight: bold !important;
-                            font-size: 14px !important;
+                            font-size: 13.5px !important;
                         }
 
                         .goal-summary-badge-row {
                             width: 100%;
-                            font-size: 13.5px !important;
+                            font-size: 13px !important;
                             color: #000000 !important;
                             border-top: 1px dashed #000000 !important;
-                            padding-top: 3px;
+                            padding-top: 2px;
                             margin-top: 1px;
                             text-align: left;
                         }
 
                         .goal-kiemduyet-row {
                             width: 100%;
-                            font-size: 13.5px !important;
+                            font-size: 13px !important;
                             color: #000000 !important;
                             border-top: 1px dashed #000000 !important;
-                            padding-top: 3px;
+                            padding-top: 2px;
                             margin-top: 1px;
                             display: flex;
                             flex-wrap: wrap;
@@ -309,21 +328,21 @@
                         .tag-kiemduyet-status {
                             display: inline-block;
                             border: 1px solid #000000 !important;
-                            padding: 1px 8px;
+                            padding: 1px 7px;
                             border-radius: 3px;
                             font-weight: bold !important;
-                            font-size: 13px !important;
+                            font-size: 12.5px !important;
                             text-transform: uppercase;
                             background-color: #f5f5f5 !important;
                         }
 
                         .goal-kiemduyet-ghichu {
                             width: 100%;
-                            font-size: 13px !important;
+                            font-size: 12.5px !important;
                             font-style: italic;
                             color: #000000 !important;
                             padding-left: 6px;
-                            margin-top: 2px;
+                            margin-top: 1px;
                         }
 
                         .text-bold { font-weight: bold !important; }
@@ -333,9 +352,8 @@
                             .goal-block-item { border: 1px solid #000000 !important; }
                             .day-tracking-box { border: 1px solid #000000 !important; }
                             .box-print-rest { background-color: #eeeeee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                            .meta-label-tag { border: 1px dashed #000000 !important; color: #000000 !important; }
-                            .meta-baseline-tag { border: 1px solid #000000 !important; background-color: #f5f5f5 !important; }
-                            .tag-kiemduyet-status { border: 1px solid #000000 !important; background-color: #f5f5f5 !important; }
+                            .tracking-container-row { overflow-x: visible !important; }
+                            .day-boxes-horizontal-flow { min-width: auto !important; }
                         }
                     </style>
 
@@ -465,7 +483,7 @@
                             </tr>
                         </table>
 
-                        <!-- DANH SÁCH MỤC TIÊU (CHẢY TIẾP ĐẦY TRANG 1 TRƯỚC KHI SANG TRANG 2) -->
+                        <!-- DANH SÁCH MỤC TIÊU -->
                         <div class="tracking-page-section">
                             <div class="tracking-table-title">Hệ thống Mục tiêu can thiệp và Nhật ký đánh giá mức độ thành thục</div>
 
@@ -474,10 +492,11 @@
 
                                     <div class="goal-block-item">
 
-                                        <!-- HÀNG TRÊN: TIÊU ĐỀ + METADATA -->
+                                        <!-- HÀNG TRÊN: TIÊU ĐỀ (TÊN MỤC TIÊU FONT 16px, KHÔNG ĐẬM; CHỈ SỐ ĐẬM) + METADATA -->
                                         <div class="goal-top-row">
                                             <div class="goal-title-cell">
-                                                <span>Mục tiêu <t t-out="muctieu_index + 1"/>:</span> <span t-field="muctieu.name"/>
+                                                <span class="goal-index-label">Mục tiêu <t t-out="muctieu_index + 1"/>:</span>
+                                                <span class="goal-name-text" t-field="muctieu.name"/>
                                                 <t t-if="muctieu.ghichu">
                                                     <span class="goal-note-text">Ghi chú: <span t-field="muctieu.ghichu"/></span>
                                                 </t>
@@ -490,7 +509,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- HÀNG DƯỚI: THEO DÕI HÀNG NGANG (KHÔNG BỊ RỚT DÒNG) -->
+                                        <!-- HÀNG DƯỚI: THEO DÕI HÀNG NGANG CÓ THANH CUỘN -->
                                         <div class="goal-bottom-row">
 
                                             <div class="tracking-container-row">

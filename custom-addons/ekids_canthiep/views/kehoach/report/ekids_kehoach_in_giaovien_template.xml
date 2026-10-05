@@ -31,7 +31,7 @@
                     <style>
                         @page {
                             size: A4 landscape;
-                            margin: 4mm !important; /* Thu gọn mép giấy để tận dụng tối đa diện tích */
+                            margin: 4mm !important;
                         }
 
                         * {
@@ -42,24 +42,32 @@
                             print-color-adjust: exact;
                         }
 
-                        /* FONT CHỮ CƠ BẢN TỐI THIỂU 14px */
+                        /* ÉP TRÀN VIỀN 100% CHIỀU RỘNG TRÊN MỌI THIẾT BỊ */
+                        body, .o_report_layout_standard, .o_layout, .article, .page, .o_compact_print_body {
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            margin: 0 !important;
+                            padding: 2px !important;
+                        }
+
                         .o_compact_print_body {
                             font-family: "Times New Roman", "Arial", serif !important;
                             color: #000000 !important;
                             font-size: 14px !important;
                             line-height: 1.3;
-                            width: 100%;
-                            padding: 0 !important;
+                            width: 100% !important;
                         }
 
-                        /* Header Thông tin Kế hoạch */
-                        .header-main-table { width: 100%; margin-bottom: 4px; }
+                        .header-main-table, .profile-grid-table, .print-container {
+                            width: 100% !important;
+                            max-width: 100% !important;
+                        }
+
                         .header-main-table td { padding: 2px 4px; vertical-align: middle; color: #000000 !important; font-size: 14px !important; }
                         .top-main-title { font-size: 17.5px !important; font-weight: bold !important; text-transform: uppercase; color: #000000 !important; }
                         .top-sub-title { font-size: 13.5px !important; font-style: italic; color: #000000 !important; }
 
                         .profile-grid-table {
-                            width: 100%;
                             border-collapse: collapse;
                             margin-bottom: 6px;
                             table-layout: fixed;
@@ -72,18 +80,15 @@
                         .col-linhvuc  { width: 33.5%; }
                         .col-tuoi     { width: 33.5%; text-align: center; }
 
-                        /* 🌟 BỎ LỆNH page-break-inside: avoid Ở KHUNG TO ĐỂ NỘI DUNG TỰ ĐIỀN ĐẦY TRANG */
                         .print-container {
-                            width: 100%;
                             border: 1px solid #000000 !important;
                             padding: 5px 7px;
                             margin-bottom: 6px;
                             background-color: #ffffff !important;
-                            page-break-inside: auto !important; /* Cho phép dòng chữ chảy liên tục */
+                            page-break-inside: auto !important;
                             break-inside: auto !important;
                         }
 
-                        /* Tiêu đề mục tiêu không bị mồ côi ở cuối trang */
                         .print-title-section {
                             display: table;
                             width: 100%;
@@ -97,11 +102,20 @@
                         .print-main-title {
                             display: table-cell;
                             width: 60%;
-                            font-size: 15.5px !important;
-                            font-weight: bold;
+                            font-size: 16px !important;
                             vertical-align: bottom;
                             text-align: left;
                             color: #000000 !important;
+                        }
+
+                        /* PHẦN "Mục tiêu X:" BÔI ĐẬM */
+                        .goal-index-label {
+                            font-weight: bold !important;
+                        }
+
+                        /* TÊN MỤC TIÊU BÌNH THƯỜNG, KHÔNG BÔI ĐẬM */
+                        .goal-name-text {
+                            font-weight: normal !important;
                         }
 
                         .goal-note-text {
@@ -140,12 +154,26 @@
 
                         .text-paragraph {
                             margin-bottom: 2px;
-                            font-size: 14px !important;
+                            font-size: 13.5px !important;
                             color: #000000 !important;
                             line-height: 1.35;
                         }
 
-                        /* Bảng tiêu chí giữ nguyên vẹn không bị xé đôi */
+                        .abc-content-wrapper *, .abc-content-wrapper p, .abc-content-wrapper span, .abc-content-wrapper div {
+                            font-family: "Times New Roman", "Arial", serif !important;
+                            font-size: 13.5px !important;
+                            color: #000000 !important;
+                            line-height: 1.35 !important;
+                        }
+                        .abc-content-wrapper h1, .abc-content-wrapper h2, .abc-content-wrapper h3, .abc-content-wrapper h4 {
+                            font-family: "Times New Roman", "Arial", serif !important;
+                            font-size: 16px !important;
+                            font-weight: bold !important;
+                            color: #000000 !important;
+                            margin-top: 4px !important;
+                            margin-bottom: 2px !important;
+                        }
+
                         .criteria-table {
                             width: 100%;
                             border-collapse: collapse;
@@ -161,12 +189,11 @@
                             margin-bottom: 4px;
                             padding-bottom: 3px;
                             border-bottom: 1px dashed #000000 !important;
-                            page-break-inside: auto !important; /* Thiết kế ABC có thể ngắt dòng sang trang mới nếu quá dài */
+                            page-break-inside: auto !important;
                         }
 
                         .abc-procedure-content { width: 100%; text-align: justify; }
 
-                        /* 🌟 KHỐI THEO DÕI CỐ ĐỊNH NGUYÊN VẸN KHÔNG TÁCH RỜI */
                         .tracking-diary-content {
                             width: 100%;
                             margin-top: 3px;
@@ -177,19 +204,23 @@
                             break-inside: avoid !important;
                         }
 
-                        /* 🌟 DÙNG FLEX ĐỂ 30 NGÀY NẰM VỪA KHÍT TRÊN 1 HÀNG DUY NHẤT (KHÔNG BỊ RỚT DÒNG) */
-                        .day-boxes-horizontal-flow {
-                            display: flex;
-                            flex-wrap: nowrap !important; /* CẤM RỚT DÒNG */
-                            gap: 2px;
+                        .tracking-scroll-wrapper {
                             width: 100%;
-                            justify-content: space-between;
+                            overflow-x: auto;
+                            -webkit-overflow-scrolling: touch;
                         }
 
-                        /* Ô THEO DÕI TỰ CO GIÃN ĐỀU VỪA VẶN 30-31 CỘT */
+                        .day-boxes-horizontal-flow {
+                            display: flex;
+                            flex-wrap: nowrap !important;
+                            gap: 2px;
+                            width: 100%;
+                            min-width: 850px;
+                        }
+
                         .day-tracking-box-print {
                             flex: 1 1 0;
-                            min-width: 0;
+                            min-width: 26px;
                             height: 48px;
                             border: 1px solid #000000 !important;
                             border-radius: 2px;
@@ -211,6 +242,7 @@
                             width: 100%;
                             text-align: center;
                             height: 14px;
+                            white-space: nowrap;
                         }
 
                         .cell-print-val {
@@ -255,6 +287,8 @@
                             .print-container { border: 1px solid #000000 !important; }
                             .day-tracking-box-print { border: 1px solid #000000 !important; }
                             .box-print-rest { background-color: #eeeeee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            .tracking-scroll-wrapper { overflow-x: visible !important; }
+                            .day-boxes-horizontal-flow { min-width: auto !important; }
                         }
                     </style>
 
@@ -405,7 +439,8 @@
 
                                     <div class="print-title-section">
                                         <div class="print-main-title">
-                                            <span>Mục tiêu <span t-out="muctieu_index + 1"/>:</span> <span t-field="muctieu.name"/>
+                                            <span class="goal-index-label">Mục tiêu <span t-out="muctieu_index + 1"/>:</span>
+                                            <span class="goal-name-text" t-field="muctieu.name"/>
                                             <t t-if="muctieu.ghichu">
                                                 <span class="goal-note-text">Ghi chú: <span t-field="muctieu.ghichu"/></span>
                                             </t>
@@ -506,17 +541,19 @@
                                         </div>
                                     </t>
 
-                                    <!-- KHỐI III: THIẾT KẾ ABC (CHO PHÉP CHẢY TỰ NHIÊN) -->
+                                    <!-- KHỐI III: THIẾT KẾ ABC -->
                                     <t t-if="has_thietke">
                                         <div class="bottom-row-grid">
                                             <div class="abc-procedure-content">
                                                 <div class="section-header-title">III. Thiết kế hoạt động cho giáo viên theo mô tả (ABC)</div>
-                                                <div class="text-paragraph"><span t-out="muctieu.thietke"/></div>
+                                                <div class="text-paragraph abc-content-wrapper">
+                                                    <span t-out="muctieu.thietke"/>
+                                                </div>
                                             </div>
                                         </div>
                                     </t>
 
-                                    <!-- KHỐI IV: THEO DÕI (GIỮ TRỌN VẸN 30 NGÀY TRÊN 1 HÀNG) -->
+                                    <!-- KHỐI IV: THEO DÕI (CÓ THANH CUỘN NGANG AN TOÀN) -->
                                     <div class="tracking-diary-content">
                                         <div class="section-header-title" style="margin-bottom: 2px;">
                                             IV. Theo dõi
@@ -525,58 +562,60 @@
                                             </span>
                                         </div>
 
-                                        <div class="day-boxes-horizontal-flow">
-                                            <t t-if="muctieu.ketqua2muctieu_ids">
-                                                <t t-foreach="muctieu.ketqua2muctieu_ids" t-as="kq">
-                                                    <t t-set="is_future_status" t-value="kq.is_date_status == '1'"/>
-                                                    <t t-set="rest_class" t-value="(kq.loai in ['0', '-1'] or is_future_status) and 'box-print-rest' or ''"/>
+                                        <div class="tracking-scroll-wrapper">
+                                            <div class="day-boxes-horizontal-flow">
+                                                <t t-if="muctieu.ketqua2muctieu_ids">
+                                                    <t t-foreach="muctieu.ketqua2muctieu_ids" t-as="kq">
+                                                        <t t-set="is_future_status" t-value="kq.is_date_status == '1'"/>
+                                                        <t t-set="rest_class" t-value="(kq.loai in ['0', '-1'] or is_future_status) and 'box-print-rest' or ''"/>
 
-                                                    <div t-attf-class="day-tracking-box-print #{rest_class}">
-                                                        <span class="cell-print-date">
-                                                            <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
-                                                        </span>
-                                                        <div class="cell-print-val">
-                                                            <t t-if="is_future_status"></t>
-                                                            <t t-else="">
-                                                                <t t-if="kq.loai == '-1'">N</t>
-                                                                <t t-elif="kq.loai == '0'"></t>
+                                                        <div t-attf-class="day-tracking-box-print #{rest_class}">
+                                                            <span class="cell-print-date">
+                                                                <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
+                                                            </span>
+                                                            <div class="cell-print-val">
+                                                                <t t-if="is_future_status"></t>
                                                                 <t t-else="">
-                                                                    <t t-if="kq.trangthai != '0' and kq.solan_thu &gt; 0">
-                                                                        <span t-field="kq.solan_thu_dat"/>
+                                                                    <t t-if="kq.loai == '-1'">N</t>
+                                                                    <t t-elif="kq.loai == '0'"></t>
+                                                                    <t t-else="">
+                                                                        <t t-if="kq.trangthai != '0' and kq.solan_thu &gt; 0">
+                                                                            <span t-field="kq.solan_thu_dat"/>
+                                                                        </t>
                                                                     </t>
                                                                 </t>
-                                                            </t>
+                                                            </div>
+                                                            <div class="cell-print-rate">
+                                                                <t t-if="not is_future_status and kq.loai == '1' and kq.trangthai != '0' and kq.solan_thu &gt; 0">
+                                                                    <span><t t-esc="kq.tyle_thu"/>%</span>
+                                                                </t>
+                                                            </div>
                                                         </div>
-                                                        <div class="cell-print-rate">
-                                                            <t t-if="not is_future_status and kq.loai == '1' and kq.trangthai != '0' and kq.solan_thu &gt; 0">
-                                                                <span><t t-esc="kq.tyle_thu"/>%</span>
-                                                            </t>
-                                                        </div>
-                                                    </div>
+                                                    </t>
                                                 </t>
-                                            </t>
 
-                                            <!-- Fallback khi chưa sinh dòng -->
-                                            <t t-else="">
-                                                <t t-set="total_days" t-value="int(o.songay or 30)"/>
-                                                <t t-foreach="range(total_days)" t-as="day_idx">
-                                                    <t t-set="computed_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
-                                                    <t t-set="is_fallback_sunday" t-value="computed_date.weekday() == 6"/>
-                                                    <t t-set="is_fallback_future" t-value="computed_date &gt; datetime.date.today()"/>
-                                                    <t t-set="should_fallback_gray" t-value="is_fallback_sunday or is_fallback_future"/>
+                                                <!-- Fallback khi chưa sinh dòng -->
+                                                <t t-else="">
+                                                    <t t-set="total_days" t-value="int(o.songay or 30)"/>
+                                                    <t t-foreach="range(total_days)" t-as="day_idx">
+                                                        <t t-set="computed_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
+                                                        <t t-set="is_fallback_sunday" t-value="computed_date.weekday() == 6"/>
+                                                        <t t-set="is_fallback_future" t-value="computed_date &gt; datetime.date.today()"/>
+                                                        <t t-set="should_fallback_gray" t-value="is_fallback_sunday or is_fallback_future"/>
 
-                                                    <div t-attf-class="day-tracking-box-print #{should_fallback_gray and 'box-print-rest' or ''}">
-                                                        <span class="cell-print-date">
-                                                            <span t-out="computed_date.strftime('%d/%m')"/>
-                                                        </span>
-                                                        <div class="cell-print-val">
-                                                            <t t-if="is_fallback_future"></t>
-                                                            <t t-elif="is_fallback_sunday">N</t>
+                                                        <div t-attf-class="day-tracking-box-print #{should_fallback_gray and 'box-print-rest' or ''}">
+                                                            <span class="cell-print-date">
+                                                                <span t-out="computed_date.strftime('%d/%m')"/>
+                                                            </span>
+                                                            <div class="cell-print-val">
+                                                                <t t-if="is_fallback_future"></t>
+                                                                <t t-elif="is_fallback_sunday">N</t>
+                                                            </div>
+                                                            <div class="cell-print-rate"></div>
                                                         </div>
-                                                        <div class="cell-print-rate"></div>
-                                                    </div>
+                                                    </t>
                                                 </t>
-                                            </t>
+                                            </div>
                                         </div>
 
                                         <div style="margin-top: 3px; padding-top: 2px; font-size: 13.5px; text-align: left; color: #000000; border-top: 1px dashed #000000;">

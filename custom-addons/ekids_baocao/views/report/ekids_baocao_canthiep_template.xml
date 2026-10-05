@@ -2,86 +2,181 @@
 <odoo>
     <template id="ekids_baocao.baocao_canthiep_template">
         <t t-call="web.html_container">
-            <div class="article" style="font-family: 'Times New Roman', serif; color: #000000; padding: 10px;">
+            <div class="article main-report-wrapper" style="font-family: 'Times New Roman', serif; color: #000000;">
                 <style>
                     @page {
                         size: A4 landscape;
                         margin: 6mm 4mm !important;
                     }
 
+                    /* 🌟 BẢN WEB / MẶC ĐỊNH */
+                    .main-report-wrapper {
+                        padding: 6px;
+                        width: 100%;
+                    }
+
                     /* 🌟 KHUNG CUỘN CẢ NGANG LẪN DỌC */
                     .report-table-responsive {
                         width: 100%;
-                        max-height: 75vh; /* 🌟 Giới hạn chiều cao để kích hoạt cuộn dọc giữ header */
-                        overflow: auto;   /* Cuộn 2 chiều: ngang trên mobile, dọc khi cuộn xuống */
+                        max-height: 84vh; /* Mở rộng chiều cao hiển thị trên mobile */
+                        overflow: auto;
                         -webkit-overflow-scrolling: touch;
-                        margin-bottom: 15px;
                         border: 1px solid #000000;
                     }
 
                     .table-report {
                         width: 100%;
                         min-width: 1250px;
-                        /* 🌟 BẮT BUỘC: separate để sticky th giữ nguyên border không bị trôi viền */
                         border-collapse: separate !important;
                         border-spacing: 0 !important;
-                        font-size: 14px;
+                        font-size: 13.5px;
                         text-align: center;
                     }
 
                     .table-report th, .table-report td {
                         border-right: 1px solid #000000;
                         border-bottom: 1px solid #000000;
-                        padding: 6px 4px;
+                        padding: 5px 3px;
                         vertical-align: middle;
                         white-space: nowrap;
+                        background-color: #FFFFFF;
                     }
 
-                    /* 🌟 HÀNG TIÊU ĐỀ 1: Ghim sát đỉnh top = 0 */
+                    /* ================= CỐ ĐỊNH HEADER DỌC ================= */
                     .table-report thead tr:first-child th {
                         position: sticky;
                         top: 0;
                         background-color: #E2E8F0 !important;
-                        z-index: 10;
+                        z-index: 15;
                         font-weight: bold;
                         text-transform: uppercase;
-                        font-size: 14px;
-                        border-top: none;
+                        font-size: 13.5px;
                     }
 
-                    /* 🌟 HÀNG TIÊU ĐỀ 2 (CÁC CỘT CON): Ghim ngay bên dưới hàng 1 */
                     .table-report thead tr:nth-child(2) th {
                         position: sticky;
-                        top: 36px; /* 🌟 Cố định khoảng cách bằng đúng chiều cao hàng 1 */
+                        top: 34px;
                         background-color: #F1F5F9 !important;
-                        z-index: 9;
-                        font-size: 14px !important;
+                        z-index: 14;
+                        font-size: 13px !important;
                         font-weight: 600 !important;
+                    }
+
+                    /* ================= CỐ ĐỊNH CỘT 1 (STT: 28px)  CỘT 2 (CƠ SỞ: 135px) ================= */
+                    .col-sticky-stt {
+                        position: sticky;
+                        left: 0;
+                        z-index: 10;
+                        width: 28px;
+                        min-width: 28px;
+                        max-width: 28px;
+                        background-color: #F8FAFC !important;
+                        border-left: 1px solid #000000 !important;
+                        padding: 4px 1px !important;
+                    }
+
+                    .col-sticky-coso {
+                        position: sticky;
+                        left: 28px;
+                        z-index: 10;
+                        width: 135px;
+                        min-width: 135px;
+                        max-width: 135px;
+                        background-color: #FFFFFF !important;
+                        box-shadow: 2px 0 4px -1px rgba(0, 0, 0, 0.18);
+                        white-space: normal !important;
+                        line-height: 1.25;
+                    }
+
+                    /* Ô giao nhau Header STT + Cơ sở */
+                    .th-sticky-stt {
+                        position: sticky !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        z-index: 30 !important;
+                        width: 28px;
+                        min-width: 28px;
+                        max-width: 28px;
+                        background-color: #CBD5E1 !important;
+                        border-left: 1px solid #000000 !important;
+                    }
+
+                    .th-sticky-coso {
+                        position: sticky !important;
+                        top: 0 !important;
+                        left: 28px !important;
+                        z-index: 30 !important;
+                        width: 135px;
+                        min-width: 135px;
+                        max-width: 135px;
+                        background-color: #CBD5E1 !important;
+                        box-shadow: 2px 0 4px -1px rgba(0, 0, 0, 0.18);
+                    }
+
+                    .bg-total .col-sticky-total {
+                        position: sticky;
+                        left: 0;
+                        z-index: 12;
+                        background-color: #CBD5E1 !important;
+                        border-left: 1px solid #000000 !important;
+                        box-shadow: 2px 0 4px -1px rgba(0, 0, 0, 0.18);
                     }
 
                     .text-left {
                         text-align: left !important;
-                        padding-left: 8px !important;
-                        white-space: normal !important;
-                        min-width: 160px;
+                        padding-left: 5px !important;
                     }
 
                     .fw-bold { font-weight: bold !important; }
                     .bg-total {
                         background-color: #E2E8F0;
                         font-weight: bold;
-                        font-size: 14.5px;
+                        font-size: 14px;
+                    }
+                    .bg-total td {
+                        background-color: #E2E8F0 !important;
                     }
 
-                    /* Khi in ấn ra PDF / Giấy A4: Hủy chế độ cuộn màn hình */
+                    /* 🌟 ĐẶC TRỊ CHO MÀN HÌNH MOBILE: TRÀN VIỀN 100%, XÓA BỎ LỀ TRỐNG */
+                    @media screen and (max-width: 768px) {
+                        .main-report-wrapper {
+                            padding: 0 !important;
+                            margin: 0 !important;
+                        }
+                        .report-table-responsive {
+                            border-left: none !important;
+                            border-right: none !important;
+                            margin-bottom: 0 !important;
+                        }
+                        .report-header-box {
+                            padding: 6px 8px !important;
+                            margin-bottom: 6px !important;
+                        }
+                        .report-header-box h3 {
+                            font-size: 15px !important;
+                        }
+                        .report-header-box div {
+                            font-size: 12px !important;
+                        }
+                    }
+
+                    /* Khi in ấn ra PDF / Giấy A4 */
                     @media print {
+                        .main-report-wrapper { padding: 0 !important; }
                         .report-table-responsive {
                             max-height: none !important;
                             overflow: visible !important;
                             border: none !important;
                         }
-                        .table-report thead tr th {
+                        .table-report th,
+                        .table-report td,
+                        .col-sticky-stt,
+                        .col-sticky-coso,
+                        .th-sticky-stt,
+                        .th-sticky-coso,
+                        .col-sticky-total {
                             position: static !important;
+                            box-shadow: none !important;
                         }
                         .table-report {
                             min-width: 100% !important;
@@ -92,22 +187,23 @@
                 </style>
 
                 <!-- HEADER TIÊU ĐỀ -->
-                <div style="text-align: center; margin-bottom: 12px;">
-                    <h3 style="font-size: 18px; font-weight: bold; text-transform: uppercase; margin-bottom: 4px;">
+                <div class="report-header-box" style="text-align: center; margin-bottom: 8px;">
+                    <h3 style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-bottom: 2px;">
                         BÁO CÁO TỔNG HỢP TIẾN ĐỘ THỰC HIỆN KẾ HOẠCH CAN THIỆP
                     </h3>
-                    <div style="font-size: 14px; font-style: italic;">
+                    <div style="font-size: 13px; font-style: italic;">
                         (Kỳ báo cáo: <t t-out="data.get('label_thangnay')"/> - Kế hoạch kế tiếp: <t t-out="data.get('label_thangtoi')"/>)
                     </div>
                 </div>
 
-                <!-- BẢNG DỮ LIỆU CỐ ĐỊNH TIÊU ĐỀ -->
+                <!-- BẢNG DỮ LIỆU CỐ ĐỊNH TIÊU ĐỀ & TRÀN VIỀN MOBILE -->
                 <div class="report-table-responsive">
                     <table class="table-report">
                         <thead>
                             <tr>
-                                <th rowspan="2" style="width: 35px; border-left: 1px solid #000;">STT</th>
-                                <th rowspan="2" style="width: 160px;">Cơ sở</th>
+                                <th rowspan="2" class="th-sticky-stt">STT</th>
+                                <th rowspan="2" class="th-sticky-coso">Cơ sở</th>
+
                                 <th rowspan="2">Tổng HS đang học</th>
                                 <th colspan="2">Học sinh có Kết luận</th>
                                 <th colspan="2">Học sinh có Kế hoạch</th>
@@ -118,23 +214,18 @@
                                 <th rowspan="2">Đang can thiệp</th>
                             </tr>
                             <tr>
-                                <!-- Kết luận -->
                                 <th>Tổng kết luận</th>
                                 <th>Được lập KH</th>
 
-                                <!-- Học sinh có kế hoạch -->
                                 <th>Đã có KH</th>
                                 <th>Chưa có KH</th>
 
-                                <!-- Tổng số kế hoạch -->
                                 <th>Đang soạn thảo</th>
                                 <th>Đã phê duyệt</th>
 
-                                <!-- Tháng này -->
                                 <th>Tổng KH</th>
                                 <th>Đã duyệt</th>
 
-                                <!-- Tháng tới -->
                                 <th>Tổng KH</th>
                                 <th>Đã duyệt</th>
                             </tr>
@@ -142,8 +233,9 @@
                         <tbody>
                             <t t-foreach="data.get('rows', [])" t-as="r">
                                 <tr>
-                                    <td style="border-left: 1px solid #000;"><t t-out="r['stt']"/></td>
-                                    <td class="text-left fw-bold"><t t-out="r['ten_coso']"/></td>
+                                    <td class="col-sticky-stt"><t t-out="r['stt']"/></td>
+                                    <td class="col-sticky-coso text-left fw-bold"><t t-out="r['ten_coso']"/></td>
+
                                     <td class="fw-bold"><t t-out="r['so_hs']"/></td>
                                     <td><t t-out="r['hs_kl']"/></td>
                                     <td><t t-out="r['hs_kl_chopheplap']"/></td>
@@ -167,7 +259,7 @@
                             <!-- DÒNG TỔNG CỘNG HỆ THỐNG -->
                             <t t-set="tot" t-value="data.get('totals', {})"/>
                             <tr class="bg-total">
-                                <td colspan="2" style="border-left: 1px solid #000;">TỔNG CỘNG</td>
+                                <td colspan="2" class="col-sticky-total">TỔNG CỘNG</td>
                                 <td><t t-out="tot.get('so_hs', 0)"/></td>
                                 <td><t t-out="tot.get('hs_kl', 0)"/></td>
                                 <td><t t-out="tot.get('hs_kl_chopheplap', 0)"/></td>
