@@ -157,7 +157,7 @@ def func_get_dulieu_chamcong_thucte_giaovien(self
     chamcong_nghi = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['-1'],
                                                                                     nghiles, nghipheps,
                                                                                     coso_dilam_kehoachs)
-    gv_dilam_kehoachs = func_get_songay_dilam_giaovien_trongthang(giaovien2thang.giaovien_id,coso_dilam_kehoachs)
+    gv_dilam_kehoachs = func_get_songay_dilam_giaovien_trongthang(giaovien,coso_dilam_kehoachs)
 
     gv_nghiles = func_get_giaovien_nghiles(giaovien,nghiles)
     gv_coso_chonghi_truluongs = func_get_giaovien_coso_nghi_truluong(giaovien, coso_chonghi_truluongs)
