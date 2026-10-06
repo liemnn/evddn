@@ -94,6 +94,20 @@ class CoSo(models.Model):
     is_thue_canthiep = fields.Boolean(string="Thuê Module [Chương trình can thiệp]", default=True)
     is_canthiep_ketluan = fields.Boolean(string="Lập kế hoạch cần có kết luận", default=True)
 
+
+    songay = fields.Integer(string="Số ngày còn",compute="_compute_songay")
+
+    def _compute_songay(self):
+        today = date.today()
+        for record in self:
+            if record.thue_denngay:
+                delta_days = (record.thue_denngay - today).days
+                # Nếu đã hết hạn (ngày âm) thì trả về 0 ngày còn lại
+                # (Nếu bạn muốn hiển thị số âm để biết quá hạn bao nhiêu ngày thì bỏ max(0, ...))
+                record.songay = max(0, delta_days)
+            else:
+                record.songay = 0
+
     def _get_vietnam_banks(self):
         return [
             ('422589', 'CIMB (Ngân hàng TNHH MTV CIMB Việt Nam)'),
@@ -282,6 +296,52 @@ class CoSo(models.Model):
                 'default_coso_id': self.id
             }
         }
+
+    def action_giahan_6thang(self):
+        today = date.today()
+        for record in self:
+            # Nếu chưa có ngày bắt đầu thuê thì gán luôn hôm nay
+            if not record.thue_tungay:
+                record.thue_tungay = today
+
+            # Xác định mốc ngày cơ sở để cộng thêm 6 tháng:
+            # Nếu chưa có ngày kết thúc hoặc đã quá hạn, lấy mốc là hôm nay; ngược lại lấy tiếp nối từ thue_denngay
+            if record.thue_denngay:
+                base_date = record.thue_denngay
+
+                # Gia hạn 6 tháng và lấy ngày cuối cùng của tháng đó
+                record.thue_denngay = self.func_get_last_day_of_month(base_date, 6)
+
+    def action_giahan_1nam(self):
+        today = date.today()
+        for record in self:
+            if not record.thue_tungay:
+                record.thue_tungay = today
+
+            if record.thue_denngay:
+                base_date = record.thue_denngay
+
+                # Gia hạn 12 tháng (1 năm) và lấy ngày cuối cùng của tháng đó
+                record.thue_denngay = self.func_get_last_day_of_month(base_date, 12)
+
+    def func_get_last_day_of_month(self, base_date, add_months):
+        """
+        Hàm phụ trợ cộng thêm add_months vào base_date
+        và trả về ngày cuối cùng của tháng đó.
+        Chỉ dùng thư viện chuẩn datetime / date / timedelta.
+        """
+        # 1. Tính năm và tháng mục tiêu
+        total_months = base_date.year * 12 + (base_date.month - 1) + add_months
+        target_year = total_months // 12
+        target_month = (total_months % 12) + 1
+
+        # 2. Để tìm ngày cuối tháng target_month, ta tìm ngày 1 của tháng kế tiếp rồi trừ đi 1 ngày
+        if target_month == 12:
+            next_month_first_day = date(target_year + 1, 1, 1)
+        else:
+            next_month_first_day = date(target_year, target_month + 1, 1)
+
+        return next_month_first_day - timedelta(days=1)
 
 
 

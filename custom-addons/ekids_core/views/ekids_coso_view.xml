@@ -129,6 +129,31 @@
                     <field name="masothue"/>
                     <field name="dm_tinh_id"/>
                     <field name="dm_xa_id"/>
+                    <field name="dm_xa_id"/>
+                     <field name="trangthai"
+                           decoration-success="trangthai == '1'"
+                           decoration-danger="trangthai == '0'"
+                           decoration-warning="trangthai == '1'"
+                     />
+                    <field name="songay"/>
+                    <button name="action_giahan_6thang"
+                            type="object"
+                            string="Gia hạn 6 tháng"
+                            icon="fa-calendar-plus-o"
+                            invisible="songay &gt;= 30"
+                            class="btn btn-outline-primary fw-bold"
+                            confirm="Bạn có chắc chắn muốn gia hạn hợp đồng thuê thêm 6 tháng (đến cuối tháng) cho cơ sở này không?"/>
+
+                    <!-- Nút Gia hạn 1 năm -->
+                    <button name="action_giahan_1nam"
+                            type="object"
+                            string="Gia hạn 1 năm"
+                            invisible="songay &gt;= 30"
+                            icon="fa-clock-o"
+                            class="btn btn-outline-success fw-bold"
+                            confirm="Bạn có chắc chắn muốn gia hạn hợp đồng thuê thêm 1 năm (đến cuối tháng) cho cơ sở này không?"/>
+
+
                 </list>
             </field>
         </record>
