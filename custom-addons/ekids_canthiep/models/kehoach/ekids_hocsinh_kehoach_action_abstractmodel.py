@@ -158,40 +158,41 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthais)
         if not kehoach:
             giaovien = giaovien_util.func_get_giaovien_tu_user(self)
-            # tim ke hoach truoc
-            trangthais = [kehoach_util.KEHOACH_HET_HIEULUC]
-            kehoach_truoc = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, trangthais)
-            tu_ngay = date.today()
-            if kehoach_truoc:
-                tu_ngay = self.func_get_default_kehoach_tu_ngay(kehoach_truoc)
-            den_ngay = self.func_get_default_kehoach_den_ngay(tu_ngay)
-            songay = (den_ngay - tu_ngay).days + 1
-            data ={
-                "hocsinh_id":self.id,
-                "ketluan_id": ketluan.id,
-                "gv_lapkehoach_id": giaovien.id,
-                "tu_ngay": tu_ngay,
-                "den_ngay": den_ngay,
-                "songay": songay
-            }
-            if kehoach_truoc:
-                data["kehoach_truoc_id"] =kehoach_truoc.id
+            if giaovien.id in ketluan.gv_canthiep_ids.ids:
+                # tim ke hoach truoc
+                trangthais = [kehoach_util.KEHOACH_HET_HIEULUC]
+                kehoach_truoc = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, trangthais)
+                tu_ngay = date.today()
+                if kehoach_truoc:
+                    tu_ngay = self.func_get_default_kehoach_tu_ngay(kehoach_truoc)
+                den_ngay = self.func_get_default_kehoach_den_ngay(tu_ngay)
+                songay = (den_ngay - tu_ngay).days + 1
+                data ={
+                    "hocsinh_id":self.id,
+                    "ketluan_id": ketluan.id,
+                    "gv_lapkehoach_id": giaovien.id,
+                    "tu_ngay": tu_ngay,
+                    "den_ngay": den_ngay,
+                    "songay": songay
+                }
+                if kehoach_truoc:
+                    data["kehoach_truoc_id"] =kehoach_truoc.id
 
-            kehoach = self.env['ekids.kehoach'].create(data)
-            if kehoach:
-                linhvucs = ketluan.linhvuc_ids
-                for linhvuc in linhvucs:
-                    if linhvuc.is_lapkehoach_thangnay == True:
-                        data2={
-                            'sequence':linhvuc.sequence,
-                            'kehoach_id':kehoach.id,
-                            'chuongtrinh_id': linhvuc.chuongtrinh_id.id,
-                            'linhvuc_id': linhvuc.linhvuc_id.id,
-                            'tuoi_id': linhvuc.tuoi_id.id,
-                        }
-                        self.env['ekids.kehoach_linhvuc'].create(data2)
-                kehoach.func_copy_muctieu_thangtruoc_khongdat_sang()
-        return kehoach
+                kehoach = self.env['ekids.kehoach'].create(data)
+                if kehoach:
+                    linhvucs = ketluan.linhvuc_ids
+                    for linhvuc in linhvucs:
+                        if linhvuc.is_lapkehoach_thangnay == True:
+                            data2={
+                                'sequence':linhvuc.sequence,
+                                'kehoach_id':kehoach.id,
+                                'chuongtrinh_id': linhvuc.chuongtrinh_id.id,
+                                'linhvuc_id': linhvuc.linhvuc_id.id,
+                                'tuoi_id': linhvuc.tuoi_id.id,
+                            }
+                            self.env['ekids.kehoach_linhvuc'].create(data2)
+                    kehoach.func_copy_muctieu_thangtruoc_khongdat_sang()
+            return kehoach
 
 
 
