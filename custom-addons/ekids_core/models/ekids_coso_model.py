@@ -26,7 +26,8 @@ class CoSo(models.Model):
     thue_denngay = fields.Date(string="Ngày kết thúc thuê")
     trangthai = fields.Selection([("0", "Đang cấu hình (chưa thuê)")
                                      ,("1", "Đang thuê")
-                                     , ("-1", "Hết thời gian thuê ( tạm dừng)")],
+                                     , ("-1", "Hết thời gian thuê ( tạm dừng)")
+                                     ,("2", "Săp hết hạn thuê (dưới 1 tháng)")],
                             string="Trạng thái",compute="_compute_trangthai",store=True)
 
     tyle_tralai_hs_nghiphep = fields.Integer(string="Tỷ lệ % khi Học sinh xin [Nghỉ phép]", default=0,
@@ -162,19 +163,32 @@ class CoSo(models.Model):
             ('999888', 'VBSP (Ngân hàng Chính sách Xã hội)'),
         ]
 
-    @api.depends('thue_tungay', 'thue_denngay')
+    @api.depends("thue_tungay","thue_denngay")
     def _compute_trangthai(self):
         today = date.today()
         for record in self:
-            # Nếu thiếu 1 trong 2 ngày → xem như chưa thuê
+            # 1. Chưa nhập đủ ngày bắt đầu hoặc ngày kết thúc
             if not record.thue_tungay or not record.thue_denngay:
-                record.trangthai = '0'  # Đang cấu hình (chưa thuê)
-            elif record.thue_tungay > today:
-                record.trangthai = '0'  # Chưa đến ngày thuê
-            elif record.thue_tungay <= today <= record.thue_denngay:
-                record.trangthai = '1'  # Đang thuê
+                record.trangthai = '0'
+                continue
+
+            # 2. Chưa đến thời gian bắt đầu thuê
+            if record.thue_tungay > today:
+                record.trangthai = '0'
+
+            # 3. Đã quá hạn thuê (hết hiệu lực)
+            elif today > record.thue_denngay:
+                record.trangthai = '-1'
+
+            # 4. Đang trong thời gian thuê (thue_tungay <= today <= thue_denngay)
             else:
-                record.trangthai = '-1'  # Hết thời hạn
+                # Cách tính 1: Số ngày còn lại từ hôm nay đến lúc hết hạn <= 30 ngày
+                # (hoặc: record.thue_denngay - timedelta(days=30) <= today)
+                days_left = (record.thue_denngay - today).days
+                if days_left <= 30:
+                    record.trangthai = '2'  # Sắp hết hạn thuê (dưới 1 tháng)
+                else:
+                    record.trangthai = '1'  # Đang thuê bình thường
 
     @api.model
     def search_fetch(self, domain, field_names,offset=0, limit=50, order=None):

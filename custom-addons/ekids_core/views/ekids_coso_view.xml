@@ -11,7 +11,13 @@
               <!-- Bộ lọc mặc định -->
               <filter string="Đang thuê" name="trangthai" domain="[('trangthai','=','1')]"/>
               <filter string="Tạm dừng (hết hiệu lực)" name="trangthai" domain="[('trangthai','=','-1')]"/>
-              <group expand="1" string="Group By">
+              <filter string="Sắp hết hạn (&lt;= 30 ngày)"
+                    name="filter_sap_hethan"
+                    domain="[
+                        ('thue_denngay', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                        ('thue_denngay', '&lt;=', (context_today() + datetime.timedelta(days=30)).strftime('%Y-%m-%d'))
+                    ]"/>
+                <group expand="1" string="Group By">
                 <filter name="group_by_tinh"
                     string="Tỉnh thành"
                     context="{'group_by':'dm_tinh_id'}"/>
@@ -67,7 +73,11 @@
                                 <!-- Các thông tin badge dòng 1 -->
                                 <div class="d-flex flex-wrap gap-2 mb-2" style="padding-left: 36px;">
                                     <div class="d-flex align-items-center">
-                                        <field name="trangthai" widget="badge" decoration-success="trangthai == '1'" decoration-danger="trangthai != '1'" style="padding: 4px 8px; font-size: 11px; font-weight: 600;"/>
+                                        <field name="trangthai" widget="badge"
+                                               decoration-success="trangthai == '1'"
+                                               decoration-danger="trangthai != '1'"
+                                               decoration-warning="trangthai != '2'"
+                                               style="padding: 4px 8px; font-size: 11px; font-weight: 600;"/>
                                     </div>
 
                                     <span class="badge bg-light border text-dark fw-normal d-flex align-items-center" style="font-size: 11px; padding: 4px 8px; color: #334155;">
