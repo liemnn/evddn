@@ -142,7 +142,8 @@ class DanhMucCa(models.Model):
         self.env['ekids.hocsinh_ca_canthiep'].create(data)
 
     def func_get_dongia_hocsinh(self,hocsinh,tu_ngay,den_ngay):
-        nghiles = nghile_util.func_get_nghiles_trong_khoang_thoigian(self,self.coso_id, ['0'], tu_ngay,den_ngay)
+        #nghiles = nghile_util.func_get_nghiles_trong_khoang_thoigian(self,self.coso_id, ['0'], tu_ngay,den_ngay)
+        nghiles =None
         return self.func_get_dongia(nghiles,hocsinh,tu_ngay,den_ngay)
 
 
@@ -156,6 +157,8 @@ class DanhMucCa(models.Model):
         else:
             return  self.tien
 
+
+
     def func_is_hoc(self,hocsinh,ngay):
         week = ngay.weekday() + 2
         field_name_ca = "t" + str(week)
@@ -167,18 +170,11 @@ class DanhMucCa(models.Model):
             if is_hoc == True:
                 return True
         else:
-
-            # TH2: Theo hồ sơ học sinh có thiết lập riêng
-            if (hocsinh and hocsinh.is_ngaydihoc_rieng == True):
-                is_hoc = getattr(hocsinh, field_name_hs_cs)
-                if is_hoc == True:
-                    return True
-            else:
-                # TH3: Theo hồ cơ sở
-                coso = self.coso_id
-                is_hoc = getattr(coso, field_name_hs_cs)
-                if is_hoc == True:
-                    return True
+            # TH2: Theo hồ cơ sở
+            coso = self.coso_id
+            is_hoc = getattr(coso, field_name_hs_cs)
+            if is_hoc == True:
+                return True
 
         # còn lại không có
         return False

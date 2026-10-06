@@ -525,12 +525,14 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 ('trangthai', 'in', ['3']),
             ])
 
-            tien = 0
-            soca = 0
-            dongia = 0
-            ca_hoc = None
+
 
             for dm_ca in dm_ca_ids:
+                tien = 0
+                soca = 0
+                dongia = 0
+                ca_hoc = None
+                songay_nghi=0
                 for ca in ca_canthieps:
                     if ca.dm_ca_id.id == dm_ca.id:
                         ca_hoc = dm_ca
@@ -548,6 +550,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                             check_den_ngay = (not ca_den_ngay) or (ca_den_ngay >= ngay)
                             if getattr(ca, thu_field, False) and check_tu_ngay and check_den_ngay:
                                 # ngay nay co di hoc
+                                songay_nghi +=1
                                 if (dm_ca.is_hoantien_khi_nghi == False
                                         and dm_ca.tyle_hoan_rieng <= 0):
                                     # không cho phep hoàn tiền khoản này
@@ -566,28 +569,30 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                 tien += (dongia / 100) * tyle_hoantra
                                 soca += 1
                                 dongia = self.func_thongtin_duoctru_hocphi_tien(dongia, dm_ca, hocphi)
-            if soca_hocbu > 0:
-                soca = soca - soca_hocbu
-                tien = soca * ca_hoc.tien
 
-            if ((tien > 0 and tyle_hoantra > 0)
-                    or soca_hocbu > 0):
-                tien = self.func_thongtin_duoctru_hocphi_tien(tien, ca_hoc, hocphi)
-                name = self.func_get_name_hoantra_hocphi_ca(hocphi, lydo
-                                                            , len(days)
-                                                            , ca_hoc
-                                                            , tyle_hoantra
-                                                            , soca
-                                                            , soca_hocbu
-                                                            , tien
-                                                            , dongia)
+                if soca_hocbu > 0:
+                    soca = soca - soca_hocbu
+                    tien = soca * ca_hoc.tien
 
-                data = {
-                    'hocphi_id': hocphi.id,
-                    'name': name,
-                    'tien': tien
-                }
-                self.env['ekids.hocphi_duoctru'].create(data)
+                if ((tien > 0 and tyle_hoantra > 0)
+                        or soca_hocbu > 0):
+                    tien = self.func_thongtin_duoctru_hocphi_tien(tien, ca_hoc, hocphi)
+                    name = self.func_get_name_hoantra_hocphi_ca(hocphi, lydo
+                                                                , songay_nghi
+                                                                , ca_hoc
+                                                                , tyle_hoantra
+                                                                , soca
+                                                                , soca_hocbu
+                                                                , tien
+                                                                , dongia)
+
+
+                    data = {
+                        'hocphi_id': hocphi.id,
+                        'name': name,
+                        'tien': tien
+                    }
+                    self.env['ekids.hocphi_duoctru'].create(data)
 
     def func_tao_macdinh_hocphi_ca(self, nghiles,hocphi, ca_canthieps
                         ,ngay_dauthang,ngay_cuoithang):
