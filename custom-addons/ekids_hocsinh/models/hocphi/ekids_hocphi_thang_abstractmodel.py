@@ -519,11 +519,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         if ca_canthieps and days:
             dm_ca_ids = list(set(ca_canthieps.mapped('dm_ca_id')))
 
-            soca_hocbu = self.env['ekids.diemdanh_ca2ngay'].search_count([
-                ('hocsinh_id', '=', hocphi.hocsinh_id.id),
-                ('ngay', 'in', days),
-                ('trangthai', 'in', ['3']),
-            ])
+
 
 
 
@@ -533,8 +529,19 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 dongia = 0
                 ca_hoc = None
                 songay_nghi=0
+                soca_hocbu = self.env['ekids.diemdanh_ca2ngay'].search_count([
+                    ('hocsinh_id', '=', hocphi.hocsinh_id.id),
+                    ('ngay', 'in', days),
+                    ('hocphi_dm_ca_id', '=', dm_ca.id),
+                    ('trangthai', 'in', ['3']),
+                ])
+
+
+
                 for ca in ca_canthieps:
-                    if ca.dm_ca_id.id == dm_ca.id:
+                    if (ca.dm_ca_id.id == dm_ca.id
+                            and  ca.trangthai !="3"):
+                        # không tinh cac ca trong ngay là sẽ bo tri hoc bu
                         ca_hoc = dm_ca
                         for daystr in days:
                             # Ép kiểu date an toàn
@@ -593,6 +600,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                         'tien': tien
                     }
                     self.env['ekids.hocphi_duoctru'].create(data)
+
 
     def func_tao_macdinh_hocphi_ca(self, nghiles,hocphi, ca_canthieps
                         ,ngay_dauthang,ngay_cuoithang):
