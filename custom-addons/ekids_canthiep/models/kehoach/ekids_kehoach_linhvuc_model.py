@@ -6,7 +6,7 @@ from odoo.osv import expression
 class KeHoach2LinhVuc(models.Model):
     _name = 'ekids.kehoach_linhvuc'
     _description = 'Các mục tiêu cho kế hoạch'
-    _order = "sequence asc"
+    _order = "sequence asc,id asc"
 
     sequence = fields.Integer(string="STT", default=1)
     kehoach_id = fields.Many2one("ekids.kehoach", string="Thuộc kế hoạch nào",

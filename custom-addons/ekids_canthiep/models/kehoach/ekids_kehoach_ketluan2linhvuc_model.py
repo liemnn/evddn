@@ -6,9 +6,10 @@ from odoo.exceptions import ValidationError
 class KetLuan2LinhVuc(models.Model):
     _name = 'ekids.kehoach_ketluan2linhvuc'
     _description = 'Các lĩnh vực thuộc kết luận'
-    _order = 'sequence asc,id desc'
+    _order = 'sequence asc,id asc'
 
     sequence = fields.Integer(string="STT", default=1)
+    index = fields.Integer(string="STT", default=1, compute="_compute_index")
     ketluan_id = fields.Many2one("ekids.kehoach_ketluan", string="Thuộc kết luận nào",
                                  required=True,
                                  ondelete="cascade")
@@ -37,6 +38,12 @@ class KetLuan2LinhVuc(models.Model):
         'muctieu_id',
         string="Danh sách mục tiêu lựa chọn thiết kế"
     )
+
+    def _compute_index(self):
+        index =1
+        for record in self:
+            record.index = index
+            index += 1
 
     @api.onchange('tuoi_id')
     def _onchange_tuoi_id(self):

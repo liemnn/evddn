@@ -704,7 +704,7 @@
                                     <field name="linhvuc_ids" readonly="is_readonly" nolabel="1">
                                         <list editable="bottom" class="o_list_premium m-0 border-0">
                                             <field name="sequence" widget="handle"/>
-                                            <field name="sequence" width="50" string="STT"/>
+                                            <field name="index" width="50" string="STT"/>
                                             <field name="chuongtrinh_id"
                                                    string="Chương trình"
                                                    readonly="parent.is_readonly"
