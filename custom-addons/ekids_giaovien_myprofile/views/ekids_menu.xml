@@ -7,7 +7,8 @@
         <menuitem name="Cá nhân" id="ekids_giaovien_myprofile.menu_root"
               web_icon="ekids_giaovien_myprofile,static/description/icon.png" sequence="10"/>
 
-        <menuitem name="Hồ sơ của tôi" id="ekids_giaovien_myprofile.hoso_giaovien_menu" parent="ekids_giaovien_myprofile.menu_root"
+        <menuitem name="Hồ sơ của tôi" id="ekids_giaovien_myprofile.hoso_giaovien_menu"
+                  parent="ekids_giaovien_myprofile.menu_root"
               action="ekids_giaovien_myprofile.action_hoso_canhan_action"
               groups="ekids_core.giaovien"  sequence="1"/>
 
@@ -15,6 +16,13 @@
         <menuitem name="Bảng Lương" id="ekids_giaovien_myprofile.giaovien_luong_menu" parent="ekids_giaovien_myprofile.menu_root"
               action="ekids_giaovien_myprofile.action_bangluong_action"
               groups="ekids_core.giaovien"  sequence="2"/>
+
+        <menuitem id="ekids_giaovien_myprofile.giaovien_matkhau_menu"
+              name="Đổi mật khẩu"
+              parent="ekids_giaovien_myprofile.menu_root"
+              action="ekids_giaovien_myprofile.giaovien_matkhau_action"
+              groups="ekids_core.giaovien"
+              sequence="3"/>
 
 
 

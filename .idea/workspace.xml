@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/models/ekids_giaovien_matkhau_model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/views/ekids_giaovien_matkhau_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_core/views/ekids_coso_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_core/views/ekids_coso_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/security/ir.model.access.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/views/ekids_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_giaovien_myprofile/views/ekids_menu.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +22,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -48,23 +54,23 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Debug",
+    "Python.evddn.executor": "Run",
     "Python.formula_util.executor": "Run",
     "Python.python_util.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_canthiep/views/kehoach",
+    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_giaovien_myprofile/views",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\odoo\evddn\custom-addons\ekids_giaovien_myprofile\views" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\views\kehoach" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_canthiep\models\kehoach" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_giaovien\models\luong" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_giaovien\views\luong\phieuluong" />
-      <recent name="D:\odoo\evddn\custom-addons\ekids_giaovien\views\cauhinh" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_hdsd\static\src\html\giaovien" />
@@ -162,14 +168,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00489" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1790047865988</created>
-      <option name="number" value="00489" />
-      <option name="presentableId" value="LOCAL-00489" />
-      <option name="project" value="LOCAL" />
-      <updated>1790047865988</updated>
     </task>
     <task id="LOCAL-00490" summary="liemnn">
       <option name="closed" value="true" />
@@ -555,7 +553,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791341785517</updated>
     </task>
-    <option name="localTasksCounter" value="538" />
+    <task id="LOCAL-00538" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1791346685754</created>
+      <option name="number" value="00538" />
+      <option name="presentableId" value="LOCAL-00538" />
+      <option name="project" value="LOCAL" />
+      <updated>1791346685756</updated>
+    </task>
+    <option name="localTasksCounter" value="539" />
     <servers />
   </component>
   <component name="UnknownFeatures">
