@@ -199,7 +199,7 @@ class CoSo(models.Model):
         today = date.today()
 
         # Nếu từ ngày 25 trở đi, ta cộng thêm 7 ngày để mốc thời gian nhảy sang tháng tiếp theo
-        if today.day >= 25:
+        if today.day >= 28:
             target_date = today + timedelta(days=7)
         else:
             target_date = today

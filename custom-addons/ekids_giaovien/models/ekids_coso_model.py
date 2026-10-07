@@ -76,7 +76,7 @@ class CoSo(models.Model):
         month = today.month
         year = today.year
 
-        if today.day < 25:
+        if today.day < 28:
 
             last_month_same_day = today - relativedelta(months=1)
             month = last_month_same_day.month
