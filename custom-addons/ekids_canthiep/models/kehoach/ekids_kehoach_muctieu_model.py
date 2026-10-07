@@ -1022,22 +1022,7 @@ class KeHoach2MucTieu(models.Model):
 
 
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        # 1. Gọi hàm tạo của super để lấy về toàn bộ recordset được tạo ra
-        records = super(KeHoach2MucTieu, self).create(vals_list)
 
-        # 2. Duyệt qua từng bản ghi vừa tạo thành công để cập nhật nghiệp vụ liên quan
-        if records and len(records)>0:
-            kehoach_linhvuc = records[0].kehoach_linhvuc_id
-            kehoach_linhvuc.func_capnhat_kehoach_muctieu_truoc()
-
-        return records
-
-    def write(self, vals):
-        self.func_capnhat_thietke_vao_chuongtrinh(vals)
-        res = super(KeHoach2MucTieu, self).write(vals)
-        return res
 
 
     def func_capnhat_thietke_vao_chuongtrinh(self,vals):
@@ -1118,8 +1103,51 @@ class KeHoach2MucTieu(models.Model):
 
         return res
 
+    def func_get_thietke_muctieu_gannhat_kehoach(self):
+        self.ensure_one()
+        # 1. Chỉ tìm nếu có gắn mục tiêu danh mục và thiết kế gốc đang rỗng
+        if not self.muctieu_id or self.muctieu_id.thietke not in kehoach_util.EMPTY_HTML:
+            return
 
+        # 2. Xây dựng domain gọn, không JOIN thừa và xử lý an toàn giá trị NULL
+        domain = [
+            ("coso_id", "=", self.coso_id.id),
+            ("kehoach_id.trangthai", "in", [kehoach_util.KEHOACH_DANG_CANTHIEP,kehoach_util.KEHOACH_HET_HIEULUC]),
+            ("muctieu_id", "=", self.muctieu_id.id),
+            ("thietke_temp", "!=", False),
+            ("thietke_temp", "not in", kehoach_util.EMPTY_HTML),
+        ]
 
+        # Loại trừ chính bản ghi hiện tại nếu đã lưu
+        if self.id:
+            domain.append(("id", "!=", self.id))
+
+        muctieu_gannhat = self.env['ekids.kehoach_muctieu'].search(
+            domain,
+            order="id desc",
+            limit=1
+        )
+        if muctieu_gannhat:
+            self.thietke_temp = muctieu_gannhat.thietke_temp
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # 1. Gọi hàm tạo của super để lấy về toàn bộ recordset được tạo ra
+        records = super(KeHoach2MucTieu, self).create(vals_list)
+
+        # 2. Duyệt qua từng bản ghi vừa tạo thành công để cập nhật nghiệp vụ liên quan
+        if records and len(records) > 0:
+            kehoach_linhvuc = records[0].kehoach_linhvuc_id
+            kehoach_linhvuc.func_capnhat_kehoach_muctieu_truoc()
+            for record in records:
+                record.func_get_thietke_muctieu_gannhat_kehoach()
+
+        return records
+
+    def write(self, vals):
+        self.func_capnhat_thietke_vao_chuongtrinh(vals)
+        res = super(KeHoach2MucTieu, self).write(vals)
+        return res
 
     def unlink(self):
         kehoach_linhvuc = self.kehoach_linhvuc_id

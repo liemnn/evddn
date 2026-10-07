@@ -4,6 +4,8 @@ from odoo.osv import expression
 
 from . import  giaovien_util,coso_util,hocsinh_util
 
+EMPTY_HTML = [False, '', '<p><br></p>', '<p></p>', '<p><br/></p>', '<p>&nbsp;</p>']
+
 KETLUAN_CHUA_CO='-2'
 KETLUAN_DANG_TAO='0'
 KETLUAN_CHOPHEP_LAP_KEHOACH='1'

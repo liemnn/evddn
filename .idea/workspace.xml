@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_muctieu_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/chuongtrinh/ekids_ct_muctieu_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_ketqua2muctieu_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_ketqua2muctieu_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_ca2ngay_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_diemdanh/models/hocsinh/ekids_diemdanh_ca2ngay_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/phieuthu/ekids_hocphi_thang_template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/views/hocphi/phieuthu/ekids_hocphi_thang_template.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/ekids_coso_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_func/kehoach_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_func/kehoach_util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +51,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Run",
+    "Python.evddn.executor": "Debug",
     "Python.formula_util.executor": "Run",
     "Python.python_util.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
@@ -166,14 +165,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00494" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1790070318431</created>
-      <option name="number" value="00494" />
-      <option name="presentableId" value="LOCAL-00494" />
-      <option name="project" value="LOCAL" />
-      <updated>1790070318431</updated>
     </task>
     <task id="LOCAL-00495" summary="liemnn">
       <option name="closed" value="true" />
@@ -559,7 +550,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791359927884</updated>
     </task>
-    <option name="localTasksCounter" value="543" />
+    <task id="LOCAL-00543" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1791362438173</created>
+      <option name="number" value="00543" />
+      <option name="presentableId" value="LOCAL-00543" />
+      <option name="project" value="LOCAL" />
+      <updated>1791362438173</updated>
+    </task>
+    <option name="localTasksCounter" value="544" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -635,7 +634,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_func/kehoach_util.py</url>
-          <line>93</line>
+          <line>95</line>
           <option name="timeStamp" value="373" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -694,11 +693,6 @@
           <option name="timeStamp" value="553" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_linhvuc_model.py</url>
-          <line>144</line>
-          <option name="timeStamp" value="556" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_baocao/models/ekids_baocao_canthiep_model.py</url>
           <line>15</line>
           <option name="timeStamp" value="559" />
@@ -722,6 +716,16 @@
           <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py</url>
           <line>853</line>
           <option name="timeStamp" value="570" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_muctieu_model.py</url>
+          <line>1130</line>
+          <option name="timeStamp" value="574" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_canthiep/models/kehoach/ekids_kehoach_model.py</url>
+          <line>144</line>
+          <option name="timeStamp" value="575" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -358,6 +358,7 @@ class CoSo(models.Model):
         domain_base = [
             #('kehoach_id.coso_id', '=', self.id),
             ('chuongtrinh_id.coso_id', '=', self.id),
+            ("kehoach_id.trangthai", "in", [kehoach_util.KEHOACH_DANG_CANTHIEP, kehoach_util.KEHOACH_HET_HIEULUC]),
             ('muctieu_id', '!=', False),
             ('thietke_temp', 'not in', EMPTY_HTML),
         ]
