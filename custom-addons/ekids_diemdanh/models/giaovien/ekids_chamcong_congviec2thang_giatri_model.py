@@ -101,8 +101,12 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
             tong2 = 0.0
             tong3 = 0.0
             for i in range(1, 32):
-                giatri_str = getattr(record, f'd{i}')
-                giatri = float(giatri_str)
+                giatri_str = getattr(record, f'd{i}', None)
+                giatri = 0.0
+                try:
+                    giatri = round(float(giatri_str), lamtron) if giatri_str not in (None, '') else 0.0
+                except (ValueError, TypeError):
+                    giatri = 0.0
                 giatri = round(giatri, lamtron)
 
                 # tinh toan ca 1, 2, 3 trong ngay
