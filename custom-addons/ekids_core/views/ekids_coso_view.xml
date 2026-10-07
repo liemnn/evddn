@@ -135,7 +135,10 @@
                            decoration-danger="trangthai == '0'"
                            decoration-warning="trangthai == '1'"
                      />
-                    <field name="songay"/>
+                    <field name="songay"
+                           decoration-success="songay &gt;= 30"
+                           decoration-danger="songay &lt; 30"
+                           widget="badge"/>
                     <button name="action_giahan_6thang"
                             type="object"
                             string="Gia hạn 6 tháng"
