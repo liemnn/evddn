@@ -73,9 +73,14 @@ class CoSo(models.Model):
 
     def func_macdinh_tao_luong_thang_qua(self):
         today = date.today()  # ví dụ: 2025-08-17
-        last_month_same_day = today - relativedelta(months=1)
-        month = last_month_same_day.month
-        year = last_month_same_day.year
+        month = today.month
+        year = today.year
+
+        if today.day < 25:
+
+            last_month_same_day = today - relativedelta(months=1)
+            month = last_month_same_day.month
+            year = last_month_same_day.year
 
         luong2nam = self.env['ekids.luong_nam'].search(
             [('coso_id', '=', self.id)
