@@ -23,6 +23,7 @@ except ImportError as e:
 class MucTieu(models.Model):
     _name = "ekids.ct_muctieu"
     _description = "Lĩnh vực"
+    _log_access = False
     _order = "sequence asc,id desc"
 
     coso_id = fields.Many2one("ekids.coso", related="linhvuc_id.coso_id", string="Cơ sở", required=True,ondelete="restrict")

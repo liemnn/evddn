@@ -19,6 +19,7 @@ except ImportError as e:
 
 class DiemDanhCa2Ngay(models.Model):
     _name = "ekids.diemdanh_ca2ngay"
+    _log_access = False
     _description = "Điểm danh học sinh theo ngày can thiệp"
 
     sequence = fields.Integer(string="STT", default=1)

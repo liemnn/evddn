@@ -18,6 +18,7 @@ except ImportError as e:
 class KeHoachKetQua2MucTieu(models.Model):
     _name = 'ekids.kehoach_ketqua2muctieu'
     _description = 'Kết quả thực hiện can thiệp'
+    _log_access = False
     _order = 'ngay asc, id asc'
 
 
@@ -55,7 +56,7 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("1", "Đi học"),
         ("0", "Ngày trong tương lai"),
         ("-1", "Ngày không đi học"),
-    ], string="Phân loại", compute="_compute_loai", index=True)
+    ], string="Phân loại", compute="_compute_loai")
 
     solan_thu = fields.Integer(string="Số làn thử",compute="_compute_solan_thu")
     solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
