@@ -272,6 +272,10 @@
                         .box-print-rest { background-color: #eeeeee !important; }
                         .box-print-rest .cell-print-date { background-color: #dddddd !important; }
 
+                        /* Ô chưa cập nhật nhưng là ngày học trong quá khứ/hôm nay */
+                        .box-print-empty { background-color: #ffffff !important; }
+                        .box-print-empty .cell-print-val { color: #cbd5e1 !important; font-weight: normal !important; }
+
                         .lbl-summary-chuadat,
                         .lbl-summary-hinhthanh,
                         .lbl-summary-dat {
@@ -425,15 +429,13 @@
                                 <t t-set="val_cn" t-value="(muctieu.chucnang or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
                                 <t t-set="has_chucnang" t-value="bool(val_cn)"/>
 
-                                <t t-set="val_tc1" t-value="(muctieu.tieuchi_chuadat or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
-                                <t t-set="val_tc2" t-value="(muctieu.tieuchi_hinhthanh or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
-                                <t t-set="val_tc3" t-value="(muctieu.tieuchi_dat or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
-                                <t t-set="has_tieuchi" t-value="bool(val_tc1 or val_tc2 or val_tc3)"/>
-
                                 <t t-set="val_tk" t-value="(muctieu.thietke or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
                                 <t t-set="has_thietke" t-value="bool(val_tk)"/>
 
                                 <t t-set="has_ban_dau" t-value="bool(muctieu.solan_thu and muctieu.solan_thu &gt; 0)"/>
+
+                                <!-- 🌟 XÂY DỰNG MAP TRA CỨU NHANH THEO NGÀY TỪ DATABASE -->
+                                <t t-set="kq_map" t-value="{k.ngay: k for k in muctieu.ketqua2muctieu_ids}"/>
 
                                 <div class="print-container">
 
@@ -474,25 +476,7 @@
                                                         </div>
                                                     </t>
 
-                                                    <t t-if="has_tieuchi">
-                                                        <div class="section-header-title">II. Tiêu chí đánh giá mức độ thành thục</div>
-                                                        <table class="criteria-table">
-                                                            <thead>
-                                                                <tr>
-                                                                     <th style="width: 33.33%;">CHƯA ĐẠT (-)</th>
-                                                                     <th style="width: 33.33%;">ĐANG HÌNH THÀNH (+/-)</th>
-                                                                     <th style="width: 33.33%;">ĐẠT (+)</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td><span t-out="muctieu.tieuchi_chuadat"/></td>
-                                                                    <td><span t-out="muctieu.tieuchi_hinhthanh"/></td>
-                                                                    <td><span t-out="muctieu.tieuchi_dat"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </t>
+
                                                 </div>
                                             </t>
 
@@ -517,25 +501,7 @@
                                                         </div>
                                                     </t>
 
-                                                    <t t-if="has_tieuchi">
-                                                        <div class="section-header-title">II. Tiêu chí đánh giá mức độ thành thục</div>
-                                                        <table class="criteria-table">
-                                                            <thead>
-                                                                <tr>
-                                                                     <th style="width: 33.33%;">CHƯA ĐẠT (-)</th>
-                                                                     <th style="width: 33.33%;">ĐANG HÌNH THÀNH (+/-)</th>
-                                                                     <th style="width: 33.33%;">ĐẠT (+)</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td><span t-out="muctieu.tieuchi_chuadat"/></td>
-                                                                    <td><span t-out="muctieu.tieuchi_hinhthanh"/></td>
-                                                                    <td><span t-out="muctieu.tieuchi_dat"/></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </t>
+
                                                 </div>
                                             </t>
                                         </div>
@@ -553,7 +519,7 @@
                                         </div>
                                     </t>
 
-                                    <!-- KHỐI IV: THEO DÕI (CÓ THANH CUỘN NGANG AN TOÀN) -->
+                                    <!-- KHỐI IV: THEO DÕI (DỰNG ĐỦ 30-31 NGÀY KỂ CẢ KHI DB KHÔNG CÓ DÒNG RỖNG) -->
                                     <div class="tracking-diary-content">
                                         <div class="section-header-title" style="margin-bottom: 2px;">
                                             IV. Theo dõi
@@ -564,56 +530,61 @@
 
                                         <div class="tracking-scroll-wrapper">
                                             <div class="day-boxes-horizontal-flow">
-                                                <t t-if="muctieu.ketqua2muctieu_ids">
-                                                    <t t-foreach="muctieu.ketqua2muctieu_ids" t-as="kq">
-                                                        <t t-set="is_future_status" t-value="kq.is_date_status == '1'"/>
-                                                        <t t-set="rest_class" t-value="(kq.loai in ['0', '-1'] or is_future_status) and 'box-print-rest' or ''"/>
+                                                <t t-set="total_days" t-value="int(o.songay or 30)"/>
+                                                <t t-foreach="range(total_days)" t-as="day_idx">
+                                                    <!-- 1. Tính toán mốc ngày thực tế trong kế hoạch -->
+                                                    <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
+                                                    <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
+                                                    <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
 
-                                                        <div t-attf-class="day-tracking-box-print #{rest_class}">
-                                                            <span class="cell-print-date">
-                                                                <span t-field="kq.ngay" t-options="{'widget': 'date', 'format': 'dd/MM'}"/>
-                                                            </span>
-                                                            <div class="cell-print-val">
-                                                                <t t-if="is_future_status"></t>
+                                                    <!-- 2. Tra cứu xem ngày này đã có bản ghi trong DB chưa -->
+                                                    <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
+
+                                                    <!-- 3. Phân loại hiển thị -->
+                                                    <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
+                                                    <t t-set="is_not_updated" t-value="not is_rest and (not kq_rec or kq_rec.trangthai == '0' or kq_rec.solan_thu_dat == 0)"/>
+
+                                                    <div t-attf-class="day-tracking-box-print #{is_rest and 'box-print-rest' or ''} #{is_not_updated and 'box-print-empty' or ''}"
+                                                         t-att-title="is_not_updated and 'Chưa cập nhật' or ''">
+
+                                                        <!-- Tầng 1: Ngày/Tháng -->
+                                                        <span class="cell-print-date">
+                                                            <t t-out="cur_date.strftime('%d/%m')"/>
+                                                        </span>
+
+                                                        <!-- Tầng 2: Điểm đạt / Ký hiệu N / Ký hiệu chưa cập nhật -->
+                                                        <div class="cell-print-val">
+                                                            <t t-if="kq_rec">
+                                                                <t t-if="kq_rec.loai == '-1'">N</t>
+                                                                <t t-elif="kq_rec.loai == '0'"></t>
                                                                 <t t-else="">
-                                                                    <t t-if="kq.loai == '-1'">N</t>
-                                                                    <t t-elif="kq.loai == '0'"></t>
+                                                                    <t t-if="kq_rec.trangthai != '0' and kq_rec.solan_thu_dat &gt;= 0">
+                                                                        <t t-out="kq_rec.solan_thu_dat"/>
+                                                                    </t>
                                                                     <t t-else="">
-                                                                        <t t-if="kq.trangthai != '0' and kq.solan_thu &gt; 0">
-                                                                            <span t-field="kq.solan_thu_dat"/>
-                                                                        </t>
+                                                                        <!-- Đã có bản ghi nhưng chưa chấm -->
+                                                                        <span style="color: #cbd5e1; font-weight: normal;">-</span>
                                                                     </t>
                                                                 </t>
-                                                            </div>
-                                                            <div class="cell-print-rate">
-                                                                <t t-if="not is_future_status and kq.loai == '1' and kq.trangthai != '0' and kq.solan_thu &gt; 0">
-                                                                    <span><t t-esc="kq.tyle_thu"/>%</span>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <!-- CHƯA CÓ BẢN GHI TRONG DB -->
+                                                                <t t-if="is_sunday">N</t>
+                                                                <t t-elif="is_future"></t>
+                                                                <t t-else="">
+                                                                    <!-- Quá khứ / Hôm nay chưa chấm: Để dấu chấm mờ để biết là chưa cập nhật -->
+                                                                    <span style="color: #cbd5e1; font-weight: normal;">•</span>
                                                                 </t>
-                                                            </div>
+                                                            </t>
                                                         </div>
-                                                    </t>
-                                                </t>
 
-                                                <!-- Fallback khi chưa sinh dòng -->
-                                                <t t-else="">
-                                                    <t t-set="total_days" t-value="int(o.songay or 30)"/>
-                                                    <t t-foreach="range(total_days)" t-as="day_idx">
-                                                        <t t-set="computed_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
-                                                        <t t-set="is_fallback_sunday" t-value="computed_date.weekday() == 6"/>
-                                                        <t t-set="is_fallback_future" t-value="computed_date &gt; datetime.date.today()"/>
-                                                        <t t-set="should_fallback_gray" t-value="is_fallback_sunday or is_fallback_future"/>
-
-                                                        <div t-attf-class="day-tracking-box-print #{should_fallback_gray and 'box-print-rest' or ''}">
-                                                            <span class="cell-print-date">
-                                                                <span t-out="computed_date.strftime('%d/%m')"/>
-                                                            </span>
-                                                            <div class="cell-print-val">
-                                                                <t t-if="is_fallback_future"></t>
-                                                                <t t-elif="is_fallback_sunday">N</t>
-                                                            </div>
-                                                            <div class="cell-print-rate"></div>
+                                                        <!-- Tầng 3: Tỷ lệ % -->
+                                                        <div class="cell-print-rate">
+                                                            <t t-if="kq_rec and kq_rec.loai == '1' and kq_rec.trangthai != '0'">
+                                                                <span><t t-out="kq_rec.tyle_thu"/>%</span>
+                                                            </t>
                                                         </div>
-                                                    </t>
+                                                    </div>
                                                 </t>
                                             </div>
                                         </div>

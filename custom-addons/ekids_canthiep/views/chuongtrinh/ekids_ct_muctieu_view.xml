@@ -41,9 +41,6 @@
                     <field name="trangthai"
                            decoration-success="trangthai == '1'"
                            decoration-danger="trangthai == '0'"/>
-                    <field name="tieuchi_chuadat" string="Chưa đạt" optional="hide" decoration-danger="True"/>
-                    <field name="tieuchi_hinhthanh" string="hình thành" optional="hide" decoration-warning="True"/>
-                    <field name="tieuchi_dat" string="Đạt" optional="hide" decoration-success="True"/>
 
 
                 </list>
@@ -68,9 +65,6 @@
                     <field name="trangthai"
                            decoration-success="trangthai == '1'"
                            decoration-danger="trangthai == '0'"/>
-                    <field name="tieuchi_chuadat" string="Chưa đạt" optional="hide" decoration-danger="True"/>
-                    <field name="tieuchi_hinhthanh" string="hình thành" optional="hide" decoration-warning="True"/>
-                    <field name="tieuchi_dat" string="Đạt" optional="hide" decoration-success="True"/>
 
 
                 </list>
@@ -99,9 +93,6 @@
                            class="text-wrap"
                            string="Độ tuổi"
                            options="{'no_open': True, 'no_create': True}" optional="hide"/>
-                    <field name="tieuchi_chuadat" string="Chưa đạt" optional="hide" decoration-danger="True"/>
-                    <field name="tieuchi_hinhthanh" string="hình thành" optional="hide" decoration-warning="True"/>
-                    <field name="tieuchi_dat" string="Đạt" optional="hide" decoration-success="True"/>
 
                     <field name="trangthai_canthiep" string="Can thiệp"
                            class="text-wrap"
@@ -473,25 +464,7 @@
                                     <div class="kh-zone-body"><field name="thietke"/></div>
                                 </div>
 
-                                <div class="kh-html-zone zone-kpi">
-                                    <div class="kh-zone-header"><i class="fa fa-check-square-o"></i> Tiêu chí đánh giá mức độ thành thục</div>
-                                    <div class="kh-zone-body" style="background: #ffffff;">
-                                        <div class="kh-kpi-grid">
-                                            <div class="kh-kpi-box" style="border-color: #bbf7d0;">
-                                                <div class="kh-kpi-title" style="color: #16a34a;">ĐẠT (+)</div>
-                                                <field name="tieuchi_dat" placeholder="Mô tả tiêu chí Đạt..." style="width: 100%; border: none; background: transparent; text-align: center;"/>
-                                            </div>
-                                            <div class="kh-kpi-box" style="border-color: #fde68a;">
-                                                <div class="kh-kpi-title" style="color: #d97706;">ĐANG HÌNH THÀNH (+/-)</div>
-                                                <field name="tieuchi_hinhthanh" placeholder="Mô tả tiêu chí Đang hình thành..." style="width: 100%; border: none; background: transparent; text-align: center;"/>
-                                            </div>
-                                            <div class="kh-kpi-box" style="border-color: #fecaca;">
-                                                <div class="kh-kpi-title" style="color: #dc2626;">CHƯA ĐẠT (-)</div>
-                                                <field name="tieuchi_chuadat" placeholder="Mô tả tiêu chí Chưa đạt..." style="width: 100%; border: none; background: transparent; text-align: center;"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
 
                         </div>

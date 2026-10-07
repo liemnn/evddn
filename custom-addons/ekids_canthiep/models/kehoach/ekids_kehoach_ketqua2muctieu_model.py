@@ -63,6 +63,14 @@ class KeHoachKetQua2MucTieu(models.Model):
 
     is_giaovien_capnhat = fields.Boolean(string="Hệ thống tự câ nhật kết quả",default=True)
 
+    _sql_constraints = [
+        (
+            'muctieu_ngay_unique',
+            'unique(kehoach_muctieu_id, ngay)',
+            'Mỗi ngày chỉ được phép có duy nhất một bản ghi kết quả cho từng mục tiêu!'
+        )
+    ]
+
     @api.depends('solan_thu_dat', 'solan_thu')
     def _compute_tyle_thu(self):
         for record in self:

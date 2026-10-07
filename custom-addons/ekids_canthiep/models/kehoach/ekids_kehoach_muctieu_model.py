@@ -854,77 +854,78 @@ class KeHoach2MucTieu(models.Model):
         today = fields.Date.context_today(self)
         ketqua2muctieus = self.ketqua2muctieu_ids
 
-        # =========================================================================
-        # TH1: ĐÃ TỒN TẠI KẾT QUẢ -> TỰ ĐỘNG CẬP NHẬT 3 NGÀY TIẾP THEO
-        # =========================================================================
-        if ketqua2muctieus:
-            # 1. Tìm bản ghi gần nhất trước hôm nay do giáo viên tự cập nhật (Duyệt ngược từ mới về cũ)
-            last_ketqua = None
-            for kq in reversed(ketqua2muctieus):
-                if (kq.ngay and kq.ngay < today
-                        and kq.trangthai in ['1', '-1', '2']):
-                    last_ketqua = kq
-                    break
+        # 🌟 NẾU CHƯA CÓ KẾT QUẢ NÀO -> KHÔNG LÀM GÌ CẢ (Không sinh 30 ngày rác nữa)
+        if not ketqua2muctieus:
+            return
 
-            # Nếu không tìm thấy ngày giáo viên đánh giá hợp lệ -> Dừng ngay lập tức
-            if not last_ketqua:
-                return
-            if last_ketqua.is_giaovien_capnhat == False:
-                # bản cuối đã là tự động thì cũng thôi
-                return
+        # 1. Tìm bản ghi gần nhất trước hôm nay do giáo viên tự đánh giá
+        last_ketqua = None
+        for kq in ketqua2muctieus.sorted(key=lambda r: r.ngay, reverse=True):
+            if kq.ngay and kq.ngay < today and kq.trangthai in ['1', '-1', '2']:
+                last_ketqua = kq
+                break
 
-            # 2. Chỉ tính toán cấu hình & chuỗi liên tiếp khi chắc chắn có bản ghi cần xét
-            coso = self.kehoach_id.coso_id
-            soluong_dat_lientiep_cauhinh = int(
-                coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_dat_lientiep", "5") or 5)
-            max_lientiep_dat = self.func_ketqua_dat_lientiep_lonnhat()
+        # Nếu không tìm thấy hoặc bản ghi gần nhất vốn là do hệ thống tự sinh -> Dừng
+        if not last_ketqua or not last_ketqua.is_giaovien_capnhat:
+            return
 
-            # Nếu đã đủ số lượng đạt liên tiếp quy định thì không tự động điền nữa
-            if max_lientiep_dat >= soluong_dat_lientiep_cauhinh:
-                return
+        # 2. Kiểm tra cấu hình số ngày đạt liên tiếp tối đa
+        coso = self.kehoach_id.coso_id
+        soluong_dat_lientiep_cauhinh = int(
+            coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_dat_lientiep", "5") or 5
+        )
+        max_lientiep_dat = self.func_ketqua_dat_lientiep_lonnhat()
+        if max_lientiep_dat >= soluong_dat_lientiep_cauhinh:
+            return
 
-            # 3. Lọc tập hợp các ngày trong khoảng (last_ngay -> last_ngay + 3 ngày] đang ở trạng thái '0'
-            last_ngay = last_ketqua.ngay
-            next_ngay = last_ngay + timedelta(days=4)
+        # 3. Lấy mốc ngày & giới hạn ngày kết thúc của kế hoạch
+        last_ngay = last_ketqua.ngay
+        den_ngay = fields.Date.to_date(self.kehoach_id.den_ngay) or today
+        limit_date = min(today, den_ngay)
 
-            capnhat_ketqua2muctieus = self.env['ekids.kehoach_ketqua2muctieu']
-            for kq in ketqua2muctieus:
-                if (kq.ngay
-                        and last_ngay < kq.ngay <= next_ngay
-                        and next_ngay <= today
-                        and kq.trangthai == '0'):
-                    capnhat_ketqua2muctieus |= kq
+        # Lập map các ngày đã có bản ghi để tra cứu nhanh O(1)
+        existing_map = {kq.ngay: kq for kq in ketqua2muctieus if kq.ngay}
 
-            # 4. Batch Write: Cập nhật đồng loạt 1 câu lệnh duy nhất vào Database
-            if capnhat_ketqua2muctieus:
-                capnhat_ketqua2muctieus.write({
+        records_to_update = self.env['ekids.kehoach_ketqua2muctieu']
+        new_records_vals = []
+
+        # 4. Duyệt đúng 3 ngày tiếp theo sau ngày gần nhất
+        for i in range(1, 4):
+            target_date = last_ngay + timedelta(days=i)
+
+            # Không vượt quá hôm nay và không vượt quá ngày kết thúc kế hoạch
+            if target_date > limit_date:
+                break
+
+            # Bỏ qua ngày Chủ Nhật (weekday == 6)
+            if target_date.weekday() == 6:
+                continue
+
+            if target_date in existing_map:
+                kq_exist = existing_map[target_date]
+                # Nếu ngày này đã có nhưng đang ở trạng thái '0' (chưa can thiệp) -> gom lại để cập nhật
+                if kq_exist.trangthai == '0':
+                    records_to_update |= kq_exist
+            else:
+                # Chưa có bản ghi -> Tạo mới đúng ngày này
+                new_records_vals.append({
+                    'kehoach_muctieu_id': self.id,
+                    'ngay': target_date,
                     'trangthai': last_ketqua.trangthai,
                     'solan_thu_dat': last_ketqua.solan_thu_dat,
                     'is_giaovien_capnhat': False,
                 })
 
-        # =========================================================================
-        # TH2: LẦN ĐẦU KHỞI TẠO -> BULK INSERT TOÀN BỘ CÁC NGÀY TRONG KẾ HOẠCH
-        # =========================================================================
-        else:
-            tu_ngay = fields.Date.to_date(self.kehoach_id.tu_ngay)
-            den_ngay = fields.Date.to_date(self.kehoach_id.den_ngay)
-            if not tu_ngay or not den_ngay or tu_ngay > den_ngay:
-                return
+        # 5. Ghi đồng loạt xuống cơ sở dữ liệu (tối ưu tốc độ, không ghi rời rạc)
+        if records_to_update:
+            records_to_update.write({
+                'trangthai': last_ketqua.trangthai,
+                'solan_thu_dat': last_ketqua.solan_thu_dat,
+                'is_giaovien_capnhat': False,
+            })
 
-            datas = []
-            curr = tu_ngay
-            target_id = self.id
-            while curr <= den_ngay:
-                datas.append({
-                    "kehoach_muctieu_id": target_id,
-                    "ngay": curr,
-                    "trangthai": "0"
-                })
-                curr += timedelta(days=1)
-
-            if datas:
-                self.env['ekids.kehoach_ketqua2muctieu'].create(datas)
+        if new_records_vals:
+            self.env['ekids.kehoach_ketqua2muctieu'].create(new_records_vals)
 
     def action_open_target_note(self):
         """ Hàm xử lý mở Popup khi click vào nút ghi chú từ HTML """
@@ -1058,14 +1059,7 @@ class KeHoach2MucTieu(models.Model):
                             if string_util._is_html_empty(self.chucnang_temp) == False:
                                 data['chucnang'] = self.chucnang_temp
 
-                            if string_util._is_char_empty(self.tieuchi_chuadat_temp) == False:
-                                data['tieuchi_chuadat'] = self.tieuchi_chuadat_temp
 
-                            if string_util._is_char_empty(self.tieuchi_hinhthanh_temp) == False:
-                                data['tieuchi_hinhthanh'] = self.tieuchi_hinhthanh_temp
-
-                            if string_util._is_char_empty(self.tieuchi_dat_temp) == False:
-                                data['tieuchi_dat'] = self.tieuchi_dat_temp
 
                             ct_muctieu.write(data)
 
@@ -1096,6 +1090,33 @@ class KeHoach2MucTieu(models.Model):
             'target': 'new',
             'context': self.env.context,
         }
+
+    def func_get_thongtin_nghiles_cungcap_ketqua2ngay(self):
+        """Hàm cung cấp thông tin loại ngày (nghỉ lễ, đi học, chủ nhật) cho JS Widget"""
+        self.ensure_one()
+        kehoach = self.kehoach_id
+        hocsinh = kehoach.hocsinh_id
+        tu_ngay = kehoach.tu_ngay
+        den_ngay = kehoach.den_ngay
+
+        res = {}
+        if not tu_ngay or not den_ngay or not hocsinh:
+            return res
+
+        cur = tu_ngay
+        while cur <= den_ngay:
+            cur_str = cur.strftime('%Y-%m-%d')
+            # Gọi chính xác hàm nghiệp vụ chuẩn của hệ thống để phân loại ngày
+            loai = kehoach_util.func_kehoach_ketqua2muctieu(self, hocsinh, cur)
+            if loai in ['1', '11']:
+                res[cur_str] = '1'  # Đi học
+            elif loai in ['0']:
+                res[cur_str] = '0'  # Tương lai
+            else:
+                res[cur_str] = '-1'  # Nghỉ lễ / Chủ nhật / Nghỉ học
+            cur += timedelta(days=1)
+
+        return res
 
 
 

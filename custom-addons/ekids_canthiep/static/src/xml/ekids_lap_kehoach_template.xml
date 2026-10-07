@@ -344,27 +344,7 @@
 
                                         <!-- 2. TIÊU CHÍ ĐÁNH GIÁ LÂM SÀNG -->
                                         <!-- Chỉ hiển thị khi có ít nhất một tiêu chí có nội dung -->
-                                        <div t-if="muctieu.has_tieuchi" class="w-100 d-flex flex-column gap-2 mt-2">
-                                            <div class="fw-bold text-uppercase" style="font-size: 14px; color: #94A3B8; letter-spacing: 0.5px;">
-                                                <i class="fa fa-check-square-o"></i> Tiêu chí đánh giá lâm sàng phân cấp:
-                                            </div>
-                                            <div class="d-flex flex-wrap gap-3 w-100 m-0">
-                                                <div t-if="muctieu.has_tc1" class="crit-box danger d-flex flex-column gap-1">
-                                                    <span class="fw-bold text-danger" style="font-size: 14px;">(-) Chưa đạt:</span>
-                                                    <t t-out="muctieu.tieuchi_chuadat"/>
-                                                </div>
 
-                                                <div t-if="muctieu.has_tc2" class="crit-box warning d-flex flex-column gap-1">
-                                                    <span class="fw-bold" style="font-size: 14px; color: #B45309;">(+/-) Đang hình thành:</span>
-                                                    <t t-out="muctieu.tieuchi_hinhthanh"/>
-                                                </div>
-
-                                                <div t-if="muctieu.has_tc3" class="crit-box success d-flex flex-column gap-1">
-                                                    <span class="fw-bold text-success" style="font-size: 14px;">(+) Đạt:</span>
-                                                    <t t-out="muctieu.tieuchi_dat"/>
-                                                </div>
-                                            </div>
-                                        </div>
 
                                         <!-- Footer dưới cùng -->
                                         <div class="w-100 d-flex justify-content-between align-items-center border-top pt-2 mt-2">

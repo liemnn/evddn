@@ -465,23 +465,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="w-100 mt-3">
-                                                    <span class="info-label-premium text-secondary"><i class="fa fa-check-square"></i> Tiêu chí đánh giá lâm sàng phân cấp:</span>
-                                                    <div class="criteria-flex-layout">
-                                                        <div class="criteria-card-item">
-                                                            <span class="fw-bold text-danger small">(-) Chưa đạt:</span>
-                                                            <div class="criteria-box-desc-text text-danger-dark"><t t-esc="muctieu.tieuchi_chuadat"></t></div>
-                                                        </div>
-                                                        <div class="criteria-card-item warn">
-                                                            <span class="fw-bold small" style="color:#B45309;">(+/-) Đang hình thành:</span>
-                                                            <div class="criteria-box-desc-text"><t t-esc="muctieu.tieuchi_hinhthanh"></t></div>
-                                                        </div>
-                                                        <div class="criteria-card-item success">
-                                                            <span class="fw-bold text-success small">(+) Đạt:</span>
-                                                            <div class="criteria-box-desc-text text-danger-dark"><t t-esc="muctieu.tieuchi_dat"></t></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+
 
                                             </div>
                                         </td>

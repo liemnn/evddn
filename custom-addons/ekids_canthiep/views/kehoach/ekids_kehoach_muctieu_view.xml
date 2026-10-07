@@ -31,9 +31,7 @@
                   <field name="tuoi_id"/>
                   <field name="chucnang"/>
                   <field name="thietke"/>
-                  <field name="tieuchi_chuadat"/>
-                  <field name="tieuchi_hinhthanh"/>
-                  <field name="tieuchi_dat"/>
+
 
                   <templates>
                       <t t-name="kanban-box">
@@ -155,38 +153,7 @@
                                       </div>
                                   </div>
 
-                                  <div class="row" style="font-size: 13px;">
-                                      <div class="col-12 mb-2">
-                                          <strong class="text-secondary"><i class="fa fa-check-square-o me-1"></i>Tiêu chí đánh giá:</strong>
-                                      </div>
 
-                                      <div class="col-md-4 mb-2">
-                                          <div class="p-2 h-100" style="background-color: #FEF2F2; border: 1px solid #FECACA; border-radius: 6px;">
-                                              <strong style="color: #DC2626;">(-) Chưa đạt:</strong>
-                                              <div class="mt-1 text-dark" style="white-space: normal;">
-                                                  <field name="tieuchi_chuadat"/>
-                                              </div>
-                                          </div>
-                                      </div>
-
-                                      <div class="col-md-4 mb-2">
-                                          <div class="p-2 h-100" style="background-color: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px;">
-                                              <strong style="color: #D97706;">(+/-) Đang hình thành:</strong>
-                                              <div class="mt-1 text-dark" style="white-space: normal;">
-                                                  <field name="tieuchi_hinhthanh"/>
-                                              </div>
-                                          </div>
-                                      </div>
-
-                                      <div class="col-md-4 mb-2">
-                                          <div class="p-2 h-100" style="background-color: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 6px;">
-                                              <strong style="color: #16A34A;">(+) Đạt:</strong>
-                                              <div class="mt-1 text-dark" style="white-space: normal;">
-                                                  <field name="tieuchi_dat"/>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
 
                               </div> </div> </t>
                   </templates>
