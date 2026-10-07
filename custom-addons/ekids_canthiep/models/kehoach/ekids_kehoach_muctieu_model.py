@@ -1140,6 +1140,7 @@ class KeHoach2MucTieu(models.Model):
             kehoach_linhvuc = records[0].kehoach_linhvuc_id
             kehoach_linhvuc.func_capnhat_kehoach_muctieu_truoc()
             for record in records:
+                # nghiep vụ lấy phần thiết kế gần nhất cho vào thiết kế muc tieu
                 record.func_get_thietke_muctieu_gannhat_kehoach()
 
         return records
