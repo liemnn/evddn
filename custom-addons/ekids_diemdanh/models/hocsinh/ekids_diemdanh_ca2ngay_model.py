@@ -39,8 +39,8 @@ class DiemDanhCa2Ngay(models.Model):
     tu = fields.Char(string="Từ (HH:MM)", help='Format: HH:MM')
     den = fields.Char(string="Đến (HH:MM)", help='Format: HH:MM')
 
-    hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="cascade",index=True)
-    giaovien_id = fields.Many2one("ekids.giaovien", string="Giáo viên thực hiện", ondelete="cascade",index=True)
+    hocsinh_id = fields.Many2one("ekids.hocsinh", string="Học sinh", required=True, ondelete="cascade")
+    giaovien_id = fields.Many2one("ekids.giaovien", string="Giáo viên thực hiện", ondelete="cascade")
 
     trangthai = fields.Selection([
         ("0", "Mặc định học"),

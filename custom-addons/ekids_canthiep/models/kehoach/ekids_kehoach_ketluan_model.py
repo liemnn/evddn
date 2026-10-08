@@ -28,7 +28,7 @@ class KetLuan(models.Model):
     name = fields.Char(string="Kết luận lần", required=True, compute="_compute_name")
     index = fields.Integer(string="STT", default=1, compute="_compute_index")
     # 1. THÔNG TIN HỌC SINH
-    hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True, tracking=True)  # [cite: 2]
+    hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True)  # [cite: 2]
 
     trangthai = fields.Selection([
         (kehoach_util.KETLUAN_DANG_TAO, "Đang soạn thảo"),
