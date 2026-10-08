@@ -37,9 +37,10 @@ class DanhMucTuoi(models.Model):
     def action_xem_muctieu(self):
 
         coso_id = self.env.context.get("default_coso_id")
+        is_sohuu = self.env.context.get("default_chuongtrinh_sohuu",False)
 
-        if (coso_id
-                and coso_id == self.coso_id.id):
+        if (is_sohuu == True or (coso_id
+                and coso_id == self.coso_id.id)):
             return {
                 'type': 'ir.actions.act_window',
                 'name': "TUỔI:" + self.name,
@@ -50,6 +51,7 @@ class DanhMucTuoi(models.Model):
                 'context': {
                     'default_chuongtrinh_id': self.chuongtrinh_id.id,
                     'default_tuoi_id': self.id,
+
                 }
 
             }

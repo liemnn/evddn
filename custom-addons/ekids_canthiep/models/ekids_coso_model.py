@@ -104,15 +104,20 @@ class CoSo(models.Model):
             record.is_phancong = is_phancong
 
     def action_xem_chuongtrinh_kanban(self):
+        kanban_view_id = self.env.ref('ekids_canthiep.ct_chuongtrinh_kanban').id
 
         return {
             'type': 'ir.actions.act_window',
             'name': 'CHƯƠNG TRÌNH',
             'res_model': 'ekids.ct_chuongtrinh',
+            'views': [(kanban_view_id, 'kanban')],
             'view_mode': 'kanban,list,form',
             'domain': [('coso_id', '=', self.id)],
             'target': 'current',
-            'context': {'default_coso_id': self.id},
+            'context': {
+                'default_coso_id': self.id,
+                'default_chuongtrinh_sohuu': True
+            },
         }
 
     def action_xem_chuongtrinh_coso_khac_kanban(self):
@@ -137,6 +142,7 @@ class CoSo(models.Model):
 
             'context': {
                 'default_coso_id': self.id,
+                'default_chuongtrinh_sohuu': False,
                 'create': False,
                 'edit': False,
                 'delete': False,

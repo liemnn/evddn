@@ -85,7 +85,9 @@ class ChuongTrinh(models.Model):
             'target': 'current',
             'domain': [('chuongtrinh_id', '=', self.id)],
             'context':{
-                'default_chuongtrinh_id':self.id
+                'default_chuongtrinh_id':self.id,
+                'default_chuongtrinh_sohuu': True
+
             }
 
         }
@@ -115,7 +117,8 @@ class ChuongTrinh(models.Model):
             'target': 'current',
             'domain': [('chuongtrinh_id', '=', self.id)],
             'context':{
-                'default_chuongtrinh_id':self.id
+                'default_chuongtrinh_id':self.id,
+                'default_chuongtrinh_sohuu': True
             }
 
         }
@@ -146,7 +149,8 @@ class ChuongTrinh(models.Model):
             'target': 'current',
             'domain': [('chuongtrinh_id', '=', self.id)],
             'context': {
-                'default_chuongtrinh_id': self.id
+                'default_chuongtrinh_id': self.id,
+                'default_chuongtrinh_sohuu': True
             }
 
         }
