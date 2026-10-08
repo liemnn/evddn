@@ -139,6 +139,16 @@ class GiaoVien(models.Model):
                     if htct.is_tham_nien_duoccong == True:
                         thamnien+= htct.tham_nien
             record.tham_nien =thamnien
+
+    def func_get_tham_nien(self,ngay):
+        thamnien =giaovien_util.func_get_thamnien_ngay(self,ngay)
+        htcts= self.hoctapcongtac_ids
+        if htcts:
+            for htct in htcts:
+                if htct.is_tham_nien_duoccong == True:
+                    thamnien+= htct.tham_nien
+        return thamnien
+
     @api.depends('name')
     def _compute_ten(self):
         for record in self:

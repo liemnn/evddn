@@ -270,16 +270,26 @@ def func_get_thamnien(giaovien):
         return 0.0
 
     today = date.today()
+    return func_get_thamnien_ngay(giaovien,today)
+
+
+
+def func_get_thamnien_ngay(giaovien,ngay):
+    # 1. Chặn lỗi nếu chưa nhập ngày bắt đầu đi làm
+    if not giaovien.dilam_tungay:
+        return 0.0
+
+
 
     # 2. Xác định mốc thời gian chốt sổ (end_date)
     if giaovien.trangthai == "0":
         # Nếu đã nghỉ làm -> Tính đến ngày nghỉ việc.
         # (Giả định anh đang dùng trường 'ngay_nghiviec', hãy sửa lại tên biến nếu anh đặt tên khác)
         # Nếu quên chưa nhập ngày nghỉ, tạm lấy ngày hôm nay để tránh lỗi hệ thống
-        end_date = giaovien.dilam_denngay if giaovien.dilam_denngay else today
+        end_date = giaovien.dilam_denngay if giaovien.dilam_denngay else ngay
     else:
         # Nếu trạng thái "1" (Đang làm việc) hoặc "2" (Nghỉ thai sản, ốm đau) -> Tính đến hôm nay
-        end_date = today
+        end_date = ngay
 
     # 3. Chốt chặn an toàn: Tránh trường hợp nhập sai (ngày nghỉ trước ngày đi làm) gây ra số âm
     if end_date < giaovien.dilam_tungay:
@@ -292,6 +302,7 @@ def func_get_thamnien(giaovien):
     result = diff.years + (diff.months / 12.0)
 
     return round(result, 1)
+
 
 
 
