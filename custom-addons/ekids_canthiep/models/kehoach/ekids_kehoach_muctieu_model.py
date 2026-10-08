@@ -135,7 +135,7 @@ class KeHoach2MucTieu(models.Model):
         ("1", "Đạt (+)"),
         ("-1", "Đang can thiệp"),
 
-    ], string="Trạng thái", default="0",compute="_compute_trangthai",store=False)
+    ], string="Trạng thái", default="0",compute="_compute_trangthai",store=False,recursive=True)
 
     is_co_thietke = fields.Boolean(compute="_compute_is_co_thietke")
 

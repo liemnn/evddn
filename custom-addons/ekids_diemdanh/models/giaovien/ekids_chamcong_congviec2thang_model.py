@@ -125,8 +125,8 @@ class ChamCongCongViec2Thang(models.Model,ChamCongFuncAbstractModel):
     d31= fields.Boolean("31",default=False)
     is_d31_nghi = fields.Boolean(string="Nghỉ", compute="_compute_all_is_d_nghi")
 
-    tong = fields.Float(string="Tổng", compute="_compute_tong", digits=(10, 1),store=True,defaul=0)
-    tong_temps = fields.Float(string="Tổng tạm", digits=(10, 1),defaul=0)
+    tong = fields.Float(string="Tổng", compute="_compute_tong", digits=(10, 1),store=True,default=0)
+    tong_temps = fields.Float(string="Tổng tạm", digits=(10, 1),default=0)
 
 
     ca2ngay_daythay_ids = fields.One2many("ekids.chamcong_ca2ngay_daythay", "congviec2thang_id"

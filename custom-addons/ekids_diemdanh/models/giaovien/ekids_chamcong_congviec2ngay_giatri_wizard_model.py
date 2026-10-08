@@ -23,7 +23,7 @@ class ChamCongCongViec2NgayGiaTriWizard(models.TransientModel):
 
     congviec2thang_giatri_id = fields.Many2one("ekids.chamcong_congviec2thang_giatri", required=True,ondelete="cascade")
     ngay =fields.Date(string="Ngày")
-    giatri =fields.Char(string="Giá trị",digits=(6, 3),default="1.0")
+    giatri = fields.Char(string="Giá trị",default="1.0")
 
     @api.onchange('giatri')
     def _onchange_giatri_lamtron(self):

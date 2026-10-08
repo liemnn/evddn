@@ -46,12 +46,13 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
             default=True
         )
 
-    tong_str = fields.Char(string="Tổng", compute="_compute_tong")
+    tong_str = fields.Char(string="Tổng", compute="_compute_tong_str")
 
-    tong = fields.Float(string="Tổng", compute="_compute_tong", digits=(10, 3),store=True,defaul=0)
-    tong1 = fields.Float(string="Tổng", digits=(10, 3), store=True, defaul=0)
-    tong2 = fields.Float(string="Tổng", digits=(10, 3), store=True, defaul=0)
-    tong3 = fields.Float(string="Tổng", digits=(10, 3), store=True, defaul=0)
+    tong = fields.Float(string="Tổng", compute="_compute_tong", digits=(10, 3),store=True,default=0)
+
+    tong1 = fields.Float(string="Tổng", digits=(10, 3), store=True, default=0)
+    tong2 = fields.Float(string="Tổng", digits=(10, 3), store=True, default=0)
+    tong3 = fields.Float(string="Tổng", digits=(10, 3), store=True, default=0)
 
     # 🌟 OVERRIDE export_data: Áp dụng cho cả d1..d31 và các cột tổng (tong, tong1, tong2, tong3)
     @api.model
