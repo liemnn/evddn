@@ -46,7 +46,7 @@ class ChamCongCongViec2ThangGiaTri(models.Model,ChamCongFuncAbstractModel):
             default=True
         )
 
-    tong_str = fields.Char(string="Tổng", compute="_compute_tong_str")
+    tong_str = fields.Char(string="Tổng", compute="_compute_tong")
 
     tong = fields.Float(string="Tổng", compute="_compute_tong", digits=(10, 3),store=True,default=0)
 
