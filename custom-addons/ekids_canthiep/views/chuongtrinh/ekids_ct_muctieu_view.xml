@@ -38,6 +38,8 @@
                     <field name="tuoi_id" string="Độ tuổi" options="{'no_open': True, 'no_create': True}"/>
 
                     <field name="name" string="Mục tiêu" decoration-bf="True"/>
+                   <field name="is_co_chucnang"  widget="boolean_toggle" string="Có Chức năng"/>
+                   <field name="is_co_thietke"   widget="boolean_toggle" string="Có Thiết kế"/>
                     <field name="trangthai"
                            decoration-success="trangthai == '1'"
                            decoration-danger="trangthai == '0'"/>
