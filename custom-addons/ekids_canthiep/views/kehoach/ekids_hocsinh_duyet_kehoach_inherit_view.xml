@@ -11,7 +11,15 @@
 
                 <!-- ================= 1. THÔNG TIN HỌC SINH ================= -->
                 <field name="sequence" width="35" string="TT"/>
-                <field name="name" width="160" class="fw-bold text-wrap" string="Họ và tên"/>
+                <field name="name" width="160"  string="Họ và tên"/>
+                <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
+                            string=""
+                            width="30"
+                            type="action"
+                            icon="fa-medkit"
+                            class="btn-outline-danger"
+                            title="Hồ sơ can thiệp của trẻ"
+                            />
                 <field name="gioitinh" width="70" string="Giới tính"/>
                 <field name="tuoi" optional="hide" string="Tuổi"/>
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
@@ -34,7 +42,7 @@
 
                 <!-- ================= 3. KHỐI GIAI ĐOẠN 1: ĐỢI DUYỆT ================= -->
                 <field name="tong_kehoach_doiduyet" string="Đợi duyệt" width="65" class="text-center fw-bold"/>
-                <field name="ngay_guiduyet" string="Gửi duyệt" width="95" class="text-center text-wrap"/>
+                <field name="ngay_guiduyet" string="Gửi duyệt" class="text-center text-wrap"/>
 
                 <button name="action_xem_danhsach_kehoach"
                         string=""
@@ -47,10 +55,11 @@
 
                 <button name="action_duyet_kehoach"
                         string="Duyệt"
+
                         type="object"
                         class="btn-info btn-sm text-white fw-bold"
                         icon="fa-paper-plane"
-                        invisible="is_kiemduyet == False"
+                        invisible="tong_kehoach_doiduyet == 0"
                         title="Kế hoạch này cần Duyệt để đưa vào can thiệp"/>
 
                 <!-- ================= 4. KHỐI GIAI ĐOẠN 2: ĐANG CAN THIỆP & XÁC NHẬN ================= -->
@@ -82,16 +91,7 @@
                         title="Đánh giá / Xác nhận kết quả can thiệp"/>
 
                 <!-- ================= 5. KHỐI GIAI ĐOẠN 3: LƯU TRỮ & TỔNG ================= -->
-                <field name="tong_kehoach_da_canthiep" string="Đã kết thúc" width="75" class="text-center"/>
 
-                <button name="action_xem_danhsach_kehoach"
-                        string=""
-                        type="object"
-                        class="btn-outline-secondary btn-sm"
-                        icon="fa-list-ul"
-                        invisible="tong_kehoach_da_canthiep == 0"
-                        context="{'default_context_type':'5','default_context_trangthai':['-1']}"
-                        title="Danh sách [Kế hoạch] đã kết thúc"/>
 
                 <field name="tong_kehoach" string="Tổng kế hoạch" width="55" class="text-center fw-bold"/>
 

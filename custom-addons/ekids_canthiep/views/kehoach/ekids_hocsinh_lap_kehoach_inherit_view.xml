@@ -7,7 +7,7 @@
             <list create="false" delete="false" limit="200" default_order="id asc">
 
                 <field name="sequence" width="25"/>
-                <field name="name" width="200" class="text-wrap"/>
+                <field name="name" width="200"/>
                 <field name="gioitinh" width="70" string="Giới tính"/>
                 <field name="tuoi" optional="hide" string="Tuổi"/>
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
@@ -26,7 +26,12 @@
                 <field name="ten_kehoach" string="Của tháng" width="150" class="fw-bold text-wrap"/>
                 <field name="trangthai_kehoach" string="Kế hoạch" width="110" widget="badge" class="text-wrap"/>
 
-
+                <field name="gv_canthiep_ids"
+                   string="Giáo viên"
+                   width="110"
+                   widget="many2many_tags"
+                   readonly="1"
+                   options="{'no_open': True}"/>
                 <field name="tong_kehoach_taomoi" string="Đã lập"/>
 
                 <button name="action_xem_danhsach_kehoach"

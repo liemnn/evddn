@@ -271,7 +271,7 @@ class LuongFuncAbstractModel(models.AbstractModel):
 
         parameters["$NGAY_DIMUON"] = str(dilam_muon)
 
-        tham_nien = giaovien.tham_nien
+        tham_nien = giaovien.func_get_tham_nien(ngay_dauthang)
         # làm tròn thâm niên
         #tham_nien_int = int (tham_nien)
         parameters["$THAM_NIEN"] = str(tham_nien)

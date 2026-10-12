@@ -68,23 +68,30 @@ def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,
                 ngay += timedelta(days=1)
     return days
 
-def func_get_nghipheps_tatca_giaovien(self, coso,nam,thang):
-    result={}
+def func_get_nghipheps_tatca_giaovien(self, coso, nam, thang):
+    result = {}
     days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
-    ngay_dauthang= days[0]
-    ngay_cuoithang=days[len(days)-1]
+    if not days:
+        return result
+    ngay_dauthang = days[0]
+    ngay_cuoithang = days[-1]
+
     nghipheps = self.env['ekids.giaovien_nghiphep'].search([
         ('coso_id', '=', coso.id),
         ('tu_ngay', '<=', ngay_cuoithang),
         ('den_ngay', '>=', ngay_dauthang),
     ])
-    for day in days:
-        for nghiphep in nghipheps:
-            key = str(nghiphep.giaovien_id.id)+":" +str(day)
-            if  day >= nghiphep.tu_ngay and day <= nghiphep.den_ngay:
-                result[key] = nghiphep
-            else:
-                continue
+
+    for np in nghipheps:
+        # Thu hẹp khoảng ngày trong phạm vi tháng xét duyệt
+        start = max(np.tu_ngay, ngay_dauthang)
+        end = min(np.den_ngay, ngay_cuoithang)
+        curr = start
+        gv_id = np.giaovien_id.id
+        while curr <= end:
+            result[f"{gv_id}:{curr}"] = np
+            curr += timedelta(days=1)
+
     return result
 
 def func_get_ngay_dilam_theo_kehoach(self, coso,nghiles,tu_ngay, den_ngay):
@@ -150,7 +157,7 @@ def func_get_dulieu_chamcong_thucte_giaovien(self
     chamcong_nghi = func_get_ngays_theloai_trong_khoang_thoigian(self, giaovien2thang, ['-1'],
                                                                                     nghiles, nghipheps,
                                                                                     coso_dilam_kehoachs)
-    gv_dilam_kehoachs = func_get_songay_dilam_giaovien_trongthang(giaovien2thang.giaovien_id,coso_dilam_kehoachs)
+    gv_dilam_kehoachs = func_get_songay_dilam_giaovien_trongthang(giaovien,coso_dilam_kehoachs)
 
     gv_nghiles = func_get_giaovien_nghiles(giaovien,nghiles)
     gv_coso_chonghi_truluongs = func_get_giaovien_coso_nghi_truluong(giaovien, coso_chonghi_truluongs)
@@ -263,16 +270,26 @@ def func_get_thamnien(giaovien):
         return 0.0
 
     today = date.today()
+    return func_get_thamnien_ngay(giaovien,today)
+
+
+
+def func_get_thamnien_ngay(giaovien,ngay):
+    # 1. Chặn lỗi nếu chưa nhập ngày bắt đầu đi làm
+    if not giaovien.dilam_tungay:
+        return 0.0
+
+
 
     # 2. Xác định mốc thời gian chốt sổ (end_date)
     if giaovien.trangthai == "0":
         # Nếu đã nghỉ làm -> Tính đến ngày nghỉ việc.
         # (Giả định anh đang dùng trường 'ngay_nghiviec', hãy sửa lại tên biến nếu anh đặt tên khác)
         # Nếu quên chưa nhập ngày nghỉ, tạm lấy ngày hôm nay để tránh lỗi hệ thống
-        end_date = giaovien.dilam_denngay if giaovien.dilam_denngay else today
+        end_date = giaovien.dilam_denngay if giaovien.dilam_denngay else ngay
     else:
         # Nếu trạng thái "1" (Đang làm việc) hoặc "2" (Nghỉ thai sản, ốm đau) -> Tính đến hôm nay
-        end_date = today
+        end_date = ngay
 
     # 3. Chốt chặn an toàn: Tránh trường hợp nhập sai (ngày nghỉ trước ngày đi làm) gây ra số âm
     if end_date < giaovien.dilam_tungay:
@@ -285,6 +302,7 @@ def func_get_thamnien(giaovien):
     result = diff.years + (diff.months / 12.0)
 
     return round(result, 1)
+
 
 
 

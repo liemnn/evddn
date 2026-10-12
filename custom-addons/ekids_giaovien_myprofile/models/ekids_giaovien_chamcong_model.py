@@ -248,7 +248,7 @@ class GiaoVienChamCong(models.Model):
             for ca_canthiep in ca_canthieps:
                 is_canthiep = getattr(ca_canthiep,thu_field)
                 if is_canthiep:
-                        count = self.env['ekids.diemdanh_ca2ngay'].search([
+                        count = self.env['ekids.diemdanh_ca2ngay'].search_count([
                             ('hocsinh_id', '=', ca_canthiep.hocsinh_id.id),
                             ('ngay', '=', ngay),
                             ('hocphi_dm_ca_id', '=', ca_canthiep.dm_ca_id.id),

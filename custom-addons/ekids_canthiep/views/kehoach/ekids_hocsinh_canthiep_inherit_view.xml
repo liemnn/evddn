@@ -8,7 +8,7 @@
 
 
                 <field name="sequence" width="25"/>
-                <field name="name" width="170" class="text-wrap"/>
+                <field name="name" width="170"/>
                 <field name="gioitinh" width="70" string="Giới tính"/>
                 <field name="tuoi" optional="hide" string="Tuổi"/>
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
@@ -70,6 +70,30 @@
                 />
 
             </list>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="ekids_canthiep.ekids_hocsinh_form_inherit_hoso">
+        <field name="name">ekids.hocsinh.form.inherit.hoso.report</field>
+        <field name="model">ekids.hocsinh</field>
+        <field name="inherit_id" ref="ekids_hocsinh.hocsinh_form"/>
+        <field name="arch" type="xml">
+
+            <!-- 1. Header (Nút Action chính ở thanh trạng thái nếu form view có header) -->
+            <!-- Moola view nalli <header> illa, aadrinda <sheet> modalu <header> serisabahudu -->
+            <xpath expr="//sheet" position="before">
+                <header>
+                   <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
+                            string="Hồ sơ can thiệp"
+                            type="action"
+                            icon="fa-medkit"
+                            class="btn-outline-danger"
+
+                            />
+                </header>
+            </xpath>
+
+
         </field>
     </record>
 

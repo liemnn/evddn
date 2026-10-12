@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Đánh giá lại kết quả can thiệp</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #22C55E; --c-indigo: #4F46E5; --c-orange: #F59E0B; --c-red: #EF4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR --- */
+        .top-bar { height: 55px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 15px; }
+        .back-btn { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 6px 12px; border-radius: 6px; background: #EFF6FF; border: 1px solid #BFDBFE; transition: 0.2s;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+
+        .top-center { font-size: 0.85rem; font-weight: 600; color: var(--text-sub); }
+        .top-center strong { color: #DC2626; font-size: 1rem; }
+
+        .header-title-right { font-weight: 700; font-size: 0.95rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; width: 100%; }
+        .content-area { flex: 1; overflow-y: auto; padding: 30px 20px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%; display: flex; justify-content: center; }
+        .doc-container { max-width: 1000px; width: 100%; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color); margin-bottom: 40px;}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h2 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.5px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        /* --- CÁC BƯỚC HƯỚNG DẪN --- */
+        .step-detail-box {
+            background: white; border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 30px; margin-bottom: 25px; position: relative; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .step-detail-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--primary); }
+        .step-detail-box h3.step-title {
+            font-size: 1.3rem; color: #1E293B; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .step-detail-box h3.step-title span { background: #EEF2FF; color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; }
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.6; }
+        .doc-content p { margin-bottom: 12px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content li { margin-bottom: 8px; }
+
+        .highlight-box { background: #EFF6FF; border-left: 4px solid var(--primary); padding: 15px; border-radius: 0 8px 8px 0; margin: 15px 0; font-size: 0.95rem; color: #1E40AF; }
+
+        /* --- MOCKUP GIAO DIỆN PHẦN MỀM --- */
+        .ui-mockup {
+            background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 10px; padding: 20px; margin: 20px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .ui-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: white; }
+        .ui-table th, .ui-table td { border: 1px solid #CBD5E1; padding: 8px 10px; text-align: left; }
+        .ui-table th { background: #F1F5F9; font-weight: 700; color: var(--text-main); }
+
+        .ui-btn { background: #2563EB; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+        .ui-btn-green { background: #10B981; }
+        .ui-btn-red { background: #EF4444; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 10px; height: auto; min-height: 55px; flex-wrap: wrap; padding-top: 6px; padding-bottom: 6px; }
+            .top-center { width: 100%; text-align: center; order: 3; margin-top: 4px; font-size: 0.8rem; }
+            .content-area { padding: 10px; }
+            .doc-container { padding: 15px; border-radius: 12px; }
+            .doc-header h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="../index.html#kehoach" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
+        </div>
+        <div class="top-center">
+            Hỗ trợ kỹ thuật / Zalo: <strong>0393.393.386</strong>
+        </div>
+        <div class="top-right">
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phân hệ 02: Kế hoạch can thiệp <i class="fas fa-chevron-right"></i> <span>Đánh giá lại kết quả can thiệp</span>
+                </div>
+
+                <div class="doc-header">
+                    <h2>F. Đánh giá lại kết quả can thiệp (Cuối tháng)</h2>
+                    <p><strong>Mục tiêu:</strong> Vào thời điểm cuối tháng, người quản lý chuyên môn cần đánh giá lại kết quả can thiệp của học sinh thông qua việc dự giờ thực tế, nhằm kiểm chứng xem mục tiêu đó có thực sự đạt (+) với con hay không trước khi kết thúc chu kỳ tháng.</p>
+                </div>
+
+                <!-- BƯỚC 1 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Bước 1</span> Truy cập danh sách kế hoạch can thiệp của trẻ</h3>
+                    <div class="doc-content">
+                        <p>Thực hiện các thao tác truy cập hệ thống để chọn học sinh cần đánh giá:</p>
+                        <ul>
+                            <li>Trên màn hình menu chính, click chọn nút chức năng <strong style="color: var(--primary);">Duyệt [Kế hoạch/Kết quả]</strong>.</li>
+                        </ul>
+
+                        <!-- MOCKUP NÚT BẤM -->
+                        <div class="ui-mockup" style="max-width: 380px; margin: 15px auto; background: white; padding: 20px; border-radius: 12px; border: 2px dashed #2563EB;">
+                            <div style="font-size: 0.75rem; color: var(--text-sub); text-align: center; margin-bottom: 10px; font-weight: 700;">GIAO DIỆN CHỌN CHỨC NĂNG:</div>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="background: white; border: 2px solid #EF4444; color: #0F172A; padding: 10px 15px; border-radius: 8px; font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(239,68,68,0.15);">
+                                    <i class="fas fa-check-square" style="color: #2563EB;"></i> Duyệt [Kế hoạch/Kết quả] <span style="font-size: 0.7rem; background: #FEE2E2; color: #DC2626; padding: 2px 6px; border-radius: 4px; margin-left: auto;">Click vào đây</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul>
+                            <li>Tại bảng danh sách học sinh đang ở trạng thái can thiệp, tìm học sinh cần đánh giá và click vào nút <span class="ui-btn ui-btn-green"><i class="fas fa-check-square"></i> XÁC NHẬN</span> (Đánh giá / Xác nhận kết quả can thiệp).</li>
+                        </ul>
+
+                        <!-- MOCKUP BẢNG DANH SÁCH HỌC SINH -->
+                        <div class="ui-mockup">
+                            <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-main);">Danh sách học sinh đang can thiệp:</div>
+                            <table class="ui-table">
+                                <thead>
+                                    <tr>
+                                        <th>TT</th>
+                                        <th>Họ và tên</th>
+                                        <th>Trạng thái</th>
+                                        <th>Của tháng</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>3</td>
+                                        <td><strong>Nguyễn Hữu Nghĩa</strong></td>
+                                        <td><span style="background: #E2E8F0; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">Đang can thiệp</span></td>
+                                        <td>Tháng 8+9/2026</td>
+                                        <td><span class="ui-btn ui-btn-green"><i class="fas fa-check-square"></i> XÁC NHẬN</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 2 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Bước 2</span> Vào chức năng "Đợi xác nhận" để đánh giá thực tế</h3>
+                    <div class="doc-content">
+                        <p>Trong giao diện chi tiết kế hoạch tháng đang ở trạng thái <strong>Đang can thiệp</strong>:</p>
+                        <ul>
+                            <li>Tại mỗi mục tiêu của trẻ, click vào nút <span class="ui-btn" style="background: #475569;"><i class="fas fa-clock"></i> Đợi xác nhận</span> để mở hộp thoại xác nhận kết quả kiểm tra thực tế (sau khi chuyên môn đã tiến hành dự giờ/kiểm tra trực tiếp).</li>
+                        </ul>
+
+                        <!-- MOCKUP GIAO DIỆN MỤC TIÊU ĐANG CAN THIỆP -->
+                        <div class="ui-mockup" style="background: white;">
+                            <div style="font-weight: 700; font-size: 0.85rem; color: var(--primary); margin-bottom: 8px;"><i class="fas fa-list-check"></i> Danh sách mục tiêu tháng:</div>
+                            <div style="border: 1px solid #CBD5E1; padding: 10px; border-radius: 6px; background: #F8FAFC; display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem;">
+                                <span>Nghe và chú ý: Nghe và nhận biết âm thanh...</span>
+                                <div style="display: flex; gap: 6px;">
+                                    <span class="ui-btn ui-btn-green">Đạt</span>
+                                    <span class="ui-btn" style="background: #475569;"><i class="fas fa-clock"></i> Đợi xác nhận</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>Hộp thoại <strong>"XÁC NHẬN KẾT QUẢ CAN THIỆP"</strong> xuất hiện với 3 tùy chọn đánh giá thực tế cho chuyên môn:</p>
+                        <ul style="padding-left: 20px;">
+                            <li><strong>a. Đạt (+):</strong> Trẻ đã hoàn thành tốt mục tiêu qua kiểm tra thực tế.</li>
+                            <li><strong>b. Chuyển (-):</strong> Trẻ chưa đạt yêu cầu, quyết định chuyển mục tiêu này sang tháng tiếp theo để tiếp tục thực hiện can thiệp.</li>
+                            <li><strong>c. Dừng (-):</strong> Trẻ chưa đạt nhưng vì một số lý do đặc thù nên không tiếp tục can thiệp mục tiêu này trong tháng tiếp theo và dừng lại (ví dụ: mục tiêu quá sức với trẻ ở giai đoạn hiện tại).</li>
+                        </ul>
+
+                        <!-- MOCKUP HỘP THOẠI XÁC NHẬN KẾT QUẢ -->
+                        <div class="ui-mockup" style="background: white; border: 2px solid #2563EB;">
+                            <div style="font-weight: 800; font-size: 0.9rem; color: #1E293B; margin-bottom: 8px; border-bottom: 1px solid #CBD5E1; padding-bottom: 6px;">
+                                <i class="fas fa-check-circle"></i> XÁC NHẬN KẾT QUẢ CAN THIỆP
+                            </div>
+                            <div style="font-size: 0.8rem; margin-bottom: 8px; color: #64748B;">Mục tiêu: "Nghe và chú ý: Nghe và nhận biết âm thanh..."</div>
+                            <div style="font-size: 0.8rem; font-weight: 700; margin-bottom: 6px;">XÁC NHẬN KẾT QUẢ CAN THIỆP:</div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                                <span class="ui-btn ui-btn-green">Đạt (+)</span>
+                                <span class="ui-btn" style="background: #64748B;">Chuyển (-)</span>
+                                <span class="ui-btn" style="background: #EF4444;">Dừng (-)</span>
+                            </div>
+                            <div style="background: #F8FAFC; border: 1px solid #CBD5E1; padding: 8px; border-radius: 6px; font-size: 0.8rem; margin-bottom: 10px; color: #94A3B8;">
+                                Nhập ghi chú hoặc biểu hiện cụ thể của học sinh...
+                            </div>
+                            <div style="text-align: right;">
+                                <span class="ui-btn">Lưu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 3 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Bước 3</span> Kết thúc kế hoạch tháng</h3>
+                    <div class="doc-content">
+                        <p>Sau khi đã hoàn tất việc kiểm tra và xác nhận toàn bộ các mục tiêu có trong kế hoạch tháng của trẻ:</p>
+                        <ul>
+                            <li>Click vào nút <span class="ui-btn ui-btn-green" style="font-size: 0.85rem; padding: 6px 14px;"><i class="fas fa-box-archive"></i> Kết thúc</span> ở góc trên giao diện kế hoạch.</li>
+                            <li>Hệ thống sẽ chuyển trạng thái hoàn thành chu kỳ tháng, cho phép giáo viên tiếp tục tiến hành lập kế hoạch mới cho chu kỳ tiếp theo.</li>
+                        </ul>
+
+                        <!-- MOCKUP NÚT KẾT THÚC -->
+                        <div class="ui-mockup" style="background: white; padding: 15px; display: flex; align-items: center; justify-content: space-between;">
+                            <span class="ui-btn ui-btn-green" style="padding: 8px 16px;"><i class="fas fa-box-archive"></i> Kết thúc</span>
+                            <span style="font-size: 0.8rem; font-weight: 700; color: #475569;">Trạng thái: Đang can thiệp <i class="fas fa-arrow-right"></i> Đã hoàn thành chu kỳ</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

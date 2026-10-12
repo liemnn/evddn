@@ -8,6 +8,7 @@ class ChuongTrinh(models.Model):
 
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở", required=True, ondelete="restrict")
     name = fields.Char(string="Tên (viết tắt)",required=True)
+    tacgia = fields.Char(string="Tác giả")
     title = fields.Char(string="Tên chương trình", required=True)
     desc =fields.Html(string="Mô tả")
     coso_ids = fields.Many2many(comodel_name="ekids.coso",
@@ -84,7 +85,9 @@ class ChuongTrinh(models.Model):
             'target': 'current',
             'domain': [('chuongtrinh_id', '=', self.id)],
             'context':{
-                'default_chuongtrinh_id':self.id
+                'default_chuongtrinh_id':self.id,
+                'default_chuongtrinh_sohuu': True
+
             }
 
         }
@@ -114,7 +117,8 @@ class ChuongTrinh(models.Model):
             'target': 'current',
             'domain': [('chuongtrinh_id', '=', self.id)],
             'context':{
-                'default_chuongtrinh_id':self.id
+                'default_chuongtrinh_id':self.id,
+                'default_chuongtrinh_sohuu': True
             }
 
         }
@@ -145,7 +149,8 @@ class ChuongTrinh(models.Model):
             'target': 'current',
             'domain': [('chuongtrinh_id', '=', self.id)],
             'context': {
-                'default_chuongtrinh_id': self.id
+                'default_chuongtrinh_id': self.id,
+                'default_chuongtrinh_sohuu': True
             }
 
         }

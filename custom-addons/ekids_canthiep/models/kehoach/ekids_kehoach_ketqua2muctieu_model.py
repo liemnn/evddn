@@ -18,6 +18,7 @@ except ImportError as e:
 class KeHoachKetQua2MucTieu(models.Model):
     _name = 'ekids.kehoach_ketqua2muctieu'
     _description = 'Kết quả thực hiện can thiệp'
+    _log_access = False
     _order = 'ngay asc, id asc'
 
 
@@ -36,7 +37,7 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("2", "Đang hình thành (+/-)"),
 
 
-    ], string="Trạng thái",default="0")
+    ], string="Trạng thái",compute="_compute_trangthai",store=True)
 
 
     desc = fields.Html(string="Mô tả")
@@ -49,24 +50,68 @@ class KeHoachKetQua2MucTieu(models.Model):
         ("1", "Tương lai")
     ], string="Mốc thời gian", compute="_compute_is_date_status",default="1")
 
+
+
     loai = fields.Selection([
         ("1", "Đi học"),
         ("0", "Ngày trong tương lai"),
-        ("-1", "Ngày không đi hoc"),
-    ], string="Phân loại", default="1", compute="_compute_loai")
+        ("-1", "Ngày không đi học"),
+    ], string="Phân loại", compute="_compute_loai")
 
-    @api.depends("kehoach_muctieu_id.kehoach_id.is_readonly", "ngay")
+    solan_thu = fields.Integer(string="Số làn thử",compute="_compute_solan_thu")
+    solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
+    tyle_thu = fields.Integer(string="Tỷ lệ %", compute="_compute_tyle_thu")
+
+    is_giaovien_capnhat = fields.Boolean(string="Hệ thống tự câ nhật kết quả",default=True)
+
+    _sql_constraints = [
+        (
+            'muctieu_ngay_unique',
+            'unique(kehoach_muctieu_id, ngay)',
+            'Mỗi ngày chỉ được phép có duy nhất một bản ghi kết quả cho từng mục tiêu!'
+        )
+    ]
+
+    @api.depends('solan_thu_dat', 'solan_thu')
+    def _compute_tyle_thu(self):
+        for record in self:
+            tong = record.solan_thu or (record.kehoach_muctieu_id.solan_thu if record.kehoach_muctieu_id else 10)
+            record.tyle_thu = round((record.solan_thu_dat / tong) * 100) if tong > 0 else 0
+
+    @api.depends('tyle_thu')
+    def _compute_trangthai(self):
+        for record in self:
+            # Nhận trực tiếp tỷ lệ từ depends, loại bỏ hoàn toàn việc gọi _compute_tyle_thu() thủ công
+            t = record.tyle_thu
+            if record.trangthai != "0":
+                if t >= 80:
+                    record.trangthai = "1"
+                elif t > 0:
+                    record.trangthai = "2"
+                else:
+                    record.trangthai = "-1"
+
+    def _compute_solan_thu(self):
+        for record in self:
+            solan_thu = record.kehoach_muctieu_id.solan_thu
+            if solan_thu <= 0:
+                solan_thu=10
+            record.solan_thu = solan_thu
+
+
     def _compute_loai(self):
         for record in self:
             hocsinh = record.kehoach_muctieu_id.kehoach_id.hocsinh_id
 
-            loai = kehoach_util.func_kehoach_ketqua2muctieu(self,hocsinh,record.ngay)
-            if loai in ['1','11']:
-                record.loai ='1'
+            loai = kehoach_util.func_kehoach_ketqua2muctieu(self, hocsinh, record.ngay)
+            if loai in ['1', '11']:
+                record.loai = '1'
             elif loai in ['0']:
                 record.loai = '0'
             else:
                 record.loai = '-1'
+
+
 
 
 

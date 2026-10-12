@@ -7,14 +7,14 @@ const actionRegistry = registry.category("actions");
 
 actionRegistry.add("reload_congviec_jsless", async (env, action) => {
     const actionService = env.services.action;
-    const { record_id, ngay_field, giatri,tong} = action.params || {};
+    const { record_id, ngay_field, giatri,tong_str} = action.params || {};
     if (record_id && ngay_field) {
 
         let divs = document.getElementsByName(ngay_field);
         let html = "";
 
         switch (giatri) {
-            case 0:
+            case "0":
                 html = '<i class="fa fa-ban text-muted" title="Không có giá trị"/>'
                 break;
             default:
@@ -33,11 +33,11 @@ actionRegistry.add("reload_congviec_jsless", async (env, action) => {
              // ✅ Đóng popup hiện tại
              // cap nhat tong
 
-            const selector_tong = 'span[data-record_id="' + record_id + '"][name="tong"]';
+            const selector_tong_str = 'span[data-record_id="' + record_id + '"][name="tong_str"]';
 
-            const cell_tong = document.querySelector(selector_tong);
+            const cell_tong_str = document.querySelector(selector_tong_str);
 
-            cell_tong.innerHTML ='<span class="fa text-success fw-bold fs-4">'+tong+'</span>'
+            cell_tong_str.innerHTML ='<span class="fa text-success fw-bold fs-4">'+tong_str+'</span>'
 
             actionService.doAction({ type: "ir.actions.act_window_close" });
 

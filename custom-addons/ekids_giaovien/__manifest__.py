@@ -24,6 +24,8 @@
         'views/cauhinh/ekids_luong_dm_chitra_view.xml',
         'views/cauhinh/ekids_luong_dm_chamcong_view.xml',
         'views/cauhinh/ekids_giaovien_nghiphep_view.xml',
+        'views/cauhinh/ekids_luong_dm_view.xml',
+
 
 
         'data/sequence.xml',
@@ -40,6 +42,8 @@
         'views/luong/ekids_luong_hangmuc_view.xml',
         'views/luong/ekids_luong_sukien_view.xml',
         'views/luong/phieuluong/ekids_phieuluong_template.xml',
+        'views/luong/phieuluong/ekids_luong_thang_template.xml',
+
         'views/luong/ban_in/ekids_luong_banin_action.xml',
         'views/luong/ban_in/ekids_luong_banin_template.xml',
         'views/luong/ban_in/ekids_luong_banin_wizard_view.xml',

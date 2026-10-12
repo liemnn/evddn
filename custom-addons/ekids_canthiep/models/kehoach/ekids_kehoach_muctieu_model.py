@@ -135,7 +135,7 @@ class KeHoach2MucTieu(models.Model):
         ("1", "Đạt (+)"),
         ("-1", "Đang can thiệp"),
 
-    ], string="Trạng thái", default="0",compute="_compute_trangthai",store=False)
+    ], string="Trạng thái", default="0",compute="_compute_trangthai",store=False,recursive=True)
 
     is_co_thietke = fields.Boolean(compute="_compute_is_co_thietke")
 
@@ -151,6 +151,7 @@ class KeHoach2MucTieu(models.Model):
 
     # ghi chú kiểm duyet
     ghichu_kiemduyet = fields.Html(string="Nội dung kiểm duyệt")
+    dinhhuong_kiemduyet = fields.Html(string="Ý kiến/ Định hướng")
 
 
 
@@ -173,6 +174,177 @@ class KeHoach2MucTieu(models.Model):
     is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
     is_canthiep_readonly = fields.Boolean(compute="_compute_is_canthiep_readonly")
     is_kiemduyet_readonly = fields.Boolean(compute="_compute_is_kiemduyet_readonly")
+
+    solan_thu = fields.Integer(string="Số làn thử",default=10)
+    solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
+    tyle_thu = fields.Integer(string="Tỷ lệ %",compute="_compute_tyle_thu")
+
+    tyle_canthiep = fields.Integer(string="Tỷ lệ đạt %", compute="_compute_tyle_canthiep")
+
+    solan_kiemduyet_dat = fields.Integer(string="Số lần đạt(+)")
+    tyle_kiemduyet = fields.Integer(string="Tỷ lệ %", compute="_compute_tyle_kiemduyet")
+
+
+
+
+    @api.onchange('trangthai_kiemduyet')
+    def _onchange_trangthai_kiemduyet(self):
+        """Khi bấm nút Đạt (+), nếu số lần đạt đang < 80% thì tự động gợi ý mốc 8/10"""
+        tong_thu = self.solan_thu if self.solan_thu > 0 else 10
+        nguong_dat = int(tong_thu * 0.8)  # 80% của tổng lần thử (ví dụ 8/10)
+
+        if self.trangthai_kiemduyet == '1':
+            if self.solan_kiemduyet_dat < nguong_dat:
+                self.solan_kiemduyet_dat = nguong_dat
+
+    @api.onchange('solan_kiemduyet_dat')
+    def _onchange_solan_kiemduyet_dat(self):
+        """Khi nhập số lần đạt, tự động điều chỉnh tỷ lệ và đồng bộ nút bấm"""
+        tong_thu = self.solan_thu if self.solan_thu > 0 else 10
+
+        # 1. Chống nhập vượt quá tổng số lần thử
+        if self.solan_kiemduyet_dat > tong_thu:
+            self.solan_kiemduyet_dat = tong_thu
+            return {
+                'warning': {
+                    'title': 'Cảnh báo số liệu',
+                    'message': f'Số lần đạt không thể vượt quá tổng số lần thử ({tong_thu})!'
+                }
+            }
+        if self.solan_kiemduyet_dat < 0:
+            self.solan_kiemduyet_dat = 0
+
+        # 2. Tính tỷ lệ %
+        nguong_dat = int(tong_thu * 0.8)
+        if self.solan_kiemduyet_dat >= nguong_dat:
+            # Từ 80% trở lên tự động đồng bộ sang nút Đạt (+)
+            self.trangthai_kiemduyet = '1'
+        else:
+            # Dưới 80% mà đang để Đạt (+) thì chuyển sang Chuyển (-)
+            if self.trangthai_kiemduyet == '1':
+                self.trangthai_kiemduyet = '-1'
+
+    @api.constrains('trangthai_kiemduyet', 'solan_kiemduyet_dat', 'solan_thu')
+    def _check_kiemduyet_dat_hople(self):
+        """Ràng buộc cứng khi Lưu (Save): Đã chọn Đạt (+) thì bắt buộc >= 80%"""
+        for rec in self:
+            tong_thu = rec.solan_thu if rec.solan_thu > 0 else 10
+            nguong_dat = int(tong_thu * 0.8)
+
+            if rec.trangthai_kiemduyet == '1' and rec.solan_kiemduyet_dat < nguong_dat:
+                raise ValidationError(
+                    f"Không thể xác nhận trạng thái [Đạt (+)]!\n"
+                    f"Tiêu chuẩn đánh giá lâm sàng bắt buộc đạt từ 80% trở lên.\n"
+                    f"• Số lần đạt hiện tại: {rec.solan_kiemduyet_dat}/{tong_thu} ({rec.tyle_kiemduyet}%)\n"
+                    f"• Yêu cầu tối thiểu: từ {nguong_dat}/{tong_thu} (≥ 80%) trở lên.\n\n"
+                    f"Vui lòng điều chỉnh lại số lần đạt hoặc chọn [Chuyển (-)] / [Dừng (-)]."
+                )
+
+    @api.depends("solan_kiemduyet_dat")
+    def _compute_tyle_kiemduyet(self):
+        for record in self:
+            tyle = 0
+            if record.solan_thu > 0:
+                tyle = (record.solan_kiemduyet_dat / record.solan_thu) * 100
+            else:
+                tyle = 0
+            record.tyle_kiemduyet = tyle
+
+    def _compute_solan_dat_lientiep(self):
+
+        for rec in self:
+
+            solan = rec.func_ketqua_dat_lientiep_lonnhat()
+            rec.solan_dat_lientiep = solan
+
+    @api.depends('ketqua2muctieu_ids.trangthai', 'ketqua2muctieu_ids.tyle_thu', 'ketqua2muctieu_ids.loai')
+    def _compute_tyle_canthiep(self):
+        today = fields.Date.today()
+
+        # 🌟 ĐƯA RA NGOÀI VÒNG LẶP: Tính 1 lần duy nhất cho cả recordset
+        first_coso = self[:1].coso_id
+        soluong_str = coso_util.func_cauhinh_canthiep(
+            self, first_coso, "muctieu_soluong_dat_lientiep", "5"
+        ) if first_coso else "5"
+        soluong_dat_lientiep_quydinh = int(soluong_str)
+
+        for rec in self:
+            kqs = rec.ketqua2muctieu_ids.sorted(key=lambda r: r.ngay, reverse=True)
+            index = 0
+            tong_tyle = 0
+
+            for kq in kqs:
+                if (kq.ngay
+                        and fields.Date.to_date(kq.ngay) <= today
+                        and kq.loai == '1'
+                        and kq.trangthai != '0'
+                ):
+                    index += 1
+                    tong_tyle += kq.tyle_thu
+                    if index >= soluong_dat_lientiep_quydinh:
+                        break
+
+            rec.tyle_canthiep = round(tong_tyle / index) if index > 0 else 0
+
+
+
+
+    @api.constrains('solan_thu', 'solan_thu_dat')
+    def _check_solan_thu_hop_le(self):
+        for rec in self:
+            # Nếu đã nhập số lần đạt hoặc số lần thử thì bắt buộc số lần thử > 0
+            if rec.solan_thu < 0 or rec.solan_thu_dat < 0:
+                raise ValidationError("Số lần thử và số lần đạt (+) không được là số âm!")
+
+            if rec.solan_thu == 0 and rec.solan_thu_dat > 0:
+                raise ValidationError("Tổng số lần thử phải lớn hơn 0 khi đã có số lần đạt (+)! ")
+
+            if rec.solan_thu_dat > rec.solan_thu:
+                raise ValidationError(
+                    f"Dữ liệu không hợp lệ!\n"
+                    f"• Số lần đạt (+): {rec.solan_thu_dat}\n"
+                    f"• Tổng số lần thử: {rec.solan_thu}\n\n"
+                    f"Số lần đạt (+) không được lớn hơn tổng số lần thử."
+                )
+
+    # 2. CẢNH BÁO TỨC THÌ (ONCHANGE) KHI VỪA NHẬP TRÊN GIAO DIỆN
+    @api.onchange('solan_thu', 'solan_thu_dat')
+    def _onchange_check_solan_thu(self):
+        if self.solan_thu < 0:
+            self.solan_thu = 0
+            return {
+                'warning': {
+                    'title': 'Cảnh báo nhập liệu',
+                    'message': 'Tổng số lần thử không thể là số âm!'
+                }
+            }
+
+        if self.solan_thu_dat < 0:
+            self.solan_thu_dat = 0
+            return {
+                'warning': {
+                    'title': 'Cảnh báo nhập liệu',
+                    'message': 'Số lần đạt (+) không thể là số âm!'
+                }
+            }
+
+        if self.solan_thu > 0 and self.solan_thu_dat > self.solan_thu:
+            return {
+                'warning': {
+                    'title': 'Số liệu chưa hợp lệ',
+                    'message': f'Số lần đạt ({self.solan_thu_dat}) đang vượt quá tổng số lần thử ({self.solan_thu})!'
+                }
+            }
+
+    @api.depends("solan_thu","solan_thu_dat")
+    def _compute_tyle_thu(self):
+        for record in self:
+            if record.solan_thu >0:
+                tyle = (record.solan_thu_dat/record.solan_thu)*100
+            else:
+                tyle=0
+            record.tyle_thu = tyle
+
 
 
     def _compute_is_bientap_temp(self):
@@ -324,36 +496,89 @@ class KeHoach2MucTieu(models.Model):
                 ketqua_hinhthanh_thangtruoc = muctieu_thangtruoc.ketqua_hinhthanh
             mt.ketqua_hinhthanh_thangtruoc = ketqua_hinhthanh_thangtruoc
 
-
-
-    @api.depends('ketqua2muctieu_ids', 'ketqua2muctieu_ids.trangthai')
+    @api.depends(
+        'kehoach_id.trangthai',
+        'kehoach_id.tu_ngay',
+        'kehoach_muctieu_truoc_id.trangthai',
+        'ketqua2muctieu_ids.trangthai',
+        'ketqua2muctieu_ids.loai'
+    )
     def _compute_trangthai(self):
-        today = date.today()
+        # 1. Chống lỗi crash khi self rỗng
+        if not self:
+            return
+
+        today = fields.Date.today()
+        first_rec = self[:1]
+        first_coso = first_rec.coso_id or (first_rec.kehoach_id.coso_id if first_rec.kehoach_id else False)
+
+        # 2. Đọc cấu hình cơ sở 1 lần duy nhất ngoài vòng lặp
+        tyle_dat = int(
+            coso_util.func_cauhinh_canthiep(self, first_coso, "muctieu_tyle_dat", "80")) if first_coso else 80
+        soluong_mo = int(
+            coso_util.func_cauhinh_canthiep(self, first_coso, "muctieu_soluong_mo", "2")) if first_coso else 2
+        dat_lientiep_quydinh = int(
+            coso_util.func_cauhinh_canthiep(self, first_coso, "muctieu_soluong_dat_lientiep", "5")) if first_coso else 5
+
         for mt in self:
             kehoach = mt.kehoach_id
             is_chophep_canthiep = False
+
+            # A. TÍNH TOÁN CHO PHÉP CAN THIỆP
             if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                if today >= kehoach.tu_ngay:
-                    soluong_str = coso_util.func_cauhinh_canthiep(self, kehoach.coso_id, "muctieu_soluong_mo", "2")
-                    is_chophep_canthiep = mt.func_is_chophep_canthiep(int(soluong_str))
+                if kehoach.tu_ngay and today >= kehoach.tu_ngay:
+                    is_chophep_canthiep = mt.func_is_chophep_canthiep(kehoach,soluong_mo, tyle_dat)
             elif kehoach.trangthai == kehoach_util.KEHOACH_HET_HIEULUC:
-                    is_chophep_canthiep = True # Cho phep xem lai
+                is_chophep_canthiep = True  # Cho phép xem lại kế hoạch cũ
 
-            if is_chophep_canthiep == False:
-                #TH1: Chua cho can thiep
-                mt.trangthai = "0"
+            # B. TÍNH TOÁN TRẠNG THÁI HIỂN THỊ CỦA MỤC TIÊU
+            if not is_chophep_canthiep:
+                mt.trangthai = "0"  # Chưa mở / Chưa cho can thiệp
             else:
-                #TH2: Da cho can thiep
-                soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, kehoach.coso_id, "muctieu_soluong_dat_lientiep", "6")
-
-                ketqua_dat_lientiep= mt.func_ketqua_dat_lientiep_lonnhat()
-                if ketqua_dat_lientiep >= int(soluong_dat_lientiep_str):
-                    mt.trangthai="1"
+                # Đã mở can thiệp -> Rà soát chuỗi đạt liên tiếp gần nhất
+                songay_dat_lientiep = mt.func_ketqua_dat_lientiep_lonnhat()
+                if songay_dat_lientiep >= dat_lientiep_quydinh:
+                    mt.trangthai = "1"  # Đã Đạt (+)
                 else:
-                    mt.trangthai = "-1"
+                    mt.trangthai = "-1"  # Đang can thiệp (kể cả khi chưa có ngày đạt nào)
 
 
 
+    def func_is_chophep_canthiep(self,kehoach, index,tyle_dat):
+        # TH1: ĐIỀU KIỆN MỚI: Nếu thời gian đã trôi qua >= 60% (khoảng 2/3) kế hoạch -> Luôn cho phép can thiệp
+        today = fields.Date.context_today(self)
+        tu_ngay = fields.Date.to_date(kehoach.tu_ngay)
+        den_ngay = fields.Date.to_date(kehoach.den_ngay)
+
+        if (tu_ngay and den_ngay):
+
+            tong_songay = (den_ngay - tu_ngay).days + 1
+            if today >= tu_ngay and tong_songay > 0:
+                songay_datroi = (today - tu_ngay).days + 1
+                # Đạt từ 60% thời gian kế hoạch trở lên
+                if (songay_datroi / tong_songay) >= 0.6:
+                    return True
+        #TH2 de quy
+
+        muctieu_truoc = self.kehoach_muctieu_truoc_id
+        if not muctieu_truoc:
+            return True
+        elif muctieu_truoc.trangthai == "1":
+            # trang thai truoc đã đạt
+            return True
+        else:
+            if index <= 1:
+                return False
+            else:
+                if muctieu_truoc.tyle_canthiep >= tyle_dat:
+                    return True
+                else:
+                    index = index - 1
+                    muctieu = self.kehoach_muctieu_truoc_id
+                    if muctieu:
+                        return muctieu.func_is_chophep_canthiep(kehoach,index,tyle_dat)
+                    else:
+                        return True
 
     def action_owl_review_approve(self):
         for rec in self:
@@ -365,33 +590,69 @@ class KeHoach2MucTieu(models.Model):
             rec.state_review = 'rejected'
         return True
 
-
     def func_ketqua_dat_lientiep_lonnhat(self):
-        today =date.today()
-        max = 0
-        current_max = 0
+        self.ensure_one()
+        today = fields.Date.today()
 
-        # 🌟 BƯỚC QUY HOẠCH CHÍ MẠNG: Ép sắp xếp danh sách kết quả tịnh tiến theo ngày tăng dần
-        # Sử dụng sorted() của Python giúp chạy mượt mà trên RAM mà không cần Re-query SQL
-        ketquas = self.ketqua2muctieu_ids
-        if ketquas:
-            for kq in ketquas:
-                if kq.ngay > today:
-                    continue
-                # Nếu trạng thái bằng '1' (Đạt) dạng chuỗi hoặc số nguyên tùy cấu hình database của anh
+        # 1. Do ketqua2muctieu_ids đã có sẵn _order 'ngay asc',
+        # dùng reversed() để duyệt ngược từ ngày mới nhất về ngày cũ mà KHÔNG CẦN SORT
+        # So sánh trực tiếp kq.ngay <= today vì kq.ngay đã là kiểu date
+        # Kiểm tra nhanh trạng thái trước để loại bỏ bản ghi mà không cần đụng vào kq.loai
+        tong = 0
+        for kq in reversed(self.ketqua2muctieu_ids):
+            # Bỏ qua ngày tương lai
+            if not kq.ngay or kq.ngay > today:
+                continue
 
-                if (kq.trangthai == '1'
-                        and  kq.loai =='1'):
-                    current_max += 1
-                    # Cập nhật lại chuỗi dài nhất nếu chuỗi hiện tại vượt mốc cũ
-                    if current_max > max:
-                        max = current_max
-                else:
-                    # Đứt gãy chuỗi đạt liên tiếp -> Reset bộ đếm tạm thời về 0
-                    if kq.loai == '1':
-                        current_max = 0
+            # Bỏ qua ngày chưa đánh giá / chưa can thiệp
+            if not kq.trangthai or kq.trangthai == '0':
+                continue
 
-        return max
+            # Chỉ kiểm tra loai khi ngày đó thực sự có đánh giá
+            if kq.loai != '1':
+                continue
+
+            # Kiểm tra trạng thái đạt
+            if kq.trangthai == '1':
+                tong += 1
+            else:
+                # Gặp ngày có đánh giá nhưng không đạt ('2' hoặc '-1') -> Dừng chuỗi ngay lập tức
+                break
+
+        return tong
+
+    def func_ketqua_tyle_lientiep_lonnhat_loai(self, trangthai,solan_macdinh):
+        self.ensure_one()
+        today = date.today()
+        kqs = [
+            kq for kq in self.ketqua2muctieu_ids
+            if kq.ngay and fields.Date.to_date(kq.ngay) <= today and kq.loai == '1'
+        ]
+        kqs.sort(key=lambda x: fields.Date.to_date(x.ngay))
+
+        max_len = 0
+        best_tong_tyle = 0
+        cur_len = 0
+        cur_tong_tyle = 0
+        target_str = str(trangthai)
+
+        for kq in kqs:
+            if str(kq.trangthai) == target_str:
+                cur_len += 1
+                cur_tong_tyle += kq.tyle_thu
+                if cur_len > max_len:
+                    max_len = cur_len
+                    best_tong_tyle = cur_tong_tyle
+            else:
+                # Reset sạch sẽ cả 2 biến tạm khi đứt gãy chuỗi
+                cur_len = 0
+                cur_tong_tyle = 0
+
+        if (max_len < solan_macdinh and trangthai =="1"):
+            max_len = solan_macdinh
+        ketqua = round(best_tong_tyle / max_len) if max_len > 0 else 0
+
+        return ketqua
 
 
     def func_ketqua_tyle_canthiep(self):
@@ -467,27 +728,7 @@ class KeHoach2MucTieu(models.Model):
 
 
 
-    def func_is_chophep_canthiep(self,index):
-        muctieu_truoc = self.kehoach_muctieu_truoc_id
-        coso = muctieu_truoc.kehoach_id.coso_id
-
-        if not muctieu_truoc:
-            return True
-        elif muctieu_truoc.trangthai=="1":
-            # trang thai truoc đã đạt
-            return True
-        else:
-            if index <= 1:
-                return False
-            else:
-                tyle_dat_str = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_tyle_dat", "80")
-                ketqua_tyle_canthiep = muctieu_truoc.func_ketqua_tyle_canthiep()
-                if ketqua_tyle_canthiep >= int(tyle_dat_str):
-                    return True
-                else:
-                    index = index -1
-                    muctieu= self.kehoach_muctieu_truoc_id
-                    return muctieu.func_is_chophep_canthiep(index)
+    
 
 
 
@@ -560,7 +801,6 @@ class KeHoach2MucTieu(models.Model):
 
     def action_canthiep(self):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_capnhat_ketqua_form').id
-        self._compute_is_canthiep_readonly()
         is_canthiep_readonly = self.is_canthiep_readonly
         self.func_khoitao_ketqua2muctieu()
         url= {
@@ -609,57 +849,83 @@ class KeHoach2MucTieu(models.Model):
         self.ensure_one()
         return {'type': 'ir.actions.act_window_close'}
 
-
     def func_khoitao_ketqua2muctieu(self):
-        # 1. Chuẩn hóa ngày hiện tại (Nên dùng context_today để đúng múi giờ người dùng Odoo)
-        ketqua2muctieus =self.ketqua2muctieu_ids
+        self.ensure_one()
+        today = fields.Date.context_today(self)
+        ketqua2muctieus = self.ketqua2muctieu_ids
+
+        # 🌟 NẾU CHƯA CÓ KẾT QUẢ NÀO -> KHÔNG LÀM GÌ CẢ (Không sinh 30 ngày rác nữa)
+        if not ketqua2muctieus:
+            return
+
+        # 1. Tìm bản ghi gần nhất trước hôm nay do giáo viên tự đánh giá
+        last_ketqua = None
+        for kq in ketqua2muctieus.sorted(key=lambda r: r.ngay, reverse=True):
+            if kq.ngay and kq.ngay < today and kq.trangthai in ['1', '-1', '2']:
+                last_ketqua = kq
+                break
+
+        # Nếu không tìm thấy hoặc bản ghi gần nhất vốn là do hệ thống tự sinh -> Dừng
+        if not last_ketqua or not last_ketqua.is_giaovien_capnhat:
+            return
+
+        # 2. Kiểm tra cấu hình số ngày đạt liên tiếp tối đa
         coso = self.kehoach_id.coso_id
-        today =fields.Date.today()
-        # TH1: Đã tạo kết quả trước đây:
-        if ketqua2muctieus:
-            last_ketqua2muctieu = None
-            for ketqua2muctieu in ketqua2muctieus:
-                ngay =  fields.Date.to_date(ketqua2muctieu.ngay)
-                if (ngay <today and ketqua2muctieu.trangthai in ['1','-1','2']):
-                    last_ketqua2muctieu = ketqua2muctieu
-            #TON TAI ban ghi cuoi co ngay:
-            soluong_dat_lientiep_str = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_dat_lientiep", "6")
-            max_lientiep_dat = self.func_ketqua_dat_lientiep_lonnhat()
+        soluong_dat_lientiep_cauhinh = int(
+            coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_dat_lientiep", "5") or 5
+        )
+        max_lientiep_dat = self.func_ketqua_dat_lientiep_lonnhat()
+        if max_lientiep_dat >= soluong_dat_lientiep_cauhinh:
+            return
 
-            if last_ketqua2muctieu:
-                last_ngay =fields.Date.to_date(last_ketqua2muctieu.ngay)
-                for ketqua2muctieu in ketqua2muctieus:
-                    ngay = fields.Date.to_date(ketqua2muctieu.ngay)
-                    if (ngay >last_ngay
-                        and ngay<= today):
-                       if ketqua2muctieu.trangthai == '0':
-                           if max_lientiep_dat < int(soluong_dat_lientiep_str):
-                               setattr(ketqua2muctieu,'trangthai',last_ketqua2muctieu.trangthai)
+        # 3. Lấy mốc ngày & giới hạn ngày kết thúc của kế hoạch
+        last_ngay = last_ketqua.ngay
+        den_ngay = fields.Date.to_date(self.kehoach_id.den_ngay) or today
+        limit_date = min(today, den_ngay)
 
+        # Lập map các ngày đã có bản ghi để tra cứu nhanh O(1)
+        existing_map = {kq.ngay: kq for kq in ketqua2muctieus if kq.ngay}
 
-        else:
-            #TH2: Lần đầu click
+        records_to_update = self.env['ekids.kehoach_ketqua2muctieu']
+        new_records_vals = []
 
-            today = fields.Date.context_today(self)
-            # 2. Ép kiểu an toàn về Date, triệt tiêu hoàn toàn lỗi Datetime vs Date
-            tu_ngay = fields.Date.to_date(self.kehoach_id.tu_ngay)
-            den_ngay = fields.Date.to_date(self.kehoach_id.den_ngay)
+        # 4. Duyệt đúng 3 ngày tiếp theo sau ngày gần nhất
+        for i in range(1, 4):
+            target_date = last_ngay + timedelta(days=i)
 
-            datas = []
-            current_date =tu_ngay
+            # Không vượt quá hôm nay và không vượt quá ngày kết thúc kế hoạch
+            if target_date > limit_date:
+                break
 
-            while current_date <= den_ngay:
-                data ={
-                    "kehoach_muctieu_id": self.id,
-                    "ngay": current_date,
-                    "trangthai": "0"
-                }
-                datas.append(data)
-                current_date += timedelta(days=1)
+            # Bỏ qua ngày Chủ Nhật (weekday == 6)
+            if target_date.weekday() == 6:
+                continue
 
-            # 5. Bulk Create: Đẩy toàn bộ mảng vào Database trong 1 câu query duy nhất
-            if datas and len(datas)>0:
-                self.env['ekids.kehoach_ketqua2muctieu'].create(datas)
+            if target_date in existing_map:
+                kq_exist = existing_map[target_date]
+                # Nếu ngày này đã có nhưng đang ở trạng thái '0' (chưa can thiệp) -> gom lại để cập nhật
+                if kq_exist.trangthai == '0':
+                    records_to_update |= kq_exist
+            else:
+                # Chưa có bản ghi -> Tạo mới đúng ngày này
+                new_records_vals.append({
+                    'kehoach_muctieu_id': self.id,
+                    'ngay': target_date,
+                    'trangthai': last_ketqua.trangthai,
+                    'solan_thu_dat': last_ketqua.solan_thu_dat,
+                    'is_giaovien_capnhat': False,
+                })
+
+        # 5. Ghi đồng loạt xuống cơ sở dữ liệu (tối ưu tốc độ, không ghi rời rạc)
+        if records_to_update:
+            records_to_update.write({
+                'trangthai': last_ketqua.trangthai,
+                'solan_thu_dat': last_ketqua.solan_thu_dat,
+                'is_giaovien_capnhat': False,
+            })
+
+        if new_records_vals:
+            self.env['ekids.kehoach_ketqua2muctieu'].create(new_records_vals)
 
     def action_open_target_note(self):
         """ Hàm xử lý mở Popup khi click vào nút ghi chú từ HTML """
@@ -756,22 +1022,7 @@ class KeHoach2MucTieu(models.Model):
 
 
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        # 1. Gọi hàm tạo của super để lấy về toàn bộ recordset được tạo ra
-        records = super(KeHoach2MucTieu, self).create(vals_list)
 
-        # 2. Duyệt qua từng bản ghi vừa tạo thành công để cập nhật nghiệp vụ liên quan
-        if records and len(records)>0:
-            kehoach_linhvuc = records[0].kehoach_linhvuc_id
-            kehoach_linhvuc.func_capnhat_kehoach_muctieu_truoc()
-
-        return records
-
-    def write(self, vals):
-        self.func_capnhat_thietke_vao_chuongtrinh(vals)
-        res = super(KeHoach2MucTieu, self).write(vals)
-        return res
 
 
     def func_capnhat_thietke_vao_chuongtrinh(self,vals):
@@ -793,14 +1044,7 @@ class KeHoach2MucTieu(models.Model):
                             if string_util._is_html_empty(self.chucnang_temp) == False:
                                 data['chucnang'] = self.chucnang_temp
 
-                            if string_util._is_char_empty(self.tieuchi_chuadat_temp) == False:
-                                data['tieuchi_chuadat'] = self.tieuchi_chuadat_temp
 
-                            if string_util._is_char_empty(self.tieuchi_hinhthanh_temp) == False:
-                                data['tieuchi_hinhthanh'] = self.tieuchi_hinhthanh_temp
-
-                            if string_util._is_char_empty(self.tieuchi_dat_temp) == False:
-                                data['tieuchi_dat'] = self.tieuchi_dat_temp
 
                             ct_muctieu.write(data)
 
@@ -818,8 +1062,93 @@ class KeHoach2MucTieu(models.Model):
         else:
             return False
 
+    def action_capnhat_tyle_thu(self):
+        self.ensure_one()
+        view_id = self.env.ref('ekids_canthiep.kehoach_muctieu_bientap_tyle_thu_form').id
+        return {
+            'name': 'Kết quả [Thử] trước khi lập kế hoạch',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach_muctieu',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'views': [(view_id, 'form')],
+            'target': 'new',
+            'context': self.env.context,
+        }
 
+    def func_get_thongtin_nghiles_cungcap_ketqua2ngay(self):
+        """Hàm cung cấp thông tin loại ngày (nghỉ lễ, đi học, chủ nhật) cho JS Widget"""
+        self.ensure_one()
+        kehoach = self.kehoach_id
+        hocsinh = kehoach.hocsinh_id
+        tu_ngay = kehoach.tu_ngay
+        den_ngay = kehoach.den_ngay
 
+        res = {}
+        if not tu_ngay or not den_ngay or not hocsinh:
+            return res
+
+        cur = tu_ngay
+        while cur <= den_ngay:
+            cur_str = cur.strftime('%Y-%m-%d')
+            # Gọi chính xác hàm nghiệp vụ chuẩn của hệ thống để phân loại ngày
+            loai = kehoach_util.func_kehoach_ketqua2muctieu(self, hocsinh, cur)
+            if loai in ['1', '11']:
+                res[cur_str] = '1'  # Đi học
+            elif loai in ['0']:
+                res[cur_str] = '0'  # Tương lai
+            else:
+                res[cur_str] = '-1'  # Nghỉ lễ / Chủ nhật / Nghỉ học
+            cur += timedelta(days=1)
+
+        return res
+
+    def func_get_thietke_muctieu_gannhat_kehoach(self):
+        self.ensure_one()
+        # 1. Chỉ tìm nếu có gắn mục tiêu danh mục và thiết kế gốc đang rỗng
+        if not self.muctieu_id or self.muctieu_id.thietke not in kehoach_util.EMPTY_HTML:
+            return
+
+        # 2. Xây dựng domain gọn, không JOIN thừa và xử lý an toàn giá trị NULL
+        domain = [
+            ("coso_id", "=", self.coso_id.id),
+            ("kehoach_id.trangthai", "in", [kehoach_util.KEHOACH_DANG_CANTHIEP,kehoach_util.KEHOACH_HET_HIEULUC]),
+            ("muctieu_id", "=", self.muctieu_id.id),
+            ("thietke_temp", "!=", False),
+            ("thietke_temp", "not in", kehoach_util.EMPTY_HTML),
+        ]
+
+        # Loại trừ chính bản ghi hiện tại nếu đã lưu
+        if self.id:
+            domain.append(("id", "!=", self.id))
+
+        muctieu_gannhat = self.env['ekids.kehoach_muctieu'].search(
+            domain,
+            order="id desc",
+            limit=1
+        )
+        if muctieu_gannhat:
+            self.thietke_temp = muctieu_gannhat.thietke_temp
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # 1. Gọi hàm tạo của super để lấy về toàn bộ recordset được tạo ra
+        records = super(KeHoach2MucTieu, self).create(vals_list)
+
+        # 2. Duyệt qua từng bản ghi vừa tạo thành công để cập nhật nghiệp vụ liên quan
+        if records and len(records) > 0:
+            kehoach_linhvuc = records[0].kehoach_linhvuc_id
+            kehoach_linhvuc.func_capnhat_kehoach_muctieu_truoc()
+            for record in records:
+                # nghiep vụ lấy phần thiết kế gần nhất cho vào thiết kế muc tieu
+                record.func_get_thietke_muctieu_gannhat_kehoach()
+
+        return records
+
+    def write(self, vals):
+        self.func_capnhat_thietke_vao_chuongtrinh(vals)
+        res = super(KeHoach2MucTieu, self).write(vals)
+        return res
 
     def unlink(self):
         kehoach_linhvuc = self.kehoach_linhvuc_id

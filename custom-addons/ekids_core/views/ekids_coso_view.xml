@@ -10,7 +10,14 @@
             <search string="Tìm kiếm Cơ sở">
               <!-- Bộ lọc mặc định -->
               <filter string="Đang thuê" name="trangthai" domain="[('trangthai','=','1')]"/>
-              <group expand="1" string="Group By">
+              <filter string="Tạm dừng (hết hiệu lực)" name="trangthai" domain="[('trangthai','=','-1')]"/>
+              <filter string="Sắp hết hạn (&lt;= 30 ngày)"
+                    name="filter_sap_hethan"
+                    domain="[
+                        ('thue_denngay', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                        ('thue_denngay', '&lt;=', (context_today() + datetime.timedelta(days=30)).strftime('%Y-%m-%d'))
+                    ]"/>
+                <group expand="1" string="Group By">
                 <filter name="group_by_tinh"
                     string="Tỉnh thành"
                     context="{'group_by':'dm_tinh_id'}"/>
@@ -49,6 +56,7 @@
                     <field name="trangthai"/>
                     <field name="is_thue_quantricoso"/>
                     <field name="is_thue_canthiep"/>
+                    <field name="is_canthiep_ketluan"/>
 
                     <templates>
                         <t t-name="kanban-box">
@@ -65,7 +73,11 @@
                                 <!-- Các thông tin badge dòng 1 -->
                                 <div class="d-flex flex-wrap gap-2 mb-2" style="padding-left: 36px;">
                                     <div class="d-flex align-items-center">
-                                        <field name="trangthai" widget="badge" decoration-success="trangthai == '1'" decoration-danger="trangthai != '1'" style="padding: 4px 8px; font-size: 11px; font-weight: 600;"/>
+                                        <field name="trangthai" widget="badge"
+                                               decoration-success="trangthai == '1'"
+                                               decoration-danger="trangthai != '1'"
+                                               decoration-warning="trangthai != '2'"
+                                               style="padding: 4px 8px; font-size: 11px; font-weight: 600;"/>
                                     </div>
 
                                     <span class="badge bg-light border text-dark fw-normal d-flex align-items-center" style="font-size: 11px; padding: 4px 8px; color: #334155;">
@@ -91,6 +103,10 @@
                                         <span>Thuê [Chương trình can thiệp]:</span>
                                         <field name="is_thue_canthiep" widget="boolean_toggle"/>
                                     </div>
+                                    <div class="d-flex align-items-center justify-content-between py-1">
+                                        <span>Lập kế hoạch can thiệp cần có kết luận:</span>
+                                        <field name="is_canthiep_ketluan" widget="boolean_toggle"/>
+                                    </div>
                                 </div>
 
                             </div>
@@ -113,6 +129,34 @@
                     <field name="masothue"/>
                     <field name="dm_tinh_id"/>
                     <field name="dm_xa_id"/>
+                    <field name="dm_xa_id"/>
+                     <field name="trangthai"
+                           decoration-success="trangthai == '1'"
+                           decoration-danger="trangthai == '0'"
+                           decoration-warning="trangthai == '1'"
+                     />
+                    <field name="songay"
+                           decoration-success="songay &gt;= 30"
+                           decoration-danger="songay &lt; 30"
+                           widget="badge"/>
+                    <button name="action_giahan_6thang"
+                            type="object"
+                            string="Gia hạn 6 tháng"
+                            icon="fa-calendar-plus-o"
+                            invisible="songay &gt;= 30"
+                            class="btn btn-outline-primary fw-bold"
+                            confirm="Bạn có chắc chắn muốn gia hạn hợp đồng thuê thêm 6 tháng (đến cuối tháng) cho cơ sở này không?"/>
+
+                    <!-- Nút Gia hạn 1 năm -->
+                    <button name="action_giahan_1nam"
+                            type="object"
+                            string="Gia hạn 1 năm"
+                            invisible="songay &gt;= 30"
+                            icon="fa-clock-o"
+                            class="btn btn-outline-success fw-bold"
+                            confirm="Bạn có chắc chắn muốn gia hạn hợp đồng thuê thêm 1 năm (đến cuối tháng) cho cơ sở này không?"/>
+
+
                 </list>
             </field>
         </record>
@@ -184,13 +228,14 @@
                                         <field name="desc" string="Ghi chú"/>
                                         <field name="is_thue_quantricoso" widget="boolean_toggle"/>
                                         <field name="is_thue_canthiep" widget="boolean_toggle"/>
+                                        <field name="is_canthiep_ketluan" widget="boolean_toggle"/>
                                     </group>
                                 </div>
                             </div>
                         </div>
 
                         <notebook class="mt-2">
-                            <page name="working_time" string="THỜI GIAN HOẠT ĐỘNG">
+                            <page name="working_time" string="HOẠT ĐỘNG">
                                 <div class="p-3">
                                     <div class="fw-bold mb-3 text-muted"><i class="fa fa-calendar-check-o me-2"/> CÁC NGÀY LÀM VIỆC TRONG TUẦN</div>
                                     <div class="ekids_toggle_row d-flex justify-content-between align-items-center" style="max-width: 600px;">
@@ -226,7 +271,7 @@
                                 </div>
                             </page>
 
-                            <page name="config_lock" string="CẤU HÌNH KHÓA DỮ LIỆU">
+                            <page name="config_lock" string="KHÓA DỮ LIỆU">
                                 <div class="p-3">
                                     <div class="row mb-4">
                                         <div class="col-md-6">
@@ -297,7 +342,7 @@
                                 </div>
                             </page>
 
-                            <page name="config_lock" string="THIẾT LẬP THAM SỐ PHỤC VỤ HOẠT ĐỘNG CƠ SỞ">
+                            <page name="config_lock" string="THAM SỐ">
                                 <div class="p-3">
 
                                     <div class="row">
@@ -343,7 +388,7 @@
                             </page>
 
 
-                            <page name="branches" string="CƠ SỞ THÀNH VIÊN">
+                            <page name="branches" string="THÀNH VIÊN">
                                 <div class="p-3">
                                     <field name="coso_ids" widget="many2many_tags" placeholder="Chọn các cơ sở trực thuộc..."/>
                                 </div>

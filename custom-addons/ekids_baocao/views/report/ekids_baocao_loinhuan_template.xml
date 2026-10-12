@@ -4,71 +4,83 @@
 
             <t t-call="web.basic_layout">
 
-                <div class="page" style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+                <div class="page" style="font-family: Arial, sans-serif; color: #333;">
 
-                    <div class="btn-print-container" style="text-align:right; margin-bottom: 20px;">
+                    <!-- NÚT IN (Ẩn khi in ấn) -->
+                    <div class="btn-print-container text-end mb-2 px-2 print-hide" style="text-align: right;">
                         <button onclick="window.print()"
-                                style="width:30px; height:auto; border:0px; background:transparent;"
+                                style="width:auto; height:auto; border:0px; background:transparent; cursor: pointer;"
                                 title="In báo cáo" type="button">
                             <i class="fa fa-print" style="font-size: 18px; color: #555;"></i>
                         </button>
                     </div>
 
-                    <table style="width: 100%; margin-bottom: 30px; border: none;">
+                    <!-- BẢNG QUỐC HIỆU, TIÊU NGỮ -->
+                    <table style="width: 100%; margin-bottom: 25px; border: none;">
                         <tr>
                             <td style="width: 40%; text-align: center; vertical-align: top; border: none;">
-                                <h5 style="text-transform: uppercase; font-weight: bold; font-size: 16px; margin-bottom: 0;">
+                                <h5 style="text-transform: uppercase; font-weight: bold; font-size: 15px; margin-bottom: 0;">
                                     <t t-esc="coso"/>
                                 </h5>
                             </td>
                             <td style="width: 60%; text-align: center; vertical-align: top; border: none;">
-                                <h5 style="font-weight: bold; font-size: 16px; margin-bottom: 5px;">
+                                <h5 style="font-weight: bold; font-size: 15px; margin-bottom: 3px;">
                                     CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM
                                 </h5>
-                                <h6 style="font-weight: bold; font-size: 15px; text-decoration: underline; margin-top: 0;">
+                                <h6 style="font-weight: bold; font-size: 14px; text-decoration: underline; margin-top: 0;">
                                     Độc lập - Tự do - Hạnh phúc
                                 </h6>
                             </td>
                         </tr>
                     </table>
 
-                    <div style="text-align: center; margin-bottom: 25px;">
-                        <h3 style="font-weight: bold; text-transform: uppercase; font-size: 22px; margin-bottom: 5px;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h3 style="font-weight: bold; text-transform: uppercase; font-size: 20px; margin-bottom: 5px;">
                             BÁO CÁO THU CHI - LỢI NHUẬN NĂM <t t-esc="nam"/>
                         </h3>
-                        <p style="font-style: italic; font-size: 14px; color: #555;">
+                        <p style="font-style: italic; font-size: 13.5px; color: #555; margin: 0;">
                             <t t-esc="thoigian"/>
                         </p>
                     </div>
 
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <t t-foreach="table_data[0]" t-as="header">
-                                    <th><t t-esc="header"/></th>
-                                </t>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <t t-foreach="table_data[1:]" t-as="row">
+                    <!-- BẢNG DỮ LIỆU ĐƯỢC BỌC TRONG TABLE-RESPONSIVE ĐỂ TRÀN VIỀN VÀ CUỘN NGANG -->
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
                                 <tr>
-                                    <t t-foreach="row" t-as="cell">
-                                        <td t-att-style="cell_index in [0, 1] and 'text-align: center;' or 'text-align: right;'">
-                                            <t t-esc="cell"/>
-                                        </td>
+                                    <t t-foreach="table_data[0]" t-as="header">
+                                        <th><t t-esc="header"/></th>
                                     </t>
                                 </tr>
-                            </t>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="table_data[1:]" t-as="row">
+                                    <tr>
+                                        <t t-foreach="row" t-as="cell">
+                                            <td t-att-style="cell_index in [0, 1] and 'text-align: center;' or 'text-align: right;'">
+                                                <t t-esc="cell"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
 
                 <style>
-                    /* --- 1. ÉP KHỔ GIẤY VÀ CĂN LỀ --- */
+                    /* --- 1. ÉP KHỔ GIẤY VÀ TRÀN VIỀN 100% --- */
                     @page {
-                        size: A4 landscape; /* Để khổ NGANG vì Báo cáo lợi nhuận thường rất nhiều cột */
+                        size: A4 landscape; /* Khổ ngang cho báo cáo nhiều cột */
                         margin: 10mm 10mm 10mm 10mm !important;
+                    }
+
+                    body, .o_report_layout_standard, .o_layout, .page {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        margin: 0 !important;
+                        padding: 5px !important;
                     }
 
                     /* --- 2. ÉP FONT ARIAL CHỐNG LỖI CHỮ, NHƯNG THA CHO ICON --- */
@@ -78,7 +90,7 @@
 
                     /* --- 3. ẨN NÚT VÀ CHỐNG CĂN LỀ THỪA KHI RA GIẤY --- */
                     @media print {
-                        .d-print-none {
+                        .print-hide {
                             display: none !important;
                         }
                         body, .page {
@@ -87,17 +99,30 @@
                         }
                     }
 
-                    /* --- 4. CSS BẢNG BIỂU ĐẸP CỦA ANH --- */
+                    /* --- 4. KHUNG CUỘN NGANG MƯỢT MÀ TRÊN MOBILE --- */
+                    .table-responsive {
+                        width: 100% !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        overflow-x: auto;
+                        -webkit-overflow-scrolling: touch;
+                    }
+
+                    /* --- 5. CSS BẢNG BIỂU --- */
                     .data-table {
-                        width: 100%;
+                        width: 100% !important;
+                        max-width: none !important;
                         border-collapse: collapse;
-                        font-size: 14px;
-                        margin-bottom: 30px;
+                        font-size: 13.5px;
+                        margin-bottom: 20px;
+                        table-layout: auto;
                     }
 
                     .data-table th, .data-table td {
                         border: 1px solid #444;
-                        padding: 8px 5px; /* Ép padding nhỏ lại chút để an toàn cho 12-15 cột */
+                        padding: 7px 8px;
+                        white-space: nowrap; /* Giữ dữ liệu trên 1 hàng, hỗ trợ cuộn ngang trên mobile */
+                        vertical-align: middle;
                     }
 
                     .data-table th {
@@ -118,7 +143,7 @@
                     .data-table tbody tr:last-child {
                         font-weight: bold;
                         background-color: #d6d8db;
-                        font-size: 15px;
+                        font-size: 14.5px;
                     }
                 </style>
             </t>

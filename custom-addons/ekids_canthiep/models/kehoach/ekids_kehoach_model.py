@@ -117,7 +117,15 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
     ngay_conlai_kehoach = fields.Integer(compute="_compute_ngay_conlai_kehoach", string="Ngày còn lại [Kế hoạch]")
 
-    access_token = fields.Char(string="Thẻ truy cập nhanh", readonly=True, copy=False)
+
+
+    access_token = fields.Char(
+        string="Thẻ truy cập nhanh",
+        readonly=True,
+        copy=False,
+        default=lambda self: str(uuid.uuid4())
+    )
+
     share_full_url = fields.Char("Chia sẻ full", compute="_compute_urls")
     share_short_url = fields.Char("Chia sẻ short", compute="_compute_urls")
 
@@ -127,30 +135,45 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     tyle_dat_canthiep = fields.Integer(compute="_compute_tong_ketqua_canthiep")
     tyle_dat_kiemduyet = fields.Integer(compute="_compute_tong_ketqua_canthiep")
 
+    nhanxet = fields.Html(string="Nhận xét cuối tháng")
+    dinhhuong = fields.Html(string="Định hướng tháng tới")
+
+    is_canthiep_ketluan = fields.Boolean( compute="_compute_is_canthiep_ketluan")
+
+    def _compute_is_canthiep_ketluan(self):
+        for kh in self:
+            is_canthiep_ketluan = True
+            if kh.coso_id.is_canthiep_ketluan == False:
+                if kh.trangthai == kehoach_util.KEHOACH_DANG_LAP:
+                    is_canthiep_ketluan = False
+            kh.is_canthiep_ketluan =is_canthiep_ketluan
+
+
+    @api.depends(
+        'kehoach_linhvuc_ids.kehoach_muctieu_ids.trangthai',
+        'kehoach_linhvuc_ids.kehoach_muctieu_ids.trangthai_kiemduyet'
+    )
     def _compute_tong_ketqua_canthiep(self):
         for kh in self:
-            # Lấy toàn bộ danh sách mục tiêu thuộc kế hoạch
-            muctieus = kh.kehoach_linhvuc_ids.mapped('kehoach_muctieu_ids')
+            muctieus = kh.kehoach_linhvuc_ids.kehoach_muctieu_ids
             tong_mt = len(muctieus)
 
-            if muctieus:
-                # Gọi compute trạng thái cho toàn bộ recordset cùng lúc
-                muctieus._compute_trangthai()
+            if tong_mt > 0:
+                # Đếm nhanh trên RAM, không gọi re-compute thủ công
+                dat_ct = sum(1 for m in muctieus if m.trangthai == '1')
+                dat_kd = sum(1 for m in muctieus if m.trangthai_kiemduyet == '1')
 
-                # Đếm số lượng mục tiêu đạt
-                dat_ct = len(muctieus.filtered(lambda m: m.trangthai == '1'))
-                dat_kd = len(muctieus.filtered(lambda m: m.trangthai_kiemduyet == '1'))
+                kh.tong_muctieu = tong_mt
+                kh.tong_dat_canthiep = dat_ct
+                kh.tong_dat_kiemduyet = dat_kd
+                kh.tyle_dat_canthiep = round((dat_ct / tong_mt) * 100)
+                kh.tyle_dat_kiemduyet = round((dat_kd / tong_mt) * 100)
             else:
-                dat_ct = 0
-                dat_kd = 0
-
-            kh.tong_muctieu = tong_mt
-            kh.tong_dat_canthiep = dat_ct
-            kh.tong_dat_kiemduyet = dat_kd
-
-            # Tính tỷ lệ % (nếu bạn có dùng trường hiển thị tỷ lệ trên form)
-            kh.tyle_dat_canthiep = round((dat_ct / tong_mt * 100), 1) if tong_mt > 0 else 0.0
-            kh.tyle_dat_kiemduyet = round((dat_kd / tong_mt * 100), 1) if tong_mt > 0 else 0.0
+                kh.tong_muctieu = 0
+                kh.tong_dat_canthiep = 0
+                kh.tong_dat_kiemduyet = 0
+                kh.tyle_dat_canthiep = 0
+                kh.tyle_dat_kiemduyet = 0
 
     def _compute_ngay_conlai_kehoach(self):
         today = date.today()
@@ -166,7 +189,11 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def _compute_urls(self):
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         for rec in self:
-            token = rec.access_token or str(uuid.uuid4())  # Fallback an toàn
+            if rec.access_token:
+                token = rec.access_token
+            else:
+                token = str(uuid.uuid4())  # Fallback an toàn
+                rec.access_token = token
             rec.share_short_url = f"{base_url}/kehoach/0/{token}"
             rec.share_full_url = f"{base_url}/kehoach/1/{token}"
 
@@ -202,8 +229,6 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         is_admin = user.has_group('base.group_system')
         giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for record in self:
-            if not record.access_token:
-                record.access_token=str(uuid.uuid4())
 
             is_readonly= True
             if is_admin:
@@ -395,23 +420,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         return trung_lich_count > 0
 
 
-    def func_tao_macdinh_kehoach_muctieu(self):
-        # unlink cái cũ
-        kh_muctieus = self.func_danhsach_kehoach_muctieu(self.id)
-        if kh_muctieus:
-            for kh_muctieu in kh_muctieus:
-                kh_muctieu.unlink()
-        # tao cai moi
-        if self.kehoach_linhvuc_ids:
-            for lv in self.kehoach_linhvuc_ids:
-                muctieus = self.func_danhsach_muctieu(lv.linhvuc_id.id,lv.tuoi_id.id)
-                if muctieus:
-                    for muctieu in muctieus:
-                        data={
-                            'kehoach_id':self.id,
-                            'muctieu_id':muctieu.id
-                        }
-                        self.env['ekids.kehoach_muctieu'].create(data)
+
 
     def func_danhsach_kehoach_muctieu(self, kehoach_id):
         domain = [('kehoach_id', '=', kehoach_id)]
@@ -568,6 +577,21 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         return False
 
     def action_ketthuc_kehoach(self):
+        """Mở Popup cho phép nhập nhận xét và định hướng trước khi đóng kế hoạch"""
+        self.ensure_one()
+        view_id = self.env.ref('ekids_canthiep.kehoach_ketthuc_form').id
+        return {
+            'name': f'Đánh giá & Kết thúc kế hoạch: {self.name}',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'views': [(view_id, 'form')],
+            'target': 'new',
+            'context': self.env.context,
+        }
+
+    def action_xacnhan_ketthuc_kehoach(self):
         if self.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
             is_chophep_ketthuc =False
             user = self.env.user
@@ -583,6 +607,31 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         if is_chophep_ketthuc:
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
 
+    def action_thietke_kehoach_linhvuc(self):
+        self.ensure_one()
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_thietke_linhvuc_form').id
+        url= {
+            'name': 'Thêm lĩnh vực can thiệp',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach',
+            'view_mode': 'form',
+            'views': [(form_view_id, 'form')],
+            'res_id': self.id,
+            'target': 'new',  # 🌟 Bắt buộc 'new' để hiển thị dạng POPUP Modal
+            'context': {
+                'default_kehoach_id': self.id,
+            }
+        }
+        return url
+
+    def action_luu_refresh_lai_kehoach(self):
+        """Hàm đóng popup và ép trình duyệt refresh lại trang phía dưới"""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+        }
+
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -595,8 +644,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                     raise UserError(
                         "Kế hoạch của Học sinh [" + result.hocsinh_id.name + "] Được lập trong khoản thời gian trên đang bị trùng với thời gian của kế hoạch khác !")
 
-                # Tinh toan so ca trong
-                result.func_tao_macdinh_kehoach_muctieu()
+
                 records.append(result)
         return records[0] if len(records) == 1 else records
 
@@ -611,8 +659,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                 if is_trung:
                     raise UserError("Thời gian của [Kế hoạch] đang trùng với kế hoạch khác")
 
-            if "kehoach_linhvuc_ids" in vals:
-                self.func_tao_macdinh_kehoach_muctieu()
+
         return result
 
 

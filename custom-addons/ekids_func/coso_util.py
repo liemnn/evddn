@@ -51,25 +51,22 @@ def func_is_dl_kpi_locked(self,coso,nam,thang):
     if is_locked == True:
         raise UserError("Dữ liệu đã hết hiệu lực được sửa. Nếu thật sự cần sửa vui lòng liên hệ Quản trị phần mềm !.")
 
-def func_is_dl_locked(self,type,coso,nam,thang):
+
+def func_is_dl_locked(self, type, coso, nam, thang):
     if self.env.is_admin():
         return False
-    #type=1 : diem danh; type=2: Kpi phải lui một tháng
-    if type in [1,2]:
-        if int(coso.sothang_khoa_dl_diemdanh) <=0 :
-            # không thiết lập
-            return False
-    today = date.today()
-    thang_n = (today.year *12) + today.month
-    thang_m = (nam*12)+thang
-    if type in [2]:
-        # kpi cần lùi 1 tháng
-        thang_n =thang_n-1
 
-    if (thang_n -thang_m) >= int (coso.sothang_khoa_dl_diemdanh):
-        return True
-    else:
+    sothang_khoa = int(coso.sothang_khoa_dl_diemdanh or 0)
+    if sothang_khoa <= 0:
         return False
+
+    today = date.today()
+    thang_n = (today.year * 12) + today.month
+    thang_m = (int(nam) * 12) + int(thang)
+    if type == 2:
+        thang_n -= 1
+
+    return (thang_n - thang_m) >= sothang_khoa
 
 def func_is_dl_luong_locked(self,coso,trangthai):
     if self.env.is_admin():

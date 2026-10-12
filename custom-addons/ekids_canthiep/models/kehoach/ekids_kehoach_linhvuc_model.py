@@ -6,7 +6,7 @@ from odoo.osv import expression
 class KeHoach2LinhVuc(models.Model):
     _name = 'ekids.kehoach_linhvuc'
     _description = 'Các mục tiêu cho kế hoạch'
-    _order = "sequence asc"
+    _order = "sequence, id"
 
     sequence = fields.Integer(string="STT", default=1)
     kehoach_id = fields.Many2one("ekids.kehoach", string="Thuộc kế hoạch nào",
@@ -32,6 +32,33 @@ class KeHoach2LinhVuc(models.Model):
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
 
     tong_muctieu_dat= fields.Integer(compute="_compute_tong_muctieu_dat")
+
+    tyle_thu = fields.Integer(string="Tỷ lệ thử ban đầu (%)", compute="_compute_tyle", store=True)
+    tyle_dat = fields.Integer(string="Tỷ lệ đạt can thiệp (%)", compute="_compute_tyle", store=True)
+
+
+    def _compute_tyle(self):
+        for record in self:
+            muctieus = record.kehoach_muctieu_ids
+            tong_mt = len(muctieus)
+            tyle_thu=0
+            tyle_dat=0
+            if muctieus and tong_mt > 0:
+                for mt in muctieus:
+                    tyle_thu += mt.tyle_thu
+                    if mt.trangthai_kiemduyet == "0":
+                        tyle_dat += mt.tyle_canthiep
+                    else:
+                        tyle_dat += mt.tyle_kiemduyet
+                tyle_thu = round(tyle_thu/tong_mt)
+                tyle_dat = round(tyle_dat / tong_mt)
+
+
+
+            record.tyle_thu = tyle_thu
+            record.tyle_dat = tyle_dat
+
+
 
 
     def func_capnhat_kehoach_muctieu_truoc(self):
@@ -116,6 +143,7 @@ class KeHoach2LinhVuc(models.Model):
     def action_them_muctieu_vao_kehoach_linhvuc(self):
 
         self.ensure_one()
+
         ct_muctieu_ids =[]
         kehoach_muctieus = self.kehoach_muctieu_ids
         if kehoach_muctieus:
@@ -125,6 +153,12 @@ class KeHoach2LinhVuc(models.Model):
         if len(ct_muctieu_ids)>0:
             domain_muctieu = [("id", "not in", ct_muctieu_ids)]
             domain = expression.AND([domain, domain_muctieu])
+
+        # lay từ mục tiêu giới hạn (nếu có)
+        muctieu_ids =  self.func_get_muctieu_ids_tu_ketluan2linhvuc(self.linhvuc_id.id,self.tuoi_id.id)
+        if muctieu_ids:
+            domain_ids = [("id", "in", muctieu_ids)]
+            domain = expression.AND([domain, domain_ids])
 
 
         list_view_id = self.env.ref('ekids_canthiep.ct_muctieu_lap_kehoach_list').id
@@ -155,6 +189,22 @@ class KeHoach2LinhVuc(models.Model):
             }
 
         }
+
+    def func_get_muctieu_ids_tu_ketluan2linhvuc(self,linhvuc_id,tuoi_id):
+        if (self.kehoach_id
+            and self.kehoach_id.ketluan_id):
+            ketluan = self.kehoach_id.ketluan_id
+            if ketluan:
+                ketluan2linhvucs = ketluan.linhvuc_ids
+                if ketluan2linhvucs:
+                    for ketluan2linhvuc in ketluan2linhvucs:
+                        if (ketluan2linhvuc.is_muctieu_kho == False
+                                and ketluan2linhvuc.linhvuc_id.id == linhvuc_id
+                            and ketluan2linhvuc.tuoi_id.id == tuoi_id):
+                            return ketluan2linhvuc.muctieu_ids.ids
+        return None
+
+
 
 
     def action_gv_tu_taomoi_muctieu(self):
@@ -215,4 +265,6 @@ class KeHoach2LinhVuc(models.Model):
                             for kehoach_muctieu in kehoach_muctieus:
                                 if kehoach_muctieu.muctieu_id.id == muctieu.id:
                                     return kehoach_muctieu
+
+
 

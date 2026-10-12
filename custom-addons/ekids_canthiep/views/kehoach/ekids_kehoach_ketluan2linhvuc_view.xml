@@ -1,0 +1,213 @@
+<odoo>
+  <data>
+      <record id="ekids_canthiep.kehoach_ketluan2linhvuc_form" model="ir.ui.view">
+        <field name="name">ekids.kehoach_ketluan2linhvuc.thietke.form</field>
+        <field name="model">ekids.kehoach_ketluan2linhvuc</field>
+        <field name="arch" type="xml">
+            <form string="Thiết kế khung mục tiêu can thiệp" class="o_thietke_dialog_wide">
+                <sheet class="p-3 bg-white">
+                    <style>
+                        /* Khung Modal rộng rãi */
+                        .modal-dialog:has(.o_thietke_dialog_wide),
+                        .o_dialog:has(.o_thietke_dialog_wide) {
+                            max-width: 950px !important;
+                            width: 95% !important;
+                            margin: 3vh auto !important;
+                        }
+
+                        .modal-dialog:has(.o_thietke_dialog_wide) .modal-content {
+                            border-radius: 14px !important;
+                            box-shadow: 0 15px 35px rgba(0,0,0,0.14) !important;
+                            overflow: hidden;
+                        }
+
+                        /* Header Card */
+                        .header-context-box {
+                            background-color: #F8FAFC;
+                            border: 1px solid #E2E8F0;
+                            border-radius: 12px;
+                            padding: 14px 16px;
+                        }
+
+                        .info-tag-header {
+                            font-size: 11px;
+                            font-weight: 800;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            color: #64748B;
+                            margin-bottom: 5px;
+                            display: block;
+                        }
+
+                        .value-display-pill {
+                            background-color: #FFFFFF;
+                            border: 1px solid #CBD5E1;
+                            border-radius: 8px;
+                            padding: 6px 12px;
+                            font-weight: 700;
+                            font-size: 14px;
+                            min-height: 40px;
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        /* Badge Cho phép sửa */
+                        .badge-editable-highlight {
+                            background-color: #FFF7ED !important;
+                            color: #C2410C !important;
+                            border: 1.5px solid #FB923C !important;
+                            font-size: 10.5px !important;
+                            font-weight: 800 !important;
+                            letter-spacing: 0.3px;
+                            padding: 3px 8px !important;
+                            border-radius: 20px !important;
+                            box-shadow: 0 1px 3px rgba(234, 88, 12, 0.15);
+                        }
+
+                        .select-tuoi-box .o_input {
+                            font-size: 14px !important;
+                            font-weight: 700 !important;
+                            border: 1.5px solid #EA580C !important;
+                            border-radius: 8px !important;
+                            background-color: #FFFFFF !important;
+                            color: #9A3412 !important;
+                            min-height: 40px !important;
+                            padding: 4px 10px !important;
+                            box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.1) !important;
+                        }
+
+                        /* 🌟 GỘP LÀM 1: THẺ CẤU HÌNH PHẠM VI MỤC TIÊU NỔI BẬT */
+                        .single-scope-card {
+                            border-radius: 10px;
+                            padding: 12px 16px;
+                            transition: all 0.2s ease;
+                        }
+
+                        /* Trạng thái 1: Mở kho (Xanh lá) */
+                        .card-scope-open {
+                            background-color: #F0FDF4 !important;
+                            border: 1px solid #BBF7D0 !important;
+                            border-left: 5px solid #16A34A !important;
+                        }
+
+                        /* Trạng thái 2: Giới hạn (Đỏ) */
+                        .card-scope-limit {
+                            background-color: #FEF2F2 !important;
+                            border: 1px solid #FECACA !important;
+                            border-left: 5px solid #DC2626 !important;
+                        }
+                    </style>
+
+                    <!-- KHỐI 1: HEADER THÔNG TIN 3 CỘT -->
+                    <div class="header-context-box mb-3 shadow-sm">
+                        <div class="row g-2 align-items-center">
+
+                            <!-- Cột 1: CHƯƠNG TRÌNH -->
+                            <div class="col-md-4">
+                                <span class="info-tag-header"><i class="fa fa-graduation-cap text-primary me-1"/> Chương trình</span>
+                                <div class="value-display-pill" style="color: #6B21A8; border-color: #E9D5FF; background-color: #FAF5FF;">
+                                    <i class="fa fa-bookmark text-secondary me-2 opacity-75"/>
+                                    <field name="chuongtrinh_id" readonly="1" options="{'no_open': True}"/>
+                                </div>
+                            </div>
+
+                            <!-- Cột 2: LĨNH VỰC -->
+                            <div class="col-md-4">
+                                <span class="info-tag-header"><i class="fa fa-cubes text-info me-1"/> Lĩnh vực</span>
+                                <div class="value-display-pill" style="color: #0369A1; border-color: #BAE6FD; background-color: #F0F9FF;">
+                                    <i class="fa fa-folder-open text-warning me-2"/>
+                                    <field name="linhvuc_id" readonly="1" options="{'no_open': True}"/>
+                                </div>
+                            </div>
+
+                            <!-- Cột 3: ĐỘ TUỔI VÀ BADGE "CHO PHÉP SỬA" -->
+                            <div class="col-md-4 select-tuoi-box">
+                                <span class="info-tag-header d-flex justify-content-between align-items-center">
+                                    <span><i class="fa fa-calendar text-danger me-1"/> Độ tuổi phát triển</span>
+                                    <span class="badge-editable-highlight d-inline-flex align-items-center gap-1">
+                                        <i class="fa fa-pencil text-danger"/> CHO PHÉP SỬA
+                                    </span>
+                                </span>
+                                <field name="tuoi_id"
+                                       options="{'no_create': True, 'no_open': True}"
+                                       domain="[('chuongtrinh_id','=',chuongtrinh_id)]"
+                                       placeholder="-- Chọn độ tuổi --"/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 🌟 KHỐI 2: GỘP 2 Ô THÀNH 1 THẺ DUY NHẤT (NGẮN GỌN - RÕ Ý - DỄ NHỚ) -->
+                    <!-- TRƯỜNG HỢP 1: BẬT KHO (is_muctieu_kho == True) -->
+                    <div invisible="not is_muctieu_kho" class="single-scope-card card-scope-open d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2.5 shadow-sm">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="d-flex align-items-center justify-content-center bg-white border border-success rounded-circle flex-shrink-0" style="width: 38px; height: 38px;">
+                                <i class="fa fa-database text-success fs-5"/>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-success" style="font-size: 14px;">CHẾ ĐỘ: CHỌN [MỤC TIÊU] TRONG KHO CHƯƠNG TRÌNH</div>
+                                <div class="text-muted" style="font-size: 12.5px;">
+                                    Giáo viên lập kế hoạch được chọn <strong>tất cả mục tiêu</strong> trong kho chương trình.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 bg-white px-3 py-1.5 rounded-pill border shadow-sm">
+                            <field name="is_muctieu_kho" widget="boolean_toggle"/>
+                            <span class="fw-bold text-success" style="font-size: 13px;">Đang mở [Tự do]</span>
+                        </div>
+                    </div>
+
+                    <!-- TRƯỜNG HỢP 2: TẮT KHO (is_muctieu_kho == False) -->
+                    <div invisible="is_muctieu_kho" class="single-scope-card card-scope-limit d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2.5 shadow-sm">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="d-flex align-items-center justify-content-center bg-white border border-danger rounded-circle flex-shrink-0" style="width: 38px; height: 38px;">
+                                <i class="fa fa-lock text-danger fs-5"/>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-danger" style="font-size: 14px;">CHẾ ĐỘ: CHỌN [MỤC TIÊU] GIỚI HẠN</div>
+                                <div class="text-muted" style="font-size: 12.5px;">
+                                    Giáo viên lập kế hoạch được chọn <strong>mục tiêu</strong> trong danh sách chỉ định.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 bg-white px-3 py-1.5 rounded-pill border shadow-sm">
+                            <field name="is_muctieu_kho" widget="boolean_toggle"/>
+                            <span class="fw-bold text-danger" style="font-size: 13px;">Đang mở [Giới hạn chỉ định]</span>
+                        </div>
+                    </div>
+
+                    <!-- KHỐI 3: BẢNG MỤC TIÊU (CHỈ HIỆN KHI Ở CHẾ ĐỘ GIỚI HẠN) -->
+                    <div invisible="is_muctieu_kho" class="border rounded-3 p-3 bg-white shadow-sm mt-2">
+                        <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom">
+                            <span class="fw-bold text-dark d-flex align-items-center gap-2" style="font-size: 13.5px;">
+                                <i class="fa fa-list-check text-primary fs-6"/> DANH SÁCH MỤC TIÊU CHỈ ĐỊNH ĐƯỢC PHÉP CHỌN
+                            </span>
+                            <span class="text-muted small">Tích chọn mục tiêu cho phép giáo viên sử dụng</span>
+                        </div>
+
+                        <field name="muctieu_ids"
+                               domain="[('linhvuc_id', '=', linhvuc_id), ('tuoi_id', '=', tuoi_id)]"
+                               options="{'no_create': True}">
+                            <list string="Danh sách mục tiêu" create="false" edit="false">
+                                <field name="name" string="Tên mục tiêu can thiệp"/>
+                                <field name="tuoi_id" widget="badge" decoration-info="1" string="Độ tuổi" style="width: 140px;"/>
+                            </list>
+                        </field>
+                    </div>
+
+                </sheet>
+
+                <!-- FOOTER NÚT HÀNH ĐỘNG -->
+                <footer class="d-flex justify-content-end gap-2 p-2.5 border-top bg-light">
+                    <button string="Xác nhận"
+                            special="save"
+                            class="btn btn-primary fw-bold px-4 py-1.5 shadow-sm"/>
+                    <button string="Đóng" class="btn btn-light border px-3 py-1.5" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+  </data>
+</odoo>

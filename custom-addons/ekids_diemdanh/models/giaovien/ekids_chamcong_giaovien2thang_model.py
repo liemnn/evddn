@@ -18,7 +18,17 @@ try:
 except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
 
-
+EXPORT_MAP_CHAMCONG = {
+    "Đi làm": "+",
+    "Đi làm(muộn)": "+",
+    "Đi nửa buổi": "+/-",
+    "Đi nửa buổi(muộn)": "+/-",
+    "Giáo viên nghỉ phép": "N",
+    "Nghỉ làm": "N",
+    "Nghỉ lễ": "N",
+    "Nhà trường cho nghỉ": "N",
+    "Không đăng ký đi làm": "N",
+}
 
 
 class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,ChamCongFuncAbstractModel):
@@ -70,6 +80,16 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
     phep_con_trongnam = fields.Integer(string="Ngày phép con lại trong năm")
 
     field_sua = fields.Char("Các trường do người dùng điều chỉnh", default="")
+
+    @api.model
+    def export_data(self, fields_to_export):
+        response = super().export_data(fields_to_export)
+        datas = response.get('datas', [])
+        for row in datas:
+            for idx, cell_val in enumerate(row):
+                if isinstance(cell_val, str) and cell_val in EXPORT_MAP_CHAMCONG:
+                    row[idx] = EXPORT_MAP_CHAMCONG[cell_val]
+        return response
 
     def _compute_sequence(self):
         index =1

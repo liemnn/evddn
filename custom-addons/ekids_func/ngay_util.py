@@ -1,14 +1,9 @@
 from datetime import datetime, timedelta,date
-def func_get_cacngay_trong_thang(nam, thang):
-    result = []
-    for i in range(1, 32):
-        try:
-            day = date(nam, thang, i)
-            result.append(day)
-        except:
-            continue
-    return result
+import calendar
 
+def func_get_cacngay_trong_thang(nam, thang):
+    _, num_days = calendar.monthrange(int(nam), int(thang))
+    return [date(int(nam), int(thang), day) for day in range(1, num_days + 1)]
 def func_is_thang_nay(ngay):
     today = date.today()
     if today.year == ngay.year:

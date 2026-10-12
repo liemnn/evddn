@@ -44,4 +44,8 @@ class CoSo(models.Model):
             }
         }
 
+    def action_view_ekids_baocao_canthiep_action_window(self):
+        return (self.env.ref('ekids_baocao.action_report_view_canthiep')
+                .report_action(self, data=None))
+
 

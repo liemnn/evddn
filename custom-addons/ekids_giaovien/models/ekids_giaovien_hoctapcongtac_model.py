@@ -15,6 +15,27 @@ class GiaoVienHocTapCongTac(models.Model):
     chucvu = fields.Char(string="Bằng cấp/Chức vụ", required=True)
     thanhtich = fields.Char(string="Thành tích đạt được (nếu có)")
     is_tham_nien_duoccong = fields.Boolean(string="Thâm niên được tính",default=False)
-    tham_nien = fields.Float(string="Thâm niên làm việc", digits=(10, 1),default=0.0)
+    tham_nien = fields.Float(string="Thâm niên làm việc", digits=(10, 1),compute="_compute_tham_nien")
+
+
+    @api.depends('tu_ngay', 'den_ngay', 'is_tham_nien_duoccong')
+    def _compute_tham_nien(self):
+        for record in self:
+            if record.tu_ngay and record.is_tham_nien_duoccong:
+                # Xác định ngày kết thúc: nếu có den_ngay thì dùng, nếu không thì lấy ngày hiện tại
+                end_date = record.den_ngay if record.den_ngay else fields.Date.today()
+
+                if end_date >= record.tu_ngay:
+                    # Tính tổng số ngày chênh lệch
+                    delta = end_date - record.tu_ngay
+                    # Quy đổi ra năm (lấy số ngày chia cho 365.25 để tính cả năm nhuận)
+                    so_nam = delta.days / 365.25
+                    # Làm tròn đến 1 chữ số thập phân
+                    record.tham_nien = round(so_nam, 1)
+                else:
+                    record.tham_nien = 0.0
+            else:
+                record.tham_nien = 0.0
+
 
 

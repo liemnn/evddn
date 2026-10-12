@@ -28,6 +28,8 @@
 
                     <field name="sequence" width="25" />
                     <field name="hocsinh_id" width="170"  readonly="true"/>
+                    <field name="hs_hinhthuc_theohoc" string="Loại" optional="hide"/>
+
 
                     <button name="action_open_popup_thongtin_diemdanh_hocsinh"
                             type="object"

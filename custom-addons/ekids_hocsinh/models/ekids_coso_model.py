@@ -197,12 +197,22 @@ class CoSo(models.Model):
         return hocphi2thang
     def func_macdinh_tao_hocphi_thang_nay(self):
         today = date.today()
+
+        # Nếu từ ngày 25 trở đi, ta cộng thêm 7 ngày để mốc thời gian nhảy sang tháng tiếp theo
+        if today.day >= 28:
+            target_date = today + timedelta(days=7)
+        else:
+            target_date = today
+
+
         if self.is_thu_hocphi_dauthang == False:
             # Bước 1: về ngày 1 tháng hiện tại
             first_day_this_month = today.replace(day=1)
             # Bước 2: lùi 1 ngày → cuối tháng trước
             last_day_last_month = first_day_this_month - timedelta(days=1)
             today = last_day_last_month
+        else:
+            today = target_date
 
         year = today.year
         month =today.month
@@ -285,6 +295,20 @@ class CoSo(models.Model):
             'context': {
                 'default_coso_id': self.id,
                 'search_default_trangthai': '1',
+            }
+        }
+
+    def action_xem_hocphi_dm(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'CẤU HÌNH - MỤC THU HỌC PHÍ',
+            'res_model': 'ekids.hocphi_dm',
+            'view_mode': 'list,form',
+            'target': 'current',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.id,
             }
         }
 

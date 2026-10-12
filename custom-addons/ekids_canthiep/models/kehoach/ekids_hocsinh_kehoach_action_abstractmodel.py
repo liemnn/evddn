@@ -22,9 +22,8 @@ except ImportError as e:
 
 
 class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
-    _name = 'ekids.hocsinh_kehoach_action_abstractmodel'
+    _register = False
     _description = 'Kế hoạch can thiệp của học sinh'
-    _abstract = True
 
 
     def action_taomoi_ketluan(self):
@@ -43,10 +42,33 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             },
         }
 
+    def action_taomoi_phancong(self):
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_phancong_form').id
+        ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self, self,
+                                                                  [kehoach_util.KETLUAN_DANG_TAO,
+                                                                   kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH])
+        url = {
+            'type': 'ir.actions.act_window',
+            'name': 'PHÂN CÔNG LẬP KẾ HOẠCH',
+            'res_model': 'ekids.kehoach_ketluan',
+            'view_mode': 'form',
+            'views': [(form_view_id, 'form')],
+            'target': 'new',
+            'domain': [('coso_id', '=', self.id)],
+            'context': {
+                'default_coso_id': self.coso_id.id,
+                'default_hocsinh_id': self.id
+
+            },
+        }
+        if ketluan:
+            url["res_id"] = ketluan.id
+        return url
+
     def action_sua_ketluan(self):
         form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
         ketluan = kehoach_util.func_get_ketluan_hocsinh_trangthai(self, self,
-                                                                          [kehoach_util.KETLUAN_DANG_TAO])
+                                                                          [kehoach_util.KETLUAN_DANG_TAO,kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH])
         if ketluan:
             url= {
                 'type': 'ir.actions.act_window',
@@ -136,39 +158,43 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         kehoach = kehoach_util.func_get_kehoach_hocsinh_trangthai(self,self,trangthais)
         if not kehoach:
             giaovien = giaovien_util.func_get_giaovien_tu_user(self)
-            # tim ke hoach truoc
-            trangthais = [kehoach_util.KEHOACH_HET_HIEULUC]
-            kehoach_truoc = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, trangthais)
-            tu_ngay = date.today()
-            if kehoach_truoc:
-                tu_ngay = self.func_get_default_kehoach_tu_ngay(kehoach_truoc)
-            den_ngay = self.func_get_default_kehoach_den_ngay(tu_ngay)
-            songay = (den_ngay - tu_ngay).days + 1
-            data ={
-                "hocsinh_id":self.id,
-                "ketluan_id": ketluan.id,
-                "gv_lapkehoach_id": giaovien.id,
-                "tu_ngay": tu_ngay,
-                "den_ngay": den_ngay,
-                "songay": songay
-            }
-            if kehoach_truoc:
-                data["kehoach_truoc_id"] =kehoach_truoc.id
+            if giaovien.id in ketluan.gv_canthiep_ids.ids:
+                # tim ke hoach truoc
+                trangthais = [kehoach_util.KEHOACH_HET_HIEULUC]
+                kehoach_truoc = kehoach_util.func_get_kehoach_hocsinh_trangthai(self, self, trangthais)
+                tu_ngay = date.today()
+                if kehoach_truoc:
+                    tu_ngay = self.func_get_default_kehoach_tu_ngay(kehoach_truoc)
+                den_ngay = self.func_get_default_kehoach_den_ngay(tu_ngay)
+                songay = (den_ngay - tu_ngay).days + 1
+                data ={
+                    "hocsinh_id":self.id,
+                    "ketluan_id": ketluan.id,
+                    "gv_lapkehoach_id": giaovien.id,
+                    "tu_ngay": tu_ngay,
+                    "den_ngay": den_ngay,
+                    "songay": songay
+                }
+                if kehoach_truoc:
+                    data["kehoach_truoc_id"] =kehoach_truoc.id
 
-            kehoach = self.env['ekids.kehoach'].create(data)
-            if kehoach:
-                linhvucs = ketluan.linhvuc_ids
-                for linhvuc in linhvucs:
-                    data2={
-                        'sequence':linhvuc.sequence,
-                        'kehoach_id':kehoach.id,
-                        'chuongtrinh_id': linhvuc.chuongtrinh_id.id,
-                        'linhvuc_id': linhvuc.linhvuc_id.id,
-                        'tuoi_id': linhvuc.tuoi_id.id,
-                    }
-                    self.env['ekids.kehoach_linhvuc'].create(data2)
-                kehoach.func_copy_muctieu_thangtruoc_khongdat_sang()
-        return kehoach
+                kehoach = self.env['ekids.kehoach'].create(data)
+                if kehoach:
+                    linhvucs = ketluan.linhvuc_ids
+                    for linhvuc in linhvucs:
+                        if linhvuc.is_lapkehoach_thangnay == True:
+                            data2={
+                                'sequence':linhvuc.sequence,
+                                'kehoach_id':kehoach.id,
+                                'chuongtrinh_id': linhvuc.chuongtrinh_id.id,
+                                'linhvuc_id': linhvuc.linhvuc_id.id,
+                                'tuoi_id': linhvuc.tuoi_id.id,
+                            }
+                            self.env['ekids.kehoach_linhvuc'].create(data2)
+                    kehoach.func_copy_muctieu_thangtruoc_khongdat_sang()
+            return kehoach
+
+
 
     def func_get_default_kehoach_tu_ngay(self, kehoach_gan_nhat):
         tu_ngay = fields.Date.context_today(self)
@@ -346,7 +372,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 domain.extend(gv_lap_domain)
             elif context_type in ["2", "4"]:
                 domain.extend(gv_duyet_domain)
-            elif context_type in ["5", None]:  # Type 5 hoặc mặc định (Đang can thiệp)
+            elif context_type in ["5"]:  # Type 5 hoặc mặc định (Đang can thiệp)
                 domain = expression.AND([domain, expression.OR([gv_duyet_domain, gv_lap_domain])])
 
         # 4. Trả về Window Action

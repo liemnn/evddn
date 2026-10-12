@@ -15,7 +15,7 @@
                     <div class="row">
                         <div class="col-12">
                             <group>
-                                <group string="B1:Phân công lại giáo viên cho [Kết luận]">
+                                <group string="B1:Phân công lại giáo viên cho [Kết luận] - Cho các kế hoạch tiếp theo">
                                     <field name="gv_kiemduyet_id"
                                            domain="[('coso_id','=',coso_id)]"
                                            options="{'no_create': True, 'no_open': True}"/>
@@ -38,7 +38,7 @@
                                 <list delete="false" create="false" edit="true" editable="bottom">
                                     <field name="kehoach_id" string="Kế hoạch đang có"/>
                                     <field name="gv_canthiep_id"
-                                           domain="[('coso_id','=',parent.coso_id),('id', 'in', parent.gv_canthiep_ids)]"
+                                           domain="[('coso_id','=',parent.coso_id),('trangthai','=','1')]"
                                            options="{'no_create': True, 'no_open': True}"/>
                                     <field name="trangthai" string="Trạng thái kế hoạch" width="130"
                                            widget="badge"

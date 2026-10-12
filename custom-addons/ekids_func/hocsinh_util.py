@@ -36,22 +36,29 @@ def func_get_hocsinh_ca_canthieps(self, hocsinh, ngay_dauthang, ngay_cuoithang):
     ca_canthieps = self.env['ekids.hocsinh_ca_canthiep'].search(domain)
 
     return ca_canthieps
-def func_get_dihoc_diemdanh(self,hocsinh,ngay):
 
-    nam =ngay.year
+
+def func_get_dihoc_diemdanh(self, hocsinh, ngay):
+    nam = ngay.year
     thang = ngay.month
-    hocsinh2thang = self.env['ekids.diemdanh_hocsinh2thang'].search([
-        ('hocsinh_id', '=', hocsinh.id),
-        ('diemdanh_id.thang', '=', str(thang)),
-        ('diemdanh_id.nam', '=', str(nam))
-    ],limit=1)
+    cache_key = ('diemdanh_hs', hocsinh.id, nam, thang)
+
+    # Lưu cache an toàn trong bộ nhớ transaction registry của connection cursor
+    if not hasattr(self.env.cr, '_custom_cache'):
+        self.env.cr._custom_cache = {}
+
+    hocsinh2thang = self.env.cr._custom_cache.get(cache_key)
+    if hocsinh2thang is None:
+        hocsinh2thang = self.env['ekids.diemdanh_hocsinh2thang'].search([
+            ('hocsinh_id', '=', hocsinh.id),
+            ('diemdanh_id.thang', '=', str(thang)),
+            ('diemdanh_id.nam', '=', str(nam))
+        ], limit=1)
+        self.env.cr._custom_cache[cache_key] = hocsinh2thang or False
+
     if hocsinh2thang:
-        field_name = "d" + str(ngay.day)
-        giatri = getattr(hocsinh2thang, field_name, '-1')
-        return giatri
-    else:
-        return "1"
-    return None
+        return getattr(hocsinh2thang, f"d{ngay.day}", '-1')
+    return "1"
 
 
 def func_get_nghipheps_trong_khoang_thoigian(self,coso, hocsinh, nghiles,nhatruong_nghis, tu_ngay, den_ngay):
@@ -98,32 +105,36 @@ def func_get_nghipheps_trong_khoang_thoigian(self,coso, hocsinh, nghiles,nhatruo
                 ngay += timedelta(days=1)
     return days
 
-def func_get_nghipheps_tatca_hocsinh(self, coso,nam,thang):
-    result={}
+def func_get_nghipheps_tatca_hocsinh(self, coso, nam, thang):
+    result = {}
     days = ngay_util.func_get_cacngay_trong_thang(nam, thang)
-    ngay_dauthang= days[0]
-    ngay_cuoithang=days[len(days)-1]
+    if not days:
+        return result
+    ngay_dauthang = days[0]
+    ngay_cuoithang = days[-1]
     nghipheps = self.env['ekids.hocsinh_nghiphep'].search([
         ('coso_id', '=', coso.id),
         ('tu_ngay', '<=', ngay_cuoithang),
         ('den_ngay', '>=', ngay_dauthang),
     ])
-    for day in days:
-        for nghiphep in nghipheps:
-            key = str(nghiphep.hocsinh_id.id)+":" +str(day)
-            if  day >= nghiphep.tu_ngay and day <= nghiphep.den_ngay:
-                result[key] = nghiphep
-            else:
-                continue
+    for np in nghipheps:
+        start = max(np.tu_ngay, ngay_dauthang)
+        end = min(np.den_ngay, ngay_cuoithang)
+        curr = start
+        hs_id = np.hocsinh_id.id
+        while curr <= end:
+            result[f"{hs_id}:{curr}"] = np
+            curr += timedelta(days=1)
     return result
 
-def func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,tu_ngay, den_ngay):
+def func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,tu_ngay, den_ngay,is_theo_hocsinh):
     ngay = tu_ngay
     days = {}
-    if hocsinh.ngay_nhaphoc > tu_ngay:
+    if (is_theo_hocsinh == True
+            and hocsinh.ngay_nhaphoc > tu_ngay):
         ngay = hocsinh.ngay_nhaphoc
 
-    if  (hocsinh.trangthai == '3'
+    if  ( is_theo_hocsinh == True and hocsinh.trangthai == '3'
         and hocsinh.ngay_nghihoc
              and hocsinh.ngay_nghihoc < den_ngay):
         den_ngay = hocsinh.ngay_nghihoc
@@ -135,13 +146,32 @@ def func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,tu_ngay, den_ngay):
             if nghiles:
                 is_nghile = nghiles.get(str(ngay), False)
                 if is_nghile == False:
-                    is_hoc = func_is_co_ca_trong_ngay(hocsinh, ngay)
+                    is_hoc = func_is_hocsinh_dihoc(hocsinh, ngay)
                     if is_hoc == True:
                         days[str(ngay)] = ngay
             else:
-                is_hoc =func_is_co_ca_trong_ngay(hocsinh,ngay)
+                is_hoc =func_is_hocsinh_dihoc(hocsinh,ngay)
                 if is_hoc == True:
                     days[str(ngay)] = ngay
+
+        ngay += timedelta(days=1)
+    return days
+
+def func_get_ngay_dihoc_kehoachs_dm_ca(nghiles,hocsinh,dm_ca,tu_ngay, den_ngay):
+    ngay = tu_ngay
+    days = {}
+    while ngay <= den_ngay:
+        is_hoc = dm_ca.func_is_hoc(hocsinh,ngay)
+        if is_hoc == True:
+            # Co so hoat dong
+            if nghiles:
+                is_nghile = nghiles.get(str(ngay), False)
+                if is_nghile == False:
+                    days[str(ngay)] = ngay
+            else:
+                days[str(ngay)] = ngay
+        else:
+            liem=3
 
         ngay += timedelta(days=1)
     return days
@@ -151,8 +181,7 @@ def func_get_ngay_dihoc_cua_coso(coso, nghiles,tu_ngay, den_ngay):
     while ngay <= den_ngay:
         is_coso_hoatdong = coso_util.func_is_coso_hoatdong(coso, ngay)
         if is_coso_hoatdong:
-            # Co so hoat dong
-            #days[str(ngay)] = ngay
+
 
             if nghiles:
                 is_nghile = nghiles.get(str(ngay))
@@ -162,23 +191,77 @@ def func_get_ngay_dihoc_cua_coso(coso, nghiles,tu_ngay, den_ngay):
                days[str(ngay)] = ngay
 
 
+
         ngay += timedelta(days=1)
     return days
 
-
-def func_is_co_ca_trong_ngay(hocsinh,ngay):
+def func_is_hoc_canthiep_dm_ca(hocsinh,dm_ca,ngay):
     week = ngay.weekday() + 2
-    field_name = "hd_t" + str(week)
-    if hocsinh.is_ngaydihoc_rieng ==True:
-        is_hoc = getattr(hocsinh,field_name)
+    field_name_ca = "t" + str(week)
+    field_name_hs_cs = "hd_t" + str(week)
+
+    #TH1: có danh mục ca và có áp dụng riêng
+    if (dm_ca and dm_ca.is_apdung_rieng == True):
+        is_hoc = getattr(dm_ca, field_name_ca)
         if is_hoc == True:
             return True
     else:
-        coso =hocsinh.coso_id
-        is_hoc = getattr(coso, field_name)
-        if is_hoc == True:
-            return True
+
+        # TH2: Theo hồ sơ học sinh có thiết lập riêng
+        if (hocsinh and hocsinh.is_ngaydihoc_rieng == True):
+            is_hoc = getattr(hocsinh, field_name_hs_cs)
+            if is_hoc == True:
+                return True
+        else:
+            # TH3: Theo hồ cơ sở
+            coso = hocsinh.coso_id
+            is_hoc = getattr(coso, field_name_hs_cs)
+            if is_hoc == True:
+                return True
+
+
+    # còn lại không có
     return False
+
+
+
+def func_is_hocsinh_dihoc(hocsinh, ngay):
+    if not ngay or not hocsinh:
+        return False
+
+    week = ngay.weekday() + 2
+    field_name = "hd_t" + str(week)
+
+    # TH1: Kiểm tra lịch chung (Theo thiết lập riêng của học sinh hoặc theo cơ sở)
+    target_obj = hocsinh if hocsinh.is_ngaydihoc_rieng else hocsinh.coso_id
+    if target_obj and getattr(target_obj, field_name, False):
+        return True
+
+    # TH2: Kiểm tra các ca can thiệp còn hiệu lực trong ngày
+    ca_canthieps = hocsinh.ca_canthiep_ids
+    if ca_canthieps:
+        field_name_ca = "t" + str(week)
+        check_ngay = fields.Date.to_date(ngay)
+
+        for ca in ca_canthieps:
+            # Nếu ca không học vào thứ này thì bỏ qua luôn
+            if not getattr(ca, field_name_ca, False):
+                continue
+
+            # Kiểm tra từ ngày (nếu có)
+            if ca.tu_ngay and fields.Date.to_date(ca.tu_ngay) > check_ngay:
+                continue
+
+            # Kiểm tra đến ngày (nếu có)
+            if ca.den_ngay and fields.Date.to_date(ca.den_ngay) < check_ngay:
+                continue
+
+            # Thỏa mãn mọi điều kiện -> Tính là có đi học
+            return True
+
+    return False
+
+
 
 def func_is_dangky_hoc(hocsinh,ngay):
     week = ngay.weekday() + 2

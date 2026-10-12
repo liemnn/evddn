@@ -71,6 +71,38 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
 
     is_dong_hocphi_theoky = fields.Boolean(compute="_compute_is_dong_hocphi_theoky")
 
+    ph_ten = fields.Char(string="Phụ huynh",compute="_compute_is_phuhuynh")
+    ph_cccd = fields.Char(string="CCCD",compute="_compute_is_phuhuynh")
+    ph_dienthoai = fields.Char(string="Điện thoại",compute="_compute_is_phuhuynh")
+    ph_diachi= fields.Char(string="Địa chỉ",compute="_compute_is_phuhuynh")
+
+    def _compute_is_phuhuynh(self):
+        for record in self:
+            ph_ten=""
+            ph_cccd=""
+            ph_dienthoai=""
+            ph_diachi=""
+            phuhuynh_ids = record.phuhuynh_ids
+            if phuhuynh_ids:
+                for ph in phuhuynh_ids:
+                    ph_ten = ph.name
+                    ph_cccd =ph.cccd
+                    ph_dienthoai = ph.dienthoai
+                    if ph.diachi_chitiet:
+                        ph_diachi = str(ph.diachi_chitiet)
+                    if ph.dm_xa_id:
+                        ph_diachi += "," + ph.dm_xa_id.name
+                    if ph.dm_tinh_id:
+                        ph_diachi += ","+ ph.dm_tinh_id.name
+
+                    break
+
+
+            record.ph_ten = ph_ten
+            record.ph_cccd = ph_cccd
+            record.ph_dienthoai = ph_dienthoai
+            record.ph_diachi = ph_diachi
+
     @api.onchange("trangthai")
     def _onchage_trangthai(self):
         for record in self:
@@ -214,7 +246,7 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
         today = fields.Date.today()
 
         for hs in self:
-            # 1. Chặn các trạng thái không cần tính toán số tháng
+            # 1. Chặn các trạng thái không tính thời gian theo học
             if hs.trangthai == "2":
                 hs.thoigian_hoc = "Đợi đánh giá"
                 continue
@@ -222,30 +254,40 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
                 hs.thoigian_hoc = "Đã đánh giá nhưng không học"
                 continue
 
-            # 2. Xử lý các trạng thái cần tính toán (1 và 3)
+            tong_ngay = 0
+
+            # 2. Tính thời gian từ quá trình học chính thức tại cơ sở
             if hs.ngay_nhaphoc:
-                # Xác định mốc thời gian chốt sổ (end_date)
+                # Nếu trạng thái là "Đã nghỉ" (3), ưu tiên lấy ngay_nghihoc. Nếu quên nhập thì lấy tạm hôm nay.
+                # Nếu trạng thái là "Đang theo học" (1), tính đến ngày hôm nay (today).
                 if hs.trangthai == "3":
-                    # Nếu đã nghỉ, tính đến ngày nghỉ. Nếu quên chưa nhập ngày nghỉ thì tạm lấy ngày hôm nay
                     end_date = hs.ngay_nghihoc if hs.ngay_nghihoc else today
                 else:
-                    # Nếu đang theo học (trangthai == "1"), tính đến ngày hôm nay
                     end_date = today
 
-                # Thuật toán quy đổi ra tháng của anh
-                nam_diff = end_date.year - hs.ngay_nhaphoc.year
-                thang_diff = end_date.month - hs.ngay_nhaphoc.month
+                # Đảm bảo mốc kết thúc không nhỏ hơn ngày nhập học
+                if end_date >= hs.ngay_nhaphoc:
+                    delta_hientai = (end_date - hs.ngay_nhaphoc).days
+                    tong_ngay += max(0, delta_hientai)
 
-                # Tổng số tháng tạm tính
-                tong_thang = (nam_diff * 12) + thang_diff
+            # 3. Cộng dồn thời gian từ lịch sử can thiệp trước đây (nếu có)
+            if hs.lichsu_canthiep_ids:
+                for ls in hs.lichsu_canthiep_ids:
+                    if ls.tu_ngay:
+                        ls_end_date = ls.den_ngay if ls.den_ngay else today
+                        if ls_end_date >= ls.tu_ngay:
+                            delta_ls = (ls_end_date - ls.tu_ngay).days
+                            tong_ngay += max(0, delta_ls)
 
-                # Hiệu chỉnh: Nếu ngày chốt sổ chưa đến ngày nhập học của tháng đó
-                if end_date.day < hs.ngay_nhaphoc.day:
-                    tong_thang -= 1
+            # 4. Quy đổi tổng số ngày tích lũy ra năm và tháng để hiển thị trực quan
+            if tong_ngay <= 0:
+                hs.thoigian_hoc = "Mới nhập học"
+            else:
+                # Quy đổi tương đối theo tháng (1 tháng = 30 ngày)
+                tong_thang = tong_ngay // 30
 
-                # Xử lý kết quả hiển thị
                 if tong_thang <= 0:
-                    hs.thoigian_hoc = "Mới nhập học"
+                    hs.thoigian_hoc = f"{tong_ngay} ngày"
                 else:
                     nam = tong_thang // 12
                     thang = tong_thang % 12
@@ -256,10 +298,7 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
                     if thang > 0:
                         parts.append(f"{thang} tháng")
 
-                    hs.thoigian_hoc = " ".join(parts)
-            else:
-                # Không có ngày nhập học
-                hs.thoigian_hoc = "Chưa có dữ liệu"
+                    hs.thoigian_hoc = " ".join(parts) if parts else "Dưới 1 tháng"
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -316,6 +355,15 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
     def action_mo_popup_taikhoan_phuhuynh(self):
         self.ensure_one()
         form_view_id = self.env.ref('ekids_hocsinh.view_ekids_hocsinh_user_form').id
+        phuhuynhs = self.phuhuynh_ids
+        name =""
+        login=""
+        if phuhuynhs:
+            phuhuynh = self.phuhuynh_ids[:1]  # Lấy 1 bản ghi đầu tiên an toàn (không bao giờ văng IndexError)
+            name = phuhuynh.name or ""
+            name =name + "(PH:"+ self.name+")"
+            login = phuhuynh.dienthoai or ""
+
         if self.id:
             return {
                 'type': 'ir.actions.act_window',
@@ -327,6 +375,8 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
                 'target': 'new',
                 'context':{
                     'hocsinh_id': self.id,
+                    'default_name': name,
+                    'default_login': login,
 
                 },
             }
@@ -359,7 +409,8 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
         if user:
             self.user_id = False
             self.is_taikhoan = False
-            user.unlink()
+            user.sudo().unlink()
+           
 
     def action_nap_rut_tien(self):
         self.ensure_one()  # Đảm bảo đang đứng ở 1 bản ghi học sinh cụ thể

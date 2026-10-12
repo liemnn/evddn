@@ -74,6 +74,13 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                                                            ngay_dauthang_truoc,
                                                                                            ngay_cuoithang_truoc)
 
+            # Truy vấn trước 1 lần duy nhất cho toàn bộ học sinh
+            existing_hocphis = self.env['ekids.hocphi'].search([
+                ('coso_id', '=', self.coso_id.id),
+                ('thang_id', '=', self.id),
+                ('hocsinh_id', 'in', hocsinhs.ids)
+            ])
+            existing_map = {hp.hocsinh_id.id: hp for hp in existing_hocphis}
 
             for hocsinh in hocsinhs:
                 ngay_dauthang_thucte =ngay_dauthang
@@ -83,13 +90,15 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                          ,nghiles
                                                          ,nghiles_thangtruoc
                                                          ,ngay_dihoc_cosos
-                                                          ,hocsinh
+                                                         ,hocsinh
+                                                         ,ngay_dauthang
                                                          ,ngay_dauthang_thucte
                                                          ,ngay_cuoithang
                                                          ,thangtruoc_days
                                                          ,False
                                                          ,nhatruong_nghi_bu_thangtruoc
-                                                         ,nhatruong_nghi_thangtruoc)
+                                                         ,nhatruong_nghi_thangtruoc
+                                                         ,existing_hp=existing_map.get(hocsinh.id))
                 # Tinh toán các khoản thu ngoài
             #B2tinh toán các khoảng thu ngoài
             self.func_tao_macdinh_hocphi_thungoai(coso.id, ngay_dauthang.year, ngay_dauthang.month)
@@ -121,11 +130,13 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                             ,ngay_dihoc_cosos
                                             ,hocsinh
                                             ,ngay_dauthang
+                                            ,ngay_dauthang_thucte
                                             ,ngay_cuoithang
                                             ,thangtruoc_days
                                             ,is_tinhlai
                                             ,nhatruong_nghi_bus
-                                            ,nhatruong_nghis):
+                                            ,nhatruong_nghis
+                                            ,existing_hp=None):
         hocphi =None
         thu_bantrus = hocsinh.thu_bantru_ids
         if is_tinhlai == True:
@@ -137,94 +148,101 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                  ],limit=1)
 
         else:
-            #TH2: Khởi tạo hoặc tính toán lại toàn bộ
-            # B2:kiem tra xem hocsinh này đã có bang tinh hoc phi chua
-            count = self.env['ekids.hocphi'].search_count(
-                [('coso_id', '=', self.coso_id.id)
-                    , ('thang_id', '=', self.id)
-                    , ('hocsinh_id', '=', hocsinh.id)
-                 ])
-            if count <= 0:
+            # Nếu đã có trong map thì bỏ qua, chưa có mới tạo
+            if existing_hp:
+                hocphi = None
+            else:
                 data = {
                     'coso_id': self.coso_id.id,
                     'thang_id': self.id,
                     'hocsinh_id': hocsinh.id,
-                    'tyle_giamhocphi':0,
+                    'tyle_giamhocphi': 0,
                     'trangthai': '-1'
                 }
-
-                #B1: Công tác tính toán đảm bảo hiệu năng
                 hocphi = self.env['ekids.hocphi'].create(data)
         if hocphi:
             ca_canthieps = hocsinh_util.func_get_hocsinh_ca_canthieps(self,hocsinh,ngay_dauthang,ngay_cuoithang)
 
             ngay_dihoc_kehoachs = (hocsinh_util
-                                    .func_get_ngay_dihoc_kehoachs(coso,nghiles,hocsinh,ngay_dauthang,ngay_cuoithang))
+                                    .func_get_ngay_dihoc_kehoachs(coso,nghiles,hocsinh,ngay_dauthang,ngay_cuoithang,False))
+            ngay_dihoc_thucte_kehoachs =None
+
+            if ngay_dauthang != ngay_dauthang_thucte:
+                ngay_dihoc_thucte_kehoachs = (hocsinh_util
+                                       .func_get_ngay_dihoc_kehoachs(coso, nghiles, hocsinh, ngay_dauthang_thucte,
+                                                                     ngay_cuoithang,False))
+            else:
+                ngay_dihoc_thucte_kehoachs =ngay_dihoc_kehoachs
+
+
 
             #B2: vào tính toán các phần
             hocphi.ngay_dihoc = len(ngay_dihoc_kehoachs)
             hocphi.ngay_dihoc_coso = len(ngay_dihoc_cosos)
 
             if ngay_dihoc_kehoachs:
-                self.func_tao_macdinh_hocphi_bantru(hocphi,thu_bantrus, len(ngay_dihoc_kehoachs),len(ngay_dihoc_cosos))
+                self.func_tao_macdinh_hocphi_bantru(hocphi,thu_bantrus, len(ngay_dihoc_thucte_kehoachs),len(ngay_dihoc_cosos))
 
                 # Tinh toan khoang thu ca can thiệp
-                self.func_tao_macdinh_hocphi_ca(hocphi,ca_canthieps,ngay_dihoc_kehoachs,ngay_dihoc_cosos)
+                self.func_tao_macdinh_hocphi_ca(nghiles,hocphi,ca_canthieps,ngay_dauthang,ngay_cuoithang)
                 # tin hoc phi do giam hoc phi theo so tien cu the
 
-                # tinh toan tháng trước để được trừ
+                # tinh toan tháng trước để được trừ của tháng trước
                 if thangtruoc_days:
-                    ngay_dauthang = thangtruoc_days[0]
-                    ngay_cuoithang = thangtruoc_days[len(thangtruoc_days) - 1]
-
-                    is_hocthangtruoc =True
-                    if hocsinh.ngay_nhaphoc > ngay_cuoithang:
-                        is_hocthangtruoc = False
-
-                    if (hocsinh.ngay_nhaphoc > ngay_dauthang
-                            and hocsinh.ngay_nhaphoc < ngay_cuoithang):
-                        ngay_dauthang = hocsinh.ngay_nhaphoc
-
-                    if hocsinh.ngay_nghihoc and hocsinh.ngay_nghihoc < ngay_cuoithang:
-                        ngay_cuoithang = hocsinh.ngay_nghihoc
-
-
-                    if is_hocthangtruoc == True:
-                        ca_canthieps_thangtruocs = hocsinh_util.func_get_hocsinh_ca_canthieps(self,hocsinh, ngay_dauthang, ngay_cuoithang)
-                        self.func_hoantra_hocphi_thang_truoc(coso
+                    self.func_hoantra_hocphi_thang_truoc(coso
                                                              ,nghiles_thangtruoc
                                                              ,hocphi
                                                              ,hocsinh
                                                              ,thu_bantrus
-                                                             ,ca_canthieps_thangtruocs
-                                                             ,ngay_dauthang
-                                                             ,ngay_cuoithang
-                                                             ,ngay_dihoc_cosos
+                                                             ,thangtruoc_days
                                                              ,nhatruong_nghi_bus
                                                              ,nhatruong_nghis)
-            #B3: Tính chính sách giảm học phí cho học sinh
-            if hocsinh.dm_chinhsach_giam_id:
-                hocphi.tyle_giamhocphi = 0
-                hocphi.tyle_giamhocphi_bantru = 0
-                hocphi.tyle_giamhocphi_ca = 0
-                if hocsinh.dm_chinhsach_giam_id.is_giam_theo_tyle == True:
-                     # chỉ tính cho trường hợp chính sách giảm học phí theo tỷ lệ
-                    hocphi.tyle_giamhocphi =hocsinh.dm_chinhsach_giam_id.tyle_giam
-                    hocphi.tyle_giamhocphi_bantru = hocsinh.dm_chinhsach_giam_id.tyle_giam
-                    hocphi.tyle_giamhocphi_ca = hocsinh.dm_chinhsach_giam_id.tyle_giam
-                else:
-                    self.func_tao_khoantru_giam_hocphi_sotien(hocsinh,hocphi)
 
-                hocphi.dm_chinhsach_giam_id = hocsinh.dm_chinhsach_giam_id.id
 
-            hocphi._compute_hocphi()
-            hocphi._compute_hocphi_giam()
-            hocphi._compute_hocphi_phaidong()
+            self.func_tinhtoan_chinhsach_giam_hocphi(hocphi)
 
 
 
                 # tạo default số tiền lớp chung
                 # self.create_default_hocphi_bantru(hs,hocphi,False)
+
+    def func_tinhtoan_chinhsach_giam_hocphi(self,hocphi):
+        # B3: Tính chính sách giảm học phí cho học sinh
+        hocsinh =hocphi.hocsinh_id
+        if not hocsinh:
+            return
+        chinhsach = hocsinh.dm_chinhsach_giam_id
+        if not chinhsach:
+            return
+
+        # Chuẩn bị dữ liệu cập nhật gom chung vào 1 từ điển (vals) để tối ưu hiệu năng ORM write
+        vals = {
+            'dm_chinhsach_giam_id': chinhsach.id,
+            'tyle_giamhocphi': 0.0,
+            'tyle_giamhocphi_bantru': 0.0,
+            'tyle_giamhocphi_ca': 0.0,
+        }
+
+        if chinhsach.is_giam_theo_tyle:
+            # Chỉ tính cho trường hợp chính sách giảm học phí theo tỷ lệ
+            tyle = chinhsach.tyle_giam
+            vals.update({
+                'tyle_giamhocphi': tyle,
+                'tyle_giamhocphi_bantru': tyle,
+                'tyle_giamhocphi_ca': tyle,
+            })
+        else:
+            # Trường hợp giảm theo số tiền cố định
+            self.func_tao_khoantru_giam_hocphi_sotien(hocsinh, hocphi)
+
+        # Cập nhật database một lần duy nhất cho các trường tỷ lệ và chính sách
+        hocphi.write(vals)
+
+        # Kích hoạt tính toán lại các giá trị học phí cuối cùng
+        hocphi._compute_hocphi()
+        hocphi._compute_hocphi_giam()
+        hocphi._compute_hocphi_phaidong()
+
 
     def func_tao_khoantru_giam_hocphi_sotien(self,hocsinh,hocphi):
        dm_giam = hocsinh.dm_chinhsach_giam_id
@@ -241,18 +259,15 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         thang = int(self.thang_id.name)
         nam = int(self.nam_id.name)
         #B1 xoa dữ liệu cũ
-        bantrus = self.hocphi_bantru_ids
-        if bantrus:
-            for bantru in bantrus:
-                bantru.unlink()
-        cas = self.hocphi_ca_ids
-        if cas:
-            for ca in cas:
-                ca.unlink()
-        trus = self.hocphi_duoctru_ids
-        if trus:
-            for tru in trus:
-                tru.unlink()
+
+        if self.hocphi_bantru_ids:
+            self.hocphi_bantru_ids.unlink()
+
+        if self.hocphi_ca_ids:
+            self.hocphi_ca_ids.unlink()
+
+        if self.hocphi_duoctru_ids:
+            self.hocphi_duoctru_ids.unlink()
         #B2 tinh toán la học phí
 
         days = ngay_util.func_get_cacngay_trong_thang(nam,thang)
@@ -302,6 +317,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                      ,ngay_dihoc_cosos
                                                      , hocsinh
                                                      , ngay_dauthang
+                                                     , ngay_dauthang_thucte
                                                      , ngay_cuoithang
                                                      , thangtruoc_days
                                                      , True
@@ -313,6 +329,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
     # nêu đặt  is get defaul =true có nghĩa lấy giá trị tháng trước
     def func_tao_macdinh_hocphi_bantru(self,hocphi,thu_bantrus,songay_dihoc_quydinh,songay_dihoc_coso):
         if thu_bantrus:
+            batch_data = []
             for thu_bantru in thu_bantrus:
                 tien = thu_bantru.tien
                 desc = ""
@@ -341,14 +358,15 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 namestr =thu_bantru.name
                 if desc:
                     namestr =namestr+ " "+desc
-                data = {
+
+                batch_data.append({
                     'hocphi_id': hocphi.id,
                     'name': namestr,
-                    'dm_thu_bantru_id':thu_bantru.id,
+                    'dm_thu_bantru_id': thu_bantru.id,
                     'tien': tien
-
-                }
-                self.env['ekids.hocphi_bantru'].create(data)
+                })
+            if batch_data:
+                self.env['ekids.hocphi_bantru'].create(batch_data)
 
     def func_tao_macdinh_hocphi_thungoai(self,coso_id,nam,thang):
         thungoais = self.env["ekids.hocphi_thungoai"].search([
@@ -385,7 +403,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                               ,so_ngay_dihoc_theoquydinh):
 
         if thu_bantrus:
-            coso = hocphi.coso_id
+
             for thu_bantru in thu_bantrus:
                 tien =0
                 tyle_hoan_hp =0
@@ -489,44 +507,57 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                     }
                     self.env['ekids.hocphi_duoctru'].create(data)
 
-
-
-    def func_func_hoantra_hocphi_do_nghiphep_ca(self,lydo
-                                                             , hocphi
-                                                             , is_tyle_hoan_theo_nghiphep
-                                                             , tyle_hoantra
-                                                             , days
-                                                             , ca_canthieps
-                                                             , ngay_dihoc_kehoachs
-                                                             , ngay_dihoc_cosos):
+    def func_func_hoantra_hocphi_do_nghiphep_ca(self, lydo
+                                                , hocphi
+                                                , is_tyle_hoan_theo_nghiphep
+                                                , tyle_hoantra
+                                                , days
+                                                , ca_canthieps
+                                                , ngay_dauthang
+                                                , ngay_cuoithang):
 
         if ca_canthieps and days:
             dm_ca_ids = list(set(ca_canthieps.mapped('dm_ca_id')))
 
-            soca_hocbu = self.env['ekids.diemdanh_ca2ngay'].search_count([
-                ('hocsinh_id', '=', hocphi.hocsinh_id.id),
-                ('ngay', 'in', days),
-                ('trangthai', 'in', ['3']),
-            ])
 
-            tien=0
-            soca=0
-            dongia=0
-            ca_hoc = None
+
+
 
             for dm_ca in dm_ca_ids:
+                tien = 0
+                soca = 0
+                dongia = 0
+                ca_hoc = None
+                songay_nghi=0
+                soca_hocbu = self.env['ekids.diemdanh_ca2ngay'].search_count([
+                    ('hocsinh_id', '=', hocphi.hocsinh_id.id),
+                    ('ngay', 'in', days),
+                    ('hocphi_dm_ca_id', '=', dm_ca.id),
+                    ('trangthai', 'in', ['3']),
+                ])
+
+
+
                 for ca in ca_canthieps:
-                    if ca.dm_ca_id.id == dm_ca.id:
-                        ca_hoc =dm_ca
+                    if (ca.dm_ca_id.id == dm_ca.id
+                            and  ca.trangthai !="3"):
+                        # không tinh cac ca trong ngay là sẽ bo tri hoc bu
+                        ca_hoc = dm_ca
                         for daystr in days:
-                            ngay = string_util.string2date(daystr)
+                            # Ép kiểu date an toàn
+                            ngay = fields.Date.to_date(string_util.string2date(daystr))
                             weekday = ngay.weekday() + 2  # t2, t3, ... t8
                             thu_field = 't' + str(weekday)
 
-                            check_tu_ngay = (not ca.tu_ngay) or (ca.tu_ngay <= ngay)
-                            check_den_ngay = (not ca.den_ngay) or (ca.den_ngay >= ngay)
+                            # Ép kiểu ca.tu_ngay và ca.den_ngay về date trước khi so sánh
+                            ca_tu_ngay = fields.Date.to_date(ca.tu_ngay)
+                            ca_den_ngay = fields.Date.to_date(ca.den_ngay)
+
+                            check_tu_ngay = (not ca_tu_ngay) or (ca_tu_ngay <= ngay)
+                            check_den_ngay = (not ca_den_ngay) or (ca_den_ngay >= ngay)
                             if getattr(ca, thu_field, False) and check_tu_ngay and check_den_ngay:
                                 # ngay nay co di hoc
+                                songay_nghi +=1
                                 if (dm_ca.is_hoantien_khi_nghi == False
                                         and dm_ca.tyle_hoan_rieng <= 0):
                                     # không cho phep hoàn tiền khoản này
@@ -540,67 +571,69 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                 dongia = dm_ca.tien
                                 if dm_ca.is_tien_trongoi == True:
                                     # Chặn lỗi ZeroDivisionError
-                                    dongia = (dm_ca.tien / len(ngay_dihoc_kehoachs))
+                                    dongia = dm_ca.func_get_dongia_hocsinh(hocphi.hocsinh_id,ngay_dauthang,ngay_cuoithang)
 
-
-                                tien += (dongia/100)*tyle_hoantra
+                                tien += (dongia / 100) * tyle_hoantra
                                 soca += 1
-                                dongia = self.func_thongtin_duoctru_hocphi_tien(dongia,dm_ca, hocphi)
-            if soca_hocbu>0:
-                soca = soca - soca_hocbu
-                tien = soca * ca_hoc.tien
+                                dongia = self.func_thongtin_duoctru_hocphi_tien(dongia, dm_ca, hocphi)
 
+                if soca_hocbu > 0:
+                    soca = soca - soca_hocbu
+                    tien = soca * ca_hoc.tien
 
+                if ((tien > 0 and tyle_hoantra > 0)
+                        or soca_hocbu > 0):
+                    tien = self.func_thongtin_duoctru_hocphi_tien(tien, ca_hoc, hocphi)
+                    name = self.func_get_name_hoantra_hocphi_ca(hocphi, lydo
+                                                                , songay_nghi
+                                                                , ca_hoc
+                                                                , tyle_hoantra
+                                                                , soca
+                                                                , soca_hocbu
+                                                                , tien
+                                                                , dongia)
 
-            if ((tien >0 and tyle_hoantra>0)
-                    or soca_hocbu>0):
-                tien = self.func_thongtin_duoctru_hocphi_tien(tien,ca_hoc, hocphi)
-                name = self.func_get_name_hoantra_hocphi_ca(hocphi,lydo
-                                                               ,len(days)
-                                                               ,ca_hoc
-                                                               ,tyle_hoantra
-                                                               ,soca
-                                                               ,soca_hocbu
-                                                               ,tien
-                                                               ,dongia)
-
-                data = {
-                    'hocphi_id': hocphi.id,
-                    'name': name,
-                    'tien': tien
-                }
-                self.env['ekids.hocphi_duoctru'].create(data)
-
-
-
-
-
-    def func_tao_macdinh_hocphi_ca(self,hocphi,ca_canthieps,ngay_dihoc_kehoachs,ngay_dihoc_cosos):
-        if ca_canthieps:
-            dm_ca_ids = list(set(ca_canthieps.mapped('dm_ca_id')))
-            for dm_ca in dm_ca_ids:
-               soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca_canthieps,dm_ca,ngay_dihoc_kehoachs)
-               if soca > 0:
-                    tien =soca * dm_ca.tien
-                    # tien thu tron goi theo thang
-                    if dm_ca.is_tien_trongoi == True:
-                        # dongia = (dm_ca.tien/len(ngay_dihoc_kehoachs))
-                        soca_tren_ngay = soca /len(ngay_dihoc_kehoachs)
-                        lamtron = math.ceil(soca_tren_ngay)
-                        if lamtron <= 0:
-                            tien = dm_ca.tien
-                        else:
-                            tien = dm_ca.tien * lamtron
 
                     data = {
                         'hocphi_id': hocphi.id,
-                        'dm_ca_id':dm_ca.id,
-                        'soca':soca,
-                        'tien':tien,
-                        'desc': dm_ca.desc,
-
+                        'name': name,
+                        'tien': tien
                     }
-                    self.env['ekids.hocphi_ca'].create(data)
+                    self.env['ekids.hocphi_duoctru'].create(data)
+
+
+    def func_tao_macdinh_hocphi_ca(self, nghiles,hocphi, ca_canthieps
+                        ,ngay_dauthang,ngay_cuoithang):
+        if not ca_canthieps:
+            return
+
+
+        data_list = []
+
+        for dm_ca in ca_canthieps.mapped('dm_ca_id'):
+            soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca_canthieps, dm_ca,ngay_dauthang,ngay_cuoithang)
+            if soca <= 0:
+                continue
+
+            if dm_ca.is_tien_trongoi == False:
+                # 1. Tính theo buổi thông thường
+                tien = soca * dm_ca.tien
+            else:
+                # 2. Thu trọn gói tháng (Giữ nguyên 100% logic gốc của bạn)
+                dongia = dm_ca.func_get_dongia(nghiles,hocphi.hocsinh_id,ngay_dauthang,ngay_cuoithang)
+                tien = soca * dongia
+
+
+            data_list.append({
+                'hocphi_id': hocphi.id,
+                'dm_ca_id': dm_ca.id,
+                'soca': soca,
+                'tien': tien,
+                'desc': dm_ca.desc or '',
+            })
+
+        if data_list:
+            self.env['ekids.hocphi_ca'].create(data_list)
 
 
 
@@ -608,24 +641,26 @@ class HocPhiThangAbstractModel(models.AbstractModel):
     # 1. lay ra so ngay trong thang
     # tru di ngay co so không hoat dong
     # tinh toan so ngay nghi le va lam bu
-    def func_get_tong_soca_macdinh_trong_khoang_thoigian(self,ca_canthieps,dm_ca,ngay_dihoc_kehoachs):
+
+
+    def func_get_tong_soca_macdinh_trong_khoang_thoigian(self, ca_canthieps, dm_ca, tu_ngay,den_ngay):
         total = 0
-        if not ngay_dihoc_kehoachs:
-            return total
-
-        # 2. Duyệt qua từng ngày trong tháng cần tính
-        for key, ngay in ngay_dihoc_kehoachs.items():
-            weekday = ngay.weekday() + 2  # t2, t3, ... t8
+        ngay = tu_ngay
+        while ngay <= den_ngay:
+            ngay_val = fields.Date.to_date(ngay)
+            weekday = ngay_val.weekday() + 2  # t2, t3, ... t8
             thu_field = 't' + str(weekday)
-
-            # 3. Với mỗi ngày, kiểm tra xem có cấu hình nào khớp không
             for ca in ca_canthieps:
                 if ca.dm_ca_id.id == dm_ca.id:
+                    # Ép kiểu date an toàn cho ca.tu_ngay và ca.den_ngay
+                    ca_tu_ngay = fields.Date.to_date(ca.tu_ngay)
+                    ca_den_ngay = fields.Date.to_date(ca.den_ngay)
+
                     # Kiểm tra 2 điều kiện:
                     # - Có chọn thứ trong tuần đó (t2=True, ...)
                     # - Ngày nằm trong khoảng tu_ngay và den_ngay
-                    check_tu_ngay = (not ca.tu_ngay) or (ca.tu_ngay <= ngay)
-                    check_den_ngay = (not ca.den_ngay) or (ca.den_ngay >= ngay)
+                    check_tu_ngay = (not ca_tu_ngay) or (ca_tu_ngay <= ngay_val)
+                    check_den_ngay = (not ca_den_ngay) or (ca_den_ngay >= ngay_val)
 
                     if (getattr(ca, thu_field, False)
                             and check_tu_ngay
@@ -634,8 +669,11 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                         total += 1
                         # Nếu một học sinh chỉ học 1 ca đó trong 1 ngày, thoát vòng lặp ca để tránh cộng trùng
 
+            ngay += timedelta(days=1)
 
         return total
+
+
 
 
 
@@ -681,67 +719,88 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                         ,hocphi
                                         ,hocsinh
                                         ,thu_bantrus
-                                        ,ca_canthieps
-                                        ,ngay_dauthang
-                                        ,ngay_cuoithang
-                                        ,ngay_dihoc_cosos
+                                        ,thangtruoc_days
                                         ,nhatruong_nghi_bus
                                         ,nhatruong_nghis):
+        ngay_dauthang = thangtruoc_days[0]
+        ngay_cuoithang = thangtruoc_days[len(thangtruoc_days) - 1]
 
-        dihoc_kehoachs = (hocsinh_util
-                          .func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,ngay_dauthang, ngay_cuoithang))
+        is_hocthangtruoc = True
+        if hocsinh.ngay_nhaphoc > ngay_cuoithang:
+            is_hocthangtruoc = False
 
-        #TH0: Nhà trường cho nghỉ bù hoàn 100% cho học sinh giáo viên bị trừ lương
+        if (hocsinh.ngay_nhaphoc > ngay_dauthang
+                and hocsinh.ngay_nhaphoc < ngay_cuoithang):
+            ngay_dauthang = hocsinh.ngay_nhaphoc
 
-        if len(nhatruong_nghi_bus)>0:
-            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai('Nhà trường nghỉ lễ,bù,khác... ', hocphi
-                                                            , 100
-                                                            , thu_bantrus
-                                                            , nhatruong_nghi_bus, dihoc_kehoachs, ngay_dihoc_cosos)
+        if hocsinh.ngay_nghihoc and hocsinh.ngay_nghihoc < ngay_cuoithang:
+            ngay_cuoithang = hocsinh.ngay_nghihoc
 
-
-
-        #TH1: Tính học phí được trừ: Nhà trường cho nghi
-
-        if len(nhatruong_nghis) > 0:
-            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai('Nhà trường nghỉ ',hocphi
-                                                        ,coso.tyle_tralai_coso_chonghi
-                                                        ,thu_bantrus
-                                                        ,nhatruong_nghis,dihoc_kehoachs,ngay_dihoc_cosos)
-        # TH2: học sinh xin nghỉ phép
-        nghipheps =(hocsinh_util
-                    .func_get_nghipheps_trong_khoang_thoigian(self,coso
-                                                              ,hocsinh
-                                                              ,nghiles
-                                                              ,nhatruong_nghis
-                                                              ,ngay_dauthang
-                                                              ,ngay_cuoithang))
-        if len(nghipheps) > 0:
-
-            self.func_func_hoantra_hocphi_do_nghiphep(hocphi
-                                                            , coso.tyle_tralai_hs_nghiphep
-                                                            , thu_bantrus
-                                                            , ca_canthieps
-                                                            , nghipheps
-                                                            , dihoc_kehoachs
-                                                            , ngay_dihoc_cosos)
+        if is_hocthangtruoc == True:
+            ca_canthieps = hocsinh_util.func_get_hocsinh_ca_canthieps(self, hocsinh, ngay_dauthang,
+                                                                                  ngay_cuoithang)
 
 
-        #TH3: Nghỉ đột suất, điểm danh nghỉ
-        diemdanh_nghis= self.func_get_ngay_diemdanh_nghi_trong_khoang_thoigian(hocsinh
-                                                                                               ,nghiles
-                                                                                               ,nghipheps
-                                                                                               ,dihoc_kehoachs)
-        if len(diemdanh_nghis) > 0:
-            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai('Vắng ', hocphi
-                                                            , coso.tyle_tralai_hs_vangmat
+            dihoc_kehoachs = (hocsinh_util
+                              .func_get_ngay_dihoc_kehoachs(coso, nghiles,hocsinh,ngay_dauthang, ngay_cuoithang,False))
+
+            #TH0: Nhà trường cho nghỉ bù hoàn 100% cho học sinh giáo viên bị trừ lương
+
+            if len(nhatruong_nghi_bus)>0:
+                self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai('Nhà trường nghỉ lễ,bù,khác... ', hocphi
+                                                                , 100
+                                                                , thu_bantrus
+                                                                , nhatruong_nghi_bus, dihoc_kehoachs, ngay_dauthang,ngay_cuoithang)
+
+
+
+            #TH1: Tính học phí được trừ: Nhà trường cho nghi
+
+            if len(nhatruong_nghis) > 0:
+                self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai('Nhà trường nghỉ ',hocphi
+                                                            ,coso.tyle_tralai_coso_chonghi
                                                             ,thu_bantrus
-                                                            , diemdanh_nghis
-                                                            , dihoc_kehoachs
-                                                            ,ngay_dihoc_cosos)
+                                                            ,nhatruong_nghis,dihoc_kehoachs,ngay_dauthang,ngay_cuoithang)
+            # TH2: học sinh xin nghỉ phép
+            nghipheps =(hocsinh_util
+                        .func_get_nghipheps_trong_khoang_thoigian(self,coso
+                                                                  ,hocsinh
+                                                                  ,nghiles
+                                                                  ,nhatruong_nghis
+                                                                  ,ngay_dauthang
+                                                                  ,ngay_cuoithang))
+            if len(nghipheps) > 0:
 
-        # Bổ sung tiền ca tăng cường tháng trước
-        self.func_tao_hocphi_ca_tangcuong_thangtruoc(hocphi,ngay_dauthang,ngay_cuoithang)
+                self.func_func_hoantra_hocphi_do_nghiphep(hocphi
+                                                                , coso.tyle_tralai_hs_nghiphep
+                                                                , thu_bantrus
+                                                                , ca_canthieps
+                                                                , nghipheps
+                                                                , dihoc_kehoachs
+                                                                , ngay_dauthang
+                                                                , ngay_cuoithang)
+
+
+            #TH3: Nghỉ đột suất, điểm danh nghỉ
+            diemdanh_nghis= self.func_get_ngay_diemdanh_nghi_trong_khoang_thoigian(hocsinh
+                                                                                                   ,nghiles
+                                                                                                   ,nghipheps
+                                                                                                   ,dihoc_kehoachs)
+            if len(diemdanh_nghis) > 0:
+                self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai('Vắng ', hocphi
+                                                                , coso.tyle_tralai_hs_vangmat
+                                                                ,thu_bantrus
+                                                                , diemdanh_nghis
+                                                                , dihoc_kehoachs
+                                                                ,ngay_dauthang
+                                                                ,ngay_cuoithang)
+
+            # Bổ sung tiền ca tăng cường tháng trước
+            self.func_tao_hocphi_ca_tangcuong_thangtruoc(hocphi,ngay_dauthang,ngay_cuoithang)
+
+            if coso.is_thu_hocphi_dauthang == False:
+                #tinh lại thời gian đi học cho đúng
+                hocphi.ngay_dihoc = hocphi.ngay_dihoc - len(diemdanh_nghis) -  len(nghipheps)
 
     def func_tao_hocphi_ca_tangcuong_thangtruoc(self,hocphi,tu_ngay,den_ngay):
         ca2ngays= self.env['ekids.diemdanh_ca2ngay'].search([
@@ -766,12 +825,14 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 }
                 self.env['ekids.hocphi_bantru'].create(data)
 
-    def func_func_hoantra_hocphi_do_nghiphep(self,hocphi,tyle_hoantra
-                                                               ,thu_bantrus
-                                                               ,ca_canthieps
-                                                               ,nghipheps
-                                                               ,ngay_dihoc_kehoachs
-                                                               ,ngay_dihoc_cosos):
+    def func_func_hoantra_hocphi_do_nghiphep(self
+                                               ,hocphi,tyle_hoantra
+                                               ,thu_bantrus
+                                               ,ca_canthieps
+                                               ,nghipheps
+                                               ,ngay_dihoc_kehoachs
+                                               ,ngay_dauthang
+                                               ,ngay_cuoithang):
         if nghipheps:
             #TH2 TRỪ TIỀN CA NGHỈ CÓ PHÉP.
             datas={}
@@ -810,11 +871,14 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                                       ,int(tyle)
                                                                       ,values
                                                                       ,ca_canthieps
-                                                                      ,ngay_dihoc_kehoachs
-                                                                      ,ngay_dihoc_cosos)
+                                                                      ,ngay_dauthang
+                                                                      ,ngay_cuoithang)
 
 
-    def func_hoantra_hocphi_do_diemdanh_nghi_theo_loai(self,lydo,hocphi,tyle_hoantra,thu_bantrus,ngaynghis,ngay_dihoc_kehoachs,ngay_dihoc_cosos):
+    def func_hoantra_hocphi_do_diemdanh_nghi_theo_loai(self,lydo,hocphi,tyle_hoantra,thu_bantrus,ngaynghis
+                                                       ,ngay_dihoc_kehoachs
+                                                       ,ngay_dauthang
+                                                       ,ngay_cuoithang):
             #TH1: nghỉ và thiết lập tỷ lệ hoàn trả
         if ngaynghis:
             #TH1: TRU BAN TRU
@@ -824,7 +888,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             #TH2: TRỪ CA CAN THIEP
             days = list(ngaynghis.keys())
             # lấy cả các ca nghỉ, và sẽ dạy bù phục vụ thông báo
-            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai_ca(lydo,hocphi, tyle_hoantra, days, ngay_dihoc_kehoachs,ngay_dihoc_cosos)
+            self.func_hoantra_hocphi_do_diemdanh_nghi_theo_loai_ca(lydo,hocphi, tyle_hoantra, days,ngay_dauthang,ngay_cuoithang)
 
 
 
@@ -835,7 +899,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
 
 
-    def func_hoantra_hocphi_do_diemdanh_nghi_theo_loai_ca(self,lydo, hocphi, tyle_hoantra_chung, days, ngay_dihoc_kehoachs,ngay_dihoc_cosos):
+    def func_hoantra_hocphi_do_diemdanh_nghi_theo_loai_ca(self,lydo, hocphi, tyle_hoantra_chung, days
+                                                          ,ngay_dauthang,ngay_cuoithang):
         #tao mac dinh ca2ngay ngay nghi
         if days:
             for day in days:
@@ -854,8 +919,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         if not ca2ngays:
             return datas
 
-        # Tính số ngày học một lần để tối ưu hiệu năng
-        so_ngay_hoc = len(ngay_dihoc_kehoachs)
+
 
         for ca2ngay in ca2ngays:
             dm_ca = ca2ngay.hocphi_dm_ca_id
@@ -877,7 +941,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             tien_mot_ca = dm_ca.tien
             if dm_ca.is_tien_trongoi:
                 # Chặn lỗi ZeroDivisionError
-                tien_mot_ca = (dm_ca.tien / so_ngay_hoc) if so_ngay_hoc > 0 else 0.0
+                tien_mot_ca = dm_ca.func_get_dongia_hocsinh(hocphi.hocsinh_id,ngay_dauthang,ngay_cuoithang)
+
             if ca2ngay.trangthai == '3':
                 tien_mot_ca=0
 
@@ -914,22 +979,23 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
                     tien_duoc_hoan_tra = (value['tien'] / 100) * value['tyle_hoantra']
                     tien = self.func_thongtin_duoctru_hocphi_tien(tien_duoc_hoan_tra,value['dm_ca'], hocphi)
-                    dongia = value['dongia']
-                    name =self.func_get_name_hoantra_hocphi_ca(hocphi,lydo
-                                                               ,len(days)
-                                                               ,value['dm_ca']
-                                                               ,value['tyle_hoantra']
-                                                               ,value['soca']
-                                                               ,value['ca_bu']
-                                                               ,tien
-                                                               ,dongia)
-                    #tao ban ghi
-                    data = {
-                        'hocphi_id': hocphi.id,
-                        'name': name,
-                        'tien': tien
-                    }
-                    self.env['ekids.hocphi_duoctru'].create(data)
+                    if tien >0:
+                        dongia = value['dongia']
+                        name =self.func_get_name_hoantra_hocphi_ca(hocphi,lydo
+                                                                   ,len(days)
+                                                                   ,value['dm_ca']
+                                                                   ,value['tyle_hoantra']
+                                                                   ,value['soca']
+                                                                   ,value['ca_bu']
+                                                                   ,tien
+                                                                   ,dongia)
+                        #tao ban ghi
+                        data = {
+                            'hocphi_id': hocphi.id,
+                            'name': name,
+                            'tien': tien
+                        }
+                        self.env['ekids.hocphi_duoctru'].create(data)
 
     from odoo.osv import expression
 
@@ -940,7 +1006,9 @@ class HocPhiThangAbstractModel(models.AbstractModel):
     def func_thongtin_duoctru_hocphi_tien(self,tien,obj,hocphi):
         if obj.is_giam_hocphi == True:
             hocsinh =hocphi.hocsinh_id
-            if hocsinh.dm_chinhsach_giam_id:
+            if (hocsinh.dm_chinhsach_giam_id
+                    and hocsinh.dm_chinhsach_giam_id.is_giam_theo_tyle == True):
+                # phai giam theo ty le con lai giam theo tiền thì thôi
                 tyle =hocsinh.dm_chinhsach_giam_id.tyle_giam
                 if tyle >0:
                     tien = (tien/100)* (100-tyle)
@@ -959,6 +1027,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
             dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
             if (dm_chinhsach_giam
+                    and dm_chinhsach_giam.is_giam_theo_tyle == True
                     and dm_chinhsach_giam.tyle_giam > 0
                     and ca.is_giam_hocphi == True):
                 name += " (Đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"
@@ -982,6 +1051,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
 
         if (dm_chinhsach_giam
+                and dm_chinhsach_giam.is_giam_theo_tyle == True
                 and dm_chinhsach_giam.tyle_giam > 0
                 and thu_bantru.is_giam_hocphi == True):
             name += " (Đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"

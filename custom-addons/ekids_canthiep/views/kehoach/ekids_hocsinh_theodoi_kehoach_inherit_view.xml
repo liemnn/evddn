@@ -11,7 +11,15 @@
 
                 <!-- ================= 1. THÔNG TIN HỌC SINH ================= -->
                 <field name="sequence" width="35" string="TT"/>
-                <field name="name" width="160" class="fw-bold text-wrap" string="Họ và tên"/>
+                <field name="name" width="160"  string="Họ và tên"/>
+                <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
+                            string=""
+                            width="30"
+                            type="action"
+                            icon="fa-medkit"
+                            class="btn-outline-danger"
+                            title="Hồ sơ can thiệp của trẻ"
+                            />
                 <field name="gioitinh" width="70" string="Giới tính"/>
                 <field name="tuoi" optional="hide" string="Tuổi"/>
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
@@ -30,7 +38,15 @@
                 <field name="ten_kehoach" string="Của tháng" width="105" class="fw-bold text-wrap"/>
                 <field name="trangthai_kehoach" string="Kế hoạch" width="110" widget="badge" class="text-wrap"/>
 
-
+                <field name="gv_canthiep_ids"
+                   string="Giáo viên"
+                   width="110"
+                   widget="many2many_tags"
+                   readonly="1"
+                   options="{'no_open': True}"/>
+                <field name="gv_kiemduyet_id"
+                        width="100"
+                       string="Kiểm duyệt"/>
 
 
                 <field name="tong_kehoach" string="Tổng kế hoạch" width="55" class="text-center fw-bold"/>
@@ -43,6 +59,26 @@
                         invisible="tong_kehoach == 0"
                         context="{'default_context_type':'0'}"
                         title="Xem toàn bộ [Kế hoạch] của trẻ"/>
+
+                <field name="kehoach_thangtruoc"
+                       string="Tháng trước"
+                       widget="badge"
+                       decoration-success="kehoach_thangtruoc == 'Có'"
+                       decoration-danger="kehoach_thangtruoc == 'Không'"/>
+
+                <field name="kehoach_thangnay"
+                       string="Tháng này"
+                       widget="badge"
+                       decoration-success="kehoach_thangnay == 'Có'"
+                       decoration-danger="kehoach_thangnay == 'Không'"/>
+
+                <field name="kehoach_thangsau"
+                       string="Tháng sau"
+                       widget="badge"
+                       decoration-success="kehoach_thangsau == 'Có'"
+                       decoration-danger="kehoach_thangsau == 'Không'"/>
+
+
 
 
 

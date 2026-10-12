@@ -18,7 +18,16 @@ except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
 
 
-
+EXPORT_MAP_DIEMDANH = {
+    "Đi học": "+",
+    "Học sinh nghỉ có phép": "-",
+    "Nghỉ không phép": "-",
+    "Học nửa buổi": "+/-",
+    "Nghỉ lễ": "N",
+    "Nhà trường cho nghỉ": "N",
+    "Đi học - Có ca [Học bù /Tăng cường]": "+",
+    "Không đăng ký học -Nghỉ": "N",
+}
 
 class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
     _name = "ekids.diemdanh_hocsinh2thang"
@@ -34,7 +43,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên",ondelete="cascade",
                                  domain="[('coso_id','=',coso_id)]",required=True)
 
-
+    hs_hinhthuc_theohoc = fields.Char(compute="_compute_hocsinh",)
 
     # --- sinh tự động các field d1..d31 và is_d1_nghi..is_d31_nghi ---
     # sinh field d1..d31 và is_d1_nghi..is_d31_nghi
@@ -89,7 +98,26 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
 
     is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
 
+    # 🌟 OVERRIDE export_data: Tự động mã hóa thành ký tự ngắn khi xuất file Excel
+    @api.model
+    def export_data(self, fields_to_export):
+        response = super().export_data(fields_to_export)
+        datas = response.get('datas', [])
+        for row in datas:
+            for idx, cell_val in enumerate(row):
+                if isinstance(cell_val, str) and cell_val in EXPORT_MAP_DIEMDANH:
+                    row[idx] = EXPORT_MAP_DIEMDANH[cell_val]
+        return response
 
+    def _compute_hocsinh(self):
+        label_map = {
+            "0": "Bán trú",
+            "1": "Cá nhân",
+            "2": "Khác",
+        }
+        for record in self:
+            val = record.hocsinh_id.hinhthuc_theohoc
+            record.hs_hinhthuc_theohoc = label_map.get(str(val), "")
     def _compute_is_dl_locked(self):
         today = date.today()
         sothang_today = (today.year * 12) + today.month
@@ -256,7 +284,8 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                 ngay = date(nam,thang,day)
                 weekday =ngay.weekday()+2
                 field_hs = "hd_t"+str(weekday)
-                is_hs_hoc = getattr(hocsinh,field_hs)
+                #is_hs_hoc = getattr(hocsinh,field_hs)
+                is_hs_hoc = hocsinh_util.func_is_hocsinh_dihoc(hocsinh,ngay)
                 giatri_old = getattr(self,field_ngay_giatri)
                 if (coso_hoatdongs.get(ngay) == False
                         or giatri_old == '0'
@@ -264,12 +293,12 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                     continue
                 elif (hocsinh.is_ngaydihoc_rieng==True and is_hs_hoc ==False):
                     key = "["+str(ngay)+"]"
-                    if (self.field_sua != None and (key in str(self.field_sua))):
-                        continue
-                    else:
-                        setattr(self, field_ngay_giatri, "10")
-                        value =str(self.field_sua) + key
-                        setattr(self, "field_sua", value)
+                    #if (self.field_sua != None and (key in str(self.field_sua))):
+                        #continue
+                    #else:
+                    setattr(self, field_ngay_giatri, "10")
+                    value =str(self.field_sua) + key
+                    setattr(self, "field_sua", value)
 
                 else:
                     giatri_new = self.func_is_tinhtoan_giatri_moi(ngay,nghiles,coso_hoatdongs,nghipheps,ca_tangcuongs)
@@ -297,8 +326,8 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
                     is_tangcuong = self.func_is_co_ca_hocbu_tangcuong(ca_tangcuongs,self.hocsinh_id.id,ngay)
                     if is_tangcuong ==True:
                         giatri="11"
-                    is_ca_ngay =hocsinh_util.func_is_co_ca_trong_ngay(self.hocsinh_id,ngay)
-                    if is_ca_ngay == False:
+                    is_hocsinh_dihoc =hocsinh_util.func_is_hocsinh_dihoc(self.hocsinh_id,ngay)
+                    if is_hocsinh_dihoc == False:
                         giatri="10"
 
         return giatri
@@ -379,7 +408,7 @@ class DiemDanhHocSinh2Thang(models.Model,DiemDanhHocSinh2ThangAbstractModel):
         coso_nghiles_2 = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, self.coso_id, ['0','2'], ngay_dauthang,
                                                                           ngay_cuoithang)
 
-        ngay_dihoc_kehoachs = hocsinh_util.func_get_ngay_dihoc_kehoachs(self.coso_id,coso_nghiles_2,self.hocsinh_id,ngay_dauthang,ngay_cuoithang)
+        ngay_dihoc_kehoachs = hocsinh_util.func_get_ngay_dihoc_kehoachs(self.coso_id,coso_nghiles_2,self.hocsinh_id,ngay_dauthang,ngay_cuoithang,True)
         ngay_dihoc_cosos= hocsinh_util.func_get_ngay_dihoc_cua_coso(self.coso_id, coso_nghiles, ngay_dauthang,ngay_cuoithang)
 
         self.tong_dihoc_kehoach = len(ngay_dihoc_kehoachs)

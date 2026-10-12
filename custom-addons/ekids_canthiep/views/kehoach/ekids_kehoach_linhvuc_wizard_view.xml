@@ -153,9 +153,7 @@
                                                 context="{'default_wizard_id': parent.id}"
                                                 title="Gỡ bỏ mục tiêu này khỏi danh sách bổ sung"/>
 
-                                        <field name="tieuchi_chuadat" string="Chưa đạt" optional="hide" decoration-danger="True"/>
-                                        <field name="tieuchi_hinhthanh" string="hình thành" optional="hide" decoration-warning="True"/>
-                                        <field name="tieuchi_dat" string="Đạt" optional="hide" decoration-success="True"/>
+
 
                                     </list>
                                 </field>

@@ -6,6 +6,7 @@ import ast
 import uuid
 from .ekids_luong_func_abstractmodel import LuongFuncAbstractModel
 from .ekids_luong_formula_abstractmodel import LuongFolmulaAbstractModel
+from .ekids_luong_thang_baocao_model import LuongThangBaoCaoAbstractModel
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -19,7 +20,9 @@ try:
 except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
 
-class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
+class Luong(models.Model,LuongFuncAbstractModel
+    ,LuongFolmulaAbstractModel
+    ,LuongThangBaoCaoAbstractModel):
     _name = 'ekids.luong'
     _description = 'Luong Giáo viên'
     _order = "giaovien_id asc, id desc"
@@ -355,6 +358,24 @@ class Luong(models.Model,LuongFuncAbstractModel,LuongFolmulaAbstractModel):
 
             }
         }
+
+    def action_in_chi_tiet_luong(self):
+
+        context = self.env.context
+        coso_id = context.get("default_coso_id")
+        thang = context.get("default_thang")
+        nam = context.get("default_nam")
+        if (coso_id and thang and nam):
+            luong2thang = self.env['ekids.luong_thang'].search(
+                [('coso_id', '=', coso_id)
+                    , ('nam_id.name', '=', str(nam))
+                    , ('name', '=', str(thang))
+
+                 ],limit=1)
+            if luong2thang:
+                return self.env.ref('ekids_giaovien.action_luong_thang_baocao').report_action(luong2thang)
+
+
 
     def write(self, vals):
         if 'trangthai' in vals:

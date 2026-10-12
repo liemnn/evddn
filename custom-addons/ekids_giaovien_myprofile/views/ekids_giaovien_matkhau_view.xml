@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ekids_giaovien_myprofile.giaovien_matkhau_form" model="ir.ui.view">
+        <field name="name">giaovien_matkhau.form</field>
+        <field name="model">ekids.giaovien_matkhau</field>
+        <field name="arch" type="xml">
+            <form string="Đổi mật khẩu cá nhân" class="o_pwd_custom_form">
+
+                <style>
+                    /* Thiết kế Modal chuẩn giao diện SaaS cao cấp */
+                    .o_pwd_custom_form .modal-dialog {
+                        max-width: 480px !important;
+                    }
+                    .o_pwd_custom_form .modal-content {
+                        border-radius: 20px !important;
+                        border: none !important;
+                        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15) !important;
+                        overflow: hidden;
+                    }
+                    .o_pwd_custom_form .modal-body {
+                        padding: 28px !important;
+                        background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%) !important;
+                    }
+                    .o_pwd_custom_form .modal-footer {
+                        background: #FFFFFF !important;
+                        border-top: 1px solid #E2E8F0 !important;
+                        padding: 16px 28px !important;
+                    }
+
+                    /* Header Banner tinh tế */
+                    .pwd-banner {
+                        text-align: center;
+                        margin-bottom: 24px;
+                    }
+                    .pwd-icon-wrapper {
+                        width: 60px;
+                        height: 60px;
+                        background: linear-gradient(135deg, #0EA5E9 0%, #0369A1 100%);
+                        border-radius: 50%;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #FFFFFF;
+                        font-size: 24px;
+                        box-shadow: 0 8px 20px rgba(3, 105, 161, 0.3);
+                        margin-bottom: 12px;
+                    }
+                    .pwd-banner h3 {
+                        font-size: 18px;
+                        font-weight: 800;
+                        color: #0F172A;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                        margin-bottom: 4px;
+                    }
+                    .pwd-banner p {
+                        font-size: 13.5px;
+                        color: #64748B;
+                        margin: 0;
+                    }
+
+                    /* Card chứa từng vùng nhập liệu */
+                    .pwd-card-box {
+                        background: #FFFFFF;
+                        border: 1px solid #E2E8F0;
+                        border-radius: 14px;
+                        padding: 18px 20px;
+                        margin-bottom: 14px;
+                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+                    }
+                    .pwd-card-label {
+                        font-size: 12px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        color: #475569;
+                        margin-bottom: 10px;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                    }
+                    .pwd-card-label i {
+                        color: #0284C7;
+                    }
+
+                    /* Tùy chỉnh field Odoo to rõ, sắc nét */
+                    .o_pwd_custom_form .o_form_label {
+                        display: none !important; /* Ẩn label mặc định của odoo để dùng style riêng */
+                    }
+                    .o_pwd_custom_form .o_field_widget {
+                        width: 100% !important;
+                    }
+                    .o_pwd_custom_form input.o_input {
+                        border-radius: 10px !important;
+                        border: 1px solid #CBD5E1 !important;
+                        padding: 12px 16px !important;
+                        font-size: 15px !important;
+                        background-color: #F8FAFC !important;
+                        height: 46px !important;
+                        color: #0F172A !important;
+                        transition: all 0.2s ease;
+                    }
+                    .o_pwd_custom_form input.o_input:focus {
+                        border-color: #0284C7 !important;
+                        background-color: #FFFFFF !important;
+                        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.12) !important;
+                    }
+
+                    /* Nút bấm hiện đại */
+                    .btn-save-custom {
+                        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+                        border: none !important;
+                        border-radius: 10px !important;
+                        padding: 10px 22px !important;
+                        font-weight: 700 !important;
+                        font-size: 14px !important;
+                        color: #FFFFFF !important;
+                        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+                    }
+                    .btn-save-custom:hover {
+                        background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
+                    }
+                    .btn-cancel-custom {
+                        background: #F1F5F9 !important;
+                        border: 1px solid #CBD5E1 !important;
+                        border-radius: 10px !important;
+                        padding: 10px 18px !important;
+                        font-weight: 600 !important;
+                        font-size: 14px !important;
+                        color: #475569 !important;
+                    }
+                    .btn-cancel-custom:hover {
+                        background: #E2E8F0 !important;
+                        color: #0F172A !important;
+                    }
+
+                    @media (max-width: 768px) {
+                        .o_pwd_custom_form .modal-dialog {
+                            margin: 10px !important;
+                            max-width: 100% !important;
+                        }
+                        .pwd-card-box {
+                            padding: 14px;
+                        }
+                    }
+                </style>
+
+                <sheet>
+                    <!-- BANNER HEADER -->
+                    <div class="pwd-banner">
+                        <div class="pwd-icon-wrapper">
+                            <i class="fa fa-shield"/>
+                        </div>
+                        <h3>Đổi Mật Khẩu Cá Nhân</h3>
+                        <p>Bảo mật tài khoản của bạn bằng mật khẩu an toàn</p>
+                    </div>
+
+                    <!-- CARD 1: MẬT KHẨU HIỆN TẠI -->
+                    <div class="pwd-card-box">
+                        <div class="pwd-card-label">
+                            <i class="fa fa-lock"/> Mật khẩu hiện tại
+                        </div>
+                        <field name="old_password" password="True" placeholder="Nhập mật khẩu đang sử dụng..."/>
+                    </div>
+
+                    <!-- CARD 2: MẬT KHẨU MỚI -->
+                    <div class="pwd-card-box">
+                        <div class="pwd-card-label">
+                            <i class="fa fa-key"/> Mật khẩu mới
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <span style="font-size: 12px; color: #64748B; display: block; margin-bottom: 4px;">Mật khẩu mới (tối thiểu 6 ký tự)</span>
+                            <field name="new_password" password="True" placeholder="Nhập mật khẩu mới..."/>
+                        </div>
+                        <div>
+                            <span style="font-size: 12px; color: #64748B; display: block; margin-bottom: 4px;">Xác nhận mật khẩu mới</span>
+                            <field name="confirm_password" password="True" placeholder="Nhập lại chính xác mật khẩu mới..."/>
+                        </div>
+                    </div>
+
+                </sheet>
+
+                <footer>
+                    <button string="Hủy bỏ" class="btn btn-cancel-custom" special="cancel"/>
+                    <button name="action_xacnhan_doi_matkhau" string="Đổi mật khẩu" type="object" class="btn btn-save-custom"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="ekids_giaovien_myprofile.giaovien_matkhau_action" model="ir.actions.act_window">
+        <field name="name">Đổi mật khẩu</field>
+        <field name="res_model">ekids.giaovien_matkhau</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -23,6 +23,7 @@ except ImportError as e:
 class MucTieu(models.Model):
     _name = "ekids.ct_muctieu"
     _description = "Lĩnh vực"
+    _log_access = False
     _order = "sequence asc,id desc"
 
     coso_id = fields.Many2one("ekids.coso", related="linhvuc_id.coso_id", string="Cơ sở", required=True,ondelete="restrict")
@@ -54,7 +55,25 @@ class MucTieu(models.Model):
 
     trangthai_canthiep = fields.Selection([("0", "Chưa can thiệp")
                                      ,("1", "Đạt(+) từ tháng trước")
-                                     ,("2", "Đã có trong kế hoạch giáo viên khác")],compute="_compute_trangthai_canthiep" )
+                                     ,("2", "Hiện đang can thiệp")],compute="_compute_trangthai_canthiep" )
+
+    is_co_thietke = fields.Boolean(compute="_compute_is_co_thietke")
+    is_co_chucnang = fields.Boolean(compute="_compute_is_co_thietke")
+
+    def _compute_is_co_thietke(self):
+        for record in self:
+            is_co_thietke = True
+            is_co_chucnang = True
+            if (not record.thietke
+                    or record.thietke in [kehoach_util.EMPTY_HTML]):
+                is_co_thietke = False
+            if (not record.chucnang
+                or record.chucnang in [kehoach_util.EMPTY_HTML]):
+                is_co_chucnang = False
+
+            record.is_co_chucnang = is_co_chucnang
+            record.is_co_thietke = is_co_thietke
+
 
     @api.depends('linhvuc_id', 'sequence')
     def _compute_index(self):

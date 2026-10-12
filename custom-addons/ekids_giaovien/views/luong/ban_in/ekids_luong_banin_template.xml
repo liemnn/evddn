@@ -6,9 +6,10 @@
 
                 <div class="page" style="font-family: Arial, sans-serif;">
 
-                    <div class="btn-print-container" style="text-align:right; margin-bottom: 20px;">
+                    <!-- NÚT IN (Ẩn khi in ấn) -->
+                    <div class="btn-print-container text-end mb-2 px-2 print-hide" style="text-align: right;">
                         <button onclick="window.print()"
-                                style="width:30px; height:auto; border:0px; background:transparent;"
+                                style="width:30px; height:auto; border:0px; background:transparent; cursor: pointer;"
                                 title="In báo cáo" type="button">
                             <i class="fa fa-print" style="font-size: 18px; color: #555;"></i>
                         </button>
@@ -24,35 +25,47 @@
                         </tr>
                     </table>
 
-                    <table width="100%" border="1" cellspacing="0" cellpadding="0" class="box-table">
-                        <thead>
-                            <tr>
-                                <t t-foreach="table_data[0]" t-as="header">
-                                    <th><t t-esc="header"/></th>
-                                </t>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <t t-foreach="table_data[1:]" t-as="row">
+                    <!-- KHUNG CUỘN KẾT HỢP GHIM HEADER VÀ CỘT TÊN GIÁO VIÊN -->
+                    <div class="table-responsive">
+                        <table width="100%" border="1" cellspacing="0" cellpadding="0" class="box-table">
+                            <thead>
                                 <tr>
-                                    <t t-foreach="enumerate(row)" t-as="item">
-                                        <td t-attf-class="col-#{item[0]}">
-                                            <t t-esc="item[1]"/>
-                                        </td>
+                                    <t t-foreach="table_data[0]" t-as="header">
+                                        <th t-attf-class="#{ 'sticky-col-header' if header_index == 1 else '' }">
+                                            <t t-esc="header"/>
+                                        </th>
                                     </t>
                                 </tr>
-                            </t>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="table_data[1:]" t-as="row">
+                                    <tr>
+                                        <t t-foreach="enumerate(row)" t-as="item">
+                                            <td t-attf-class="col-#{item[0]} #{ 'sticky-col-cell' if item[0] == 1 else '' }">
+                                                <t t-esc="item[1]"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <style>
-                        /* --- 1. ÉP KHỔ GIẤY A4 VÀ LỀ CHUẨN KHI IN --- */
+                        /* --- 1. ÉP KHỔ GIẤY A4 NGANG VÀ TRÀN VIỀN 100% --- */
                         @page {
-                            size: A4 landscape; /* Lương nhiều cột (11 cột) nên tôi gán landscape (khổ ngang) cho an toàn, nếu anh muốn in dọc thì xóa chữ landscape đi nhé */
+                            size: A4 landscape;
                             margin: 10mm 10mm 10mm 10mm !important;
                         }
 
-                        /* --- 2. CÁC THIẾT LẬP KHI MÁY IN CHẠY (Ẩn nút, ép sát lề) --- */
+                        body, .o_report_layout_standard, .o_layout, .page {
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            margin: 0 !important;
+                            padding: 5px !important;
+                        }
+
+                        /* --- 2. CÁC THIẾT LẬP KHI MÁY IN CHẠY --- */
                         @media print {
                             .btn-print-container {
                                 display: none !important;
@@ -61,6 +74,10 @@
                                 margin-top: 0px !important;
                                 padding-top: 0px !important;
                             }
+                            /* Khi in thì bỏ sticky để bảng trải dài tự nhiên trên khổ giấy A4 */
+                            .box-table th, .sticky-col-header, .sticky-col-cell {
+                                position: static !important;
+                            }
                         }
 
                         /* --- 3. FIX LỖI FONT VÀ ICON --- */
@@ -68,39 +85,73 @@
                             font-family: Arial, sans-serif !important;
                         }
 
-                        /* --- 4. CSS BẢNG BIỂU --- */
-                        .box-table {
-                            border-collapse: collapse;
+                        /* --- 4. KHUNG CUỘN VÀ TÍNH NĂNG STICKY (GHIM HEADER  CỘT TÊN) --- */
+                        .table-responsive {
+                            width: 100% !important;
+                            max-height: 75vh; /* Giới hạn chiều cao khung cuộn dọc trên màn hình */
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            overflow: auto; /* Cho phép cuộn cả dọc và ngang mượt mà */
+                            -webkit-overflow-scrolling: touch;
                         }
 
+                        .box-table {
+                            border-collapse: collapse;
+                            width: 100% !important;
+                            max-width: none !important;
+                            table-layout: auto;
+                        }
+
+                        /* Ghim cố định Header (Hàng tiêu đề) khi cuộn dọc */
                         .box-table th {
+                            position: sticky;
+                            top: 0;
+                            z-index: 3;
                             background-color: #f2f2f2;
-                            color: #212529; /* Đã fix lỗi thiếu dấu chấm phẩy */
+                            color: #212529;
                             border: 1px solid #ccc;
-                            font-size: 14px; /* Chỉnh nhỏ lại 1 chút vì bảng lương có tận 11 cột */
+                            font-size: 14px;
                             height: 35px;
                             padding: 5px;
                             text-align: center;
+                            white-space: nowrap;
                         }
 
                         .box-table td {
                             border: 1px solid #ccc;
                             font-size: 13px;
                             padding: 3px;
+                            white-space: nowrap;
+                            background-color: #ffffff; /* Đảm bảo nền trắng không bị lọt chữ phía sau */
                         }
 
-                        /* --- 5. ĐỘ RỘNG CÁC CỘT (Giữ nguyên của anh) --- */
+                        /* Ghim cố định Cột 1 (Tên giáo viên) khi cuộn ngang */
+                        .sticky-col-header {
+                            left: 0;
+                            z-index: 4; /* Nằm đè lên cả header và cột khác khi giao nhau */
+                            background-color: #e9ecef !important;
+                        }
+
+                        .sticky-col-cell {
+                            position: sticky;
+                            left: 0;
+                            z-index: 2;
+                            background-color: #f8f9fa !important; /* Màu nền phân biệt cho cột ghim */
+                            font-weight: bold;
+                        }
+
+                        /* --- 5. ĐỘ RỘNG CÁC CỘT --- */
                         td.col-0 { width: 5%; text-align: center !important; padding: 5px !important; }
-                        td.col-1 { width: 18%; text-align: left !important; padding: 5px !important; }
+                        td.col-1 { width: 18%; text-align: left !important; padding: 5px !important; white-space: normal !important; min-width: 140px; }
                         td.col-2 { width: 5%; text-align: center !important; padding: 5px !important; }
-                        td.col-3 { width: 5%; text-align: center !important;padding: 5px !important; }
-                        td.col-4 { width: 5%; text-align: right !important;padding: 5px !important; }
-                        td.col-5 { width: 10%; text-align: right !important;padding: 5px !important; }
-                        td.col-6 { width: 10%; text-align: right !important;padding: 5px !important; }
-                        td.col-7 { width: 10%; text-align: right !important;padding: 5px !important; }
-                        td.col-8 { width: 10%; text-align: right !important;padding: 5px !important; }
-                        td.col-9 { width: 10%; text-align: right !important;padding: 5px !important; font-weight: bold;}
-                        td.col-10{ width: 10%; text-align: right !important;padding: 5px !important; }
+                        td.col-3 { width: 5%; text-align: center !important; padding: 5px !important; }
+                        td.col-4 { width: 5%; text-align: right !important; padding: 5px !important; }
+                        td.col-5 { width: 10%; text-align: right !important; padding: 5px !important; }
+                        td.col-6 { width: 10%; text-align: right !important; padding: 5px !important; }
+                        td.col-7 { width: 10%; text-align: right !important; padding: 5px !important; }
+                        td.col-8 { width: 10%; text-align: right !important; padding: 5px !important; }
+                        td.col-9 { width: 10%; text-align: right !important; padding: 5px !important; font-weight: bold; }
+                        td.col-10 { width: 10%; text-align: right !important; padding: 5px !important; }
 
                         thead {
                             display: table-header-group;

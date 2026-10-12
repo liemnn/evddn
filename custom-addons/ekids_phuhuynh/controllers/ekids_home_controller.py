@@ -43,6 +43,7 @@ class HomeController(http.Controller):
                     'coso': hocsinh.coso_id.name,
                     'thongbao': thongbaos,
                     # Khai báo mặc định để chống lỗi QWeb
+                    'share_url': hocsinh.share_url,
                     'hocphi_id': False,
                     'hocphi_phaidong': 0,
                     'hocphi_thang': '',

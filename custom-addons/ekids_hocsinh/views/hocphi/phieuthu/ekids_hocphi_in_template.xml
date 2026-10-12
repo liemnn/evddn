@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="template_phieuthu">
 
@@ -8,18 +9,30 @@
                 <t t-call="web.basic_layout">
 
                     <div class="page" style="font-family: Arial, sans-serif;">
-                        <div style="text-align:right">
-                            <button onclick="window.print()"
-                                    style="width:30px; height:auto;border:0px"
-                                    string="In phiếu thu [Học phí]" type="object">
-                                <i class="fa fa-print"></i>
+                        <!-- THANH CÔNG CỤ: IN & CHIA SẺ ĐỒNG BỘ GIAO DIỆN VIÊN THUỐC -->
+                        <div class="btn-print-container" style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-bottom: 14px;">
+                            <!-- Nút In ấn -->
+                            <button type="button"
+                                    onclick="window.print()"
+                                    class="btn btn-sm d-inline-flex align-items-center gap-1.5"
+                                    title="In phiếu thu học phí"
+                                    style="font-size: 13px; font-weight: 600; border-radius: 20px; padding: 4px 14px; border: 1px solid #CBD5E1; color: #475569; background: #F8FAFC; cursor: pointer; text-decoration: none;">
+                                <i class="fa fa-print text-primary" style="font-size: 13px; margin-right: 5px;"/>
+                                <span>In</span>
                             </button>
-                            <button t-att-data-url="o.share_url"
-                                    style="width:30px; height:auto;border:0px"
-                                    onclick="navigator.clipboard.writeText(this.dataset.url); alert('Đã copy link chia sẻ Thu Học phí!')">
-                                <i class="fa fa-copy"></i>
+
+                            <!-- Nút Chia sẻ link -->
+                            <button type="button"
+                                    class="btn btn-sm d-inline-flex align-items-center gap-1.5"
+                                    t-att-data-url="o.share_url"
+                                    onclick="copyShareUrl(this)"
+                                    title="Sao chép liên kết chia sẻ phiếu thu học phí"
+                                    style="font-size: 13px; font-weight: 600; border-radius: 20px; padding: 4px 14px; border: 1px solid #CBD5E1; color: #475569; background: #F8FAFC; cursor: pointer; text-decoration: none;">
+                                <i class="fa fa-link text-primary" style="font-size: 13px; margin-right: 5px;"/>
+                                <span class="copy-btn-text">Chia sẻ</span>
                             </button>
                         </div>
+
                         <span t-field="o.coso_id.header_thu_hocphi" class="box-header"/>
                         <table width="100%" border="0" cellspacing="0" cellpadding="0"
                                class="box-noborder">
@@ -45,7 +58,6 @@
                                 </td>
                             </tr>
                         </table>
-
 
                         <table class="box-table" width="100%" border="1" cellspacing="0" cellpadding="0" style="font-size:13px;border-width:1px !important">
                             <tr>
@@ -128,7 +140,7 @@
                                 </td>
                             </tr>
 
-                            <tr t-if="o.hocphi_giam > 0">
+                            <tr t-if="o.hocphi_giam &gt; 0">
                                 <td style="text-align:center"></td>
                                 <td style="text-align:right">
                                     <b>GIẢM HỌC PHÍ THEO CHÍNH SÁCH </b>
@@ -184,8 +196,17 @@
                         </table>
 
                         <style>
-                            /* BƯỚC 3: Dùng !important để ép mọi thành phần dùng font Arial */
-                           *:not(i) {
+                            @media print {
+                                .btn-print-container {
+                                    display: none !important;
+                                }
+                                body, .page {
+                                    margin-top: 0px !important;
+                                    padding-top: 0px !important;
+                                }
+                            }
+
+                            *:not(i) {
                                 font-family: Arial, sans-serif !important;
                             }
 
@@ -193,7 +214,7 @@
                                 border-style: solid;
                                 border: 1px solid #ccc;
                                 font-size:14px;
-                                padding:0px; /* Sửa chữ pading bị sai chính tả thành padding */
+                                padding:0px;
                             }
 
                             .page {
@@ -215,12 +236,60 @@
                                 border-style: solid;
                                 border: 0px solid #ccc;
                                 font-size:14px;
-                                padding:0px; /* Sửa chữ pading bị sai chính tả thành padding */
+                                padding:0px;
                             }
                         </style>
 
                     </div>
-                </t> </t>
+                </t>
+
+                <!-- SCRIPT XỬ LÝ COPY LINK ĐỒNG BỘ HIỆU ỨNG VÀ TRẠNG THÁI -->
+                <script type="text/javascript">
+                    <![CDATA[
+                    function copyShareUrl(btnEl) {
+                        let url = btnEl.getAttribute('data-url');
+                        if (!url) {
+                            url = window.location.href;
+                        }
+
+                        if (navigator.clipboard && window.isSecureContext) {
+                            navigator.clipboard.writeText(url).then(onSuccess).catch(fallbackCopy);
+                        } else {
+                            fallbackCopy();
+                        }
+
+                        function fallbackCopy() {
+                            const tempInput = document.createElement("input");
+                            tempInput.value = url;
+                            document.body.appendChild(tempInput);
+                            tempInput.select();
+                            document.execCommand("copy");
+                            document.body.removeChild(tempInput);
+                            onSuccess();
+                        }
+
+                        function onSuccess() {
+                            const textSpan = btnEl.querySelector('.copy-btn-text');
+                            const iconEl = btnEl.querySelector('i');
+                            const originalText = textSpan.innerText;
+
+                            textSpan.innerText = "Đã chép!";
+                            iconEl.className = "fa fa-check text-success";
+                            btnEl.style.borderColor = "#86EFAC";
+                            btnEl.style.backgroundColor = "#F0FDF4";
+
+                            setTimeout(function() {
+                                textSpan.innerText = originalText;
+                                iconEl.className = "fa fa-link text-primary";
+                                btnEl.style.borderColor = "#CBD5E1";
+                                btnEl.style.backgroundColor = "#F8FAFC";
+                            }, 2000);
+                        }
+                    }
+                    ]]>
+                </script>
+
+            </t>
         </t>
     </template>
 </odoo>

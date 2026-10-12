@@ -1,5 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError,UserError
+from odoo import models, fields, api, Command
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -8,6 +10,7 @@ try:
     from odoo.addons.ekids_func import kehoach_util
     from odoo.addons.ekids_func import coso_util
     from odoo.addons.ekids_func import ngay_util
+    from odoo.addons.ekids_func import giaovien_util
 
 except ImportError as e:
     _logger.warning(f"Không thể import ekids_func.string_util: {e}")
@@ -25,7 +28,7 @@ class KetLuan(models.Model):
     name = fields.Char(string="Kết luận lần", required=True, compute="_compute_name")
     index = fields.Integer(string="STT", default=1, compute="_compute_index")
     # 1. THÔNG TIN HỌC SINH
-    hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True, tracking=True)  # [cite: 2]
+    hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True)  # [cite: 2]
 
     trangthai = fields.Selection([
         (kehoach_util.KETLUAN_DANG_TAO, "Đang soạn thảo"),
@@ -65,6 +68,20 @@ class KetLuan(models.Model):
         string="Các lĩnh vực thuộc kết luận"
     )  #
 
+    chon_chuongtrinh_id = fields.Many2one(
+        'ekids.ct_chuongtrinh',
+        string="Chương trình can thiệp",
+        help="Chọn chương trình để tải danh sách lĩnh vực tương ứng"
+    )
+    chon_linhvuc_ids = fields.Many2many(
+        'ekids.ct_linhvuc',  # Hoặc model lĩnh vực của bạn
+        'ekids_ketluan_chon_linhvuc_rel',
+        'ketluan_id',
+        'linhvuc_id',
+        string="Lĩnh vực cần can thiệp",
+        domain="[('chuongtrinh_id', '=', chon_chuongtrinh_id)]"
+    )
+
 
 
     dm_gv_danhgia_id = fields.Many2one('ekids.ct_dm_cg_danhgia', string='Chuyên gia đánh giá', ondelete="restrict")
@@ -90,8 +107,7 @@ class KetLuan(models.Model):
 
     tong_kehoach = fields.Integer(string="Tổng kế hoạch",compute="_compute_tong_kehoach")
 
-    # Đổi kiểu dữ liệu từ Char sang Html
-    linhvucs = fields.Html(string="Lĩnh vực can thiệp", compute="_compute_linhvucs")
+
 
     # Giữ nguyên trường kiểu Text để không bị sinh thẻ <p> rác
     linhvucs = fields.Text(string="Lĩnh vực can thiệp", compute="_compute_linhvucs")
@@ -108,6 +124,58 @@ class KetLuan(models.Model):
     )
 
     chuongtrinh = fields.Char(string="Tên chương trình", compute="_compute_chuongtrinh")
+
+    is_xoa = fields.Boolean(compute="_compute_is_xoa")
+
+
+
+    @api.onchange('chon_chuongtrinh_id')
+    def _onchange_chon_chuongtrinh_id(self):
+        """Khi đổi chương trình thì xóa các lĩnh vực cũ đang chọn dở"""
+        self.chon_linhvuc_ids = [Command.clear()]
+
+    def action_them_linhvuc_nhanh(self):
+        self.ensure_one()
+        if not self.chon_chuongtrinh_id:
+            raise UserError("Vui lòng chọn Chương trình can thiệp trước!")
+        if not self.chon_linhvuc_ids:
+            raise UserError("Vui lòng chọn ít nhất một Lĩnh vực cần can thiệp!")
+
+        existing_pairs = set()
+        for line in self.linhvuc_ids:
+            existing_pairs.add((line.chuongtrinh_id.id, line.linhvuc_id.id))
+
+        commands = []
+        for lv in self.chon_linhvuc_ids:
+            pair = (self.chon_chuongtrinh_id.id, lv.id)
+            if pair in existing_pairs:
+                continue
+
+            commands.append(Command.create({
+                'chuongtrinh_id': self.chon_chuongtrinh_id.id,
+                'linhvuc_id': lv.id,
+                'tuoi_id': False,
+            }))
+
+        if not commands:
+            raise UserError("Tất cả các lĩnh vực được chọn đã có sẵn trong bảng bên dưới!")
+
+        # Dùng with_context để bỏ qua kiểm tra tuổi khi bấm nút này
+        self.with_context(skip_check_tuoi=True).write({
+            'linhvuc_ids': commands,
+            'chon_linhvuc_ids': [Command.clear()],
+        })
+        return True
+
+
+    def _compute_is_xoa(self):
+        for record in self:
+            is_xoa=False
+            if record.trangthai in [kehoach_util.KETLUAN_DANG_TAO,kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]:
+                if len(record.kehoach_ids)>0:
+
+                    is_xoa = True
+            record.is_xoa = is_xoa
 
     # 2. Viết hàm tính toán tự động phụ thuộc vào bảng chi tiết
     @api.depends('linhvuc_ids.chuongtrinh_id')
@@ -228,22 +296,27 @@ class KetLuan(models.Model):
             hocsinh_id = vals.get('hocsinh_id')
 
             if hocsinh_id:
-                # 2. Sử dụng search_count để đếm nhanh số phiếu [Đang lập] của học sinh này dưới DB
-                # SELECT COUNT này quét thẳng vào index nên tốc độ xử lý siêu tốc (< 5ms)
-                draft_count = self.env['ekids.kehoach_ketluan'].search_count([
-                    ('hocsinh_id', '=', hocsinh_id),
-                    ('trangthai', '=', kehoach_util.KETLUAN_DANG_TAO)
-                ])
+                hocsinh =self.env["ekids.hocsinh"].browse(hocsinh_id)
+                if hocsinh:
+                    # 2. Sử dụng search_count để đếm nhanh số phiếu [Đang lập] của học sinh này dưới DB
+                    # SELECT COUNT này quét thẳng vào index nên tốc độ xử lý siêu tốc (< 5ms)
+                    if hocsinh.coso_id.is_canthiep_ketluan == False:
+                        vals["trangthai"]="1"
+                        # khi chỉ phân công thì chuyển ngay trạng thái cho phép lập kế hoạch
+                    draft_count = self.env['ekids.kehoach_ketluan'].search_count([
+                        ('hocsinh_id', '=', hocsinh_id),
+                        ('trangthai', '=', kehoach_util.KETLUAN_DANG_TAO)
+                    ])
 
-                # 3. Chốt chặn bảo mật
-                if draft_count > 0:
-                    hocsinh = self.env['ekids.hocsinh'].browse(hocsinh_id)
-                    raise UserError(
-                        f"Học sinh [{hocsinh.name}] đang có một phiếu Kết luận ở trạng thái [Đang lập]. "
-                        f"Vui lòng hoàn thiện hoặc hủy phiếu cũ trước khi tạo kết luận mới!"
-                    )
-            else:
-                raise UserError("Không thể tạo phiếu Kết luận mới khi trường [Học sinh] đang bị bỏ trống!")
+                    # 3. Chốt chặn bảo mật
+                    if draft_count > 0:
+                        hocsinh = self.env['ekids.hocsinh'].browse(hocsinh_id)
+                        raise UserError(
+                            f"Học sinh [{hocsinh.name}] đang có một phiếu Kết luận ở trạng thái [Đang lập]. "
+                            f"Vui lòng hoàn thiện hoặc hủy phiếu cũ trước khi tạo kết luận mới!"
+                        )
+                else:
+                    raise UserError("Không thể tạo phiếu Kết luận mới khi trường [Học sinh] đang bị bỏ trống!")
 
         # 4. Gọi super() DUY NHẤT MỘT LẦN ở cuối cùng để lưu hàng loạt xuống Database
         return super(KetLuan, self).create(vals_list)
@@ -266,6 +339,7 @@ class KetLuan(models.Model):
 
                 # Chỉ xử lý kiểm tra nếu trạng thái MỚI khác trạng thái CŨ
                 if trangthai_cu != trangthai_moi:
+                    rec.func_write_chuyen_trangthai_chophep_lapkehoach(trangthai_moi)
 
                     # TH1: Từ [Cho phép lập KH] quay về [Đang lập] -> Check xem có kế hoạch con chưa
                     if trangthai_cu == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH:
@@ -286,7 +360,31 @@ class KetLuan(models.Model):
                             )
 
         # 3. Gọi hàm super() ở cuối cùng sau khi đã vượt qua tất cả các tầng kiểm duyệt bảo mật
-        return super(KetLuan, self).write(vals)
+        res = super(KetLuan, self).write(vals)
+
+        return res
+
+    def func_write_chuyen_trangthai_chophep_lapkehoach(self,trangthai_moi):
+        # TH1: Chuyển sang [Cho phép lập KH] -> BẮT BUỘC toàn bộ linhvuc_ids phải có đủ tuoi_id
+        if trangthai_moi == kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH:
+            if self.coso_id.is_canthiep_ketluan == True:
+                if not self.linhvuc_ids:
+                    raise UserError(
+                        "Chưa có [Lĩnh vực can thiệp] nào trong khung chương trình! "
+                        "Vui lòng thiết lập ít nhất một lĩnh vực trước khi chuyển sang trạng thái [Cho phép lập Kế hoạch]."
+                    )
+
+                missing_tuoi = self.linhvuc_ids.filtered(lambda l: not l.tuoi_id)
+                if missing_tuoi:
+                    missing_names = ", ".join(
+                        f"[{line.chuongtrinh_id.name if line.chuongtrinh_id else 'Chưa có CT'}] {line.linhvuc_id.name}"
+                        for line in missing_tuoi
+                    )
+                    raise ValidationError(
+                        f"Không thể chuyển sang trạng thái [Cho phép lập Kế hoạch]!\n"
+                        f"Tất cả các lĩnh vực can thiệp đều phải được chọn Độ tuổi cụ thể.\n\n"
+                        f"Các lĩnh vực chưa có độ tuổi: {missing_names}"
+                    )
 
 
 
@@ -392,6 +490,21 @@ class KetLuan(models.Model):
                 'domain': [('coso_id', '=', self.coso_id.id)],
                 'context': {'default_coso_id': self.coso_id.id},
             }
+
+    def action_xoa_kehoach_cua_ketluan(self):
+        # day la quyet dinh nguy hiem
+        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+        kehoach_ids =self.kehoach_ids
+        is_admin=self.env.is_admin()
+        trangthais=[kehoach_util.KEHOACH_DANG_LAP
+            ,kehoach_util.KEHOACH_DANG_PHEDUYET
+            ,kehoach_util.KEHOACH_DANG_CANTHIEP]
+        if kehoach_ids:
+            for kehoach_id in kehoach_ids:
+                if (kehoach_id.trangthai in trangthais
+                    and (is_admin == True or giaovien.id == kehoach_id.ketluan_id.gv_kiemduyet_id.id)):
+                    kehoach_id.unlink()
+
 
     def func_tao_macdinh_kehoach_ketluan_phancong_lai_wizard_form(self):
         self.ensure_one()

@@ -22,12 +22,19 @@ class CoSo(models.Model):
     _inherit = "ekids.coso"
 
     is_ketluan = fields.Boolean(compute="_compute_is_ketluan")
+    is_phancong = fields.Boolean(compute="_compute_is_phancong")
+
     is_duyet_kehoach = fields.Boolean(compute="_compute_is_duyet_kehoach")
 
     is_ql_chuongtrinh = fields.Boolean(compute="_compute_is_ql_chuongtrinh")
 
     is_theodoi_kehoach = fields.Boolean(compute="_compute_is_theodoi_kehoach")
 
+    chuongtrinh_ids = fields.Many2many(comodel_name="ekids.ct_chuongtrinh",
+                                relation="ekids_ct_chuongtrinh4coso_ids_rel",
+                                column1="coso_id",
+                                column2="ct_chuongtrinh_id"
+                                , string="Các chương trình áp dụng")
 
 
     def _compute_is_ql_chuongtrinh(self):
@@ -75,23 +82,42 @@ class CoSo(models.Model):
         is_role_ketluan = user.has_group('ekids_core.ketluan')
 
         for record in self:
-           if (is_admin
-               or is_role_ketluan):
-               record.is_ketluan = True
-           else:
-               record.is_ketluan = False
+            is_ketluan = False
+            if record.is_canthiep_ketluan == True:
+               if (is_admin
+                   or is_role_ketluan):
+                is_ketluan = True
 
+            record.is_ketluan = is_ketluan
+
+    def _compute_is_phancong(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        is_role_ketluan = user.has_group('ekids_core.ketluan')
+
+        for record in self:
+            is_phancong= False
+            if record.is_canthiep_ketluan == False:
+                if (is_admin
+                        or is_role_ketluan):
+                    is_phancong = True
+            record.is_phancong = is_phancong
 
     def action_xem_chuongtrinh_kanban(self):
+        kanban_view_id = self.env.ref('ekids_canthiep.ct_chuongtrinh_kanban').id
 
         return {
             'type': 'ir.actions.act_window',
             'name': 'CHƯƠNG TRÌNH',
             'res_model': 'ekids.ct_chuongtrinh',
+            'views': [(kanban_view_id, 'kanban')],
             'view_mode': 'kanban,list,form',
             'domain': [('coso_id', '=', self.id)],
             'target': 'current',
-            'context': {'default_coso_id': self.id},
+            'context': {
+                'default_coso_id': self.id,
+                'default_chuongtrinh_sohuu': True
+            },
         }
 
     def action_xem_chuongtrinh_coso_khac_kanban(self):
@@ -116,6 +142,7 @@ class CoSo(models.Model):
 
             'context': {
                 'default_coso_id': self.id,
+                'default_chuongtrinh_sohuu': False,
                 'create': False,
                 'edit': False,
                 'delete': False,
@@ -196,6 +223,23 @@ class CoSo(models.Model):
 
     def action_danhsach_hocsinh_ketluan(self):
         list_view_id = self.env.ref('ekids_canthiep.hocsinh_ketluan_inherit_list').id
+        domain = [('coso_id', '=', self.id)]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'DANH SÁCH',
+            'res_model': 'ekids.hocsinh',
+            'view_mode': 'list',
+            'views': [(list_view_id, 'list')],
+            'target': 'current',
+            'domain': domain,
+            'context': {
+                'default_coso_id': self.id,
+                'search_default_trangthai': '1',
+            },
+        }
+
+    def action_danhsach_hocsinh_phancong(self):
+        list_view_id = self.env.ref('ekids_canthiep.hocsinh_phancong_inherit_list').id
         domain = [('coso_id', '=', self.id)]
         return {
             'type': 'ir.actions.act_window',
@@ -320,6 +364,7 @@ class CoSo(models.Model):
         domain_base = [
             #('kehoach_id.coso_id', '=', self.id),
             ('chuongtrinh_id.coso_id', '=', self.id),
+            ("kehoach_id.trangthai", "in", [kehoach_util.KEHOACH_DANG_CANTHIEP, kehoach_util.KEHOACH_HET_HIEULUC]),
             ('muctieu_id', '!=', False),
             ('thietke_temp', 'not in', EMPTY_HTML),
         ]

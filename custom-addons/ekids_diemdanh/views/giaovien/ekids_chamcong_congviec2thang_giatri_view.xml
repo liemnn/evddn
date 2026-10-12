@@ -17,7 +17,7 @@
 
                     <field name="sequence" width="25" />
                     <field name="giaovien_id" width="150"  readonly="true"/>
-                    <field name="tong" widget="widget_giaovien_giaoviec" width="50"/>
+                    <field name="tong_str" widget="widget_giaovien_giaoviec" width="50"/>
                     <field name="d1" widget="widget_giaovien_giaoviec" invisible="is_d1_nghi" width="30" />
                     <field name="d2" widget="widget_giaovien_giaoviec" invisible="is_d2_nghi" width="30" />
                     <field name="d3" widget="widget_giaovien_giaoviec" invisible="is_d3_nghi" width="30" />

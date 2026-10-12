@@ -8,5 +8,15 @@
             <field name="report_file">ekids_giaovien.template_phieuluong</field>
 
         </record>
+
+        <record id="ekids_giaovien.action_luong_thang_baocao" model="ir.actions.report">
+            <field name="name">Báo cáo tổng hợp lương tháng chi tiết</field>
+            <field name="model">ekids.luong_thang</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ekids_giaovien.luong_thang_baocao_template</field>
+            <field name="report_file">ekids_giaovien.luong_thang_baocao_template</field>
+            <field name="binding_model_id" ref="model_ekids_luong_thang"/>
+            <field name="binding_type">report</field>
+        </record>
     </data>
 </odoo>

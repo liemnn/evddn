@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eKids - Hướng dẫn: Chia sẻ kế hoạch và kết quả can thiệp cho phụ huynh</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563EB; --primary-hover: #1D4ED8; --bg-body: #F8FAFC; --surface: #FFFFFF;
+            --text-main: #0F172A; --text-sub: #64748B; --border-color: #E2E8F0;
+            --c-green: #22C55E; --c-indigo: #4F46E5; --c-orange: #F59E0B; --c-red: #EF4444; --c-cyan: #0891B2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- TOP BAR --- */
+        .top-bar { height: 55px; background: var(--surface); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-shrink: 0; z-index: 20; box-shadow: 0 2px 10px rgba(0,0,0,0.02);}
+        .top-left { display: flex; align-items: center; gap: 15px; }
+        .back-btn { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 700; color: var(--primary); text-decoration: none; padding: 6px 12px; border-radius: 6px; background: #EFF6FF; border: 1px solid #BFDBFE; transition: 0.2s;}
+        .back-btn:hover { background: var(--primary); color: white; border-color: var(--primary);}
+
+        .top-center { font-size: 0.85rem; font-weight: 600; color: var(--text-sub); }
+        .top-center strong { color: #DC2626; font-size: 1rem; }
+
+        .header-title-right { font-weight: 700; font-size: 0.95rem; color: var(--primary); letter-spacing: 0.2px;}
+
+        /* --- LAYOUT CHÍNH --- */
+        .main-layout { display: flex; flex: 1; overflow: hidden; justify-content: center; width: 100%; }
+        .content-area { flex: 1; overflow-y: auto; padding: 30px 20px; background-color: var(--bg-body); scroll-behavior: smooth; width: 100%; display: flex; justify-content: center; }
+        .doc-container { max-width: 1000px; width: 100%; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-color); margin-bottom: 40px;}
+
+        .breadcrumb { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        .breadcrumb i { font-size: 0.7rem; } .breadcrumb span { color: var(--primary); }
+
+        .doc-header { margin-bottom: 30px; border-bottom: 2px solid #F1F5F9; padding-bottom: 20px; }
+        .doc-header h2 { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: -0.3px; line-height: 1.3;}
+        .doc-header p { font-size: 1.05rem; color: var(--text-sub); line-height: 1.6;}
+
+        /* --- CÁC BƯỚC HƯỚNG DẪN --- */
+        .step-detail-box {
+            background: white; border: 1px solid var(--border-color); border-radius: 12px;
+            padding: 30px; margin-bottom: 25px; position: relative; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+        .step-detail-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--primary); }
+        .step-detail-box h3.step-title {
+            font-size: 1.3rem; color: #1E293B; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .step-detail-box h3.step-title span { background: #EEF2FF; color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; }
+
+        .doc-content { font-size: 1rem; color: #334155; line-height: 1.6; }
+        .doc-content p { margin-bottom: 12px; }
+        .doc-content ul { padding-left: 20px; margin-bottom: 16px; }
+        .doc-content li { margin-bottom: 8px; }
+
+        .highlight-box { background: #EFF6FF; border-left: 4px solid var(--primary); padding: 15px; border-radius: 0 8px 8px 0; margin: 15px 0; font-size: 0.95rem; color: #1E40AF; }
+
+        /* --- KHUNG CHỨA HÌNH ẢNH CHỤP THỰC TẾ --- */
+        .img-screenshot-box {
+            background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 10px; padding: 15px; margin: 20px 0; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); max-width: 450px; margin-left: auto; margin-right: auto;
+        }
+        .img-screenshot-box img {
+            max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #94A3B8; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: block; margin: 0 auto;
+        }
+        .img-caption { font-size: 0.8rem; color: var(--text-sub); margin-top: 8px; font-style: italic; font-weight: 600; }
+
+        .ui-btn { background: #2563EB; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+        .ui-btn-cyan { background: var(--c-cyan); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .top-bar { padding: 0 10px; height: auto; min-height: 55px; flex-wrap: wrap; padding-top: 6px; padding-bottom: 6px; }
+            .top-center { width: 100%; text-align: center; order: 3; margin-top: 4px; font-size: 0.8rem; }
+            .content-area { padding: 10px; }
+            .doc-container { padding: 15px; border-radius: 12px; }
+            .doc-header h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-left">
+            <a href="../index.html#kehoach" class="back-btn" title="Về trang chủ hướng dẫn"><i class="fas fa-home"></i> Về trang chủ</a>
+        </div>
+        <div class="top-center">
+            Hỗ trợ kỹ thuật / Zalo: <strong>0393.393.386</strong>
+        </div>
+        <div class="top-right">
+            <div class="header-title-right">Hướng dẫn sử dụng phần mềm eVDDN</div>
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <div class="content-area">
+            <div class="doc-container">
+
+                <div class="breadcrumb">
+                    Trung tâm trợ giúp <i class="fas fa-chevron-right"></i> Phân hệ 02: Kế hoạch can thiệp <i class="fas fa-chevron-right"></i> <span>Chia sẻ kế hoạch và kết quả cho phụ huynh</span>
+                </div>
+
+                <div class="doc-header">
+                    <h2>H. Chia sẻ kế hoạch và kết quả can thiệp cho phụ huynh</h2>
+                    <p><strong>Mục tiêu:</strong> Vào đầu mỗi chu kỳ tháng, nhà trường sẽ tiến hành gửi kế hoạch và kết quả can thiệp cho phụ huynh. Hệ thống hỗ trợ 3 hình thức chia sẻ linh hoạt để phụ huynh dễ dàng nắm bắt thông tin của trẻ.</p>
+                </div>
+
+                <!-- CÁCH 1 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Cách 1</span> Cấp tài khoản ứng dụng (Xem trực tiếp trên Mobile App)</h3>
+                    <div class="doc-content">
+                        <p>Sau khi được nhà trường cấp tài khoản (số điện thoại và mật khẩu), phụ huynh tải và đăng nhập vào ứng dụng di động (Mobile App). Dưới đây là chi tiết các màn hình tính năng trên điện thoại:</p>
+
+                        <ul>
+                            <li><strong>1. Giao diện trang chủ ứng dụng:</strong> Hiển thị tổng quan thông tin của bé, các lối tắt nhanh đến tính năng <em>Trao đổi với nhà trường, Lịch học, Học phí, Xin nghỉ, Kế hoạch can thiệp</em> và <em>Sổ liên lạc hằng ngày</em>.</li>
+                        </ul>
+                        <div class="img-screenshot-box">
+                            <img src="dt_trangchu.png" alt="Trang chủ ứng dụng phụ huynh">
+                            <div class="img-caption">Màn hình 1: Trang chủ ứng dụng trên điện thoại</div>
+                        </div>
+
+                        <ul>
+                            <li><strong>2. Màn hình Trao đổi với nhà trường:</strong> Cho phép phụ huynh nhắn tin trực tiếp, trao đổi tình hình học tập và phản hồi với giáo viên hoặc trung tâm.</li>
+                        </ul>
+                        <div class="img-screenshot-box">
+                            <img src="dt_chat.png" alt="Trao đổi với nhà trường">
+                            <div class="img-caption">Màn hình 2: Trao đổi trực tuyến với nhà trường/giáo viên</div>
+                        </div>
+
+                        <ul>
+                            <li><strong>3. Màn hình Lịch học của bé:</strong> Cung cấp thông tin chi tiết về ca học, mức phí, các ngày học trong tuần (T2 đến CN), khung giờ học và tên giáo viên trực tiếp can thiệp.</li>
+                        </ul>
+                        <div class="img-screenshot-box">
+                            <img src="dt_lichhoc.png" alt="Lịch học của bé">
+                            <div class="img-caption">Màn hình 3: Theo dõi lịch học hằng tuần của trẻ</div>
+                        </div>
+
+                        <ul>
+                            <li><strong>4. Màn hình Quản lý Học phí & Thanh toán:</strong> Hiển thị tổng số tiền cần thanh toán, chi tiết các khoản phí từng tháng (tiền học, học liệu, đưa đón) và tích hợp nút <em>Thanh toán ngay</em> qua mã QR tiện lợi.</li>
+                        </ul>
+                        <div class="img-screenshot-box">
+                            <img src="dt_hocphi.png" alt="Quản lý học phí">
+                            <div class="img-caption">Màn hình 4: Quản lý và tra cứu học phí các tháng</div>
+                        </div>
+
+                        <ul>
+                            <li><strong>5. Màn hình quét mã QR chuyển khoản học phí:</strong> Hỗ trợ phụ huynh quét mã chuyển khoản nhanh, tự động điền số tiền và nội dung, sau đó bấm xác nhận <em>"Tôi đã chuyển khoản xong"</em>.</li>
+                        </ul>
+                        <div class="img-screenshot-box">
+                            <img src="dt_hocphi_qr.png" alt="Thanh toán quét mã QR học phí">
+                            <div class="img-caption">Màn hình 5: Giao diện quét mã QR chuyển khoản học phí</div>
+                        </div>
+
+                        <ul>
+                            <li><strong>6. Danh sách các kế hoạch can thiệp của bé:</strong> Phụ huynh chọn mục <em>Kế hoạch can thiệp</em> để xem lịch sử các giai đoạn tháng, thời gian bắt đầu/kết thúc và tên giáo viên can thiệp/phê duyệt.</li>
+                        </ul>
+                        <div class="img-screenshot-box">
+                            <img src="dt_ds_kehoach.png" alt="Danh sách kế hoạch can thiệp của bé">
+                            <div class="img-caption">Màn hình 6: Danh sách các giai đoạn kế hoạch can thiệp</div>
+                        </div>
+
+                        <ul>
+                            <li><strong>7. Chi tiết mục tiêu và nhật ký đánh giá:</strong> Hiển thị bảng tiến trình can thiệp chi tiết theo từng ngày (với các ký hiệu <em>(-), N, (+/-), (+)</em>), kết quả thống kê và đánh giá chuyên môn của quản lý.</li>
+                        </ul>
+                        <div class="img-screenshot-box">
+                            <img src="dt_ds_kehoach_chitiet.png" alt="Chi tiết kế hoạch và nhật ký đánh giá">
+                            <div class="img-caption">Màn hình 7: Chi tiết mục tiêu và lịch đánh giá tiến trình của trẻ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CÁCH 2 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Cách 2</span> Gửi link truy cập trực tiếp (Không cần cài phần mềm)</h3>
+                    <div class="doc-content">
+                        <p>Dành cho các phụ huynh không muốn cài đặt ứng dụng trên điện thoại:</p>
+                        <ul>
+                            <li>Nhà trường hoặc giáo viên sao chép liên kết (link web) bản xem kế hoạch can thiệp cá nhân của trẻ và gửi qua Zalo, tin nhắn cho phụ huynh.</li>
+                            <li>Phụ huynh chỉ cần click vào link là có thể mở trình duyệt xem toàn bộ nội dung kế hoạch, mục tiêu, thiết kế hoạt động và tiến độ của con một cách nhanh chóng, tiện lợi.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CÁCH 3 -->
+                <div class="step-detail-box">
+                    <h3 class="step-title"><span>Cách 3</span> In bản giấy gửi trực tiếp cho phụ huynh</h3>
+                    <div class="doc-content">
+                        <p>Để in bản giấy kế hoạch can thiệp hoặc kết quả của trẻ:</p>
+                        <ul>
+                            <li>Tại giao diện quản lý kế hoạch tháng của học sinh, click chọn nút <span class="ui-btn" style="background: #64748B;"><i class="fas fa-print"></i> In</span> ở thanh công cụ phía trên.</li>
+                            <li>Phần mềm cung cấp các tùy chọn in linh hoạt:
+                                <ol style="padding-left: 20px; margin-top: 4px;">
+                                    <li><strong>In bản [kế hoạch] Đầy đủ thiết kế chi tiết (A4 Ngang):</strong> Phù hợp gửi lưu hồ sơ hoặc giao cho giáo viên/phụ huynh cần nghiên cứu kỹ tiến trình can thiệp.</li>
+                                    <li><strong>In bản [kế hoạch] Tóm tắt - Chỉ có tên [mục tiêu] (A4 Ngang):</strong> Dạng rút gọn để theo dõi nhanh các mục tiêu trọng tâm trong tháng.</li>
+                                </ol>
+                            </li>
+                        </ul>
+
+                        <div class="highlight-box">
+                            <i class="fas fa-lightbulb"></i> <strong>Gợi ý:</strong> Sau khi in bản giấy, giáo viên có thể gửi trực tiếp cho phụ huynh vào các buổi họp phụ huynh đầu tháng hoặc bàn giao khi đưa đón trẻ tại trường.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

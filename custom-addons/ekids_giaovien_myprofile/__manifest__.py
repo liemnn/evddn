@@ -10,6 +10,7 @@
         'security/ir.model.access.csv',
 
         'views/ekids_giaovien_view.xml',
+        'views/ekids_giaovien_matkhau_view.xml',
         'views/ekids_luong_view.xml',
         'views/ekids_giaovien_chamcong_view.xml',
         'views/ekids_menu.xml',

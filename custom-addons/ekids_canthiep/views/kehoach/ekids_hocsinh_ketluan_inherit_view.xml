@@ -24,20 +24,39 @@
             <list create="false" delete="false" limit="200" default_order="id asc">
                 <field name="sequence" width="25"/>
                 <field name="name" width="170"/>
+                <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
+                            string=""
+                            width="30"
+                            type="action"
+                            icon="fa-medkit"
+                            class="btn-outline-danger"
+                            title="Hồ sơ can thiệp của trẻ"
+                            />
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
                 <field name="gioitinh"/>
                 <field name="ngaysinh" optional="hide"/>
-                <field name="tuoi"/>
-                <field name="ngay_nhaphoc" string="Nhập học" width="100"/>
-                <field name="thoigian_hoc" string="Thời gian học" width="100"/>
+                <field name="tuoi" optional="hide"/>
+                <field name="ngay_nhaphoc" string="Nhập học" width="100" optional="hide"/>
+                <field name="thoigian_hoc" string="Thời gian học" width="100" optional="hide"/>
 
                 <field name="dm_xa_id" optional="hide"/>
                 <field name="trangthai" string="Trạng thái"
                         decoration-success="trangthai == '1'"
                         decoration-info="trangthai == '2'"
-                        decoration-danger="trangthai == '3'" width="100"/>
-                <field name="trangthai_ketluan" string="Kết luận"/>
-                <field name="tong_ketluan" string="Tổng số kết luận"/>
+                        decoration-danger="trangthai == '3'"
+                       width="100"/>
+                <field name="trangthai_ketluan" width="130" string="Kết luận"/>
+                <field name="gv_canthiep_ids"
+                   string="Giáo viên"
+                   width="110"
+                   widget="many2many_tags"
+                   readonly="1"
+                   options="{'no_open': True}"/>
+                <field name="gv_kiemduyet_id"
+                        width="100"
+                       string="Kiểm duyệt"/>
+
+                <field name="tong_ketluan" width="30" string="Tổng"/>
 
 
 
@@ -57,13 +76,14 @@
                         invisible="is_tao_ketluan == False"
                         title="Có thể tạo mới [Kết luận]"
                 />
+
                 <button name="action_sua_ketluan"
                         string="Sửa"
                         type="object"
                         class="btn-warning btn-sm text-dark fw-bold"
                         icon="fa-pencil-square-o"
                         invisible="is_sua_ketluan == False"
-                        title="Sửa lại [Kết luận] đang soạn thảo"
+                        title="Sửa lại [Kết luận] đang soạn thảo hoặc đang can thiệp"
                 />
 
                 <!-- 1. COPY TỪ KẾT LUẬN GẦN NHẤT CỦA CHÍNH HỌC SINH NÀY -->
@@ -96,7 +116,6 @@
                         class="btn-secondary btn-sm"
                         icon="fa-folder-open-o"
                         invisible="tong_kehoach == 0"
-                        context="{'default_context_type':'4'}"
                         title="Xem toàn bộ lịch sử [Kế hoạch]"/>
         </list>
         </field>

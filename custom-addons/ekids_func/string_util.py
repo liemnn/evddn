@@ -24,9 +24,9 @@ def date2string_format(date,format):
         return ""
 def string2date(datestr):
     if datestr:
-        return datetime.strptime(datestr,"%Y-%m-%d")
-    else:
-        return False
+        # Ép về date thay vì datetime
+        return datetime.strptime(str(datestr)[:10], "%Y-%m-%d").date()
+    return False
 
 def xoa_tiengviet_codau(s):
     # Loại bỏ dấu tiếng Việt

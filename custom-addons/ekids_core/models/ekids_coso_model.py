@@ -26,7 +26,8 @@ class CoSo(models.Model):
     thue_denngay = fields.Date(string="Ngày kết thúc thuê")
     trangthai = fields.Selection([("0", "Đang cấu hình (chưa thuê)")
                                      ,("1", "Đang thuê")
-                                     , ("-1", "Hết thời gian thuê ( tạm dừng)")],
+                                     , ("-1", "Hết thời gian thuê ( tạm dừng)")
+                                     ,("2", "Săp hết hạn thuê (dưới 1 tháng)")],
                             string="Trạng thái",compute="_compute_trangthai",store=True)
 
     tyle_tralai_hs_nghiphep = fields.Integer(string="Tỷ lệ % khi Học sinh xin [Nghỉ phép]", default=0,
@@ -49,7 +50,7 @@ class CoSo(models.Model):
         store=False
     )
 
-    header_thu_hocphi = fields.Html(string="Tiêu đề [Phần đầu] Phiếu [Học phí/Lương]")
+    header_thu_hocphi = fields.Html(string="Phần tiêu đề trong các bản In của trung tâm")
 
     ghichu_thu_hocphi = fields.Html(string="Ghi chú [Phần cuối] Phiếu [Học phí]")
     qrcode_thu_hocphi = fields.Binary(string="QR-Code [Chuyển khoản] thu Học phí")
@@ -64,13 +65,14 @@ class CoSo(models.Model):
 
     is_thu_hocphi_dauthang =fields.Boolean(string="Thiết lập thu [Học phí] đầu tháng",default=True)
     is_dong_hocphi_theoky= fields.Boolean(string="Đóng học phí theo kỳ/Gộp kỳ", default=False)
+    is_canthiep_theo_dulieu = fields.Boolean(string="Can thiệp dựa trên dữ liệu", default=False)
 
     sothang_khoa_dl_chitieu = fields.Selection(
         [('0', 'Không khóa'),('1', '1 Tháng'), ('2', '2 Tháng'), ('3', '3 Tháng'), ('4', '4 Tháng'), ('5', '5 Tháng'),
          ('6', '6 Tháng'), ('7', '7 Tháng'), ('8', '8 Tháng'), ('9', '9 Tháng'), ('10', '10 Tháng'),
          ('11', '11 Tháng'), ('12', '12 Tháng')],
         string='Sẽ khóa dữ liệu [Chi/Tiêu] sau số tháng',
-        default='0',
+        default='2',
         required=True
     )
 
@@ -90,6 +92,21 @@ class CoSo(models.Model):
 
     is_thue_quantricoso = fields.Boolean(string="Thuê Module [Quản trị/vận hành cơ sở]", default=True)
     is_thue_canthiep = fields.Boolean(string="Thuê Module [Chương trình can thiệp]", default=True)
+    is_canthiep_ketluan = fields.Boolean(string="Lập kế hoạch cần có kết luận", default=True)
+
+
+    songay = fields.Integer(string="Số ngày còn",compute="_compute_songay")
+
+    def _compute_songay(self):
+        today = date.today()
+        for record in self:
+            if record.thue_denngay:
+                delta_days = (record.thue_denngay - today).days
+                # Nếu đã hết hạn (ngày âm) thì trả về 0 ngày còn lại
+                # (Nếu bạn muốn hiển thị số âm để biết quá hạn bao nhiêu ngày thì bỏ max(0, ...))
+                record.songay = max(0, delta_days)
+            else:
+                record.songay = 0
 
     def _get_vietnam_banks(self):
         return [
@@ -160,19 +177,32 @@ class CoSo(models.Model):
             ('999888', 'VBSP (Ngân hàng Chính sách Xã hội)'),
         ]
 
-    @api.depends('thue_tungay', 'thue_denngay')
+    @api.depends("thue_tungay","thue_denngay")
     def _compute_trangthai(self):
         today = date.today()
         for record in self:
-            # Nếu thiếu 1 trong 2 ngày → xem như chưa thuê
+            # 1. Chưa nhập đủ ngày bắt đầu hoặc ngày kết thúc
             if not record.thue_tungay or not record.thue_denngay:
-                record.trangthai = '0'  # Đang cấu hình (chưa thuê)
-            elif record.thue_tungay > today:
-                record.trangthai = '0'  # Chưa đến ngày thuê
-            elif record.thue_tungay <= today <= record.thue_denngay:
-                record.trangthai = '1'  # Đang thuê
+                record.trangthai = '0'
+                continue
+
+            # 2. Chưa đến thời gian bắt đầu thuê
+            if record.thue_tungay > today:
+                record.trangthai = '0'
+
+            # 3. Đã quá hạn thuê (hết hiệu lực)
+            elif today > record.thue_denngay:
+                record.trangthai = '-1'
+
+            # 4. Đang trong thời gian thuê (thue_tungay <= today <= thue_denngay)
             else:
-                record.trangthai = '-1'  # Hết thời hạn
+                # Cách tính 1: Số ngày còn lại từ hôm nay đến lúc hết hạn <= 30 ngày
+                # (hoặc: record.thue_denngay - timedelta(days=30) <= today)
+                days_left = (record.thue_denngay - today).days
+                if days_left <= 30:
+                    record.trangthai = '2'  # Sắp hết hạn thuê (dưới 1 tháng)
+                else:
+                    record.trangthai = '1'  # Đang thuê bình thường
 
     @api.model
     def search_fetch(self, domain, field_names,offset=0, limit=50, order=None):
@@ -266,6 +296,52 @@ class CoSo(models.Model):
                 'default_coso_id': self.id
             }
         }
+
+    def action_giahan_6thang(self):
+        today = date.today()
+        for record in self:
+            # Nếu chưa có ngày bắt đầu thuê thì gán luôn hôm nay
+            if not record.thue_tungay:
+                record.thue_tungay = today
+
+            # Xác định mốc ngày cơ sở để cộng thêm 6 tháng:
+            # Nếu chưa có ngày kết thúc hoặc đã quá hạn, lấy mốc là hôm nay; ngược lại lấy tiếp nối từ thue_denngay
+            if record.thue_denngay:
+                base_date = record.thue_denngay
+
+                # Gia hạn 6 tháng và lấy ngày cuối cùng của tháng đó
+                record.thue_denngay = self.func_get_last_day_of_month(base_date, 6)
+
+    def action_giahan_1nam(self):
+        today = date.today()
+        for record in self:
+            if not record.thue_tungay:
+                record.thue_tungay = today
+
+            if record.thue_denngay:
+                base_date = record.thue_denngay
+
+                # Gia hạn 12 tháng (1 năm) và lấy ngày cuối cùng của tháng đó
+                record.thue_denngay = self.func_get_last_day_of_month(base_date, 12)
+
+    def func_get_last_day_of_month(self, base_date, add_months):
+        """
+        Hàm phụ trợ cộng thêm add_months vào base_date
+        và trả về ngày cuối cùng của tháng đó.
+        Chỉ dùng thư viện chuẩn datetime / date / timedelta.
+        """
+        # 1. Tính năm và tháng mục tiêu
+        total_months = base_date.year * 12 + (base_date.month - 1) + add_months
+        target_year = total_months // 12
+        target_month = (total_months % 12) + 1
+
+        # 2. Để tìm ngày cuối tháng target_month, ta tìm ngày 1 của tháng kế tiếp rồi trừ đi 1 ngày
+        if target_month == 12:
+            next_month_first_day = date(target_year + 1, 1, 1)
+        else:
+            next_month_first_day = date(target_year, target_month + 1, 1)
+
+        return next_month_first_day - timedelta(days=1)
 
 
 

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ekids_baocao.baocao_canthiep_template">
+        <t t-call="web.html_container">
+            <div class="article main-report-wrapper" style="font-family: 'Times New Roman', serif; color: #000000;">
+                <style>
+                    @page {
+                        size: A4 landscape;
+                        margin: 6mm 4mm !important;
+                    }
+
+                    /* 🌟 BẢN WEB / MẶC ĐỊNH */
+                    .main-report-wrapper {
+                        padding: 6px;
+                        width: 100%;
+                    }
+
+                    /* 🌟 KHUNG CUỘN CẢ NGANG LẪN DỌC */
+                    .report-table-responsive {
+                        width: 100%;
+                        max-height: 84vh; /* Mở rộng chiều cao hiển thị trên mobile */
+                        overflow: auto;
+                        -webkit-overflow-scrolling: touch;
+                        border: 1px solid #000000;
+                    }
+
+                    .table-report {
+                        width: 100%;
+                        min-width: 1250px;
+                        border-collapse: separate !important;
+                        border-spacing: 0 !important;
+                        font-size: 13.5px;
+                        text-align: center;
+                    }
+
+                    .table-report th, .table-report td {
+                        border-right: 1px solid #000000;
+                        border-bottom: 1px solid #000000;
+                        padding: 5px 3px;
+                        vertical-align: middle;
+                        white-space: nowrap;
+                        background-color: #FFFFFF;
+                    }
+
+                    /* ================= CỐ ĐỊNH HEADER DỌC ================= */
+                    .table-report thead tr:first-child th {
+                        position: sticky;
+                        top: 0;
+                        background-color: #E2E8F0 !important;
+                        z-index: 15;
+                        font-weight: bold;
+                        text-transform: uppercase;
+                        font-size: 13.5px;
+                    }
+
+                    .table-report thead tr:nth-child(2) th {
+                        position: sticky;
+                        top: 34px;
+                        background-color: #F1F5F9 !important;
+                        z-index: 14;
+                        font-size: 13px !important;
+                        font-weight: 600 !important;
+                    }
+
+                    /* ================= CỐ ĐỊNH CỘT 1 (STT: 28px)  CỘT 2 (CƠ SỞ: 135px) ================= */
+                    .col-sticky-stt {
+                        position: sticky;
+                        left: 0;
+                        z-index: 10;
+                        width: 28px;
+                        min-width: 28px;
+                        max-width: 28px;
+                        background-color: #F8FAFC !important;
+                        border-left: 1px solid #000000 !important;
+                        padding: 4px 1px !important;
+                    }
+
+                    .col-sticky-coso {
+                        position: sticky;
+                        left: 28px;
+                        z-index: 10;
+                        width: 135px;
+                        min-width: 135px;
+                        max-width: 135px;
+                        background-color: #FFFFFF !important;
+                        box-shadow: 2px 0 4px -1px rgba(0, 0, 0, 0.18);
+                        white-space: normal !important;
+                        line-height: 1.25;
+                    }
+
+                    /* Ô giao nhau Header STT + Cơ sở */
+                    .th-sticky-stt {
+                        position: sticky !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        z-index: 30 !important;
+                        width: 28px;
+                        min-width: 28px;
+                        max-width: 28px;
+                        background-color: #CBD5E1 !important;
+                        border-left: 1px solid #000000 !important;
+                    }
+
+                    .th-sticky-coso {
+                        position: sticky !important;
+                        top: 0 !important;
+                        left: 28px !important;
+                        z-index: 30 !important;
+                        width: 135px;
+                        min-width: 135px;
+                        max-width: 135px;
+                        background-color: #CBD5E1 !important;
+                        box-shadow: 2px 0 4px -1px rgba(0, 0, 0, 0.18);
+                    }
+
+                    .bg-total .col-sticky-total {
+                        position: sticky;
+                        left: 0;
+                        z-index: 12;
+                        background-color: #CBD5E1 !important;
+                        border-left: 1px solid #000000 !important;
+                        box-shadow: 2px 0 4px -1px rgba(0, 0, 0, 0.18);
+                    }
+
+                    .text-left {
+                        text-align: left !important;
+                        padding-left: 5px !important;
+                    }
+
+                    .fw-bold { font-weight: bold !important; }
+                    .bg-total {
+                        background-color: #E2E8F0;
+                        font-weight: bold;
+                        font-size: 14px;
+                    }
+                    .bg-total td {
+                        background-color: #E2E8F0 !important;
+                    }
+
+                    /* 🌟 ĐẶC TRỊ CHO MÀN HÌNH MOBILE: TRÀN VIỀN 100%, XÓA BỎ LỀ TRỐNG */
+                    @media screen and (max-width: 768px) {
+                        .main-report-wrapper {
+                            padding: 0 !important;
+                            margin: 0 !important;
+                        }
+                        .report-table-responsive {
+                            border-left: none !important;
+                            border-right: none !important;
+                            margin-bottom: 0 !important;
+                        }
+                        .report-header-box {
+                            padding: 6px 8px !important;
+                            margin-bottom: 6px !important;
+                        }
+                        .report-header-box h3 {
+                            font-size: 15px !important;
+                        }
+                        .report-header-box div {
+                            font-size: 12px !important;
+                        }
+                    }
+
+                    /* Khi in ấn ra PDF / Giấy A4 */
+                    @media print {
+                        .main-report-wrapper { padding: 0 !important; }
+                        .report-table-responsive {
+                            max-height: none !important;
+                            overflow: visible !important;
+                            border: none !important;
+                        }
+                        .table-report th,
+                        .table-report td,
+                        .col-sticky-stt,
+                        .col-sticky-coso,
+                        .th-sticky-stt,
+                        .th-sticky-coso,
+                        .col-sticky-total {
+                            position: static !important;
+                            box-shadow: none !important;
+                        }
+                        .table-report {
+                            min-width: 100% !important;
+                            width: 100% !important;
+                            border-collapse: collapse !important;
+                        }
+                    }
+                </style>
+
+                <!-- HEADER TIÊU ĐỀ -->
+                <div class="report-header-box" style="text-align: center; margin-bottom: 8px;">
+                    <h3 style="font-size: 17px; font-weight: bold; text-transform: uppercase; margin-bottom: 2px;">
+                        BÁO CÁO TỔNG HỢP TIẾN ĐỘ THỰC HIỆN KẾ HOẠCH CAN THIỆP
+                    </h3>
+                    <div style="font-size: 13px; font-style: italic;">
+                        (Kỳ báo cáo: <t t-out="data.get('label_thangnay')"/> - Kế hoạch kế tiếp: <t t-out="data.get('label_thangtoi')"/>)
+                    </div>
+                </div>
+
+                <!-- BẢNG DỮ LIỆU CỐ ĐỊNH TIÊU ĐỀ & TRÀN VIỀN MOBILE -->
+                <div class="report-table-responsive">
+                    <table class="table-report">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="th-sticky-stt">STT</th>
+                                <th rowspan="2" class="th-sticky-coso">Cơ sở</th>
+
+                                <th rowspan="2">Tổng HS đang học</th>
+                                <th colspan="2">Học sinh có Kết luận</th>
+                                <th colspan="2">Học sinh có Kế hoạch</th>
+                                <th colspan="2">Tổng số Kế hoạch</th>
+                                <th colspan="2">Kế hoạch <t t-out="data.get('label_thangnay')"/></th>
+                                <th colspan="2">Kế hoạch <t t-out="data.get('label_thangtoi')"/></th>
+                                <th rowspan="2">Đang đợi duyệt</th>
+                                <th rowspan="2">Đang can thiệp</th>
+                            </tr>
+                            <tr>
+                                <th>Tổng kết luận</th>
+                                <th>Được lập KH</th>
+
+                                <th>Đã có KH</th>
+                                <th>Chưa có KH</th>
+
+                                <th>Đang soạn thảo</th>
+                                <th>Đã phê duyệt</th>
+
+                                <th>Tổng KH</th>
+                                <th>Đã duyệt</th>
+
+                                <th>Tổng KH</th>
+                                <th>Đã duyệt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="data.get('rows', [])" t-as="r">
+                                <tr>
+                                    <td class="col-sticky-stt"><t t-out="r['stt']"/></td>
+                                    <td class="col-sticky-coso text-left fw-bold"><t t-out="r['ten_coso']"/></td>
+
+                                    <td class="fw-bold"><t t-out="r['so_hs']"/></td>
+                                    <td><t t-out="r['hs_kl']"/></td>
+                                    <td><t t-out="r['hs_kl_chopheplap']"/></td>
+
+                                    <td class="fw-bold" style="color: #2563EB;"><t t-out="r['hs_co_kh']"/></td>
+                                    <td style="color: #DC2626;"><t t-out="r['hs_chua_co_kh']"/></td>
+
+                                    <td style="color: #D97706;"><t t-out="r['kh_soanthao']"/></td>
+                                    <td class="fw-bold" style="color: #047857;"><t t-out="r['kh_daduyet']"/></td>
+
+                                    <td><t t-out="r['kh_nay_all']"/></td>
+                                    <td><t t-out="r['kh_nay_daduyet']"/></td>
+                                    <td><t t-out="r['kh_toi_all']"/></td>
+                                    <td><t t-out="r['kh_toi_daduyet']"/></td>
+
+                                    <td style="color: #B45309; font-weight: bold;"><t t-out="r['kh_doiduyet']"/></td>
+                                    <td style="color: #1D4ED8; font-weight: bold;"><t t-out="r['kh_dangcanthiep']"/></td>
+                                </tr>
+                            </t>
+
+                            <!-- DÒNG TỔNG CỘNG HỆ THỐNG -->
+                            <t t-set="tot" t-value="data.get('totals', {})"/>
+                            <tr class="bg-total">
+                                <td colspan="2" class="col-sticky-total">TỔNG CỘNG</td>
+                                <td><t t-out="tot.get('so_hs', 0)"/></td>
+                                <td><t t-out="tot.get('hs_kl', 0)"/></td>
+                                <td><t t-out="tot.get('hs_kl_chopheplap', 0)"/></td>
+
+                                <td style="color: #2563EB;"><t t-out="tot.get('hs_co_kh', 0)"/></td>
+                                <td style="color: #DC2626;"><t t-out="tot.get('hs_chua_co_kh', 0)"/></td>
+
+                                <td style="color: #D97706;"><t t-out="tot.get('kh_soanthao', 0)"/></td>
+                                <td style="color: #047857;"><t t-out="tot.get('kh_daduyet', 0)"/></td>
+
+                                <td><t t-out="tot.get('kh_nay_all', 0)"/></td>
+                                <td><t t-out="tot.get('kh_nay_daduyet', 0)"/></td>
+                                <td><t t-out="tot.get('kh_toi_all', 0)"/></td>
+                                <td><t t-out="tot.get('kh_toi_daduyet', 0)"/></td>
+
+                                <td style="color: #B45309;"><t t-out="tot.get('kh_doiduyet', 0)"/></td>
+                                <td style="color: #1D4ED8;"><t t-out="tot.get('kh_dangcanthiep', 0)"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

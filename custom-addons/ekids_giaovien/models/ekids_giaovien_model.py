@@ -139,6 +139,16 @@ class GiaoVien(models.Model):
                     if htct.is_tham_nien_duoccong == True:
                         thamnien+= htct.tham_nien
             record.tham_nien =thamnien
+
+    def func_get_tham_nien(self,ngay):
+        thamnien =giaovien_util.func_get_thamnien_ngay(self,ngay)
+        htcts= self.hoctapcongtac_ids
+        if htcts:
+            for htct in htcts:
+                if htct.is_tham_nien_duoccong == True:
+                    thamnien+= htct.tham_nien
+        return thamnien
+
     @api.depends('name')
     def _compute_ten(self):
         for record in self:
@@ -246,7 +256,7 @@ class GiaoVien(models.Model):
             if coso.user_id.id != self.user_id.id:
                 self.user_id =False
                 self.is_taikhoan = False
-                user.unlink()
+                user.sudo().unlink()
             else:
                 raise ValidationError(
                     _("Tài khoản này là tài khoản Quản trị/ Quản lý cơ sở được cấp khi thuê bạn không thể xóa !"))
