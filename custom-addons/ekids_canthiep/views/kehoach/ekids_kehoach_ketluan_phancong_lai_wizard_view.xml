@@ -4,60 +4,261 @@
         <field name="name">ekids.kehoach_ketluan_phancong_lai_wizard.form</field>
         <field name="model">ekids.kehoach_ketluan_phancong_lai_wizard</field>
         <field name="arch" type="xml">
-            <form string="B1:Phân công lại giáo viên cho [Kết luận]">
+            <form string="Điều chỉnh &amp; Phân công lại giáo viên">
                 <field name="coso_id" invisible="1"/>
-                <sheet>
-                    <div class="alert alert-info" role="alert" style="margin-bottom: 15px; font-weight: 500;">
-                        <i class="fa fa-info-circle" style="margin-right: 5px;"></i>
-                        <strong>Hướng dẫn:</strong> Sử dụng bảng phía trên để [Phân công] lại [Giáo viên] kiểm duyệt và nhóm Giáo viên can thiệp chung cho Kết luận. Sau đó, điều chỉnh chi tiết [Giáo viên] lập kế hoạch/can thiệp cụ thể cho từng [Kế hoạch] đang can thiệp hiện có.
-                    </div>
 
-                    <div class="row">
-                        <div class="col-12">
-                            <group>
-                                <group string="B1:Phân công lại giáo viên cho [Kết luận] - Cho các kế hoạch tiếp theo">
-                                    <field name="gv_kiemduyet_id"
-                                           domain="[('coso_id','=',coso_id)]"
-                                           options="{'no_create': True, 'no_open': True}"/>
-                                    <field name="gv_canthiep_ids" widget="many2many_tags"
-                                           domain="[('coso_id','=',coso_id)]"
-                                           options="{'no_create': True, 'no_open': True}"/>
+                <sheet class="p-0">
+                    <style>
+                        /* Ép toàn bộ chữ trong wizard có kích thước tối thiểu 16px */
+                        .ekids-wizard-container,
+                        .ekids-wizard-container * {
+                            font-size: 16px;
+                        }
+
+                        .ekids-wizard-container {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 20px;
+                            padding: 14px 16px;
+                            background-color: #F8FAFC;
+                        }
+
+                        /* Khung Card bo góc mềm mại */
+                        .ekids-soft-card {
+                            background: #FFFFFF;
+                            border-radius: 14px;
+                            border: 1.5px solid #E2E8F0;
+                            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03), 0 8px 20px rgba(0, 0, 0, 0.03);
+                            overflow: hidden;
+                            transition: all 0.25s ease;
+                        }
+                        .ekids-soft-card:hover {
+                            border-color: #CBD5E1;
+                            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+                        }
+
+                        /* Header thanh thoát, chữ to nổi bật */
+                        .card-header-bar {
+                            padding: 14px 22px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            border-bottom: 1.5px solid #F1F5F9;
+                        }
+                        .header-future {
+                            background: linear-gradient(to right, #EEF2FF, #FFFFFF);
+                        }
+                        .header-current {
+                            background: linear-gradient(to right, #FFFBEB, #FFFFFF);
+                        }
+
+                        /* Số thứ tự bước to rõ */
+                        .step-number {
+                            width: 34px;
+                            height: 34px;
+                            border-radius: 50%;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 18px !important;
+                            font-weight: 800;
+                            margin-right: 12px;
+                            flex-shrink: 0;
+                        }
+                        .step-future {
+                            background-color: #4F46E5;
+                            color: #FFFFFF;
+                            box-shadow: 0 3px 8px rgba(79, 70, 229, 0.3);
+                        }
+                        .step-current {
+                            background-color: #D97706;
+                            color: #FFFFFF;
+                            box-shadow: 0 3px 8px rgba(217, 119, 6, 0.3);
+                        }
+
+                        /* Tiêu đề mục to 18px */
+                        .card-title-text {
+                            font-size: 18px !important;
+                            font-weight: 800;
+                            color: #0F172A;
+                            letter-spacing: -0.3px;
+                        }
+
+                        /* Huy hiệu mềm mại góc phải */
+                        .soft-badge-pill {
+                            font-size: 15px !important;
+                            font-weight: 700;
+                            padding: 6px 16px;
+                            border-radius: 30px;
+                        }
+                        .badge-future {
+                            background-color: #E0E7FF;
+                            color: #3730A3;
+                        }
+                        .badge-current {
+                            background-color: #FEF3C7;
+                            color: #92400E;
+                        }
+
+                        .card-body-content {
+                            padding: 18px 22px 20px 22px;
+                        }
+
+                        /* Dải ghi chú cảnh báo chữ đỏ to 16.5px, dễ đọc */
+                        .soft-red-alert {
+                            background-color: #FEF2F2;
+                            border: 1.5px solid #FCA5A5;
+                            border-radius: 10px;
+                            padding: 12px 18px;
+                            color: #991B1B;
+                            font-size: 16.5px !important;
+                            line-height: 1.55;
+                            display: flex;
+                            align-items: flex-start;
+                            gap: 12px;
+                            margin-bottom: 16px;
+                        }
+                        .soft-red-alert i {
+                            color: #DC2626;
+                            margin-top: 3px;
+                            font-size: 20px !important;
+                            flex-shrink: 0;
+                        }
+
+                        /* Ép các label và input của Odoo to 16px - 17px */
+                        .large-text-group .o_form_label {
+                            font-size: 16.5px !important;
+                            font-weight: 700 !important;
+                            color: #334155 !important;
+                            margin-bottom: 6px;
+                        }
+                        .large-text-group input,
+                        .large-text-group .o_tag_badge_text,
+                        .large-text-group .badge {
+                            font-size: 16px !important;
+                        }
+                        .large-text-group .badge {
+                            padding: 5px 10px !important;
+                        }
+
+                        /* Bảng danh sách kế hoạch */
+                        .large-list-table th {
+                            font-size: 16px !important;
+                            font-weight: 700 !important;
+                            color: #475569 !important;
+                            padding: 10px 8px !important;
+                        }
+                        .large-list-table td {
+                            font-size: 16.5px !important;
+                            padding: 12px 8px !important;
+                        }
+                        .large-list-table .badge {
+                            font-size: 15px !important;
+                            padding: 6px 12px !important;
+                        }
+                    </style>
+
+                    <div class="ekids-wizard-container">
+
+                        <!-- ================= MỤC 1: QUY HOẠCH TƯƠNG LAI ================= -->
+                        <div class="ekids-soft-card">
+                            <div class="card-header-bar header-future">
+                                <div class="d-flex align-items-center">
+                                    <span class="step-number step-future">1</span>
+                                    <span class="card-title-text">PHÂN CÔNG CHO CÁC THÁNG TIẾP THEO</span>
+                                </div>
+                                <span class="soft-badge-pill badge-future">
+                                    <i class="fa fa-calendar me-1"></i> Kế hoạch tương lai
+                                </span>
+                            </div>
+
+                            <div class="card-body-content">
+                                <!-- Dải ghi chú chữ đỏ to, rõ ràng -->
+                                <div class="soft-red-alert shadow-sm">
+                                    <i class="fa fa-info-circle"></i>
+                                    <div>
+                                        <strong class="text-danger">LƯU Ý:</strong> Phân công này sẽ tự động áp dụng khi giáo viên bấm <strong>[Lập kế hoạch]</strong> ở các tháng sau.
+                                        <span class="text-danger fw-bold">Tuyệt đối không làm thay đổi</span> giáo viên của các kế hoạch tháng này đã tạo trước đó!
+                                    </div>
+                                </div>
+
+                                <group class="large-text-group m-0 p-0">
+                                    <group class="m-0 p-0">
+                                        <field name="gv_kiemduyet_id"
+                                               string="Giáo viên kiểm duyệt mới"
+                                               placeholder="Chọn giáo viên chuyên môn kiểm duyệt..."
+                                               domain="[('coso_id','=',coso_id)]"
+                                               options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="gv_canthiep_ids" widget="many2many_tags"
+                                               string="Nhóm giáo viên can thiệp mới"
+                                               placeholder="Chọn các giáo viên can thiệp..."
+                                               domain="[('coso_id','=',coso_id)]"
+                                               options="{'no_create': True, 'no_open': True}"/>
+                                    </group>
                                 </group>
-                            </group>
+                            </div>
                         </div>
+
+                        <!-- ================= MỤC 2: BÀN GIAO THÁNG NÀY ================= -->
+                        <div class="ekids-soft-card">
+                            <div class="card-header-bar header-current">
+                                <div class="d-flex align-items-center">
+                                    <span class="step-number step-current">2</span>
+                                    <span class="card-title-text">BÀN GIAO GIÁO VIÊN TRONG KẾ HOẠCH ĐANG DẠY</span>
+                                </div>
+                                <span class="soft-badge-pill badge-current">
+                                    <i class="fa fa-exchange me-1"></i> Kế hoạch hiện tại
+                                </span>
+                            </div>
+
+                            <div class="card-body-content">
+                                <!-- Dải ghi chú chữ đỏ to, rõ ràng -->
+                                <div class="soft-red-alert shadow-sm">
+                                    <i class="fa fa-bell"></i>
+                                    <div>
+                                        <strong class="text-danger">LƯU Ý:</strong> Chỉ đổi giáo viên khi có sự bàn giao đột xuất (nghỉ ốm, thai sản, điều chuyển).
+                                        Nhấp trực tiếp vào cột <strong>Giáo viên</strong>  để đổi (chỉ đổi giáo viên của các kế hoạch chưa kết thúc).
+                                    </div>
+                                </div>
+
+                                <field name="gv_canthiep_wizard_ids"
+                                       create="false"
+                                       delete="false"
+                                       edit="true"
+                                       options="{'no_create': True, 'no_open': True, 'no_create_edit': True}">
+                                    <list delete="false" create="false" edit="true" editable="bottom" class="table-hover large-list-table">
+                                        <field name="kehoach_id" string="Kế hoạch" readonly="1" class="fw-bold text-dark"/>
+                                        <field name="gv_canthiep_id"
+                                               string="Giáo viên"
+                                               domain="[('coso_id','=',parent.coso_id),('trangthai','=','1')]"
+                                               options="{'no_create': True, 'no_open': True}"
+                                               readonly="trangthai == '-1'"/>
+                                        <field name="trangthai" string="Trạng thái" width="160"
+                                               widget="badge"
+                                               decoration-success="trangthai == '1'"
+                                               decoration-danger="trangthai == '-1'"
+                                               decoration-warning="trangthai == '0'"
+                                               decoration-info="trangthai == '2'"
+                                               readonly="1"/>
+                                    </list>
+                                </field>
+                            </div>
+                        </div>
+
                     </div>
-
-                    <notebook>
-                        <page string="B2. Phân công lại [GIÁO VIÊN] trong [KẾ HOẠCH] đang can thiệp (nếu cần)">
-                            <field name="gv_canthiep_wizard_ids"
-                                   create="false"
-                                   delete="false"
-                                   edit="true"
-                                   options="{'no_create': True, 'no_open': True, 'no_create_edit': True}">
-
-                                <list delete="false" create="false" edit="true" editable="bottom">
-                                    <field name="kehoach_id" string="Kế hoạch đang có"/>
-                                    <field name="gv_canthiep_id"
-                                           domain="[('coso_id','=',parent.coso_id),('trangthai','=','1')]"
-                                           options="{'no_create': True, 'no_open': True}"/>
-                                    <field name="trangthai" string="Trạng thái kế hoạch" width="130"
-                                           widget="badge"
-                                           decoration-warning="trangthai == '0'"
-                                           decoration-info="trangthai == '2'"
-                                           decoration-success="trangthai == '1'"
-                                           decoration-danger="trangthai == '-1'"
-                                           />
-                                </list>
-
-                            </field>
-                        </page>
-                    </notebook>
                 </sheet>
-                <footer>
+
+                <footer class="d-flex align-items-center justify-content-end gap-3 py-3 px-4 border-top bg-light">
                     <button name="action_phancong_lai"
-                            confirm ="Bạn chắc chắn muốn điều chỉnh, phân công lại ?"
-                            string="Xác nhận thay đổi" type="object" class="btn-primary"/>
-                    <button string="Hủy" class="btn-secondary" special="cancel"/>
+                            confirm="Xác nhận lưu thay đổi? Hãy chắc chắn bạn đã chọn đúng giáo viên tương ứng ở Mục 1 và Mục 2."
+                            string="Xác nhận thay đổi phân công"
+                            type="object"
+                            class="btn btn-primary fw-bold px-4 py-2 rounded-3 shadow-sm"
+                            style="background-color: #2563EB; border: none; font-size: 16.5px !important;"/>
+                    <button string="Đóng / Hủy"
+                            class="btn btn-light border px-4 py-2 rounded-3 text-secondary fw-semibold"
+                            style="font-size: 16.5px !important;"
+                            special="cancel"/>
                 </footer>
             </form>
         </field>
