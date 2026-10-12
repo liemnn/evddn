@@ -171,13 +171,14 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 ngay_dihoc_thucte_kehoachs = (hocsinh_util
                                        .func_get_ngay_dihoc_kehoachs(coso, nghiles, hocsinh, ngay_dauthang_thucte,
                                                                      ngay_cuoithang,False))
+                ngay_dauthang = ngay_dauthang_thucte
             else:
                 ngay_dihoc_thucte_kehoachs =ngay_dihoc_kehoachs
 
 
 
             #B2: vào tính toán các phần
-            hocphi.ngay_dihoc = len(ngay_dihoc_kehoachs)
+            hocphi.ngay_dihoc = len(ngay_dihoc_thucte_kehoachs)
             hocphi.ngay_dihoc_coso = len(ngay_dihoc_cosos)
 
             if ngay_dihoc_kehoachs:
