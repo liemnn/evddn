@@ -100,8 +100,14 @@ class Luong(models.Model,LuongFuncAbstractModel
 
 
 
-    # làm access token  để chia sẻ
-    access_token = fields.Char(string="Thẻ truy cập nhanh")
+
+    access_token = fields.Char(
+        string="Thẻ truy cập nhanh",
+        readonly=True,
+        copy=False,
+        default=lambda self: str(uuid.uuid4())
+    )
+
     share_url = fields.Char("Chi sẻ Phiếu Lương(URL)", compute="_compute_share_url",store=True)
 
     is_dl_locked = fields.Boolean("Khóa dữ liệu không cho sửa", readonly=True, compute="_compute_is_dl_locked")
@@ -173,7 +179,8 @@ class Luong(models.Model,LuongFuncAbstractModel
     def _compute_share_url(self):
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         for rec in self:
-            rec.access_token = str(uuid.uuid4())
+            if not rec.access_token:
+                rec.access_token = str(uuid.uuid4())
             rec.share_url = rec.access_token and f"{base_url}/phieuluong/{rec.access_token}" or False
 
 
