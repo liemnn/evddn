@@ -91,7 +91,6 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                          ,nghiles_thangtruoc
                                                          ,ngay_dihoc_cosos
                                                          ,hocsinh
-                                                         ,ngay_dauthang
                                                          ,ngay_dauthang_thucte
                                                          ,ngay_cuoithang
                                                          ,thangtruoc_days
@@ -130,7 +129,6 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                             ,ngay_dihoc_cosos
                                             ,hocsinh
                                             ,ngay_dauthang
-                                            ,ngay_dauthang_thucte
                                             ,ngay_cuoithang
                                             ,thangtruoc_days
                                             ,is_tinhlai
@@ -165,24 +163,14 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
             ngay_dihoc_kehoachs = (hocsinh_util
                                     .func_get_ngay_dihoc_kehoachs(coso,nghiles,hocsinh,ngay_dauthang,ngay_cuoithang,False))
-            ngay_dihoc_thucte_kehoachs =None
-
-            if ngay_dauthang != ngay_dauthang_thucte:
-                ngay_dihoc_thucte_kehoachs = (hocsinh_util
-                                       .func_get_ngay_dihoc_kehoachs(coso, nghiles, hocsinh, ngay_dauthang_thucte,
-                                                                     ngay_cuoithang,False))
-                ngay_dauthang = ngay_dauthang_thucte
-            else:
-                ngay_dihoc_thucte_kehoachs =ngay_dihoc_kehoachs
-
 
 
             #B2: vào tính toán các phần
-            hocphi.ngay_dihoc = len(ngay_dihoc_thucte_kehoachs)
+            hocphi.ngay_dihoc = len(ngay_dihoc_kehoachs)
             hocphi.ngay_dihoc_coso = len(ngay_dihoc_cosos)
 
             if ngay_dihoc_kehoachs:
-                self.func_tao_macdinh_hocphi_bantru(hocphi,thu_bantrus, len(ngay_dihoc_thucte_kehoachs),len(ngay_dihoc_cosos))
+                self.func_tao_macdinh_hocphi_bantru(hocphi,thu_bantrus, len(ngay_dihoc_kehoachs),len(ngay_dihoc_cosos))
 
                 # Tinh toan khoang thu ca can thiệp
                 self.func_tao_macdinh_hocphi_ca(nghiles,hocphi,ca_canthieps,ngay_dauthang,ngay_cuoithang)
@@ -317,7 +305,6 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                      ,nghiles_thangtruoc
                                                      ,ngay_dihoc_cosos
                                                      , hocsinh
-                                                     , ngay_dauthang
                                                      , ngay_dauthang_thucte
                                                      , ngay_cuoithang
                                                      , thangtruoc_days
