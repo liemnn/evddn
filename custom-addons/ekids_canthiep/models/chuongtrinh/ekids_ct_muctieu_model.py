@@ -219,8 +219,8 @@ class MucTieu(models.Model):
             tuoi_idx = fields_list.index('tuoi_id')
             chuongtrinh_idx = fields_list.index('import_chuongtrinh_name')
 
-            chucnang_idx = fields_list.index('chucnang')
-            thietke_idx = fields_list.index('thietke')
+            chucnang_idx = fields_list.index('chucnang') if 'chucnang' in fields_list else -1
+            thietke_idx = fields_list.index('thietke') if 'thietke' in fields_list else -1
 
             # 🌟 MẸO CHÍ MẠNG: Ép Odoo đổi kiểu map cột Lĩnh vực từ Tên chữ sang ID số hệ thống
             fields_list[linhvuc_idx] = 'linhvuc_id/.id'

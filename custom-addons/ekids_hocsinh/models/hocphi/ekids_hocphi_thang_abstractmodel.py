@@ -91,6 +91,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                          ,nghiles_thangtruoc
                                                          ,ngay_dihoc_cosos
                                                          ,hocsinh
+                                                         ,ngay_dauthang
                                                          ,ngay_dauthang_thucte
                                                          ,ngay_cuoithang
                                                          ,thangtruoc_days
@@ -129,6 +130,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                             ,ngay_dihoc_cosos
                                             ,hocsinh
                                             ,ngay_dauthang
+                                            ,ngay_dauthang_thucte
                                             ,ngay_cuoithang
                                             ,thangtruoc_days
                                             ,is_tinhlai
@@ -162,7 +164,9 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             ca_canthieps = hocsinh_util.func_get_hocsinh_ca_canthieps(self,hocsinh,ngay_dauthang,ngay_cuoithang)
 
             ngay_dihoc_kehoachs = (hocsinh_util
-                                    .func_get_ngay_dihoc_kehoachs(coso,nghiles,hocsinh,ngay_dauthang,ngay_cuoithang,False))
+                                    .func_get_ngay_dihoc_kehoachs(coso,nghiles,hocsinh,ngay_dauthang_thucte,ngay_cuoithang,False))
+
+
 
 
             #B2: vào tính toán các phần
@@ -173,7 +177,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 self.func_tao_macdinh_hocphi_bantru(hocphi,thu_bantrus, len(ngay_dihoc_kehoachs),len(ngay_dihoc_cosos))
 
                 # Tinh toan khoang thu ca can thiệp
-                self.func_tao_macdinh_hocphi_ca(nghiles,hocphi,ca_canthieps,ngay_dauthang,ngay_cuoithang)
+                self.func_tao_macdinh_hocphi_ca(nghiles,hocphi,ca_canthieps,ngay_dauthang,ngay_dauthang_thucte,ngay_cuoithang)
                 # tin hoc phi do giam hoc phi theo so tien cu the
 
                 # tinh toan tháng trước để được trừ của tháng trước
@@ -305,6 +309,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                                                      ,nghiles_thangtruoc
                                                      ,ngay_dihoc_cosos
                                                      , hocsinh
+                                                     , ngay_dauthang
                                                      , ngay_dauthang_thucte
                                                      , ngay_cuoithang
                                                      , thangtruoc_days
@@ -591,7 +596,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
 
     def func_tao_macdinh_hocphi_ca(self, nghiles,hocphi, ca_canthieps
-                        ,ngay_dauthang,ngay_cuoithang):
+                        ,ngay_dauthang,ngay_dauthang_thucte,ngay_cuoithang):
         if not ca_canthieps:
             return
 
@@ -599,7 +604,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         data_list = []
 
         for dm_ca in ca_canthieps.mapped('dm_ca_id'):
-            soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca_canthieps, dm_ca,ngay_dauthang,ngay_cuoithang)
+            soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca_canthieps, dm_ca,ngay_dauthang_thucte,ngay_cuoithang)
             if soca <= 0:
                 continue
 

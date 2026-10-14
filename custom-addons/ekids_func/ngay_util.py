@@ -4,6 +4,17 @@ import calendar
 def func_get_cacngay_trong_thang(nam, thang):
     _, num_days = calendar.monthrange(int(nam), int(thang))
     return [date(int(nam), int(thang), day) for day in range(1, num_days + 1)]
+
+def func_get_ngays(tu_ngay, den_ngay):
+  days = {}
+  current_date = tu_ngay
+  # Sử dụng dấu <= nếu muốn bao gồm cả den_ngay, hoặc < nếu chỉ lấy đến trước den_ngay
+  while current_date <= den_ngay:
+
+    days[str(current_date)] = current_date
+
+    current_date += timedelta(days=1)
+  return days
 def func_is_thang_nay(ngay):
     today = date.today()
     if today.year == ngay.year:

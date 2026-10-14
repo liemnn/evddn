@@ -105,13 +105,14 @@ class CoSo(models.Model):
 
     def action_xem_chuongtrinh_kanban(self):
         kanban_view_id = self.env.ref('ekids_canthiep.ct_chuongtrinh_kanban').id
+        form_view_id = self.env.ref('ekids_canthiep.ct_chuongtrinh_form').id
 
         return {
             'type': 'ir.actions.act_window',
             'name': 'CHƯƠNG TRÌNH',
             'res_model': 'ekids.ct_chuongtrinh',
-            'views': [(kanban_view_id, 'kanban')],
-            'view_mode': 'kanban,list,form',
+            'views': [(kanban_view_id, 'kanban'),(form_view_id, 'form')],
+            'view_mode': 'kanban,form',
             'domain': [('coso_id', '=', self.id)],
             'target': 'current',
             'context': {
