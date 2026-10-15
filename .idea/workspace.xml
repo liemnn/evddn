@@ -7,6 +7,7 @@
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose/odoo18/backups/backup.sh" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose/odoo18/backups/backup.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +50,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
-    "Python.evddn.executor": "Run",
+    "Python.evddn.executor": "Debug",
     "Python.formula_util.executor": "Run",
     "Python.python_util.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
@@ -163,14 +164,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00508" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1790303065157</created>
-      <option name="number" value="00508" />
-      <option name="presentableId" value="LOCAL-00508" />
-      <option name="project" value="LOCAL" />
-      <updated>1790303065158</updated>
     </task>
     <task id="LOCAL-00509" summary="liemnn">
       <option name="closed" value="true" />
@@ -556,7 +549,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791964673116</updated>
     </task>
-    <option name="localTasksCounter" value="557" />
+    <task id="LOCAL-00557" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1792029143028</created>
+      <option name="number" value="00557" />
+      <option name="presentableId" value="LOCAL-00557" />
+      <option name="project" value="LOCAL" />
+      <updated>1792029143028</updated>
+    </task>
+    <option name="localTasksCounter" value="558" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -726,19 +727,19 @@
           <option name="timeStamp" value="581" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py</url>
-          <line>748</line>
-          <option name="timeStamp" value="589" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py</url>
-          <line>890</line>
-          <option name="timeStamp" value="592" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/custom-addons/ekids_func/giaovien_util.py</url>
           <line>470</line>
           <option name="timeStamp" value="595" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py</url>
+          <line>649</line>
+          <option name="timeStamp" value="598" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/custom-addons/ekids_hocsinh/models/hocphi/ekids_hocphi_thang_abstractmodel.py</url>
+          <line>646</line>
+          <option name="timeStamp" value="599" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

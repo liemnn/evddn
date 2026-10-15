@@ -611,7 +611,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         data_list = []
 
         for dm_ca in ca_canthieps.mapped('dm_ca_id'):
-            soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(ca_canthieps, dm_ca,ngay_dauthang_thucte,ngay_cuoithang)
+            soca = self.func_get_tong_soca_macdinh_trong_khoang_thoigian(nghiles,ca_canthieps, dm_ca,ngay_dauthang_thucte,ngay_cuoithang)
             if soca <= 0:
                 continue
 
@@ -643,11 +643,14 @@ class HocPhiThangAbstractModel(models.AbstractModel):
     # tinh toan so ngay nghi le va lam bu
 
 
-    def func_get_tong_soca_macdinh_trong_khoang_thoigian(self, ca_canthieps, dm_ca, tu_ngay,den_ngay):
+    def func_get_tong_soca_macdinh_trong_khoang_thoigian(self, nghiles,ca_canthieps, dm_ca, tu_ngay,den_ngay):
         total = 0
         ngay = tu_ngay
         while ngay <= den_ngay:
             ngay_val = fields.Date.to_date(ngay)
+            if nghiles.get(str(ngay)):
+                ngay += timedelta(days=1)
+                continue
             weekday = ngay_val.weekday() + 2  # t2, t3, ... t8
             thu_field = 't' + str(weekday)
             for ca in ca_canthieps:
