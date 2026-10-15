@@ -270,6 +270,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         hocsinh = self.hocsinh_id
         # lay tat ca hoc sinh tung hoc trong thang xem.
 
+
         nghiles = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, coso, ['0'], ngay_dauthang,
                                                                      ngay_cuoithang)
 
@@ -282,6 +283,9 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         ngay_dauthang_truoc = thangtruoc_days[0]
         if hocsinh.ngay_nhaphoc > ngay_dauthang_truoc:
             ngay_dauthang_truoc =hocsinh.ngay_nhaphoc
+
+
+
 
         ngay_cuoithang_truoc = thangtruoc_days[len(thangtruoc_days) - 1]
         nghiles_thangtruoc = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, coso, ['0'],
@@ -297,6 +301,9 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         ngay_dauthang_thucte = ngay_dauthang
         if hocsinh.ngay_nhaphoc > ngay_dauthang:
             ngay_dauthang_thucte = hocsinh.ngay_nhaphoc
+
+        if (hocsinh.ngay_nghihoc and hocsinh.ngay_nghihoc < ngay_cuoithang):
+            ngay_cuoithang= hocsinh.ngay_nghihoc
 
         nhatruong_nghi_bu_thangtruoc = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, coso, ['2'], ngay_dauthang_truoc,
                                                                                 ngay_cuoithang_truoc)
