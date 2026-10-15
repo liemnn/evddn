@@ -151,7 +151,10 @@
                                         <t t-if="o.dm_chinhsach_giam_id">
                                             - <span t-field="o.dm_chinhsach_giam_id.name"/>
                                         </t>
-                                        (<strong t-field="o.tyle_giamhocphi"/>%)
+                                        <t t-if="o.tyle_giamhocphi > 0">
+                                            (<strong t-field="o.tyle_giamhocphi"/>%)
+                                        </t>
+
                                     </t>
                                 </td>
                                 <td style="text-align:right; vertical-align:top;">

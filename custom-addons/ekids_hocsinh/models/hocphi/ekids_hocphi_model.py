@@ -105,6 +105,14 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
     tyle_giamhocphi = fields.Integer(string=" % Giảm",default=0)
     dm_chinhsach_giam_id = fields.Many2one("ekids.hocphi_dm_chinhsach_giam",
                                            string="Học sinh thuộc chính sách giảm học phí (nếu có)")
+
+    is_giam_theo_tyle = fields.Boolean(
+        related='dm_chinhsach_giam_id.is_giam_theo_tyle', readonly=True
+    )
+    chinhsach_tien_giam = fields.Float(
+        related='dm_chinhsach_giam_id.tien', readonly=True
+    )
+
     is_giamhocphi_dacthu = fields.Boolean(string="Giảm học phí theo đặc thù",default=False)
 
     tyle_giamhocphi_bantru = fields.Integer(string=" % Giảm bán trú", default=0)
@@ -416,14 +424,19 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 hp._compute_hocphi()
             else:
                 # Giam theo tong khong chia tung khoan rieng
-                bantru = hp.func_hocphi_giam_bantru()
-                # tong giảm ca can thiệp
-                ca = hp.func_hocphi_giam_ca()
-                #tien_duoctru = hp.tien_duoctru
+                if hp.is_giam_theo_tyle == True:
+                    bantru = hp.func_hocphi_giam_bantru()
+                    # tong giảm ca can thiệp
+                    ca = hp.func_hocphi_giam_ca()
+                    #tien_duoctru = hp.tien_duoctru
 
-                sotien_giam = ((bantru + ca) / 100) * hp.tyle_giamhocphi
-                hp.hocphi_giam = sotien_giam
-                hp._compute_hocphi()
+                    sotien_giam = ((bantru + ca) / 100) * hp.tyle_giamhocphi
+                    hp.hocphi_giam = sotien_giam
+                    hp._compute_hocphi()
+                else:
+                    hp.hocphi_giam = hp.chinhsach_tien_giam
+                    hp._compute_hocphi()
+
 
 
 

@@ -224,9 +224,7 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                 'tyle_giamhocphi_bantru': tyle,
                 'tyle_giamhocphi_ca': tyle,
             })
-        else:
-            # Trường hợp giảm theo số tiền cố định
-            self.func_tao_khoantru_giam_hocphi_sotien(hocsinh, hocphi)
+
 
         # Cập nhật database một lần duy nhất cho các trường tỷ lệ và chính sách
         hocphi.write(vals)

@@ -225,6 +225,7 @@
             </kanban>
         </field>
     </record>
+
     <record id="ekids_hocsinh.hocphi_form" model="ir.ui.view">
         <field name="name">Thông tin Học phí - Standard Polished UI</field>
         <field name="model">ekids.hocphi</field>
@@ -233,6 +234,7 @@
                 <field name="is_chot_hocphi" invisible="1"/>
                 <field name="is_dl_locked" invisible="1"/>
                 <field name="coso_id" invisible="1"/>
+                <field name="is_giam_theo_tyle" invisible="1"/>
 
                 <header>
                     <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary fw-bold px-3 shadow-sm" icon="fa-print" string="In phiếu thu"/>
@@ -323,7 +325,6 @@
                             flex-shrink: 0;
                         }
 
-                        /* Cấu trúc bảng chống tràn và chống đè chữ cho banner tổng */
                         .ekids-banner-table {
                             width: 100%;
                             border-collapse: collapse;
@@ -365,8 +366,8 @@
                             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
                         }
 
-                        /* Hộp Badge phần trăm có ký hiệu % cố định */
-                        .ekids-percent-badge {
+                        /* Hộp Badge linh hoạt cho % hoặc VNĐ */
+                        .ekids-badge-dynamic {
                             display: inline-flex;
                             align-items: center;
                             justify-content: center;
@@ -374,13 +375,11 @@
                             border: 1.5px solid #dc2626;
                             border-radius: 8px;
                             padding: 3px 12px;
-                            min-width: 100px;
-                            max-width: 130px;
+                            min-width: 90px;
                             box-shadow: 0 2px 5px rgba(220, 38, 38, 0.12);
                             gap: 4px;
                         }
 
-                        /* 5. Font chữ Notebook bảng dưới */
                         .o_notebook .nav-tabs .nav-link {
                             font-size: 14px !important;
                             font-weight: 800 !important;
@@ -389,21 +388,9 @@
                         .o_notebook .o_list_table {
                             font-size: 15px !important;
                         }
-                        .o_notebook .o_list_table th {
-                            font-size: 14px !important;
-                            font-weight: 800 !important;
-                            color: #1e293b !important;
-                            background-color: #f8fafc !important;
-                            padding: 10px 12px !important;
-                        }
-                        .o_notebook .o_list_table td {
-                            padding: 10px 12px !important;
-                            color: #0f172a !important;
-                            font-weight: 500 !important;
-                        }
                     </style>
 
-                    <!-- ================= HEADER: HỌC SINH + THÁNG + SỐ NGÀY ĐI HỌC ================= -->
+                    <!-- ================= HEADER ================= -->
                     <div class="d-flex flex-wrap justify-content-between align-items-center ekids-header-bar">
                         <div class="d-flex align-items-center flex-wrap" style="gap: 15px;">
                             <div class="d-flex align-items-center gap-2">
@@ -447,10 +434,10 @@
                         </div>
                     </div>
 
-                    <!-- ================= KHỐI BẢNG TÍNH & CHÍNH SÁCH (2 CỘT 7 : 5) ================= -->
+                    <!-- ================= 2 CỘT CHÍNH ================= -->
                     <div class="row align-items-stretch mb-3 mx-0">
 
-                        <!-- CỘT TRÁI (7 PHẦN): CHI TIẾT ĐỊNH MỨC HỌC PHÍ -->
+                        <!-- CỘT TRÁI: CHI TIẾT ĐỊNH MỨC -->
                         <div class="col-md-7 ps-0 pe-md-2 mb-3 mb-md-0">
                             <div class="ekids-panel">
                                 <div>
@@ -516,7 +503,6 @@
                                     </div>
                                 </div>
 
-                                <!-- BANNER TỔNG PHẢI ĐÓNG -->
                                 <div class="ekids-total-banner">
                                     <table class="ekids-banner-table">
                                         <tr>
@@ -535,7 +521,7 @@
                             </div>
                         </div>
 
-                        <!-- CỘT PHẢI (5 PHẦN): CHÍNH SÁCH GIẢM -->
+                        <!-- CỘT PHẢI: CHÍNH SÁCH GIẢM -->
                         <div class="col-md-5 pe-0 ps-md-2">
                             <div class="ekids-panel">
                                 <div>
@@ -546,7 +532,6 @@
 
                                     <div class="ekids-discount-wrap">
 
-                                        <!-- THẺ DIỆN CHÍNH SÁCH CỦA HỌC SINH -->
                                         <div class="ekids-policy-hero">
                                             <div class="d-flex align-items-center gap-2 mb-1.5">
                                                 <div class="d-flex align-items-center justify-content-center bg-white rounded-circle shadow-sm" style="width: 26px; height: 26px;">
@@ -557,12 +542,10 @@
                                                 </span>
                                             </div>
                                             <div class="ps-1">
-                                                <!-- Khi CÓ diện chính sách -->
                                                 <span invisible="dm_chinhsach_giam_id == False" class="fw-bolder" style="font-size: 15.5px; color: #78350f; line-height: 1.4;">
                                                     <field name="dm_chinhsach_giam_id" readonly="1" options="{'no_open': True}"/>
                                                 </span>
 
-                                                <!-- Khi KHÔNG thuộc chính sách nào -->
                                                 <div invisible="dm_chinhsach_giam_id != False" class="d-flex align-items-center gap-1.5 pt-0.5">
                                                     <i class="fa fa-info-circle text-muted" style="font-size: 14px;"/>
                                                     <span class="fw-bolder" style="font-size: 14px; color: #64748b; letter-spacing: 0.3px;">
@@ -572,9 +555,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- KHỐI MỨC GIẢM -->
                                         <div class="ekids-discount-box">
-                                            <!-- Hàng tiêu đề + Công tắc -->
                                             <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                                                 <div class="d-flex align-items-center gap-2">
                                                     <i class="fa fa-pencil-square-o text-primary" style="font-size: 16px;"/>
@@ -585,24 +566,34 @@
                                                 </div>
                                             </div>
 
-                                            <!-- KHI TẮT ĐẶC THÙ: Bổ sung ký hiệu % to rõ ràng -->
+                                            <!-- KHI TẮT ĐẶC THÙ: HIỂN THỊ ĐỘNG THEO TỶ LỆ (%) HOẶC SỐ TIỀN (VNĐ) -->
                                             <div invisible="is_giamhocphi_dacthu == True" class="d-flex justify-content-between align-items-center">
                                                 <span style="font-size: 15px; font-weight: 800; color: #0f172a;">
                                                     Mức giảm áp dụng:
                                                 </span>
-                                                <div class="ekids-percent-badge">
+
+                                                <!-- TRƯỜNG HỢP A: Giảm theo Tỷ lệ % -->
+                                                <div invisible="is_giam_theo_tyle == False" class="ekids-badge-dynamic">
                                                     <field name="tyle_giamhocphi" class="fw-black text-danger mb-0"
-                                                           style="font-size: 20px !important; font-weight: 900 !important; width: auto !important;"
+                                                           style="font-size: 19px !important; font-weight: 900 !important; width: auto !important;"
                                                            readonly="is_dl_locked"/>
-                                                    <span class="fw-black text-danger" style="font-size: 18px; font-weight: 900;">%</span>
+                                                    <span class="fw-black text-danger" style="font-size: 17px; font-weight: 900;">%</span>
+                                                </div>
+
+                                                <!-- TRƯỜNG HỢP B: Giảm theo Số tiền cố định VNĐ -->
+                                                <div invisible="is_giam_theo_tyle == True" class="ekids-badge-dynamic" style="min-width: 130px;">
+                                                    <field name="chinhsach_tien_giam" class="fw-black text-danger mb-0"
+                                                           style="font-size: 16px !important; font-weight: 900 !important; width: auto !important;"
+                                                           readonly="1" widget="integer" nolabel="1"/>
+                                                    <span class="fw-black text-danger" style="font-size: 13px; font-weight: 800;">VNĐ</span>
                                                 </div>
                                             </div>
 
-                                            <!-- KHI BẬT ĐẶC THÙ: Bổ sung ký hiệu % cho cả 2 ô -->
+                                            <!-- KHI BẬT ĐẶC THÙ -->
                                             <div invisible="is_giamhocphi_dacthu == False">
                                                 <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded-2 border">
                                                     <span style="font-size: 14px; font-weight: 800; color: #0f172a;">% Giảm [Lớp chung]:</span>
-                                                    <div class="ekids-percent-badge" style="min-width: 90px;">
+                                                    <div class="ekids-badge-dynamic" style="min-width: 90px;">
                                                         <field name="tyle_giamhocphi_bantru" class="fw-black text-danger mb-0"
                                                                style="font-size: 17px !important; font-weight: 800 !important; width: auto !important;"
                                                                readonly="is_dl_locked"/>
@@ -611,7 +602,7 @@
                                                 </div>
                                                 <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded-2 border">
                                                     <span style="font-size: 14px; font-weight: 800; color: #0f172a;">% Giảm [Can thiệp]:</span>
-                                                    <div class="ekids-percent-badge" style="min-width: 90px;">
+                                                    <div class="ekids-badge-dynamic" style="min-width: 90px;">
                                                         <field name="tyle_giamhocphi_ca" class="fw-black text-danger mb-0"
                                                                style="font-size: 17px !important; font-weight: 800 !important; width: auto !important;"
                                                                readonly="is_dl_locked"/>
@@ -624,7 +615,6 @@
                                     </div>
                                 </div>
 
-                                <!-- GHI CHÚ CHÂN KHỐI -->
                                 <div class="p-2 px-3 m-3 mt-0 rounded-2 d-flex align-items-center gap-2" style="background-color: #f0fdf4; border: 1.5px solid #bbf7d0;">
                                     <i class="fa fa-check-circle text-success" style="font-size: 15px; flex-shrink: 0;"/>
                                     <span style="font-size: 13px; font-weight: 600; color: #166534; line-height: 1.4;">
@@ -636,7 +626,7 @@
 
                     </div>
 
-                    <!-- ================= NOTEBOOK CHI TIẾT BÊN DƯỚI (FONT TO 15PX) ================= -->
+                    <!-- ================= NOTEBOOK BÊN DƯỚI ================= -->
                     <notebook>
                         <page name="hocphi_bantru_ids" string="CHI TIẾT: LỚP CHUNG [+]">
                             <field name="hocphi_bantru_ids"
