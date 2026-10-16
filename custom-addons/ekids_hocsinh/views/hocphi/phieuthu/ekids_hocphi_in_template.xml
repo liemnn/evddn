@@ -189,11 +189,7 @@
                                              style="height:150px; width:170px; display:block; margin:auto;"/>
                                         <div style="font-size: 11px; font-weight: bold; margin-top: 5px;">Quét để chuyển khoản</div>
                                     </t>
-                                    <!-- Nếu không có QR động thì vẫn hiển thị ảnh tĩnh -->
-                                    <t t-else="">
-                                        <img t-att-src="'data:image/png;base64,' + o.coso_id.qrcode_thu_hocphi.decode('utf-8')"
-                                             style="height:150px; width:170px;"/>
-                                    </t>
+
                                 </td>
                             </tr>
                         </table>
