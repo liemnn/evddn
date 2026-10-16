@@ -366,6 +366,7 @@
                 <form class="o_premium_layout">
                     <field name="is_phancong_lai" invisible="1"/>
                     <field name="is_xoa" invisible="1"/>
+                    <field name="coso_id" invisible="1"/>
                     <header>
                         <button name="action_phancong_lai_giaovien"
                             string="Phân công lại giáo viên"
@@ -660,7 +661,7 @@
                                     <div class="ws-field-box">
                                         <field name="dm_gv_danhgia_id" readonly="is_readonly"
                                                domain="[('coso_id','=',coso_id)]"
-                                               options="{'no_open': True,'no_create': True}"/>
+                                                context="{'default_coso_id':coso_id}"/>
                                     </div>
                                 </div>
                             </div>
@@ -677,7 +678,8 @@
                                             <field name="dm_roiloan_ids" readonly="is_readonly"
                                                    domain="[('coso_id','=',coso_id)]"
                                                    string="Các rối loạn của trẻ" widget="many2many_tags"
-                                                   options="{'no_open': True,'no_create': True}" colspan="12" class="w-100"/>
+                                                    context="{'default_coso_id':coso_id}"
+                                                    colspan="12" class="w-100"/>
                                         </group>
                                     </div>
                                 </div>
@@ -687,14 +689,18 @@
                                         <group col="12" class="p-0 m-0">
                                             <field name="dm_mucdo_id" readonly="is_readonly"
                                                    domain="[('coso_id','=',coso_id)]"
-                                                   string="Mức độ" colspan="12" options="{'no_open': True,'no_create': True}"/>
+                                                   string="Mức độ" colspan="12"
+                                                    context="{'default_coso_id':coso_id}"
+                                            />
                                         </group>
                                     </div>
                                     <div class="col-md-4 pe-0 ps-0 ps-md-2 border-separator-md">
                                         <group col="12" class="p-0 m-0">
                                             <field name="dm_lieuluong_id" readonly="is_readonly"
                                                    domain="[('coso_id','=',coso_id)]"
-                                                   string="Liều lượng can thiệp" colspan="12" options="{'no_open': True,'no_create': True}"/>
+                                                   string="Liều lượng can thiệp" colspan="12"
+                                                    context="{'default_coso_id':coso_id}"
+                                            />
                                         </group>
                                     </div>
                                     <div class="col-md-4 ps-0 pe-0 pe-md-2">
@@ -718,7 +724,9 @@
                                             <field name="dm_phuongphap_id" readonly="is_readonly"
                                                    domain="[('coso_id','=',coso_id)]"
                                                    nolabel="1"
-                                                   colspan="12" options="{'no_open': True,'no_create': True}"/>
+                                                   colspan="12"
+                                                   context="{'default_coso_id':coso_id}"
+                                            />
                                         </group>
                                     </div>
                                 </div>
@@ -895,7 +903,8 @@
                                         <field name="dm_lichhen_id" readonly="is_readonly" nolabel="1"
                                                domain="[('coso_id','=',coso_id)]"
                                                string="Lịch hẹn lần sau"
-                                               colspan="12" options="{'no_open': True,'no_create': True}"/>
+                                               context="{'default_coso_id':coso_id}"
+                                               colspan="12" />
                                     </group>
                                 </div>
                             </div>
