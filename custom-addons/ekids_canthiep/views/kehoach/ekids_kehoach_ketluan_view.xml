@@ -368,17 +368,17 @@
                     <field name="is_xoa" invisible="1"/>
                     <header>
                         <button name="action_phancong_lai_giaovien"
-                            string="Phân công lại"
+                            string="Phân công lại giáo viên"
                             type="object"
                             icon="fa-share-alt"
                             invisible="not is_phancong_lai"
                             class="btn-default"/>
 
                         <button name="action_xoa_kehoach_cua_ketluan"
-                            string="Xóa toàn bộ [Kế hoạch]"
+                            string="Xóa toàn bộ [Kế hoạch] của Kết luận"
                             type="object"
                             icon="fa-trash-o"
-                            confirm="CẢNH BÁO: Toàn bộ Kế hoạch của Kết luận này sẽ bị XÓA VĨNH VIỄN và KHÔNG THỂ KHÔI PHỤC! Bạn có chắc chắn muốn tiếp tục?"
+                            confirm="CẢNH BÁO: Toàn bộ Kế hoạch của Kết luận này sẽ bị XÓA VĨNH VIỄN và KHÔNG THỂ KHÔI PHỤC! kể cả kế hoạch đã kết thúc. Bạn có chắc chắn muốn tiếp tục?"
                             invisible="is_xoa == False"
                             class="btn-outline-danger"/>
 
@@ -388,6 +388,67 @@
 
                         <style>
                             .bg-light-smooth { background-color: #F8FAFC !important; }
+
+                            /* ======================================================= */
+                            /* STYLE THÔNG BÁO HỆ THỐNG ĐỘC LẬP - CỠ CHỮ >= 16PX       */
+                            /* ======================================================= */
+                            .system-notice-banner {
+                                background-color: #FFFDF5 !important;
+                                border: 2px solid #F59E0B !important;
+                                border-radius: 12px !important;
+                                padding: 16px 20px !important;
+                                margin-bottom: 18px !important;
+                                box-shadow: 0 4px 14px rgba(245, 158, 11, 0.12) !important;
+                            }
+
+                            .notice-icon-box {
+                                background-color: #FEF3C7 !important;
+                                color: #D97706 !important;
+                                width: 52px !important;
+                                height: 52px !important;
+                                border-radius: 12px !important;
+                                display: flex !important;
+                                align-items: center !important;
+                                justify-content: center !important;
+                                flex-shrink: 0 !important;
+                                border: 1px solid #FDE68A !important;
+                            }
+
+                            .notice-main-title {
+                                font-size: 18px !important;
+                                font-weight: 800 !important;
+                                color: #92400E !important;
+                                letter-spacing: -0.2px !important;
+                            }
+
+                            .notice-action-btn {
+                                font-size: 15.5px !important;
+                                border: 1.5px solid #D97706 !important;
+                                border-radius: 8px !important;
+                                background-color: #FDE68A !important;
+                            }
+                            .notice-action-btn:hover {
+                                background-color: #FCD34D !important;
+                            }
+
+                            .notice-body-text {
+                                font-size: 16.5px !important;
+                                color: #451A03 !important;
+                                line-height: 1.55 !important;
+                                margin-bottom: 10px !important;
+                            }
+
+                            .notice-red-highlight {
+                                background-color: #FEF2F2 !important;
+                                border: 1.5px dashed #EF4444 !important;
+                                border-radius: 8px !important;
+                                padding: 12px 16px !important;
+                                color: #991B1B !important;
+                                font-size: 16.5px !important;
+                                line-height: 1.55 !important;
+                                display: flex !important;
+                                align-items: center !important;
+                            }
 
                             /* THANH THÔNG TIN HEADER HỌC SINH */
                             .ws-info-bar {
@@ -488,7 +549,7 @@
                             .o_premium_layout .o_form_label { font-weight: 700 !important; color: #475569 !important; font-size: 13px !important; }
                             .border-separator-md { border-left: 1px dashed #E2E8F0; }
 
-                            /* THANH CÔNG CỤ CHỌN NHANH ĐÃ FIX CÂN ĐỐI */
+                            /* THANH CÔNG CỤ CHỌN NHANH */
                             .quick-select-box {
                                 background: #F0FDF4 !important;
                                 border: 1px dashed #86EFAC !important;
@@ -533,6 +594,44 @@
                         <field name="is_readonly" invisible="1"/>
 
                         <div class="w-100">
+
+                            <!-- ======================================================== -->
+                            <!-- KHỐI THÔNG BÁO HỆ THỐNG NỔI BẬT (CHỮ TO >= 16PX)       -->
+                            <!-- ======================================================== -->
+                            <div class="system-notice-banner" invisible="trangthai != '1'">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="notice-icon-box">
+                                        <i class="fa fa-bullhorn fa-2x"></i>
+                                    </div>
+
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                                            <span class="notice-main-title">
+                                                THÔNG BÁO: KẾT LUẬN ĐÃ DUYỆT [CHO PHÉP LẬP KẾ HOẠCH]
+                                            </span>
+
+                                            <button name="action_phancong_lai_giaovien"
+                                                    type="object"
+                                                    string="Phân công lại giáo viên"
+                                                    icon="fa-share-alt"
+                                                    class="btn btn-warning fw-bold text-dark px-3 py-1 shadow-sm notice-action-btn"
+                                                    invisible="not is_phancong_lai"/>
+                                        </div>
+
+                                        <div class="notice-body-text">
+                                            Hồ sơ này đã được duyệt khóa: <strong>Không thể biên tập lại khung chương trình</strong> cho giáo viên.
+                                            Nếu cần điều chỉnh hoặc thay đổi người dạy, vui lòng nhấn nút <strong>[Phân công lại giáo viên]</strong> ở bên phải.
+                                        </div>
+
+                                        <div class="notice-red-highlight">
+                                            <i class="fa fa-exclamation-triangle fa-lg text-danger me-2"></i>
+                                            <span>
+                                                <strong>NẾU MUỐN THAY ĐỔI KHUNG CHƯƠNG TRÌNH:</strong> Vui lòng click chọn trạng thái <u>"Hết hiệu lực lập [Kế hoạch]"</u> trên thanh trạng thái (góc trên bên phải) để kết thúc hồ sơ này. Sau đó hệ thống sẽ mở quyền cho bạn tạo một phiếu Kết luận mới khác!
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- HÀNG THÔNG TIN HỌC SINH -->
                             <div class="ws-info-bar">
@@ -643,7 +742,6 @@
                                     <span>Đánh giá lên khung chương trình</span>
                                 </div>
 
-                                <!-- Danh sách tags các khung chương trình lớn đang dùng -->
                                 <div class="row mb-2 mx-0">
                                     <div class="col-12 p-0">
                                         <group col="12" class="p-0 m-0">
@@ -654,7 +752,6 @@
 
                                 <!-- THANH CÔNG CỤ CHỌN NHANH CÂN ĐỐI CHUẨN GRID -->
                                 <div class="quick-select-box" invisible="is_readonly">
-                                    <!-- Tiêu đề / Hướng dẫn -->
                                     <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom" style="border-color: #DCFCE7 !important;">
                                         <i class="fa fa-bolt text-warning" style="font-size: 13px;"></i>
                                         <span class="fw-bold text-success" style="font-size: 0.82rem; letter-spacing: 0.2px;">
@@ -662,7 +759,6 @@
                                         </span>
                                     </div>
 
-                                    <!-- Lưới 3 cột: Cột 1 (30%), Cột 2 (50%), Nút bấm (20%) -->
                                     <div class="row g-2 align-items-end">
                                         <div class="col-md-4 col-12">
                                             <div class="quick-label text-success">
@@ -708,14 +804,12 @@
                                             <field name="chuongtrinh_id"
                                                    string="Chương trình"
                                                    readonly="parent.is_readonly"
-                                                   options="{'no_open': True,'no_create': True}"
-                                                   />
+                                                   options="{'no_open': True,'no_create': True}"/>
                                             <field name="linhvuc_id"
                                                    string="Lĩnh vực"
                                                    readonly="parent.is_readonly"
                                                    domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
-                                                   options="{'no_open': True,'no_create': True}"
-                                                   />
+                                                   options="{'no_open': True,'no_create': True}"/>
                                             <field name="tuoi_id"
                                                    string="Độ tuổi"
                                                    readonly="parent.is_readonly"
@@ -723,14 +817,11 @@
                                                    options="{'no_open': True,'no_create': True}"
                                                    required="1"/>
 
-
                                             <field name="is_lapkehoach_thangnay"
                                                    widget="boolean_toggle"
                                                    string="Được lập kế hoạch"
                                                    decoration-success="is_lapkehoach_thangnay == True"
-                                                   decoration-danger="is_lapkehoach_thangnay == False"
-                                                   />
-
+                                                   decoration-danger="is_lapkehoach_thangnay == False"/>
 
                                             <button name="action_thietke_khung_muctieu"
                                                     type="object"
@@ -839,7 +930,7 @@
                             string="Xóa toàn bộ [Kế hoạch]"
                             type="object"
                             icon="fa-trash-o"
-                            confirm="CẢNH BÁO: Toàn bộ Kế hoạch của Kết luận này sẽ bị XÓA VĨNH VIỄN và KHÔNG THỂ KHÔI PHỤC! Bạn có chắc chắn muốn tiếp tục?"
+                            confirm="CẢNH BÁO: Toàn bộ Kế hoạch của Kết luận này sẽ bị XÓA VĨNH VIỄN và KHÔNG THỂ KHÔI PHỤC! kể cả kế hoạch đã kết thúc. Bạn có chắc chắn muốn tiếp tục?"
                             invisible="is_xoa == False"
                             class="btn-outline-danger"/>
 

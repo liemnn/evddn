@@ -683,21 +683,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
 
 
-    # 🌟 BỎ HOÀN TOÀN decorator @api.model ở đây
-    def unlink(self):
-        # 1. Nếu là Admin tối cao thì cho qua luôn, không cần duyệt qua vòng lặp
-        if self.env.user._is_admin():
-            return super(KeHoach, self).unlink()
 
-        # 2. Duyệt qua từng bản ghi được chọn xóa để kiểm tra điều kiện trạng thái
-        for rec in self:
-            # Kiểm tra nếu thỏa mãn điều kiện Đang lập HOẶC Cần điều chỉnh thì cho phép qua, ngược lại chặn đứng
-            if not (rec.trangthai == kehoach_util.KEHOACH_DANG_LAP or
-                    rec.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
-                raise UserError(f"Kế hoạch [{rec.name or ''}] đang ở trạng thái không cho phép xóa!")
-
-        # 3. Gọi hàm super() duy nhất một lần cuối cùng để thực thi xóa dưới DB
-        return super(KeHoach, self).unlink()
 
 
 

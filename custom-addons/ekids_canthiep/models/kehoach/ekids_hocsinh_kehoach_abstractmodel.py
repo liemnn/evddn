@@ -182,7 +182,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
             is_taomoi = True
 
         for hs in self:
-            trangthais =[kehoach_util.KETLUAN_DANG_TAO]
+            trangthais =[kehoach_util.KETLUAN_DANG_TAO,kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH]
             count = kehoach_util.func_count_ketluan_hocsinh_trangthai(self,hs,trangthais)
             if count>0:
                 hs.is_tao_ketluan = False

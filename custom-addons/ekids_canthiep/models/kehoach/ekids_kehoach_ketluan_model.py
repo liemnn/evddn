@@ -348,7 +348,7 @@ class KetLuan(models.Model):
                             if is_admin == False:
                                 if rec.kehoach_ids:  # Thay bằng tên trường kế hoạch chính xác trên model của bạn
                                     raise UserError(
-                                        "Đã tồn tại [Kế hoạch] gắn với kết luận này, không thể chuyển ngược về trạng thái [Đang lập]!"
+                                        "Đã tồn tại [Kế hoạch] gắn với kết luận này, không thể chuyển ngược về trạng thái [Đang lập]!.Nêu nhất định phải chuyển về bản phải xóa toàn bộ [Kế hoạch] của kết luận này đi !"
                                     )
 
                     # TH2: Phiếu đã [Hết hiệu lực] -> Cấm tuyệt đối không cho bẻ lái sang trạng thái khác
@@ -493,17 +493,11 @@ class KetLuan(models.Model):
 
     def action_xoa_kehoach_cua_ketluan(self):
         # day la quyet dinh nguy hiem
-        giaovien = giaovien_util.func_get_giaovien_tu_user(self)
         kehoach_ids =self.kehoach_ids
-        is_admin=self.env.is_admin()
-        trangthais=[kehoach_util.KEHOACH_DANG_LAP
-            ,kehoach_util.KEHOACH_DANG_PHEDUYET
-            ,kehoach_util.KEHOACH_DANG_CANTHIEP]
+
         if kehoach_ids:
             for kehoach_id in kehoach_ids:
-                if (kehoach_id.trangthai in trangthais
-                    and (is_admin == True or giaovien.id == kehoach_id.ketluan_id.gv_kiemduyet_id.id)):
-                    kehoach_id.unlink()
+                    kehoach_id.sudo().unlink()
 
 
     def func_tao_macdinh_kehoach_ketluan_phancong_lai_wizard_form(self):
