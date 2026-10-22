@@ -48,7 +48,8 @@
             <field name="report_type">qweb-html</field>
             <field name="report_name">ekids_canthiep.kehoach_hoso_template</field>
             <field name="report_file">ekids_canthiep.kehoach_hoso_template</field>
-            <field name="print_report_name">'Hồ sơ_Can_thiep_' + (object.hocsinh_id.name or '')</field>
+            <!--  SỬA THÀNH: -->
+            <field name="print_report_name">'Hồ_sơ_Can_thiệp_' + (object.name or '')</field>
             <field name="binding_model_id" ref="model_ekids_hocsinh"/>
             <field name="binding_type">report</field>
             <!-- Khóa cứng khổ giấy A4 Ngang (Landscape) trơn tru -->

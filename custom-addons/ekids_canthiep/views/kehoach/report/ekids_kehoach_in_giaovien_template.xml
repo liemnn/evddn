@@ -197,9 +197,6 @@
                         .tracking-diary-content {
                             width: 100%;
                             margin-top: 3px;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 2px;
                             page-break-inside: avoid !important;
                             break-inside: avoid !important;
                         }
@@ -210,71 +207,58 @@
                             -webkit-overflow-scrolling: touch;
                         }
 
-                        .day-boxes-horizontal-flow {
-                            display: flex;
-                            flex-wrap: nowrap !important;
-                            gap: 2px;
+                        /* BẢNG THEO DÕI NGÀY HTML CHUẨN TƯƠNG THÍCH WKHTMLTOPDF  WEB */
+                        .tracking-days-table {
                             width: 100%;
-                            min-width: 850px;
+                            table-layout: fixed;
+                            border-collapse: collapse;
+                            margin-bottom: 4px;
+                            background-color: #ffffff !important;
                         }
 
-                        .day-tracking-box-print {
-                            flex: 1 1 0;
-                            min-width: 26px;
-                            height: 48px;
+                        .tracking-days-table td,
+                        .tracking-days-table th {
                             border: 1px solid #000000 !important;
-                            border-radius: 2px;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: space-between;
-                            align-items: center;
-                            background-color: #ffffff !important;
+                            text-align: center;
+                            vertical-align: middle;
+                            padding: 0 !important;
+                            margin: 0 !important;
+                        }
+
+                        .td-day-head {
+                            font-size: 10.5px !important;
+                            font-weight: bold !important;
+                            color: #000000 !important;
+                            background-color: #f0f0f0 !important;
+                            height: 14px;
+                            line-height: 14px;
+                            white-space: nowrap;
                             overflow: hidden;
                         }
 
-                        .cell-print-date {
-                            font-size: 11px !important;
-                            font-weight: bold !important;
-                            color: #000000 !important;
-                            line-height: 14px;
-                            background-color: #f0f0f0 !important;
-                            border-bottom: 1px solid #000000 !important;
-                            width: 100%;
-                            text-align: center;
-                            height: 14px;
-                            white-space: nowrap;
-                        }
-
-                        .cell-print-val {
-                            height: 20px;
-                            width: 100%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
+                        .td-day-score {
+                            height: 18px;
                             font-size: 11.5px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
+                            line-height: 18px;
                             border-bottom: 1px dotted #000000 !important;
                         }
 
-                        .cell-print-rate {
+                        .td-day-rate {
                             height: 13px;
-                            width: 100%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-size: 13px !important;
+                            font-size: 11.5px !important;
                             font-weight: bold !important;
                             color: #000000 !important;
-                            line-height: 1;
+                            line-height: 13px;
                         }
 
-                        .box-print-rest { background-color: #eeeeee !important; }
-                        .box-print-rest .cell-print-date { background-color: #dddddd !important; }
-
-                        /* Ô chưa cập nhật nhưng là ngày học trong quá khứ/hôm nay */
-                        .box-print-empty { background-color: #ffffff !important; }
-                        .box-print-empty .cell-print-val { color: #cbd5e1 !important; font-weight: normal !important; }
+                        .cell-rest {
+                            background-color: #eeeeee !important;
+                        }
+                        .cell-rest .td-day-head {
+                            background-color: #dddddd !important;
+                        }
 
                         .lbl-summary-chuadat,
                         .lbl-summary-hinhthanh,
@@ -289,10 +273,12 @@
                         @media print {
                             .btn-print-container { display: none !important; }
                             .print-container { border: 1px solid #000000 !important; }
-                            .day-tracking-box-print { border: 1px solid #000000 !important; }
-                            .box-print-rest { background-color: #eeeeee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                             .tracking-scroll-wrapper { overflow-x: visible !important; }
-                            .day-boxes-horizontal-flow { min-width: auto !important; }
+                            .tracking-days-table { width: 100% !important; min-width: 100% !important; }
+                        }
+
+                        @media screen and (max-width: 992px) {
+                            .tracking-days-table { min-width: 800px; }
                         }
                     </style>
 
@@ -410,8 +396,9 @@
                             <tr>
                                 <td class="col-lbl-left">Tâm lý và hành vi:</td>
                                 <td colspan="3">
-                                    - Điều trẻ thích: .........................................................................................<br/>
-                                    - Điều trẻ sợ: ............................................................................................
+-                                     Điều trẻ thích: .........................................................................................
+<br/>
+-                                     Điều trẻ sợ: ............................................................................................
                                 </td>
                             </tr>
                             <tr>
@@ -436,6 +423,7 @@
 
                                 <!-- 🌟 XÂY DỰNG MAP TRA CỨU NHANH THEO NGÀY TỪ DATABASE -->
                                 <t t-set="kq_map" t-value="{k.ngay: k for k in muctieu.ketqua2muctieu_ids}"/>
+                                <t t-set="total_days" t-value="int(o.songay or 30)"/>
 
                                 <div class="print-container">
 
@@ -475,8 +463,6 @@
                                                             </span>
                                                         </div>
                                                     </t>
-
-
                                                 </div>
                                             </t>
 
@@ -500,8 +486,6 @@
                                                             </span>
                                                         </div>
                                                     </t>
-
-
                                                 </div>
                                             </t>
                                         </div>
@@ -519,7 +503,7 @@
                                         </div>
                                     </t>
 
-                                    <!-- KHỐI IV: THEO DÕI (DỰNG ĐỦ 30-31 NGÀY KỂ CẢ KHI DB KHÔNG CÓ DÒNG RỖNG) -->
+                                    <!-- KHỐI IV: THEO DÕI (TABLE LAYOUT FIXED THAY VÌ FLEX ĐỂ TRÁNH CO CỤM TRÊN PDF) -->
                                     <div class="tracking-diary-content">
                                         <div class="section-header-title" style="margin-bottom: 2px;">
                                             IV. Theo dõi
@@ -529,64 +513,74 @@
                                         </div>
 
                                         <div class="tracking-scroll-wrapper">
-                                            <div class="day-boxes-horizontal-flow">
-                                                <t t-set="total_days" t-value="int(o.songay or 30)"/>
-                                                <t t-foreach="range(total_days)" t-as="day_idx">
-                                                    <!-- 1. Tính toán mốc ngày thực tế trong kế hoạch -->
-                                                    <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
-                                                    <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
-                                                    <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
+                                            <table class="tracking-days-table">
+                                                <thead>
+                                                    <tr>
+                                                        <t t-foreach="range(total_days)" t-as="day_idx">
+                                                            <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
+                                                            <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
+                                                            <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
+                                                            <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
+                                                            <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
 
-                                                    <!-- 2. Tra cứu xem ngày này đã có bản ghi trong DB chưa -->
-                                                    <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
+                                                            <th t-attf-class="td-day-head #{is_rest and 'cell-rest' or ''}">
+                                                                <t t-out="cur_date.strftime('%d/%m')"/>
+                                                            </th>
+                                                        </t>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- DÒNG ĐIỂM ĐẠT / N -->
+                                                    <tr>
+                                                        <t t-foreach="range(total_days)" t-as="day_idx">
+                                                            <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
+                                                            <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
+                                                            <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
+                                                            <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
+                                                            <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
 
-                                                    <!-- 3. Phân loại hiển thị -->
-                                                    <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
-                                                    <t t-set="is_not_updated" t-value="not is_rest and (not kq_rec or kq_rec.trangthai == '0' or kq_rec.solan_thu_dat == 0)"/>
-
-                                                    <div t-attf-class="day-tracking-box-print #{is_rest and 'box-print-rest' or ''} #{is_not_updated and 'box-print-empty' or ''}"
-                                                         t-att-title="is_not_updated and 'Chưa cập nhật' or ''">
-
-                                                        <!-- Tầng 1: Ngày/Tháng -->
-                                                        <span class="cell-print-date">
-                                                            <t t-out="cur_date.strftime('%d/%m')"/>
-                                                        </span>
-
-                                                        <!-- Tầng 2: Điểm đạt / Ký hiệu N / Ký hiệu chưa cập nhật -->
-                                                        <div class="cell-print-val">
-                                                            <t t-if="kq_rec">
-                                                                <t t-if="kq_rec.loai == '-1'">N</t>
-                                                                <t t-elif="kq_rec.loai == '0'"></t>
-                                                                <t t-else="">
-                                                                    <t t-if="kq_rec.trangthai != '0' and kq_rec.solan_thu_dat &gt;= 0">
-                                                                        <t t-out="kq_rec.solan_thu_dat"/>
-                                                                    </t>
+                                                            <td t-attf-class="td-day-score #{is_rest and 'cell-rest' or ''}">
+                                                                <t t-if="kq_rec">
+                                                                    <t t-if="kq_rec.loai == '-1'">N</t>
+                                                                    <t t-elif="kq_rec.loai == '0'"></t>
                                                                     <t t-else="">
-                                                                        <!-- Đã có bản ghi nhưng chưa chấm -->
-                                                                        <span style="color: #cbd5e1; font-weight: normal;">-</span>
+                                                                        <t t-if="kq_rec.trangthai != '0' and kq_rec.solan_thu_dat &gt;= 0">
+                                                                            <t t-out="kq_rec.solan_thu_dat"/>
+                                                                        </t>
+                                                                        <t t-else="">
+                                                                            <span style="color: #cbd5e1; font-weight: normal;">-</span>
+                                                                        </t>
                                                                     </t>
                                                                 </t>
-                                                            </t>
-                                                            <t t-else="">
-                                                                <!-- CHƯA CÓ BẢN GHI TRONG DB -->
-                                                                <t t-if="is_sunday">N</t>
-                                                                <t t-elif="is_future"></t>
                                                                 <t t-else="">
-                                                                    <!-- Quá khứ / Hôm nay chưa chấm: Để dấu chấm mờ để biết là chưa cập nhật -->
-                                                                    <span style="color: #cbd5e1; font-weight: normal;">•</span>
+                                                                    <t t-if="is_sunday">N</t>
+                                                                    <t t-elif="is_future"></t>
+                                                                    <t t-else="">
+                                                                        <span style="color: #cbd5e1; font-weight: normal;">•</span>
+                                                                    </t>
                                                                 </t>
-                                                            </t>
-                                                        </div>
+                                                            </td>
+                                                        </t>
+                                                    </tr>
 
-                                                        <!-- Tầng 3: Tỷ lệ % -->
-                                                        <div class="cell-print-rate">
-                                                            <t t-if="kq_rec and kq_rec.loai == '1' and kq_rec.trangthai != '0'">
-                                                                <span><t t-out="kq_rec.tyle_thu"/>%</span>
-                                                            </t>
-                                                        </div>
-                                                    </div>
-                                                </t>
-                                            </div>
+                                                    <!-- DÒNG TỶ LỆ PHẦN TRĂM -->
+                                                    <tr>
+                                                        <t t-foreach="range(total_days)" t-as="day_idx">
+                                                            <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
+                                                            <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
+                                                            <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
+                                                            <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
+                                                            <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
+
+                                                            <td t-attf-class="td-day-rate #{is_rest and 'cell-rest' or ''}">
+                                                                <t t-if="kq_rec and kq_rec.loai == '1' and kq_rec.trangthai != '0'">
+                                                                    <t t-out="kq_rec.tyle_thu"/>%
+                                                                </t>
+                                                            </td>
+                                                        </t>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
 
                                         <div style="margin-top: 3px; padding-top: 2px; font-size: 13.5px; text-align: left; color: #000000; border-top: 1px dashed #000000;">
