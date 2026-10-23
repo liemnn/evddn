@@ -161,6 +161,9 @@ class ChamCongCongViec2Thang(models.Model,ChamCongFuncAbstractModel):
                     elif cell_val is False:
                         row[idx] = ""
 
+        # BẮT BUỘC PHẢI RETURN RESPONSE TRẢ VỀ CHO ODOO
+        return response
+
     def action_capnhat_ketqua_tong(self):
         form_view_id = self.env.ref('ekids_diemdanh.chamcong_congviec2thang_form').id  # chú ý id chính xác
         self.tong_temps =self.tong
