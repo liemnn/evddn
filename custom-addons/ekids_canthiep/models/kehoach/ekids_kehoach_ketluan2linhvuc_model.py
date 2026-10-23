@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api,Command
 from odoo.osv import expression
 from odoo.exceptions import ValidationError
 
@@ -38,6 +38,12 @@ class KetLuan2LinhVuc(models.Model):
         'muctieu_id',
         string="Danh sách mục tiêu lựa chọn thiết kế"
     )
+
+    @api.onchange('chuongtrinh_id')
+    def _onchange_huongtrinh_id(self):
+        """Khi đổi chương trình thì xóa các lĩnh vực cũ đang chọn dở"""
+        self.tuoi_id = [Command.clear()]
+
 
     def _compute_index(self):
         index =1

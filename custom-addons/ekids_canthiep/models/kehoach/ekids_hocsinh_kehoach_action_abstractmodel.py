@@ -113,19 +113,44 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
             },
         }
     def action_xem_danhsach_ketluan(self):
-          return {
-            'type': 'ir.actions.act_window',
-            'name': 'KẾT LUẬN',
-            'res_model': 'ekids.kehoach_ketluan',
-            'view_mode': 'kanban,form',
+         coso = self.coso_id
+         if coso:
+             url={}
+             kanban_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_kanban').id
+             if coso.is_canthiep_ketluan == True:
 
-            'target': 'current',
-            'domain': [('hocsinh_id', '=', self.id)],
-            'context': {
-                'default_coso_id': self.coso_id.id,
-                'default_hocsinh_id': self.id
-            },
-        }
+                 form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_form').id
+                 url = {
+                        'type': 'ir.actions.act_window',
+                        'name': 'KẾT LUẬN',
+                        'res_model': 'ekids.kehoach_ketluan',
+                        'view_mode': 'kanban,form',
+                        'views': [(kanban_view_id, 'kanban'),(form_view_id, 'form')],
+                        'target': 'current',
+                        'domain': [('hocsinh_id', '=', self.id)],
+                        'context': {
+                            'default_coso_id': self.coso_id.id,
+                            'default_hocsinh_id': self.id
+                        },
+                    }
+             else:
+                 form_view_id = self.env.ref('ekids_canthiep.kehoach_phancong_form').id
+                 url = {
+                        'type': 'ir.actions.act_window',
+                        'name': 'KẾT LUẬN',
+                        'res_model': 'ekids.kehoach_ketluan',
+                        'view_mode': 'kanban,form',
+                        'views': [(kanban_view_id, 'kanban'),(form_view_id, 'form')],
+                        'target': 'current',
+                        'domain': [('hocsinh_id', '=', self.id)],
+                        'context': {
+                            'default_coso_id': self.coso_id.id,
+                            'default_hocsinh_id': self.id
+                        },
+                    }
+             return url
+
+
 
     def action_lap_kehoach(self):
 
