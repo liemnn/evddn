@@ -62,7 +62,7 @@ class KeHoachKetQua2MucTieu(models.Model):
     solan_thu_dat = fields.Integer(string="Số lần đạt(+)")
     tyle_thu = fields.Integer(string="Tỷ lệ %", compute="_compute_tyle_thu")
 
-    is_giaovien_capnhat = fields.Boolean(string="Hệ thống tự câ nhật kết quả",default=True)
+    is_giaovien_capnhat = fields.Boolean(string="Hệ thống tự câp nhật kết quả",default=True)
 
     _sql_constraints = [
         (
@@ -81,15 +81,14 @@ class KeHoachKetQua2MucTieu(models.Model):
     @api.depends('tyle_thu')
     def _compute_trangthai(self):
         for record in self:
-            # Nhận trực tiếp tỷ lệ từ depends, loại bỏ hoàn toàn việc gọi _compute_tyle_thu() thủ công
             t = record.tyle_thu
+            # Chỉ cập nhật khi không phải là ngày nghỉ/không can thiệp
             if record.trangthai != "0":
-                if t >= 80:
-                    record.trangthai = "1"
-                elif t > 0:
-                    record.trangthai = "2"
-                else:
-                    record.trangthai = "-1"
+                new_status = "1" if t >= 80 else ("2" if t > 0 else "-1")
+                if record.trangthai != new_status:
+                    record.trangthai = new_status
+
+
 
     def _compute_solan_thu(self):
         for record in self:

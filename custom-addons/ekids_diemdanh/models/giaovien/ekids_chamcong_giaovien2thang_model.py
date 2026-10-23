@@ -33,7 +33,7 @@ EXPORT_MAP_CHAMCONG = {
 
 class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,ChamCongFuncAbstractModel):
     _name = "ekids.chamcong_giaovien2thang"
-    _description = "Điểm danh học sinh theo học"
+    _description = "Chaasm"
     _order = "giaovien_id asc"
 
     sequence = fields.Integer(string="TT", compute="_compute_sequence")

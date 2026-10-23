@@ -21,7 +21,7 @@ except ImportError as e:
 
 class ChamCongLoai2Thang(models.Model,ChamCongFuncAbstractModel):
     _name = "ekids.chamcong_loai2thang"
-    _description = "Điểm danh học sinh theo học"
+    _description = "Chấm công giáo viên"
 
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở",required=True,ondelete ="restrict")
     chamcong_loai_id = fields.Many2one("ekids.chamcong_loai", string="Loại chấm công", required=True,ondelete ="cascade")

@@ -22,7 +22,7 @@ except ImportError as e:
 
 class ChamCongCongViec2Thang(models.Model,ChamCongFuncAbstractModel):
     _name = "ekids.chamcong_congviec2thang"
-    _description = "Điểm danh học sinh theo học"
+    _description = "Chấm công Giáo viên"
     _order = "giaovien_id asc"
 
     sequence = fields.Integer(string="TT", compute="_compute_sequence")

@@ -20,7 +20,7 @@ except ImportError as e:
 
 class DiemDanh(models.Model):
     _name = "ekids.diemdanh"
-    _description = "Điểm danh học sinh theo học"
+    _description = "Điểm danh học sinh"
     _order = "id desc,nam desc ,thang desc"
 
     coso_id = fields.Many2one("ekids.coso", string="Cơ sở",required=True)
