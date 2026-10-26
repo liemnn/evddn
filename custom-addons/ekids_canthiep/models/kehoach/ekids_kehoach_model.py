@@ -138,11 +138,19 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     tyle_dat_canthiep = fields.Integer(compute="_compute_tong_ketqua_canthiep")
     tyle_dat_kiemduyet = fields.Integer(compute="_compute_tong_ketqua_canthiep")
 
+    nhanxet_gv = fields.Html(string="Nhận xét cuối tháng")
     nhanxet = fields.Html(string="Nhận xét cuối tháng")
     dinhhuong = fields.Html(string="Định hướng tháng tới")
 
     is_canthiep_ketluan = fields.Boolean( compute="_compute_is_canthiep_ketluan")
+    is_nhanxet_gv = fields.Boolean(compute="_compute_is_nhanxet_gv")
 
+    def _compute_is_nhanxet_gv(self):
+        for kh in self:
+            is_nhanxet_gv = False
+            if kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+               is_nhanxet_gv = True
+            kh.is_nhanxet_gv =is_nhanxet_gv
     def _compute_is_canthiep_ketluan(self):
         for kh in self:
             is_canthiep_ketluan = True
@@ -603,6 +611,9 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         """Mở Popup cho phép nhập nhận xét và định hướng trước khi đóng kế hoạch"""
         self.ensure_one()
         view_id = self.env.ref('ekids_canthiep.kehoach_ketthuc_form').id
+        if (string_util._is_char_empty(self.nhanxet_gv) == False
+            and string_util._is_char_empty(self.nhanxet) == True) :
+            self.write({'nhanxet': self.nhanxet_gv})
         return {
             'name': f'Đánh giá & Kết thúc kế hoạch: {self.name}',
             'type': 'ir.actions.act_window',
@@ -630,9 +641,31 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         if is_chophep_ketthuc:
             self.trangthai = kehoach_util.KEHOACH_HET_HIEULUC
 
+    def action_nhanxet_gv_kehoach(self):
+        self.ensure_one()
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_nhanxet_gv_form').id
+        url= {
+            'name': 'Thêm lĩnh vực can thiệp',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach',
+            'view_mode': 'form',
+            'views': [(form_view_id, 'form')],
+            'res_id': self.id,
+            'target': 'new',  # 🌟 Bắt buộc 'new' để hiển thị dạng POPUP Modal
+            'context': {
+                'default_kehoach_id': self.id,
+            }
+        }
+        return url
+
+    def action_xacnhan_nhanxet_gv_kehoach(self):
+        return None
+
     def action_thietke_kehoach_linhvuc(self):
         self.ensure_one()
         form_view_id = self.env.ref('ekids_canthiep.kehoach_thietke_linhvuc_form').id
+        # copy phần nhận xét vào giáo viên.
+
         url= {
             'name': 'Thêm lĩnh vực can thiệp',
             'type': 'ir.actions.act_window',
