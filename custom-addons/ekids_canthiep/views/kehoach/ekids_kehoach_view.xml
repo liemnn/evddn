@@ -776,6 +776,7 @@
                      <field name="is_xoa" invisible="1"/>
                      <field name="is_gui_pheduyet" invisible="1"/>
                      <field name="is_readonly" invisible="1"/>
+                     <field name="is_chuyen_trangthai" invisible="1"/>
                      <field name="is_kiemduyet" invisible="1"/>
                      <field name="trangthai" invisible="1"/>
                      <field name="is_header_open" invisible="1"/>
@@ -849,7 +850,11 @@
                                  class="btn-outline-danger"
                                  invisible="not is_xoa"/>
 
-                         <field name="trangthai" widget="statusbar" statusbar_visible="0,2,1,-1" options="{'clickable': false}"/>
+                         <field name="trangthai" widget="statusbar"  invisible="is_chuyen_trangthai == False"
+                                statusbar_visible="0,2,1,-1" options="{'clickable': True}"/>
+
+                         <field name="trangthai" widget="statusbar"  invisible="is_chuyen_trangthai == True"
+                                statusbar_visible="0,2,1,-1" options="{'clickable': False}"/>
                      </header>
 
                      <sheet class="p-1 p-md-3 bg-white w-100 max-w-100">
@@ -1092,7 +1097,7 @@
                                          <field name="index" readonly="1"/>
                                      </div>
                                      <span class="fw-bold" style="font-size: 15.5px; color: #1E293B;">
-                                          <field name="name" readonly="1"/>
+                                          Tên kế hoạch:<field name="ten"/>
                                      </span>
                                  </div>
 
@@ -1137,6 +1142,7 @@
                                                    <field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/>
                                                </span>
                                           </div>
+
                                       </div>
 
                                       <!-- Lưới thông tin Học sinh & Ngày tháng -->

@@ -36,6 +36,8 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     hocsinh_id = fields.Many2one('ekids.hocsinh', string="Họ và tên", required=True)  # [cite: 2]
 
     name = fields.Char(string="Tên",compute="_compute_name")
+    ten = fields.Char(string="Tên")
+
     kehoach_linhvuc_ids = fields.One2many("ekids.kehoach_linhvuc",
                                           inverse_name="kehoach_id",
                                           string="Lĩnh vực và độ tuổi thuộc kết luận")
@@ -114,6 +116,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     is_header_open = fields.Boolean(compute="_compute_is_header_open")
     is_show_wiget_canthiep = fields.Boolean(compute="_compute_is_show_wiget_canthiep")
     is_xoa = fields.Boolean(compute="_compute_is_xoa")
+    is_chuyen_trangthai = fields.Boolean(compute="_compute_is_chuyen_trangthai")
 
     ngay_conlai_kehoach = fields.Integer(compute="_compute_ngay_conlai_kehoach", string="Ngày còn lại [Kế hoạch]")
 
@@ -250,9 +253,29 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
             record.is_readonly = is_readonly
 
+    def _compute_is_chuyen_trangthai(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
+        for record in self:
+
+            is_chuyen_trangthai= False
+            if is_admin:
+                is_chuyen_trangthai = True
+            else:
+
+                giaovien = self.ketluan_id.gv_kiemduyet_id
+                if giaovien.id in giaoviens.ids:
+                    is_chuyen_trangthai= True
+
+            record.is_chuyen_trangthai = is_chuyen_trangthai
+
     @api.depends("tu_ngay")
     def _compute_name(self):
         for record in self:
+            if string_util._is_char_empty(record.ten) == False:
+                record.name = record.ten
+                continue
             if not record.tu_ngay:
                 record.name = ""
                 continue
@@ -631,36 +654,6 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             'type': 'ir.actions.client',
             'tag': 'reload',
         }
-
-
-    @api.model_create_multi
-    def create(self, vals_list):
-        records = []
-        for vals in vals_list:
-            result = super(KeHoach, self).create(vals)
-            if result:
-                is_trung = result.func_kiemtra_kehoach_trung_thoigian()
-                if is_trung:
-                    raise UserError(
-                        "Kế hoạch của Học sinh [" + result.hocsinh_id.name + "] Được lập trong khoản thời gian trên đang bị trùng với thời gian của kế hoạch khác !")
-
-
-                records.append(result)
-        return records[0] if len(records) == 1 else records
-
-    @api.model
-    def write(self, vals):
-        result = super().write(vals)
-        if result:
-            if ('tu_ngay' in vals
-                or 'den_ngay' in vals):
-                # nếu có thay đôi về ngày tháng cần kiểm tra trùng
-                is_trung = self.func_kiemtra_kehoach_trung_thoigian()
-                if is_trung:
-                    raise UserError("Thời gian của [Kế hoạch] đang trùng với kế hoạch khác")
-
-
-        return result
 
 
     def action_khoitao_lai_kehoach(self):

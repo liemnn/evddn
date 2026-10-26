@@ -26,7 +26,9 @@ class KeHoachKetQua2MucTieu(models.Model):
     kehoach_muctieu_id = fields.Many2one("ekids.kehoach_muctieu",
                                  string="Thuộc kế hoạch nào",
                                  required=True,
-                                 ondelete="cascade")
+                                 ondelete="cascade",
+                                 index = False
+                                         )
 
     ngay = fields.Date(string="Ngày",required=True)
 
