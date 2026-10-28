@@ -763,11 +763,11 @@ class KeHoach2MucTieu(models.Model):
     @api.depends('muctieu_id', 'muctieu_id.thietke', 'thietke_temp')
     def _compute_thietke(self):
         for mt in self:
-            if (mt.muctieu_id
-                    and string_util._is_html_empty(mt.muctieu_id.thietke)== False):
-                mt.thietke = mt.muctieu_id.thietke
+            if string_util._is_html_empty(mt.thietke_temp) == False:
+                mt.thietke = mt.thietke_temp
             else:
-                mt.thietke = mt.thietke_temp or ''
+                mt.thietke = mt.muctieu_id.thietke
+
 
     # 3. COMPUTE TIÊU CHÍ CHƯA ĐẠT (Kiểu Char)
     @api.depends('muctieu_id', 'muctieu_id.tieuchi_chuadat', 'tieuchi_chuadat_temp')
