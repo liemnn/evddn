@@ -661,24 +661,28 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     def action_xacnhan_nhanxet_gv_kehoach(self):
         return None
 
-    def action_thietke_kehoach_linhvuc(self):
+    def action_lap_kehoach_6thang(self):
         self.ensure_one()
-        form_view_id = self.env.ref('ekids_canthiep.kehoach_thietke_linhvuc_form').id
-        # copy phần nhận xét vào giáo viên.
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_kehoach_6thang_form').id
 
-        url= {
+        return {
             'name': 'Thêm lĩnh vực can thiệp',
             'type': 'ir.actions.act_window',
-            'res_model': 'ekids.kehoach',
+            'res_model': 'ekids.kehoach_ketluan',
             'view_mode': 'form',
             'views': [(form_view_id, 'form')],
-            'res_id': self.id,
-            'target': 'new',  # 🌟 Bắt buộc 'new' để hiển thị dạng POPUP Modal
+            'res_id': self.ketluan_id.id,
+            'target': 'new',
+            'flags': {
+                'initial_mode': 'edit',  # 🌟 CHUẨN ODOO: Bắt buộc mở thẳng vào chế độ EDIT
+            },
             'context': {
                 'default_kehoach_id': self.id,
+                'form_view_initial_mode': 'edit',  # Bổ sung cho các bản Odoo cũ/mới tương thích
+                'create': True,
+                'edit': True,
             }
         }
-        return url
 
     def action_luu_refresh_lai_kehoach(self):
         """Hàm đóng popup và ép trình duyệt refresh lại trang phía dưới"""

@@ -136,6 +136,39 @@ class KetLuan(models.Model):
 
     def action_them_linhvuc_nhanh(self):
         self.ensure_one()
+        self.func_them_linhvuc_nhanh()
+        return True
+
+    def action_them_linhvuc_nhanh_kehoach_6thang(self):
+        self.ensure_one()
+        self.func_them_linhvuc_nhanh()
+
+        form_view_id = self.env.ref('ekids_canthiep.kehoach_ketluan_kehoach_6thang_form').id
+
+        return {
+            'name': 'Thêm lĩnh vực can thiệp',
+            'type': 'ir.actions.act_window',
+            'res_model': 'ekids.kehoach_ketluan',
+            'view_mode': 'form',
+            'views': [(form_view_id, 'form')],
+            'res_id': self.id,
+            'target': 'new',
+            'flags': {
+                'initial_mode': 'edit',  # 🌟 CHUẨN ODOO: Bắt buộc mở thẳng vào chế độ EDIT
+            },
+            'context': {
+                'default_ketluan_id': self.id,
+                'form_view_initial_mode': 'edit',  # Bổ sung cho các bản Odoo cũ/mới tương thích
+                'create': True,
+                'edit': True,
+            }
+        }
+
+
+
+
+
+    def func_them_linhvuc_nhanh(self):
         if not self.chon_chuongtrinh_id:
             raise UserError("Vui lòng chọn Chương trình can thiệp trước!")
         if not self.chon_linhvuc_ids:
@@ -165,8 +198,38 @@ class KetLuan(models.Model):
             'linhvuc_ids': commands,
             'chon_linhvuc_ids': [Command.clear()],
         })
-        return True
 
+    def action_luu_kehoach_6thang(self):
+        self.ensure_one()
+
+        linhvuc_ids =self.linhvuc_ids
+        if linhvuc_ids:
+            for lv in linhvuc_ids:
+                if not lv.linhvuc_id:
+                    raise UserError("Bạn cần lựa chọn [Lĩnh vực] cho chương trình trong kế hoạch khung!")
+                if not lv.tuoi_id:
+                    raise UserError("Bạn cần lựa chọn [Độ tuổi] cho chương trình trong kế hoạch khung!")
+
+
+        context = self.env.context
+        kehoach_id = context.get("default_kehoach_id",False)
+        if kehoach_id:
+            kehoach = self.env['ekids.kehoach'].browse(kehoach_id)
+            if kehoach:
+                hocsinh = kehoach.hocsinh_id
+
+
+                if not hocsinh:
+                    raise UserError("Không tìm thấy thông tin Học sinh để khởi tạo lại kế hoạch!")
+
+                # BƯỚC 2: Xóa kế hoạch cũ
+                kehoach.unlink()
+
+                # Ép Odoo xóa hoàn toàn bản ghi xuống DB ngay lập tức để làm sạch bộ nhớ Cache
+                self.env.flush_all()
+
+                url = hocsinh.action_lap_kehoach()
+                return url
 
     def _compute_is_xoa(self):
         for record in self:
@@ -238,13 +301,16 @@ class KetLuan(models.Model):
         is_role_ketluan = user.has_group('ekids_core.ketluan')
 
         for record in self:
-            if record.trangthai not in ['0']:
-                record.is_readonly = True
-            else:
-                if is_admin or is_role_ketluan:
-                    record.is_readonly = False
-                else:
+            if record.coso_id.is_canthiep_ketluan == True:
+                if record.trangthai not in ['0']:
                     record.is_readonly = True
+                else:
+                    if is_admin or is_role_ketluan:
+                        record.is_readonly = False
+                    else:
+                        record.is_readonly = True
+            else:
+                record.is_readonly = False
 
     def _compute_is_phancong_lai(self):
 

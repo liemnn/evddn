@@ -15,9 +15,12 @@ class KetLuan2LinhVuc(models.Model):
                                  ondelete="cascade")
 
 
-    chuongtrinh_id = fields.Many2one("ekids.ct_chuongtrinh", related="linhvuc_id.chuongtrinh_id"
-                                     , string="Chương trình")
-
+    chuongtrinh_id = fields.Many2one(
+        "ekids.ct_chuongtrinh",
+        string="Chương trình",
+        required=True,
+        ondelete="cascade"
+    )
 
 
     linhvuc_id = fields.Many2one('ekids.ct_linhvuc', string='Lĩnh vực', required=True, ondelete="cascade")
@@ -39,10 +42,12 @@ class KetLuan2LinhVuc(models.Model):
         string="Danh sách mục tiêu lựa chọn thiết kế"
     )
 
+
     @api.onchange('chuongtrinh_id')
     def _onchange_huongtrinh_id(self):
         """Khi đổi chương trình thì xóa các lĩnh vực cũ đang chọn dở"""
         self.tuoi_id = [Command.clear()]
+        self.linhvuc_id = [Command.clear()]
 
 
     def _compute_index(self):
