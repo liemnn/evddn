@@ -44,16 +44,21 @@
                         decoration-success="trangthai == '1'"
                         decoration-info="trangthai == '2'"
                         decoration-danger="trangthai == '3'" width="100"/>
-               <field name="trangthai_phancong" string="Phân công"
+               <field name="trangthai_phancong" string="Phân công" width="100"
                         decoration-success="trangthai_phancong == '1'"
                         decoration-danger="trangthai_phancong == '0'"/>
+
+               <field name="trangthai_ketluan"
+                      width="140" string="Trang thái phân công"/>
+
                 <field name="gv_canthiep_ids"
                    string="Giáo viên"
+                   width="120"
                    widget="many2many_tags"
                    readonly="1"
                    options="{'no_open': True}"/>
                 <field name="gv_kiemduyet_id"
-                       string="Kiểm duyệt"/>
+                       string="Kiểm duyệt" width="120"/>
 
 
 
