@@ -29,7 +29,7 @@
             <field name="priority" eval="1"/>
             <field name="arch" type="xml">
                 <list
-                        default_order="linhvuc_id desc,sequence asc"
+                        default_order="sequence asc"
                         create="true" edit="true" delete="true" multi_edit="true">
 
                     <field name="sequence" widget="handle"/>

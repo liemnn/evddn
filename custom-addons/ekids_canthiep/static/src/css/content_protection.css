@@ -1,0 +1,22 @@
+/* Chống chọn, bôi đen văn bản trên toàn hệ thống */
+*, *::before, *::after {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+/* Cho phép người dùng vẫn gõ được chữ trong các ô input, textarea */
+input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+/* Ẩn nội dung khi in nếu trang không được phép */
+@media print {
+    .no-print-allowed {
+        display: none !important;
+    }
+}

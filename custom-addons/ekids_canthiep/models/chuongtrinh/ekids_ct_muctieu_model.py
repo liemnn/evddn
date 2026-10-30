@@ -148,12 +148,14 @@ class MucTieu(models.Model):
 
         return True
 
-
+    @api.depends('sequence')
     def _compute_index_list(self):
-        index =1
-        for record in self:
+        # 1. Đảm bảo sắp xếp recordset theo sequence trước khi đánh số thứ tự
+        sorted_records = self.sorted(key=lambda r: (r.sequence, r.id))
+        index = 1
+        for record in sorted_records:
             record.index_list = index
-            index +=1
+            index += 1
 
     def action_luachon_ct_muctieu_vao_kehoach(self):
         self.ensure_one()  # Xử lý đích danh dòng vừa được bấm nút

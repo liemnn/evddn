@@ -81,7 +81,17 @@ Long description of module's purpose
             'ekids_canthiep/static/src/xml/ekids_canthiep_kehoach_owl.xml',
             'ekids_canthiep/static/src/xml/ekids_lap_kehoach_template.xml',
             'ekids_canthiep/static/src/xml/ekids_canthiep_ketqua_template.xml',
-            
+            'ekids_canthiep/static/src/css/content_protection.css',
+            'ekids_canthiep/static/src/js/content_protection.js',
+        ],
+        # 2. Áp dụng cho các trang bên ngoài (Portal phụ huynh xem hồ sơ, báo cáo public)
+        'web.assets_frontend': [
+            'ekids_canthiep/static/src/css/content_protection.css',
+            'ekids_canthiep/static/src/js/content_protection.js',
+        ],
+        'web.report_assets_common': [
+                'ekids_canthiep/static/src/css/content_protection.css',
+                'ekids_canthiep/static/src/js/content_protection.js',
         ],
     },
 
