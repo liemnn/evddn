@@ -211,7 +211,7 @@
                                                   t-attf-style="font-size: 12px; #{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0;' : 'background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A;') : 'background-color: #F8FAFC; color: #475569; border: 1px dashed #CBD5E1;'}"
                                                   t-attf-title="Thử: #{muctieu.solan_thu_dat || 0}/#{muctieu.solan_thu || 0} lần | Tỷ lệ: #{muctieu.tyle_thu || 0}%">
                                                 <i class="fa fa-crosshairs opacity-75" style="font-size: 11px;"></i>
-                                                <span class="fw-bold">Thử: <t t-esc="muctieu.solan_thu_dat || 0"/>/<t t-esc="muctieu.solan_thu || 0"/></span>
+                                                <span class="fw-bold">Mức độ ban đầu: <t t-esc="muctieu.solan_thu_dat || 0"/>/<t t-esc="muctieu.solan_thu || 0"/></span>
                                                 <span class="badge px-1.5 py-0.5 rounded-pill fw-bolder"
                                                       t-attf-style="#{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #16A34A; color: white;' : 'background-color: #F59E0B; color: white;') : 'background-color: #94A3B8; color: white;'}">
                                                     <t t-esc="muctieu.tyle_thu || 0"/>%
