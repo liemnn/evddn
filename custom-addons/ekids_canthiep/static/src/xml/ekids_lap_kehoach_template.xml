@@ -193,10 +193,10 @@
                                                 <!-- 1. BADGE TỶ LỆ THỬ -->
                                                 <span class="badge px-2 py-1 d-inline-flex align-items-center gap-1 badge-trial-action"
                                                       t-attf-style="font-size: 13px; border-radius: 6px; white-space: nowrap; #{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0;' : 'background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A;') : 'background-color: #F8FAFC; color: #64748B; border: 1px dashed #CBD5E1;'}"
-                                                      title="Bấm để cập nhật kết quả thử nghiệm"
+                                                      title="Bấm để cập nhật [Mức độ ban đầu] của trẻ với mục tiêu này"
                                                       t-on-click="() => this.openModalTyLeThu(muctieu.id)">
                                                     <i class="fa fa-crosshairs" style="font-size: 11px;"></i>
-                                                    <span class="fw-bold">Thử: <t t-esc="muctieu.solan_thu_dat || 0"/>/<t t-esc="muctieu.solan_thu || 0"/></span>
+                                                    <span class="fw-bold">Mức độ ban đầu: <t t-esc="muctieu.solan_thu_dat || 0"/>/<t t-esc="muctieu.solan_thu || 0"/></span>
                                                     <span class="badge px-1.5 py-0.5 rounded-pill fw-bolder ms-0.5"
                                                           t-attf-style="#{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #16A34A; color: white;' : 'background-color: #F59E0B; color: white;') : 'background-color: #94A3B8; color: white;'}">
                                                         <t t-esc="muctieu.tyle_thu || 0"/>%

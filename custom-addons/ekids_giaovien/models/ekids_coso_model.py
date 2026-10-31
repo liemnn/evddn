@@ -72,15 +72,22 @@ class CoSo(models.Model):
             }
 
     def func_macdinh_tao_luong_thang_qua(self):
-        today = date.today()  # ví dụ: 2025-08-17
-        month = today.month
-        year = today.year
+        today = date.today()
+        # Mốc ngày 1 tháng hiện tại
+        ngay_dauthang = today.replace(day=1)
 
-        if today.day < 28:
+        # - Hôm nay >= 28: Tính lương tháng này (Ví dụ: 31/10 -> Tháng 10)
+        # - Hôm nay < 28: Tính lương tháng trước (Ví dụ: 17/08 -> Tháng 07; 15/01 -> Tháng 12 năm trước)
 
-            last_month_same_day = today - relativedelta(months=1)
-            month = last_month_same_day.month
-            year = last_month_same_day.year
+        if today.day >= 28:
+            target_date = ngay_dauthang
+        else:
+            # Ngày 1 tháng này lùi 1 ngày -> tự động rơi về tháng trước (an toàn khi chuyển năm)
+            target_date = ngay_dauthang - timedelta(days=1)
+
+        year = target_date.year
+        month = target_date.month
+
 
         luong2nam = self.env['ekids.luong_nam'].search(
             [('coso_id', '=', self.id)

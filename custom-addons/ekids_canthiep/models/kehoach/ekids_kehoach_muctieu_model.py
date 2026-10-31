@@ -184,7 +184,34 @@ class KeHoach2MucTieu(models.Model):
     solan_kiemduyet_dat = fields.Integer(string="Số lần đạt(+)")
     tyle_kiemduyet = fields.Integer(string="Tỷ lệ %", compute="_compute_tyle_kiemduyet")
 
+    # 1. CẢNH BÁO TỨC THÌ KHI GIÁO VIÊN NHẬP TRÊN GIAO DIỆN (ONCHANGE)
+    @api.onchange('solan_thu_dat', 'solan_thu')
+    def _onchange_solan_thu_va_solan_thu_dat(self):
+        if self.solan_thu and self.solan_thu > 0:
+            tyle = (self.solan_thu_dat / self.solan_thu) * 100
+            if tyle >= 80:
+                # Tự động gán lại về mốc 0 hoặc giá trị an toàn
 
+                return {
+                    'warning': {
+                        'title': 'Không hợp lệ !',
+                        'message': (
+                            'Mức độ ban đầu của trẻ không thể >= 80% (vì với mức độ này trẻ không cần can thiệp)'
+
+                        )
+                    }
+                }
+
+    # 2. KHÓA CỨNG TẦNG DATABASE / BACKEND KHI BẤM NÚT LƯU (CONSTRAINS)
+    @api.constrains('solan_thu_dat', 'solan_thu', 'tyle_thu')
+    def _check_tyle_thu_limit(self):
+        for rec in self:
+            if rec.solan_thu and rec.solan_thu > 0:
+                tyle = (rec.solan_thu_dat / rec.solan_thu) * 100
+                if tyle >= 80:
+                    raise ValidationError(
+                        'Mức độ ban đầu của trẻ không thể >= 80% (vì với mức độ này trẻ không cần can thiệp)'
+                    )
 
 
     @api.onchange('trangthai_kiemduyet')
