@@ -16,7 +16,8 @@
         <field name="name">Thông tin Học phí tháng</field>
         <field name="model">ekids.hocphi_thang</field>
         <field name="arch" type="xml">
-            <kanban default_order="name desc"  archivable="false" action="action_view_khoitao_hocphi_hocsinh" sample="1" type="object">
+            <kanban default_order="id desc"  archivable="false"
+                    action="action_view_khoitao_hocphi_hocsinh" sample="1" type="object">
 
                    <t t-name="kanban-box">
                         <div class="box">

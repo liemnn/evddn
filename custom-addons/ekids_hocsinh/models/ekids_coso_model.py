@@ -197,28 +197,35 @@ class CoSo(models.Model):
         return hocphi2thang
     def func_macdinh_tao_hocphi_thang_nay(self):
         today = date.today()
+        # Mốc ngày 1 tháng hiện tại
+        ngay_dauthang = today.replace(day=1)
 
-        # Nếu từ ngày 25 trở đi, ta cộng thêm 7 ngày để mốc thời gian nhảy sang tháng tiếp theo
-        if today.day >= 28:
-            target_date = today + timedelta(days=7)
+        if self.is_thu_hocphi_dauthang == True:
+            # TH1: Thu học phí ĐẦU THÁNG
+            # - Hôm nay < 28: Thu học phí tháng này
+            # - Hôm nay >= 28: Thu học phí tháng tiếp theo (Ví dụ: 31/10 -> Tháng 11)
+            if today.day >= 28:
+                # Nhảy sang ngày 28 của tháng hiện tại rồi cộng thêm 5 ngày để chắc chắn sang tháng sau
+                target_date = ngay_dauthang.replace(day=28) + timedelta(days=5)
+            else:
+                target_date = ngay_dauthang
         else:
-            target_date = today
+            # TH2: Thu học phí CUỐI THÁNG
+            # - Hôm nay >= 28: Thu học phí tháng này (Ví dụ: 31/10 -> Tháng 10)
+            # - Hôm nay < 28: Thu học phí tháng trước (Ví dụ: 20/10 -> Tháng 9)
+            if today.day >= 28:
+                target_date = ngay_dauthang
+            else:
+                # Ngày 1 tháng này lùi 1 ngày -> ngày cuối của tháng trước
+                target_date = ngay_dauthang - timedelta(days=1)
 
+        year = target_date.year
+        month = target_date.month
 
-        if self.is_thu_hocphi_dauthang == False:
-            # Bước 1: về ngày 1 tháng hiện tại
-            first_day_this_month = today.replace(day=1)
-            # Bước 2: lùi 1 ngày → cuối tháng trước
-            last_day_last_month = first_day_this_month - timedelta(days=1)
-            today = last_day_last_month
-        else:
-            today = target_date
-
-        year = today.year
-        month =today.month
-
-        hocphi2thang = self.func_macdinh_tao_hocphi(year,month)
+        hocphi2thang = self.func_macdinh_tao_hocphi(year, month)
         return hocphi2thang
+
+
 
 
     def func_macdinh_tao_hocphi(self,nam,thang):
