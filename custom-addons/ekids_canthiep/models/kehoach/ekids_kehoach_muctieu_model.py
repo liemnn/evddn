@@ -196,7 +196,7 @@ class KeHoach2MucTieu(models.Model):
                     'warning': {
                         'title': 'Không hợp lệ !',
                         'message': (
-                            'Mức độ ban đầu của trẻ không thể >= 80% (vì với mức độ này trẻ không cần can thiệp)'
+                            'Mức độ ban đầu của trẻ không thể >= 80% (vì với mức độ này trẻ không nên lựa chọn mục tiêu này trong kế hoạch can thiệp)'
 
                         )
                     }
@@ -210,7 +210,8 @@ class KeHoach2MucTieu(models.Model):
                 tyle = (rec.solan_thu_dat / rec.solan_thu) * 100
                 if tyle >= 80:
                     raise ValidationError(
-                        'Mức độ ban đầu của trẻ không thể >= 80% (vì với mức độ này trẻ không cần can thiệp)'
+                        'Mức độ ban đầu của trẻ không thể >= 80% (vì với mức độ này trẻ không nên lựa chọn mục tiêu này trong kế hoạch can thiệp)'
+
                     )
 
 

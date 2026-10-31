@@ -1,284 +1,298 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates xml:space="preserve">
     <t t-name="ekids_canthiep.LapKeHoachWidgetTemplate">
-        <div class="w-100 d-flex flex-column gap-3 mt-2 px-0">
+        <div class="w-100 d-flex flex-column gap-2 mt-2 px-0 overflow-x-hidden">
 
-            <!-- CSS TỐI ƯU GIAO DIỆN PREMIUM COMPACT -->
             <style>
                 .o_field_widget[name="kehoach_linhvuc_ids"] { width: 100% !important; max-width: 100% !important; display: block !important; }
                 .custom-folder-bar { background-color: #F8FAFC !important; border: 1px solid #E2E8F0 !important; border-radius: 12px !important; }
-                .badge-purple-light { background-color: #F3E8FF !important; color: #6B21A8 !important; border: 1px solid #E9D5FF !important; white-space: nowrap; flex-shrink: 0 !important; }
-
-                .crit-box { flex: 1; min-width: 250px; padding: 12px; border-radius: 6px; font-size: 14px; line-height: 1.5; text-align: justify; }
-                .crit-box.danger { background-color: #FEF2F2; border: 1px solid #FCA5A5; color: #1E293B; }
-                .crit-box.warning { background-color: #FFFDF2; border: 1px solid #FDE047; color: #1E293B; }
-                .crit-box.success { background-color: #F0FDF4; border: 1px solid #BBF7D0; color: #1E293B; }
+                .badge-purple-light { background-color: #F3E8FF !important; color: #6B21A8 !important; border: 1px solid #E9D5FF !important; white-space: nowrap; flex-shrink: 0 !important; font-size: 11.5px !important; }
 
                 .muctieu-circle-index-grey {
-                    width: 24px;
-                    height: 24px;
+                    width: 22px;
+                    height: 22px;
                     border-radius: 50%;
                     display: inline-flex !important;
                     align-items: center !important;
                     justify-content: center !important;
-                    font-weight: 800;
+                    font-weight: 700;
                     font-size: 13px;
                     background-color: #E2E8F0 !important;
                     color: #1E293B !important;
                     flex-shrink: 0;
-                    line-height: 1 !important;
+                    margin-top: 1px;
                 }
 
+                /* FOLDER BAR CHA */
                 .folder-main-layout {
                     display: flex;
                     flex-direction: row;
                     align-items: center;
                     justify-content: space-between;
                     width: 100%;
-                    padding: 10px 14px;
-                    gap: 12px;
+                    padding: 8px 12px;
+                    gap: 10px;
                     cursor: pointer;
                 }
-                .folder-top-info-line { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; flex-wrap: wrap; }
-                .folder-title-text { font-size: 16px; font-weight: bold; color: #1E293B !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-                .folder-bottom-actions-line { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+                .folder-top-info-line { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; flex-wrap: wrap; }
+                .folder-title-text { font-size: 15px; font-weight: 700; color: #1E293B !important; }
+                .folder-bottom-actions-line { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
-                .target-left-block { display: flex; align-items: start; gap: 12px; flex: 1; min-width: 0; }
-                .target-text-wrap { font-size: 13.5px; color: #1E293B; text-align: left; word-break: break-word; line-height: 1.5; }
-
-                .btn-add-target-clean {
+                .btn-folder-action {
                     font-size: 13px !important;
                     font-weight: 700 !important;
-                    height: 28px;
-                    padding: 0 12px !important;
+                    height: 30px;
+                    padding: 0 10px !important;
                     white-space: nowrap;
                     border-radius: 6px;
-                    width: auto !important;
-                    flex-shrink: 0 !important;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                /* 🌟 KHỐI CARD MỤC TIÊU: CHIA RÕ 2 DÒNG ĐỘC LẬP TRÊN CẢ WEB  MOBILE */
+                .target-item-card {
+                    width: 100%;
+                    padding: 9px 14px;
+                    border-bottom: 1px solid #F1F5F9;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                }
+
+                /* DÒNG 1: STT VÀ TÊN MỤC TIÊU CHIẾM TRỌN 1 HÀNG */
+                .target-row-title {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 8px;
+                    width: 100%;
+                    cursor: pointer;
+                }
+                .target-text-wrap {
+                    font-size: 13.5px;
+                    color: #1E293B;
+                    line-height: 1.45;
+                    word-break: break-word;
+                }
+
+                /* 🌟 DÒNG 2: TOÀN BỘ NÚT  BADGE GOM VÀO 1 HÀNG DẠT SÁT PHẢI */
+                .target-row-actions-right {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: 7px;
+                    width: 100%;
+                    flex-wrap: wrap;
+                }
+
+                .badge-trial-action {
+                    cursor: pointer !important;
+                    transition: all 0.15s ease-in-out;
+                    font-size: 11.5px !important;
+                    padding: 2.5px 7px !important;
+                    border-radius: 6px !important;
+                    white-space: nowrap;
+                }
+                .btn-edit-target {
+                    font-size: 11.5px !important;
+                    padding: 2px 8px !important;
+                    border-radius: 4px;
+                    color: #2563EB !important;
+                    background-color: #EFF6FF !important;
+                    border: 1px solid #BFDBFE !important;
+                    font-weight: 700;
+                    height: 24px;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 4px;
+                    white-space: nowrap;
                 }
 
                 .btn-quick-delete-icon {
                     color: #EF4444;
                     background: transparent;
                     border: none;
-                    padding: 4px;
+                    padding: 2px 4px;
                     font-size: 14px;
                     cursor: pointer;
-                    transition: transform 0.12s ease;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
                 }
-                .btn-quick-delete-icon:hover { transform: scale(1.15); color: #DC2626; }
-
-                /* Style Badge Tỷ lệ thử dạng bấm được */
-                .badge-trial-action {
-                    cursor: pointer !important;
-                    transition: all 0.15s ease-in-out;
-                    user-select: none;
-                }
-                .badge-trial-action:hover {
-                    transform: translateY(-1px);
-                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                    filter: brightness(0.95);
-                }
 
                 @media (max-width: 768px) {
-                    .folder-main-layout { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; padding: 12px !important; }
-                    .folder-top-info-line { gap: 6px !important; width: 100%; }
-                    .folder-title-text { white-space: normal; overflow: visible; text-overflow: clip; width: 100%; display: block; font-size: 14px; }
-
+                    .folder-main-layout {
+                        flex-direction: column !important;
+                        align-items: flex-start !important;
+                        gap: 8px !important;
+                        padding: 10px !important;
+                    }
+                    .folder-top-info-line { width: 100%; }
                     .folder-bottom-actions-line {
-                        width: 100%;
+                        width: 100% !important;
                         display: flex !important;
                         justify-content: space-between !important;
                         align-items: center !important;
                         border-top: 1px dashed #E2E8F0;
                         padding-top: 8px;
                     }
-                    .btn-add-target-clean { flex: 0 1 auto; height: 32px !important; justify-content: center; }
 
-                    .target-header-row { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; padding: 12px !important; }
-                    .target-left-block { width: 100%; }
-                    .target-text-wrap { font-size: 13px; }
-
-                    .target-right-actions-block {
-                        width: 100%;
-                        display: flex !important;
-                        justify-content: flex-end !important;
-                        align-items: center !important;
-                        gap: 10px !important;
-                        border-top: 1px dashed #E2E8F0;
-                        padding-top: 8px;
-                        flex-wrap: wrap;
+                    .target-item-card { padding: 8px 10px !important; }
+                    .target-text-wrap { font-size: 13px !important; }
+                    .target-row-actions-right {
+                        gap: 5px !important;
+                        padding-top: 4px;
+                        border-top: 1px dotted #F1F5F9;
                     }
                 }
             </style>
 
             <t t-foreach="state.groupedData" t-as="lv" t-key="lv.kehoach_linhvuc_id">
-                <div class="w-100 custom-folder-bar overflow-hidden mb-2">
+                <div class="w-100 custom-folder-bar overflow-hidden mb-2 shadow-sm">
 
                     <!-- KHỐI TIÊU ĐỀ LĨNH VỰC (FOLDER CHA) -->
                     <div class="folder-main-layout" t-on-click="() => this.toggleLinhVucCollapse(lv.kehoach_linhvuc_id)">
                         <div class="folder-top-info-line">
-                            <i t-attf-class="fa #{state.collapsedLinhVuc[lv.kehoach_linhvuc_id] ? 'fa-chevron-right' : 'fa-chevron-down'} text-muted opacity-75" style="font-size: 11px; margin-right: 2px;"></i>
+                            <i t-attf-class="fa #{state.collapsedLinhVuc[lv.kehoach_linhvuc_id] ? 'fa-chevron-right' : 'fa-chevron-down'} text-muted opacity-75" style="font-size: 11px;"></i>
                             <i class="fa fa-folder text-warning" style="font-size: 17px; color: #EAB308 !important;"></i>
 
                             <span class="folder-title-text">
                                 <t t-esc="lv.linhvuc"/>
                             </span>
 
-                            <span class="text-muted opacity-40 mx-0.5 d-none d-md-inline">|</span>
-
-                            <span t-if="lv.tuoi" class="badge badge-purple-light rounded px-2 py-0.5 fw-bold" style="font-size: 13px;">
-                                <t t-esc="lv.tuoi"/>
-                            </span>
-
-                            <span t-if="lv.chuongtrinh" class="badge badge-purple-light rounded px-2 py-0.5 fw-bold" style="font-size: 13px;">
-                                <t t-esc="lv.chuongtrinh"/>
-                            </span>
+                            <div class="d-inline-flex gap-1 align-items-center">
+                                <span t-if="lv.tuoi" class="badge badge-purple-light rounded px-1.5 py-0.5 fw-bold">
+                                    <t t-esc="lv.tuoi"/>
+                                </span>
+                                <span t-if="lv.chuongtrinh" class="badge badge-purple-light rounded px-1.5 py-0.5 fw-bold">
+                                    <t t-esc="lv.chuongtrinh"/>
+                                </span>
+                            </div>
                         </div>
 
                         <div class="folder-bottom-actions-line" t-on-click.stop="">
-                            <div class="d-flex align-items-center justify-content-between w-100">
-                                <span class="badge px-2.5 py-1 fw-bold flex-shrink-0" style="font-size: 13px; background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; border-radius: 20px; white-space: nowrap; margin-bottom: 0;">
-                                    Có <t t-esc="lv.tong_muctieu"/> mục tiêu
-                                </span>
+                            <span class="badge px-2 py-1 fw-bold flex-shrink-0"
+                                  style="font-size: 12px; background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; border-radius: 12px;">
+                                <t t-esc="lv.tong_muctieu"/> mục tiêu
+                            </span>
 
-                                <div class="d-flex align-items-center gap-2">
-                                    <button t-if="!props.readonly"
-                                            type="button" class="btn btn-sm btn-light btn-add-target-clean d-flex align-items-center gap-1"
-                                            style="background-color: #F3F4F6 !important; border-color: #D1D5DB !important; color: #374151 !important;"
-                                            t-on-click="() => this.open_GV_TaoMoi_MucTieu(lv.kehoach_linhvuc_id)">
-                                        <i class="fa fa-pencil-square-o" style="color: #4B5563;"></i> Tự tạo mới
-                                    </button>
+                            <div class="d-flex align-items-center gap-1.5 ms-auto">
+                                <button t-if="!props.readonly"
+                                        type="button" class="btn btn-light border btn-folder-action text-dark"
+                                        t-on-click="() => this.open_GV_TaoMoi_MucTieu(lv.kehoach_linhvuc_id)">
+                                    <i class="fa fa-pencil-square-o text-secondary me-1"></i>Tự tạo mới
+                                </button>
 
-                                    <button t-if="!props.readonly"
-                                            type="button" class="btn btn-sm btn-primary btn-add-target-clean d-flex align-items-center gap-1"
-                                            style="background-color: #2563EB !important; border-color: #2563EB !important;"
-                                            t-on-click="() => this.them_MucTieu_Vao_KeHoach_LinhVuc(lv.kehoach_linhvuc_id)">
-                                        <i class="fa fa-plus-circle"></i> Thêm [mục tiêu]
-                                    </button>
-                                </div>
+                                <button t-if="!props.readonly"
+                                        type="button" class="btn btn-primary btn-folder-action"
+                                        style="background-color: #2563EB !important; border-color: #2563EB !important;"
+                                        t-on-click="() => this.them_MucTieu_Vao_KeHoach_LinhVuc(lv.kehoach_linhvuc_id)">
+                                    <i class="fa fa-plus-circle me-1"></i>Thêm mục tiêu
+                                </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- DANH SÁCH MỤC TIÊU CON -->
-                    <div t-if="!state.collapsedLinhVuc[lv.kehoach_linhvuc_id]" class="p-0 bg-white border-top w-100 shadow-inner">
+                    <div t-if="!state.collapsedLinhVuc[lv.kehoach_linhvuc_id]" class="p-0 bg-white border-top w-100">
                         <div class="d-flex flex-column w-100">
 
                             <t t-foreach="lv.muctieus" t-as="muctieu" t-key="muctieu.id">
-                                <div class="w-100 p-0 border-bottom d-flex flex-column">
+                                <div class="target-item-card">
 
-                                    <!-- DÒNG TIÊU ĐỀ MỤC TIÊU -->
-                                    <div class="target-header-row d-flex align-items-center justify-content-between w-100 p-3"
-                                         t-on-click="() => this.toggleTargetDetail(muctieu.id)">
-
-                                        <!-- Số thứ tự + Tên mục tiêu -->
-                                        <div class="target-left-block">
-                                            <span class="muctieu-circle-index-grey">
-                                                <t t-esc="muctieu_index+1"/>
-                                            </span>
-                                            <span class="target-text-wrap fw-semibold">
-                                                <t t-esc="muctieu.name"/>
-                                            </span>
-                                        </div>
-
-                                        <!-- Cụm Hành động & Trạng thái phía bên phải -->
-                                        <div class="target-right-actions-block d-flex align-items-center gap-2 justify-content-end" t-on-click.stop="">
-
-                                            <div class="d-flex align-items-center flex-shrink-0 gap-1.5">
-
-                                                <!-- 1. BADGE TỶ LỆ THỬ -->
-                                                <span class="badge px-2 py-1 d-inline-flex align-items-center gap-1 badge-trial-action"
-                                                      t-attf-style="font-size: 13px; border-radius: 6px; white-space: nowrap; #{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0;' : 'background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A;') : 'background-color: #F8FAFC; color: #64748B; border: 1px dashed #CBD5E1;'}"
-                                                      title="Bấm để cập nhật [Mức độ ban đầu] của trẻ với mục tiêu này"
-                                                      t-on-click="() => this.openModalTyLeThu(muctieu.id)">
-                                                    <i class="fa fa-crosshairs" style="font-size: 11px;"></i>
-                                                    <span class="fw-bold">Mức độ ban đầu: <t t-esc="muctieu.solan_thu_dat || 0"/>/<t t-esc="muctieu.solan_thu || 0"/></span>
-                                                    <span class="badge px-1.5 py-0.5 rounded-pill fw-bolder ms-0.5"
-                                                          t-attf-style="#{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #16A34A; color: white;' : 'background-color: #F59E0B; color: white;') : 'background-color: #94A3B8; color: white;'}">
-                                                        <t t-esc="muctieu.tyle_thu || 0"/>%
-                                                    </span>
-                                                </span>
-
-                                                <!-- 2. Nút Biên tập -->
-                                                <button class="btn btn-sm d-flex align-items-center gap-1 fw-bold"
-                                                        style="font-size: 12px; padding: 2px 8px; border-radius: 4px; color: #2563EB !important; background-color: #EFF6FF !important; border: 1px solid #BFDBFE !important; box-shadow: 0 1px 2px rgba(37,99,235,0.05); transition: all 0.2s ease; white-space: nowrap;"
-                                                        t-on-click="() => this.open_GV_BienTap_NoiDung_MucTieu(muctieu.id)"
-                                                        onmouseover="this.style.backgroundColor='#2563EB'; this.style.color='#FFFFFF'; this.style.borderColor='#2563EB';"
-                                                        onmouseout="this.style.backgroundColor='#EFF6FF'; this.style.color='#2563EB'; this.style.borderColor='#BFDBFE';">
-                                                    <i class="fa fa-edit" style="font-size: 12px;"></i> Biên tập
-                                                </button>
-
-                                                <!-- 3. Chuỗi Badge Phân loại trạng thái -->
-                                                <span t-if="muctieu.kehoach_muctieu_thangtruoc_id"
-                                                      class="badge px-2.5 py-1 d-inline-flex align-items-center gap-1.5"
-                                                      style="font-size: 12.5px; color: #991B1B; background-color: #FEF2F2; border: 1px solid #FECACA; border-radius: 6px; cursor: help; white-space: nowrap;"
-                                                      t-attf-data-bs-toggle="tooltip"
-                                                      t-attf-data-bs-placement="top"
-                                                      t-attf-title="Số tháng chuyển tiếp: #{muctieu.sothang_da_chuyenttiep} tháng&#10;• Hình thành (+/-): #{muctieu.ketqua_hinhthanh_thangtruoc} ngày&#10;• Đạt (+) liên tiếp: #{muctieu.ketqua_dat_lientiep_thangtruoc} ngày">
-                                                    <i class="fa fa-history text-danger" style="font-size: 13px;"></i>
-                                                    <span class="fw-bold text-danger"> Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)</span>
-                                                    <span class="badge fw-bold px-2 py-0.5"
-                                                          style="font-size: 11.5px; background-color: #FEF9C3; color: #A16207; border: 1px solid #FDE047; border-radius: 4px;">
-                                                        +/-(<t t-esc="muctieu.ketqua_hinhthanh_thangtruoc"/>)
-                                                    </span>
-                                                    <span class="badge fw-bold px-2 py-0.5"
-                                                          style="font-size: 11.5px; background-color: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; border-radius: 4px;">
-                                                        +(<t t-esc="muctieu.ketqua_dat_lientiep_thangtruoc"/>)
-                                                    </span>
-                                                </span>
-                                                <span t-elif="!muctieu.muctieu_id"
-                                                      class="badge fw-bold px-2 py-0.5"
-                                                      style="font-size: 12px; color: #DC2626; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px; white-space: nowrap;">
-                                                    <i class="fa fa-star me-0.5"></i> Giáo viên [Tạo]
-                                                </span>
-                                                <span t-else=""
-                                                      class="badge fw-bold px-2 py-0.5"
-                                                      style="font-size: 12px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
-                                                    <i class="fa fa-star me-0.5"></i> Mới
-                                                </span>
-                                            </div>
-
-                                            <!-- Nút Ghi chú Inline -->
-                                            <button type="button" class="btn btn-link p-1 text-decoration-none shadow-none d-flex align-items-center gap-1 flex-shrink-0"
-                                                    t-on-click="() => this.toggleNoteInline(muctieu.id)"
-                                                    style="height: 24px; cursor: pointer; white-space: nowrap;">
-                                                <i class="fa fa-commenting" t-attf-style="font-size: 16px; color: #{muctieu.ghichu ? '#10B981' : '#94A3B8'};"></i>
-                                                <span style="font-size: 13px; color: #475569; font-weight: 600;">Ghi chú</span>
-                                            </button>
-
-                                            <!-- Nút Xóa nhanh -->
-                                            <button t-if="muctieu.is_delete"
-                                                    type="button" class="btn-quick-delete-icon flex-shrink-0" title="Xóa khỏi kế hoạch"
-                                                    t-on-click="() => this.removeTargetFromPlan(muctieu.id)">
-                                                <i class="fa fa-trash-o"></i>
-                                            </button>
-
-                                            <!-- Nút Mở rộng / Thu gọn chi tiết -->
-                                            <button type="button" class="btn btn-link p-0 text-decoration-none text-muted flex-shrink-0"
-                                                    t-on-click="() => this.toggleTargetDetail(muctieu.id)">
-                                                <i t-attf-class="fa #{state.expandedTargets[muctieu.id] ? 'fa-chevron-up' : 'fa-chevron-down'}" style="font-size: 13px;"></i>
-                                            </button>
-                                        </div>
+                                    <!-- 🌟 DÒNG 1: STT VÀ TÊN MỤC TIÊU CHIẾM TRỌN HÀNG TRÊN -->
+                                    <div class="target-row-title" t-on-click="() => this.toggleTargetDetail(muctieu.id)">
+                                        <span class="muctieu-circle-index-grey">
+                                            <t t-esc="muctieu_index+1"/>
+                                        </span>
+                                        <span class="target-text-wrap fw-semibold">
+                                            <t t-esc="muctieu.name"/>
+                                        </span>
                                     </div>
 
-                                    <!-- VÙNG MỞ RỘNG CHI TIẾT NỘI DUNG -->
-                                    <div t-if="state.expandedTargets[muctieu.id]" class="w-100 p-3 border-top d-flex flex-column gap-3"
-                                         style="background-color: #FAFAFA; border-color: #E2E8F0;">
+                                    <!-- 🌟 DÒNG 2: TOÀN BỘ CỤM NÚT & BADGE TRÊN 1 HÀNG NẰM SÁT LỀ PHẢI -->
+                                    <div class="target-row-actions-right" t-on-click.stop="">
+
+                                        <!-- 1. Badge Tỷ lệ ban đầu -->
+                                        <span class="badge badge-trial-action d-inline-flex align-items-center gap-1"
+                                              t-attf-style="#{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0;' : 'background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A;') : 'background-color: #F8FAFC; color: #64748B; border: 1px dashed #CBD5E1;'}"
+                                              title="Bấm để cập nhật [Mức độ ban đầu]"
+                                              t-on-click="() => this.openModalTyLeThu(muctieu.id)">
+                                            <i class="fa fa-crosshairs"></i>
+                                            <span class="fw-bold">Mức độ ban đầu: <t t-esc="muctieu.solan_thu_dat || 0"/>/<t t-esc="muctieu.solan_thu || 0"/></span>
+                                            <span class="badge px-1 py-0.2 rounded-pill fw-bold ms-0.5"
+                                                  t-attf-style="#{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #16A34A; color: white;' : 'background-color: #F59E0B; color: white;') : 'background-color: #94A3B8; color: white;'}">
+                                                <t t-esc="muctieu.tyle_thu || 0"/>%
+                                            </span>
+                                        </span>
+
+                                        <!-- 2. Nút Biên tập -->
+                                        <button class="btn btn-edit-target"
+                                                t-on-click="() => this.open_GV_BienTap_NoiDung_MucTieu(muctieu.id)">
+                                            <i class="fa fa-edit"></i> Biên tập
+                                        </button>
+
+                                        <!-- 3. Badge trạng thái nguồn gốc -->
+                                        <span t-if="muctieu.kehoach_muctieu_thangtruoc_id"
+                                              class="badge px-2 py-0.5 d-inline-flex align-items-center gap-1"
+                                              style="font-size: 12px; color: #991B1B; background-color: #FEF2F2; border: 1px solid #FECACA; border-radius: 4px; white-space: nowrap;">
+                                            <i class="fa fa-history text-danger"></i> Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)
+                                            <span class="badge fw-bold px-2 py-0.5"
+                                                  style="font-size: 11.5px; background-color: #FEF9C3; color: #A16207; border: 1px solid #FDE047; border-radius: 4px;">
+                                                +/-(<t t-esc="muctieu.ketqua_hinhthanh_thangtruoc"/>)
+                                            </span>
+                                            <span class="badge fw-bold px-2 py-0.5"
+                                                  style="font-size: 11.5px; background-color: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; border-radius: 4px;">
+                                                +(<t t-esc="muctieu.ketqua_dat_lientiep_thangtruoc"/>)
+                                            </span>
+                                        </span>
+                                        <span t-elif="!muctieu.muctieu_id"
+                                              class="badge fw-bold px-1.5 py-0.5"
+                                              style="font-size: 12px; color: #DC2626; background-color: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 4px; white-space: nowrap;">
+                                            <i class="fa fa-star me-0.5"></i> Giáo viên tạo
+                                        </span>
+                                        <span t-else=""
+                                              class="badge fw-bold px-1.5 py-0.5"
+                                              style="font-size: 12px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
+                                            <i class="fa fa-star me-0.5"></i> Mới
+                                        </span>
+
+                                        <!-- 4. Nút Ghi chú -->
+                                        <button type="button" class="btn btn-link p-0 text-decoration-none shadow-none d-flex align-items-center gap-1"
+                                                t-on-click="() => this.toggleNoteInline(muctieu.id)">
+                                            <i class="fa fa-commenting" t-attf-style="font-size: 16px; color: #{muctieu.ghichu ? '#10B981' : '#94A3B8'};"></i>
+                                            <span style="font-size: 12px; color: #475569; font-weight: 600;">Ghi chú</span>
+                                        </button>
+
+                                        <!-- 5. Nút Xóa nhanh -->
+                                        <button t-if="muctieu.is_delete"
+                                                type="button" class="btn-quick-delete-icon" title="Xóa khỏi kế hoạch"
+                                                t-on-click="() => this.removeTargetFromPlan(muctieu.id)">
+                                            <i class="fa fa-trash-o"></i>
+                                        </button>
+
+                                        <!-- 6. Mũi tên Mở rộng/Thu gọn -->
+                                        <button type="button" class="btn btn-link p-0 text-decoration-none text-muted"
+                                                t-on-click="() => this.toggleTargetDetail(muctieu.id)">
+                                            <i t-attf-class="fa #{state.expandedTargets[muctieu.id] ? 'fa-chevron-up' : 'fa-chevron-down'}" style="font-size: 12px;"></i>
+                                        </button>
+
+                                    </div>
+
+                                    <!-- VÙNG MỞ RỘNG CHI TIẾT NỘI DUNG (GIỮ NGUYÊN) -->
+                                    <div t-if="state.expandedTargets[muctieu.id]" class="w-100 p-2.5 rounded-2 border d-flex flex-column gap-2 mt-1"
+                                         style="background-color: #F8FAFC; border-color: #E2E8F0;">
 
                                         <!-- Khung Ghi chú nhanh -->
-                                        <div t-if="state.activeNotes[muctieu.id]" class="w-100 p-3 bg-white rounded-3 border inline-note-box shadow-sm mb-1">
+                                        <div t-if="state.activeNotes[muctieu.id]" class="w-100 p-2.5 bg-white rounded-3 border shadow-sm">
                                             <div class="fw-bold text-dark mb-1" style="font-size: 13px;">
-                                                <i class="fa fa-pencil-square-o text-primary"></i> Ghi chú cho mục tiêu:
+                                                <i class="fa fa-pencil-square-o text-primary"></i> Ghi chú mục tiêu:
                                             </div>
 
-                                            <textarea class="form-control form-control-sm note-textarea mb-2"
+                                            <textarea class="form-control form-control-sm mb-2"
                                                       t-att-disabled="props.readonly"
                                                       t-att-value="muctieu.ghichu_clean || ''"
-                                                      rows="6"
+                                                      rows="4"
                                                       style="font-size: 14px;"
                                                       placeholder="Nhập tiến trình hoặc ghi chú cụ thể..."></textarea>
 
@@ -293,70 +307,63 @@
                                             </div>
                                         </div>
 
-                                        <!-- 1. CHỨC NĂNG CỐT LÕI & THIẾT KẾ HOẠT ĐỘNG -->
-                                        <div t-if="muctieu.has_chucnang or muctieu.has_thietke" class="row g-3 w-100 m-0 pt-1">
-                                            <!-- Cả hai đều có dữ liệu: Chia 50% - 50% -->
+                                        <!-- Chức năng cốt lõi & Thiết kế hoạt động -->
+                                        <div t-if="muctieu.has_chucnang or muctieu.has_thietke" class="row g-2 w-100 m-0">
                                             <t t-if="muctieu.has_chucnang and muctieu.has_thietke">
-                                                <div class="col-md-6 ps-0 pe-md-3 text-start">
-                                                    <div class="fw-bold text-success mb-1" style="font-size: 13px; letter-spacing: 0.3px;">
-                                                        <i class="fa fa-star"></i> CHỨC NĂNG PHÁT TRIỂN CỐT LÕI:
+                                                <div class="col-12 col-md-6 ps-0 pe-md-2 text-start">
+                                                    <div class="fw-bold text-success mb-1" style="font-size: 13px;">
+                                                        <i class="fa fa-star"></i> CHỨC NĂNG CỐT LÕI:
                                                     </div>
-                                                    <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                    <div style="font-size: 14px; color: #4A5568; line-height: 1.5; text-align: justify;">
                                                         <t t-out="muctieu.chucnang"/>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6 pe-0 ps-md-3 text-start" style="border-left: 1px dashed #E2E8F0;">
-                                                    <div class="fw-bold text-warning mb-1" style="font-size: 14px; letter-spacing: 0.3px; color: #EA580C !important;">
+                                                <div class="col-12 col-md-6 pe-0 ps-md-2 text-start border-top border-md-top-0 border-md-start pt-2 pt-md-0" style="border-color: #E2E8F0 !important;">
+                                                    <div class="fw-bold text-warning mb-1" style="font-size: 14px; color: #EA580C !important;">
                                                         <i class="fa fa-magic"></i> THIẾT KẾ HOẠT ĐỘNG CHO GIÁO VIÊN:
                                                     </div>
-                                                    <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                    <div style="font-size: 14px; color: #4A5568; line-height: 1.5; text-align: justify;">
                                                         <t t-out="muctieu.thietke"/>
                                                     </div>
                                                 </div>
                                             </t>
 
-                                            <!-- Chỉ có Chức năng cốt lõi: Chiếm 100% -->
                                             <t t-elif="muctieu.has_chucnang and !muctieu.has_thietke">
                                                 <div class="col-12 px-0 text-start">
-                                                    <div class="fw-bold text-success mb-1" style="font-size: 13px; letter-spacing: 0.3px;">
-                                                        <i class="fa fa-star"></i> CHỨC NĂNG PHÁT TRIỂN CỐT LÕI:
+                                                    <div class="fw-bold text-success mb-1" style="font-size: 13px;">
+                                                        <i class="fa fa-star"></i> CHỨC NĂNG CỐT LÕI:
                                                     </div>
-                                                    <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                    <div style="font-size: 13px; color: #4A5568; line-height: 1.5; text-align: justify;">
                                                         <t t-out="muctieu.chucnang"/>
                                                     </div>
                                                 </div>
                                             </t>
 
-                                            <!-- Chỉ có Thiết kế hoạt động: Chiếm 100% -->
                                             <t t-elif="!muctieu.has_chucnang and muctieu.has_thietke">
                                                 <div class="col-12 px-0 text-start">
-                                                    <div class="fw-bold text-warning mb-1" style="font-size: 14px; letter-spacing: 0.3px; color: #EA580C !important;">
+                                                    <div class="fw-bold text-warning mb-1" style="font-size: 14px; color: #EA580C !important;">
                                                         <i class="fa fa-magic"></i> THIẾT KẾ HOẠT ĐỘNG CHO GIÁO VIÊN:
                                                     </div>
-                                                    <div style="font-size: 14px; color: #4A5568; line-height: 1.6; text-align: justify;">
+                                                    <div style="font-size: 13px; color: #4A5568; line-height: 1.5; text-align: justify;">
                                                         <t t-out="muctieu.thietke"/>
                                                     </div>
                                                 </div>
                                             </t>
                                         </div>
 
-                                        <!-- 2. TIÊU CHÍ ĐÁNH GIÁ LÂM SÀNG -->
-                                        <!-- Chỉ hiển thị khi có ít nhất một tiêu chí có nội dung -->
-
-
-                                        <!-- Footer dưới cùng -->
-                                        <div class="w-100 d-flex justify-content-between align-items-center border-top pt-2 mt-2">
-                                            <span t-if="props.readonly" class="text-muted" style="font-size: 13px; font-style: italic; color: #94A3B8 !important;">
-                                                <i class="fa fa-lock"></i> Kế hoạch ở chế độ chỉ đọc (Không thể chỉnh sửa mục tiêu)
+                                        <!-- Footer trạng thái khóa/xóa dưới cùng -->
+                                        <div class="w-100 d-flex justify-content-between align-items-center border-top pt-2 mt-1">
+                                            <span t-if="props.readonly" class="text-muted" style="font-size: 13px; font-style: italic;">
+                                                <i class="fa fa-lock"></i> Kế hoạch ở chế độ chỉ đọc
                                             </span>
                                             <t t-else="">
-                                                <button t-if="muctieu.is_delete" type="button" class="btn btn-xs btn-outline-danger" style="font-size: 13px;"
+                                                <button t-if="muctieu.is_delete" type="button" class="btn btn-xs btn-outline-danger" style="font-size: 12px;"
                                                         t-on-click="() => this.removeTargetFromPlan(muctieu.id)">
                                                     <i class="fa fa-trash-o"></i> Xóa khỏi kế hoạch
                                                 </button>
-                                                <span t-else="" class="text-muted" style="font-size: 13px; font-style: italic; color: #94A3B8 !important;">
-                                                    <i class="fa fa-lock"></i> Mục tiêu chuyển từ tháng trước sang (Không thể xóa)
+                                                <span t-else="" class="text-muted" style="font-size: 13px; font-style: italic;">
+                                                    <i class="fa fa-lock"></i> Mục tiêu tháng trước (Không thể xóa)
                                                 </span>
                                             </t>
                                         </div>
