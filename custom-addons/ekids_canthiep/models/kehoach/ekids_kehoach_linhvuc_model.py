@@ -49,7 +49,11 @@ class KeHoach2LinhVuc(models.Model):
                     if mt.trangthai_kiemduyet == "0":
                         tyle_dat += mt.tyle_canthiep
                     else:
-                        tyle_dat += mt.tyle_kiemduyet
+                        if mt.tyle_kiemduyet >0:
+                            tyle_dat += mt.tyle_kiemduyet
+                        else:
+                            tyle_dat += mt.tyle_canthiep
+
                 tyle_thu = round(tyle_thu/tong_mt)
                 tyle_dat = round(tyle_dat / tong_mt)
 
