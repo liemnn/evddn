@@ -26,8 +26,7 @@ class KeHoachKetQua2MucTieu(models.Model):
     kehoach_muctieu_id = fields.Many2one("ekids.kehoach_muctieu",
                                  string="Thuộc kế hoạch nào",
                                  required=True,
-                                 ondelete="cascade",
-                                 index = False
+                                 ondelete="cascade"
                                          )
 
     ngay = fields.Date(string="Ngày",required=True)
@@ -66,13 +65,13 @@ class KeHoachKetQua2MucTieu(models.Model):
 
     is_giaovien_capnhat = fields.Boolean(string="Hệ thống tự câp nhật kết quả",default=True)
 
-    _sql_constraints = [
-        (
-            'muctieu_ngay_unique',
-            'unique(kehoach_muctieu_id, ngay)',
-            'Mỗi ngày chỉ được phép có duy nhất một bản ghi kết quả cho từng mục tiêu!'
-        )
-    ]
+    #_sql_constraints = [
+     #   (
+       #     'muctieu_ngay_unique',
+       #     'unique(kehoach_muctieu_id, ngay)',
+      #      'Mỗi ngày chỉ được phép có duy nhất một bản ghi kết quả cho từng mục tiêu!'
+      #  )
+   # ]
 
     @api.depends('solan_thu_dat', 'solan_thu')
     def _compute_tyle_thu(self):

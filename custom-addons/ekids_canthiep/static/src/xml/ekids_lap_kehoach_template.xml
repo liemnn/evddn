@@ -284,14 +284,17 @@
                                          style="background-color: #F8FAFC; border-color: #E2E8F0;">
 
                                         <!-- Khung Ghi chú nhanh -->
-                                        <div t-if="state.activeNotes[muctieu.id]" class="w-100 p-2.5 bg-white rounded-3 border shadow-sm">
+                                        <!-- Khung Ghi chú nhanh -->
+                                        <div t-if="state.activeNotes[muctieu.id]" class="w-100 p-2.5 bg-white rounded-3 border shadow-sm note-container-box" t-att-data-box-target-id="muctieu.id">
                                             <div class="fw-bold text-dark mb-1" style="font-size: 13px;">
                                                 <i class="fa fa-pencil-square-o text-primary"></i> Ghi chú mục tiêu:
                                             </div>
 
-                                            <textarea class="form-control form-control-sm mb-2"
+                                            <textarea class="form-control form-control-sm mb-2 note-textarea-input"
+                                                      t-att-id="'note_muctieu_' + muctieu.id"
+                                                      t-att-data-target-id="muctieu.id"
                                                       t-att-disabled="props.readonly"
-                                                      t-att-value="muctieu.ghichu_clean || ''"
+                                                      t-att-value="muctieu.ghichu_clean || muctieu.ghichu || ''"
                                                       rows="4"
                                                       style="font-size: 14px;"
                                                       placeholder="Nhập tiến trình hoặc ghi chú cụ thể..."></textarea>

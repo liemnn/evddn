@@ -221,24 +221,50 @@ export class LapKehoachWidget extends Component {
         }
     }
 
-    async saveNoteInline(target, event) {
-        if (this.props.readonly) {
-            this.notification.add("Không thể lưu ghi chú do kế hoạch đã ở trạng thái chỉ đọc!", { type: "danger" });
+    async saveNoteInline(muctieu, ev) {
+        if (ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+
+        // 1. Tìm chính xác phần tử textarea theo ID hoặc DOM container gần nhất
+        let textarea = document.getElementById(`note_muctieu_${muctieu.id}`);
+        if (!textarea && ev && ev.target) {
+            const container = ev.target.closest('.note-container-box');
+            textarea = container ? container.querySelector('.note-textarea-input') : null;
+        }
+
+        if (!textarea) {
+            console.error("Không tìm thấy ô textarea ghi chú cho mục tiêu:", muctieu.id);
             return;
         }
 
-        try {
-            const textarea = event.target.closest(".inline-note-box").querySelector(".note-textarea");
-            let newNote = textarea.value ? textarea.value.replace(/<\/?[^>]+(>|$)/g, "").trim() : "";
+        const valGhiChu = textarea.value.trim();
 
-            await this.orm.write("ekids.kehoach_muctieu", [target.id], { ghichu: newNote });
-            target.ghichu = newNote;
-            target.ghichu_clean = newNote;
-            this.state.activeNotes[target.id] = false;
-            this.notification.add("Đã cập nhật ghi chú thành công!", { type: "success" });
-            await this.loadAllPlanData();
+        try {
+            // 2. Gửi RPC ghi nhận vào database (Model ekids.kehoach_muctieu)
+            await this.orm.write("ekids.kehoach_muctieu", [muctieu.id], {
+                ghichu: valGhiChu,
+            });
+
+            // 3. Cập nhật state trực tiếp tại client để không cần reload toàn bộ form
+            muctieu.ghichu = valGhiChu;
+            muctieu.ghichu_clean = valGhiChu;
+
+            // 4. Đóng khung ghi chú sau khi lưu thành công
+            if (this.state.activeNotes) {
+                this.state.activeNotes[muctieu.id] = false;
+            }
+
+            // Bật thông báo thành công (nếu có notification service)
+            if (this.notification) {
+                this.notification.add("Đã lưu ghi chú thành công!", { type: "success" });
+            }
         } catch (error) {
-            console.error(error);
+            console.error("Lỗi khi lưu ghi chú mục tiêu:", error);
+            if (this.notification) {
+                this.notification.add("Không thể lưu ghi chú. Vui lòng thử lại!", { type: "danger" });
+            }
         }
     }
 
