@@ -788,13 +788,43 @@ class KeHoach2MucTieu(models.Model):
                 mt.chucnang = mt.chucnang_temp or ''
 
     # 2. COMPUTE THIẾT KẾ (Kiểu HTML)
-    @api.depends('muctieu_id', 'muctieu_id.thietke', 'thietke_temp')
+    @api.depends('muctieu_id', 'muctieu_id.thietke', 'thietke_temp', 'coso_id')
     def _compute_thietke(self):
         for mt in self:
-            if string_util._is_html_empty(mt.thietke_temp) == False:
-                mt.thietke = mt.thietke_temp
-            else:
-                mt.thietke = mt.muctieu_id.thietke
+            thietke = ""
+
+            # Ưu tiên 1: Giáo viên tự biên tập tại kế hoạch hiện tại
+            if not string_util._is_html_empty(mt.thietke_temp):
+                thietke = mt.thietke_temp
+
+            # Ưu tiên 2: Thiết kế chuẩn từ Danh mục chương trình (ct_muctieu)
+            elif mt.muctieu_id and not string_util._is_html_empty(mt.muctieu_id.thietke):
+                thietke = mt.muctieu_id.thietke
+
+            # Ưu tiên 3: Tìm thiết kế gần nhất đã từng soạn ở các kế hoạch trước cùng cơ sở
+            elif mt.muctieu_id and mt.coso_id:
+                domain = [
+                    ('coso_id', '=', mt.coso_id.id),
+                    ('muctieu_id', '=', mt.muctieu_id.id),
+                    ('thietke_temp', '!=', False),
+                    ('thietke_temp', 'not in', kehoach_util.EMPTY_HTML),
+                ]
+
+                # Nếu là bản ghi đã tồn tại trong DB, loại trừ chính nó
+                if isinstance(mt.id, int):
+                    domain.append(('id', '<', mt.id))
+
+                # Tìm bản ghi gần nhất có nội dung thực sự
+                kh_muctieu_cu = self.env['ekids.kehoach_muctieu'].search(
+                    domain,
+                    order="id desc",
+                    limit=1
+                )
+                if kh_muctieu_cu:
+                    thietke = kh_muctieu_cu.thietke_temp or ""
+
+            mt.thietke = thietke
+
 
 
     # 3. COMPUTE TIÊU CHÍ CHƯA ĐẠT (Kiểu Char)

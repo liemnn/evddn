@@ -595,3 +595,26 @@ class KetLuan(models.Model):
 
         wizard = self.env['ekids.kehoach_ketluan_phancong_lai_wizard'].create(data)
         return wizard
+
+    def action_xem_chuongtrinh_cothe_sudung(self):
+        kanban_view_id = self.env.ref('ekids_canthiep.ct_chuongtrinh_chiase_kanban').id
+
+
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'CHƯƠNG TRÌNH TRUNG TÂM KHÁC CHIA SẺ',
+            'res_model': 'ekids.ct_chuongtrinh',
+            'views': [(kanban_view_id, 'kanban')],
+            'view_mode': 'kanban',
+
+            'target': 'new',
+
+            'context': {
+                'default_coso_id': self.id,
+                'default_chuongtrinh_sohuu': False,
+                'create': False,
+                'edit': False,
+                'delete': False,
+            },
+        }

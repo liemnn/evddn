@@ -577,7 +577,10 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
                 if soca_hocbu > 0:
                     soca = soca - soca_hocbu
-                    tien = soca * ca_hoc.tien
+                    if dm_ca.is_tien_trongoi == True:
+                        tien = soca * dongia
+                    else:
+                        tien = soca * ca_hoc.tien
 
                 if ((tien > 0 and tyle_hoantra > 0)
                         or soca_hocbu > 0):
