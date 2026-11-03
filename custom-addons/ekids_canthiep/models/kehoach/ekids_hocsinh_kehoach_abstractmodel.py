@@ -25,9 +25,10 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
     _register = False
     _description = 'Kế hoạch can thiệp của học sinh'
 
+    @api.depends('kehoach_ids.tu_ngay', 'kehoach_ids.den_ngay', 'kehoach_ids.tyle_dat_canthiep')
     def _compute_kehoach_thang(self):
         today = fields.Date.today()
-        # 1. Tính toán mốc ngày 1 lần duy nhất ngoài vòng lặp
+        # 1. Tính toán trước mốc ngày 1 lần duy nhất ngoài vòng lặp
         d_thangnay_1 = today.replace(day=1)
         d_thangnay_15 = today.replace(day=15)
 
@@ -37,24 +38,26 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
         d_thangsau_1 = d_thangnay_1 + relativedelta(months=1)
         d_thangsau_15 = d_thangsau_1.replace(day=15)
 
-        for hs in self:
-            # Lọc ngay trên bộ nhớ RAM qua hs.kehoach_ids
-            has_truoc = any(
-                kh.tu_ngay and kh.den_ngay and kh.tu_ngay <= d_thangtruoc_15 and kh.den_ngay >= d_thangtruoc_1
-                for kh in hs.kehoach_ids
-            )
-            has_nay = any(
-                kh.tu_ngay and kh.den_ngay and kh.tu_ngay <= d_thangnay_15 and kh.den_ngay >= d_thangnay_1
-                for kh in hs.kehoach_ids
-            )
-            has_sau = any(
-                kh.tu_ngay and kh.den_ngay and kh.tu_ngay <= d_thangsau_15 and kh.den_ngay >= d_thangsau_1
-                for kh in hs.kehoach_ids
-            )
+        # Hàm helper cục bộ tính tỷ lệ trung bình các kế hoạch giao thoa với tháng
+        def _get_tyle_str(kehoach_list, d_start, d_mid):
+            valid_khs = [
+                kh for kh in kehoach_list
+                if kh.tu_ngay and kh.den_ngay and kh.tu_ngay <= d_mid and kh.den_ngay >= d_start
+            ]
+            if not valid_khs:
+                return "Không"
 
-            hs.kehoach_thangtruoc = "Có" if has_truoc else "Không"
-            hs.kehoach_thangnay = "Có" if has_nay else "Không"
-            hs.kehoach_thangsau = "Có" if has_sau else "Không"
+            # Tính trung bình tỷ lệ can thiệp (tyle_dat_canthiep)
+            tong_tyle = sum(kh.tyle_dat_canthiep or 0 for kh in valid_khs)
+            avg_tyle = round(tong_tyle / len(valid_khs))
+            return f"{avg_tyle}%"
+
+        for hs in self:
+            kh_records = hs.kehoach_ids
+
+            hs.kehoach_thangtruoc = _get_tyle_str(kh_records, d_thangtruoc_1, d_thangtruoc_15)
+            hs.kehoach_thangnay = _get_tyle_str(kh_records, d_thangnay_1, d_thangnay_15)
+            hs.kehoach_thangsau = _get_tyle_str(kh_records, d_thangsau_1, d_thangsau_15)
 
 
     def _compute_ngay_conlai_kehoach(self):
