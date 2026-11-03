@@ -793,15 +793,11 @@ class KeHoach2MucTieu(models.Model):
         for mt in self:
             thietke = ""
 
-            # Ưu tiên 1: Giáo viên tự biên tập tại kế hoạch hiện tại
+            # 🌟 TH1: Ưu tiên cao nhất - Giáo viên tự biên tập tại kế hoạch hiện tại
             if not string_util._is_html_empty(mt.thietke_temp):
                 thietke = mt.thietke_temp
 
-            # Ưu tiên 2: Thiết kế chuẩn từ Danh mục chương trình (ct_muctieu)
-            elif mt.muctieu_id and not string_util._is_html_empty(mt.muctieu_id.thietke):
-                thietke = mt.muctieu_id.thietke
-
-            # Ưu tiên 3: Tìm thiết kế gần nhất đã từng soạn ở các kế hoạch trước cùng cơ sở
+            # 🌟 TH2: Rà soát trong cùng cơ sở xem mục tiêu này đã từng có kế hoạch nào có thiết kế chưa
             elif mt.muctieu_id and mt.coso_id:
                 domain = [
                     ('coso_id', '=', mt.coso_id.id),
@@ -810,18 +806,24 @@ class KeHoach2MucTieu(models.Model):
                     ('thietke_temp', 'not in', kehoach_util.EMPTY_HTML),
                 ]
 
-                # Nếu là bản ghi đã tồn tại trong DB, loại trừ chính nó
+                # Nếu bản ghi hiện tại đã lưu trong database, loại trừ chính nó
                 if isinstance(mt.id, int):
                     domain.append(('id', '<', mt.id))
 
-                # Tìm bản ghi gần nhất có nội dung thực sự
+                # Lấy bản ghi kế hoạch gần nhất từng được giáo viên soạn thiết kế
                 kh_muctieu_cu = self.env['ekids.kehoach_muctieu'].search(
                     domain,
                     order="id desc",
                     limit=1
                 )
                 if kh_muctieu_cu:
-                    thietke = kh_muctieu_cu.thietke_temp or ""
+                    thietke = kh_muctieu_cu.thietke_temp
+
+
+
+            # Trường hợp mục tiêu có danh mục nhưng chưa có cơ sở (hoặc fallback)
+            if (string_util._is_html_empty(thietke) or string_util._is_char_empty(thietke)):
+                thietke = mt.muctieu_id.thietke
 
             mt.thietke = thietke
 
