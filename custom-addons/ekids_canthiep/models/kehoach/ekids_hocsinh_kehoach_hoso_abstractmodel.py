@@ -133,7 +133,8 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         but_pha = f"{sorted_temp[0]['name']} ({sorted_temp[0]['tyle_dat']}%)" if sorted_temp else "Chưa có"
         diem_trung = f"{sorted_temp[-1]['name']} ({sorted_temp[-1]['tyle_dat']}%)" if sorted_temp else "Chưa có"
 
-        tong_dat = getattr(kehoach, 'tong_dat_kiemduyet', 0) or count_dat
+        # SỬA LẠI: Ưu tiên lấy trực tiếp số lượng đếm được từ danh sách mục tiêu thực tế (count_dat)
+        tong_dat = count_dat if total_targets else getattr(kehoach, 'tong_dat_kiemduyet', 0)
         rate_t1 = round((tong_dat / total_targets * 100)) if total_targets else getattr(kehoach, 'tyle_dat_canthiep', 0)
 
         return {

@@ -78,6 +78,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 'views': [(form_view_id, 'form')],
                 "res_id":ketluan.id,
                 'target': 'current',
+                'flags': {'mode': 'edit'},
                 'domain': [('coso_id', '=', self.id)],
                 'context': {
                     'default_coso_id': self.coso_id.id,

@@ -164,15 +164,32 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         'kehoach_linhvuc_ids.kehoach_muctieu_ids.trangthai',
         'kehoach_linhvuc_ids.kehoach_muctieu_ids.trangthai_kiemduyet'
     )
+
     def _compute_tong_ketqua_canthiep(self):
         for kh in self:
             muctieus = kh.kehoach_linhvuc_ids.kehoach_muctieu_ids
             tong_mt = len(muctieus)
 
             if tong_mt > 0:
-                # Đếm nhanh trên RAM, không gọi re-compute thủ công
-                dat_ct = sum(1 for m in muctieus if m.trangthai == '1')
-                dat_kd = sum(1 for m in muctieus if m.trangthai_kiemduyet == '1')
+                dat_ct = 0
+                dat_kd = 0
+
+                # Duyệt 1 vòng duy nhất trên RAM để đếm cả 2 chỉ số
+                for m in muctieus:
+                    # 1. Đếm đạt can thiệp thực tế
+                    is_dat_canthiep = (m.trangthai == '1')
+                    if is_dat_canthiep:
+                        dat_ct += 1
+
+                    # 2. Đếm đạt kiểm duyệt:
+                    # Nếu đã kiểm duyệt (khác '0') -> lấy theo kết quả kiểm duyệt ('1')
+                    # Nếu chưa kiểm duyệt ('0')     -> fallback lấy theo kết quả can thiệp
+
+                    if m.trangthai_kiemduyet == '1':
+                        dat_kd += 1
+                    else:
+                        if is_dat_canthiep:
+                            dat_kd += 1
 
                 kh.tong_muctieu = tong_mt
                 kh.tong_dat_canthiep = dat_ct

@@ -763,7 +763,7 @@
                                     <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom" style="border-color: #DCFCE7 !important;">
                                         <i class="fa fa-bolt text-warning" style="font-size: 13px;"></i>
                                         <span class="fw-bold text-success" style="font-size: 0.82rem; letter-spacing: 0.2px;">
-                                            💡 Hướng dẫn:111Chọn chương trình và lĩnh vực từ khung định hướng. Gạt bật [Cho phép lập kế hoạch] để áp dụng cho tháng này; khi tắt đi, lĩnh vực này sẽ tạm ẩn và không được sử dụng.
+                                            💡 Hướng dẫn:Chọn chương trình và lĩnh vực từ khung định hướng. Gạt bật [Cho phép lập kế hoạch] để áp dụng cho tháng này; khi tắt đi, lĩnh vực này sẽ tạm ẩn và không được sử dụng.
 
                                             <button name="action_xem_chuongtrinh_cothe_sudung"
                                                 type="object"
@@ -813,8 +813,8 @@
                                 <!-- BẢNG CHI TIẾT KHUNG CHƯƠNG TRÌNH & ĐỘ TUỔI -->
                                 <div class="o_table_responsive border rounded-3 overflow-hidden shadow-sm bg-white mt-1"
                                      style="border-color: #E2E8F0 !important;">
-                                    <field name="linhvuc_ids" readonly="is_readonly" nolabel="1">
-                                        <list editable="bottom" class="o_list_premium m-0 border-0">
+                                    <field name="linhvuc_ids"  nolabel="1">
+                                        <list editable="bottom" edit="1" create="1" delete="1">
                                             <field name="sequence" widget="handle"/>
                                             <field name="index" width="50" string="STT"/>
                                             <field name="chuongtrinh_id"
@@ -828,7 +828,7 @@
                                                    options="{'no_open': True,'no_create': True}"/>
                                             <field name="tuoi_id"
                                                    string="Độ tuổi"
-                                                   readonly="parent.is_readonly"
+
                                                    domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
                                                    options="{'no_open': True,'no_create': True}"
                                                    required="1"/>
@@ -1159,7 +1159,7 @@
                         <div class="o_table_responsive border rounded-3 overflow-hidden shadow-sm bg-white mt-1"
                                      style="border-color: #E2E8F0 !important;" invisible="not linhvuc_ids">
                                     <field name="linhvuc_ids">
-                                       <list editable="bottom" create="0" edit="0" delete="0" class="o_list_premium m-0 border-0">
+                                       <list editable="bottom" create="1" edit="1" delete="1" class="o_list_premium m-0 border-0">
                                             <field name="sequence" widget="handle"/>
                                             <field name="index" width="50" string="STT"/>
                                             <field name="chuongtrinh_id"
