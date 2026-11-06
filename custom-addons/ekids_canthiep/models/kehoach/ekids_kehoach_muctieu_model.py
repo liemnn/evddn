@@ -790,42 +790,59 @@ class KeHoach2MucTieu(models.Model):
     # 2. COMPUTE THIẾT KẾ (Kiểu HTML)
     @api.depends('muctieu_id', 'muctieu_id.thietke', 'thietke_temp', 'coso_id')
     def _compute_thietke(self):
+        # 1. Đọc cấu hình ưu tiên 1 lần duy nhất cho toàn bộ tập bản ghi
+        coso = self[:1].coso_id or (self[:1].kehoach_id.coso_id if self[:1].kehoach_id else False)
+        uutien = coso_util.func_cauhinh_canthiep(self, coso, "muctieu_thietke_uutien", "0") if coso else "0"
+
+        # 2. Hàm helper tìm thiết kế gần nhất đã từng soạn ở các kế hoạch trước cùng cơ sở
+
+
+        # 3. Duyệt và gán giá trị cho từng mục tiêu
         for mt in self:
             thietke = ""
 
-            # 🌟 TH1: Ưu tiên cao nhất - Giáo viên tự biên tập tại kế hoạch hiện tại
+            # 🌟 ƯU TIÊN SỐ 1: Giáo viên tự biên tập tại kế hoạch hiện tại
             if not string_util._is_html_empty(mt.thietke_temp):
                 thietke = mt.thietke_temp
 
-            # 🌟 TH2: Rà soát trong cùng cơ sở xem mục tiêu này đã từng có kế hoạch nào có thiết kế chưa
-            elif mt.muctieu_id and mt.coso_id:
-                domain = [
-                    ('coso_id', '=', mt.coso_id.id),
-                    ('muctieu_id', '=', mt.muctieu_id.id),
-                    ('thietke_temp', '!=', False),
-                    ('thietke_temp', 'not in', kehoach_util.EMPTY_HTML),
-                ]
+            # 🌟 NHÁNH 1: uutien == "0" (Biên tập -> Chương trình -> Kế hoạch trước)
+            elif uutien == "0":
+                if mt.muctieu_id and not string_util._is_html_empty(mt.muctieu_id.thietke):
+                    thietke = mt.muctieu_id.thietke
+                else:
+                    thietke = mt.func_get_thietke_kehoach_cu()
 
-                # Nếu bản ghi hiện tại đã lưu trong database, loại trừ chính nó
-                if isinstance(mt.id, int):
-                    domain.append(('id', '<', mt.id))
-
-                # Lấy bản ghi kế hoạch gần nhất từng được giáo viên soạn thiết kế
-                kh_muctieu_cu = self.env['ekids.kehoach_muctieu'].search(
-                    domain,
-                    order="id desc",
-                    limit=1
-                )
-                if kh_muctieu_cu:
-                    thietke = kh_muctieu_cu.thietke_temp
-
-
-
-            # Trường hợp mục tiêu có danh mục nhưng chưa có cơ sở (hoặc fallback)
-            if (string_util._is_html_empty(thietke) or string_util._is_char_empty(thietke)):
-                thietke = mt.muctieu_id.thietke
+            # 🌟 NHÁNH 2: uutien == "1" (Biên tập -> Kế hoạch trước -> Chương trình)
+            elif uutien == "1":
+                thietke_cu = mt.func_get_thietke_kehoach_cu()
+                if not string_util._is_html_empty(thietke_cu):
+                    thietke = thietke_cu
+                elif mt.muctieu_id and not string_util._is_html_empty(mt.muctieu_id.thietke):
+                    thietke = mt.muctieu_id.thietke
 
             mt.thietke = thietke
+
+    def func_get_thietke_kehoach_cu(self):
+        if not self.muctieu_id or not self.coso_id:
+            return ""
+        domain = [
+            ('coso_id', '=', self.coso_id.id),
+            ('muctieu_id', '=', self.muctieu_id.id),
+            ('thietke_temp', '!=', False),
+            ('thietke_temp', 'not in', kehoach_util.EMPTY_HTML),
+        ]
+        # Loại trừ chính bản ghi đang xét nếu đã lưu trong DB
+        if isinstance(self.id, int):
+            domain.append(('id', '<', self.id))
+
+        kh_cu = self.env['ekids.kehoach_muctieu'].search(
+            domain,
+            order="id desc",
+            limit=1
+        )
+        if kh_cu and not string_util._is_html_empty(kh_cu.thietke_temp):
+            return kh_cu.thietke_temp
+        return ""
 
 
 

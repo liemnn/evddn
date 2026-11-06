@@ -530,7 +530,7 @@
         </record>
 
 
-        <record id="ekids_canthiep.kehoach_ketthuc_form" model="ir.ui.view">
+      <record id="ekids_canthiep.kehoach_ketthuc_form" model="ir.ui.view">
             <field name="name">ekids.kehoach.form.ketthuc</field>
             <field name="model">ekids.kehoach</field>
             <field name="priority">100</field>
@@ -538,229 +538,239 @@
                 <form string="Đánh giá &amp; Kết thúc kế hoạch">
                     <sheet>
                         <style>
-                            .o_form_view .o_form_sheet_bg { padding: 0 !important; background-color: #F8FAFC !important; }
-                            .o_form_sheet { padding: 8px 12px !important; max-width: 100% !important; border: none !important; background: transparent !important; }
+                            /* 1. Nền Sheet Modal gọn gàng */
+                            .o_form_view .o_form_sheet_bg {
+                                padding: 0 !important;
+                                background: #F8FAFC !important;
+                            }
+                            .o_form_sheet {
+                                padding: 8px 10px !important;
+                                max-width: 100% !important;
+                                border: none !important;
+                                background: transparent !important;
+                            }
 
-                            /* Header Card phong cách hiện đại */
+                            /* 2. Banner cảnh báo thay thế hộp confirm native của Odoo */
+                            .kt-notice-box {
+                                background: #FEF2F2;
+                                border: 1px solid #FECACA;
+                                border-left: 4px solid #EF4444;
+                                border-radius: 8px;
+                                padding: 8px 10px;
+                                margin-bottom: 8px;
+                                display: flex;
+                                align-items: flex-start;
+                                gap: 8px;
+                            }
+                            .kt-notice-text {
+                                font-size: 14px;
+                                color: #991B1B;
+                                line-height: 1.4;
+                            }
+
+                            /* 3. Card tóm tắt học sinh  kỳ kế hoạch */
                             .kt-modern-card {
                                 background: #FFFFFF;
                                 border: 1px solid #E2E8F0;
-                                border-radius: 12px;
-                                padding: 12px 16px;
-                                box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
-                                margin-bottom: 12px;
+                                border-radius: 10px;
+                                padding: 10px 12px;
+                                box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+                                margin-bottom: 8px;
                             }
-
                             .kt-top-row {
                                 display: flex;
                                 align-items: center;
                                 justify-content: space-between;
-                                gap: 12px;
-                                padding-bottom: 10px;
-                                border-bottom: 1px solid #F1F5F9;
-                            }
-
-                            .kt-name-badge-wrap {
-                                display: flex;
-                                align-items: center;
                                 gap: 8px;
+                                padding-bottom: 8px;
+                                border-bottom: 1px dashed #E2E8F0;
                             }
-
                             .kt-student-title {
-                                font-size: 19px;
-                                font-weight: 800;
+                                font-size: 15px;
+                                font-weight: 700;
                                 color: #0F172A;
                                 margin: 0;
-                                letter-spacing: -0.2px;
+                                line-height: 1.3;
                             }
 
-                            .kt-tag-student {
-                                background: #EFF6FF;
-                                color: #2563EB;
-                                font-size: 10.5px;
-                                font-weight: 700;
-                                padding: 2px 8px;
-                                border-radius: 6px;
-                                text-transform: uppercase;
-                                letter-spacing: 0.3px;
-                            }
-
-                            /* Lưới 4 ô thông số Mini Badge */
+                            /* Lưới 2 cột trên Mobile, 4 cột trên Desktop */
                             .kt-pills-row {
                                 display: grid;
-                                grid-template-columns: repeat(4, 1fr);
-                                gap: 8px;
-                                margin-top: 10px;
-                                margin-bottom: 8px;
+                                grid-template-columns: repeat(2, 1fr);
+                                gap: 6px;
+                                margin-top: 8px;
+                            }
+                            @media (min-width: 768px) {
+                                .kt-pills-row {
+                                    grid-template-columns: repeat(4, 1fr);
+                                    gap: 8px;
+                                }
                             }
 
                             .kt-info-pill {
                                 background: #F8FAFC;
-                                border: 1px solid #E2E8F0;
-                                border-radius: 8px;
-                                padding: 6px 10px;
+                                border: 1px solid #F1F5F9;
+                                border-radius: 6px;
+                                padding: 4px 8px;
                                 display: flex;
                                 flex-direction: column;
-                                gap: 2px;
+                                min-width: 0;
                             }
-
                             .kt-pill-label {
-                                font-size: 10px;
+                                font-size: 12px;
                                 color: #64748B;
                                 font-weight: 600;
                                 display: flex;
                                 align-items: center;
-                                gap: 5px;
+                                gap: 4px;
                             }
-
                             .kt-pill-val {
-                                font-size: 12px;
+                                font-size: 14px;
                                 font-weight: 700;
-                                color: #0F172A;
-                                white-space: nowrap; /* Chống gãy dòng ngày tháng */
+                                color: #1E293B;
+                                white-space: nowrap;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
+                                margin-top: 1px;
                             }
 
-                            /* Dòng cảnh báo màu đỏ */
-                            .kt-alert-warning-red {
-                                background-color: #FEF2F2;
-                                border: 1px dashed #FCA5A5;
+                            /* 4. Khung nhập Textarea nhẹ, không bị dính thanh công cụ HTML che màn hình */
+                            .kt-textarea-wrap {
+                                background: #FFFFFF;
+                                border: 1px solid #E2E8F0;
                                 border-radius: 8px;
-                                padding: 6px 12px;
-                                font-size: 11.5px;
-                                font-weight: 600;
-                                color: #DC2626;
-                                display: flex;
-                                align-items: center;
-                                gap: 8px;
-                                margin-top: 4px;
+                                padding: 8px 10px;
+                                margin-bottom: 8px;
                             }
-
-                            /* Tiêu đề mục nhập liệu */
                             .kt-field-header {
-                                font-size: 11.5px;
-                                font-weight: 800;
-                                text-transform: uppercase;
-                                letter-spacing: 0.3px;
+                                font-size: 14px;
+                                font-weight: 700;
                                 display: flex;
                                 align-items: center;
                                 gap: 6px;
-                                margin-top: 10px;
-                                margin-bottom: 4px;
+                                margin-bottom: 6px;
+                            }
+                            .kt-textarea-wrap textarea.o_input {
+                                border: 1px solid #CBD5E1 !important;
+                                border-radius: 6px !important;
+                                font-size: 14px !important;
+                                padding: 6px 8px !important;
+                                min-height: 70px !important;
+                                line-height: 1.4 !important;
+                                background: #FAFAFA !important;
+                            }
+                            .kt-textarea-wrap textarea.o_input:focus {
+                                background: #FFFFFF !important;
+                                border-color: #2563EB !important;
                             }
 
-                            /* Khung soạn thảo HTML */
-                            .kt-editor-compact .note-editor {
+                            /* 5. Nút bấm Footer to bản trên Mobile */
+                            .modal-footer {
+                                padding: 8px 12px !important;
+                                gap: 8px !important;
+                                background: #FFFFFF !important;
+                                border-top: 1px solid #E2E8F0 !important;
+                            }
+                            .btn-mobile-action {
+                                height: 38px !important;
+                                font-size: 14px !important;
+                                font-weight: 700 !important;
                                 border-radius: 8px !important;
-                                border-color: #CBD5E1 !important;
-                                margin-bottom: 0 !important;
+                                display: inline-flex !important;
+                                align-items: center !important;
+                                justify-content: center !important;
+                                padding: 0 16px !important;
                             }
-                            .kt-editor-compact .note-editable {
-                                min-height: 85px !important;
-                                max-height: 130px !important;
-                                font-size: 12.5px !important;
-                                padding: 8px 10px !important;
-                            }
-
-                            /* Tối ưu Mobile */
                             @media (max-width: 768px) {
-                                .o_form_sheet { padding: 4px 6px !important; }
-                                .kt-modern-card { padding: 10px 12px !important; }
-                                .kt-top-row {
-                                    flex-direction: column !important;
-                                    align-items: flex-start !important;
-                                    gap: 6px !important;
+                                .modal-footer {
+                                    display: flex !important;
+                                    justify-content: space-between !important;
                                 }
-                                .kt-pills-row {
-                                    grid-template-columns: 1fr 1fr !important;
-                                    gap: 6px !important;
-                                }
-                                .kt-alert-warning-red {
-                                    font-size: 11px !important;
-                                    padding: 6px 8px !important;
+                                .modal-footer button {
+                                    flex: 1 !important;
                                 }
                             }
                         </style>
 
-                        <!-- Khối Header Card Thông tin kế hoạch -->
-                        <div class="kt-modern-card">
-                            <!-- Hàng trên: Học sinh + Badge trạng thái -->
-                            <div class="kt-top-row">
-                                <div class="kt-name-badge-wrap">
-                                    <span class="kt-tag-student"><i class="fa fa-user me-1"/>Học sinh</span>
-                                    <h2 class="kt-student-title">
-                                        <field name="hocsinh_id" readonly="1" options="{'no_open': True}"/>
-                                    </h2>
-                                </div>
+                        <!-- 1. Hộp cảnh báo đỏ xác nhận (Thay thế confirm popup trắng trơn) -->
+                        <div class="kt-notice-box">
+                            <i class="fa fa-exclamation-triangle text-danger" style="font-size: 14px; margin-top: 2px;"/>
+                            <div class="kt-notice-text">
+                                <strong>Xác nhận kết thúc:</strong>[Kế hoạch] này, Khi đó giáo viên mới có thể lập kế hoạch tiếp theo <strong>Kế hoạch kết thúc</strong> dữ liệu can thiệp học sinh sẽ được tổng kết làm báo cáo kết quả can thiệp của tháng.
+                            </div>
+                        </div>
 
-                                <span class="badge" style="background-color: #16A34A; color: #FFFFFF; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px;">
-                                    <i class="fa fa-circle text-white me-1" style="font-size: 7px;"/>Đang can thiệp
+                        <!-- 2. Thẻ thông tin tóm tắt -->
+                        <div class="kt-modern-card">
+                            <div class="kt-top-row">
+                                <div class="d-flex align-items-center gap-2 min-w-0">
+                                    <span class="badge" style="background: #EFF6FF; color: #2563EB; font-size: 10px; padding: 3px 6px; border-radius: 4px;">
+                                        <i class="fa fa-user me-1"/>Học sinh
+                                    </span>
+                                    <h4 class="kt-student-title">
+                                        <field name="hocsinh_id" readonly="1" options="{'no_open': True}"/>
+                                    </h4>
+                                </div>
+                                <span class="badge" style="background-color: #DCFCE7; color: #166534; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 12px; white-space: nowrap;">
+                                    <i class="fa fa-circle text-success me-1" style="font-size: 6px;"/>Đang can thiệp
                                 </span>
                             </div>
 
-                            <!-- Hàng giữa: 4 Khối thông tin Mini Badge -->
                             <div class="kt-pills-row">
                                 <div class="kt-info-pill">
-                                    <span class="kt-pill-label"><i class="fa fa-file-text-o text-primary"/>Kỳ kế hoạch</span>
+                                    <span class="kt-pill-label"><i class="fa fa-bookmark text-primary"/>Kỳ kế hoạch</span>
                                     <span class="kt-pill-val text-primary"><field name="name" readonly="1"/></span>
                                 </div>
                                 <div class="kt-info-pill">
-                                    <span class="kt-pill-label"><i class="fa fa-calendar text-warning"/>Thời gian can thiệp</span>
+                                    <span class="kt-pill-label"><i class="fa fa-calendar text-warning"/>Thời gian</span>
                                     <span class="kt-pill-val">
                                         <field name="tu_ngay" readonly="1"/> - <field name="den_ngay" readonly="1"/>
                                     </span>
                                 </div>
                                 <div class="kt-info-pill">
                                     <span class="kt-pill-label"><i class="fa fa-user-tie text-success"/>Giáo viên</span>
-                                    <span class="kt-pill-val text-success"><field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/></span>
+                                    <span class="kt-pill-val"><field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/></span>
                                 </div>
                                 <div class="kt-info-pill">
                                     <span class="kt-pill-label"><i class="fa fa-user-check text-info"/>Chuyên môn</span>
                                     <span class="kt-pill-val"><field name="gv_kiemduyet_id" readonly="1" options="{'no_open': True}"/></span>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Hàng dưới: Cảnh báo đỏ -->
-                            <div class="kt-alert-warning-red">
-                                <i class="fa fa-exclamation-triangle" style="font-size: 13px; flex-shrink: 0;"/>
-                                <span>Bạn vui lòng nhận xét về kết quả can thiệp trong tháng và có định hướng trong tháng tới trước khi kết thúc.</span>
+                        <!-- 3. Nhận xét đánh giá kết quả (Textarea chuẩn) -->
+                        <div class="kt-textarea-wrap">
+                            <div class="kt-field-header" style="color: #1E3A8A;">
+                                <i class="fa fa-commenting-o text-primary"/>
+                                <span>1. Nhận xét đánh giá kết quả can thiệp</span>
                             </div>
-                        </div>
-
-                        <!-- 1. Nhận xét đánh giá cuối tháng -->
-                        <div class="kt-field-header" style="color: #1E3A8A;">
-                            <i class="fa fa-commenting-o text-primary"/>
-                            <span>1. Nhận xét đánh giá kết quả can thiệp</span>
-                        </div>
-                        <div class="kt-editor-compact">
                             <field name="nhanxet"
-                                   placeholder="Ghi nhận sự tiến bộ, những mục tiêu đã làm chủ và các điểm cần lưu ý của trẻ trong tháng qua..."
-                                   widget="html"
-                                   options="{'style-inline': true}"/>
+                                   placeholder="Ghi nhận sự tiến bộ, những mục tiêu đã làm chủ và các điểm cần lưu ý..."
+                                   nolabel="1"/>
                         </div>
 
-                        <!-- 2. Định hướng kế hoạch tháng tới -->
-                        <div class="kt-field-header" style="color: #065F46; margin-top: 8px;">
-                            <i class="fa fa-compass text-success"/>
-                            <span>2. Định hướng kế hoạch tháng tới</span>
-                        </div>
-                        <div class="kt-editor-compact">
+                        <!-- 4. Định hướng kế hoạch tháng tới (Textarea chuẩn) -->
+                        <div class="kt-textarea-wrap">
+                            <div class="kt-field-header" style="color: #065F46;">
+                                <i class="fa fa-compass text-success"/>
+                                <span>2. Định hướng kế hoạch tháng tới</span>
+                            </div>
                             <field name="dinhhuong"
-                                   placeholder="Định hướng mục tiêu trọng tâm cần can thiệp, phương pháp phối hợp cùng phụ huynh ở tháng tiếp theo..."
-                                   widget="html"
-                                   options="{'style-inline': true}"/>
+                                   placeholder="Định hướng mục tiêu trọng tâm cần can thiệp, phối hợp phụ huynh..."
+                                   nolabel="1"/>
                         </div>
                     </sheet>
 
+                    <!-- 5. Footer: Đã loại bỏ hoàn toàn thuộc tính confirm="" -->
                     <footer>
                         <button name="action_xacnhan_ketthuc_kehoach"
                                 type="object"
-                                string="Xác nhận kết thúc kế hoạch"
-                                class="btn-danger"
-                                icon="fa-check-circle"
-                                confirm="Bạn có chắc chắn muốn kết thúc kỳ kế hoạch này và chuyển trạng thái sang Đã hoàn thành (-1)?"/>
-                        <button string="Hủy / Để sau" class="btn-secondary" special="cancel"/>
+                                string="Xác nhận kết thúc"
+                                class="btn-danger btn-mobile-action"
+                                icon="fa-check-circle"/>
+                        <button string="Hủy / Để sau"
+                                class="btn-light border btn-mobile-action"
+                                special="cancel"/>
                     </footer>
                 </form>
             </field>
