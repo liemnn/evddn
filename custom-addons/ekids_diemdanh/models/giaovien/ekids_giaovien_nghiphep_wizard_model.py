@@ -22,6 +22,8 @@ class ChamCongGiaoVienNghiPhepWizard(models.TransientModel):
 
                              ], default="1")
 
+    is_chuyencan = fields.Boolean(string="Nghỉ nhưng vẫn tính chuyên cần", default=False)
+
     @api.constrains('tu_ngay', 'den_ngay')
     def _constrains_nghiLe(self):
         for rec in self:
@@ -38,6 +40,7 @@ class ChamCongGiaoVienNghiPhepWizard(models.TransientModel):
                 'den_ngay': record.den_ngay,
                 'desc': record.desc,
                 'loai': record.loai,
+                'is_chuyencan': record.is_chuyencan
 
 
             }

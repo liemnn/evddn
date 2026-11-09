@@ -178,7 +178,12 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
         nghiles = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, self.coso_id,None, ngay_dauthang,
                                                                      ngay_cuoithang)
         nghipheps = (giaovien_util
-                     .func_get_nghipheps_trong_khoang_thoigian(self, self.coso_id, self.giaovien_id, nghiles, '1', ngay_dauthang,
+                     .func_get_nghipheps_trong_khoang_thoigian(self, self.coso_id, self.giaovien_id, nghiles, '1',None, ngay_dauthang,
+                                                               ngay_cuoithang))
+
+        nghipheps_vantinh_chuyencan = (giaovien_util
+                     .func_get_nghipheps_trong_khoang_thoigian(self, self.coso_id, self.giaovien_id, nghiles, '1', True,
+                                                               ngay_dauthang,
                                                                ngay_cuoithang))
 
         tong_dilam_kehoachs = giaovien_util.func_get_ngay_dilam_theo_kehoach(self, self.coso_id, nghiles, ngay_dauthang,
@@ -192,6 +197,7 @@ class ChamCongGiaoVien2Thang(models.Model,ChamCongGiaoVien2ThangAbstractModel,Ch
                                                                              ,tong_dilam_kehoachs
                                                                              ,self.giaovien_id
                                                                              ,nghiles
+                                                                             ,nghipheps_vantinh_chuyencan
                                                                              ,coso_chonghi_truluongs
                                                                              ,nghipheps
                                                                              ,nam

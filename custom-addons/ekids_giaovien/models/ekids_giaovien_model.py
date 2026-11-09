@@ -166,7 +166,7 @@ class GiaoVien(models.Model):
         nghiles = nghile_util.func_get_nghiles_trong_khoang_thoigian(self, self.coso_id,None, tu_ngay, den_ngay)
 
         for record in self:
-            nghipheps = giaovien_util.func_get_nghipheps_trong_khoang_thoigian(self,record.coso_id, record, nghiles, None,tu_ngay, den_ngay)
+            nghipheps = giaovien_util.func_get_nghipheps_trong_khoang_thoigian(self,record.coso_id, record, nghiles, None,None,tu_ngay, den_ngay)
 
             if nghipheps:
                 record.phep_da_sudung = len(nghipheps)

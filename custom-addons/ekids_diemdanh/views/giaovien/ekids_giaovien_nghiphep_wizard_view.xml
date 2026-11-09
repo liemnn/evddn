@@ -1,45 +1,284 @@
 <odoo>
     <data>
         <record id="ekids_diemdanh.chamcong_giaovien_nghiphep_wizard_form" model="ir.ui.view">
-            <field name="name">chamcong_giaovien_nghiphep_wizard</field>
+            <field name="name">chamcong_giaovien_nghiphep_wizard.form.clean</field>
             <field name="model">ekids.chamcong_giaovien_nghiphep_wizard</field>
             <field name="arch" type="xml">
-                <form string="Chọn ngày điểm danh">
-                    <sheet>
-                        <h4>
-                            <field name="coso_id" readonly="true"/>/
-                            <field name="giaovien_id" readonly="true"/>
-                        </h4>
-                        <group col="2">
-                            <group>
-                                <field name="tu_ngay"/>
-                            </group>
-                             <group>
-                                <field name="den_ngay"/>
-                            </group>
-                        </group>
+                <form string="Nghỉ phép">
+                    <sheet class="p-0">
+                        <style>
+                            /* Container tổng thể */
+                            .ek-wizard-container {
+                                padding: 14px 16px;
+                                background: #ffffff;
+                            }
 
-                        <group>
-                            <field name="loai" />
-                        </group>
+                            /* Khung viền bọc card chính */
+                            .ek-card-section {
+                                background: #f8fafc;
+                                border: 1.5px solid #e2e8f0;
+                                border-radius: 12px;
+                                padding: 14px;
+                            }
 
+                            .ek-card-header {
+                                font-size: 13.5px;
+                                font-weight: 800;
+                                color: #1e293b;
+                                text-transform: uppercase;
+                                letter-spacing: 0.3px;
+                                margin-bottom: 12px;
+                                display: flex;
+                                align-items: center;
+                                flex-wrap: wrap;
+                                gap: 6px;
+                            }
 
+                            /* 1. Dòng 1: Lưới 2 ô ngày */
+                            .ek-input-grid {
+                                display: grid;
+                                grid-template-columns: 1fr 1fr;
+                                gap: 10px;
+                                margin-bottom: 10px;
+                            }
+                            .ek-input-box {
+                                background: #ffffff;
+                                border: 1.5px solid #cbd5e1;
+                                border-radius: 10px;
+                                padding: 7px 12px;
+                            }
+                            .ek-input-box.highlight {
+                                border-color: #86efac;
+                            }
+                            .ek-input-label {
+                                font-size: 11px;
+                                font-weight: 800;
+                                color: #334155 !important;
+                                text-transform: uppercase;
+                                letter-spacing: 0.3px;
+                                margin-bottom: 3px;
+                                display: flex;
+                                align-items: center;
+                            }
+                            .ek-input-box input {
+                                color: #0f172a !important;
+                                font-weight: 700 !important;
+                                font-size: 14.5px !important;
+                                border: none !important;
+                                box-shadow: none !important;
+                                padding: 0 !important;
+                                background: transparent !important;
+                                width: 100% !important;
+                            }
 
-                        <group>
+                            /* 2. Dòng 2: Hình thức nghỉ */
+                            .ek-full-box {
+                                background: #ffffff;
+                                border: 1.5px solid #cbd5e1;
+                                border-radius: 10px;
+                                padding: 7px 12px;
+                                margin-bottom: 10px;
+                            }
+                            .ek-full-box select {
+                                color: #0f172a !important;
+                                font-weight: 700 !important;
+                                font-size: 14px !important;
+                                border: none !important;
+                                background: transparent !important;
+                                padding: 0 !important;
+                                width: 100% !important;
+                            }
 
-                            <field name="desc" />
-                        </group>
+                            /* 3. Dòng 3: Khối chuyên cần viền cam hổ phách */
+                            .ek-chuyencan-strip {
+                                background: #ffffff;
+                                border: 1.5px solid #e08e0b;
+                                border-radius: 10px;
+                                padding: 8px 12px;
+                                margin-bottom: 10px;
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            }
+                            .ek-strip-icon {
+                                width: 32px;
+                                height: 32px;
+                                background: #fef3c7;
+                                border-radius: 8px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                color: #d97706;
+                                font-size: 14px;
+                                flex-shrink: 0;
+                            }
+                            .ek-strip-body {
+                                flex-grow: 1;
+                                min-width: 0;
+                            }
+                            .ek-strip-title {
+                                font-size: 12.5px;
+                                font-weight: 800;
+                                color: #92400e;
+                                text-transform: uppercase;
+                                letter-spacing: 0.3px;
+                                display: block;
+                            }
+                            .ek-strip-desc {
+                                font-size: 11.5px;
+                                color: #475569;
+                                margin: 0;
+                                line-height: 1.35;
+                            }
+
+                            /* 4. Dòng 4: Lý do nghỉ / Ghi chú */
+                            .ek-desc-box {
+                                background: #ffffff;
+                                border: 1.5px solid #cbd5e1;
+                                border-radius: 10px;
+                                padding: 7px 12px;
+                            }
+                            .ek-desc-box textarea {
+                                border: none !important;
+                                box-shadow: none !important;
+                                background: transparent !important;
+                                padding: 0 !important;
+                                color: #0f172a !important;
+                                font-size: 13.5px !important;
+                                resize: vertical;
+                            }
+
+                            /* CSS Ép màu Button Footer chuẩn bảng màu mẫu */
+                            .btn-save-custom {
+                                background-color: #5c86a6 !important;
+                                border: 1px solid #5c86a6 !important;
+                                color: #ffffff !important;
+                                font-weight: 700 !important;
+                                border-radius: 6px !important;
+                                padding: 6px 16px !important;
+                                min-width: 105px !important;
+                                display: inline-flex !important;
+                                align-items: center !important;
+                                justify-content: center !important;
+                            }
+                            .btn-save-custom:hover {
+                                background-color: #4b6e8a !important;
+                                border-color: #4b6e8a !important;
+                                color: #ffffff !important;
+                            }
+
+                            .btn-close-custom {
+                                background-color: #ffffff !important;
+                                border: 1px solid #cbd5e1 !important;
+                                color: #334155 !important;
+                                font-weight: 600 !important;
+                                border-radius: 6px !important;
+                                padding: 6px 16px !important;
+                                min-width: 80px !important;
+                                display: inline-flex !important;
+                                align-items: center !important;
+                                justify-content: center !important;
+                            }
+                            .btn-close-custom:hover {
+                                background-color: #f1f5f9 !important;
+                                color: #0f172a !important;
+                            }
+
+                            /* Responsive trên Mobile (màn hình dọc  576px) */
+                            @media (max-width: 576px) {
+                                .ek-wizard-container {
+                                    padding: 8px 10px;
+                                }
+                                .ek-card-section {
+                                    padding: 10px;
+                                }
+                                .ek-input-grid {
+                                    grid-template-columns: 1fr;
+                                    gap: 8px;
+                                }
+                                .ek-chuyencan-strip {
+                                    flex-wrap: wrap;
+                                    gap: 8px;
+                                }
+                                .ek-chuyencan-toggle-wrap {
+                                    margin-left: auto;
+                                }
+                            }
+                        </style>
+
+                        <div class="ek-wizard-container">
+                            <div class="ek-card-section">
+                                <!-- HEADER TÊN GIÁO VIÊN -->
+                                <div class="ek-card-header">
+                                    <span><i class="fa fa-sliders text-secondary me-1"/> ĐĂNG KÝ NGHỈ PHÉP:</span>
+                                    <span class="text-primary ms-1">
+                                        <field name="giaovien_id" readonly="1" options="{'no_open': True}"/>
+                                    </span>
+                                </div>
+
+                                <!-- DÒNG 1: TỪ NGÀY & ĐẾN HẾT NGÀY -->
+                                <div class="ek-input-grid">
+                                    <div class="ek-input-box highlight">
+                                        <span class="ek-input-label" style="color: #15803d !important;">
+                                            <i class="fa fa-calendar-check-o me-1.5"/> TỪ NGÀY BẮT ĐẦU
+                                        </span>
+                                        <field name="tu_ngay" class="w-100" required="1"/>
+                                    </div>
+                                    <div class="ek-input-box">
+                                        <span class="ek-input-label">
+                                            <i class="fa fa-calendar-times-o me-1.5 text-danger"/> ĐẾN HẾT NGÀY
+                                        </span>
+                                        <field name="den_ngay" class="w-100" required="1"/>
+                                    </div>
+                                </div>
+
+                                <!-- DÒNG 2: HÌNH THỨC NGHỈ -->
+                                <div class="ek-full-box">
+                                    <span class="ek-input-label">
+                                        <i class="fa fa-tag me-1.5 text-primary"/> HÌNH THỨC NGHỈ:
+                                    </span>
+                                    <field name="loai" widget="selection" class="w-100"/>
+                                </div>
+
+                                <!-- DÒNG 3: NGHỈ VẪN TÍNH CHUYÊN CẦN -->
+                                <div class="ek-chuyencan-strip">
+                                    <div class="ek-strip-icon">
+                                        <i class="fa fa-bullhorn"/>
+                                    </div>
+                                    <div class="ek-strip-body">
+                                        <span class="ek-strip-title">Tính chuyên cần</span>
+                                        <p class="ek-strip-desc">
+                                            <strong>Khi bật:</strong> Giáo viên nghỉ <strong>vẫn được tính chuyên cần</strong> trong tháng.
+                                        </p>
+                                    </div>
+                                    <div class="ek-chuyencan-toggle-wrap">
+                                        <field name="is_chuyencan" widget="boolean_toggle"/>
+                                    </div>
+                                </div>
+
+                                <!-- DÒNG 4: LÝ DO NGHỈ / GHI CHÚ -->
+                                <div class="ek-desc-box">
+                                    <span class="ek-input-label">
+                                        <i class="fa fa-pencil me-1.5 text-primary"/> LÝ DO NGHỈ / GHI CHÚ:
+                                    </span>
+                                    <field name="desc" placeholder="Ghi rõ lý do vắng mặt..." rows="2" class="w-100"/>
+                                </div>
+                            </div>
+                        </div>
                     </sheet>
-                    <footer>
+
+                    <!-- FOOTER CĂN TRÁI VỚI NÚT LƯU HIỆN MÀU CHUẨN XÁC -->
+                    <footer class="d-flex justify-content-start gap-2 px-3 py-2.5 bg-white border-top">
                         <button name="action_tao_chamcong_giaovien_nghiphep"
-                                type="object" string="Tạo nghỉ phép"
-                                class="btn-primary"/>
-                        <button string="Hủy" special="cancel" class="btn-secondary"/>
+                                type="object"
+                                string="Lưu kết quả"
+                                class="btn btn-save-custom shadow-sm"/>
+                        <button string="Đóng"
+                                special="cancel"
+                                class="btn btn-close-custom"/>
                     </footer>
                 </form>
             </field>
         </record>
-
-
     </data>
 </odoo>

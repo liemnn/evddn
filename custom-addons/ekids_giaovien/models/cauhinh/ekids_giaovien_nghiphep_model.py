@@ -22,6 +22,8 @@ class GiaoVienNghiPhep(models.Model):
 
                                      ], default="1")
 
+    is_chuyencan = fields.Boolean(string="Nghỉ nhưng vẫn tính chuyên cần",default=False)
+
     @api.constrains('tu_ngay', 'den_ngay')
     def _constrains_nghiLe(self):
         for rec in self:
