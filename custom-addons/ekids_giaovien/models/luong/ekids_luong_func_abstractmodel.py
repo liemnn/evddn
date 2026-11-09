@@ -56,6 +56,16 @@ class LuongFuncAbstractModel(models.AbstractModel):
                                                                        , giaovien
                                                                        , nghiles_all
                                                                        ,'1'
+                                                                       ,None
+                                                                       , ngay_dauthang_thucte
+                                                                       , ngay_cuoithang))
+
+                nghipheps_vantinh_chuyencan = (giaovien_util
+                             .func_get_nghipheps_trong_khoang_thoigian(self, coso
+                                                                       , giaovien
+                                                                       , nghiles_all
+                                                                       , '1'
+                                                                       , True
                                                                        , ngay_dauthang_thucte
                                                                        , ngay_cuoithang))
                 # chỉ tính nghỉ phép bị trừ lương
@@ -66,6 +76,7 @@ class LuongFuncAbstractModel(models.AbstractModel):
                                                                                      ,nghiles_all
                                                                                      ,coso_chonghi_truluongs
                                                                                      ,nghipheps
+                                                                                     ,nghipheps_vantinh_chuyencan
                                                                                      ,nam
                                                                                      ,thang)
                 self.func_tao_macdinh_luong_cho_giaovien(coso_nghiles
@@ -127,6 +138,16 @@ class LuongFuncAbstractModel(models.AbstractModel):
                                                                , giaovien
                                                                , nghiles_all
                                                                ,'1'
+                                                               ,None
+                                                               , ngay_dauthang_thucte
+                                                               , ngay_cuoithang))
+
+        nghipheps_vantinh_chuyencan = (giaovien_util
+                     .func_get_nghipheps_trong_khoang_thoigian(self, coso
+                                                               , giaovien
+                                                               , nghiles_all
+                                                               , '1'
+                                                               ,True
                                                                , ngay_dauthang_thucte
                                                                , ngay_cuoithang))
 
@@ -138,6 +159,7 @@ class LuongFuncAbstractModel(models.AbstractModel):
                                                                              ,nghiles_all
                                                                              ,coso_chonghi_truluongs
                                                                              ,nghipheps
+                                                                             ,nghipheps_vantinh_chuyencan
                                                                              ,nam
                                                                              ,thang)
         self.func_tao_macdinh_luong_cho_giaovien(coso_nghiles
@@ -247,9 +269,10 @@ class LuongFuncAbstractModel(models.AbstractModel):
         ngaynghi = dilam_nghi + (dilam_nuabuoi * 0.5) + len(gv_coso_chonghi_truluongs) + len(nghipheps)
 
         # chu y trường hợp giáo viên nghỉ giữa tháng
+        nghipheps_vantinh_chuyencan = dl_chamcong['nghipheps_vantinh_chuyencan']
         ngaynghi_tong = ngaynghi+songay_do_giaovien_nghilam
         parameters["$NGAY_NGHI"] = str(ngaynghi_tong)
-        ngay_nghi_chuyencan = ngaynghi_tong - nghi_vantinh_chuyencan
+        ngay_nghi_chuyencan = ngaynghi_tong - nghi_vantinh_chuyencan - len(nghipheps_vantinh_chuyencan)
         parameters["$NGHI_CHUYENCAN"] = str(ngay_nghi_chuyencan)
 
         #luong.so_ngaynghi = chamcong_nghi

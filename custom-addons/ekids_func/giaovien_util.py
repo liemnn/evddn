@@ -37,7 +37,7 @@ def func_get_giaoviens_tu_user(self):
     return GiaoVien.search(final_domain)
 
 
-def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,tu_ngay, den_ngay):
+def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,is_chuyencan,tu_ngay, den_ngay):
     domain =[
                 ('giaovien_id', '=', giaovien.id),
                 ('tu_ngay', '<=', den_ngay),
@@ -45,6 +45,10 @@ def func_get_nghipheps_trong_khoang_thoigian(self,coso, giaovien, nghiles, loai,
             ]
     if loai:
         domain.append(('loai','=',loai))
+
+    if is_chuyencan == True:
+        domain.append(('is_chuyencan', '=', is_chuyencan))
+
     nghipheps = self.env['ekids.giaovien_nghiphep'].search(domain)
 
     days = {}
@@ -138,6 +142,7 @@ def func_get_dulieu_chamcong_thucte_giaovien(self
                                              ,nghiles
                                              ,coso_chonghi_truluongs
                                              ,nghipheps
+                                             ,nghipheps_vantinh_chuyencan
                                              ,nam
                                              ,thang):
 
@@ -163,6 +168,8 @@ def func_get_dulieu_chamcong_thucte_giaovien(self
     gv_coso_chonghi_truluongs = func_get_giaovien_coso_nghi_truluong(giaovien, coso_chonghi_truluongs)
 
 
+
+
     duoc_chamcong = len(dilam_cangay)  + (len(dilam_nuabuoi) * 0.5)
 
     #TINH TOAN CHUYEN CAN:
@@ -181,6 +188,7 @@ def func_get_dulieu_chamcong_thucte_giaovien(self
         'gv_dilam_kehoach':gv_dilam_kehoachs,
         'gv_nghiles': gv_nghiles,
         'nghi_vantinh_chuyencan': nghi_vantinh_chuyencan,
+        'nghipheps_vantinh_chuyencan': nghipheps_vantinh_chuyencan,
         'gv_coso_chonghi_truluongs': gv_coso_chonghi_truluongs
 
 
