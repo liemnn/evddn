@@ -409,10 +409,18 @@
                                         <div class="kh-data-value"><field name="trangthai"/></div>
                                     </div>
                                     <div class="kh-data-row">
-                                        <div class="kh-data-label"><i class="fa fa-heart text-danger"></i>Chính sách giảm học phí (nếu có)</div>
+                                        <div class="kh-data-label">
+                                            <i class="fa fa-heart text-danger"></i>
+                                            Các [Chính sách] giảm học phí (nếu có)
+                                        </div>
                                         <div class="kh-data-value">
-                                            <field name="dm_chinhsach_giam_id"
-                                                   domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
+
+                                            <!-- Hiển thị dạng các thẻ tag có màu sắc chọn nhanh -->
+                                            <field name="dm_chinhsach_giam_ids"
+                                                   widget="many2many_tags"
+                                                   domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
+
+                                                   placeholder="Chọn các chính sách giảm..."/>
                                         </div>
                                     </div>
 

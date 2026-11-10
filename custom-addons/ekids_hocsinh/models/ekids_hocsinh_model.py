@@ -41,8 +41,23 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
     ]
         , string="Hình thức theo học", default="1", required=True)
 
-    dm_chinhsach_giam_id = fields.Many2one("ekids.hocphi_dm_chinhsach_giam",
-                                           string="Học sinh thuộc chính sách giảm học phí (nếu có)")
+
+    # Trường mới: Nhiều chính sách giảm
+    # Trường mới: Nhiều chính sách giảm
+    dm_chinhsach_giam_ids = fields.Many2many(
+        "ekids.hocphi_dm_chinhsach_giam",
+        "ekids_hocphi_chinhsach_hocsinh_rel",  # Đổi nhẹ tên bảng để tránh vướng khóa ngoại cũ còn sót
+        "hocsinh_id",  # Cột 1: trỏ về ekids.hocsinh (id)
+        "chinhsach_id",  # Cột 2: trỏ về ekids.hocphi_dm_chinhsach_giam (id)
+        string="Các chính sách giảm học phí (nếu có)",
+    )
+
+    tyle_giamhocphi = fields.Integer(string=" % Giảm",compute="_compute_chinhsach_giam",default=0)
+    sotien_giamhocphi = fields.Float(string=" % Giảm", compute="_compute_chinhsach_giam", default=0)
+
+
+
+
 
     trangthai = fields.Selection([
             ("1", "Đang theo học"),
@@ -75,6 +90,26 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
     ph_cccd = fields.Char(string="CCCD",compute="_compute_is_phuhuynh")
     ph_dienthoai = fields.Char(string="Điện thoại",compute="_compute_is_phuhuynh")
     ph_diachi= fields.Char(string="Địa chỉ",compute="_compute_is_phuhuynh")
+
+
+
+    def _compute_chinhsach_giam(self):
+        for record in self:
+            tyle_giamhocphi =0
+            sotien_giamhocphi=0
+
+            dm_chinhsach_giam_ids = record.dm_chinhsach_giam_ids
+            if dm_chinhsach_giam_ids:
+                for cs in dm_chinhsach_giam_ids:
+                    if cs.is_giam_theo_tyle == True:
+                        tyle_giamhocphi += cs.tyle_giam
+                    else:
+                        sotien_giamhocphi+= cs.tien
+
+
+            record.tyle_giamhocphi = tyle_giamhocphi
+            record.sotien_giamhocphi = sotien_giamhocphi
+
 
     def _compute_is_phuhuynh(self):
         for record in self:

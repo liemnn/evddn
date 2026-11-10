@@ -146,20 +146,35 @@ class HocPhiThangAbstractModel(models.AbstractModel):
                     , ('thang_id', '=', self.id)
                     , ('hocsinh_id', '=', hocsinh.id)
                  ],limit=1)
+            if hocphi:
+                chinhsachs = hocsinh.dm_chinhsach_giam_ids
+                hocphi.write({
+                    'dm_chinhsach_giam_ids': [(6, 0, chinhsachs.ids)],
+                    'tyle_giamhocphi': sum(cs.tyle_giam for cs in chinhsachs if cs.is_giam_theo_tyle),
+                    'sotien_giamhocphi': sum(cs.tien for cs in chinhsachs if not cs.is_giam_theo_tyle),
+                })
 
         else:
             # Nếu đã có trong map thì bỏ qua, chưa có mới tạo
             if existing_hp:
                 hocphi = None
             else:
-                data = {
+                chinhsachs = hocsinh.dm_chinhsach_giam_ids
+
+                # Tính tổng tỷ lệ (%) và tổng tiền (VNĐ) trực tiếp bằng generator
+                tyle_giam = sum(cs.tyle_giam for cs in chinhsachs if cs.is_giam_theo_tyle)
+                sotien_giam = sum(cs.tien for cs in chinhsachs if not cs.is_giam_theo_tyle)
+
+                hocphi = self.env['ekids.hocphi'].create({
                     'coso_id': self.coso_id.id,
                     'thang_id': self.id,
                     'hocsinh_id': hocsinh.id,
-                    'tyle_giamhocphi': 0,
-                    'trangthai': '-1'
-                }
-                hocphi = self.env['ekids.hocphi'].create(data)
+                    'trangthai': '-1',
+                    'dm_chinhsach_giam_ids': [(6, 0, chinhsachs.ids)],
+                    'tyle_giamhocphi': tyle_giam,
+                    'sotien_giamhocphi': sotien_giam,
+                })
+
         if hocphi:
             ca_canthieps = hocsinh_util.func_get_hocsinh_ca_canthieps(self,hocsinh,ngay_dauthang,ngay_cuoithang)
 
@@ -204,46 +219,17 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         hocsinh =hocphi.hocsinh_id
         if not hocsinh:
             return
-        chinhsach = hocsinh.dm_chinhsach_giam_id
-        if not chinhsach:
+        chinhsachs = hocsinh.dm_chinhsach_giam_ids
+        if not chinhsachs:
             return
 
-        # Chuẩn bị dữ liệu cập nhật gom chung vào 1 từ điển (vals) để tối ưu hiệu năng ORM write
-        vals = {
-            'dm_chinhsach_giam_id': chinhsach.id,
-            'tyle_giamhocphi': 0.0,
-            'tyle_giamhocphi_bantru': 0.0,
-            'tyle_giamhocphi_ca': 0.0,
-        }
 
-        if chinhsach.is_giam_theo_tyle:
-            # Chỉ tính cho trường hợp chính sách giảm học phí theo tỷ lệ
-            tyle = chinhsach.tyle_giam
-            vals.update({
-                'tyle_giamhocphi': tyle,
-                'tyle_giamhocphi_bantru': tyle,
-                'tyle_giamhocphi_ca': tyle,
-            })
-
-
-        # Cập nhật database một lần duy nhất cho các trường tỷ lệ và chính sách
-        hocphi.write(vals)
 
         # Kích hoạt tính toán lại các giá trị học phí cuối cùng
         hocphi._compute_hocphi()
         hocphi._compute_hocphi_giam()
         hocphi._compute_hocphi_phaidong()
 
-
-    def func_tao_khoantru_giam_hocphi_sotien(self,hocsinh,hocphi):
-       dm_giam = hocsinh.dm_chinhsach_giam_id
-       if dm_giam and dm_giam.is_giam_theo_tyle == False:
-            data = {
-                'hocphi_id': hocphi.id,
-                'name': dm_giam.name,
-                'tien': dm_giam.tien
-            }
-            self.env['ekids.hocphi_duoctru'].create(data)
 
 
     def func_tinhtoan_lai_hocphi_cho_mot_hocsinh(self):
@@ -1009,13 +995,11 @@ class HocPhiThangAbstractModel(models.AbstractModel):
 
     def func_thongtin_duoctru_hocphi_tien(self,tien,obj,hocphi):
         if obj.is_giam_hocphi == True:
-            hocsinh =hocphi.hocsinh_id
-            if (hocsinh.dm_chinhsach_giam_id
-                    and hocsinh.dm_chinhsach_giam_id.is_giam_theo_tyle == True):
-                # phai giam theo ty le con lai giam theo tiền thì thôi
-                tyle =hocsinh.dm_chinhsach_giam_id.tyle_giam
-                if tyle >0:
-                    tien = (tien/100)* (100-tyle)
+
+            # phai giam theo ty le con lai giam theo tiền thì thôi
+            tyle = hocphi.func_tinhtoan_tyle_giamhocphi()
+            if tyle > 0:
+                tien = (tien/100)* (100-tyle)
         return tien
 
 
@@ -1029,12 +1013,9 @@ class HocPhiThangAbstractModel(models.AbstractModel):
             if tyle_hoan_hp < 100:
                name = name +" x "+str(tyle_hoan_hp)+"%"
 
-            dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
-            if (dm_chinhsach_giam
-                    and dm_chinhsach_giam.is_giam_theo_tyle == True
-                    and dm_chinhsach_giam.tyle_giam > 0
-                    and ca.is_giam_hocphi == True):
-                name += " (Đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"
+            chinhsach_tyle_giam = hocphi.func_tinhtoan_tyle_giamhocphi()
+            if chinhsach_tyle_giam >0:
+                name += " (Đã giảm " + str(chinhsach_tyle_giam) + "%)"
 
             if soca_bu > 0:
                 name = name + " & Bảo lưu " + str(soca_bu) + " ca"
@@ -1052,11 +1033,8 @@ class HocPhiThangAbstractModel(models.AbstractModel):
         if tyle_hoan_hp < 100:
             name = name + " x " + str(tyle_hoan_hp) + "%"
 
-        dm_chinhsach_giam = hocphi.hocsinh_id.dm_chinhsach_giam_id
+        chinhsach_tyle_giam= hocphi.func_tinhtoan_tyle_giamhocphi()
 
-        if (dm_chinhsach_giam
-                and dm_chinhsach_giam.is_giam_theo_tyle == True
-                and dm_chinhsach_giam.tyle_giam > 0
-                and thu_bantru.is_giam_hocphi == True):
-            name += " (Đã giảm " + str(dm_chinhsach_giam.tyle_giam) + "%)"
+        if chinhsach_tyle_giam >0:
+            name += " (Đã giảm " + str(chinhsach_tyle_giam) + "%)"
         return name

@@ -234,7 +234,7 @@
                 <field name="is_chot_hocphi" invisible="1"/>
                 <field name="is_dl_locked" invisible="1"/>
                 <field name="coso_id" invisible="1"/>
-                <field name="is_giam_theo_tyle" invisible="1"/>
+
 
                 <header>
                     <button name="%(ekids_hocsinh.action_phieuthus)d" type="action" class="btn btn-primary fw-bold px-3 shadow-sm" icon="fa-print" string="In phiếu thu"/>
@@ -542,16 +542,9 @@
                                                 </span>
                                             </div>
                                             <div class="ps-1">
-                                                <span invisible="dm_chinhsach_giam_id == False" class="fw-bolder" style="font-size: 15.5px; color: #78350f; line-height: 1.4;">
-                                                    <field name="dm_chinhsach_giam_id" readonly="1" options="{'no_open': True}"/>
-                                                </span>
+                                                <field name="ten_giamhocphi"/>
 
-                                                <div invisible="dm_chinhsach_giam_id != False" class="d-flex align-items-center gap-1.5 pt-0.5">
-                                                    <i class="fa fa-info-circle text-muted" style="font-size: 14px;"/>
-                                                    <span class="fw-bolder" style="font-size: 14px; color: #64748b; letter-spacing: 0.3px;">
-                                                        HỌC SINH KHÔNG THUỘC CHÍNH SÁCH NÀO
-                                                    </span>
-                                                </div>
+
                                             </div>
                                         </div>
 
@@ -569,24 +562,18 @@
                                             <!-- KHI TẮT ĐẶC THÙ: HIỂN THỊ ĐỘNG THEO TỶ LỆ (%) HOẶC SỐ TIỀN (VNĐ) -->
                                             <div invisible="is_giamhocphi_dacthu == True" class="d-flex justify-content-between align-items-center">
                                                 <span style="font-size: 15px; font-weight: 800; color: #0f172a;">
-                                                    Mức giảm áp dụng:
+                                                    Tổng mức giảm theo chính sách
                                                 </span>
 
                                                 <!-- TRƯỜNG HỢP A: Giảm theo Tỷ lệ % -->
-                                                <div invisible="is_giam_theo_tyle == False" class="ekids-badge-dynamic">
+                                                <div  class="ekids-badge-dynamic">
                                                     <field name="tyle_giamhocphi" class="fw-black text-danger mb-0"
                                                            style="font-size: 19px !important; font-weight: 900 !important; width: auto !important;"
                                                            readonly="is_dl_locked"/>
                                                     <span class="fw-black text-danger" style="font-size: 17px; font-weight: 900;">%</span>
                                                 </div>
 
-                                                <!-- TRƯỜNG HỢP B: Giảm theo Số tiền cố định VNĐ -->
-                                                <div invisible="is_giam_theo_tyle == True" class="ekids-badge-dynamic" style="min-width: 130px;">
-                                                    <field name="chinhsach_tien_giam" class="fw-black text-danger mb-0"
-                                                           style="font-size: 16px !important; font-weight: 900 !important; width: auto !important;"
-                                                           readonly="1" widget="integer" nolabel="1"/>
-                                                    <span class="fw-black text-danger" style="font-size: 13px; font-weight: 800;">VNĐ</span>
-                                                </div>
+
                                             </div>
 
                                             <!-- KHI BẬT ĐẶC THÙ -->

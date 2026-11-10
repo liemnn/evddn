@@ -148,12 +148,10 @@
                                         (Đặc thù: Lớp chung <strong t-field="o.tyle_giamhocphi_bantru"/>% | Can thiệp <strong t-field="o.tyle_giamhocphi_ca"/>%)
                                     </t>
                                     <t t-else="">
-                                        <t t-if="o.dm_chinhsach_giam_id">
-                                            - <span t-field="o.dm_chinhsach_giam_id.name"/>
+                                        <t t-if="o.ten_giamhocphi">
+                                            - <span t-field="o.ten_giamhocphi"/>
                                         </t>
-                                        <t t-if="o.tyle_giamhocphi > 0">
-                                            (<strong t-field="o.tyle_giamhocphi"/>%)
-                                        </t>
+
 
                                     </t>
                                 </td>

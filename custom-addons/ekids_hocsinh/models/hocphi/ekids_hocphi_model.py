@@ -103,15 +103,20 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                                 compute="_compute_hocphi")
 
     tyle_giamhocphi = fields.Integer(string=" % Giảm",default=0)
-    dm_chinhsach_giam_id = fields.Many2one("ekids.hocphi_dm_chinhsach_giam",
-                                           string="Học sinh thuộc chính sách giảm học phí (nếu có)")
+    sotien_giamhocphi = fields.Float(string="Số tiền giảm", default=0)
 
-    is_giam_theo_tyle = fields.Boolean(
-        related='dm_chinhsach_giam_id.is_giam_theo_tyle', readonly=True
+    ten_giamhocphi = fields.Html(string="Thông tin giảm", compute="_compute_ten_giamhocphi")
+
+
+    dm_chinhsach_giam_ids = fields.Many2many(
+        "ekids.hocphi_dm_chinhsach_giam",
+        "ekids_hocphi_chinhsach_rel",  # Đổi nhẹ tên bảng để tránh vướng khóa ngoại cũ còn sót
+        "hocphi_id",  # Cột 1: trỏ về ekids.hocsinh (id)
+        "chinhsach_id",  # Cột 2: trỏ về ekids.hocphi_dm_chinhsach_giam (id)
+        string="Các chính sách giảm học phí (nếu có)",
     )
-    chinhsach_tien_giam = fields.Float(
-        related='dm_chinhsach_giam_id.tien', readonly=True
-    )
+
+
 
     is_giamhocphi_dacthu = fields.Boolean(string="Giảm học phí theo đặc thù",default=False)
 
@@ -156,6 +161,54 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
     qr_code_image = fields.Binary("QR Code Chuyển Khoản", compute="_compute_qr_code")
 
 
+    def func_tinhtoan_tyle_giamhocphi(self):
+        tyle_giamhocphi =0
+        dm_chinhsach_giam_ids = self.dm_chinhsach_giam_ids
+        if dm_chinhsach_giam_ids:
+            for cs in dm_chinhsach_giam_ids:
+                if cs.is_giam_theo_tyle == True:
+                    tyle_giamhocphi += cs.tyle_giam
+        return tyle_giamhocphi
+
+
+    def func_tinhtoan_sotien_giamhocphi(self):
+        sotien_giamhocphi =0
+        dm_chinhsach_giam_ids = self.dm_chinhsach_giam_ids
+        if dm_chinhsach_giam_ids:
+            for cs in dm_chinhsach_giam_ids:
+                if cs.is_giam_theo_tyle == False:
+                    sotien_giamhocphi += cs.tien
+        return sotien_giamhocphi
+
+    @api.depends(
+        'dm_chinhsach_giam_ids',
+        'dm_chinhsach_giam_ids.name',
+        'dm_chinhsach_giam_ids.is_giam_theo_tyle',
+        'dm_chinhsach_giam_ids.tyle_giam',
+        'dm_chinhsach_giam_ids.tien'
+    )
+    def _compute_ten_giamhocphi(self):
+        for rec in self:
+            if not rec.dm_chinhsach_giam_ids:
+                rec.ten_giamhocphi = "<span style='color: #94a3b8; font-style: italic; font-weight: normal;'>Không có chính sách miễn giảm</span>"
+                continue
+
+            items = []
+            for cs in rec.dm_chinhsach_giam_ids:
+                if cs.is_giam_theo_tyle:
+                    muc_giam = f"<span style='color: #dc2626; font-weight: normal;'>(-{cs.tyle_giam}%)</span>"
+                else:
+                    tien_str = f"{int(cs.tien):,}".replace(",", ".")
+                    muc_giam = f"<span style='color: #dc2626; font-weight: normal;'>(-{tien_str} vnđ)</span>"
+
+                # Dòng chữ thanh mảnh, giãn cách thoáng nhẹ
+                items.append(
+                    f"<div style='margin-bottom: 2px; line-height: 1.5; font-weight: normal; color: #475569;'>"
+                    f"• {cs.name} {muc_giam}"
+                    f"</div>"
+                )
+
+            rec.ten_giamhocphi = "".join(items)
     def _compute_ngay_nhaphoc(self):
         for rec in self:
             rec.ngay_nhaphoc = rec.hocsinh_id.ngay_nhaphoc
@@ -402,7 +455,7 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
             hp.hocphi_phaidong = hp.hocphi - hp.hocphi_giam
 
 
-    @api.depends("hocphi_bantru_ids", "hocphi_ca_ids", "hocphi_duoctru_ids","tyle_giamhocphi","is_giamhocphi_dacthu","tyle_giamhocphi_bantru","tyle_giamhocphi_ca")
+    @api.depends("hocphi_bantru_ids", "hocphi_ca_ids", "hocphi_duoctru_ids","tyle_giamhocphi","sotien_giamhocphi","is_giamhocphi_dacthu","tyle_giamhocphi_bantru","tyle_giamhocphi_ca")
     def _compute_hocphi_giam(self):
         for hp in self:
 
@@ -424,18 +477,18 @@ class HocPhi(models.Model,HocPhiThangAbstractModel):
                 hp._compute_hocphi()
             else:
                 # Giam theo tong khong chia tung khoan rieng
-                if hp.is_giam_theo_tyle == True:
-                    bantru = hp.func_hocphi_giam_bantru()
-                    # tong giảm ca can thiệp
-                    ca = hp.func_hocphi_giam_ca()
-                    #tien_duoctru = hp.tien_duoctru
 
-                    sotien_giam = ((bantru + ca) / 100) * hp.tyle_giamhocphi
-                    hp.hocphi_giam = sotien_giam
-                    hp._compute_hocphi()
-                else:
-                    hp.hocphi_giam = hp.chinhsach_tien_giam
-                    hp._compute_hocphi()
+                bantru = hp.func_hocphi_giam_bantru()
+                # tong giảm ca can thiệp
+                ca = hp.func_hocphi_giam_ca()
+                #tien_duoctru = hp.tien_duoctru
+
+                sotien_giam = ((bantru + ca) / 100) * hp.tyle_giamhocphi
+                # co giam so tien nua
+                sotien_giam = sotien_giam + hp.sotien_giamhocphi
+                hp.hocphi_giam = sotien_giam
+                hp._compute_hocphi()
+
 
 
 
