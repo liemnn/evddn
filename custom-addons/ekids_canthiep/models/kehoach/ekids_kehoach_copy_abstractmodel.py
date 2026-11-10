@@ -24,50 +24,19 @@ class KeHoachCopyAbstractModel(models.AbstractModel):
     _abstract = True
 
     def func_copy_muctieu_thangtruoc_khongdat_sang(self):
-        coso = self.coso_id
-        if coso.is_canthiep_ketluan == True:
-            linhvucs = self.ketluan_id.linhvuc_ids
-            if linhvucs:
-                #B1: copy Linh vuc
-                for linhvuc in linhvucs:
-                    kehoach_linhvuc = self.env['ekids.kehoach_linhvuc'].search([
-                        ("kehoach_id","=",self.id)
-                        ,("linhvuc_id","=",linhvuc.linhvuc_id.id)
-                        ,("tuoi_id", "=", linhvuc.tuoi_id.id)
-                    ],limit=1)
-                    if not kehoach_linhvuc:
-                        data = {
-                            'sequence': linhvuc.sequence,
-                            'kehoach_id': self.id,
-                            'chuongtrinh_id': linhvuc.linhvuc_id.chuongtrinh_id.id,
-                            'linhvuc_id': linhvuc.linhvuc_id.id,
-                            'tuoi_id': linhvuc.tuoi_id.id,
-                        }
-                        kehoach_linhvuc = self.env['ekids.kehoach_linhvuc'].create(data)
+        kehoach_truoc = self.kehoach_truoc_id
+        kehoach_linhvuc_ids = self.kehoach_linhvuc_ids
+        if kehoach_linhvuc_ids:
+            for kehoach_linhvuc in kehoach_linhvuc_ids:
+                if kehoach_truoc and kehoach_linhvuc:
+                    # copy các mục tiêu từ kế hoạch trước sang.
+                    kehoach_linhvuc_truoc = self.func_kehoach_linhvuc_truocs(kehoach_linhvuc.linhvuc_id.id,
+                                                                             kehoach_linhvuc.tuoi_id.id, kehoach_truoc)
+                    if kehoach_linhvuc_truoc:
+                        self.func_copy_muctieu_thangtruoc_khongdat_sang_tu_linhvuc(kehoach_linhvuc,
+                                                                                   kehoach_linhvuc_truoc)
 
-                    kehoach_truoc = self.kehoach_truoc_id
 
-                    if kehoach_truoc and kehoach_linhvuc:
-                        #copy các mục tiêu từ kế hoạch trước sang.
-                        kehoach_linhvuc_truoc = self.func_kehoach_linhvuc_truocs(kehoach_linhvuc.linhvuc_id.id,kehoach_linhvuc.tuoi_id.id,kehoach_truoc)
-                        if kehoach_linhvuc_truoc:
-                            self.func_copy_muctieu_thangtruoc_khongdat_sang_tu_linhvuc(kehoach_linhvuc,kehoach_linhvuc_truoc)
-        else:
-            # cho phép giáo viên tự lập kế hoạch thì copy kehoach trước sang.
-            kehoach_truoc = self.kehoach_truoc_id
-            if kehoach_truoc:
-                kehoach_linhvuc_truocs =kehoach_truoc.kehoach_linhvuc_ids
-                if kehoach_linhvuc_truocs:
-                    for  kehoach_linhvuc_truoc in kehoach_linhvuc_truocs:
-                        data = {
-                            'sequence': kehoach_linhvuc_truoc.linhvuc_id.sequence,
-                            'kehoach_id': self.id,
-                            'chuongtrinh_id': kehoach_linhvuc_truoc.linhvuc_id.chuongtrinh_id.id,
-                            'linhvuc_id': kehoach_linhvuc_truoc.linhvuc_id.id,
-                            'tuoi_id': kehoach_linhvuc_truoc.tuoi_id.id,
-                        }
-                        kehoach_linhvuc = self.env['ekids.kehoach_linhvuc'].create(data)
-                        self.func_copy_muctieu_thangtruoc_khongdat_sang_tu_linhvuc(kehoach_linhvuc, kehoach_linhvuc_truoc)
 
 
 
@@ -81,7 +50,7 @@ class KeHoachCopyAbstractModel(models.AbstractModel):
 
                 ],limit=1)
 
-
+                #TH1: muc tieu truoc kiem duyet trang thai bo qua
                 if (kehoach_muctieu_truoc.trangthai_kiemduyet =="1"
                         or kehoach_muctieu_truoc.trangthai_kiemduyet =="-2"):
                     #TH1: kế hoạch tháng trước đã đạt, hoặc hủy bỏ do đánh giá nếu có thì xóa đi
@@ -90,16 +59,24 @@ class KeHoachCopyAbstractModel(models.AbstractModel):
 
                 else:
                     if not kehoach_muctieu:
-                        data ={
-                            "sequence": kehoach_muctieu_truoc.muctieu_id.sequence,
-                            "kehoach_linhvuc_id":kehoach_linhvuc.id,
-                            "kehoach_muctieu_thangtruoc_id": kehoach_muctieu_truoc.id,
-                            "muctieu_id": kehoach_muctieu_truoc.muctieu_id.id,
-                            "muctieu_them": kehoach_muctieu_truoc.muctieu_them,
-                            "ghichu": kehoach_muctieu_truoc.ghichu,
-                            "trangthai":"0"
-                        }
-                        self.env['ekids.kehoach_muctieu'].create(data)
+                        tyle_truoc = kehoach_muctieu_truoc.tyle_canthiep
+                        if kehoach_muctieu_truoc.trangthai_kiemduyet == '-1':
+                            tyle_truoc = kehoach_muctieu_truoc.tyle_kiemduyet
+
+                        if tyle_truoc < 80:
+                            solan_thu_dat = (tyle_truoc/10)
+                            data ={
+                                "sequence": kehoach_muctieu_truoc.muctieu_id.sequence,
+                                "kehoach_linhvuc_id":kehoach_linhvuc.id,
+                                "kehoach_muctieu_thangtruoc_id": kehoach_muctieu_truoc.id,
+                                "muctieu_id": kehoach_muctieu_truoc.muctieu_id.id,
+                                "muctieu_them": kehoach_muctieu_truoc.muctieu_them,
+                                "ghichu": kehoach_muctieu_truoc.ghichu,
+                                'solan_thu':10,
+                                'solan_thu_dat':solan_thu_dat,
+                                "trangthai":"0"
+                            }
+                            self.env['ekids.kehoach_muctieu'].create(data)
 
 
 
