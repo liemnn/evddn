@@ -14,28 +14,31 @@
             --c-cyan: #0891B2;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
         body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.5; padding-bottom: 30px; }
         @keyframes gradientWave { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- HERO SECTION SIÊU GỌN --- */
+        /* --- HERO SECTION --- */
         .hero {
             background: linear-gradient(-45deg, #1E3A8A, #2563EB, #3B82F6, #1D4ED8);
             background-size: 400% 400%;
             animation: gradientWave 10s ease infinite;
-            padding: 12px 20px 25px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
             color: white;
             border-bottom-left-radius: 16px;
             border-bottom-right-radius: 16px;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
-            margin-bottom: -20px;
+            margin-bottom: -15px;
             position: relative;
             z-index: 1;
         }
-        .hero-left h1 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.3px; margin: 0; }
+        .hero-left h1 { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.3px; margin: 0; }
 
         .hero-support {
             display: inline-flex;
@@ -44,7 +47,7 @@
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(6px);
             border: 1px solid rgba(255, 255, 255, 0.25);
-            padding: 4px 12px;
+            padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
@@ -59,34 +62,33 @@
         /* --- TAB NAVIGATION MENU --- */
         .tab-menu {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             gap: 8px;
             margin-bottom: 18px;
-            flex-wrap: nowrap;
             background: var(--surface);
             padding: 6px;
             border-radius: 14px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
             border: 1px solid var(--border-color);
             overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
         }
+        .tab-menu::-webkit-scrollbar { display: none; }
         .tab-btn {
             background: transparent;
             border: none;
-            padding: 8px 14px;
-            font-size: 0.85rem;
+            padding: 9px 14px;
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--text-sub);
             border-radius: 8px;
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
             transition: all 0.3s ease;
-            white-space: nowrap;
-            flex: 1;
-            justify-content: center;
+            flex-shrink: 0;
         }
         .tab-btn:hover { color: var(--primary); background: var(--primary-light); }
         .tab-btn.active {
@@ -104,7 +106,7 @@
             background: linear-gradient(135deg, #EEF2FF 0%, #FFFFFF 100%);
             border: 1px solid #C7D2FE;
             border-radius: 14px;
-            padding: 20px 25px;
+            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -114,11 +116,6 @@
             gap: 20px;
             margin-bottom: 20px;
         }
-        .onboarding-banner::after {
-            content: '\f135'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
-            position: absolute; right: 200px; bottom: -30px; font-size: 10rem;
-            color: rgba(79, 70, 229, 0.03); z-index: 0; transform: rotate(-15deg); pointer-events: none;
-        }
         .onb-left { display: flex; align-items: flex-start; gap: 14px; flex: 1; z-index: 1; }
         .onb-icon {
             width: 40px; height: 40px; background: var(--c-indigo); color: white; border-radius: 10px;
@@ -127,42 +124,42 @@
         }
         .onb-text-wrapper { display: flex; flex-direction: column; }
         .onb-header-text span { font-size: 0.68rem; font-weight: 800; color: var(--c-indigo); text-transform: uppercase; letter-spacing: 0.8px; }
-        .onb-header-text h2 { font-size: 1.25rem; color: var(--text-main); font-weight: 800; line-height: 1.2; margin-top: 2px; margin-bottom: 3px;}
-        .onb-desc { font-size: 0.85rem; color: var(--text-sub); line-height: 1.4; margin: 0; max-width: 800px;}
+        .onb-header-text h2 { font-size: 1.2rem; color: var(--text-main); font-weight: 800; line-height: 1.25; margin-top: 2px; margin-bottom: 4px;}
+        .onb-desc { font-size: 0.83rem; color: var(--text-sub); line-height: 1.4; margin: 0;}
 
-        .onb-right { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; z-index: 1; }
-        .btn-onb { background: var(--c-indigo); color: white; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; box-shadow: 0 3px 10px rgba(79, 70, 229, 0.2); }
+        .onb-right { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; z-index: 1; }
+        .btn-onb { background: var(--c-indigo); color: white; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; box-shadow: 0 3px 10px rgba(79, 70, 229, 0.2); white-space: nowrap; }
         .btn-onb:hover { transform: translateY(-2px); background: #4338CA; }
-        .btn-onb-outline { background: white; color: var(--c-indigo); border: 1px solid #A5B4FC; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; }
+        .btn-onb-outline { background: white; color: var(--c-indigo); border: 1px solid #A5B4FC; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: 0.3s; white-space: nowrap; }
         .btn-onb-outline:hover { background: #EEF2FF; border-color: var(--c-indigo); }
 
         /* --- SƠ ĐỒ TỔNG QUAN HỆ THỐNG (TAB 1) --- */
         .system-overview-card {
-            background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; box-shadow: 0 6px 18px rgba(0,0,0,0.03);
-            display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 20px; align-items: center;
+            background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+            display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 16px; align-items: center;
         }
-        .sys-box-manager { background: #F8FAFC; border: 2px dashed #94A3B8; border-radius: 14px; padding: 20px; text-align: center; }
-        .sys-box-manager i { font-size: 2.2rem; color: #2563EB; margin-bottom: 8px; }
-        .sys-box-manager h4 { font-size: 1rem; font-weight: 800; color: #0F172A; margin-bottom: 4px; }
-        .sys-box-manager p { font-size: 0.8rem; color: #64748B; line-height: 1.3; }
+        .sys-box-manager { background: #F8FAFC; border: 2px dashed #94A3B8; border-radius: 14px; padding: 18px; text-align: center; }
+        .sys-box-manager i { font-size: 2rem; color: #2563EB; margin-bottom: 6px; }
+        .sys-box-manager h4 { font-size: 0.95rem; font-weight: 800; color: #0F172A; margin-bottom: 2px; }
+        .sys-box-manager p { font-size: 0.78rem; color: #64748B; line-height: 1.3; }
 
-        .sys-box-modules { border: 2px dashed #F87171; background: #FFFBFA; border-radius: 14px; padding: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .sys-sub-module { background: #FFFFFF; border: 1px solid #FECACA; border-radius: 10px; padding: 12px 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .sys-sub-module h5 { font-size: 0.9rem; font-weight: 800; text-align: center; text-transform: uppercase; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px dashed #FEE2E2; }
+        .sys-box-modules { border: 2px dashed #F87171; background: #FFFBFA; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+        .sys-sub-module { background: #FFFFFF; border: 1px solid #FECACA; border-radius: 10px; padding: 10px 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .sys-sub-module h5 { font-size: 0.82rem; font-weight: 800; text-align: center; text-transform: uppercase; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dashed #FEE2E2; }
         .sys-sub-module:nth-child(1) h5 { color: #1E40AF; }
         .sys-sub-module:nth-child(2) h5 { color: #047857; }
-        .sys-sub-module ul { list-style-type: disc; padding-left: 18px; font-size: 0.78rem; color: #334155; line-height: 1.4; }
+        .sys-sub-module ul { list-style-type: disc; padding-left: 16px; font-size: 0.75rem; color: #334155; line-height: 1.35; }
         .sys-sub-module ul li { margin-bottom: 2px; }
 
-        .sys-box-users { background: #F8FAFC; border: 2px dashed #94A3B8; border-radius: 14px; padding: 20px; text-align: center; }
-        .sys-box-users i { font-size: 2.2rem; color: #10B981; margin-bottom: 8px; }
-        .sys-box-users h4 { font-size: 1rem; font-weight: 800; color: #0F172A; margin-bottom: 4px; }
-        .sys-box-users p { font-size: 0.8rem; color: #64748B; line-height: 1.3; }
+        .sys-box-users { background: #F8FAFC; border: 2px dashed #94A3B8; border-radius: 14px; padding: 18px; text-align: center; }
+        .sys-box-users i { font-size: 2rem; color: #10B981; margin-bottom: 6px; }
+        .sys-box-users h4 { font-size: 0.95rem; font-weight: 800; color: #0F172A; margin-bottom: 2px; }
+        .sys-box-users p { font-size: 0.75rem; color: #64748B; line-height: 1.3; }
 
-        /* --- TRÌNH XEM PDF TRỰC TIẾP CHO TAB 2 --- */
+        /* --- TRÌNH XEM PDF (TAB 2) --- */
         .pdf-embed-wrapper {
             background: #525659; border-radius: 14px; overflow: hidden;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06); display: flex; flex-direction: column; height: 72vh; border: 1px solid var(--border-color);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06); display: flex; flex-direction: column; height: 75vh; border: 1px solid var(--border-color);
         }
         .compact-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; background: #FFFFFF; border-bottom: 1px solid #CBD5E1; z-index: 5; }
         .os-tabs { display: flex; gap: 6px; }
@@ -177,13 +174,13 @@
         .pdf-viewer-container { flex: 1; width: 100%; background: #525659; display: flex; }
         .pdf-viewer-container iframe { width: 100%; height: 100%; border: none; display: block; }
 
-        /* --- SƠ ĐỒ VẬN HÀNH TƯƠNG TÁC (PHÂN HỆ 01) --- */
+        /* --- SƠ ĐỒ VẬN HÀNH (TAB 3) --- */
         .workflow-instruction-bar {
             background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF;
-            padding: 8px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+            padding: 8px 16px; border-radius: 10px; font-size: 0.83rem; font-weight: 600;
             margin-bottom: 15px; display: flex; align-items: center; gap: 8px;
         }
-        .workflow-instruction-bar i { color: var(--primary); font-size: 1rem; }
+        .workflow-instruction-bar i { color: var(--primary); font-size: 1rem; flex-shrink: 0; }
 
         .workflow-diagram-container {
             display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 16px; align-items: stretch;
@@ -195,7 +192,7 @@
         .wf-col-3 { background: #FFF7ED; border: 1.5px solid #FDE68A; }
 
         .wf-col-title {
-            font-size: 0.85rem; font-weight: 800; text-align: center; text-transform: uppercase; padding-bottom: 6px; border-bottom: 1.5px dashed rgba(0,0,0,0.1);
+            font-size: 0.83rem; font-weight: 800; text-align: center; text-transform: uppercase; padding-bottom: 6px; border-bottom: 1.5px dashed rgba(0,0,0,0.1);
         }
         .wf-col-1 .wf-col-title { color: #166534; }
         .wf-col-2 .wf-col-title { color: #334155; }
@@ -208,49 +205,49 @@
         }
         .wf-node:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 99, 235, 0.08); border-color: var(--primary); }
         .wf-node i.icon-top { font-size: 1.15rem; margin-bottom: 4px; color: var(--primary); }
-        .wf-node h4 { font-size: 0.85rem; font-weight: 800; margin-bottom: 2px; }
+        .wf-node h4 { font-size: 0.83rem; font-weight: 800; margin-bottom: 2px; }
         .wf-node p { font-size: 0.73rem; color: var(--text-sub); line-height: 1.25; margin: 0; }
         .wf-node::after {
             content: '\f0a9'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: 8px; top: 8px; font-size: 0.7rem; color: #94A3B8; transition: 0.2s;
         }
         .wf-node:hover::after { color: var(--primary); transform: translateX(2px); }
 
-        /* --- SƠ ĐỒ QUY TRÌNH PHÂN HỆ 02 (CÓ 2 KHỐI NỀN TẢNG NẰM PHÍA TRÊN) --- */
+        /* --- SƠ ĐỒ QUY TRÌNH PHÂN HỆ 02 (TAB 4) --- */
         .process-flow-box {
             background: #F0FDF4;
             border: 2px solid #86EFAC;
             border-radius: 16px;
-            padding: 25px;
+            padding: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.04);
         }
         .process-top-setup {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
+            gap: 16px;
+            margin-bottom: 16px;
         }
         .process-columns-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 25px;
+            gap: 16px;
             align-items: start;
         }
         .p-col {
             background: #FFFFFF;
             border: 2px solid #22C55E;
             border-radius: 14px;
-            padding: 16px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
         .p-col-header {
             text-align: center;
-            font-size: 0.98rem;
+            font-size: 0.92rem;
             font-weight: 800;
             color: #166534;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
             border-bottom: 2px solid #DCFCE7;
             text-transform: uppercase;
             display: flex;
@@ -262,13 +259,13 @@
             background: #FEFCE8;
             border: 2px solid #FACC15;
             border-radius: 12px;
-            padding: 14px;
+            padding: 12px;
             text-decoration: none;
             color: #1E293B;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             transition: all 0.25s ease;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: flex-start;
         }
         .p-card:hover {
@@ -278,19 +275,34 @@
             background: #EFF6FF;
         }
         .p-icon-box {
-            width: 36px; height: 36px; border-radius: 10px; background: #FEF08A; color: #854D0E;
-            display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;
+            width: 34px; height: 34px; border-radius: 9px; background: #FEF08A; color: #854D0E;
+            display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .p-content h4 { font-size: 0.85rem; font-weight: 800; color: #1E293B; margin-bottom: 3px; line-height: 1.25; }
-        .p-content p { font-size: 0.73rem; color: var(--text-sub); line-height: 1.35; }
+        .p-content h4 { font-size: 0.82rem; font-weight: 800; color: #1E293B; margin-bottom: 2px; line-height: 1.25; }
+        .p-content p { font-size: 0.72rem; color: var(--text-sub); line-height: 1.35; }
 
-        /* Responsive */
+        /* --- RESPONSIVE CHO MOBILE (DƯỚI 900PX) --- */
         @media (max-width: 900px) {
-            .system-overview-card { grid-template-columns: 1fr; }
-            .workflow-diagram-container { grid-template-columns: 1fr; }
-            .process-columns-grid { grid-template-columns: 1fr; }
+            .hero { padding: 12px 15px; flex-direction: column; align-items: flex-start; }
+            .hero-right { width: 100%; display: flex; justify-content: flex-start; }
+            .container { padding: 0 10px; }
+            .tab-menu { padding: 4px; gap: 6px; }
+            .tab-btn { padding: 8px 12px; font-size: 0.78rem; }
+
+            /* Chuyển banner tổng quan thành dọc */
+            .onboarding-banner { flex-direction: column; padding: 15px; gap: 15px; }
+            .onb-right { width: 100%; flex-direction: row; justify-content: space-between; }
+            .btn-onb, .btn-onb-outline { flex: 1; padding: 8px 10px; font-size: 0.78rem; text-align: center; }
+
+            /* Chuyển các sơ đồ grid sang 1 cột trên mobile */
+            .system-overview-card { grid-template-columns: 1fr; padding: 15px; }
+            .workflow-diagram-container { grid-template-columns: 1fr; padding: 15px; }
             .process-top-setup { grid-template-columns: 1fr; }
+            .process-columns-grid { grid-template-columns: 1fr; }
+            .process-flow-box { padding: 15px; }
+
+            .pdf-embed-wrapper { height: 68vh; }
         }
     </style>
 </head>
@@ -298,16 +310,16 @@
 
     <div class="hero">
         <div class="hero-left">
-            <h1>HƯỚNG DẪN SỬ DỤNG PHẦN MỀM - EVDDN</h1>
+            <h1>HƯỚNG DẪN SỬ DỤNG - EVDDN</h1>
         </div>
         <div class="hero-right">
             <div class="hero-support">
-                <i class="fas fa-headset"></i> Hỗ trợ kỹ thuật / Zalo: <a href="tel:0393393386">0393.393.386</a>
+                <i class="fas fa-headset"></i> Hỗ trợ: <a href="tel:0393393386">0393.393.386</a>
             </div>
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" style="margin-top: 15px;">
 
         <!-- --- TAB NAVIGATION MENU --- -->
         <div class="tab-menu">
@@ -315,13 +327,13 @@
                 <i class="fas fa-rocket"></i> KHỞI TẠO BAN ĐẦU
             </button>
             <button class="tab-btn" onclick="switchTab(event, 'tab-mobile')">
-                <i class="fas fa-mobile-alt"></i> CÀI ĐẶT TRÊN ĐIỆN THOẠI
+                <i class="fas fa-mobile-alt"></i> CÀI ĐẶT MOBILE APP
             </button>
             <button class="tab-btn" onclick="switchTab(event, 'tab-phanhe')">
-                <i class="fas fa-cogs"></i> PHÂN HỆ 01: VẬN HÀNH TRUNG TÂM
+                <i class="fas fa-cogs"></i> PHÂN HỆ 01: VẬN HÀNH
             </button>
             <button class="tab-btn" onclick="switchTab(event, 'tab-kehoach')">
-                <i class="fas fa-child"></i> PHÂN HỆ 02: KẾ HOẠCH CAN THIỆP
+                <i class="fas fa-child"></i> PHÂN HỆ 02: KẾ HOẠCH
             </button>
         </div>
 
@@ -336,12 +348,12 @@
                             <span>Bước đệm bắt buộc</span>
                             <h2>Khởi tạo dữ liệu ban đầu</h2>
                         </div>
-                        <p class="onb-desc">Để hệ thống vận hành trơn tru, đội ngũ kỹ thuật eVDDN sẽ hỗ trợ nạp tự động toàn bộ dữ liệu hiện tại của Trung tâm (Học sinh, Giáo viên, Học phí...) thông qua biểu mẫu chuẩn.</p>
+                        <p class="onb-desc">Để hệ thống vận hành trơn tru, đội ngũ kỹ thuật eVDDN sẽ hỗ trợ nạp tự động toàn bộ dữ liệu hiện tại của Trung tâm thông qua biểu mẫu chuẩn.</p>
                     </div>
                 </div>
                 <div class="onb-right">
-                    <a href="khoitao/khoitao.html" class="btn-onb">Xem quy trình Khởi tạo <i class="fas fa-arrow-right"></i></a>
-                    <a href="khoitao/eVDDN_Đăng ký trung tâm.xlsx" class="btn-onb-outline"><i class="fas fa-file-excel"></i> Tải biểu mẫu Excel</a>
+                    <a href="khoitao/khoitao.html" class="btn-onb">Quy trình Khởi tạo <i class="fas fa-arrow-right"></i></a>
+                    <a href="khoitao/eVDDN_Đăng ký trung tâm.xlsx" class="btn-onb-outline"><i class="fas fa-file-excel"></i> Tải file Excel</a>
                 </div>
             </div>
 
@@ -360,8 +372,7 @@
                             <li>Hồ sơ học sinh, giáo viên</li>
                             <li>Điểm danh, chấm công</li>
                             <li>Tính lương, học phí</li>
-                            <li>Quản lý chi tiêu</li>
-                            <li>Báo cáo ghi nhận lỗ lãi hàng tháng và năm</li>
+                            <li>Quản lý chi tiêu & Báo cáo lãi lỗ</li>
                             <li>Ứng dụng cho phụ huynh</li>
                         </ul>
                     </div>
@@ -370,20 +381,19 @@
                         <ul>
                             <li>Kho chương trình can thiệp</li>
                             <li>Kết luận đánh giá & khung chương trình</li>
-                            <li>Giáo viên lập kế hoạch can thiệp</li>
-                            <li>Kiểm duyệt chuyên môn kế hoạch</li>
-                            <li>Can thiệp & cập nhật kết quả hàng ngày</li>
-                            <li>Báo cáo kết quả can thiệp cho phụ huynh</li>
+                            <li>Giáo viên lập kế hoạch & kiểm duyệt</li>
+                            <li>Can thiệp hàng ngày & cập nhật kết quả</li>
+                            <li>Báo cáo cho phụ huynh</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="sys-box-users">
-                    <p style="font-size: 0.78rem; color: #64748B; margin-bottom: 6px;">Sử dụng cả máy tính và điện thoại</p>
+                    <p style="font-size: 0.75rem; color: #64748B; margin-bottom: 6px;">Dùng Web & Mobile App</p>
                     <i class="fas fa-users"></i>
                     <h4 style="margin-top: 4px;">Phụ huynh</h4>
-                    <div style="border-top: 1px dashed #CBD5E1; margin: 12px 0;"></div>
-                    <i class="fas fa-user-tie" style="font-size: 1.8rem; color: #3B82F6;"></i>
+                    <div style="border-top: 1px dashed #CBD5E1; margin: 10px 0;"></div>
+                    <i class="fas fa-user-tie" style="font-size: 1.6rem; color: #3B82F6;"></i>
                     <h4 style="margin-top: 4px;">Giáo viên</h4>
                 </div>
             </div>
@@ -399,7 +409,7 @@
                             <i class="fab fa-android" style="color: #A4C639;"></i> Android
                         </div>
                         <div class="os-tab" id="btn-ios" onclick="switchOS('ios')">
-                            <i class="fab fa-apple" style="font-size: 1rem;"></i> Iphone (iOS)
+                            <i class="fab fa-apple" style="font-size: 1rem;"></i> iPhone (iOS)
                         </div>
                     </div>
                     <a href="mobile/mobile-android.pdf" target="_blank" id="pdf-download" class="download-btn" title="Tải PDF về máy">
@@ -418,7 +428,7 @@
         <div id="tab-phanhe" class="tab-pane">
             <div class="workflow-instruction-bar">
                 <i class="fas fa-info-circle"></i>
-                <span><strong>Hướng dẫn:</strong> Để xem tài liệu hướng dẫn sử dụng từng phần, vui lòng click trực tiếp vào từng ô chức năng bên dưới.</span>
+                <span><strong>Hướng dẫn:</strong> Click trực tiếp vào từng ô chức năng bên dưới để xem tài liệu chi tiết.</span>
             </div>
 
             <div class="workflow-diagram-container">
@@ -437,7 +447,7 @@
                 </div>
 
                 <div class="wf-column wf-col-2">
-                    <div class="wf-col-title"><i class="fas fa-calendar-check"></i> Hỗ trợ nghiệp vụ hàng ngày</div>
+                    <div class="wf-col-title"><i class="fas fa-calendar-check"></i> Nghiệp vụ hàng ngày</div>
                     <a href="hocsinh/diemdanh.html" class="wf-node">
                         <i class="fas fa-user-check icon-top" style="color: #3B82F6;"></i>
                         <h4>Điểm danh</h4>
@@ -456,7 +466,7 @@
                     <a href="thuchi/thuchi.html" class="wf-node">
                         <i class="fas fa-wallet icon-top" style="color: #3B82F6;"></i>
                         <h4>Chi tiêu</h4>
-                        <p>Quản lý các khoản chi tiêu, đầu tư trung tâm</p>
+                        <p>Quản lý các khoản chi tiêu trung tâm</p>
                     </a>
                 </div>
 
@@ -481,45 +491,42 @@
             </div>
         </div>
 
-        <!-- --- TAB 4: PHÂN HỆ 02 - SƠ ĐỒ QUY TRÌNH (2 KHỐI NỀN TẢNG NẰM PHÍA TRÊN NGOÀI VAI TRÒ) --- -->
+        <!-- --- TAB 4: PHÂN HỆ 02 - SƠ ĐỒ QUY TRÌNH --- -->
         <div id="tab-kehoach" class="tab-pane">
             <div class="workflow-instruction-bar">
                 <i class="fas fa-info-circle"></i>
-                <span><strong>Hướng dẫn:</strong> Sơ đồ quy trình nghiệp vụ hệ thống. Click vào từng khối để xem tài liệu hướng dẫn chi tiết.</span>
+                <span><strong>Hướng dẫn:</strong> Sơ đồ quy trình nghiệp vụ hệ thống. Click vào từng khối để xem tài liệu chi tiết.</span>
             </div>
 
             <div class="process-flow-box">
-                <!-- 2 khối thiết lập nền tảng nằm ở phía trên, ngoài khu vực vai trò -->
                 <div class="process-top-setup">
                     <a href="kehoach/taikhoan.html" class="p-card" style="background: #DCFCE7; border-color: #86EFAC;">
                         <div class="p-icon-box" style="background: #86EFAC; color: #166534;"><i class="fas fa-user-plus"></i></div>
                         <div class="p-content">
                             <h4>Cấp tài khoản cho Giáo viên / Phụ huynh</h4>
-                            <p>Tạo lập và phân quyền tài khoản truy cập hệ thống.</p>
+                            <p>Tạo lập và phân quyền tài khoản truy cập.</p>
                         </div>
                     </a>
 
                     <a href="kehoach/khodulieu.html" class="p-card" style="background: #DCFCE7; border-color: #86EFAC;">
                         <div class="p-icon-box" style="background: #86EFAC; color: #166534;"><i class="fas fa-database"></i></div>
                         <div class="p-content">
-                            <h4>Xây dựng kho chương trình can thiệp của trung tâm</h4>
+                            <h4>Xây dựng kho chương trình can thiệp</h4>
                             <p>Quản lý ngân hàng mục tiêu và bài tập chuẩn.</p>
                         </div>
                     </a>
                 </div>
 
-                <!-- Lưới 3 cột vai trò chính -->
                 <div class="process-columns-grid">
-
-                    <!-- CỘT 1: GIÁO VIÊN CHUYÊN MÔN -->
+                    <!-- CỘT 1 -->
                     <div class="p-col">
-                        <div class="p-col-header"><i class="fas fa-user-shield"></i> Giáo viên Chuyên môn</div>
+                        <div class="p-col-header"><i class="fas fa-user-shield"></i> GV Chuyên môn</div>
 
                         <a href="kehoach/ketluan.html" class="p-card">
                             <div class="p-icon-box"><i class="fas fa-file-invoice"></i></div>
                             <div class="p-content">
                                 <h4>Bước 1: Quản lý kết luận & Lên khung chương trình</h4>
-                                <p>Thiết lập kết luận đánh giá và định hướng mục tiêu cho trẻ.</p>
+                                <p>Thiết lập kết luận đánh giá và định hướng mục tiêu.</p>
                             </div>
                         </a>
 
@@ -534,15 +541,15 @@
                         <a href="kehoach/danhgiacuoisthang.html" class="p-card">
                             <div class="p-icon-box"><i class="fas fa-chart-line"></i></div>
                             <div class="p-content">
-                                <h4>Bước 5: Đánh giá lại kết quả can thiệp từng mục tiêu</h4>
+                                <h4>Bước 5: Đánh giá lại kết quả can thiệp</h4>
                                 <p>Tổng kết mức độ đạt được sau chu kỳ.</p>
                             </div>
                         </a>
                     </div>
 
-                    <!-- CỘT 2: GIÁO VIÊN CAN THIỆP -->
+                    <!-- CỘT 2 -->
                     <div class="p-col">
-                        <div class="p-col-header"><i class="fas fa-chalkboard-teacher"></i> Giáo viên Can thiệp</div>
+                        <div class="p-col-header"><i class="fas fa-chalkboard-teacher"></i> GV Can thiệp</div>
 
                         <a href="kehoach/lapkehoach.html" class="p-card">
                             <div class="p-icon-box"><i class="fas fa-tasks"></i></div>
@@ -555,34 +562,33 @@
                         <a href="kehoach/ketquahangngay.html" class="p-card">
                             <div class="p-icon-box"><i class="fas fa-calendar-check"></i></div>
                             <div class="p-content">
-                                <h4>Bước 4: Can thiệp hàng ngày (Cập nhật kết quả)</h4>
+                                <h4>Bước 4: Can thiệp hàng ngày</h4>
                                 <p>Thực hiện buổi dạy & ghi nhận nhật ký tiến bộ.</p>
                             </div>
                         </a>
                     </div>
 
-                    <!-- CỘT 3: PHỤ HUYNH -->
+                    <!-- CỘT 3 -->
                     <div class="p-col">
                         <div class="p-col-header"><i class="fas fa-users"></i> Phụ huynh</div>
 
-                        <div style="height: 60px;"></div>
+                        <div style="display: none;" class="desktop-spacer"></div>
 
                         <a href="kehoach/chiasephuhuynh.html" class="p-card" style="background: #FFFBEB; border-color: #FDE68A;">
                             <div class="p-icon-box" style="background: #FEF08A; color: #854D0E;"><i class="fas fa-share-alt"></i></div>
                             <div class="p-content">
                                 <h4>Chia sẻ & Theo dõi kết quả can thiệp</h4>
-                                <p>Nhận thông tin kế hoạch định kỳ và theo dõi tiến độ của con hàng ngày qua Mobile App.</p>
+                                <p>Nhận kế hoạch định kỳ và theo dõi tiến độ qua Mobile App.</p>
                             </div>
                         </a>
                     </div>
-
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- --- JAVASCRIPT ĐIỀU KHIỂN TAB VÀ NHỚ VỊ TRÍ KHI QUAY VỀ --- -->
+    <!-- --- JAVASCRIPT --- -->
     <script>
         function switchTab(evt, tabId, updateHash = true) {
             const panes = document.getElementsByClassName("tab-pane");
