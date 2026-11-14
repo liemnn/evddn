@@ -19,6 +19,7 @@
                     <div class="ek-topbar-right">
                         <!-- Bộ lọc Cơ sở -->
                         <div class="ek-select-box">
+
                             <i class="fa fa-building text-muted" style="margin-right: 6px; font-size: 12px;"/>
                             <select t-model="state.centerId" t-on-change="onChangeCenter">
                                 <t t-foreach="state.data.centers" t-as="cs" t-key="cs.id">
@@ -47,22 +48,22 @@
                 <div class="ek-iep-strip">
                     <div class="ek-stat-card">
                         <div class="ek-stat-head">
-                            <span class="ek-stat-title">HS theo học tháng này</span>
-                            <button class="ek-link-pill" t-on-click="() => this.openList('Danh sách học sinh đang học', 'ekids.hocsinh', [['trangthai', '=', '1']])">
-                                Hồ sơ HS <i class="fa fa-angle-right"/>
+                            <span class="ek-stat-title">Học sinh theo học tháng này</span>
+                            <button class="ek-link-pill" t-on-click="() => this.openList('Hồ sơ học sinh', 'ekids.hocsinh', [['trangthai', '=', '1']])">
+                                Hồ sơ Học sinh <i class="fa fa-angle-right"/>
                             </button>
                         </div>
                         <div class="ek-stat-num">
                             <t t-esc="state.data.kpi.total_students"/> <span style="font-size: 13px; font-weight: 600; color: var(--text-sub);">trẻ</span>
                         </div>
-                        <div class="ek-stat-foot"><span>Sĩ số đang hoạt động</span></div>
+                        <div class="ek-stat-foot"><span>Đang theo học</span></div>
                     </div>
 
                     <div class="ek-stat-card">
                         <div class="ek-stat-head">
-                            <span class="ek-stat-title">Có kế hoạch khung (6T)</span>
+                            <span class="ek-stat-title">Có kế hoạch khung (6 tháng)</span>
                             <button class="ek-link-pill" t-on-click="() => this.openList('Kế hoạch khung 6 tháng', 'ekids.kehoach_ketluan', [['trangthai', '=', '1']])">
-                                KH 6 tháng <i class="fa fa-angle-right"/>
+                                Kế hoạch 6 tháng <i class="fa fa-angle-right"/>
                             </button>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -72,7 +73,7 @@
                             <div class="ek-gauge-circle" t-out="getMiniGaugeSvg(state.data.kpi.pct_khung_int, '#3b6e8c')"/>
                         </div>
                         <div class="ek-stat-foot">
-                            <span style="color: var(--primary); font-weight: 700;">Bao phủ <t t-esc="state.data.kpi.pct_khung"/>% sĩ số</span>
+                            <span style="color: var(--primary); font-weight: 700;">Bao phủ <t t-esc="state.data.kpi.pct_khung"/>% học sinh</span>
                         </div>
                     </div>
 
@@ -80,7 +81,7 @@
                         <div class="ek-stat-head">
                             <span class="ek-stat-title">Số kế hoạch đã được lập</span>
                             <button class="ek-link-pill" t-on-click="() => this.openList('Tất cả kế hoạch', 'ekids.kehoach')">
-                                Tất cả KH <i class="fa fa-angle-right"/>
+                                Tất cả Kế hoạch <i class="fa fa-angle-right"/>
                             </button>
                         </div>
                         <div class="ek-stat-num"><t t-esc="state.data.kpi.total_plans_all_time"/></div>
@@ -89,9 +90,9 @@
 
                     <div class="ek-stat-card">
                         <div class="ek-stat-head">
-                            <span class="ek-stat-title">KH đã lập trong tháng</span>
+                            <span class="ek-stat-title">Kế hoạch đã lập trong tháng</span>
                             <button class="ek-link-pill" t-on-click="() => this.openList('Kế hoạch tháng', 'ekids.kehoach')">
-                                Lập KH <i class="fa fa-angle-right"/>
+                                Lập Kế hoạch <i class="fa fa-angle-right"/>
                             </button>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -107,14 +108,14 @@
 
                     <div class="ek-stat-card highlight-purple">
                         <div class="ek-stat-head">
-                            <span class="ek-stat-title" style="color: var(--purple);">KH đang can thiệp</span>
+                            <span class="ek-stat-title" style="color: var(--purple);">Kế hoạch đang can thiệp</span>
                             <button class="ek-link-pill" style="color: var(--purple); border-color: #d8b4fe;" t-on-click="() => this.openList('Kế hoạch đang can thiệp', 'ekids.kehoach', [['state', '=', 'dangcanthiep']])">
                                 Đánh giá <i class="fa fa-angle-right"/>
                             </button>
                         </div>
                         <div class="ek-stat-num" style="color: var(--purple);"><t t-esc="state.data.kpi.active_plans_in_month"/></div>
                         <div class="ek-stat-foot">
-                            <span style="color: var(--purple); font-weight: 700;">Đã duyệt &amp; đang thực hiện</span>
+                            <span style="color: var(--purple); font-weight: 700;">Đã duyệt &amp; đang can thiệp</span>
                         </div>
                     </div>
                 </div>
@@ -122,15 +123,21 @@
                 <!-- TẦNG 2: BIỂU ĐỒ SO SÁNH & TÌNH TRẠNG XỬ LÝ -->
                 <div class="ek-visual-row">
                     <div class="ek-card">
-                        <div class="ek-card-head">
-                            <span class="ek-card-title"><i class="fa fa-bar-chart" style="color: var(--primary);"/> So sánh Số lượng học sinh &amp; Kế hoạch</span>
-                            <div class="ek-legend-inline">
-                                <span><i class="ek-dot" style="background: #3b6e8c;"/>Cột: Số lượng HS</span>
-                                <span><i class="ek-dot" style="background: #7c3aed;"/>Đường: Số lượng KH</span>
-                            </div>
+                    <div class="ek-card-head">
+                        <span class="ek-card-title">
+                            <i class="fa fa-bar-chart" style="color: #2563eb;"/> So sánh Số lượng học sinh &amp; Kế hoạch
+                        </span>
+                        <div class="ek-legend-inline">
+                            <span style="color: #1d4ed8;">
+                                <i class="ek-dot" style="background: #2563eb;"/>Cột: Số lượng Học sinh
+                            </span>
+                            <span style="color: #b91c1c;">
+                                <i class="ek-dot" style="background: #dc2626;"/>Đường: Số lượng Kế hoạch đã lập
+                            </span>
                         </div>
-                        <div t-out="getComboChartSvg()"/>
                     </div>
+                    <div style="margin-top: auto; padding-top: 8px;" t-out="getComboChartSvg()"/>
+                </div>
 
                     <div class="ek-card">
                         <div class="ek-card-head">
@@ -141,7 +148,7 @@
                         <div>
                             <div style="display: flex; justify-content: space-between; font-size: 11.5px; font-weight: 700; color: var(--text-sub);">
                                 <span>Đang can thiệp: <t t-esc="state.data.ops_status.active"/></span>
-                                <span>Cần xử lý: <t t-esc="state.data.ops_status.draft + state.data.ops_status.to_approve + state.data.ops_status.no_plan"/></span>
+                                <span>Cần lập kế hoạch cho trẻ: <t t-esc="state.data.ops_status.draft + state.data.ops_status.to_approve + state.data.ops_status.no_plan"/></span>
                             </div>
                             <div class="ek-stacked-bar">
                                 <div t-attf-style="width: #{state.data.ops_status.pct_active}%; background: #16a34a;"/>
@@ -159,9 +166,9 @@
                                 </div>
                                 <div class="ek-ops-val" style="color: var(--primary);"><t t-esc="state.data.ops_status.draft"/></div>
                                 <div class="ek-ops-foot">
-                                    <span>GV đang soạn</span>
+                                    <span>Giáo viên đang lập kế hoạch</span>
                                     <button class="ek-link-pill" t-on-click="() => this.openList('Kế hoạch đang lập', 'ekids.kehoach', [['state', '=', 'draft']])">
-                                        Vào lập KH <i class="fa fa-arrow-right"/>
+                                        Vào lập Kế hoạch <i class="fa fa-arrow-right"/>
                                     </button>
                                 </div>
                             </div>
@@ -187,23 +194,21 @@
                                 </div>
                                 <div class="ek-ops-val" style="color: var(--amber);"><t t-esc="state.data.ops_status.expiring"/></div>
                                 <div class="ek-ops-foot">
-                                    <span>Sắp đến hạn kết thúc</span>
-                                    <button class="ek-link-pill amber" t-on-click="() => this.openList('Kế hoạch sắp hết hạn', 'ekids.kehoach', [['state', '=', 'dangcanthiep']])">
-                                        Gia hạn / ĐG <i class="fa fa-arrow-right"/>
-                                    </button>
+                                    <span>Sắp đến hạn kết thúc kế hoạch</span>
+
                                 </div>
                             </div>
 
                             <div class="ek-ops-item warn-red">
                                 <div class="ek-ops-top">
-                                    <span class="ek-ops-lbl" style="color: var(--red);">HS chưa có kế hoạch</span>
+                                    <span class="ek-ops-lbl" style="color: var(--red);">Học sinh chưa có kế hoạch</span>
                                     <i class="fa fa-user-times" style="color: var(--red);"/>
                                 </div>
                                 <div class="ek-ops-val" style="color: var(--red);"><t t-esc="state.data.ops_status.no_plan"/></div>
                                 <div class="ek-ops-foot">
-                                    <span>Chưa lập KH tháng</span>
+                                    <span>Chưa lập Kế hoạch tháng</span>
                                     <button class="ek-link-pill red" t-on-click="() => this.openList('Học sinh đang theo học', 'ekids.hocsinh', [['trangthai', '=', '1']])">
-                                        Lập KH ngay <i class="fa fa-arrow-right"/>
+                                        Lập Kế hoạch ngay <i class="fa fa-arrow-right"/>
                                     </button>
                                 </div>
                             </div>
@@ -222,21 +227,16 @@
                         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                             <div class="ek-filter-pills">
                                 <button t-attf-class="ek-pill-btn #{state.rowFilter === 'all' ? 'active' : ''}" t-on-click="() => this.setRowFilter('all')">
-                                    Tất cả (<t t-esc="state.data.weekly.total_plans"/> KH)
+                                    Tất cả (<t t-esc="state.data.weekly.total_plans"/> kế hoạch)
                                 </button>
                                 <button t-attf-class="ek-pill-btn #{state.rowFilter === 'pending' ? 'active' : ''}" style="color: var(--red);" t-on-click="() => this.setRowFilter('pending')">
-                                    Chưa cập nhật (<t t-esc="state.data.weekly.pending_count"/>)
+                                    Chưa cập nhật trong tuần này(<t t-esc="state.data.weekly.pending_count"/>)
                                 </button>
                                 <button t-attf-class="ek-pill-btn #{state.rowFilter === 'done' ? 'active' : ''}" style="color: var(--green);" t-on-click="() => this.setRowFilter('done')">
-                                    Đã cập nhật (<t t-esc="state.data.weekly.done_count"/>)
+                                    Đã cập nhật trong tuần này(<t t-esc="state.data.weekly.done_count"/>)
                                 </button>
                             </div>
 
-
-
-                            <button class="ek-qbtn primary-fill" t-on-click="() => this.openList('Đánh giá kết quả can thiệp', 'ekids.kehoach', [['state', '=', 'dangcanthiep']])">
-                                <i class="fa fa-external-link"/> Vào đánh giá kết quả
-                            </button>
                         </div>
                     </div>
 
@@ -248,8 +248,8 @@
                                     <th style="width: 22%;">Học sinh</th>
                                     <th style="width: 30%;">Kế hoạch can thiệp tháng</th>
                                     <th style="width: 24%;">Giáo viên phụ trách</th>
-                                    <th style="width: 120px; text-align: center;">Đã cập nhật</th>
-                                    <th style="width: 110px; text-align: center;">Thao tác</th>
+                                    <th style="width: 120px; text-align: center;">Cập nhật trong tuần này</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -288,14 +288,7 @@
                                             <td style="text-align: center;">
                                                 <span t-if="plan.is_done" class="ek-badge-x">X</span>
                                             </td>
-                                            <td style="text-align: center;">
-                                                <button t-if="plan.is_done" class="ek-link-pill" t-on-click="() => this.openPlanForm(plan.plan_id)">
-                                                    Xem KQ
-                                                </button>
-                                                <button t-else="" class="ek-link-pill red" t-on-click="() => this.openPlanForm(plan.plan_id)">
-                                                    Đánh giá
-                                                </button>
-                                            </td>
+
                                         </tr>
                                     </t>
                                 </t>

@@ -95,40 +95,56 @@ export class EkidsCanthiepDashboard extends Component {
     getComboChartSvg() {
         if (!this.state.data) return "";
         const { labels, bars, lines } = this.state.data.chart_compare;
-        const barColor = "#3b6e8c", lineColor = "#7c3aed";
-        const width = 680, height = 225;
-        const pL = 22, pR = 22, pT = 28, pB = 22;
+        const barColor = "#2563eb";   // Xanh dương tươi
+        const lineColor = "#dc2626";  // Đỏ đậm
+        const width = 680, height = 210;
+        const pL = 24, pR = 24, pT = 26, pB = 24;
         const w = width - pL - pR, h = height - pT - pB;
         const max = Math.max(...bars, ...lines, 1) * 1.18;
         const step = w / Math.max(labels.length, 1);
-        const barW = Math.min(24, step * 0.45);
+        const barW = Math.min(26, step * 0.46);
 
         let svg = `<svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block;">`;
-        for (let i = 0; i <= 2; i++) {
-            const y = pT + (h * i) / 2;
+
+        // Lưới ngang mảnh
+        for (let i = 0; i <= 3; i++) {
+            const y = pT + (h * i) / 3;
             svg += `<line x1="${pL}" y1="${y}" x2="${width - pR}" y2="${y}" stroke="#f1f5f9" stroke-width="1"/>`;
         }
-        svg += `<line x1="${pL}" y1="${pT + h}" x2="${width - pR}" y2="${pT + h}" stroke="#cbd5e1" stroke-width="1.2"/>`;
+        // Đường trục đáy
+        svg += `<line x1="${pL}" y1="${pT + h}" x2="${width - pR}" y2="${pT + h}" stroke="#94a3b8" stroke-width="1.3"/>`;
 
         let pts = [];
         labels.forEach((lbl, i) => {
             const cx = pL + step * i + step / 2;
             const bH = (bars[i] / max) * h;
             const bY = pT + h - bH;
-            svg += `<rect x="${cx - barW / 2}" y="${bY}" width="${barW}" height="${bH}" rx="4" fill="${barColor}" opacity="0.88"/>`;
-            svg += `<text x="${cx}" y="${bY - 6}" text-anchor="middle" font-size="10.5" font-weight="800" fill="${barColor}">${bars[i]}</text>`;
+
+            // Cột xanh dương
+            svg += `<rect x="${cx - barW / 2}" y="${bY}" width="${barW}" height="${bH}" rx="4" fill="${barColor}" opacity="0.82"/>`;
+            // Số trên đỉnh cột (màu xanh dương đậm)
+            svg += `<text x="${cx}" y="${bY - 6}" text-anchor="middle" font-size="11" font-weight="800" fill="#1d4ed8">${bars[i]}</text>`;
 
             const lY = pT + h - (lines[i] / max) * h;
             pts.push({ x: cx, y: lY, val: lines[i], bY });
-            svg += `<text x="${cx}" y="${height - 5}" text-anchor="middle" font-size="11" font-weight="700" fill="#64748b">${lbl}</text>`;
+
+            // Nhãn tháng T1..T12 dưới trục X
+            svg += `<text x="${cx}" y="${height - 5}" text-anchor="middle" font-size="11.5" font-weight="800" fill="#475569">${lbl}</text>`;
         });
 
-        svg += `<polyline fill="none" stroke="${lineColor}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" points="${pts.map(p => `${p.x},${p.y}`).join(' ')}"/>`;
+        // Đường nối màu đỏ đậm
+        svg += `<polyline fill="none" stroke="${lineColor}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" points="${pts.map(p => `${p.x},${p.y}`).join(' ')}"/>`;
+
+        // Điểm tròn và nhãn số màu đỏ đậm có nền trắng chống đè chữ
         pts.forEach(p => {
-            svg += `<circle cx="${p.x}" cy="${p.y}" r="3.6" fill="#fff" stroke="${lineColor}" stroke-width="2.4"/>`;
-            const off = Math.abs(p.y - p.bY) < 16 ? 15 : -8;
-            svg += `<text x="${p.x}" y="${p.y + off}" text-anchor="middle" font-size="10.5" font-weight="800" fill="${lineColor}">${p.val}</text>`;
+            svg += `<circle cx="${p.x}" cy="${p.y}" r="4.2" fill="${lineColor}" stroke="#ffffff" stroke-width="1.8"/>`;
+            const lblY = p.val === 0 ? p.y - 9 : (Math.abs(p.y - p.bY) < 18 ? p.y + 17 : p.y - 9);
+            const textStr = String(p.val);
+            const pillW = Math.max(18, textStr.length * 7 + 8);
+            svg += `<rect x="${p.x - pillW / 2}" y="${lblY - 10}" width="${pillW}" height="13" rx="3.5" fill="#ffffff" stroke="#fecaca" stroke-width="0.8" opacity="0.95"/>`;
+            svg += `<text x="${p.x}" y="${lblY}" text-anchor="middle" font-size="10.5" font-weight="900" fill="#b91c1c">${textStr}</text>`;
         });
+
         svg += `</svg>`;
         return markup(svg);
     }
