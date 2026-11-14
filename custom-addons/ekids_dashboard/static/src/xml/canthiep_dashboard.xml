@@ -216,7 +216,7 @@
                     <div class="ek-card-head">
                         <span class="ek-card-title">
                             <i class="fa fa-check-square-o" style="color: var(--green);"/>
-                            Thống kê giáo viên cập nhật kết quả can thiệp theo tuần
+                            Thống kê giáo viên cập nhật kết quả can thiệp của tuần này
                         </span>
 
                         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
@@ -232,17 +232,7 @@
                                 </button>
                             </div>
 
-                            <!-- Bộ lọc Tuần -->
-                            <div class="ek-select-box">
-                                <i class="fa fa-calendar text-muted" style="margin-right: 6px; font-size: 12px;"/>
-                                <select t-model="state.weekIndex" t-on-change="onChangeWeek">
-                                    <t t-foreach="state.data.weeks" t-as="w" t-key="w.index">
-                                        <option t-att-value="w.index">
-                                            <t t-esc="w.label"/>
-                                        </option>
-                                    </t>
-                                </select>
-                            </div>
+
 
                             <button class="ek-qbtn primary-fill" t-on-click="() => this.openList('Đánh giá kết quả can thiệp', 'ekids.kehoach', [['state', '=', 'dangcanthiep']])">
                                 <i class="fa fa-external-link"/> Vào đánh giá kết quả

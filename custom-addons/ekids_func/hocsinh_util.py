@@ -343,7 +343,17 @@ def func_get_so_hocsinh_trong_thang_tinhluong(self,coso_id,nam,thang):
     else:
         return 0
 
+def func_tong_hocsinh_trongthang(self, coso_id, nam, thang):
+    days = ngay_util.func_get_cacngay_trong_thang(int(nam), int(thang))
+    tu_ngay = days[0]
+    den_ngay = days[len(days) - 1]
+    coso_ids = [coso_id]
 
+    domain =func_get_domain_trong_khoang_thoigian(coso_ids,tu_ngay,den_ngay,None)
+
+    hocsinhs = self.env['ekids.hocsinh'].search_count(domain)
+
+    return hocsinhs
 
 def func_danhsach_hocsinh_trongthang(self, coso_id, nam, thang):
     days = ngay_util.func_get_cacngay_trong_thang(int(nam), int(thang))

@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta,date
 from odoo import models, fields, api  # 🌟 Bổ sung 'fields' vào đây
 from odoo.osv import expression
+from datetime import date, timedelta
+import calendar
 
 from . import  giaovien_util,coso_util,hocsinh_util
 
@@ -49,6 +51,14 @@ def func_get_ketluan_hocsinh_trangthai(self, hocsinh, trangthais):
         , order="id desc", limit=1)
     return ketluan
 
+def func_count_ketluan_trangthais(self, coso_id, trangthais):
+    count = self.env['ekids.kehoach_ketluan']._read_group([
+        ('coso_id', '=', coso_id),
+        ('trangthai', 'in', trangthais),
+    ]
+        ,groupby=['hocsinh_id'])
+    return len(count)
+
 def func_count_ketluan_hocsinh_trangthai(self, hocsinh, trangthais):
     count = self.env['ekids.kehoach_ketluan'].search_count ([
         ('hocsinh_id', '=', hocsinh.id),
@@ -56,6 +66,31 @@ def func_count_ketluan_hocsinh_trangthai(self, hocsinh, trangthais):
     ])
     return count
 
+
+
+def func_count_kehoach_trangthais(self, coso_id, songay,trangthais, ngay=None):
+    domain = [
+        ('coso_id', '=', coso_id),
+        ('trangthai', 'in', trangthais),
+    ]
+    if songay>0:
+        today =date.today()
+        luive = today - timedelta(days=songay)
+
+        domain += [
+            ('den_ngay', '>=', luive),
+        ]
+    if ngay:
+        thang = ngay.month
+        nam = ngay.year
+        dauthang= date(nam,thang,1)
+        giua_thang = date(nam,thang,20)
+        domain += [
+            ('tu_ngay', '<=', dauthang),
+            ('den_ngay', '>=', giua_thang),
+        ]
+
+    return self.env['ekids.kehoach'].search_count(domain)
 
 def func_get_kehoach_hocsinh(self, hocsinh):
     kehoach = self.env['ekids.kehoach'].search([
