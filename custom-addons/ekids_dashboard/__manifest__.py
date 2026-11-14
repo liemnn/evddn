@@ -14,6 +14,10 @@
             'ekids_dashboard/static/src/css/canthiep_dashboard.scss',
             'ekids_dashboard/static/src/js/canthiep_dashboard.js',
             'ekids_dashboard/static/src/xml/canthiep_dashboard.xml',
+
+            'ekids_dashboard/static/src/css/vanhanh_dashboard.scss',
+            'ekids_dashboard/static/src/js/vanhanh_dashboard.js',
+            'ekids_dashboard/static/src/xml/vanhanh_dashboard.xml',
         ],
     },
     'installable': True,

@@ -5,6 +5,11 @@
         <field name="tag">ekids_dashboard.canthiep_action</field>
     </record>
 
+    <record id="action_ekids_vanhanh_dashboard" model="ir.actions.client">
+        <field name="name">Hoạt động vận hành trung tâm</field>
+        <field name="tag">ekids_dashboard.vanhanh_action</field>
+    </record>
+
     <!-- Menu gốc (Root) -->
     <menuitem id="menu_ekids_dashboard_root"
               name="Tổng quan"
@@ -18,4 +23,11 @@
               action="action_ekids_canthiep_dashboard"
               groups="ekids_core.ketluan,ekids_core.quanlycoso"
               sequence="1"/>
+
+    <menuitem id="menu_ekids_dashboard_vanhanh"
+              name="Hoạt động vận hành trung tâm"
+              parent="menu_ekids_dashboard_root"
+              action="action_ekids_vanhanh_dashboard"
+              groups="ekids_core.quanlycoso"
+              sequence="2"/>
 </odoo>
