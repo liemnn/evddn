@@ -14,9 +14,9 @@ export class EkidsCanthiepDashboard extends Component {
         this.state = useState({
             loading: true,
             centerId: "all",
-            monthStr: "",      // Backend tự mặc định tháng hiện tại
-            weekIndex: null,   // Backend tự chọn tuần hiện tại
-            rowFilter: "all",  // 'all' | 'pending' | 'done'
+            monthStr: "",
+            weekIndex: 1,
+            rowFilter: "all", // 'all' | 'pending' | 'done'
             data: null,
         });
 
@@ -27,22 +27,24 @@ export class EkidsCanthiepDashboard extends Component {
 
     async loadData() {
         this.state.loading = true;
-        const result = await this.orm.call(
-            "ekids.canthiep.dashboard",
-            "get_dashboard_data",
-            [],
-            {
-                center_id: this.state.centerId,
-                month_str: this.state.monthStr || false,
-                week_index: this.state.weekIndex || false,
-            }
-        );
-        this.state.data = result;
-        if (!this.state.monthStr && result.months_options.length) {
-            this.state.monthStr = result.months_options[0].value;
+        try {
+            const result = await this.orm.call(
+                "ekids.dashboard_canthiep",
+                "get_dashboard_data",
+                [],
+                {
+                    center_id: this.state.centerId,
+                    month_str: this.state.monthStr || false,
+                    week_index: this.state.weekIndex || false,
+                }
+            );
+            this.state.data = result;
+            this.state.centerId = String(result.selected_center_id);
+            this.state.monthStr = String(result.selected_month);
+            this.state.weekIndex = Number(result.selected_week_index);
+        } finally {
+            this.state.loading = false;
         }
-        this.state.weekIndex = result.selected_week_index;
-        this.state.loading = false;
     }
 
     async onChangeCenter(ev) {
@@ -52,12 +54,12 @@ export class EkidsCanthiepDashboard extends Component {
 
     async onChangeMonth(ev) {
         this.state.monthStr = ev.target.value;
-        this.state.weekIndex = null; // Reset để tự chọn tuần đầu/hiện tại của tháng mới
+        this.state.weekIndex = 1;
         await this.loadData();
     }
 
     async onChangeWeek(ev) {
-        this.state.weekIndex = parseInt(ev.target.value);
+        this.state.weekIndex = parseInt(ev.target.value, 10);
         await this.loadData();
     }
 
@@ -134,7 +136,7 @@ export class EkidsCanthiepDashboard extends Component {
     openList(title, model, domain = []) {
         const finalDomain = [...domain];
         if (this.state.centerId !== "all") {
-            finalDomain.push(["coso_id", "=", parseInt(this.state.centerId)]);
+            finalDomain.push(["coso_id", "=", parseInt(this.state.centerId, 10)]);
         }
         this.action.doAction({
             type: "ir.actions.act_window",

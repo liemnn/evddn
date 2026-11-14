@@ -2,14 +2,14 @@
 <templates xml:space="preserve">
     <t t-name="ekids_dashboard.CanthiepDashboardTemplate">
         <div class="ek-dashboard-root">
-            <!-- Hiệu ứng đang tải real-time -->
+            <!-- Hiệu ứng đang tải -->
             <div t-if="state.loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
                 <i class="fa fa-spinner fa-spin fa-2x text-primary me-2"/>
-                <span style="font-weight: 700; color: #3b6e8c;">Đang tổng hợp dữ liệu real-time...</span>
+                <span style="font-weight: 700; color: #3b6e8c;">Đang tổng hợp dữ liệu...</span>
             </div>
 
             <div class="ek-container" t-if="!state.loading and state.data">
-                <!-- TOP BAR -->
+                <!-- TOP BAR: TIÊU ĐỀ & BỘ LỌC CƠ SỞ + THÁNG -->
                 <div class="ek-topbar">
                     <div class="ek-title-group">
                         <h2><i class="fa fa-child" style="color: var(--purple);"/> HOẠT ĐỘNG CAN THIỆP CỦA TRẺ</h2>
@@ -17,46 +17,29 @@
                     </div>
 
                     <div class="ek-topbar-right">
-                        <div class="ek-quick-nav">
-                            <button class="ek-qbtn" t-on-click="() => this.openList('Kế hoạch khung 6 tháng', 'ekids.kehoach', [['loai_kehoach', '=', 'khung']])">
-                                <i class="fa fa-sitemap text-primary"/> Kế hoạch 6 tháng
-                            </button>
-                            <button class="ek-qbtn primary-fill" t-on-click="() => this.openList('Kế hoạch can thiệp tháng', 'ekids.kehoach', [['loai_kehoach', '=', 'thang']])">
-                                <i class="fa fa-plus-circle"/> Lập kế hoạch
-                            </button>
-                            <button class="ek-qbtn" t-on-click="() => this.openList('Kế hoạch đợi duyệt', 'ekids.kehoach', [['state', '=', 'choduyet']])">
-                                <i class="fa fa-check-circle text-warning"/> Kiểm duyệt
-                            </button>
-                            <button class="ek-qbtn" t-on-click="() => this.openList('Đánh giá kết quả can thiệp', 'ekids.kehoach', [['state', '=', 'dangcanthiep']])">
-                                <i class="fa fa-line-chart text-success"/> Đánh giá kết quả
-                            </button>
-                        </div>
-
+                        <!-- Bộ lọc Cơ sở -->
                         <div class="ek-select-box">
                             <i class="fa fa-building text-muted" style="margin-right: 6px; font-size: 12px;"/>
-                            <select t-on-change="onChangeCenter">
+                            <select t-model="state.centerId" t-on-change="onChangeCenter">
                                 <t t-foreach="state.data.centers" t-as="cs" t-key="cs.id">
-                                    <option t-att-value="cs.id" t-att-selected="state.centerId === cs.id">
+                                    <option t-att-value="cs.id">
                                         <t t-esc="cs.name"/>
                                     </option>
                                 </t>
                             </select>
                         </div>
 
+                        <!-- Bộ lọc Tháng -->
                         <div class="ek-select-box">
                             <i class="fa fa-calendar text-muted" style="margin-right: 6px; font-size: 12px;"/>
-                            <select t-on-change="onChangeMonth">
+                            <select t-model="state.monthStr" t-on-change="onChangeMonth">
                                 <t t-foreach="state.data.months_options" t-as="m" t-key="m.value">
-                                    <option t-att-value="m.value" t-att-selected="state.monthStr === m.value">
+                                    <option t-att-value="m.value">
                                         <t t-esc="m.label"/>
                                     </option>
                                 </t>
                             </select>
                         </div>
-
-                        <button class="ek-qbtn" t-on-click="() => this.loadData()" title="Tải lại dữ liệu mới nhất">
-                            <i class="fa fa-refresh"/>
-                        </button>
                     </div>
                 </div>
 
@@ -65,7 +48,7 @@
                     <div class="ek-stat-card">
                         <div class="ek-stat-head">
                             <span class="ek-stat-title">HS theo học tháng này</span>
-                            <button class="ek-link-pill" t-on-click="() => this.openList('Danh sách học sinh đang học', 'ekids.hocsinh', [['trangthai', '=', 'danghoc']])">
+                            <button class="ek-link-pill" t-on-click="() => this.openList('Danh sách học sinh đang học', 'ekids.hocsinh', [['trangthai', '=', '1']])">
                                 Hồ sơ HS <i class="fa fa-angle-right"/>
                             </button>
                         </div>
@@ -78,7 +61,7 @@
                     <div class="ek-stat-card">
                         <div class="ek-stat-head">
                             <span class="ek-stat-title">Có kế hoạch khung (6T)</span>
-                            <button class="ek-link-pill" t-on-click="() => this.openList('Kế hoạch khung 6 tháng', 'ekids.kehoach', [['loai_kehoach', '=', 'khung']])">
+                            <button class="ek-link-pill" t-on-click="() => this.openList('Kế hoạch khung 6 tháng', 'ekids.kehoach_ketluan', [['trangthai', '=', '1']])">
                                 KH 6 tháng <i class="fa fa-angle-right"/>
                             </button>
                         </div>
@@ -107,7 +90,7 @@
                     <div class="ek-stat-card">
                         <div class="ek-stat-head">
                             <span class="ek-stat-title">KH đã lập trong tháng</span>
-                            <button class="ek-link-pill" t-on-click="() => this.openList('Kế hoạch tháng', 'ekids.kehoach', [['loai_kehoach', '=', 'thang']])">
+                            <button class="ek-link-pill" t-on-click="() => this.openList('Kế hoạch tháng', 'ekids.kehoach')">
                                 Lập KH <i class="fa fa-angle-right"/>
                             </button>
                         </div>
@@ -219,7 +202,7 @@
                                 <div class="ek-ops-val" style="color: var(--red);"><t t-esc="state.data.ops_status.no_plan"/></div>
                                 <div class="ek-ops-foot">
                                     <span>Chưa lập KH tháng</span>
-                                    <button class="ek-link-pill red" t-on-click="() => this.openList('Học sinh đang theo học', 'ekids.hocsinh', [['trangthai', '=', 'danghoc']])">
+                                    <button class="ek-link-pill red" t-on-click="() => this.openList('Học sinh đang theo học', 'ekids.hocsinh', [['trangthai', '=', '1']])">
                                         Lập KH ngay <i class="fa fa-arrow-right"/>
                                     </button>
                                 </div>
@@ -249,11 +232,12 @@
                                 </button>
                             </div>
 
+                            <!-- Bộ lọc Tuần -->
                             <div class="ek-select-box">
                                 <i class="fa fa-calendar text-muted" style="margin-right: 6px; font-size: 12px;"/>
-                                <select t-on-change="onChangeWeek">
+                                <select t-model="state.weekIndex" t-on-change="onChangeWeek">
                                     <t t-foreach="state.data.weeks" t-as="w" t-key="w.index">
-                                        <option t-att-value="w.index" t-att-selected="state.weekIndex === w.index">
+                                        <option t-att-value="w.index">
                                             <t t-esc="w.label"/>
                                         </option>
                                     </t>

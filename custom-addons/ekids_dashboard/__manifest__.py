@@ -7,7 +7,7 @@
     'depends': ['base', 'web', 'ekids_core','ekids_func','ekids_canthiep','ekids_hocsinh','ekids_giaovien'],
     'data': [
         'security/ir.model.access.csv',
-        'views/ekids_menus.xml',
+        'views/ekids_menu.xml',
     ],
     'assets': {
         'web.assets_backend': [

@@ -5,11 +5,13 @@
         <field name="tag">ekids_dashboard.canthiep_action</field>
     </record>
 
+    <!-- Menu gốc (Root) -->
     <menuitem id="menu_ekids_dashboard_root"
-              name="Dashboard"
+              name="Tổng quan"
               web_icon="ekids_dashboard,static/description/icon.png"
-              sequence="5"/>
+              sequence="0"/>
 
+    <!-- Menu con -->
     <menuitem id="menu_ekids_dashboard_canthiep"
               name="Hoạt động can thiệp"
               parent="menu_ekids_dashboard_root"
