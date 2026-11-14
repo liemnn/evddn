@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_ekids_canthiep_dashboard" model="ir.actions.client">
+        <field name="name">Hoạt động can thiệp của trẻ</field>
+        <field name="tag">ekids_dashboard.canthiep_action</field>
+    </record>
+
+    <menuitem id="menu_ekids_dashboard_root"
+              name="Dashboard"
+              web_icon="ekids_dashboard,static/description/icon.png"
+              sequence="5"/>
+
+    <menuitem id="menu_ekids_dashboard_canthiep"
+              name="Hoạt động can thiệp"
+              parent="menu_ekids_dashboard_root"
+              action="action_ekids_canthiep_dashboard"
+              sequence="1"/>
+</odoo>

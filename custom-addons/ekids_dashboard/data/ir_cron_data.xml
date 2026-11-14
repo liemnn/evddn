@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_ekids_synch_dulieu_canthiep_dashboard" model="ir.cron">
+            <field name="name">eKids Dashboard: Tổng hợp Data Mart Can thiệp (00:00 hàng đêm)</field>
+            <field name="model_id" ref="model_ekids_dashboard_canthiep_thangs"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_sync_all_datamart()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <!-- Đặt thời điểm chạy kế tiếp vào 00:00:00 (lưu ý múi giờ UTC trên server, 00:00 VN = 17:00 UTC) -->
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 17:00:00')"/>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

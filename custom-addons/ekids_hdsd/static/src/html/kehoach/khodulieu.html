@@ -15,6 +15,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
         body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
 
         /* --- TOP BAR --- */
@@ -134,6 +135,25 @@
                     <p style="margin-top: 8px; font-size: 0.95rem;"><strong>Cấu trúc của một chương trình can thiệp:</strong> Bao gồm các thông tin cơ bản: <em>Tên chương trình, Lĩnh vực, Độ tuổi</em> và <em>Hệ thống mục tiêu trong chương trình</em>. Các mục tiêu được phân chia khoa học từ dễ đến khó trong mỗi lĩnh vực tương ứng với từng độ tuổi phát triển của trẻ.</p>
                 </div>
 
+                <!-- KHUNG NHÚNG VIDEO YOUTUBE Ở PHÍA TRÊN HƯỚNG DẪN CHI TIẾT -->
+                <div style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 12px; padding: 20px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); text-align: center;">
+                    <div style="font-weight: 800; font-size: 1rem; color: #1E3A8A; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fab fa-youtube" style="color: #EF4444; font-size: 1.2rem;"></i> Video Hướng dẫn thao tác Kho dữ liệu Chương trình can thiệp trực quan
+                    </div>
+
+                    <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; border: 1px solid #94A3B8; background: #000;">
+                        <iframe src="https://www.youtube.com/embed/qSiPAg2Buaw"
+                                title="Video hướng dẫn kho dữ liệu eVDDN"
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div style="font-size: 0.82rem; color: var(--text-sub); margin-top: 10px; font-style: italic;">
+                        Mẹo: Bạn có thể xem trực tiếp video để nắm bắt nhanh các bước xây dựng kho chương trình và quản lý mục tiêu trên hệ thống.
+                    </div>
+                </div>
+
                 <!-- PHẦN 1: CHƯƠNG TRÌNH DO TRUNG TÂM TỰ XÂY DỰNG -->
                 <div class="step-detail-box">
                     <h3 class="step-title"><span>Phần 1</span> Chương trình can thiệp do trung tâm tự xây dựng</h3>
@@ -184,7 +204,7 @@
                         <p><strong>b. Cách 2: Sử dụng công cụ Import từ file Excel</strong></p>
                         <ul>
                             <li>Sử dụng các mẫu file Excel chuẩn cung cấp từ đơn vị phần mềm để nhập thông tin về lĩnh vực, độ tuổi, mục tiêu.</li>
-                            <li>Trên giao diện danh sách, click vào menu <span class="ui-btn" style="background: #475569;"><i class="fas fa-bars"></i></span> <i class="fas fa-chevron-right"></i> Chọn <strong>Nhập bản ghi</strong> (Import) để tải file lên hệ thống và cấu hình ánh xạ trường dữ liệu Odoo.</li>
+                            <li>บน giao diện danh sách, click vào menu <span class="ui-btn" style="background: #475569;"><i class="fas fa-bars"></i></span> <i class="fas fa-chevron-right"></i> Chọn <strong>Nhập bản ghi</strong> (Import) để tải file lên hệ thống và cấu hình ánh xạ trường dữ liệu Odoo.</li>
                         </ul>
 
                         <!-- MOCKUP IMPORT EXCEL -->
