@@ -13,10 +13,10 @@ export class EkidsCanthiepDashboard extends Component {
 
         this.state = useState({
             loading: true,
-            centerId: "all",
-            monthStr: "",
-            weekIndex: 1,
-            rowFilter: "all", // 'all' | 'pending' | 'done'
+            centerId: "",      // Backend tự mặc định chọn 1 cơ sở đầu tiên
+            monthStr: "",      // Backend tự mặc định chọn tháng hiện tại
+            weekIndex: null,   // Backend tự mặc định chọn tuần hiện tại
+            rowFilter: "all",  // 'all' | 'pending' | 'done'
             data: null,
         });
 
@@ -33,7 +33,7 @@ export class EkidsCanthiepDashboard extends Component {
                 "get_dashboard_data",
                 [],
                 {
-                    center_id: this.state.centerId,
+                    center_id: this.state.centerId || false,
                     month_str: this.state.monthStr || false,
                     week_index: this.state.weekIndex || false,
                 }
@@ -54,7 +54,7 @@ export class EkidsCanthiepDashboard extends Component {
 
     async onChangeMonth(ev) {
         this.state.monthStr = ev.target.value;
-        this.state.weekIndex = 1;
+        this.state.weekIndex = null; // Reset để tự chọn tuần 1 (hoặc tuần hiện tại nếu là tháng này)
         await this.loadData();
     }
 
@@ -135,7 +135,7 @@ export class EkidsCanthiepDashboard extends Component {
 
     openList(title, model, domain = []) {
         const finalDomain = [...domain];
-        if (this.state.centerId !== "all") {
+        if (this.state.centerId && this.state.centerId !== "0") {
             finalDomain.push(["coso_id", "=", parseInt(this.state.centerId, 10)]);
         }
         this.action.doAction({

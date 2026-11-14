@@ -30,48 +30,49 @@ class CanthiepDashboard(models.AbstractModel):
         return weeks
 
     @api.model
-    def get_dashboard_data(self, center_id='all', month_str=None, week_index=None):
+    def get_dashboard_data(self, center_id=None, month_str=None, week_index=None):
         today = fields.Date.context_today(self)
 
-        # 1A. LẤY DANH SÁCH CƠ SỞ THỰC TẾ TRONG HỆ THỐNG (ĐỂ LỌC THẬT)
+        # 1A. DANH SÁCH CƠ SỞ (KHÔNG CÓ "TẤT CẢ", MẶC ĐỊNH CHỌN 1 CƠ SỞ ĐẦU TIÊN)
         centers = []
         user = self.env.user
         if 'ekids.coso' in self.env:
             if hasattr(user, 'coso_ids') and user.coso_ids and not user.has_group('base.group_system'):
                 coso_recs = user.coso_ids
             else:
-                coso_recs = self.env['ekids.coso'].search([])
+                coso_recs = self.env['ekids.coso'].search([], order='id asc')
 
-            if len(coso_recs) > 1:
-                centers.append({'id': 'all', 'name': f'Tất cả trung tâm ({len(coso_recs)})'})
             for cs in coso_recs:
                 centers.append({'id': str(cs.id), 'name': cs.name})
         else:
             centers = [
-                {'id': 'all', 'name': 'Tất cả trung tâm (2)'},
                 {'id': '1', 'name': 'Trung tâm eKids Cơ sở 1'},
                 {'id': '2', 'name': 'Trung tâm eKids Cơ sở 2'},
             ]
 
         valid_center_ids = [c['id'] for c in centers]
-        if str(center_id) not in valid_center_ids:
-            center_id = valid_center_ids[0] if valid_center_ids else 'all'
+        if not center_id or str(center_id) not in valid_center_ids:
+            # Ưu tiên lấy cơ sở mặc định của user nếu nằm trong danh sách hợp lệ, ngược lại lấy cơ sở đầu tiên
+            default_cs = str(user.coso_id.id) if (hasattr(user, 'coso_id') and user.coso_id) else ''
+            if default_cs in valid_center_ids:
+                center_id = default_cs
+            else:
+                center_id = valid_center_ids[0] if valid_center_ids else '0'
+        else:
+            center_id = str(center_id)
 
-        # 1B. LẤY DANH SÁCH 12 THÁNG GẦN NHẤT ĐỂ LỌC
+        # 1B. DANH SÁCH THÁNG: CHỈ CÁC THÁNG TRONG NĂM NAY, MẶC ĐỊNH LÀ THÁNG NÀY
         months_options = []
         current_ym = today.strftime('%Y-%m')
-        for i in range(12):
-            m = today.month - i
-            y = today.year
-            while m <= 0:
-                m += 12
-                y -= 1
-            val = f"{y}-{m:02d}"
-            lbl = f"Tháng {m:02d}/{y}" + (" (Tháng này)" if val == current_ym else "")
+        for m in range(1, 13):
+            val = f"{today.year}-{m:02d}"
+            lbl = f"Tháng {m:02d}/{today.year}" + (" (Tháng này)" if val == current_ym else "")
             months_options.append({'value': val, 'label': lbl})
 
-        if not month_str:
+        valid_months = [m['value'] for m in months_options]
+        if not month_str or month_str not in valid_months:
             month_str = current_ym
+
         nam, thang = map(int, month_str.split('-'))
 
         # 2. SINH DANH SÁCH TUẦN ĐỘNG THEO THÁNG
@@ -91,19 +92,20 @@ class CanthiepDashboard(models.AbstractModel):
         # ---------------------------------------------------------------------
         # 3. DỮ LIỆU GIẢ LẬP TẦNG 1 & TẦNG 2 (BIẾN THIÊN THEO CƠ SỞ & THÁNG)
         # ---------------------------------------------------------------------
-        # Hệ số nhân giả lập để khi đổi Cơ sở hoặc Tháng thấy số liệu thay đổi trực quan
-        scale = 1.0 if center_id == 'all' else 0.55
-        month_offset = (12 - thang)
+        # Tạo hệ số riêng theo ID cơ sở để thấy rõ sự khác biệt khi chuyển cơ sở
+        cs_index = valid_center_ids.index(center_id) if center_id in valid_center_ids else 0
+        scale = 1.0 if cs_index == 0 else max(0.5, 1.0 - cs_index * 0.25)
+        month_offset = abs(today.month - thang)
 
-        tong_hs = max(10, int(round((126 - month_offset * 2) * scale)))
-        hs_co_kh_khung = max(8, int(round((121 - month_offset * 2) * scale)))
-        tong_kh_luy_ke = max(50, int(round((842 - month_offset * 45) * scale)))
-        kh_trong_thang = max(8, int(round((118 - month_offset * 2) * scale)))
-        kh_dang_can_thiep = max(6, int(round((112 - month_offset * 2) * scale)))
+        tong_hs = max(10, int(round((86 - month_offset * 2) * scale)))
+        hs_co_kh_khung = max(8, int(round((82 - month_offset * 2) * scale)))
+        tong_kh_luy_ke = max(40, int(round((520 - month_offset * 30) * scale)))
+        kh_trong_thang = max(8, int(round((80 - month_offset * 2) * scale)))
+        kh_dang_can_thiep = max(6, int(round((75 - month_offset * 2) * scale)))
 
-        kh_dang_lap = 4 if center_id == 'all' else 2
-        kh_doi_duyet = 2 if center_id == 'all' else 1
-        kh_sap_het_han = 9 if center_id == 'all' else 4
+        kh_dang_lap = 3 if cs_index == 0 else 2
+        kh_doi_duyet = 2 if cs_index == 0 else 1
+        kh_sap_het_han = 5 if cs_index == 0 else 3
         hs_chua_co_kh = max(0, tong_hs - kh_trong_thang)
 
         pct_khung = round(hs_co_kh_khung / tong_hs * 100, 1) if tong_hs else 0
@@ -112,8 +114,8 @@ class CanthiepDashboard(models.AbstractModel):
         # ---------------------------------------------------------------------
         # 4. DỮ LIỆU GIẢ LẬP BIỂU ĐỒ TỪ T1 -> THÁNG ĐANG XEM
         # ---------------------------------------------------------------------
-        base_bars = [105, 102, 110, 112, 115, 118, 120, 121, 123, 125, 126, 128]
-        base_lines = [98, 95, 105, 108, 110, 112, 115, 116, 118, 120, 118, 122]
+        base_bars = [70, 72, 74, 75, 77, 79, 80, 82, 84, 85, 86, 88]
+        base_lines = [65, 68, 70, 72, 74, 75, 76, 78, 79, 80, 80, 84]
 
         labels, bars, lines = [], [], []
         for m in range(1, thang + 1):
@@ -137,7 +139,6 @@ class CanthiepDashboard(models.AbstractModel):
         # ---------------------------------------------------------------------
         # 5. DỮ LIỆU GIẢ LẬP BẢNG THỐNG KÊ CẬP NHẬT TUẦN (TẦNG 3)
         # ---------------------------------------------------------------------
-        # Đảo trạng thái done/pending nhẹ theo tuần được chọn để test bộ lọc Tuần
         is_even_week = (week_index % 2 == 0)
 
         mock_students = [
@@ -211,32 +212,10 @@ class CanthiepDashboard(models.AbstractModel):
                     },
                 ],
             },
-            {
-                'stt': 5,
-                'student_id': 105,
-                'student_name': 'Đỗ Hoàng Nam',
-                'plans': [
-                    {
-                        'plan_id': 1007,
-                        'plan_name': 'Can thiệp Nhận thức - Ngôn ngữ',
-                        'tag_style': '',
-                        'teacher_name': 'Lê Thị Mai Anh',
-                        'is_done': False,
-                    },
-                    {
-                        'plan_id': 1008,
-                        'plan_name': 'Can thiệp Nhóm kỹ năng',
-                        'tag_style': 'background: #fef3c7; color: #b45309;',
-                        'teacher_name': 'Trần Thanh Thảo',
-                        'is_done': not is_even_week,
-                    },
-                ],
-            },
         ]
 
-        # Nếu lọc 1 cơ sở cụ thể, lấy 3 học sinh đầu để thấy danh sách thay đổi
-        if center_id != 'all':
-            mock_students = mock_students[:3]
+        if cs_index > 0:
+            mock_students = mock_students[:2]
 
         all_plans = [p for st in mock_students for p in st['plans']]
         done_count = sum(1 for p in all_plans if p['is_done'])
@@ -244,7 +223,7 @@ class CanthiepDashboard(models.AbstractModel):
 
         return {
             'centers': centers,
-            'selected_center_id': str(center_id),
+            'selected_center_id': center_id,
             'months_options': months_options,
             'selected_month': month_str,
             'weeks': weeks,
