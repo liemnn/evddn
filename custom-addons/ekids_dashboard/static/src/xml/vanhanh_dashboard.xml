@@ -8,11 +8,13 @@
             </div>
 
             <div class="ek-container" t-if="!state.dang_tai and state.dulieu">
-                <!-- TOP BAR: TIÊU ĐỀ & BỘ LỌC CƠ SỞ + THÁNG -->
+                <!-- TOP BAR: TIÊU ĐỀ & BỘ LỌC CƠ SỞ + NĂM TÀI CHÍNH + THÁNG -->
                 <div class="ek-topbar">
                     <div class="ek-title-group">
-                        <h2><i class="fa fa-pie-chart" style="color: var(--primary);"/> QUẢN TRỊ HOẠT ĐỘNG TRUNG TÂM</h2>
-                        <p>Tổng quan doanh thu, học phí, nhân sự giáo viên, quỹ lương và thu chi vận hành</p>
+                        <h2>
+                            <i class="fa fa-pie-chart" style="color: var(--primary);"/> QUẢN TRỊ HOẠT ĐỘNG TRUNG TÂM
+                        </h2>
+                        <p>Tổng quan doanh thu, học phí, nhân sự giáo viên, quỹ lương và thu chi vận hành theo năm tài chính (T02 → T01)</p>
                     </div>
 
                     <div class="ek-topbar-right">
@@ -22,6 +24,17 @@
                                 <t t-foreach="state.dulieu.ds_coso" t-as="cs" t-key="cs.id">
                                     <option t-att-value="cs.id">
                                         <t t-esc="cs.ten"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+
+                        <div class="ek-select-box">
+                            <i class="fa fa-bookmark" style="color: var(--primary); margin-right: 6px; font-size: 12px;"/>
+                            <select t-model="state.nam_taichinh" t-on-change="khiDoiNamTaiChinh">
+                                <t t-foreach="state.dulieu.ds_ntc" t-as="ntc" t-key="ntc.giatri">
+                                    <option t-att-value="ntc.giatri">
+                                        <t t-esc="ntc.nhan"/>
                                     </option>
                                 </t>
                             </select>
@@ -42,20 +55,20 @@
 
                 <!-- TẦNG 1: 4 THẺ KPI CÔ ĐỌNG -->
                 <div class="ek-kpi-strip">
-                    <!-- 1. Tổng hợp Thu - Chi - Lợi nhuận đến hôm nay -->
+                    <!-- 1. Tổng hợp Thu - Chi - Lợi nhuận lũy kế từ T02 đầu NTC đến tháng được chọn -->
                     <div class="ek-stat-card hero-green">
                         <div class="ek-stat-head">
                             <span class="ek-stat-title" style="color: var(--green);">
-                                Lợi nhuận đến <t t-esc="state.dulieu.kpi.ngay_hientai_str"/>
+                                Lợi nhuận tính đến (<t t-esc="state.dulieu.kpi.khoang_thang_luyke"/>)
                             </span>
                             <span style="font-size: 11px; font-weight: 800; color: var(--green); background: var(--green-soft); padding: 2px 7px; border-radius: 5px;">
                                 <t t-esc="state.dulieu.kpi.tang_truong_nam"/>
                             </span>
                         </div>
-                        <div class="ek-stat-num" style="color: var(--green);">
-                            <t t-esc="state.dulieu.kpi.loi_nhuan_nam"/> <span style="font-size: 14px; font-weight: 700;"><t t-esc="state.dulieu.kpi.don_vi_loi_nhuan"/></span>
+                        <div class="ek-stat-num" style="color: var(--green); font-size: 19px;">
+                            <t t-esc="state.dulieu.kpi.loi_nhuan_nam"/> <span style="font-size: 13px; font-weight: 700;"><t t-esc="state.dulieu.kpi.don_vi_loi_nhuan"/></span>
                         </div>
-                        <div class="ek-stat-meta">
+                        <div class="ek-stat-meta" style="flex-direction: column; align-items: flex-start; gap: 3px;">
                             <span>Tổng thu: <strong style="color: #15803d;"><t t-esc="state.dulieu.kpi.tong_doanh_thu_nam"/></strong></span>
                             <span>Tổng chi: <strong style="color: #dc2626;"><t t-esc="state.dulieu.kpi.tong_chi_nam"/></strong></span>
                         </div>
@@ -66,7 +79,7 @@
                         <div class="ek-stat-head">
                             <span class="ek-stat-title">Học sinh đang học</span>
                             <button class="ek-link-pill" t-on-click="() => this.moDanhSach('Hồ sơ học sinh', 'ekids.hocsinh', [['trangthai', '=', '1']])">
-                                Hồ sơ HS <i class="fa fa-angle-right"/>
+                                Hồ sơ Học sinh <i class="fa fa-angle-right"/>
                             </button>
                         </div>
 
@@ -102,40 +115,58 @@
                             </button>
                         </div>
                         <div class="ek-stat-num">
-                            <t t-esc="state.dulieu.kpi.tong_giaovien"/> <span style="font-size: 13.5px; font-weight: 600; color: var(--text-sub);">GV</span>
+                            <t t-esc="state.dulieu.kpi.tong_giaovien"/> <span style="font-size: 13.5px; font-weight: 600; color: var(--text-sub);">Giáo viên</span>
                         </div>
                         <div class="ek-stat-meta">
-                            <span>Nghỉ hôm nay: <strong style="color: var(--amber);"><t t-esc="state.dulieu.kpi.giaovien_nghi_homnay"/> GV</strong></span>
+                            <span>Nghỉ hôm nay: <strong style="color: var(--amber);"><t t-esc="state.dulieu.kpi.giaovien_nghi_homnay"/> Giáo viên</strong></span>
                             <button class="ek-link-pill" t-on-click="() => this.moDanhSach('Lịch nghỉ phép giáo viên', 'ekids.giaovien_nghiphep')">
                                 Lịch nghỉ <i class="fa fa-angle-right"/>
                             </button>
                         </div>
                     </div>
 
-                    <!-- 4. Quỹ lương & Chi vận hành tháng -->
-                    <div class="ek-stat-card">
+                    <!-- 4. Quỹ lương & Chi vận hành tháng (Nổi bật khoản chi lương) -->
+                    <div class="ek-stat-card hero-expense">
                         <div class="ek-stat-head">
-                            <span class="ek-stat-title">Tổng chi tháng <t t-esc="state.dulieu.thang"/></span>
-                            <button class="ek-link-pill" t-on-click="() => this.moDanhSach('Sổ thu chi', 'ekids.thuchi')">
+                            <span class="ek-stat-title" style="color: #be123c;">
+                                Tổng chi T<t t-esc="state.dulieu.thang"/>/<t t-esc="state.dulieu.nam"/>
+                            </span>
+                            <button class="ek-link-pill red" t-on-click="() => this.moDanhSach('Sổ chi tiêu', 'ekids.chitieu_chi')">
                                 Sổ thu chi <i class="fa fa-angle-right"/>
                             </button>
                         </div>
-                        <div class="ek-stat-num" style="color: var(--text-main);">
-                            <t t-esc="state.dulieu.kpi.tong_chi_thang"/> <span style="font-size: 14px; font-weight: 700;">tr đ</span>
+
+                        <div class="ek-stat-num" style="color: #dc2626; font-size: 19px;">
+                            <t t-esc="state.dulieu.kpi.tong_chi_thang"/> <span style="font-size: 13px; font-weight: 700;">vnđ</span>
                         </div>
-                        <div class="ek-stat-meta">
-                            <span>Lương: <strong><t t-esc="state.dulieu.kpi.chi_luong_thang"/></strong> • Chi khác: <strong><t t-esc="state.dulieu.kpi.chi_khac_thang"/></strong></span>
+
+                        <div class="ek-stat-meta" style="flex-direction: column; align-items: stretch; gap: 5px; border-top-color: #fecdd3;">
+                            <div class="ek-salary-pill">
+                                <span class="ek-salary-lbl">
+                                    <i class="fa fa-users me-1"/>Lương + BHXH:
+                                </span>
+                                <strong class="ek-salary-val">
+                                    <t t-esc="state.dulieu.kpi.chi_luong_thang"/>
+                                </strong>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 4px; font-size: 11.5px;">
+                                <span style="color: var(--text-sub);">Chi vận hành:</span>
+                                <strong style="color: #d97706; font-weight: 800;">
+                                    <t t-esc="state.dulieu.kpi.chi_khac_thang"/>
+                                </strong>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- TẦNG 2: BIỂU ĐỒ TỔNG THU - TỔNG CHI - LỢI NHUẬN (TRÁI) + BIỂU ĐỒ TRÒN HỌC PHÍ (PHẢI) -->
                 <div class="ek-main-visual-row">
-                    <!-- Biểu đồ 1: Tổng thu, Tổng chi & Lợi nhuận hàng tháng -->
+                    <!-- Biểu đồ 1: Tổng thu, Tổng chi & Lợi nhuận năm tài chính -->
                     <div class="ek-card">
                         <div class="ek-card-head">
                             <span class="ek-card-title">
-                                <i class="fa fa-line-chart" style="color: var(--green);"/> Tổng thu, Tổng chi &amp; Lợi nhuận từ đầu năm (Tr đ)
+                                <i class="fa fa-line-chart" style="color: var(--green);"/> Tổng thu, Tổng chi &amp; Lợi nhuận <t t-esc="state.dulieu.nhan_nam_taichinh"/> (Triệu đồng)
                             </span>
                             <div class="ek-legend-inline">
                                 <span style="color: #1d4ed8;"><i class="ek-dot" style="background: #2563eb;"/>Cột: Tổng thu</span>
@@ -150,7 +181,7 @@
                     <div class="ek-card">
                         <div class="ek-card-head">
                             <span class="ek-card-title">
-                                <i class="fa fa-pie-chart" style="color: var(--primary);"/> Học phí tháng <t t-esc="state.dulieu.thang"/> (<t t-esc="state.dulieu.hocphi_thang.tong_hocphi_str"/>)
+                                <i class="fa fa-pie-chart" style="color: var(--primary);"/> Học phí T<t t-esc="state.dulieu.thang"/>/<t t-esc="state.dulieu.nam"/>
                             </span>
                             <button class="ek-link-pill" t-on-click="() => this.moDanhSach('Quản lý học phí', 'ekids.hocphi')">
                                 Vào học phí <i class="fa fa-arrow-right"/>
@@ -160,6 +191,24 @@
                         <div class="ek-donut-layout">
                             <div class="ek-donut-svg" t-out="veBieuDoTronHocPhi()"/>
                             <div class="ek-donut-info">
+                                <div class="ek-donut-item" style="padding-bottom: 5px; border-bottom: 1px dashed #e2e8f0;">
+                                    <span style="font-weight: 700; color: var(--text-main);">Tổng học phí</span>
+                                    <strong style="color: var(--primary);">
+                                        <t t-esc="state.dulieu.hocphi_thang.tong_hocphi_str"/>
+                                    </strong>
+                                </div>
+                                <div class="ek-donut-item">
+                                    <span><i class="ek-dot" style="background: #f59e0b;"/>Miễn giảm</span>
+                                    <strong style="color: var(--amber);">
+                                        <t t-esc="state.dulieu.hocphi_thang.mien_giam_str"/>
+                                    </strong>
+                                </div>
+                                <div class="ek-donut-item" style="padding-top: 4px; border-top: 1px dashed #e2e8f0;">
+                                    <span style="font-weight: 700; color: var(--text-main);">Cần thu thực tế</span>
+                                    <strong style="color: var(--text-main);">
+                                        <t t-esc="state.dulieu.hocphi_thang.tong_can_thu_str"/>
+                                    </strong>
+                                </div>
                                 <div class="ek-donut-item">
                                     <span><i class="ek-dot" style="background: #16a34a;"/>Đã thu</span>
                                     <strong style="color: var(--green);">
@@ -172,12 +221,6 @@
                                         <t t-esc="state.dulieu.hocphi_thang.chua_thu_str"/> (<t t-esc="state.dulieu.hocphi_thang.tyle_chua_thu"/>%)
                                     </strong>
                                 </div>
-                                <div class="ek-donut-item">
-                                    <span><i class="ek-dot" style="background: #f59e0b;"/>Miễn giảm</span>
-                                    <strong style="color: var(--amber);">
-                                        <t t-esc="state.dulieu.hocphi_thang.mien_giam_str"/> (<t t-esc="state.dulieu.hocphi_thang.tyle_mien_giam"/>%)
-                                    </strong>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -185,10 +228,10 @@
 
                 <!-- TẦNG 3 - HÀNG 1: THU HỌC PHÍ & LƯƠNG THỰC CHI (CHIA 2 CỘT RỘNG) -->
                 <div class="ek-sub-visual-row">
-                    <!-- Cột 1: Biểu đồ Thu học phí từ đầu năm -->
+                    <!-- Cột 1: Biểu đồ Thu học phí trong năm tài chính -->
                     <div class="ek-card">
                         <div class="ek-card-head">
-                            <span class="ek-card-title"><i class="fa fa-money" style="color: var(--primary);"/> Thu học phí từ đầu năm (Tr đ)</span>
+                            <span class="ek-card-title"><i class="fa fa-money" style="color: var(--primary);"/> Thu học phí năm tài chính (Triệu đồng)</span>
                             <div class="ek-legend-inline">
                                 <span style="color: #2563eb;"><i class="ek-dot" style="background: #2563eb;"/>Cột: Thu học phí</span>
                                 <span style="color: #16a34a;"><i class="ek-dot" style="background: #16a34a;"/>Đường: Xu hướng</span>
@@ -200,10 +243,10 @@
                         <div style="margin-top: auto;" t-out="veBieuDoKetHop('thu_hocphi')"/>
                     </div>
 
-                    <!-- Cột 2: Biểu đồ Lương thực chi từ đầu năm -->
+                    <!-- Cột 2: Biểu đồ Lương thực chi trong năm tài chính -->
                     <div class="ek-card">
                         <div class="ek-card-head">
-                            <span class="ek-card-title"><i class="fa fa-credit-card" style="color: var(--purple);"/> Lương thực chi từ đầu năm (Tr đ)</span>
+                            <span class="ek-card-title"><i class="fa fa-credit-card" style="color: var(--purple);"/> Lương thực chi năm tài chính (Triệu đồng)</span>
                             <div class="ek-legend-inline">
                                 <span style="color: #7c3aed;"><i class="ek-dot" style="background: #7c3aed;"/>Cột: Lương thực chi</span>
                                 <span style="color: #d97706;"><i class="ek-dot" style="background: #d97706;"/>Đường: Xu hướng</span>
@@ -216,36 +259,52 @@
                     </div>
                 </div>
 
-                <!-- TẦNG 3 - HÀNG 2: TỔNG HỢP NGUỒN CHI THEO THÁNG (BIỂU ĐỒ CỘT) + KHOẢN CHI NỔI BẬT BÊN PHẢI -->
+                <!-- TẦNG 3 - HÀNG 2: CHI TIÊU VẬN HÀNH THEO THÁNG + CÁC MỤC CHI LỚN TRONG THÁNG -->
                 <div class="ek-card" style="margin-bottom: 0;">
                     <div class="ek-card-head">
-                        <span class="ek-card-title"><i class="fa fa-bar-chart" style="color: var(--red);"/> Tổng hợp nguồn chi vận hành theo tháng (Tr đ)</span>
+                        <span class="ek-card-title">
+                            <i class="fa fa-bar-chart" style="color: var(--red);"/> Chi tiêu vận hành năm tài chính (Triệu đồng)
+                        </span>
                         <div class="ek-legend-inline">
-                            <span style="color: #dc2626;"><i class="ek-dot" style="background: #ef4444;"/>Cột: Số tiền chi theo tháng</span>
-                            <button class="ek-link-pill" t-on-click="() => this.moDanhSach('Sổ chi vận hành', 'ekids.thuchi')">
+                            <span style="color: #dc2626;"><i class="ek-dot" style="background: #ef4444;"/>Cột: Số tiền chi tiêu mỗi tháng</span>
+                            <button class="ek-link-pill" t-on-click="() => this.moDanhSach('Sổ chi tiêu', 'ekids.chitieu_chi')">
                                 Chi tiết sổ chi <i class="fa fa-angle-right"/>
                             </button>
                         </div>
                     </div>
 
                     <div class="ek-io-split">
-                        <!-- Trái: Biểu đồ cột Số tiền chi theo tháng -->
+                        <!-- Trái: Biểu đồ cột Số tiền chi tiêu mỗi tháng -->
                         <div t-out="veBieuDoKetHop('nguon_chi')"/>
 
-                        <!-- Phải: Thanh tỷ trọng khoản chi nổi bật tháng này -->
+                        <!-- Phải: Tổng chi tiêu tháng được chọn + Các mục chi lớn -->
                         <div class="ek-mini-bars">
-                            <div style="font-size: 12px; font-weight: 800; color: var(--text-main); text-transform: uppercase;">
-                                Cơ cấu khoản chi nổi bật T<t t-esc="state.dulieu.thang"/> (<t t-esc="state.dulieu.khoanchi_noibat.tong_chi_khac_str"/>)
+                            <div style="padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 12px; font-weight: 800; color: #7f1d1d; text-transform: uppercase;">
+                                    <i class="fa fa-calculator me-1"/> Tổng chi tiêu T<t t-esc="state.dulieu.thang"/>/<t t-esc="state.dulieu.nam"/>:
+                                </span>
+                                <strong style="font-size: 14.5px; font-weight: 900; color: #dc2626;">
+                                    <t t-esc="state.dulieu.khoanchi_noibat.tong_chitieu_thang_str"/>
+                                </strong>
                             </div>
+
+                            <div style="font-size: 11.5px; font-weight: 800; color: var(--text-sub); text-transform: uppercase; margin-top: 2px;">
+                                Các mục chi lớn trong tháng <t t-esc="state.dulieu.thang"/>:
+                            </div>
+
                             <t t-foreach="state.dulieu.khoanchi_noibat.ds_khoanchi" t-as="kc" t-key="kc_index">
                                 <div class="ek-hbar-row">
                                     <span class="ek-hbar-lbl"><t t-esc="kc.ten"/></span>
                                     <div class="ek-hbar-track">
                                         <div class="ek-hbar-fill" t-attf-style="width: #{kc.tyle}%; background: #{kc.mau};"/>
                                     </div>
-                                    <span class="ek-hbar-val"><t t-esc="kc.giatri_str"/></span>
+                                    <span class="ek-hbar-val" style="width: 145px;"><t t-esc="kc.giatri_str"/></span>
                                 </div>
                             </t>
+
+                            <div t-if="!state.dulieu.khoanchi_noibat.ds_khoanchi.length" style="font-size: 12px; color: var(--text-sub); font-style: italic;">
+                                Chưa phát sinh khoản chi nào trong tháng <t t-esc="state.dulieu.thang"/>.
+                            </div>
                         </div>
                     </div>
                 </div>
