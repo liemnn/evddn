@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from odoo import models, api, fields
 from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
 import calendar
-
-
 import logging
+
 _logger = logging.getLogger(__name__)
 try:
     from odoo.addons.ekids_func import string_util
@@ -15,9 +15,7 @@ try:
     from odoo.addons.ekids_func import ngay_util
     from odoo.addons.ekids_func import kehoach_util
 except ImportError as e:
-    _logger.warning(f"Không thể import ekids_func.string_util: {e}")
-
-
+    _logger.warning(f"Không thể import ekids_func: {e}")
 
 
 class CanthiepDashboard(models.AbstractModel):
@@ -51,9 +49,7 @@ class CanthiepDashboard(models.AbstractModel):
     def get_dashboard_data(self, center_id=None, month_str=None, week_index=None):
         ngay_hientai = fields.Date.context_today(self)
 
-        # =====================================================================
-        # BƯỚC 1: XÁC ĐỊNH CƠ SỞ ĐANG CHỌN -> TRẢ VỀ BIẾN SỐ NGUYÊN: coso_id
-        # =====================================================================
+        # 1. XÁC ĐỊNH CƠ SỞ ĐANG CHỌN
         centers = []
         user = self.env.user
         if 'ekids.coso' in self.env:
@@ -77,12 +73,9 @@ class CanthiepDashboard(models.AbstractModel):
         else:
             selected_cs_str = str(center_id)
 
-        # --> BIẾN CƠ SỞ ĐANG CHỌN (kiểu int để dùng trực tiếp trong ORM/SQL)
         coso_id = int(selected_cs_str)
 
-        # =====================================================================
-        # BƯỚC 2: XÁC ĐỊNH THÁNG, NĂM & NGÀY ĐANG CHỌN
-        # =====================================================================
+        # 2. XÁC ĐỊNH THÁNG, NĂM & NGÀY ĐANG CHỌN
         months_options = []
         current_ym = ngay_hientai.strftime('%Y-%m')
         for m in range(1, 13):
@@ -94,16 +87,12 @@ class CanthiepDashboard(models.AbstractModel):
         if not month_str or month_str not in valid_months:
             month_str = current_ym
 
-        # --> CÁC BIẾN THÁNG, NĂM, NGÀY ĐẦU THÁNG, NGÀY CUỐI THÁNG ĐANG CHỌN
         nam, thang = map(int, month_str.split('-'))
         ngay_dau_thang = date(nam, thang, 1)
         ngay_cuoi_thang = date(nam, thang, calendar.monthrange(nam, thang)[1])
-        # Biến 'ngay' đại diện cho ngày đang xét trong tháng (nếu là tháng hiện tại thì lấy hôm nay, tháng khác lấy cuối tháng)
-        ngay = ngay_hientai if (nam == ngay_hientai.year and thang == ngay_hientai.month) else ngay_cuoi_thang
+        ngay = ngay_hientai if (nam == ngay_hientai.year and thang == ngay_hientai.month) else date(nam, thang, 15)
 
-        # =====================================================================
-        # BƯỚC 3: XÁC ĐỊNH TUẦN ĐANG CHỌN (CHO BẢNG TẦNG 3)
-        # =====================================================================
+        # 3. XÁC ĐỊNH TUẦN ĐANG CHỌN (CHO BẢNG TẦNG 3)
         weeks = self.get_weeks_of_month(nam, thang)
         if not week_index or int(week_index) > len(weeks):
             week_index = 1
@@ -116,13 +105,8 @@ class CanthiepDashboard(models.AbstractModel):
             week_index = int(week_index)
 
         selected_week = next((w for w in weeks if w['index'] == week_index), weeks[0])
-        tuan_tu_ngay = selected_week['d_from']
-        tuan_den_ngay = selected_week['d_to']
 
-        # =====================================================================
-        # BƯỚC 4: GỌI CÁC HÀM TÍNH TOÁN VỚI THAM SỐ ĐÃ CHUẨN HÓA
-        # Bạn chỉ cần viết logic tính toán vào 3 hàm con bên dưới
-        # =====================================================================
+        # 4. GỌI CÁC HÀM TÍNH TOÁN ĐỒNG BỘ VỚI BÁO CÁO CAN THIỆP
         kpi_data, ops_status = self._calc_kpi_and_ops(
             coso_id=coso_id,
             nam=nam,
@@ -142,9 +126,10 @@ class CanthiepDashboard(models.AbstractModel):
             coso_id=coso_id,
             nam=nam,
             thang=thang,
+            tuan_tu_ngay=selected_week['d_from'],
+            tuan_den_ngay=selected_week['d_to'],
         )
 
-        # Loại bỏ key d_from/d_to kiểu date trước khi trả JSON về OWL
         clean_weeks = [
             {k: v for k, v in w.items() if k in ('index', 'label', 'date_from', 'date_to')}
             for w in weeks
@@ -164,35 +149,91 @@ class CanthiepDashboard(models.AbstractModel):
         }
 
     # -------------------------------------------------------------------------
-    # HÀM 1: TÍNH TOÁN 5 THẺ KPI (TẦNG 1) & 4 CHỈ SỐ TÌNH TRẠNG HỒ SƠ (TẦNG 2)
+    # HÀM 1: TÍNH TOÁN 5 THẺ KPI & 4 CHỈ SỐ HỒ SƠ (KHỚP 100% BÁO CÁO CAN THIỆP)
     # -------------------------------------------------------------------------
     def _calc_kpi_and_ops(self, coso_id, nam, thang, ngay, ngay_dau_thang, ngay_cuoi_thang):
-        """
-        Tham số đầu vào sẵn có:
-        - coso_id (int): ID cơ sở đang chọn
-        - nam (int), thang (int): Năm & Tháng đang chọn
-        - ngay (date): Ngày đang xét (hôm nay nếu là tháng hiện tại, ngược lại là cuối tháng)
-        - ngay_dau_thang (date), ngay_cuoi_thang (date): Khoảng ngày của tháng đang chọn
-        """
-        # TODO: Thay các biến dưới đây bằng lệnh ORM / SQL tính từ coso_id, nam, thang, ngay...
-        tong_hs = hocsinh_util.func_tong_hocsinh_trongthang(self, coso_id, nam, thang)
-        hs_co_kh_khung = kehoach_util.func_count_ketluan_trangthais(self,coso_id,[kehoach_util.KETLUAN_CHOPHEP_LAP_KEHOACH])
-        tong_kh_luy_ke = kehoach_util.func_count_kehoach_trangthais(self,coso_id,0,[kehoach_util.KEHOACH_DANG_PHEDUYET,kehoach_util.KEHOACH_DANG_CANTHIEP,kehoach_util.KEHOACH_HET_HIEULUC],None)
-        ngay = date(nam,thang,15)
-        trangthais =[kehoach_util.KEHOACH_DANG_LAP
-                    ,kehoach_util.KEHOACH_DANG_PHEDUYET
-                    ,kehoach_util.KEHOACH_DANG_CANTHIEP
-                    ,kehoach_util.KEHOACH_HET_HIEULUC]
-        kh_trong_thang = kehoach_util.func_count_kehoach_trangthais(self,coso_id,0,trangthais,ngay)
-        kh_dang_can_thiep = kehoach_util.func_count_kehoach_trangthais(self,coso_id,0,[kehoach_util.KEHOACH_DANG_CANTHIEP],ngay)
+        # Mốc chu kỳ ngày 15 chuẩn theo ekids_baocao_canthiep_model.py
+        d_thangnay_15 = date(nam, thang, 15)
+        d_thangtruoc_15 = d_thangnay_15 - relativedelta(months=1)
 
-        kh_dang_lap = kehoach_util.func_count_kehoach_trangthais(self,coso_id,0,[kehoach_util.KEHOACH_DANG_LAP],ngay)
-        kh_doi_duyet = kehoach_util.func_count_kehoach_trangthais(self,coso_id,0,[kehoach_util.KEHOACH_DANG_PHEDUYET],ngay)
-        kh_sap_het_han = kehoach_util.func_count_kehoach_trangthais(self,coso_id,10,[kehoach_util.KEHOACH_DANG_CANTHIEP],ngay)
-        hs_chua_co_kh = max(0, tong_hs - kh_trong_thang)
+        # 1. Tập học sinh đang theo học (trangthai = '1') của cơ sở
+        hs_active_records = self.env['ekids.hocsinh'].search_read(
+            domain=[('coso_id', '=', coso_id), ('trangthai', '=', '1')],
+            fields=['id']
+        )
+        active_hs_ids = {hs['id'] for hs in hs_active_records}
+        tong_hs = len(active_hs_ids)
+
+        # 2. Học sinh có kết luận cho phép lập kế hoạch (tính theo ĐẦU HỌC SINH duy nhất)
+        kl_records = self.env['ekids.kehoach_ketluan'].search_read(
+            domain=[
+                ('coso_id', '=', coso_id),
+                ('hocsinh_id', 'in', list(active_hs_ids)),
+                ('trangthai', '=', '1'),
+            ],
+            fields=['hocsinh_id']
+        ) if active_hs_ids else []
+        hs_co_kh_khung = len({r['hocsinh_id'][0] for r in kl_records if r.get('hocsinh_id')})
+
+        # 3. Toàn bộ kế hoạch của học sinh đang theo học
+        kh_records = self.env['ekids.kehoach'].search_read(
+            domain=[
+                ('coso_id', '=', coso_id),
+                ('hocsinh_id', 'in', list(active_hs_ids)),
+            ],
+            fields=['id', 'hocsinh_id', 'tu_ngay', 'den_ngay', 'trangthai', 'trangthai_pheduyet']
+        ) if active_hs_ids else []
+
+        TRANGTHAI_DADUYET = ['1', '-1']
+        ngay_sap_hethan = ngay + timedelta(days=10)
+
+        tong_kh_luy_ke = 0          # Tổng số KH được phê duyệt (lũy kế)
+        kh_trong_thang = 0          # Tổng số KH trong chu kỳ tháng (d_thangtruoc_15 < tu_ngay <= d_thangnay_15)
+        hs_co_kh_thang = set()      # Đầu học sinh đã có KH trong chu kỳ tháng
+        kh_dang_can_thiep = 0       # KH đang can thiệp (trangthai in ['1', 'dang_canthiep'] và tu_ngay <= ngay)
+        kh_dang_lap = 0             # KH đang soạn thảo (trangthai == '0')
+        kh_doi_duyet = 0            # KH đang đợi duyệt (trangthai in ['2', 'dang_pheduyet'] và trangthai_pheduyet in ['0', 'doi_duyet'])
+        kh_sap_het_han = 0          # KH đang can thiệp sắp hết hạn trong 10 ngày tới
+
+        for r in kh_records:
+            if not r.get('hocsinh_id'):
+                continue
+            hs_id = r['hocsinh_id'][0]
+            tt = str(r.get('trangthai', ''))
+            tt_pd = str(r.get('trangthai_pheduyet', ''))
+            tu_ngay = fields.Date.to_date(r.get('tu_ngay')) if r.get('tu_ngay') else False
+            den_ngay = fields.Date.to_date(r.get('den_ngay')) if r.get('den_ngay') else False
+
+            is_approved = (tt in TRANGTHAI_DADUYET or tt_pd in ['1', 'da_duyet'])
+
+            # Lũy kế kế hoạch đã được phê duyệt
+            if is_approved:
+                tong_kh_luy_ke += 1
+
+            # Kế hoạch đang can thiệp (khớp cột "KH đang can thiệp" trên báo cáo)
+            if tt in ['1', 'dang_canthiep'] and tu_ngay and tu_ngay <= ngay:
+                kh_dang_can_thiep += 1
+                if den_ngay and ngay <= den_ngay <= ngay_sap_hethan:
+                    kh_sap_het_han += 1
+
+            # Kế hoạch đang đợi duyệt (khớp cột "KH đang đợi duyệt" trên báo cáo)
+            if tt in ['2', 'dang_pheduyet'] and tt_pd in ['0', 'doi_duyet']:
+                kh_doi_duyet += 1
+
+            # Kế hoạch đang soạn thảo (trạng thái '0' / '-1' chưa duyệt)
+            if tt in ['0', 'dang_lap'] and not is_approved:
+                kh_dang_lap += 1
+
+            # Chu kỳ kế hoạch tháng này (d_thangtruoc_15 < tu_ngay <= d_thangnay_15)
+            if tu_ngay and d_thangtruoc_15 < tu_ngay <= d_thangnay_15:
+                kh_trong_thang += 1
+                hs_co_kh_thang.add(hs_id)
+
+        # Học sinh đang theo học nhưng chưa có KH nào trong chu kỳ tháng
+        hs_chua_co_kh = max(0, tong_hs - len(hs_co_kh_thang))
 
         pct_khung = round(hs_co_kh_khung / tong_hs * 100, 1) if tong_hs else 0
-        pct_thang = round(kh_trong_thang / tong_hs * 100, 1) if tong_hs else 0
+        pct_thang = round(len(hs_co_kh_thang) / tong_hs * 100, 1) if tong_hs else 0
 
         kpi = {
             'total_students': tong_hs,
@@ -221,25 +262,35 @@ class CanthiepDashboard(models.AbstractModel):
         return kpi, ops_status
 
     # -------------------------------------------------------------------------
-    # HÀM 2: TÍNH TOÁN BIỂU ĐỒ SO SÁNH TỪ THÁNG 1 ĐẾN THÁNG ĐANG CHỌN (TẦNG 2)
+    # HÀM 2: BIỂU ĐỒ SO SÁNH TỪ THÁNG 1 ĐẾN THÁNG ĐANG CHỌN (CHU KỲ NGÀY 15)
     # -------------------------------------------------------------------------
     def func_tinhtoan_luytien_kehoach_trongnam(self, coso_id, nam, thang=None):
+        hs_active_records = self.env['ekids.hocsinh'].search_read(
+            domain=[('coso_id', '=', coso_id), ('trangthai', '=', '1')],
+            fields=['id']
+        )
+        active_hs_ids = [hs['id'] for hs in hs_active_records]
 
+        kh_records = self.env['ekids.kehoach'].search_read(
+            domain=[
+                ('coso_id', '=', coso_id),
+                ('hocsinh_id', 'in', active_hs_ids),
+            ],
+            fields=['tu_ngay']
+        ) if active_hs_ids else []
+
+        tu_ngay_list = [
+            fields.Date.to_date(r['tu_ngay'])
+            for r in kh_records if r.get('tu_ngay')
+        ]
 
         labels, bars, lines = [], [], []
-
-        # 2. Lặp qua từng tháng từ T1 đến tháng giới hạn để tính toán
         for m in range(1, thang + 1):
-
+            d_thangnay_15 = date(nam, m, 15)
+            d_thangtruoc_15 = d_thangnay_15 - relativedelta(months=1)
 
             tong_hs = hocsinh_util.func_tong_hocsinh_trongthang(self, coso_id, nam, m)
-            trangthais = [kehoach_util.KEHOACH_DANG_LAP
-                , kehoach_util.KEHOACH_DANG_PHEDUYET
-                , kehoach_util.KEHOACH_DANG_CANTHIEP
-                , kehoach_util.KEHOACH_HET_HIEULUC]
-
-            ngay = date(nam, m, 15)
-            kh_trong_thang = kehoach_util.func_count_kehoach_trangthais(self, coso_id, 0, trangthais, ngay)
+            kh_trong_thang = sum(1 for d in tu_ngay_list if d_thangtruoc_15 < d <= d_thangnay_15)
 
             labels.append(f"T{m}")
             bars.append(tong_hs)
@@ -252,43 +303,31 @@ class CanthiepDashboard(models.AbstractModel):
         }
 
     # -------------------------------------------------------------------------
-    # HÀM 3: TÍNH TOÁN BẢNG GIÁO VIÊN CẬP NHẬT KẾT QUẢ TUẦN (TẦNG 3)
+    # HÀM 3: BẢNG THỐNG KÊ GIÁO VIÊN CẬP NHẬT KẾT QUẢ TUẦN (TẦNG 3)
     # -------------------------------------------------------------------------
-    def func_tinhtoan_quatrinh_capnhat_ketqua_canthiep(self, coso_id, nam, thang):
-        """
-        Lấy danh sách kế hoạch trong tháng/năm của cơ sở coso_id
-        và kiểm tra ngày gần nhất giáo viên cập nhật kết quả trong tháng.
-        """
-        tu_ngay = date(nam, thang, 1)
-        last_day = calendar.monthrange(nam, thang)[1]
-        den_ngay = date(nam, thang, last_day)
+    def func_tinhtoan_quatrinh_capnhat_ketqua_canthiep(self, coso_id, nam, thang, tuan_tu_ngay=None, tuan_den_ngay=None):
+        d_thangnay_15 = date(nam, thang, 15)
+        d_thangtruoc_15 = d_thangnay_15 - relativedelta(months=1)
 
-        # 1. Lấy danh sách kế hoạch của cơ sở trong tháng
-        kh_model = self.env['ekids.kehoach']
-        kh_fields = kh_model._fields
-        domain_kh = [('coso_id', '=', coso_id)]
+        tu_ngay_tuan = tuan_tu_ngay or date(nam, thang, 1)
+        den_ngay_tuan = tuan_den_ngay or date(nam, thang, calendar.monthrange(nam, thang)[1])
 
-        if 'nam' in kh_fields and 'thang' in kh_fields:
-            thang_val = str(thang) if kh_fields['thang'].type == 'selection' else thang
-            nam_val = str(nam) if kh_fields['nam'].type == 'selection' else nam
-            domain_kh += [('nam', '=', nam_val), ('thang', '=', thang_val)]
-        elif 'tu_ngay' in kh_fields and 'den_ngay' in kh_fields:
-            domain_kh += [('tu_ngay', '<=', den_ngay), ('den_ngay', '>=', tu_ngay)]
-        elif 'ngay_batdau' in kh_fields and 'ngay_ketthuc' in kh_fields:
-            domain_kh += [('ngay_batdau', '<=', den_ngay), ('ngay_ketthuc', '>=', tu_ngay)]
-        elif 'ngay' in kh_fields:
-            domain_kh += [('ngay', '>=', tu_ngay), ('ngay', '<=', den_ngay)]
+        # Lấy kế hoạch của học sinh đang theo học trong chu kỳ tháng này
+        kehoach_recs = self.env['ekids.kehoach'].search([
+            ('coso_id', '=', coso_id),
+            ('hocsinh_id.trangthai', '=', '1'),
+            ('tu_ngay', '>', d_thangtruoc_15),
+            ('tu_ngay', '<=', d_thangnay_15),
+        ], order='hocsinh_id asc, id asc')
 
-        kehoach_recs = kh_model.search(domain_kh, order='hocsinh_id asc, id asc')
-
-        # 2. Nhóm trực tiếp theo 'kehoach_muctieu_id' (field trực tiếp trên ekids.kehoach_ketqua2muctieu)
+        # Kiểm tra cập nhật kết quả trong khoảng ngày của tuần đang chọn
         last_update_map = {}
         if kehoach_recs:
             kq_groups = self.env['ekids.kehoach_ketqua2muctieu']._read_group(
                 domain=[
                     ('kehoach_muctieu_id.kehoach_linhvuc_id.kehoach_id', 'in', kehoach_recs.ids),
-                    ('ngay', '>=', tu_ngay),
-                    ('ngay', '<=', den_ngay),
+                    ('ngay', '>=', tu_ngay_tuan),
+                    ('ngay', '<=', den_ngay_tuan),
                     '|', '|',
                     ('is_giaovien_capnhat', '=', True),
                     ('solan_thu_dat', '>', 0),
@@ -297,7 +336,6 @@ class CanthiepDashboard(models.AbstractModel):
                 groupby=['kehoach_muctieu_id'],
                 aggregates=['ngay:max'],
             )
-            # Quy đổi ngày cập nhật lớn nhất từ từng mục tiêu lên kế hoạch cha
             for muctieu, max_ngay in kq_groups:
                 if muctieu and max_ngay:
                     kh_id = muctieu.kehoach_linhvuc_id.kehoach_id.id
