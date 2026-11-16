@@ -18,6 +18,10 @@
             'ekids_dashboard/static/src/css/vanhanh_dashboard.scss',
             'ekids_dashboard/static/src/js/vanhanh_dashboard.js',
             'ekids_dashboard/static/src/xml/vanhanh_dashboard.xml',
+
+            'ekids_dashboard/static/src/css/giaovien_dashboard.scss',
+            'ekids_dashboard/static/src/js/giaovien_dashboard.js',
+            'ekids_dashboard/static/src/xml/giaovien_dashboard.xml',
         ],
     },
     'installable': True,

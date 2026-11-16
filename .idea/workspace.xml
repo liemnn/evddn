@@ -5,11 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b83f68a-a82b-4614-919f-d4cbc9231b26" name="Changes" comment="liemnn">
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/models/ekids_giaovien_dashboard_model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/css/giaovien_dashboard.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/js/giaovien_dashboard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/xml/giaovien_dashboard.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/js/canthiep_dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/js/canthiep_dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/js/vanhanh_dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/js/vanhanh_dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/xml/canthiep_dashboard.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/xml/canthiep_dashboard.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/xml/vanhanh_dashboard.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/static/src/xml/vanhanh_dashboard.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_dashboard/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_dashboard/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom-addons/ekids_dashboard/views/ekids_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/custom-addons/ekids_dashboard/views/ekids_menu.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,17 +61,17 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_dashboard/static/description",
+    "last_opened_file_path": "D:/odoo/evddn/custom-addons/ekids_dashboard/static/src/xml",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\odoo\evddn\custom-addons\ekids_dashboard\static\description" />
-      <recent name="D:\odoo\evddn\custom-addons\ekids_dashboard\models" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_dashboard\static\src\xml" />
-      <recent name="D:\odoo\evddn\custom-addons\ekids_dashboard\static\src\js" />
       <recent name="D:\odoo\evddn\custom-addons\ekids_dashboard\static\src\css" />
+      <recent name="D:\odoo\evddn\custom-addons\ekids_dashboard\static\src\js" />
+      <recent name="D:\odoo\evddn\custom-addons\ekids_dashboard\models" />
+      <recent name="D:\odoo\evddn\custom-addons\ekids_dashboard\static\description" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\odoo\evddn\custom-addons\ekids_dashboard\static\src\js" />
@@ -167,14 +170,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773647358851</updated>
-    </task>
-    <task id="LOCAL-00551" summary="liemnn">
-      <option name="closed" value="true" />
-      <created>1791455087122</created>
-      <option name="number" value="00551" />
-      <option name="presentableId" value="LOCAL-00551" />
-      <option name="project" value="LOCAL" />
-      <updated>1791455087122</updated>
     </task>
     <task id="LOCAL-00552" summary="liemnn">
       <option name="closed" value="true" />
@@ -560,7 +555,15 @@
       <option name="project" value="LOCAL" />
       <updated>1794796025845</updated>
     </task>
-    <option name="localTasksCounter" value="600" />
+    <task id="LOCAL-00600" summary="liemnn">
+      <option name="closed" value="true" />
+      <created>1794798703509</created>
+      <option name="number" value="00600" />
+      <option name="presentableId" value="LOCAL-00600" />
+      <option name="project" value="LOCAL" />
+      <updated>1794798703509</updated>
+    </task>
+    <option name="localTasksCounter" value="601" />
     <servers />
   </component>
   <component name="UnknownFeatures">

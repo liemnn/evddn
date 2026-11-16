@@ -10,6 +10,11 @@
         <field name="tag">ekids_dashboard.vanhanh_action</field>
     </record>
 
+    <record id="action_ekids_dashboard_giaovien" model="ir.actions.client">
+        <field name="name">Không gian Giáo viên Can thiệp</field>
+        <field name="tag">ekids_dashboard.giaovien_action</field>
+    </record>
+
     <!-- Menu gốc (Root) -->
     <menuitem id="menu_ekids_dashboard_root"
               name="Tổng quan"
@@ -30,4 +35,11 @@
               action="action_ekids_vanhanh_dashboard"
               groups="ekids_core.quanlycoso"
               sequence="2"/>
+
+    <menuitem id="menu_ekids_dashboard_giaovien"
+                  name="Của tôi (giáo viên)"
+                  parent="menu_ekids_dashboard_root"
+                  action="action_ekids_dashboard_giaovien"
+                  groups="ekids_core.giaovien"
+                  sequence="3"/>
 </odoo>
