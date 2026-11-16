@@ -309,8 +309,11 @@ class CanthiepDashboard(models.AbstractModel):
         d_thangnay_15 = date(nam, thang, 15)
         d_thangtruoc_15 = d_thangnay_15 - relativedelta(months=1)
 
-        tu_ngay_tuan = tuan_tu_ngay or date(nam, thang, 1)
-        den_ngay_tuan = tuan_den_ngay or date(nam, thang, calendar.monthrange(nam, thang)[1])
+        today = fields.Date.context_today(self)
+
+        # Xác định đúng khoảng Thứ 2 -> Chủ nhật của TUẦN NÀY (tính theo today)
+        tu_ngay_tuan = today - timedelta(days=today.weekday())
+        den_ngay_tuan = tu_ngay_tuan + timedelta(days=6)
 
         # Lấy kế hoạch của học sinh đang theo học trong chu kỳ tháng này
         kehoach_recs = self.env['ekids.kehoach'].search([
@@ -330,7 +333,6 @@ class CanthiepDashboard(models.AbstractModel):
                     ('ngay', '<=', den_ngay_tuan),
                     '|', '|',
                     ('is_giaovien_capnhat', '=', True),
-                    ('solan_thu_dat', '>', 0),
                     ('trangthai', 'in', ['0', '1', '2']),
                 ],
                 groupby=['kehoach_muctieu_id'],
