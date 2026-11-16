@@ -61,6 +61,54 @@ export class EkidsVanhanhDashboard extends Component {
         this.state.thang_nam = ev.target.value;
         await this.taiDuLieu();
     }
+    /**
+     * Gọi một hàm (method) trên model 'ekids.coso' với cơ sở đang chọn
+     * và tự động thực thi action mà hàm Python đó trả về.
+     * @param {string} tenHam - Tên hàm Python trên model ekids.coso (vd: 'action_xem_baocao_loinhuan')
+     * @param {object} thamSoBoSung - Các tham số phụ truyền thêm vào context/kwargs nếu cần
+     */
+    async goiActionCoSo(tenHam, thamSoBoSung = {}) {
+        const cosoId = parseInt(this.state.centerId || this.state.coso_id, 10);
+        if (!cosoId || !tenHam) return;
+
+        const extraContext = {
+            active_id: cosoId,
+            active_ids: [cosoId],
+            active_model: "ekids.coso",
+            default_coso_id: cosoId,
+            ...thamSoBoSung,
+        };
+
+        const actionRes = await this.orm.call(
+            "ekids.coso",
+            tenHam,
+            [[cosoId]],
+            { context: extraContext }
+        );
+
+        if (!actionRes || typeof actionRes !== "object") return;
+
+        // Bắt buộc chuyển 'view_mode' -> 'views' vì Odoo 18 _preprocessAction gọi action.views.map(...)
+        if ((actionRes.type || "ir.actions.act_window") === "ir.actions.act_window") {
+            actionRes.type = "ir.actions.act_window";
+            if (!Array.isArray(actionRes.views)) {
+                const modes = (actionRes.view_mode || "list,form")
+                    .split(",")
+                    .map((m) => m.trim())
+                    .filter(Boolean);
+                actionRes.views = modes.map((mode) => [false, mode]);
+            }
+            if (!Array.isArray(actionRes.domain)) {
+                actionRes.domain = [];
+            }
+            actionRes.context = {
+                ...(typeof actionRes.context === "object" && actionRes.context !== null ? actionRes.context : {}),
+                ...extraContext,
+            };
+        }
+
+        await this.action.doAction(actionRes);
+    }
 
     veBieuDoTronHocPhi() {
         if (!this.state.dulieu) return "";
@@ -249,6 +297,7 @@ export class EkidsVanhanhDashboard extends Component {
             target: "current",
         });
     }
+
 }
 
 registry.category("actions").add("ekids_dashboard.vanhanh_action", EkidsVanhanhDashboard);

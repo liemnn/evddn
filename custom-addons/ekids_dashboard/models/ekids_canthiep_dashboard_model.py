@@ -331,7 +331,7 @@ class CanthiepDashboard(models.AbstractModel):
                     ('kehoach_muctieu_id.kehoach_linhvuc_id.kehoach_id', 'in', kehoach_recs.ids),
                     ('ngay', '>=', tu_ngay_tuan),
                     ('ngay', '<=', den_ngay_tuan),
-                    '|', '|',
+                    '|',
                     ('is_giaovien_capnhat', '=', True),
                     ('trangthai', 'in', ['0', '1', '2']),
                 ],

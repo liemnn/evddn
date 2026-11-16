@@ -78,7 +78,7 @@
                     <div class="ek-stat-card">
                         <div class="ek-stat-head">
                             <span class="ek-stat-title">Học sinh đang học</span>
-                            <button class="ek-link-pill" t-on-click="() => this.moDanhSach('Hồ sơ học sinh', 'ekids.hocsinh', [['trangthai', '=', '1']])">
+                            <button class="ek-link-pill" t-on-click="() => this.goiActionCoSo('action_view_ekids_hocsinh_kanban_action_window')">
                                 Hồ sơ Học sinh <i class="fa fa-angle-right"/>
                             </button>
                         </div>
@@ -100,7 +100,7 @@
 
                         <div class="ek-stat-meta">
                             <span>Vắng hôm nay: <strong style="color: var(--red);"><t t-esc="state.dulieu.kpi.hocsinh_vang_homnay"/> trẻ</strong></span>
-                            <button class="ek-link-pill red" t-on-click="() => this.moDanhSach('Điểm danh học sinh', 'ekids.hocsinh')">
+                            <button class="ek-link-pill" t-on-click="() => this.goiActionCoSo('action_diemdanh_thang_nay')">
                                 Điểm danh <i class="fa fa-angle-right"/>
                             </button>
                         </div>
@@ -110,7 +110,7 @@
                     <div class="ek-stat-card">
                         <div class="ek-stat-head">
                             <span class="ek-stat-title">Giáo viên trung tâm</span>
-                            <button class="ek-link-pill" t-on-click="() => this.moDanhSach('Danh sách giáo viên', 'ekids.giaovien')">
+                            <button class="ek-link-pill" t-on-click="() => this.goiActionCoSo('action_xem_toanbo_giaovien')">
                                 Danh sách <i class="fa fa-angle-right"/>
                             </button>
                         </div>
@@ -129,10 +129,10 @@
                     <div class="ek-stat-card hero-expense">
                         <div class="ek-stat-head">
                             <span class="ek-stat-title" style="color: #be123c;">
-                                Tổng chi T<t t-esc="state.dulieu.thang"/>/<t t-esc="state.dulieu.nam"/>
+                                Tổng chi lương + chi khác T<t t-esc="state.dulieu.thang"/>/<t t-esc="state.dulieu.nam"/>
                             </span>
-                            <button class="ek-link-pill red" t-on-click="() => this.moDanhSach('Sổ chi tiêu', 'ekids.chitieu_chi')">
-                                Sổ thu chi <i class="fa fa-angle-right"/>
+                            <button class="ek-link-pill" t-on-click="() => this.goiActionCoSo('action_tinh_luong_thang_qua')">
+                                Lương <i class="fa fa-angle-right"/>
                             </button>
                         </div>
 
@@ -183,7 +183,7 @@
                             <span class="ek-card-title">
                                 <i class="fa fa-pie-chart" style="color: var(--primary);"/> Học phí T<t t-esc="state.dulieu.thang"/>/<t t-esc="state.dulieu.nam"/>
                             </span>
-                            <button class="ek-link-pill" t-on-click="() => this.moDanhSach('Quản lý học phí', 'ekids.hocphi')">
+                            <button class="ek-link-pill" t-on-click="() => this.goiActionCoSo('action_tinh_hocphi_thang_nay')">
                                 Vào học phí <i class="fa fa-arrow-right"/>
                             </button>
                         </div>
@@ -231,7 +231,7 @@
                     <!-- Cột 1: Biểu đồ Thu học phí trong năm tài chính -->
                     <div class="ek-card">
                         <div class="ek-card-head">
-                            <span class="ek-card-title"><i class="fa fa-money" style="color: var(--primary);"/> Thu học phí năm tài chính (Triệu đồng)</span>
+                            <span class="ek-card-title"><i class="fa fa-money" style="color: var(--primary);"/> BIỂU ĐỒ THU HỌC PHÍ CÁC THÁNG TRONG NĂM</span>
                             <div class="ek-legend-inline">
                                 <span style="color: #2563eb;"><i class="ek-dot" style="background: #2563eb;"/>Cột: Thu học phí</span>
                                 <span style="color: #16a34a;"><i class="ek-dot" style="background: #16a34a;"/>Đường: Xu hướng</span>
@@ -246,7 +246,7 @@
                     <!-- Cột 2: Biểu đồ Lương thực chi trong năm tài chính -->
                     <div class="ek-card">
                         <div class="ek-card-head">
-                            <span class="ek-card-title"><i class="fa fa-credit-card" style="color: var(--purple);"/> Lương thực chi năm tài chính (Triệu đồng)</span>
+                            <span class="ek-card-title"><i class="fa fa-credit-card" style="color: var(--purple);"/> BIỂU ĐỒ CHI LƯƠNG CÁC THÁNG TRONG NĂM</span>
                             <div class="ek-legend-inline">
                                 <span style="color: #7c3aed;"><i class="ek-dot" style="background: #7c3aed;"/>Cột: Lương thực chi</span>
                                 <span style="color: #d97706;"><i class="ek-dot" style="background: #d97706;"/>Đường: Xu hướng</span>
@@ -263,7 +263,7 @@
                 <div class="ek-card" style="margin-bottom: 0;">
                     <div class="ek-card-head">
                         <span class="ek-card-title">
-                            <i class="fa fa-bar-chart" style="color: var(--red);"/> Chi tiêu vận hành năm tài chính (Triệu đồng)
+                            <i class="fa fa-bar-chart" style="color: var(--red);"/> CHI KHÁC CÁC THÁNG TRONG NĂM
                         </span>
                         <div class="ek-legend-inline">
                             <span style="color: #dc2626;"><i class="ek-dot" style="background: #ef4444;"/>Cột: Số tiền chi tiêu mỗi tháng</span>
