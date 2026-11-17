@@ -50,8 +50,8 @@
                     <div class="ek-stat-card hero-purple">
                         <div class="ek-stat-head">
                             <span class="ek-stat-title" style="color: var(--purple);">Trẻ phụ trách tháng này</span>
-                            <button class="ek-link-pill purple" t-on-click="() => this.moDanhSach('Hồ sơ trẻ phụ trách', 'ekids.hocsinh', [['trangthai', '=', '1']])">
-                                Hồ sơ trẻ <i class="fa fa-angle-right"/>
+                            <button class="ek-link-pill" t-on-click="() => this.goiActionCoSo('action_danhsach_hocsinh_lap_kehoach')">
+                               Lập kế hoạch <i class="fa fa-angle-right"/>
                             </button>
                         </div>
                         <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 6px; flex-wrap: wrap;">
@@ -60,18 +60,16 @@
                             </div>
                             <div style="display: inline-flex; gap: 4px; font-size: 11px; font-weight: 800;">
                                 <span style="background: var(--green-soft); color: var(--green); padding: 2px 7px; border-radius: 5px;">
-                                    <t t-esc="state.dulieu.kpi.hs_da_co_kh"/> đã có KH
+                                    <t t-esc="state.dulieu.kpi.hs_da_co_kh"/> đã có Kế hoạch
                                 </span>
                                 <span style="background: var(--red-soft); color: var(--red); padding: 2px 7px; border-radius: 5px;">
-                                    <t t-esc="state.dulieu.kpi.hs_chua_co_kh"/> chưa có KH
+                                    <t t-esc="state.dulieu.kpi.hs_chua_co_kh"/> chưa có Kế hoạch
                                 </span>
                             </div>
                         </div>
                         <div class="ek-stat-meta">
                             <span>Tỷ lệ lập kế hoạch: <strong style="color: var(--purple);"><t t-esc="state.dulieu.kpi.tyle_lap_kh"/>%</strong></span>
-                            <button class="ek-link-pill red" t-on-click="() => this.datBoLocDong('chua_co_kh')">
-                                Lập KH thiếu <i class="fa fa-plus"/>
-                            </button>
+
                         </div>
                     </div>
 
@@ -88,9 +86,7 @@
                         </div>
                         <div class="ek-stat-meta">
                             <span>Còn <strong style="color: var(--red);"><t t-esc="state.dulieu.kpi.so_kh_chua_capnhat"/> kế hoạch</strong> chưa chấm</span>
-                            <button class="ek-link-pill" t-on-click="() => this.datBoLocDong('chua_capnhat')">
-                                Lọc chưa chấm <i class="fa fa-filter"/>
-                            </button>
+
                         </div>
                     </div>
 

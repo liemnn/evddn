@@ -45,6 +45,48 @@ export class EkidsGiaovienDashboard extends Component {
         this.state.thang_nam = ev.target.value;
         await this.taiDuLieu();
     }
+    async goiActionCoSo(tenHam, thamSoBoSung = {}) {
+        const cosoId = parseInt(this.state.centerId || this.state.coso_id, 10);
+        if (!cosoId || !tenHam) return;
+
+        const extraContext = {
+            active_id: cosoId,
+            active_ids: [cosoId],
+            active_model: "ekids.coso",
+            default_coso_id: cosoId,
+            ...thamSoBoSung,
+        };
+
+        const actionRes = await this.orm.call(
+            "ekids.coso",
+            tenHam,
+            [[cosoId]],
+            { context: extraContext }
+        );
+
+        if (!actionRes || typeof actionRes !== "object") return;
+
+        // Bắt buộc chuyển 'view_mode' -> 'views' vì Odoo 18 _preprocessAction gọi action.views.map(...)
+        if ((actionRes.type || "ir.actions.act_window") === "ir.actions.act_window") {
+            actionRes.type = "ir.actions.act_window";
+            if (!Array.isArray(actionRes.views)) {
+                const modes = (actionRes.view_mode || "list,form")
+                    .split(",")
+                    .map((m) => m.trim())
+                    .filter(Boolean);
+                actionRes.views = modes.map((mode) => [false, mode]);
+            }
+            if (!Array.isArray(actionRes.domain)) {
+                actionRes.domain = [];
+            }
+            actionRes.context = {
+                ...(typeof actionRes.context === "object" && actionRes.context !== null ? actionRes.context : {}),
+                ...extraContext,
+            };
+        }
+
+        await this.action.doAction(actionRes);
+    }
 
     datBoLocDong(che_do) {
         this.state.loc_dong = che_do;
