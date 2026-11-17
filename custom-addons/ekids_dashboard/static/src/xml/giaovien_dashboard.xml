@@ -82,7 +82,7 @@
                             <t t-esc="state.data.kpi.done_plans"/> <span style="font-size: 14px; font-weight: 600; color: var(--text-sub);">/ <t t-esc="state.data.kpi.tong_kh_tuan"/> kế hoạch</span>
                         </div>
                         <div class="ek-stat-meta">
-                            <span>Còn <strong style="color: var(--red);"><t t-esc="state.data.kpi.pending_plans"/> kế hoạch</strong> chưa chấm</span>
+                            <span>Còn <strong style="color: var(--red);"><t t-esc="state.data.kpi.pending_plans"/> kế hoạch</strong> chưa cập nhật kết quả trong tuần</span>
 
                         </div>
                     </div>
