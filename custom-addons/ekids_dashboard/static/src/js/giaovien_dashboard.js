@@ -12,139 +12,97 @@ export class EkidsGiaovienDashboard extends Component {
         this.action = useService("action");
 
         this.state = useState({
-            loading: true,
-            monthStr: "",
-            rowFilter: "all", // 'all' | 'pending' | 'done' | 'no_plan'
-            data: null,
+            dang_tai: true,
+            thang_nam: "",
+            loc_dong: "tatca",
+            dulieu: null,
         });
 
         onWillStart(async () => {
-            await this.loadData();
+            await this.taiDuLieu();
         });
     }
 
-    async loadData() {
-        this.state.loading = true;
+    async taiDuLieu() {
+        this.state.dang_tai = true;
         try {
-            const res = await this.orm.call(
+            const ketqua = await this.orm.call(
                 "ekids.dashboard_giaovien",
                 "get_dashboard_data",
                 [],
-                { month_str: this.state.monthStr || false }
+                { thang_nam: this.state.thang_nam || false }
             );
-            this.state.data = res;
-            if (res.has_teacher) {
-                this.state.monthStr = String(res.selected_month);
+            this.state.dulieu = ketqua;
+            if (ketqua && ketqua.co_giaovien) {
+                this.state.thang_nam = String(ketqua.thang_nam);
             }
         } finally {
-            this.state.loading = false;
+            this.state.dang_tai = false;
         }
     }
 
-    async onChangeMonth(ev) {
-        this.state.monthStr = ev.target.value;
-        await this.loadData();
-    }
-    async goiActionCoSo(tenHam, thamSoBoSung = {}) {
-        const cosoId = parseInt(this.state.centerId || this.state.coso_id, 10);
-        if (!cosoId || !tenHam) return;
-
-        const extraContext = {
-            active_id: cosoId,
-            active_ids: [cosoId],
-            active_model: "ekids.coso",
-            default_coso_id: cosoId,
-            ...thamSoBoSung,
-        };
-
-        const actionRes = await this.orm.call(
-            "ekids.coso",
-            tenHam,
-            [[cosoId]],
-            { context: extraContext }
-        );
-
-        if (!actionRes || typeof actionRes !== "object") return;
-
-        // Bắt buộc chuyển 'view_mode' -> 'views' vì Odoo 18 _preprocessAction gọi action.views.map(...)
-        if ((actionRes.type || "ir.actions.act_window") === "ir.actions.act_window") {
-            actionRes.type = "ir.actions.act_window";
-            if (!Array.isArray(actionRes.views)) {
-                const modes = (actionRes.view_mode || "list,form")
-                    .split(",")
-                    .map((m) => m.trim())
-                    .filter(Boolean);
-                actionRes.views = modes.map((mode) => [false, mode]);
-            }
-            if (!Array.isArray(actionRes.domain)) {
-                actionRes.domain = [];
-            }
-            actionRes.context = {
-                ...(typeof actionRes.context === "object" && actionRes.context !== null ? actionRes.context : {}),
-                ...extraContext,
-            };
-        }
-
-        await this.action.doAction(actionRes);
+    async khiDoiThang(ev) {
+        this.state.thang_nam = ev.target.value;
+        await this.taiDuLieu();
     }
 
-    setRowFilter(mode) {
-        this.state.rowFilter = mode;
+    datBoLocDong(che_do) {
+        this.state.loc_dong = che_do;
     }
 
-    get filteredRows() {
-        if (!this.state.data || !this.state.data.has_teacher) return [];
-        const rows = this.state.data.student_rows || [];
-        if (this.state.rowFilter === "all") return rows;
-        return rows.filter((r) => r.status === this.state.rowFilter);
+    get dsDongDaLoc() {
+        if (!this.state.dulieu || !this.state.dulieu.co_giaovien) return [];
+        const ds_dong = this.state.dulieu.ds_dong_hocsinh || [];
+        if (this.state.loc_dong === "tatca") return ds_dong;
+        return ds_dong.filter((r) => r.trangthai === this.state.loc_dong);
     }
 
-    getSalaryChartSvg() {
-        if (!this.state.data || !this.state.data.has_teacher) return "";
-        const { labels, values, tr_labels, full_labels } = this.state.data.salary_chart;
-        if (!labels || !labels.length) return "";
+    veBieuDoLuong() {
+        if (!this.state.dulieu || !this.state.dulieu.co_giaovien) return "";
+        const { nhan_thang, giatri_cot, nhan_trieu, nhan_daydu } = this.state.dulieu.bieudo_luong;
+        if (!nhan_thang || !nhan_thang.length) return "";
 
-        const width = 760, height = 210;
+        const rong = 760, cao = 210;
         const pL = 24, pR = 24, pT = 30, pB = 24;
-        const w = width - pL - pR, h = height - pT - pB;
-        const maxVal = Math.max(...values, 1) * 1.18;
-        const step = w / labels.length;
-        const barW = Math.min(32, step * 0.48);
+        const w = rong - pL - pR, h = cao - pT - pB;
+        const giatri_max = Math.max(...giatri_cot, 1) * 1.18;
+        const buoc = w / nhan_thang.length;
+        const rong_cot = Math.min(32, buoc * 0.48);
 
-        let svg = `<svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block;">`;
+        let svg = `<svg viewBox="0 0 ${rong} ${cao}" style="width:100%;height:auto;display:block;">`;
         for (let i = 0; i <= 3; i++) {
             const y = pT + (h * i) / 3;
-            svg += `<line x1="${pL}" y1="${y}" x2="${width - pR}" y2="${y}" stroke="#f1f5f9" stroke-width="1"/>`;
+            svg += `<line x1="${pL}" y1="${y}" x2="${rong - pR}" y2="${y}" stroke="#f1f5f9" stroke-width="1"/>`;
         }
-        svg += `<line x1="${pL}" y1="${pT + h}" x2="${width - pR}" y2="${pT + h}" stroke="#94a3b8" stroke-width="1.3"/>`;
+        svg += `<line x1="${pL}" y1="${pT + h}" x2="${rong - pR}" y2="${pT + h}" stroke="#94a3b8" stroke-width="1.3"/>`;
 
-        let pts = [];
-        labels.forEach((lbl, i) => {
-            const cx = pL + step * i + step / 2;
-            const bH = (values[i] / maxVal) * h;
-            const bY = pT + h - bH;
+        let ds_diem = [];
+        nhan_thang.forEach((nhan, i) => {
+            const cx = pL + buoc * i + buoc / 2;
+            const cao_cot = (giatri_cot[i] / giatri_max) * h;
+            const y_cot = pT + h - cao_cot;
 
-            svg += `<g><title>Lương thực lĩnh ${lbl}: ${full_labels[i]}</title>`;
-            svg += `<rect x="${cx - barW / 2}" y="${bY}" width="${barW}" height="${bH}" rx="4.5" fill="#16a34a" opacity="0.82"/>`;
-            svg += `<text x="${cx}" y="${bY - 7}" text-anchor="middle" font-size="10.5" font-weight="800" fill="#15803d">${tr_labels[i]}</text>`;
+            svg += `<g><title>Lương thực lĩnh ${nhan}: ${nhan_daydu[i]}</title>`;
+            svg += `<rect x="${cx - rong_cot / 2}" y="${y_cot}" width="${rong_cot}" height="${cao_cot}" rx="4.5" fill="#16a34a" opacity="0.82"/>`;
+            svg += `<text x="${cx}" y="${y_cot - 7}" text-anchor="middle" font-size="10.5" font-weight="800" fill="#15803d">${nhan_trieu[i]}</text>`;
             svg += `</g>`;
-            svg += `<text x="${cx}" y="${height - 5}" text-anchor="middle" font-size="11" font-weight="800" fill="#475569">${lbl}</text>`;
-            pts.push({ x: cx, y: bY });
+            svg += `<text x="${cx}" y="${cao - 5}" text-anchor="middle" font-size="11" font-weight="800" fill="#475569">${nhan}</text>`;
+            ds_diem.push({ x: cx, y: y_cot });
         });
 
-        svg += `<polyline fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" points="${pts.map((p) => `${p.x},${p.y}`).join(" ")}"/>`;
-        pts.forEach((p) => {
+        svg += `<polyline fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" points="${ds_diem.map((p) => `${p.x},${p.y}`).join(" ")}"/>`;
+        ds_diem.forEach((p) => {
             svg += `<circle cx="${p.x}" cy="${p.y}" r="3.8" fill="#2563eb" stroke="#ffffff" stroke-width="1.8"/>`;
         });
         svg += `</svg>`;
         return markup(svg);
     }
 
-    openList(title, model, domain = [], context = {}) {
+    moDanhSach(tieu_de, ten_model, domain = [], context = {}) {
         this.action.doAction({
             type: "ir.actions.act_window",
-            name: title,
-            res_model: model,
+            name: tieu_de,
+            res_model: ten_model,
             view_mode: "list,form",
             views: [[false, "list"], [false, "form"]],
             domain: domain,
@@ -153,23 +111,23 @@ export class EkidsGiaovienDashboard extends Component {
         });
     }
 
-    openPlanForm(planId, studentId = false) {
-        const gvId = this.state.data.teacher.id;
+    moFormKeHoach(kehoachId, hocsinhId = false) {
+        const gvId = this.state.dulieu.giaovien.id;
         const action = {
             type: "ir.actions.act_window",
-            name: planId ? "Kế hoạch can thiệp" : "Lập kế hoạch can thiệp mới",
+            name: kehoachId ? "Kế hoạch can thiệp" : "Lập kế hoạch can thiệp mới",
             res_model: "ekids.kehoach",
             view_mode: "form",
             views: [[false, "form"]],
             context: {
-                default_hocsinh_id: studentId || false,
+                default_hocsinh_id: hocsinhId || false,
                 default_gv_lapkehoach_id: gvId,
                 default_giaovien_id: gvId,
             },
             target: "current",
         };
-        if (planId) {
-            action.res_id = planId;
+        if (kehoachId) {
+            action.res_id = kehoachId;
         }
         this.action.doAction(action);
     }
