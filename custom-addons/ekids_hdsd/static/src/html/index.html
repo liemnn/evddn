@@ -228,7 +228,7 @@
         }
         .process-columns-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 16px;
             align-items: start;
         }
@@ -282,6 +282,74 @@
         .p-content h4 { font-size: 0.82rem; font-weight: 800; color: #1E293B; margin-bottom: 2px; line-height: 1.25; }
         .p-content p { font-size: 0.72rem; color: var(--text-sub); line-height: 1.35; }
 
+        /* --- KHỐI MÔ TẢ PHƯƠNG ÁN LẬP KẾ HOẠCH --- */
+        .planning-options-box {
+            background: #FFFFFF;
+            border: 1px solid #BFDBFE;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.04);
+        }
+        .planning-options-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #1E3A8A;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .planning-options-desc {
+            font-size: 0.83rem;
+            color: #334155;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+        .planning-options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        .plan-option-card {
+            background: #F8FAFC;
+            border: 1px solid #CBD5E1;
+            border-radius: 10px;
+            padding: 14px;
+        }
+        .plan-option-card.highlight {
+            background: #EFF6FF;
+            border-color: #93C5FD;
+        }
+        .plan-option-card h5 {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #1E293B;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .plan-option-card p {
+            font-size: 0.78rem;
+            color: #475569;
+            line-height: 1.4;
+            margin: 0;
+        }
+        .planning-options-footer {
+            font-size: 0.78rem;
+            color: #D97706;
+            background: #FEF3C7;
+            border: 1px solid #FDE68A;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         /* --- RESPONSIVE CHO MOBILE (DƯỚI 900PX) --- */
         @media (max-width: 900px) {
             .hero { padding: 12px 15px; flex-direction: column; align-items: flex-start; }
@@ -301,6 +369,7 @@
             .process-top-setup { grid-template-columns: 1fr; }
             .process-columns-grid { grid-template-columns: 1fr; }
             .process-flow-box { padding: 15px; }
+            .planning-options-grid { grid-template-columns: 1fr; }
 
             .pdf-embed-wrapper { height: 68vh; }
         }
@@ -499,6 +568,7 @@
             </div>
 
             <div class="process-flow-box">
+                <!-- 2 khối thiết lập nền tảng nằm ở phía trên -->
                 <div class="process-top-setup">
                     <a href="kehoach/taikhoan.html" class="p-card" style="background: #DCFCE7; border-color: #86EFAC;">
                         <div class="p-icon-box" style="background: #86EFAC; color: #166534;"><i class="fas fa-user-plus"></i></div>
@@ -517,16 +587,40 @@
                     </a>
                 </div>
 
+                <!-- KHỐI MÔ TẢ TÓM TẮT 02 PHƯƠNG ÁN LẬP KẾ HOẠCH -->
+                <div class="planning-options-box">
+                    <div class="planning-options-title">
+                        <i class="fas fa-lightbulb" style="color: #2563EB;"></i> Tổng quan phương án lập kế hoạch can thiệp
+                    </div>
+                    <div class="planning-options-desc">
+                        Nhằm đơn giản hóa công tác chuyên môn, phần mềm đã hỗ trợ <strong>02 phương án lập kế hoạch</strong> để các trung tâm tùy chọn theo nhu cầu vận hành:
+                    </div>
+                    <div class="planning-options-grid">
+                        <div class="plan-option-card">
+                            <h5><i class="fas fa-stream" style="color: #2563EB;"></i> Cách 1 (Quy trình cũ):</h5>
+                            <p>GV chuyên môn lập khung Kế hoạch 6 tháng ➔ GV can thiệp dựa vào khung để lập Kế hoạch 1 tháng ➔ Gửi duyệt.</p>
+                        </div>
+                        <div class="plan-option-card highlight">
+                            <h5><i class="fas fa-bolt" style="color: #10B981;"></i> Cách 2 (Quy trình mới):</h5>
+                            <p>GV can thiệp chủ động lập kế hoạch ➔ có thể chọn chương trình, lĩnh vực và lập kế hoạch ➔ Gửi duyệt trực tiếp. <em>(Cách này giúp bỏ qua bước làm khung kế hoạch, giảm tải đáng kể cho GV chuyên môn).</em></p>
+                        </div>
+                    </div>
+                    <div class="planning-options-footer">
+                        <i class="fas fa-info-circle"></i> Tùy theo quy trình vận hành, các cơ sở có thể chọn phương án phù hợp nhất. Trung tâm nào muốn thay đổi thiết lập vui lòng báo lại để bộ phận phần mềm hỗ trợ cài đặt nhé!
+                    </div>
+                </div>
+
+                <!-- Lưới quy trình chi tiết (2 cột: GV Chuyên môn & GV Can thiệp) -->
                 <div class="process-columns-grid">
-                    <!-- CỘT 1 -->
+                    <!-- CỘT 1: GV CHUYÊN MÔN -->
                     <div class="p-col">
                         <div class="p-col-header"><i class="fas fa-user-shield"></i> GV Chuyên môn</div>
 
                         <a href="kehoach/ketluan.html" class="p-card">
-                            <div class="p-icon-box"><i class="fas fa-file-invoice"></i></div>
+                            <div class="p-icon-box"><i class="fas fa-user-cog"></i></div>
                             <div class="p-content">
-                                <h4>Bước 1: Quản lý kết luận & Lên khung chương trình</h4>
-                                <p>Thiết lập kết luận đánh giá và định hướng mục tiêu.</p>
+                                <h4>Bước 1: Phân công giáo viên lập kế hoạch và kiểm duyệt</h4>
+                                <p>Thiết lập kết luận đánh giá, định hướng và phân công nhiệm vụ.</p>
                             </div>
                         </a>
 
@@ -534,51 +628,28 @@
                             <div class="p-icon-box"><i class="fas fa-check-double"></i></div>
                             <div class="p-content">
                                 <h4>Bước 3: Duyệt kế hoạch</h4>
-                                <p>Phê duyệt kế hoạch tháng do giáo viên lập.</p>
-                            </div>
-                        </a>
-
-                        <a href="kehoach/danhgiacuoisthang.html" class="p-card">
-                            <div class="p-icon-box"><i class="fas fa-chart-line"></i></div>
-                            <div class="p-content">
-                                <h4>Bước 5: Đánh giá lại kết quả can thiệp</h4>
-                                <p>Tổng kết mức độ đạt được sau chu kỳ.</p>
+                                <p>Phê duyệt kế hoạch tháng do giáo viên gửi.</p>
                             </div>
                         </a>
                     </div>
 
-                    <!-- CỘT 2 -->
+                    <!-- CỘT 2: GV CAN THIỆP -->
                     <div class="p-col">
                         <div class="p-col-header"><i class="fas fa-chalkboard-teacher"></i> GV Can thiệp</div>
 
                         <a href="kehoach/lapkehoach.html" class="p-card">
                             <div class="p-icon-box"><i class="fas fa-tasks"></i></div>
                             <div class="p-content">
-                                <h4>Bước 2: Lập kế hoạch</h4>
-                                <p>Bám sát kết luận để soạn thảo chi tiết mục tiêu.</p>
+                                <h4>Bước 2: Giáo viên lập kế hoạch</h4>
+                                <p>Có thể chủ động làm kế hoạch khung 6 tháng ➔ Gửi duyệt.</p>
                             </div>
                         </a>
 
                         <a href="kehoach/ketquahangngay.html" class="p-card">
                             <div class="p-icon-box"><i class="fas fa-calendar-check"></i></div>
                             <div class="p-content">
-                                <h4>Bước 4: Can thiệp hàng ngày</h4>
-                                <p>Thực hiện buổi dạy & ghi nhận nhật ký tiến bộ.</p>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- CỘT 3 -->
-                    <div class="p-col">
-                        <div class="p-col-header"><i class="fas fa-users"></i> Phụ huynh</div>
-
-                        <div style="display: none;" class="desktop-spacer"></div>
-
-                        <a href="kehoach/chiasephuhuynh.html" class="p-card" style="background: #FFFBEB; border-color: #FDE68A;">
-                            <div class="p-icon-box" style="background: #FEF08A; color: #854D0E;"><i class="fas fa-share-alt"></i></div>
-                            <div class="p-content">
-                                <h4>Chia sẻ & Theo dõi kết quả can thiệp</h4>
-                                <p>Nhận kế hoạch định kỳ và theo dõi tiến độ qua Mobile App.</p>
+                                <h4>Can thiệp hàng ngày & Đánh giá kết quả</h4>
+                                <p>Thực hiện buổi dạy, ghi nhận tiến bộ & tổng kết chu kỳ.</p>
                             </div>
                         </a>
                     </div>

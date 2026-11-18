@@ -132,22 +132,21 @@ class KeHoach2MucTieu(models.Model):
 
     trangthai = fields.Selection([
         ("0", "Chưa can thiệp"),
-        ("1", "Đạt (+)"),
-        ("-1", "Đang can thiệp"),
+        ("1", "ĐẠT"),
+        ("-1", "CHƯA ĐẠT"),
 
     ], string="Trạng thái", default="0",compute="_compute_trangthai",store=False,recursive=True)
 
     is_co_thietke = fields.Boolean(compute="_compute_is_co_thietke")
 
     # Thêm vào Model: ekids.kehoach_muctieu
+
     trangthai_kiemduyet = fields.Selection([
-        ('0', 'Chờ duyệt'),
-        ('1', 'Đạt (+)'),
-        ('-1', 'Chuyển (-)'),
-        ('-2', 'Dừng (-)')
+        ('0', 'Đợi xác nhận'),
+        ('1', 'ĐẠT'),
+        ('-1', 'CHUYỂN'),
+        ('-2', 'DỪNG'),
     ], string="Trạng thái kiểm duyệt chuyên môn", default='0')
-
-
 
     # ghi chú kiểm duyet
     ghichu_kiemduyet = fields.Html(string="Nội dung kiểm duyệt")
@@ -183,6 +182,8 @@ class KeHoach2MucTieu(models.Model):
 
     solan_kiemduyet_dat = fields.Integer(string="Số lần đạt(+)")
     tyle_kiemduyet = fields.Integer(string="Tỷ lệ %", compute="_compute_tyle_kiemduyet")
+
+    tyle_ketqua = fields.Integer(string="Tỷ lệ %", compute="_compute_tyle_ketqua")
 
     # 1. CẢNH BÁO TỨC THÌ KHI GIÁO VIÊN NHẬP TRÊN GIAO DIỆN (ONCHANGE)
     @api.onchange('solan_thu_dat', 'solan_thu')
@@ -267,6 +268,16 @@ class KeHoach2MucTieu(models.Model):
                     f"• Yêu cầu tối thiểu: từ {nguong_dat}/{tong_thu} (≥ 80%) trở lên.\n\n"
                     f"Vui lòng điều chỉnh lại số lần đạt hoặc chọn [Chuyển (-)] / [Dừng (-)]."
                 )
+
+
+    def _compute_tyle_ketqua(self):
+        for record in self:
+            tyle = 0
+            if record.trangthai_kiemduyet =='0':
+                tyle = record.tyle_kiemduyet
+            else:
+                tyle = record.tyle_canthiep
+            record.tyle_ketqua = tyle
 
     @api.depends("solan_kiemduyet_dat")
     def _compute_tyle_kiemduyet(self):

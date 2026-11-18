@@ -211,110 +211,203 @@
                 <style>
                     /* Bố cục khung ngoài Popup */
                     .o_compact_popup_form {
-                        padding: 16px !important;
+                        padding: 16px 18px !important;
                         background-color: #F8FAFC !important;
                         display: flex;
                         flex-direction: column;
                         gap: 14px;
                     }
 
-                    /* 1. Tiêu đề mục tiêu */
+                    /* 1. Tiêu đề mục tiêu (>= 16px) */
                     .kh-compact-header-row {
                         display: flex;
-                        align-items: center;
-                        justify-content: space-between;
+                        align-items: flex-start;
                         width: 100%;
-                        padding-bottom: 8px;
+                        padding-bottom: 10px;
                         border-bottom: 1px solid #E2E8F0;
                     }
                     .kh-compact-target-title {
-                        font-size: 14px;
+                        font-size: 16px !important;
                         color: #0F172A;
                         font-weight: 700;
-                        line-height: 1.4;
+                        line-height: 1.45;
                     }
 
-                    /* 2. Khung chứa 3 nút chọn kết luận to ở trên cùng */
+                    /* 2. Hộp Hướng dẫn nghiệp vụ (>= 14.5px) */
+                    .kh-guideline-banner {
+                        background-color: #EFF6FF;
+                        border: 1px solid #BFDBFE;
+                        border-left: 4px solid #2563EB;
+                        border-radius: 10px;
+                        padding: 12px 16px;
+                        font-size: 14.5px !important;
+                        color: #1E3A8A;
+                        line-height: 1.55;
+                    }
+                    .kh-guideline-title {
+                        font-size: 15px !important;
+                        font-weight: 800;
+                        margin-bottom: 6px;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        color: #1D4ED8;
+                    }
+                    .kh-guideline-list {
+                        margin: 6px 0 0 0;
+                        padding-left: 20px;
+                    }
+                    .kh-guideline-list li {
+                        margin-bottom: 4px;
+                    }
+
+                    /* 3. Khung chứa 3 nút quyết định 2 dòng ấn tượng */
                     .kh-big-actions-container {
                         background: #FFFFFF;
                         border: 1px solid #E2E8F0;
-                        border-radius: 10px;
-                        padding: 12px 14px;
+                        border-radius: 12px;
+                        padding: 14px 16px;
                         display: flex;
                         flex-direction: column;
-                        gap: 8px;
+                        gap: 10px;
                     }
                     .kh-big-actions-title {
-                        font-size: 11px;
+                        font-size: 14px !important;
                         font-weight: 800;
-                        color: #475569;
+                        color: #334155;
                         text-transform: uppercase;
-                        letter-spacing: 0.5px;
+                        letter-spacing: 0.3px;
                     }
                     .custom_ketqua_3btns {
-                        display: flex !important;
-                        align-items: center;
-                        gap: 10px;
                         width: 100%;
                     }
+                    .custom_ketqua_3btns .o_field_selection_badge {
+                        display: flex !important;
+                        align-items: stretch !important;
+                        gap: 12px !important;
+                        width: 100% !important;
+                        flex-wrap: wrap;
+                    }
+
+                    /* Biến mỗi nút selection_badge thành Card 2 dòng */
                     .custom_ketqua_3btns .o_selection_badge {
-                        flex: 1 !important;
+                        flex: 1 1 200px !important;
                         margin: 0 !important;
-                        border-radius: 8px !important;
-                        padding: 12px 14px !important;
-                        font-size: 14px !important;
+                        border-radius: 10px !important;
+                        padding: 14px 12px !important;
+                        font-size: 17px !important; /* Tiêu đề chính viết hoa to rõ */
                         font-weight: 800 !important;
-                        border: 1.5px solid #CBD5E1 !important;
+                        letter-spacing: 0.4px;
+                        border: 2px solid #CBD5E1 !important;
                         background-color: #F8FAFC !important;
-                        color: #475569 !important;
+                        color: #1E293B !important;
                         cursor: pointer;
                         text-align: center;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        gap: 5px;
+                        line-height: 1.3 !important;
                         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
                     }
-                    /* Ẩn trạng thái 0 (Chờ duyệt) */
+
+                    /* Dòng mô tả phụ nằm dưới chữ chính */
+                    .custom_ketqua_3btns .o_selection_badge::after {
+                        font-size: 14px !important;
+                        font-weight: 500 !important;
+                        letter-spacing: 0;
+                        color: #64748B;
+                        line-height: 1.4;
+                        white-space: normal;
+                    }
+
+                    /* Ẩn trạng thái 0 (Đợi xác nhận) */
                     .custom_ketqua_3btns span.o_selection_badge[value='"0"'] {
                         display: none !important;
                     }
-                    /* Nút 1: Đạt (+) */
+
+                    /* --- NÚT 1: ĐẠT --- */
+                    .custom_ketqua_3btns span.o_selection_badge[value='"1"']::after {
+                        content: "Đạt tỷ lệ ≥ 80%";
+                    }
                     .custom_ketqua_3btns span.o_selection_badge[value='"1"']:hover,
                     .custom_ketqua_3btns span.o_selection_badge[value='"1"'].active {
                         background-color: #DCFCE7 !important;
                         border-color: #16A34A !important;
                         color: #15803D !important;
-                        box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15) !important;
+                        box-shadow: 0 4px 14px rgba(22, 163, 74, 0.18) !important;
+                        transform: translateY(-1px);
                     }
-                    /* Nút -1: Chuyển (-) */
+                    .custom_ketqua_3btns span.o_selection_badge[value='"1"']:hover::after,
+                    .custom_ketqua_3btns span.o_selection_badge[value='"1"'].active::after {
+                        color: #166534 !important;
+                        font-weight: 600 !important;
+                    }
+
+                    /* --- NÚT -1: CHUYỂN --- */
+                    .custom_ketqua_3btns span.o_selection_badge[value='"-1"']::after {
+                        content: "Không đạt vì tỷ lệ nhỏ hơn 80% chuyển sang tháng tiếp theo";
+                    }
                     .custom_ketqua_3btns span.o_selection_badge[value='"-1"']:hover,
                     .custom_ketqua_3btns span.o_selection_badge[value='"-1"'].active {
                         background-color: #FEF3C7 !important;
                         border-color: #D97706 !important;
                         color: #B45309 !important;
-                        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.15) !important;
+                        box-shadow: 0 4px 14px rgba(217, 119, 6, 0.18) !important;
+                        transform: translateY(-1px);
                     }
-                    /* Nút -2: Dừng (-) */
+                    .custom_ketqua_3btns span.o_selection_badge[value='"-1"']:hover::after,
+                    .custom_ketqua_3btns span.o_selection_badge[value='"-1"'].active::after {
+                        color: #92400E !important;
+                        font-weight: 600 !important;
+                    }
+
+                    /* --- NÚT -2: DỪNG --- */
+                    .custom_ketqua_3btns span.o_selection_badge[value='"-2"']::after {
+                        content: "Không đạt vì tỷ lệ nhỏ hơn 80% dừng can thiệp mục tiêu này tháng tiếp";
+                    }
                     .custom_ketqua_3btns span.o_selection_badge[value='"-2"']:hover,
                     .custom_ketqua_3btns span.o_selection_badge[value='"-2"'].active {
                         background-color: #FEE2E2 !important;
                         border-color: #DC2626 !important;
                         color: #B91C1C !important;
-                        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15) !important;
+                        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.18) !important;
+                        transform: translateY(-1px);
+                    }
+                    .custom_ketqua_3btns span.o_selection_badge[value='"-2"']:hover::after,
+                    .custom_ketqua_3btns span.o_selection_badge[value='"-2"'].active::after {
+                        color: #991B1B !important;
+                        font-weight: 600 !important;
                     }
 
-                    /* Khối ghi chú cảnh báo đỏ khi Chuyển / Dừng */
-                    .note-alert-red {
-                        background-color: #FEF2F2;
-                        border: 1px solid #FCA5A5;
-                        color: #B91C1C;
-                        border-radius: 6px;
-                        padding: 7px 12px;
-                        font-size: 12px;
-                        font-weight: 700;
+                    /* Khối ghi chú cảnh báo khi Chuyển / Dừng (>= 14px) */
+                    .note-alert-warning {
+                        background-color: #FFFBEB;
+                        border: 1px dashed #F59E0B;
+                        color: #92400E;
+                        border-radius: 8px;
+                        padding: 9px 14px;
+                        font-size: 14px !important;
+                        font-weight: 600;
                         display: flex;
                         align-items: center;
-                        gap: 6px;
+                        gap: 8px;
+                    }
+                    .note-alert-red {
+                        background-color: #FEF2F2;
+                        border: 1px dashed #EF4444;
+                        color: #991B1B;
+                        border-radius: 8px;
+                        padding: 9px 14px;
+                        font-size: 14px !important;
+                        font-weight: 600;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
                     }
 
-                    /* 3. Khung Score Counter Card nổi bật */
+                    /* 4. Khung Score Counter Card nổi bật (>= 14px) */
                     .kh-score-highlight-panel {
                         background: #FFFFFF;
                         border: 1px solid #CBD5E1;
@@ -323,8 +416,15 @@
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
+                        flex-wrap: wrap;
                         gap: 16px;
-                        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+                        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+                    }
+                    .score-label-title {
+                        font-size: 14px !important;
+                        font-weight: 700;
+                        color: #475569;
+                        text-transform: uppercase;
                     }
                     .score-input-wrapper {
                         display: flex;
@@ -342,8 +442,8 @@
                         box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
                     }
                     .score-input-wrapper input.o_input {
-                        width: 65px !important;
-                        height: 42px !important;
+                        width: 68px !important;
+                        height: 44px !important;
                         font-size: 24px !important;
                         font-weight: 800 !important;
                         color: #16A34A !important;
@@ -354,29 +454,47 @@
                         padding: 2px !important;
                         outline: none !important;
                     }
-                    .score-input-wrapper input.o_input:focus {
-                        border-color: #16A34A !important;
-                        box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.15) !important;
-                    }
                     .score-denominator-text {
-                        font-size: 15px;
+                        font-size: 16px !important;
                         font-weight: 700;
                         color: #475569;
                         white-space: nowrap;
                     }
                     .score-panel-divider {
                         width: 1px;
-                        height: 52px;
+                        height: 54px;
                         background-color: #E2E8F0;
                     }
 
-                    /* 4. Nhãn tiêu đề các ô nhập text */
+                    /* 5. Khung nhập text (>= 14.5px) */
+                    .kh-text-box-card {
+                        background: #FFFFFF;
+                        border: 1px solid #E2E8F0;
+                        border-radius: 10px;
+                        padding: 12px 14px;
+                    }
                     .kh-section-label {
-                        font-size: 11px;
-                        font-weight: 700;
-                        color: #475569;
+                        font-size: 14px !important;
+                        font-weight: 800;
+                        color: #334155;
                         text-transform: uppercase;
-                        margin-bottom: 4px;
+                        margin-bottom: 8px;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    .kh-text-box-card textarea.o_input {
+                        border: 1px solid #CBD5E1 !important;
+                        border-radius: 8px !important;
+                        padding: 10px 12px !important;
+                        font-size: 14.5px !important;
+                        line-height: 1.5 !important;
+                        min-height: 80px !important;
+                        background-color: #FAFAFA !important;
+                    }
+                    .kh-text-box-card textarea.o_input:focus {
+                        background-color: #FFFFFF !important;
+                        border-color: #2563EB !important;
                     }
                 </style>
 
@@ -389,101 +507,131 @@
                     </div>
                 </div>
 
-                <!-- ================= 2. KHỐI 3 NÚT TO RÕ RÀNG TRÊN CÙNG ================= -->
+                <!-- ================= 2. GHI CHÚ QUY TRÌNH ĐÁNH GIÁ CHUYÊN MÔN ================= -->
+                <div class="kh-guideline-banner">
+                    <div class="kh-guideline-title">
+                        <i class="fa fa-info-circle"/>
+                        <span>Hướng dẫn đánh giá dự giờ cuối tháng (Quản lý chuyên môn):</span>
+                    </div>
+                    <span>
+                        Chuyên môn dự giờ trực tiếp để chốt kết quả thực tế của trẻ theo 2 mức:
+                    </span>
+                    <ul class="kh-guideline-list">
+                        <li><strong>Tỷ lệ ≥ 80%:</strong> Chọn <strong>ĐẠT</strong>.</li>
+                        <li>
+                            <strong>Tỷ lệ &lt; 80% (Chưa đạt):</strong> Chọn 1 trong 2 phương án:
+                            <div class="ps-2 mt-1">
+                                • <strong>CHUYỂN:</strong> Tiếp tục can thiệp mục tiêu này ở tháng sau.<br/>
+                                • <strong>DỪNG:</strong> Ngừng can thiệp mục tiêu này (nếu đang quá sức với trẻ).
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="mt-2 pt-2 border-top d-flex align-items-start gap-2" style="border-color: #BFDBFE !important; color: #B45309; font-weight: 600;">
+                        <i class="fa fa-exclamation-triangle mt-1" style="flex-shrink: 0;"/>
+                        <span>Lưu ý: Nếu chuyên môn không thực hiện đánh giá, hệ thống sẽ tự động lấy theo kết quả của giáo viên can thiệp.</span>
+                    </div>
+                </div>
+
+                <!-- ================= 3. KHỐI 3 NÚT QUYẾT ĐỊNH 2 DÒNG ẤN TƯỢNG ================= -->
                 <div class="kh-big-actions-container shadow-sm">
-                    <div class="kh-big-actions-title">Kết luận [kiểm Duyệt] cuối cùng:</div>
+                    <div class="kh-big-actions-title">Kết luận [kiểm duyệt] cuối cùng từ giáo viên chuyên môn:</div>
                     <div class="custom_ketqua_3btns">
                         <field name="trangthai_kiemduyet" widget="selection_badge" nolabel="1"/>
                     </div>
 
-                    <!-- GHI CHÚ ĐỎ KHI CHỌN CHUYỂN (-) -->
-                    <div invisible="trangthai_kiemduyet != '-1'" class="note-alert-red mt-1">
-                        <i class="fa fa-arrow-right-arrow-left me-1"/>
-                        <span>Mục tiêu sẽ được chuyển sang tháng sau tiếp tục can thiệp.</span>
+                    <!-- GHI CHÚ KHI CHỌN CHUYỂN (-1) -->
+                    <div invisible="trangthai_kiemduyet != '-1'" class="note-alert-warning mt-1">
+                        <i class="fa fa-arrow-circle-right text-warning" style="font-size: 16px;"/>
+                        <span>Mục tiêu sẽ được chuyển sang kế hoạch tháng tiếp theo để tiếp tục can thiệp.</span>
                     </div>
 
-                    <!-- GHI CHÚ ĐỎ KHI CHỌN DỪNG (-) -->
+                    <!-- GHI CHÚ KHI CHỌN DỪNG (-2) -->
                     <div invisible="trangthai_kiemduyet != '-2'" class="note-alert-red mt-1">
-                        <i class="fa fa-ban me-1"/>
-                        <span>Mục tiêu sẽ dừng lại không tiếp tục tiến hành can thiệp trong các tháng tiếp.</span>
+                        <i class="fa fa-ban text-danger" style="font-size: 16px;"/>
+                        <span>Mục tiêu sẽ dừng lại, không tiến hành can thiệp ở tháng tiếp theo nữa.</span>
                     </div>
                 </div>
 
-                <!-- ================= 3. KHỐI NHẬP SỐ LẦN ĐẠT & TỶ LỆ HOÀN THÀNH ================= -->
+                <!-- ================= 4. KHỐI NHẬP SỐ LẦN ĐẠT & TỶ LỆ HOÀN THÀNH ================= -->
                 <div class="kh-score-highlight-panel">
-                    <!-- Cột trái: Ô nhập số lần đạt nổi bật -->
+                    <!-- Cột trái: Ô nhập số lần đạt -->
                     <div class="d-flex flex-column gap-1.5">
-                        <div class="text-muted fw-bold small text-uppercase d-flex align-items-center gap-1.5" style="font-size: 11px; letter-spacing: 0.4px;">
-                            <i class="fa fa-pen-to-square text-primary"/>
-                            <span>Số lần kiểm tra đạt (+)/ lần thử:</span>
+                        <div class="score-label-title d-flex align-items-center gap-1.5">
+                            <i class="fa fa-check-square-o text-primary"/>
+                            <span>Số lần kiểm tra đạt (+) / lần thử:</span>
                         </div>
 
                         <div class="d-flex align-items-center gap-2">
                             <div class="score-input-wrapper">
                                 <field name="solan_kiemduyet_dat" nolabel="1"/>
                                 <div class="score-denominator-text">
-                                    / <span class="fw-bolder text-dark fs-5"><field name="solan_thu" readonly="1"/></span> lần thử
+                                    / <span class="fw-bolder text-dark fs-4"><field name="solan_thu" readonly="1"/></span> lần thử
                                 </div>
                             </div>
                         </div>
 
-                        <div invisible="trangthai_kiemduyet != '1'" class="text-success fw-bold d-flex align-items-center gap-1 mt-0.5" style="font-size: 11px;">
-                            <i class="fa fa-circle-check"/>
+                        <div invisible="trangthai_kiemduyet != '1'" class="text-success fw-bold d-flex align-items-center gap-1 mt-1" style="font-size: 14px !important;">
+                            <i class="fa fa-check-circle"/>
                             <span>Yêu cầu đạt chuẩn: từ 8/10 (≥ 80%)</span>
                         </div>
                     </div>
 
-                    <!-- Đường vạch kẻ phân cách giữa 2 cột -->
                     <div class="score-panel-divider d-none d-sm-block"/>
 
                     <!-- Cột phải: Tỷ lệ % và Badge phân loại -->
-                    <div class="d-flex flex-column align-items-end justify-content-center gap-1">
-                        <div class="text-muted fw-bold small text-uppercase" style="font-size: 11px; letter-spacing: 0.4px;">
-                            Tỷ lệ đạt(+):
+                    <div class="d-flex flex-column align-items-end justify-content-center gap-1.5 ms-auto">
+                        <div class="score-label-title">
+                            Tỷ lệ đạt (+):
                         </div>
 
-                        <div class="d-flex align-items-center gap-2.5">
-                            <span class="fw-bolder" style="font-size: 26px; color: #0F172A; line-height: 1;">
+                        <div class="d-flex align-items-center gap-2.5 flex-wrap justify-content-end">
+                            <span class="fw-bolder" style="font-size: 30px; color: #0F172A; line-height: 1;">
                                 <field name="tyle_kiemduyet" readonly="1"/>%
                             </span>
 
                             <span invisible="tyle_kiemduyet &lt; 80"
                                   class="badge bg-success text-white px-3 py-2 fw-bold"
-                                  style="font-size: 11.5px; border-radius: 8px;">
-                                <i class="fa fa-check me-1"/>Đạt( cần đảm bảo ≥ 80%)
+                                  style="font-size: 14px !important; border-radius: 8px;">
+                                <i class="fa fa-check me-1"/>Đạt (≥ 80%)
                             </span>
 
                             <span invisible="tyle_kiemduyet &gt;= 80"
                                   class="badge text-white px-3 py-2 fw-bold"
-                                  style="background-color: #F59E0B; font-size: 11.5px; border-radius: 8px;">
-                                <i class="fa fa-clock-rotate-left me-1"/>Chưa đạt (&lt; 80%) trẻ mới đang hình thành
+                                  style="background-color: #F59E0B; font-size: 14px !important; border-radius: 8px;">
+                                <i class="fa fa-clock-o me-1"/>Chưa đạt (&lt; 80%) - Đang hình thành
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <!-- ================= 4. KHU VỰC MÔ TẢ TIẾN TRÌNH ================= -->
-                <div class="w-100 d-flex flex-column mt-1">
-                    <div class="kh-section-label">Ghi chú lại nội dung kiểm tra lại</div>
+                <!-- ================= 5. KHU VỰC MÔ TẢ TIẾN TRÌNH ================= -->
+                <div class="kh-text-box-card">
+                    <div class="kh-section-label">
+                        <i class="fa fa-pencil-square-o text-primary"/>
+                        <span>Ghi chú lại nội dung kiểm tra thực tế</span>
+                    </div>
                     <field name="ghichu_kiemduyet"
                            nolabel="1"
-                           placeholder="Nhập ghi chú hoặc biểu hiện lâm sàng cụ thể của trẻ trong tháng..."
-                           style="width: 100%; min-height: 80px;"/>
+                           placeholder="Nhập ghi chú hoặc biểu hiện lâm sàng cụ thể của trẻ trong buổi dự giờ..."
+                           style="width: 100%;"/>
                 </div>
 
-                <!-- ================= 5. KHU VỰC Ý KIẾN / ĐỊNH HƯỚNG ================= -->
-                <div class="w-100 d-flex flex-column mt-1">
-                    <div class="kh-section-label">Ý kiến / Định hướng can thiệp:</div>
+                <!-- ================= 6. KHU VỰC Ý KIẾN / ĐỊNH HƯỚNG ================= -->
+                <div class="kh-text-box-card">
+                    <div class="kh-section-label">
+                        <i class="fa fa-compass text-success"/>
+                        <span>Ý kiến / Định hướng can thiệp</span>
+                    </div>
                     <field name="dinhhuong_kiemduyet"
                            nolabel="1"
-                           placeholder="Gợi ý định hướng: Khái quát hóa tại gia đình, tiếp tục duy trì sang tháng sau, thay đổi phương pháp can thiệp..."
-                           style="width: 100%; min-height: 80px;"/>
+                           placeholder="Gợi ý định hướng: Khái quát hóa tại gia đình, tiếp tục duy trì sang tháng sau, điều chỉnh mức độ..."
+                           style="width: 100%;"/>
                 </div>
 
                 <!-- ================= FOOTER NÚT LƯU & ĐÓNG ================= -->
-                <footer class="mt-2 pt-2 border-top d-flex justify-content-end gap-2">
-                    <button string="Lưu &amp; Đóng" special="save" class="btn btn-primary fw-bold px-3"/>
-                    <button string="Đóng" class="btn btn-secondary px-3" special="cancel"/>
+                <footer class="mt-1 pt-2 border-top d-flex justify-content-end gap-2">
+                    <button string="Lưu &amp; Đóng" special="save" class="btn btn-primary fw-bold px-4" style="font-size: 15px; height: 40px;"/>
+                    <button string="Đóng" class="btn btn-secondary px-4" special="cancel" style="font-size: 15px; height: 40px;"/>
                 </footer>
 
             </form>
