@@ -83,6 +83,7 @@ Long description of module's purpose
             'ekids_canthiep/static/src/xml/ekids_canthiep_ketqua_template.xml',
             'ekids_canthiep/static/src/css/content_protection.css',
             'ekids_canthiep/static/src/js/content_protection.js',
+            'ekids_canthiep/static/src/js/ekids_trial_stepper_widget.js',
         ],
         # 2. Áp dụng cho các trang bên ngoài (Portal phụ huynh xem hồ sơ, báo cáo public)
         'web.assets_frontend': [

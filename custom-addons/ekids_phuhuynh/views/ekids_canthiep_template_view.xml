@@ -685,9 +685,9 @@
                             <!-- TỔNG KẾT KẾT QUẢ CAN THIỆP -->
                             <div class="goal-summary-badge-line">
                                 <strong>Kết quả can thiệp:</strong>
-                                Chưa đạt (-): <strong><span t-field="muctieu.ketqua_khongdat"/></strong> |
-                                Hình thành (+/-): <strong><span t-field="muctieu.ketqua_hinhthanh"/></strong> |
-                                Đạt (+): <strong><span t-field="muctieu.ketqua_dat"/></strong>
+                                Chưa đạt: <strong><span t-field="muctieu.ketqua_khongdat"/></strong> |
+                                Đang hình thành: <strong><span t-field="muctieu.ketqua_hinhthanh"/></strong> |
+                                Đạt: <strong><span t-field="muctieu.ketqua_dat"/></strong>
                             </div>
 
                             <!-- ĐÁNH GIÁ CHUYÊN MÔN (CHỈ HIỆN KHI KHÁC '0') -->

@@ -20,7 +20,6 @@ export class CanThiepKetQuaWidget extends Component {
             summary: { total: 0, dat: 0, hinhthanh: 0, chuadat: 0, totalEvaluated: 0, phantram: 0 }
         });
 
-        // Bộ đệm lưu cấu hình ngày nghỉ lễ lấy từ Python
         this.dayTypesMap = {};
 
         onWillStart(async () => { await this.buildKehoachKetQua2MucTieu(); });
@@ -33,7 +32,7 @@ export class CanThiepKetQuaWidget extends Component {
             const doc = new DOMParser().parseFromString(htmlString, 'text/html');
             return doc.body.textContent || doc.body.innerText || "";
         } catch (e) {
-            return String(htmlString).replace(/<\/?[^>]+(>|$)/g, "");
+            return String(htmlString).replace(/<[^>]*>/g, "");
         }
     }
 
@@ -134,7 +133,6 @@ export class CanThiepKetQuaWidget extends Component {
         const ketqua2muctieu = this.props.record.data[this.props.name]?.records || [];
         const { startDate, endDate } = await this._getPlanDateRange();
 
-        // 🌟 GỌI PYTHON LẤY THÔNG TIN NGHỈ LỄ / ĐI HỌC CHUẨN XÁC
         if (this.props.record.resId && Object.keys(this.dayTypesMap).length === 0) {
             try {
                 this.dayTypesMap = await this.orm.call(
@@ -160,7 +158,7 @@ export class CanThiepKetQuaWidget extends Component {
         today.setHours(0, 0, 0, 0);
         const todayStr = this._formatDateISO(today);
 
-        const defaultSolanThu = this.props.record.data.solan_thu || 10;
+        const defaultSolanThu = Number(this.props.record.data.solan_thu) > 0 ? Number(this.props.record.data.solan_thu) : 10;
 
         let tempGrid = [];
         let countDat = 0, countHinhThanh = 0, countChuaDat = 0;
@@ -179,14 +177,12 @@ export class CanThiepKetQuaWidget extends Component {
             const dateShortStr = `${parts[2]}/${parts[1]}`;
             const dateDisplayStr = `${parts[2]}/${parts[1]}/${parts[0]}`;
 
-            // Xác định loại ngày từ Backend map (nếu có), nếu chưa có fallback theo CN / Tương lai
             let loaiFromBackend = this.dayTypesMap[curStr];
             let defaultLoai = loaiFromBackend || (isSunday ? "-1" : (isFuture ? "0" : "1"));
 
             const existRec = recordMap.get(curStr);
 
             if (existRec) {
-                // ĐÃ CÓ BẢN GHI TRONG DATABASE
                 const rawStatusValue = existRec.data.trangthai || "0";
                 const rawLoaiValue = existRec.data.loai || defaultLoai;
 
@@ -196,14 +192,16 @@ export class CanThiepKetQuaWidget extends Component {
                     else if (rawStatusValue === "2") countHinhThanh++;
                 }
 
-                const solanThu = existRec.data.solan_thu !== undefined && existRec.data.solan_thu !== false ? Number(existRec.data.solan_thu) : defaultSolanThu;
-                const solanThuDat = existRec.data.solan_thu_dat !== undefined && existRec.data.solan_thu_dat !== false ? Number(existRec.data.solan_thu_dat) : 0;
+                const solanThu = Number(existRec.data.solan_thu) > 0 ? Number(existRec.data.solan_thu) : defaultSolanThu;
+                let solanThuDat = (existRec.data.solan_thu_dat !== undefined && existRec.data.solan_thu_dat !== false) ? Number(existRec.data.solan_thu_dat) : 0;
+                if (solanThuDat > solanThu) solanThuDat = solanThu;
+                if (solanThuDat < 0) solanThuDat = 0;
 
                 let tyleThu = 0;
                 if (existRec.data.tyle_thu !== undefined && existRec.data.tyle_thu !== false && rawStatusValue !== '0') {
-                    tyleThu = Number(existRec.data.tyle_thu);
+                    tyleThu = Math.min(Number(existRec.data.tyle_thu), 100);
                 } else if (solanThu > 0 && rawStatusValue !== '0') {
-                    tyleThu = Math.round((solanThuDat / solanThu) * 100);
+                    tyleThu = Math.min(Math.round((solanThuDat / solanThu) * 100), 100);
                 }
 
                 tempGrid.push({
@@ -223,7 +221,6 @@ export class CanThiepKetQuaWidget extends Component {
                     tooltipText: rawLoaiValue === "-1" ? `${curStr} (Nghỉ)` : curStr
                 });
             } else {
-                // 🌟 CHƯA CÓ BẢN GHI (VIRTUAL DAY): NHẬN DIỆN NGHỈ LỄ TỪ BACKEND
                 tempGrid.push({
                     dayNum: dayCounter,
                     resId: null,
@@ -268,69 +265,130 @@ export class CanThiepKetQuaWidget extends Component {
 
     onDayClick(day) {
         this.state.selectedDay = { ...day };
+        if (day.loai === "1" && day.trangthaiValue === "0") {
+            this._recalculateDayMetrics(0);
+        }
     }
 
-    selectQuickStatus(statusValue) {
-        if (!this.state.selectedDay || this.state.selectedDay.loai !== "1") return;
-        this.state.selectedDay.trangthaiValue = statusValue;
+    _recalculateDayMetrics(rawVal, showWarning = false) {
+        const day = this.state.selectedDay;
+        if (!day || day.loai !== "1") return 0;
+
+        const maxTrials = Number(day.solan_thu) > 0 ? Number(day.solan_thu) : 10;
+        let val = parseInt(rawVal, 10);
+
+        if (isNaN(val) || val < 0) {
+            val = 0;
+        }
+        if (val > maxTrials) {
+            if (showWarning) {
+                this.notification.add(
+                    `Số lần đạt tối đa là ${maxTrials}/${maxTrials} lần (100%)!`,
+                    { type: "warning" }
+                );
+            }
+            val = maxTrials;
+        }
+
+        day.solan_thu_dat = val;
+        day.tyle_thu = maxTrials > 0 ? Math.min(Math.round((val / maxTrials) * 100), 100) : 0;
+
+        if (day.tyle_thu >= 80) {
+            day.trangthaiValue = "1";
+        } else if (day.tyle_thu > 0) {
+            day.trangthaiValue = "2";
+        } else {
+            day.trangthaiValue = "-1";
+        }
+        return val;
+    }
+
+    adjustSolanThuDat(delta) {
+        const day = this.state.selectedDay;
+        if (!day || day.loai !== "1") return;
+        const current = Number(day.solan_thu_dat) || 0;
+        this._recalculateDayMetrics(current + delta, false);
+    }
+
+    setQuickTrialRatio(ratio) {
+        const day = this.state.selectedDay;
+        if (!day || day.loai !== "1") return;
+        const maxTrials = Number(day.solan_thu) > 0 ? Number(day.solan_thu) : 10;
+        const targetVal = Math.ceil(maxTrials * ratio);
+        this._recalculateDayMetrics(targetVal, false);
+    }
+
+    onKeydownSolanThuDat(ev) {
+        if (["e", "E", "+", "-", ".", ","].includes(ev.key)) {
+            ev.preventDefault();
+        }
     }
 
     onInputSolanThuDat(ev) {
         const day = this.state.selectedDay;
         if (!day || day.loai !== "1") return;
 
-        let rawVal = ev.target.value.trim();
-        let val = rawVal === "" ? 0 : parseInt(rawVal, 10);
-
-        if (isNaN(val) || val < 0) {
-            val = 0;
-            ev.target.value = 0;
-        }
-
-        if (day.solan_thu > 0 && val > day.solan_thu) {
-            this.notification.add(`Số lần đạt (${val}) không được vượt quá số lần thử (${day.solan_thu})!`, { type: "warning" });
-            val = day.solan_thu;
-            ev.target.value = day.solan_thu;
-        }
-
-        day.solan_thu_dat = val;
-
-        if (day.solan_thu > 0) {
-            day.tyle_thu = Math.round((val / day.solan_thu) * 100);
-            if (day.tyle_thu >= 80) {
-                day.trangthaiValue = "1";
-            } else if (day.tyle_thu > 0) {
-                day.trangthaiValue = "2";
-            } else {
-                day.trangthaiValue = "-1";
-            }
-        } else {
-            day.tyle_thu = 0;
-            day.trangthaiValue = "-1";
-        }
-    }
-
-    async saveInlineData() {
-        if (this.props.readonly || !this.state.selectedDay || this.state.selectedDay.loai !== "1") return;
-        const day = this.state.selectedDay;
-        const commentElem = document.getElementById("matrix_quick_desc");
-        const nextComment = commentElem ? commentElem.value.trim() : "";
-
-        const solanThuDat = (day.solan_thu_dat !== undefined && day.solan_thu_dat !== null) ? Number(day.solan_thu_dat) : 0;
-
-        let nextStatus = day.trangthaiValue;
-        if (!nextStatus || nextStatus === "0") {
-            nextStatus = solanThuDat > 0 ? "2" : "-1";
-            day.trangthaiValue = nextStatus;
-        }
-
-        if (day.solan_thu > 0 && solanThuDat > day.solan_thu) {
-            this.notification.add(`Số lần đạt không thể lớn hơn số lần thử (${day.solan_thu})!`, { type: "danger" });
+        const digitsOnly = String(ev.target.value || "").replace(/\D+/g, "");
+        if (digitsOnly === "") {
+            ev.target.value = "";
+            this._recalculateDayMetrics(0, false);
             return;
         }
 
+        const clampedVal = this._recalculateDayMetrics(digitsOnly, true);
+        ev.target.value = String(clampedVal);
+    }
+
+    onBlurSolanThuDat(ev) {
+        const day = this.state.selectedDay;
+        if (!day || day.loai !== "1") return;
+        const clampedVal = this._recalculateDayMetrics(ev.target.value, false);
+        ev.target.value = String(clampedVal);
+    }
+
+    navigateStudyDay(direction) {
+        if (!this.state.selectedDay) return;
+        const studyDays = this.state.daysGrid.filter(d => d.loai === "1");
+        const curIdx = studyDays.findIndex(d => d.dayNum === this.state.selectedDay.dayNum);
+        if (curIdx === -1) return;
+
+        const targetIdx = curIdx + direction;
+        if (targetIdx >= 0 && targetIdx < studyDays.length) {
+            this.onDayClick(studyDays[targetIdx]);
+        } else {
+            this.notification.add(
+                direction > 0 ? "Đã đến ngày học cuối cùng có thể nhập!" : "Đang ở ngày học đầu tiên của kế hoạch!",
+                { type: "info" }
+            );
+        }
+    }
+
+    async saveInlineData(goNextDay = false) {
+        if (this.props.readonly || !this.state.selectedDay || this.state.selectedDay.loai !== "1") return;
+        const day = this.state.selectedDay;
+        const currentDayNum = day.dayNum;
+
+        const commentElem = document.getElementById("matrix_quick_desc");
+        const nextComment = commentElem ? commentElem.value.trim() : "";
+
+        const maxTrials = Number(day.solan_thu) > 0 ? Number(day.solan_thu) : 10;
+        let solanThuDat = (day.solan_thu_dat !== undefined && day.solan_thu_dat !== null) ? Number(day.solan_thu_dat) : 0;
+
+        if (isNaN(solanThuDat) || solanThuDat < 0) solanThuDat = 0;
+        if (solanThuDat > maxTrials) {
+            this.notification.add(`Dữ liệu không hợp lệ: Số lần đạt (${solanThuDat}) không được vượt quá ${maxTrials}!`, { type: "danger" });
+            return;
+        }
+
+        const tyleThuCalc = maxTrials > 0 ? Math.min(Math.round((solanThuDat / maxTrials) * 100), 100) : 0;
+
+        let nextStatus = day.trangthaiValue;
+        if (!nextStatus || nextStatus === "0") {
+            nextStatus = tyleThuCalc >= 80 ? "1" : (solanThuDat > 0 ? "2" : "-1");
+            day.trangthaiValue = nextStatus;
+        }
+
         const targetMuctieuId = this.props.record.resId;
-        const tyleThuCalc = day.solan_thu > 0 ? Math.round((solanThuDat / day.solan_thu) * 100) : 0;
 
         try {
             if (day.resId) {
@@ -354,13 +412,25 @@ export class CanThiepKetQuaWidget extends Component {
                 day.resId = newId;
             }
 
-            this.notification.add(`Đã lưu nhật ký ngày ${day.dateDisplayStr}`, { type: "success" });
-            this.state.selectedDay = null;
+            this.notification.add(`Đã lưu nhật ký ngày ${day.dateDisplayStr} (${solanThuDat}/${maxTrials} - ${tyleThuCalc}%)`, { type: "success" });
 
             if (this.props.record && this.props.record.load) {
                 await this.props.record.load();
             }
             await this.buildKehoachKetQua2MucTieu();
+
+            if (goNextDay) {
+                const studyDays = this.state.daysGrid.filter(d => d.loai === "1");
+                const nextStudyDay = studyDays.find(d => d.dayNum > currentDayNum);
+                if (nextStudyDay) {
+                    this.onDayClick(nextStudyDay);
+                } else {
+                    this.state.selectedDay = null;
+                    this.notification.add("Đã hoàn thành nhập đến ngày học cuối cùng!", { type: "info" });
+                }
+            } else {
+                this.state.selectedDay = null;
+            }
         } catch (error) {
             console.error("Lỗi ghi nhận dữ liệu can thiệp:", error);
             this.notification.add("Không thể lưu kết quả can thiệp.", { type: "danger" });
