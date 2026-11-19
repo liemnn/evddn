@@ -27,39 +27,121 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         return self.env.ref('ekids_canthiep.kehoach_hoso_template_action').report_action(self)
 
     # =========================================================================
-    # MAIN DATA BUILDER
+    # MAIN DATA BUILDER (UNIFIED TIMELINE + SMART VIEW SWITCHER)
     # =========================================================================
     def _get_hoso_report_data(self):
-        """Chuẩn bị dữ liệu cho Tab 1 (Báo cáo kết quả) & Tab 2 (Kế hoạch đang can thiệp)"""
+        """Chuẩn bị dữ liệu cho Hồ sơ can thiệp theo trục thời gian thống nhất"""
         self.ensure_one()
         KeHoachModel = self.env['ekids.kehoach']
 
-        # 1. TAB 1: Kế hoạch đã kết thúc (trangthai == '-1')
-        ds_baocao, baocao_duoc_chon = self._resolve_tab1_plan(KeHoachModel)
-        tab1_data = self.func_get_baocao_kehoach(baocao_duoc_chon)
+        # 1. Lấy toàn bộ lịch sử kế hoạch theo trục thời gian (mới nhất lên đầu)
+        ds_kehoach, selected_plan = self._resolve_timeline_plans(KeHoachModel)
 
-        # 2. TAB 2: Kế hoạch đang can thiệp
-        ds_thangtoi, kh_thangtoi_duoc_chon = self._resolve_tab2_plan(KeHoachModel)
-        tab2_data = self.func_get_kehoach_tomtat_thangtoi(kh_thangtoi_duoc_chon, baocao_duoc_chon)
+        # 2. Xác định trạng thái kế hoạch đang chọn:
+        #    '-1' = Đã kết thúc (có báo cáo), '1' = Đang can thiệp, '0' = Đang lập
+        is_closed = bool(selected_plan and selected_plan.trangthai == '-1')
 
-        # 3. Phối hợp Context/HTTP Params cho active tab
-        active_tab = self._get_request_param('active_tab', default='tab1')
+        # 3. Xác định chế độ xem (view_mode): 'report' | 'full' | 'compact'
+        req_mode = self._get_request_param('view_mode', context_key='view_mode')
+        if is_closed:
+            view_mode = req_mode if req_mode in ['report', 'full', 'compact'] else 'report'
+        else:
+            # Kế hoạch đang lập / đang can thiệp chưa có báo cáo -> mặc định mở bản đầy đủ ('full')
+            view_mode = req_mode if req_mode in ['full', 'compact'] else 'full'
 
-        # 4. Profile & Token chia sẻ
+        # 4. Dữ liệu báo cáo tổng kết (chỉ tính khi kỳ đã đóng)
+        tab1_data = self.func_get_baocao_kehoach(selected_plan) if is_closed else self._get_empty_baocao_data()
+
+        # 5. Profile & Token chia sẻ
         profile_data = self._build_hocsinh_profile()
 
+        # 6. Thông tin giáo viên & chuyên môn của kỳ đang chọn
+        gv_name = selected_plan.gv_lapkehoach_id.name if selected_plan and selected_plan.gv_lapkehoach_id else 'Chưa phân công'
+        ql_name = selected_plan.gv_kiemduyet_id.name if selected_plan and selected_plan.gv_kiemduyet_id else 'Ngô Thị Ngọc Hoàn'
+
         return {
-            'has_plan': bool(baocao_duoc_chon),
-            'has_plan_thangtoi': bool(kh_thangtoi_duoc_chon),
-            'current_plan_id': baocao_duoc_chon.id if baocao_duoc_chon else 0,
-            'current_thangtoi_id': kh_thangtoi_duoc_chon.id if kh_thangtoi_duoc_chon else 0,
-            'active_tab': active_tab,
+            'has_any_plan': bool(selected_plan),
+            'is_closed': is_closed,
+            'current_plan_id': selected_plan.id if selected_plan else 0,
+            'selected_plan': selected_plan,
+            'view_mode': view_mode,
+            'ds_kehoach': ds_kehoach,
             'hocsinh': profile_data,
             'tab1': tab1_data,
-            'tab2': tab2_data,
-            'ds_baocao': ds_baocao,
-            'ds_kehoach_thangtoi': ds_thangtoi,
+            'plan_giaovien': gv_name,
+            'plan_quanly': ql_name,
+            'plan_status_code': selected_plan.trangthai if selected_plan else '',
+            'plan_status_label': self._get_plan_status_label(selected_plan.trangthai) if selected_plan else '',
         }
+
+    def _get_plan_status_label(self, code):
+        mapping = {
+            '-1': 'Đã hoàn thành',
+            '1': 'Đang can thiệp',
+            '0': 'Đang lập kế hoạch',
+        }
+        return mapping.get(str(code), 'Đang thực hiện')
+
+    # =========================================================================
+    # TIMELINE RESOLVER
+    # =========================================================================
+    def _resolve_timeline_plans(self, KeHoachModel):
+        """Lấy toàn bộ kế hoạch của trẻ sắp xếp theo dòng thời gian giảm dần"""
+        all_plans = KeHoachModel.search(
+            [('hocsinh_id', '=', self.id)],
+            order='tu_ngay desc, den_ngay desc, id desc'
+        )
+
+        ds_kehoach = []
+        valid_ids = set()
+        for p in all_plans:
+            valid_ids.add(p.id)
+            gv_name = p.gv_lapkehoach_id.name if p.gv_lapkehoach_id else 'Chưa phân công'
+            ten_kh = p.name or 'Kế hoạch'
+            tu_str = p.tu_ngay.strftime('%d/%m') if p.tu_ngay else ''
+            den_str = p.den_ngay.strftime('%d/%m/%Y') if p.den_ngay else ''
+            thoigian = f"{tu_str} - {den_str}" if tu_str and den_str else ''
+
+            st_code = str(p.trangthai or '0')
+            is_done = (st_code == '-1')
+            tyle_dat = round(p.tyle_dat_canthiep or 0)
+
+            if is_done:
+                badge_text = f"Hoàn thành • Đạt {tyle_dat}%"
+                st_type = 'done'
+            elif st_code == '1':
+                badge_text = "Đang can thiệp"
+                st_type = 'active'
+            else:
+                badge_text = "Đang lập KH"
+                st_type = 'draft'
+
+            ds_kehoach.append({
+                'id': p.id,
+                'ten': ten_kh,
+                'thoigian': thoigian,
+                'gv_name': gv_name,
+                'trangthai': st_code,
+                'is_done': is_done,
+                'tyle_dat': tyle_dat,
+                'badge_text': badge_text,
+                'st_type': st_type,
+            })
+
+        param_id = self._get_request_param('kehoach_id', context_key='kehoach_id')
+        selected_record = False
+        if param_id:
+            try:
+                pid = int(param_id)
+                if pid in valid_ids:
+                    selected_record = KeHoachModel.browse(pid)
+            except (ValueError, TypeError):
+                pass
+
+        if not selected_record and all_plans:
+            selected_record = all_plans[0]
+
+        return ds_kehoach, selected_record
 
     # =========================================================================
     # TAB 1 LOGIC: BÁO CÁO KẾT QUẢ KỲ ĐÃ ĐÓNG (trangthai == '-1')
@@ -83,7 +165,6 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             lv_name = lv_line.linhvuc_id.name if lv_line.linhvuc_id else 'Khác'
             tuoi_name = lv_line.tuoi_id.name if lv_line.tuoi_id else ''
 
-            # Lấy tên chương trình an toàn
             chuongtrinh = (
                 lv_line.tuoi_id.chuongtrinh_id.name
                 if lv_line.tuoi_id and lv_line.tuoi_id.chuongtrinh_id
@@ -125,15 +206,12 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                 'tyle_dat': avg_dat,
             })
 
-        # Biểu đồ SVG
         chart_data = self._build_svg_chart_data(chart_linhvucs)
 
-        # Chỉ số bứt phá / Điểm trũng (Sắp xếp bản sao tạm, không đổi thứ tự bảng)
         sorted_temp = sorted(chart_linhvucs, key=lambda x: x['tyle_dat'], reverse=True)
         but_pha = f"{sorted_temp[0]['name']} ({sorted_temp[0]['tyle_dat']}%)" if sorted_temp else "Chưa có"
         diem_trung = f"{sorted_temp[-1]['name']} ({sorted_temp[-1]['tyle_dat']}%)" if sorted_temp else "Chưa có"
 
-        # SỬA LẠI: Ưu tiên lấy trực tiếp số lượng đếm được từ danh sách mục tiêu thực tế (count_dat)
         tong_dat = count_dat if total_targets else getattr(kehoach, 'tong_dat_kiemduyet', 0)
         rate_t1 = round((tong_dat / total_targets * 100)) if total_targets else getattr(kehoach, 'tyle_dat_canthiep', 0)
 
@@ -156,137 +234,8 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             "chart": chart_data,
         }
 
-    # =========================================================================
-    # TAB 2 LOGIC: KẾ HOẠCH ĐANG CAN THIỆP (THÁNG TỚI)
-    # =========================================================================
-    def func_get_kehoach_tomtat_thangtoi(self, kehoach, kehoach_truoc=False):
-        """Tổng hợp danh mục mục tiêu cho kế hoạch đang can thiệp"""
-        if not kehoach:
-            return {
-                'ten': 'Chưa có kế hoạch',
-                'tieu_de_hien_thi': 'Chưa có kế hoạch',
-                'giaovien': 'Chưa phân công',
-                'quanly': 'Ngô Thị Ngọc Hoàn',
-                'tong_muctieu': 0,
-                'trangthai_text': 'Chưa lập',
-                'linhvucs_grouped': []
-            }
-
-        linhvuc_lines = kehoach.kehoach_linhvuc_ids.sorted(key=lambda r: r.sequence)
-        linhvucs_grouped = []
-        total_targets_count = 0
-        global_idx = 1
-
-        for lv_line in linhvuc_lines:
-            lv_name = lv_line.linhvuc_id.name if lv_line.linhvuc_id else 'Khác'
-            tuoi_name = lv_line.tuoi_id.name if lv_line.tuoi_id else ''
-            chuongtrinh = (
-                lv_line.tuoi_id.chuongtrinh_id.name
-                if lv_line.tuoi_id and lv_line.tuoi_id.chuongtrinh_id
-                else (lv_line.chuongtrinh_id.name if hasattr(lv_line, 'chuongtrinh_id') and lv_line.chuongtrinh_id else '')
-            )
-            mts = lv_line.kehoach_muctieu_ids.sorted(key=lambda m: (m.sequence, m.id))
-
-            targets = []
-            for mt in mts:
-                total_targets_count += 1
-                targets.append(self._format_tab2_target(mt, global_idx))
-                global_idx += 1
-
-            linhvucs_grouped.append({
-                'linhvuc': lv_name,
-                'tuoi': tuoi_name,
-                'chuongtrinh': chuongtrinh,
-                'avg_thu': lv_line.tyle_thu,
-                'total_mt': len(targets),
-                'targets': targets
-            })
-
-        gv_name = kehoach.gv_lapkehoach_id.name if kehoach.gv_lapkehoach_id else 'Chưa phân công'
-        return {
-            'ten': kehoach.name or 'Kế hoạch tháng tới',
-            'giaovien': gv_name,
-            'tieu_de_hien_thi': f"{kehoach.name or 'Kế hoạch tháng tới'} (Giáo viên: {gv_name})",
-            'quanly': kehoach.gv_kiemduyet_id.name if kehoach.gv_kiemduyet_id else 'Ngô Thị Ngọc Hoàn',
-            'tong_muctieu': total_targets_count,
-            'trangthai_text': 'Đang can thiệp',
-            'linhvucs_grouped': linhvucs_grouped
-        }
-
-    # =========================================================================
-    # INTERNAL HELPERS
-    # =========================================================================
-    def _resolve_tab1_plan(self, KeHoachModel):
-        """Xác định danh sách dropdown và bản ghi được chọn cho Tab 1
-        Chỉ lấy và cho phép chọn các kế hoạch đã kết thúc (trangthai == '-1')
-        """
-        kh_data = KeHoachModel.search_read(
-            domain=[('hocsinh_id', '=', self.id), ('trangthai', '=', '-1')],
-            fields=['id', 'name', 'gv_lapkehoach_id', 'tyle_dat_canthiep'],
-            order='den_ngay desc, tu_ngay desc'
-        )
-
-        ds_baocao = []
-        valid_plan_ids = set()
-        for kh in kh_data:
-            valid_plan_ids.add(kh['id'])
-            gv_name = kh['gv_lapkehoach_id'][1] if kh.get('gv_lapkehoach_id') else 'Chưa phân công'
-            ten_kh = kh['name'] or 'Kế hoạch'
-            ds_baocao.append({
-                'id': kh['id'],
-                'ten': ten_kh,
-                'gv_name': gv_name,
-                'label': f"{ten_kh} (Giáo viên: {gv_name})",
-                'tyle_dat': kh.get('tyle_dat_canthiep') or 0,
-            })
-
-        param_id = self._get_request_param('kehoach_id', context_key='kehoach_id')
-        selected_record = False
-
-        if param_id:
-            try:
-                plan_id_int = int(param_id)
-                # Chỉ chấp nhận nếu kế hoạch này thực sự nằm trong danh sách đã đóng ('-1')
-                if plan_id_int in valid_plan_ids:
-                    selected_record = KeHoachModel.browse(plan_id_int)
-            except (ValueError, TypeError):
-                pass
-
-        if not selected_record and kh_data:
-            selected_record = KeHoachModel.browse(kh_data[0]['id'])
-
-        return ds_baocao, selected_record
-
-    def _resolve_tab2_plan(self, KeHoachModel):
-        """Xác định danh sách dropdown và bản ghi được chọn cho Tab 2"""
-        status_val = getattr(kehoach_util, 'KEHOACH_DANG_CANTHIEP', '1')
-        kehoach_ids = KeHoachModel.search(
-            [('hocsinh_id', '=', self.id), ('trangthai', '=', str(status_val))],
-            order='tu_ngay desc, den_ngay desc'
-        )
-
-        ds_thangtoi = []
-        for p in kehoach_ids:
-            gv_name = p.gv_lapkehoach_id.name if p.gv_lapkehoach_id else 'Chưa phân công'
-            ten_kh = p.name or 'Kế hoạch can thiệp'
-            ds_thangtoi.append({
-                'id': p.id,
-                'ten': ten_kh,
-                'gv_name': gv_name,
-                'label': f"{ten_kh} (Giáo viên: {gv_name})"
-            })
-
-        param_id = self._get_request_param('thangtoi_id', context_key='thangtoi_id')
-        selected_record = False
-        if param_id:
-            selected_record = KeHoachModel.browse(int(param_id)).exists()
-        if not selected_record and kehoach_ids:
-            selected_record = kehoach_ids[0]
-
-        return ds_thangtoi, selected_record
-
     def _format_tab1_target(self, mt, stt):
-        """Định dạng dữ liệu 1 mục tiêu của báo cáo Tab 1"""
+        """Định dạng dữ liệu 1 mục tiêu của báo cáo"""
         tyle_sau = mt.tyle_kiemduyet if mt.tyle_kiemduyet > 0 else (getattr(mt, 'tyle_canthiep', 0) or mt.tyle_thu)
         is_mastered = (tyle_sau >= 80) or (mt.trangthai_kiemduyet == '1') or (mt.trangthai == '1')
         muc_do_label = "Củng cố" if is_mastered else "Duy trì"
@@ -302,26 +251,6 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             'is_mastered': is_mastered,
             'dinh_huong': dinh_huong,
         }, is_mastered
-
-    def _format_tab2_target(self, mt, stt):
-        """Định dạng dữ liệu 1 mục tiêu của kế hoạch tháng tới Tab 2
-        Chỉ căn cứ vào kehoach_muctieu_thangtruoc_id:
-        - Có giá trị (not null): Tháng trước chuyển qua
-        - Không có giá trị (null / False): Mới
-        """
-        t_thu = getattr(mt, 'tyle_thu', 0) or 0
-        ten_mt = mt.name or getattr(mt, 'muctieu_them', '') or ''
-        is_chuyen_tiep = bool(getattr(mt, 'kehoach_muctieu_thangtruoc_id', False))
-
-        return {
-            'stt': stt,
-            'muctieu': ten_mt,
-            'truoc_pct': f"{t_thu}%",
-            'solan_thu': f"{getattr(mt, 'solan_thu_dat', 0)}/{getattr(mt, 'solan_thu', 10)}",
-            'loai_muctieu': "Tháng trước chuyển qua" if is_chuyen_tiep else "Mới",
-            'is_chuyen_tiep': is_chuyen_tiep,
-            'ghichu': getattr(mt, 'dinhhuong_kiemduyet', False) or getattr(mt, 'ghichu', False) or 'Thực hiện can thiệp theo quy trình chuẩn',
-        }
 
     def _build_svg_chart_data(self, chart_linhvucs):
         """Tính toán tọa độ pixel (X, Y) cho đồ thị SVG tiến bộ lâm sàng"""
