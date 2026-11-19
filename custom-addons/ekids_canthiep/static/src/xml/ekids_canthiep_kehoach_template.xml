@@ -236,11 +236,11 @@
                                             <i class="fa fa-history text-danger"></i> Tháng trước (<t t-esc="muctieu.sothang_da_chuyenttiep"/>)
                                             <span class="badge fw-bold px-1.5 py-0.2"
                                                   style="font-size: 11px; background-color: #FEF9C3; color: #A16207; border: 1px solid #FDE047; border-radius: 4px;">
-                                                +/-(<t t-esc="muctieu.ketqua_hinhthanh_thangtruoc"/>)
+                                                Đang hình thành(<t t-esc="muctieu.ketqua_hinhthanh_thangtruoc"/> ngày)
                                             </span>
                                             <span class="badge fw-bold px-1.5 py-0.2"
                                                   style="font-size: 11px; background-color: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; border-radius: 4px;">
-                                                +(<t t-esc="muctieu.ketqua_dat_lientiep_thangtruoc"/>)
+                                                Đạt(<t t-esc="muctieu.ketqua_dat_lientiep_thangtruoc"/> ngày)
                                             </span>
                                         </span>
                                         <span t-elif="!muctieu.muctieu_id"
