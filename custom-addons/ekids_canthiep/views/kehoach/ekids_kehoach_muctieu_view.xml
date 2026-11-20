@@ -646,22 +646,22 @@
                         <div class="kd-metric-box box-teacher">
                             <div class="kd-m-label" style="color: #334155;">
                                 <i class="fa fa-user text-primary"/>
-                                <span>Giáo viên đánh giá</span>
+                                <span>Giáo viên can thiệp</span>
                             </div>
                             <div class="kd-m-val-group">
                                 <span class="kd-m-number" style="color: #0F172A;">
-                                    <field name="tyle_ketqua" readonly="1"/>%
+                                    <field name="tyle_canthiep" readonly="1"/>%
                                 </span>
 
-                                <span invisible="tyle_ketqua &lt; 80" class="kd-status-chip chip-dat">
+                                <span invisible="tyle_canthiep &lt; 80" class="kd-status-chip chip-dat">
                                     <i class="fa fa-check-circle"/> Đạt
                                 </span>
 
-                                <span invisible="tyle_ketqua &lt;= 0 or tyle_ketqua &gt;= 80" class="kd-status-chip chip-hinhthanh">
+                                <span invisible="tyle_canthiep &lt;= 0 or tyle_ketqua &gt;= 80" class="kd-status-chip chip-hinhthanh">
                                     <i class="fa fa-adjust"/> Đang hình thành
                                 </span>
 
-                                <span invisible="tyle_ketqua &gt; 0" class="kd-status-chip chip-chuadat">
+                                <span invisible="tyle_canthiep &gt; 0" class="kd-status-chip chip-chuadat">
                                     <i class="fa fa-times-circle"/> Chưa đạt
                                 </span>
                             </div>
@@ -674,15 +674,15 @@
                     <summary>
                         <span class="d-inline-flex align-items-center gap-2">
                             <i class="fa fa-info-circle"/>
-                            <span>Quy tắc đánh giá dự giờ cuối tháng (Bấm để xem hướng dẫn)</span>
+                            <span>Hướng dẫn Quản lý chuyên môn đánh giá lại kết quả can thiệp của trẻ (cuối kế hoạch)</span>
                         </span>
                         <i class="fa fa-chevron-down"/>
                     </summary>
                     <div class="kd-guide-body">
-                        <div>• <strong>Tỷ lệ kiểm tra ≥ 80%:</strong> Chọn <strong>ĐẠT</strong> (Trẻ hoàn thành mục tiêu).</div>
-                        <div>• <strong>Tỷ lệ dưới 80%:</strong> Chọn <strong>CHUYỂN</strong> (tiếp tục can thiệp tháng sau) hoặc <strong>DỪNG</strong> (ngừng mục tiêu nếu quá sức).</div>
+                        <div>• <strong>Tỷ lệ kiểm tra thực tế ≥ 80%:</strong> Chọn <strong>ĐẠT</strong> (Trẻ hoàn thành mục tiêu trong tháng).</div>
+                        <div>• <strong>Tỷ lệ dưới 80%:</strong> Chọn <strong>CHUYỂN</strong> (tiếp tục can thiệp tháng sau) hoặc <strong>DỪNG</strong> (ngừng mục tiêu nếu quá sức với trẻ).</div>
                         <div class="mt-1 text-warning fw-semibold">
-                            <i class="fa fa-exclamation-triangle me-1"/>Nếu chuyên môn không đánh giá, hệ thống tự động lấy theo kết quả của giáo viên can thiệp.
+                            <i class="fa fa-exclamation-triangle me-1"/>Nếu Quản lý chuyên môn không đánh giá, hệ thống tự động lấy theo kết quả can thiệp của giáo viên là kết quả cuôi cùng.
                         </div>
                     </div>
                 </details>
@@ -692,7 +692,7 @@
                     <div>
                         <div class="kd-section-hdr">
                             <i class="fa fa-check-square-o text-primary"/>
-                            <span>1. Chấm số lần đạt thực tế khi dự giờ</span>
+                            <span>1. Xác nhận số lần trẻ hoàn thành/ số lần thử </span>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <field name="solan_kiemduyet_dat" widget="ekids_trial_stepper" nolabel="1"/>
@@ -731,7 +731,7 @@
                 <div class="kd-decision-card">
                     <div class="kd-section-hdr">
                         <i class="fa fa-gavel text-primary"/>
-                        <span>2. Chốt kết luận kiểm duyệt chuyên môn</span>
+                        <span>2. Xác nhận kết quả can thiệp của [Mục tiêu] đối với trẻ</span>
                     </div>
 
                     <div class="custom_ketqua_3btns">
@@ -759,7 +759,7 @@
                     <div class="kd-note-card">
                         <div class="kd-section-hdr">
                             <i class="fa fa-pencil-square-o text-primary"/>
-                            <span>3. Ghi chú kiểm tra thực tế</span>
+                            <span>3. Ghi chú Quản lý chuyên môn</span>
                         </div>
                         <field name="ghichu_kiemduyet"
                                nolabel="1"
@@ -770,7 +770,7 @@
                     <div class="kd-note-card">
                         <div class="kd-section-hdr">
                             <i class="fa fa-compass text-success"/>
-                            <span>4. Ý kiến / Định hướng tháng sau</span>
+                            <span>4. Ý kiến / Định hướng tháng sau với mục tiêu này</span>
                         </div>
                         <field name="dinhhuong_kiemduyet"
                                nolabel="1"

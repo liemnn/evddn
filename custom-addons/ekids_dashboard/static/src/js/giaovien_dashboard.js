@@ -45,28 +45,8 @@ export class EkidsGiaovienDashboard extends Component {
         this.state.thang_nam = ev.target.value;
         await this.taiDuLieu();
     }
-    async goiActionCoSo(tenHam, thamSoBoSung = {}) {
-        const cosoId = parseInt(this.state.centerId || this.state.coso_id, 10);
-        if (!cosoId || !tenHam) return;
 
-        const extraContext = {
-            active_id: cosoId,
-            active_ids: [cosoId],
-            active_model: "ekids.coso",
-            default_coso_id: cosoId,
-            ...thamSoBoSung,
-        };
-
-        const actionRes = await this.orm.call(
-            "ekids.coso",
-            tenHam,
-            [[cosoId]],
-            { context: extraContext }
-        );
-
-        if (!actionRes || typeof actionRes !== "object") return;
-
-        // Bắt buộc chuyển 'view_mode' -> 'views' vì Odoo 18 _preprocessAction gọi action.views.map(...)
+    _chuanHoaActionOdoo18(actionRes, extraContext = {}) {
         if ((actionRes.type || "ir.actions.act_window") === "ir.actions.act_window") {
             actionRes.type = "ir.actions.act_window";
             if (!Array.isArray(actionRes.views)) {
@@ -84,8 +64,125 @@ export class EkidsGiaovienDashboard extends Component {
                 ...extraContext,
             };
         }
+        return actionRes;
+    }
 
-        await this.action.doAction(actionRes);
+    async goiActionCoSo(tenHam, thamSoBoSung = {}) {
+        if (!tenHam) return;
+
+        const dl = this.state.dulieu || {};
+        let rawCosoId =
+            dl.coso_id ||
+            dl.giaovien?.coso_id ||
+            this.state.centerId ||
+            this.state.coso_id;
+
+        if (Array.isArray(rawCosoId)) {
+            rawCosoId = rawCosoId[0];
+        }
+        let cosoId = parseInt(rawCosoId, 10);
+
+        if (!cosoId) {
+            try {
+                const cosos = await this.orm.searchRead("ekids.coso", [], ["id"], { limit: 1 });
+                if (cosos && cosos.length > 0) {
+                    cosoId = cosos[0].id;
+                }
+            } catch (e) {
+                console.warn("Không thể tự lấy ekids.coso:", e);
+            }
+        }
+
+        if (!cosoId) return;
+
+        const extraContext = {
+            active_id: cosoId,
+            active_ids: [cosoId],
+            active_model: "ekids.coso",
+            default_coso_id: cosoId,
+            ...thamSoBoSung,
+        };
+
+        const actionRes = await this.orm.call(
+            "ekids.coso",
+            tenHam,
+            [[cosoId]],
+            { context: extraContext }
+        );
+
+        if (!actionRes || typeof actionRes !== "object") return;
+        await this.action.doAction(this._chuanHoaActionOdoo18(actionRes, extraContext));
+    }
+
+    async moBangLuongGiaoVien() {
+        const dl = this.state.dulieu || {};
+        const gvId = dl.giaovien?.id;
+        let cosoId = dl.coso_id || dl.giaovien?.coso_id;
+        if (Array.isArray(cosoId)) cosoId = cosoId[0];
+
+        const extraContext = {
+            ...(gvId ? {
+                active_id: gvId,
+                active_ids: [gvId],
+                default_giaovien_id: gvId,
+                search_default_giaovien_id: gvId,
+            } : {}),
+            ...(cosoId ? { default_coso_id: parseInt(cosoId, 10) } : {}),
+            thang_nam: this.state.thang_nam || false,
+        };
+
+        const actionRes = await this.orm.call(
+            "ekids.luong",
+            "action_danhsach_bangluong_giaovien",
+            [[]],
+            { context: extraContext }
+        );
+
+        if (!actionRes || typeof actionRes !== "object") return;
+        await this.action.doAction(this._chuanHoaActionOdoo18(actionRes, extraContext));
+    }
+
+    /**
+     * Mở danh sách kế hoạch cần cập nhật tuần này hoặc mở thẳng kế hoạch chưa chấm đầu tiên
+     */
+    async moKeHoachCanCapNhatTuan(moFormDauTien = false) {
+        const dl = this.state.dulieu || {};
+        const gvId = dl.giaovien?.id;
+        if (!gvId) return;
+
+        const dsDong = dl.ds_dong_hocsinh || [];
+        const dsChuaCham = dsDong.filter((r) => r.trangthai === "chua_capnhat" && r.kehoach_id);
+        const dsTatCaKhIds = dsDong.filter((r) => r.kehoach_id).map((r) => r.kehoach_id);
+
+        // Nếu bấm nút "Cập nhật ngay >": ưu tiên mở thẳng form kế hoạch chưa chấm đầu tiên
+        if (moFormDauTien && dsChuaCham.length > 0) {
+            return this.moFormKeHoach(dsChuaCham[0].kehoach_id);
+        }
+
+        // Nếu bấm nút "Chưa chấm (X)": mở danh sách đúng các kế hoạch chưa chấm trong tuần
+        const dsChuaChamIds = dsChuaCham.map((r) => r.kehoach_id);
+        const domain = dsChuaChamIds.length > 0
+            ? [["id", "in", dsChuaChamIds]]
+            : (dsTatCaKhIds.length > 0
+                ? [["id", "in", dsTatCaKhIds]]
+                : [["giaovien_id", "=", gvId], ["trangthai", "=", "1"]]);
+
+        await this.action.doAction({
+            type: "ir.actions.act_window",
+            name: dsChuaChamIds.length > 0
+                ? "Kế hoạch cần cập nhật tuần này"
+                : "Danh sách kế hoạch can thiệp tháng",
+            res_model: "ekids.kehoach",
+            view_mode: "list,form",
+            views: [[false, "list"], [false, "form"]],
+            domain: domain,
+            context: {
+                default_giaovien_id: gvId,
+                search_default_giaovien_id: gvId,
+                thang_nam: this.state.thang_nam || false,
+            },
+            target: "current",
+        });
     }
 
     datBoLocDong(che_do) {

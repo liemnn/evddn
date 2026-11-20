@@ -113,7 +113,16 @@ class GiaovienDashboard(models.AbstractModel):
         """Đếm số lượng kế hoạch đang can thiệp (trangthai = '1') bằng search_count"""
 
         domain = [('trangthai', '=', kehoach_util.KEHOACH_DANG_CANTHIEP)
-            ,('gv_lapkehoach_id', '=', giaovien_id)]
+            ,('gv_lapkehoach_id', '=', giaovien_id)
+            ,('hocsinh_id.trangthai', '=', '1')]
+        return self.env['ekids.kehoach'].sudo().search_count(domain)
+
+    def _dem_kehoach_dang_co(self, giaovien_id):
+        """Đếm số lượng kế hoạch đang can thiệp (trangthai = '1') bằng search_count"""
+
+        domain = [('trangthai', 'in', ['0','2','1'])
+            ,('gv_lapkehoach_id', '=', giaovien_id)
+            ,('hocsinh_id.trangthai', '=', '1')]
         return self.env['ekids.kehoach'].sudo().search_count(domain)
 
     def _dem_kehoach_soan_choduyet(self, ds_hs_id, ngay_dau_thang, ngay_20_thang):
@@ -398,10 +407,10 @@ class GiaovienDashboard(models.AbstractModel):
         kh_dang_canthiep = self._dem_kehoach_dang_canthiep(giaovien_id)
         kh_soan_choduyet = self._dem_kehoach_soan_choduyet(ds_hs_id, ngay_dau_thang, ngay_20_thang)
         kh_sap_hethan = self._dem_kehoach_sap_hethan(ds_hs_id, ngay_dau_thang, ngay_20_thang, ngay_xet)
-
+        kh_dang_co = self._dem_kehoach_dang_co(giaovien_id)
         tong_hs_phutrach = len(ds_hs_phutrach)
         hs_da_co_kh = len(tap_hs_da_lap_kh)
-        hs_chua_co_kh = max(0, tong_hs_phutrach - hs_da_co_kh)
+        hs_chua_co_kh = max(0, tong_hs_phutrach - kh_dang_co)
         tyle_lap_kh = round(hs_da_co_kh / tong_hs_phutrach * 100, 1) if tong_hs_phutrach else 0
 
         # 2. Bảng theo dõi cập nhật tuần này
