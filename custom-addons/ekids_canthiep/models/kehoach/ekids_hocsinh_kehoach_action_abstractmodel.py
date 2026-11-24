@@ -338,8 +338,9 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
         self.ensure_one()
         today = date.today()
         # Kiểm tra phân quyền lâm sàng nâng cao nếu cần
+
         trangthai = [kehoach_util.KEHOACH_DANG_CANTHIEP]
-        kehoach = kehoach_util.func_get_kehoach_can_canthiep_hocsinh_trangthai_ngay(self, self, trangthai, today)
+        kehoach = kehoach_util.func_get_kehoach_canthiep_hocsinh_trangthai_ngay(self, self, trangthai, today)
         if kehoach:
             return {
                 'type': 'ir.actions.act_window',

@@ -303,7 +303,7 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
             # để tránh lỗi lọt điều kiện không gán dữ liệu của Odoo Compute
             is_canthiep = False
             trangthais=[kehoach_util.KEHOACH_DANG_CANTHIEP]
-            kehoach = kehoach_util.func_get_kehoach_can_canthiep_hocsinh_trangthai_ngay(self,hs, trangthais,today)
+            kehoach = kehoach_util.func_get_kehoach_canthiep_hocsinh_trangthai_ngay(self,hs, trangthais,today)
 
             if kehoach:
                 # --- ÉP KIỂU NGÀY AN TOÀN TUYỆT ĐỐI (DATE VS DATETIME) ---
