@@ -115,18 +115,42 @@ def func_get_kehoach_hocsinh_trangthai(self, hocsinh, trangthais):
 
 
 
-def func_get_kehoach_hocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
-    giaovien =giaovien_util.func_get_giaovien_tu_user(self)
+def func_get_kehoach_hocsinh_trangthai_ngay(self, hocsinh, trangthais, ngay):
+    giaovien = giaovien_util.func_get_giaovien_tu_user(self)
     if giaovien:
-        domain =[ ('hocsinh_id', '=', hocsinh.id),
-                  ('gv_lapkehoach_id', '=', giaovien.id),
-                    ('trangthai', 'in', trangthais)]
-        if ngay:
-            domain.append(("tu_ngay","<=",ngay))
-            domain.append(("den_ngay", ">=", ngay))
+        # 1. Điều kiện cơ bản theo học sinh và trạng thái
+        domain_base = [
+            ('hocsinh_id', '=', hocsinh.id),
+            ('trangthai', 'in', trangthais),
+        ]
 
-        kehoach = self.env['ekids.kehoach'].search(domain
-            , order="id desc", limit=1)
+        # Bổ sung điều kiện theo ngày (nếu có)
+        if ngay:
+            domain_base.extend([
+                ('tu_ngay', '<=', ngay),
+                ('den_ngay', '>=', ngay),
+            ])
+
+        # 2. Điều kiện phân quyền giáo viên (TH1 OR TH2)
+        # TH1: Giáo viên trực tiếp là người lập kế hoạch
+        domain_th1 = [
+            ('gv_lapkehoach_id', '=', giaovien.id)
+        ]
+
+        # TH2: Kế hoạch dùng chung và giáo viên nằm trong danh sách phân công của Kết luận
+        domain_th2 = [
+            ('ketluan_id.is_chung_kehoach', '=', True),
+            ('ketluan_id.gv_canthiep_ids', 'in', [giaovien.id]),
+        ]
+
+        domain_gv = expression.OR([domain_th1, domain_th2])
+        domain = expression.AND([domain_base, domain_gv])
+
+        kehoach = self.env['ekids.kehoach'].search(
+            domain,
+            order="id desc",
+            limit=1
+        )
         return kehoach
     else:
         return None

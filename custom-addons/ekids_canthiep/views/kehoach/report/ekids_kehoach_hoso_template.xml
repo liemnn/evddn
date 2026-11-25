@@ -566,8 +566,8 @@
                     <t t-else="">
                         <div class="timeline-section-card">
                             <div class="timeline-header-label">
-                                <span><i class="fa fa-history text-primary me-1"/> Lịch sử &amp; Lộ trình can thiệp theo thời gian (<t t-out="len(data.get('ds_kehoach', []))"/> kỳ)</span>
-                                <span style="font-size: 11px; font-weight: 500; color: #64748B;">Chọn kỳ để xem chi tiết</span>
+                                <span><i class="fa fa-history text-primary me-1"/> Lịch sử &amp; Lộ trình can thiệp theo thời gian (<t t-out="len(data.get('ds_kehoach', []))"/> tháng)</span>
+                                <span style="font-size: 11px; font-weight: 500; color: #64748B;">Chọn [Kế hoạch tháng] để xem chi tiết</span>
                             </div>
 
                             <div class="timeline-scroll-strip">
@@ -602,7 +602,7 @@
                                             t-attf-class="btn-view-mode #{view_mode == 'report' and 'active' or ''}"
                                             onclick="switchPlanViewMode('report')">
                                         <i class="fa fa-bar-chart"/>
-                                        <span>1. Báo cáo tổng kết</span>
+                                        <span>1. Báo cáo tổng kết tháng</span>
                                     </button>
                                 </t>
                                 <t t-else="">
@@ -611,7 +611,7 @@
                                             title="Kế hoạch đang thực hiện nên chưa có báo cáo tổng kết cuối kỳ"
                                             disabled="disabled">
                                         <i class="fa fa-lock"/>
-                                        <span>Báo cáo (Chưa kết thúc)</span>
+                                        <span>1. Báo cáo tổng kết tháng(đang can thiệp, chưa kết thúc)</span>
                                     </button>
                                 </t>
 
@@ -620,7 +620,7 @@
                                         t-attf-class="btn-view-mode #{view_mode == 'full' and 'active' or ''}"
                                         onclick="switchPlanViewMode('full')">
                                     <i class="fa fa-file-text"/>
-                                    <span>Kế hoạch đầy đủ (In đủ)</span>
+                                    <span>Kế hoạch đầy đủ (Đủ nội dung)</span>
                                 </button>
 
                                 <!-- NÚT 3: BẢNG THEO DÕI GỌN (IN GỌN) -->
@@ -628,27 +628,12 @@
                                         t-attf-class="btn-view-mode #{view_mode == 'compact' and 'active' or ''}"
                                         onclick="switchPlanViewMode('compact')">
                                     <i class="fa fa-table"/>
-                                    <span>Bảng theo dõi (In gọn)</span>
+                                    <span>Kế hoạch gọn (Tóm tắt)</span>
                                 </button>
                             </div>
 
-                            <!-- LINK MỞ TRANG IN A4 ĐỘC LẬP TƯƠNG ỨNG VỚI CHẾ ĐỘ ĐANG CHỌN -->
-                            <div t-if="o">
-                                <t t-if="view_mode == 'compact'">
-                                    <a t-attf-href="/report/html/ekids_canthiep.in_kehoach_cho_giaovien_gon_template/#{o.id}"
-                                       target="_blank" class="btn-external-print">
-                                        <i class="fa fa-external-link"/>
-                                        <span>Mở trang in A4 (Bản gọn)</span>
-                                    </a>
-                                </t>
-                                <t t-else="">
-                                    <a t-attf-href="/report/html/ekids_canthiep.in_kehoach_cho_giaovien_template/#{o.id}"
-                                       target="_blank" class="btn-external-print">
-                                        <i class="fa fa-external-link"/>
-                                        <span>Mở trang in A4 (Bản đủ)</span>
-                                    </a>
-                                </t>
-                            </div>
+
+
                         </div>
 
                         <!-- ========================================================================= -->
@@ -659,7 +644,7 @@
                                 <div class="kpi-card" style="border-left: 3.5px solid #2563EB;">
                                     <div class="kpi-title">Tổng mục tiêu</div>
                                     <div class="kpi-value" style="color: #1D4ED8;"><span t-out="tab1.get('tong_muctieu', 0)"/> mục tiêu</div>
-                                    <div class="kpi-sub">Kỳ kế hoạch đã đóng</div>
+                                    <div class="kpi-sub">Kế hoạch đã kết thúc can thiệp</div>
                                 </div>
                                 <div class="kpi-card" style="border-left: 3.5px solid #0D9488;">
                                     <div class="kpi-title">Kết quả đạt</div>
@@ -834,7 +819,7 @@
                                                 </t>
                                             </t>
                                         </t>
-                                        <t t-else=""><div class="text-muted fst-italic ps-2">Không có mục tiêu nào trong kỳ đạt mức củng cố.</div></t>
+                                        <t t-else=""><div class="text-muted fst-italic ps-2">Không có mục tiêu nào trong tháng đạt mức củng cố.</div></t>
                                     </div>
                                     <div style="border-top: 1px dashed #E2E8F0; margin-bottom: 10px;"/>
                                     <div>
@@ -852,7 +837,7 @@
                                                 </t>
                                             </t>
                                         </t>
-                                        <t t-else=""><div class="text-muted fst-italic ps-2">Tất cả các mục tiêu trong kỳ đều đã đạt yêu cầu.</div></t>
+                                        <t t-else=""><div class="text-muted fst-italic ps-2">Tất cả các mục tiêu trong tháng đều đã đạt yêu cầu.</div></t>
                                     </div>
                                 </div>
                             </div>
@@ -874,8 +859,8 @@
                             <div class="embedded-plan-sheet">
                                 <div class="tracking-table-title">
                                     <i class="fa fa-list-alt" style="margin-right: 6px;"/>
-                                    <t t-if="view_mode == 'full'">Hệ thống Mục tiêu can thiệp, Thiết kế hoạt động (ABC) và Nhật ký đánh giá</t>
-                                    <t t-else="">Bảng theo dõi mức độ thành thục hàng ngày (Bản gọn)</t>
+                                    <t t-if="view_mode == 'full'">Danh sách các mục tiêu trong kế hoạch tháng (bản đủ)</t>
+                                    <t t-else="">Danh sách các mục tiêu trong kế hoạch tháng (Bản gọn)</t>
                                 </div>
 
                                 <t t-foreach="o.kehoach_linhvuc_ids" t-as="lv">
