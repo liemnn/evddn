@@ -141,6 +141,7 @@
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
+                        gap: 8px;
                     }
                     .timeline-scroll-strip {
                         display: flex;
@@ -244,22 +245,9 @@
                         box-shadow: 0 2px 6px rgba(30, 58, 138, 0.2);
                     }
                     .btn-view-mode.disabled-mode {
-                        opacity: 0.5;
+                        opacity: 0.55;
                         cursor: not-allowed;
                         background-color: #F1F5F9;
-                    }
-                    .btn-external-print {
-                        font-size: 12.5px;
-                        font-weight: 700;
-                        color: #1D4ED8;
-                        background-color: #EFF6FF;
-                        border: 1px solid #BFDBFE;
-                        padding: 5px 12px;
-                        border-radius: 20px;
-                        text-decoration: none !important;
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 5px;
                     }
 
                     /* ================= 5. LƯỚI KPI  BẢNG BÁO CÁO ================= */
@@ -292,7 +280,6 @@
                         width: 100%;
                         border-collapse: collapse;
                         font-size: 13.5px;
-                        min-width: 620px;
                     }
 
                     /* ================= 6. CSS CHO BẢN CHI TIẾT (IN ĐỦ  IN GỌN NHÚNG TRỰC TIẾP) ================= */
@@ -432,26 +419,208 @@
                     .embedded-plan-sheet .txt-stat-cd { color: #B91C1C !important; font-weight: bold !important; }
                     .embedded-plan-sheet .eval-kd-note { font-size: 12px !important; color: #1E293B !important; margin-top: 2px; text-align: justify; }
 
-                    /* ================= 7. RESPONSIVE MOBILE (DƯỚI 768px) ================= */
-                    @media (max-width: 768px) {
-                        .hoso-container { padding: 6px 6px 16px 6px !important; font-size: 13px !important; }
-                        .hs-profile-card { padding: 12px !important; }
+                    /* ================= 7. RESPONSIVE MOBILE (DƯỚI 768px) - TỐI ƯU CARD VIEW ================= */
+                    @media screen and (max-width: 768px) {
+                        .hoso-container { padding: 6px 6px 20px 6px !important; font-size: 13px !important; }
+
+                        /* Profile Header Mobile */
+                        .hs-profile-card { padding: 12px !important; border-radius: 10px !important; }
                         .hs-profile-main { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
-                        .hs-avatar-box { width: 54px !important; height: 54px !important; font-size: 22px !important; }
-                        .hs-student-name { font-size: 17px !important; }
+                        .hs-avatar-box { width: 52px !important; height: 52px !important; font-size: 20px !important; }
+                        .hs-student-name { font-size: 16.5px !important; }
+                        .hs-meta-chip { font-size: 11.5px !important; padding: 2px 7px !important; }
                         .hs-side-right {
                             width: 100% !important; align-items: stretch !important; padding-left: 0 !important;
-                            border-left: none !important; border-top: 1px dashed #CBD5E1 !important; padding-top: 10px !important;
+                            border-left: none !important; border-top: 1px dashed #CBD5E1 !important; padding-top: 8px !important;
                         }
-                        .hs-action-bar { justify-content: space-between !important; width: 100% !important; }
-                        .hs-staff-box { flex-direction: row !important; justify-content: space-between !important; flex-wrap: wrap !important; text-align: left !important; }
+                        .hs-action-bar { justify-content: flex-start !important; width: 100% !important; }
+                        .hs-staff-box { flex-direction: column !important; gap: 3px !important; text-align: left !important; }
 
-                        .timeline-month-card { min-width: 165px !important; padding: 7px 10px !important; }
-                        .view-switcher-bar { flex-direction: column !important; align-items: stretch !important; }
-                        .btn-view-mode { flex: 1 1 auto !important; justify-content: center !important; padding: 6px 8px !important; font-size: 12px !important; }
+                        /* Timeline  View Switcher Mobile */
+                        .timeline-section-card { padding: 8px 10px !important; }
+                        .timeline-header-label { flex-direction: column !important; align-items: flex-start !important; gap: 2px !important; }
+                        .timeline-month-card { min-width: 160px !important; padding: 7px 10px !important; }
+                        .view-switcher-bar { flex-direction: column !important; align-items: stretch !important; padding: 8px !important; }
+                        .view-switcher-tabs { flex-direction: column !important; align-items: stretch !important; width: 100% !important; }
+                        .btn-view-mode { width: 100% !important; justify-content: flex-start !important; padding: 8px 10px !important; font-size: 12.5px !important; white-space: normal !important; text-align: left !important; }
+
+                        /* KPI Grid Mobile */
                         .kpi-grid { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
+                        .kpi-card { padding: 8px 10px !important; }
+                        .kpi-value { font-size: 14.5px !important; }
 
-                        .embedded-plan-sheet .tracking-days-table { min-width: 800px; }
+                        /* 🌟 CHUYỂN ĐỔI BẢNG CHI TIẾT MỤC TIÊU THÀNH THẺ CARD MOBILE KHÔNG CẦN CUỘN NGANG 🌟 */
+                        .table-responsive-box {
+                            border: none !important;
+                            background: transparent !important;
+                            overflow-x: visible !important;
+                        }
+                        .custom-report-table,
+                        .custom-report-table tbody {
+                            display: block !important;
+                            width: 100% !important;
+                            min-width: 100% !important;
+                        }
+                        .custom-report-table thead {
+                            display: none !important; /* Ẩn tiêu đề bảng ngang trên mobile */
+                        }
+
+                        /* Dòng tiêu đề Nhóm Lĩnh vực trên Mobile */
+                        .custom-report-table tr.report-domain-row {
+                            display: block !important;
+                            width: 100% !important;
+                            background: linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 100%) !important;
+                            border: 1.5px solid #93C5FD !important;
+                            border-left: 4px solid #1E3A8A !important;
+                            border-radius: 10px !important;
+                            margin-top: 12px !important;
+                            margin-bottom: 8px !important;
+                            box-shadow: 0 1px 3px rgba(30, 58, 138, 0.08) !important;
+                        }
+                        .custom-report-table tr.report-domain-row:first-child {
+                            margin-top: 2px !important;
+                        }
+                        .custom-report-table tr.report-domain-row td {
+                            display: block !important;
+                            width: 100% !important;
+                            border: none !important;
+                            padding: 8px 10px !important;
+                        }
+                        .domain-header-flex {
+                            flex-direction: column !important;
+                            align-items: flex-start !important;
+                            gap: 6px !important;
+                        }
+                        .domain-stats-pill {
+                            width: 100% !important;
+                            justify-content: space-between !important;
+                            padding: 4px 8px !important;
+                            font-size: 11.5px !important;
+                        }
+
+                        /* Từng dòng Mục tiêu biến thành Thẻ Card Mobile độc lập */
+                        .custom-report-table tr.report-goal-row {
+                            display: flex !important;
+                            flex-wrap: wrap !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                            width: 100% !important;
+                            border: 1px solid #CBD5E1 !important;
+                            border-radius: 10px !important;
+                            padding: 10px !important;
+                            margin-bottom: 8px !important;
+                            box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04) !important;
+                            box-sizing: border-box !important;
+                        }
+                        .custom-report-table tr.report-goal-row td {
+                            border: none !important;
+                            padding: 0 !important;
+                            box-sizing: border-box !important;
+                        }
+
+                        /* Hàng 1 của Card: Badge STT + Nội dung Mục tiêu */
+                        .custom-report-table tr.report-goal-row td.col-stt {
+                            display: inline-flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            background-color: #1E3A8A !important;
+                            color: #FFFFFF !important;
+                            font-weight: 800 !important;
+                            font-size: 11px !important;
+                            padding: 2px 8px !important;
+                            border-radius: 6px !important;
+                            margin-bottom: 6px !important;
+                            width: auto !important;
+                            text-align: left !important;
+                        }
+                        .custom-report-table tr.report-goal-row td.col-stt::before {
+                            content: "Mục tiêu #";
+                            margin-right: 1px;
+                        }
+                        .custom-report-table tr.report-goal-row td.col-muctieu {
+                            display: block !important;
+                            width: 100% !important;
+                            font-size: 13.5px !important;
+                            font-weight: 700 !important;
+                            color: #0F172A !important;
+                            line-height: 1.45 !important;
+                            padding-bottom: 8px !important;
+                            margin-bottom: 8px !important;
+                            border-bottom: 1px dashed #E2E8F0 !important;
+                        }
+
+                        /* Hàng 2 của Card: 3 cột chỉ số [Trước] | [Sau] | [Mức độ] chia đều 3 phần */
+                        .custom-report-table tr.report-goal-row td.col-truoc,
+                        .custom-report-table tr.report-goal-row td.col-sau,
+                        .custom-report-table tr.report-goal-row td.col-mucdo {
+                            display: flex !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            width: 32% !important;
+                            background-color: #F8FAFC !important;
+                            border: 1px solid #E2E8F0 !important;
+                            border-radius: 6px !important;
+                            padding: 5px 4px !important;
+                            text-align: center !important;
+                            font-size: 12px !important;
+                        }
+                        .custom-report-table tr.report-goal-row td.col-truoc::before {
+                            content: "TRƯỚC";
+                            font-size: 9.5px !important;
+                            font-weight: 700 !important;
+                            color: #64748B !important;
+                            margin-bottom: 2px !important;
+                        }
+                        .custom-report-table tr.report-goal-row td.col-sau::before {
+                            content: "SAU CAN THIỆP";
+                            font-size: 9.5px !important;
+                            font-weight: 700 !important;
+                            color: #64748B !important;
+                            margin-bottom: 2px !important;
+                        }
+                        .custom-report-table tr.report-goal-row td.col-mucdo::before {
+                            content: "ĐÁNH GIÁ";
+                            font-size: 9.5px !important;
+                            font-weight: 700 !important;
+                            color: #64748B !important;
+                            margin-bottom: 2px !important;
+                        }
+
+                        /* Hàng 3 của Card: Ý kiến / Định hướng */
+                        .custom-report-table tr.report-goal-row td.col-dinhhuong {
+                            display: block !important;
+                            width: 100% !important;
+                            margin-top: 8px !important;
+                            padding: 6px 8px !important;
+                            background-color: #F8FAFC !important;
+                            border-left: 3px solid #3B82F6 !important;
+                            border-radius: 0 6px 6px 0 !important;
+                            font-size: 12px !important;
+                            color: #334155 !important;
+                        }
+                        .custom-report-table tr.report-goal-row td.col-dinhhuong::before {
+                            content: "Định hướng: ";
+                            font-weight: 700 !important;
+                            color: #1E3A8A !important;
+                        }
+
+                        /* Chế độ Kế hoạch chi tiết (In đủ / In gọn) trên Mobile */
+                        .embedded-plan-sheet .goal-card-box { padding: 8px !important; }
+                        .embedded-plan-sheet .goal-title-full { font-size: 14px !important; }
+                        .embedded-plan-sheet .goal-meta-bottom-right {
+                            text-align: left !important;
+                            display: flex !important;
+                            flex-wrap: wrap !important;
+                            gap: 4px !important;
+                        }
+                        .embedded-plan-sheet .meta-tag-lv,
+                        .embedded-plan-sheet .meta-tag-tuoi,
+                        .embedded-plan-sheet .meta-tag-ct {
+                            margin-left: 0 !important;
+                            font-size: 11px !important;
+                        }
+                        .embedded-plan-sheet .tracking-days-table { min-width: 780px; }
                         .embedded-plan-sheet .tracking-header-table,
                         .embedded-plan-sheet .tracking-header-table tbody,
                         .embedded-plan-sheet .tracking-header-table tr,
@@ -462,7 +631,7 @@
                         .embedded-plan-sheet .eval-split-table td {
                             display: block !important; width: 100% !important; text-align: left !important; margin: 0 !important;
                         }
-                        .embedded-plan-sheet .baseline-highlight-box { display: block !important; width: 100% !important; margin-top: 4px !important; }
+                        .embedded-plan-sheet .baseline-highlight-box { display: block !important; width: 100% !important; margin-top: 4px !important; box-sizing: border-box !important; }
                         .embedded-plan-sheet .eval-split-cell { margin-bottom: 6px !important; }
                     }
 
@@ -611,7 +780,7 @@
                                             title="Kế hoạch đang thực hiện nên chưa có báo cáo tổng kết cuối kỳ"
                                             disabled="disabled">
                                         <i class="fa fa-lock"/>
-                                        <span>1. Báo cáo tổng kết tháng(đang can thiệp, chưa kết thúc)</span>
+                                        <span>1. Báo cáo tổng kết tháng (đang can thiệp, chưa kết thúc)</span>
                                     </button>
                                 </t>
 
@@ -631,9 +800,6 @@
                                     <span>Kế hoạch gọn (Tóm tắt)</span>
                                 </button>
                             </div>
-
-
-
                         </div>
 
                         <!-- ========================================================================= -->
@@ -713,8 +879,8 @@
                                 </div>
                             </div>
 
-                            <!-- 1. BẢNG MỤC TIÊU PHÂN NHÓM (ẨN LĨNH VỰC KHÔNG CÓ MỤC TIÊU) -->
-                            <div style="font-size: 14px; font-weight: 700; color: #1E3A8A; margin-bottom: 5px;">
+                            <!-- 1. BẢNG MỤC TIÊU PHÂN NHÓM (DESKTOP: TABLE | MOBILE: THẺ CARD ĐẸP MẮT) -->
+                            <div style="font-size: 14px; font-weight: 700; color: #1E3A8A; margin-bottom: 6px;">
                                 1. Chi tiết mức độ ban đầu và kết quả can thiệp
                             </div>
                             <div class="table-responsive-box">
@@ -732,9 +898,9 @@
                                     <tbody>
                                         <t t-foreach="tab1.get('linhvucs_grouped', [])" t-as="grp">
                                             <t t-if="grp.get('targets')">
-                                                <tr style="background-color: #F8FAFC; border-top: 2px solid #94A3B8; border-bottom: 1px solid #CBD5E1;">
+                                                <tr class="report-domain-row" style="background-color: #F8FAFC; border-top: 2px solid #94A3B8; border-bottom: 1px solid #CBD5E1;">
                                                     <td colspan="6" style="padding: 7px 8px;">
-                                                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+                                                        <div class="domain-header-flex" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
                                                             <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
                                                                 <i class="fa fa-folder-open text-primary" style="font-size: 13px;"/>
                                                                 <span style="font-size: 13.5px; font-weight: 700; color: #1E3A8A; text-transform: uppercase;">
@@ -757,7 +923,7 @@
                                                             </div>
 
                                                             <t t-set="diff" t-value="grp.get('tien_bo', grp['avg_dat'] - grp['avg_thu'])"/>
-                                                            <div style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; background: #FFFFFF; padding: 2px 5px; border-radius: 6px; border: 1px solid #E2E8F0;">
+                                                            <div class="domain-stats-pill" style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; background: #FFFFFF; padding: 2px 6px; border-radius: 6px; border: 1px solid #E2E8F0;">
                                                                 <span style="color: #64748B;">Đầu vào: <strong style="color: #334155;"><t t-out="grp['avg_thu']"/>%</strong></span>
                                                                 <i class="fa fa-angle-right text-muted" style="font-size: 10px;"/>
                                                                 <span style="color: #64748B;">Kết quả: <strong t-attf-style="color: #{'#15803D' if grp['avg_dat'] &gt;= 80 else '#D97706'};"><t t-out="grp['avg_dat']"/>%</strong></span>
@@ -768,20 +934,20 @@
                                                     </td>
                                                 </tr>
                                                 <t t-foreach="grp['targets']" t-as="mt">
-                                                    <tr t-attf-style="background-color: #{'#FFFFFF' if mt.get('muc_do') == 'Củng cố' else '#FFFDF5'};">
-                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center; color: #64748B; font-size: 12.5px;"><span t-out="mt.get('stt')"/></td>
-                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 8px; color: #0F172A; line-height: 1.45; font-size: 13px;"><span t-out="mt.get('muctieu')"/></td>
-                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center; color: #334155; font-size: 12.5px;"><span t-out="mt.get('truoc')"/></td>
-                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center;">
-                                                            <span t-attf-style="display: inline-block; min-width: 36px; padding: 2px 4px; border-radius: 4px; font-size: 12px; font-weight: 600; background-color: #{'#DCFCE7' if mt.get('sau') &gt;= 80 else '#FEF3C7'}; color: #{'#15803D' if mt.get('sau') &gt;= 80 else '#B45309'}; border: 1px solid #{'#BBF7D0' if mt.get('sau') &gt;= 80 else '#FDE68A'};">
+                                                    <tr class="report-goal-row" t-attf-style="background-color: #{'#FFFFFF' if mt.get('muc_do') == 'Củng cố' else '#FFFDF5'};">
+                                                        <td class="col-stt" style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center; color: #64748B; font-size: 12.5px;"><span t-out="mt.get('stt')"/></td>
+                                                        <td class="col-muctieu" style="border: 1px solid #CBD5E1; padding: 6px 8px; color: #0F172A; line-height: 1.45; font-size: 13px;"><span t-out="mt.get('muctieu')"/></td>
+                                                        <td class="col-truoc" style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center; color: #334155; font-size: 12.5px;"><span t-out="mt.get('truoc')"/></td>
+                                                        <td class="col-sau" style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center;">
+                                                            <span t-attf-style="display: inline-block; min-width: 36px; padding: 2px 5px; border-radius: 4px; font-size: 12px; font-weight: 700; background-color: #{'#DCFCE7' if mt.get('sau') &gt;= 80 else '#FEF3C7'}; color: #{'#15803D' if mt.get('sau') &gt;= 80 else '#B45309'}; border: 1px solid #{'#BBF7D0' if mt.get('sau') &gt;= 80 else '#FDE68A'};">
                                                                 <span t-out="mt.get('sau')"/>%
                                                             </span>
                                                         </td>
-                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center;">
-                                                            <span t-if="mt.get('muc_do') == 'Củng cố'" style="display: inline-block; padding: 2px 5px; border-radius: 4px; background-color: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; font-size: 11px; font-weight: 600;">Củng cố</span>
-                                                            <span t-else="" style="display: inline-block; padding: 2px 5px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 11px; font-weight: 600;">Duy trì</span>
+                                                        <td class="col-mucdo" style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center;">
+                                                            <span t-if="mt.get('muc_do') == 'Củng cố'" style="display: inline-block; padding: 2px 6px; border-radius: 4px; background-color: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; font-size: 11px; font-weight: 700;">Củng cố</span>
+                                                            <span t-else="" style="display: inline-block; padding: 2px 6px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 11px; font-weight: 700;">Duy trì</span>
                                                         </td>
-                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 8px; color: #334155; font-size: 12.5px; line-height: 1.4;"><span t-out="mt.get('dinh_huong')"/></td>
+                                                        <td class="col-dinhhuong" style="border: 1px solid #CBD5E1; padding: 6px 8px; color: #334155; font-size: 12.5px; line-height: 1.4;"><span t-out="mt.get('dinh_huong')"/></td>
                                                     </tr>
                                                 </t>
                                             </t>
