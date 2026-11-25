@@ -104,16 +104,19 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
 
             st_code = str(p.trangthai or '0')
             is_done = (st_code == '-1')
-            tyle_dat = round(p.tyle_dat_canthiep or 0)
 
+            # Đồng bộ tỷ lệ hoàn thành trên Timeline khớp 100% với KPI báo cáo bên dưới
             if is_done:
+                tyle_dat = self._compute_plan_mastery_rate(p)
                 badge_text = f"Hoàn thành • Đạt {tyle_dat}%"
                 st_type = 'done'
             elif st_code == '1':
+                tyle_dat = round(p.tyle_dat_canthiep or 0)
                 badge_text = "Đang can thiệp"
                 st_type = 'active'
             else:
-                badge_text = "Đang lập KH"
+                tyle_dat = 0
+                badge_text = "Đang lập Kế hoạch"
                 st_type = 'draft'
 
             ds_kehoach.append({
@@ -143,6 +146,24 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
 
         return ds_kehoach, selected_record
 
+    def _compute_plan_mastery_rate(self, kehoach):
+        """Tính tỷ lệ % mục tiêu đạt của một kế hoạch theo đúng tiêu chí của Báo cáo tổng kết"""
+        if not kehoach:
+            return 0
+        muctieus = kehoach.kehoach_linhvuc_ids.kehoach_muctieu_ids
+        total_targets = len(muctieus)
+        if not total_targets:
+            return round(getattr(kehoach, 'tyle_dat_kiemduyet', 0) or getattr(kehoach, 'tyle_dat_canthiep', 0) or 0)
+
+        count_dat = 0
+        for mt in muctieus:
+            tyle_sau = mt.tyle_kiemduyet if mt.tyle_kiemduyet > 0 else (getattr(mt, 'tyle_canthiep', 0) or mt.tyle_thu)
+            is_mastered = (tyle_sau >= 80) or (mt.trangthai_kiemduyet == '1') or (mt.trangthai == '1')
+            if is_mastered:
+                count_dat += 1
+
+        return round((count_dat / total_targets) * 100)
+
     # =========================================================================
     # TAB 1 LOGIC: BÁO CÁO KẾT QUẢ KỲ ĐÃ ĐÓNG (trangthai == '-1')
     # =========================================================================
@@ -162,6 +183,11 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
 
         global_idx = 1
         for lv_line in linhvuc_lines:
+            mts = lv_line.kehoach_muctieu_ids.sorted(key=lambda m: (m.sequence, m.id))
+            # Ẩn hoàn toàn lĩnh vực không có mục tiêu nào khỏi báo cáo, biểu đồ và chỉ số điểm trũng
+            if not mts:
+                continue
+
             lv_name = lv_line.linhvuc_id.name if lv_line.linhvuc_id else 'Khác'
             tuoi_name = lv_line.tuoi_id.name if lv_line.tuoi_id else ''
 
@@ -170,8 +196,6 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
                 if lv_line.tuoi_id and lv_line.tuoi_id.chuongtrinh_id
                 else (lv_line.chuongtrinh_id.name if hasattr(lv_line, 'chuongtrinh_id') and lv_line.chuongtrinh_id else '')
             )
-
-            mts = lv_line.kehoach_muctieu_ids.sorted(key=lambda m: (m.sequence, m.id))
 
             targets = []
             for mt in mts:
@@ -213,7 +237,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         diem_trung = f"{sorted_temp[-1]['name']} ({sorted_temp[-1]['tyle_dat']}%)" if sorted_temp else "Chưa có"
 
         tong_dat = count_dat if total_targets else getattr(kehoach, 'tong_dat_kiemduyet', 0)
-        rate_t1 = round((tong_dat / total_targets * 100)) if total_targets else getattr(kehoach, 'tyle_dat_canthiep', 0)
+        rate_t1 = round((tong_dat / total_targets * 100)) if total_targets else getattr(kehoach, 'tyle_dat_kiemduyet', 0) or getattr(kehoach, 'tyle_dat_canthiep', 0)
 
         return {
             "ten": kehoach.name or 'Kế hoạch',

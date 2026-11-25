@@ -664,7 +664,7 @@
                                 <div class="kpi-card" style="border-left: 3.5px solid #0D9488;">
                                     <div class="kpi-title">Kết quả đạt</div>
                                     <div class="kpi-value" style="color: #15803D;"><span t-out="tab1.get('tong_muctieu_dat', 0)"/> / <span t-out="tab1.get('tong_muctieu', 0)"/></div>
-                                    <div class="kpi-sub">Đạt: <strong><span t-out="tab1.get('tyle_dat', 0)"/>% KH tháng</strong></div>
+                                    <div class="kpi-sub">Đạt: <strong><span t-out="tab1.get('tyle_dat', 0)"/>% Kế hoạch tháng</strong></div>
                                 </div>
                                 <div class="kpi-card" style="border-left: 3.5px solid #E11D48;">
                                     <div class="kpi-title">Điểm trũng</div>
@@ -728,7 +728,7 @@
                                 </div>
                             </div>
 
-                            <!-- 1. BẢNG MỤC TIÊU PHÂN NHÓM -->
+                            <!-- 1. BẢNG MỤC TIÊU PHÂN NHÓM (ẨN LĨNH VỰC KHÔNG CÓ MỤC TIÊU) -->
                             <div style="font-size: 14px; font-weight: 700; color: #1E3A8A; margin-bottom: 5px;">
                                 1. Chi tiết mức độ ban đầu và kết quả can thiệp
                             </div>
@@ -746,57 +746,59 @@
                                     </thead>
                                     <tbody>
                                         <t t-foreach="tab1.get('linhvucs_grouped', [])" t-as="grp">
-                                            <tr style="background-color: #F8FAFC; border-top: 2px solid #94A3B8; border-bottom: 1px solid #CBD5E1;">
-                                                <td colspan="6" style="padding: 7px 8px;">
-                                                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
-                                                        <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
-                                                            <i class="fa fa-folder-open text-primary" style="font-size: 13px;"/>
-                                                            <span style="font-size: 13.5px; font-weight: 700; color: #1E3A8A; text-transform: uppercase;">
-                                                                <t t-out="grp['linhvuc']"/>
-                                                            </span>
-                                                            <t t-if="grp.get('tuoi')">
-                                                                <span class="badge" style="background-color: #E2E8F0; color: #334155; font-size: 11px; padding: 2px 5px; border-radius: 4px; font-weight: 600;">
-                                                                    <t t-out="grp['tuoi']"/>
+                                            <t t-if="grp.get('targets')">
+                                                <tr style="background-color: #F8FAFC; border-top: 2px solid #94A3B8; border-bottom: 1px solid #CBD5E1;">
+                                                    <td colspan="6" style="padding: 7px 8px;">
+                                                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+                                                            <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                                                                <i class="fa fa-folder-open text-primary" style="font-size: 13px;"/>
+                                                                <span style="font-size: 13.5px; font-weight: 700; color: #1E3A8A; text-transform: uppercase;">
+                                                                    <t t-out="grp['linhvuc']"/>
                                                                 </span>
-                                                            </t>
-                                                            <t t-if="grp.get('chuongtrinh')">
-                                                                <span class="badge" style="background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; font-size: 11px; padding: 2px 5px; border-radius: 4px; font-weight: 600;">
-                                                                    <i class="fa fa-bookmark me-1" style="font-size: 8px;"/>
-                                                                    <t t-out="grp['chuongtrinh']"/>
+                                                                <t t-if="grp.get('tuoi')">
+                                                                    <span class="badge" style="background-color: #E2E8F0; color: #334155; font-size: 11px; padding: 2px 5px; border-radius: 4px; font-weight: 600;">
+                                                                        <t t-out="grp['tuoi']"/>
+                                                                    </span>
+                                                                </t>
+                                                                <t t-if="grp.get('chuongtrinh')">
+                                                                    <span class="badge" style="background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; font-size: 11px; padding: 2px 5px; border-radius: 4px; font-weight: 600;">
+                                                                        <i class="fa fa-bookmark me-1" style="font-size: 8px;"/>
+                                                                        <t t-out="grp['chuongtrinh']"/>
+                                                                    </span>
+                                                                </t>
+                                                                <span style="font-size: 12px; color: #64748B;">
+                                                                    (<t t-out="grp['total_mt']"/> mục tiêu)
                                                                 </span>
-                                                            </t>
-                                                            <span style="font-size: 12px; color: #64748B;">
-                                                                (<t t-out="grp['total_mt']"/> mục tiêu)
-                                                            </span>
-                                                        </div>
+                                                            </div>
 
-                                                        <t t-set="diff" t-value="grp.get('tien_bo', grp['avg_dat'] - grp['avg_thu'])"/>
-                                                        <div style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; background: #FFFFFF; padding: 2px 5px; border-radius: 6px; border: 1px solid #E2E8F0;">
-                                                            <span style="color: #64748B;">Đầu vào: <strong style="color: #334155;"><t t-out="grp['avg_thu']"/>%</strong></span>
-                                                            <i class="fa fa-angle-right text-muted" style="font-size: 10px;"/>
-                                                            <span style="color: #64748B;">Kết quả: <strong t-attf-style="color: #{'#15803D' if grp['avg_dat'] &gt;= 80 else '#D97706'};"><t t-out="grp['avg_dat']"/>%</strong></span>
-                                                            <span style="width: 1px; height: 10px; background: #CBD5E1; margin: 0 1px;"/>
-                                                            <span style="color: #64748B;">Tiến bộ: <strong t-attf-style="color: #{'#16A34A' if diff &gt; 0 else ('#DC2626' if diff &lt; 0 else '#64748B')};"><t t-if="diff &gt; 0">+</t><t t-out="diff"/>%</strong></span>
+                                                            <t t-set="diff" t-value="grp.get('tien_bo', grp['avg_dat'] - grp['avg_thu'])"/>
+                                                            <div style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; background: #FFFFFF; padding: 2px 5px; border-radius: 6px; border: 1px solid #E2E8F0;">
+                                                                <span style="color: #64748B;">Đầu vào: <strong style="color: #334155;"><t t-out="grp['avg_thu']"/>%</strong></span>
+                                                                <i class="fa fa-angle-right text-muted" style="font-size: 10px;"/>
+                                                                <span style="color: #64748B;">Kết quả: <strong t-attf-style="color: #{'#15803D' if grp['avg_dat'] &gt;= 80 else '#D97706'};"><t t-out="grp['avg_dat']"/>%</strong></span>
+                                                                <span style="width: 1px; height: 10px; background: #CBD5E1; margin: 0 1px;"/>
+                                                                <span style="color: #64748B;">Tiến bộ: <strong t-attf-style="color: #{'#16A34A' if diff &gt; 0 else ('#DC2626' if diff &lt; 0 else '#64748B')};"><t t-if="diff &gt; 0">+</t><t t-out="diff"/>%</strong></span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <t t-foreach="grp['targets']" t-as="mt">
-                                                <tr t-attf-style="background-color: #{'#FFFFFF' if mt.get('muc_do') == 'Củng cố' else '#FFFDF5'};">
-                                                    <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center; color: #64748B; font-size: 12.5px;"><span t-out="mt.get('stt')"/></td>
-                                                    <td style="border: 1px solid #CBD5E1; padding: 6px 8px; color: #0F172A; line-height: 1.45; font-size: 13px;"><span t-out="mt.get('muctieu')"/></td>
-                                                    <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center; color: #334155; font-size: 12.5px;"><span t-out="mt.get('truoc')"/></td>
-                                                    <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center;">
-                                                        <span t-attf-style="display: inline-block; min-width: 36px; padding: 2px 4px; border-radius: 4px; font-size: 12px; font-weight: 600; background-color: #{'#DCFCE7' if mt.get('sau') &gt;= 80 else '#FEF3C7'}; color: #{'#15803D' if mt.get('sau') &gt;= 80 else '#B45309'}; border: 1px solid #{'#BBF7D0' if mt.get('sau') &gt;= 80 else '#FDE68A'};">
-                                                            <span t-out="mt.get('sau')"/>%
-                                                        </span>
                                                     </td>
-                                                    <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center;">
-                                                        <span t-if="mt.get('muc_do') == 'Củng cố'" style="display: inline-block; padding: 2px 5px; border-radius: 4px; background-color: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; font-size: 11px; font-weight: 600;">Củng cố</span>
-                                                        <span t-else="" style="display: inline-block; padding: 2px 5px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 11px; font-weight: 600;">Duy trì</span>
-                                                    </td>
-                                                    <td style="border: 1px solid #CBD5E1; padding: 6px 8px; color: #334155; font-size: 12.5px; line-height: 1.4;"><span t-out="mt.get('dinh_huong')"/></td>
                                                 </tr>
+                                                <t t-foreach="grp['targets']" t-as="mt">
+                                                    <tr t-attf-style="background-color: #{'#FFFFFF' if mt.get('muc_do') == 'Củng cố' else '#FFFDF5'};">
+                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center; color: #64748B; font-size: 12.5px;"><span t-out="mt.get('stt')"/></td>
+                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 8px; color: #0F172A; line-height: 1.45; font-size: 13px;"><span t-out="mt.get('muctieu')"/></td>
+                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center; color: #334155; font-size: 12.5px;"><span t-out="mt.get('truoc')"/></td>
+                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center;">
+                                                            <span t-attf-style="display: inline-block; min-width: 36px; padding: 2px 4px; border-radius: 4px; font-size: 12px; font-weight: 600; background-color: #{'#DCFCE7' if mt.get('sau') &gt;= 80 else '#FEF3C7'}; color: #{'#15803D' if mt.get('sau') &gt;= 80 else '#B45309'}; border: 1px solid #{'#BBF7D0' if mt.get('sau') &gt;= 80 else '#FDE68A'};">
+                                                                <span t-out="mt.get('sau')"/>%
+                                                            </span>
+                                                        </td>
+                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 4px; text-align: center;">
+                                                            <span t-if="mt.get('muc_do') == 'Củng cố'" style="display: inline-block; padding: 2px 5px; border-radius: 4px; background-color: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; font-size: 11px; font-weight: 600;">Củng cố</span>
+                                                            <span t-else="" style="display: inline-block; padding: 2px 5px; border-radius: 4px; background-color: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; font-size: 11px; font-weight: 600;">Duy trì</span>
+                                                        </td>
+                                                        <td style="border: 1px solid #CBD5E1; padding: 6px 8px; color: #334155; font-size: 12.5px; line-height: 1.4;"><span t-out="mt.get('dinh_huong')"/></td>
+                                                    </tr>
+                                                </t>
                                             </t>
                                         </t>
                                     </tbody>
@@ -822,12 +824,14 @@
                                         <div style="font-weight: 700; color: #1E3A8A; font-size: 13px; margin-bottom: 3px;">CỦNG CỐ</div>
                                         <t t-if="tab1.get('dinh_huong_cung_co')">
                                             <t t-foreach="tab1['dinh_huong_cung_co']" t-as="cc">
-                                                <div style="margin-bottom: 5px; padding-left: 3px;">
-                                                    <div style="font-weight: 600; color: #1E4E79; font-size: 12.5px;">- <t t-out="cc['linhvuc']"/></div>
-                                                    <t t-foreach="cc['targets']" t-as="mt_name">
-                                                        <div style="padding-left: 12px; color: #0F172A; font-size: 13px;">+ <t t-out="mt_name"/></div>
-                                                    </t>
-                                                </div>
+                                                <t t-if="cc.get('targets')">
+                                                    <div style="margin-bottom: 5px; padding-left: 3px;">
+                                                        <div style="font-weight: 600; color: #1E4E79; font-size: 12.5px;">- <t t-out="cc['linhvuc']"/></div>
+                                                        <t t-foreach="cc['targets']" t-as="mt_name">
+                                                            <div style="padding-left: 12px; color: #0F172A; font-size: 13px;">+ <t t-out="mt_name"/></div>
+                                                        </t>
+                                                    </div>
+                                                </t>
                                             </t>
                                         </t>
                                         <t t-else=""><div class="text-muted fst-italic ps-2">Không có mục tiêu nào trong kỳ đạt mức củng cố.</div></t>
@@ -838,12 +842,14 @@
                                         <div style="color: #64748B; font-style: italic; margin-bottom: 5px; font-size: 12.5px;">Tiếp tục thực hiện những mục tiêu chưa đạt (chuyển sang tháng tiếp theo):</div>
                                         <t t-if="tab1.get('dinh_huong_duy_tri')">
                                             <t t-foreach="tab1['dinh_huong_duy_tri']" t-as="dt">
-                                                <div style="margin-bottom: 5px; padding-left: 3px;">
-                                                    <div style="font-weight: 600; color: #B45309; font-size: 12.5px;">- <t t-out="dt['linhvuc']"/>:</div>
-                                                    <t t-foreach="dt['targets']" t-as="mt_dt">
-                                                        <div style="padding-left: 12px; color: #0F172A; font-size: 13px;">+ <t t-out="mt_dt"/></div>
-                                                    </t>
-                                                </div>
+                                                <t t-if="dt.get('targets')">
+                                                    <div style="margin-bottom: 5px; padding-left: 3px;">
+                                                        <div style="font-weight: 600; color: #B45309; font-size: 12.5px;">- <t t-out="dt['linhvuc']"/>:</div>
+                                                        <t t-foreach="dt['targets']" t-as="mt_dt">
+                                                            <div style="padding-left: 12px; color: #0F172A; font-size: 13px;">+ <t t-out="mt_dt"/></div>
+                                                        </t>
+                                                    </div>
+                                                </t>
                                             </t>
                                         </t>
                                         <t t-else=""><div class="text-muted fst-italic ps-2">Tất cả các mục tiêu trong kỳ đều đã đạt yêu cầu.</div></t>
@@ -873,196 +879,198 @@
                                 </div>
 
                                 <t t-foreach="o.kehoach_linhvuc_ids" t-as="lv">
-                                    <t t-foreach="lv.kehoach_muctieu_ids" t-as="muctieu">
-                                        <t t-set="val_cn" t-value="(muctieu.chucnang or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
-                                        <t t-set="has_chucnang" t-value="bool(val_cn)"/>
-                                        <t t-set="val_tk" t-value="(muctieu.thietke or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
-                                        <t t-set="has_thietke" t-value="bool(val_tk)"/>
-                                        <t t-set="kq_map" t-value="{k.ngay: k for k in muctieu.ketqua2muctieu_ids}"/>
-                                        <t t-set="total_days" t-value="int(o.songay or 30)"/>
-                                        <t t-set="has_kiemduyet" t-value="bool(muctieu.trangthai_kiemduyet and muctieu.trangthai_kiemduyet != '0')"/>
-                                        <t t-set="has_ghichu_kd" t-value="bool(muctieu.ghichu_kiemduyet and muctieu.ghichu_kiemduyet.strip())"/>
-                                        <t t-set="has_dinhhuong_kd" t-value="bool(muctieu.dinhhuong_kiemduyet and muctieu.dinhhuong_kiemduyet.strip())"/>
-                                        <t t-set="base_rate" t-value="muctieu.tyle_thu or 0"/>
-                                        <t t-set="base_box_cls" t-value="base_rate &gt;= 80 and 'baseline-high' or (base_rate &gt; 0 and 'baseline-mid' or 'baseline-zero')"/>
-                                        <t t-set="base_pill_cls" t-value="base_rate &gt;= 80 and 'pill-base-high' or (base_rate &gt; 0 and 'pill-base-mid' or 'pill-base-zero')"/>
+                                    <t t-if="lv.kehoach_muctieu_ids">
+                                        <t t-foreach="lv.kehoach_muctieu_ids" t-as="muctieu">
+                                            <t t-set="val_cn" t-value="(muctieu.chucnang or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
+                                            <t t-set="has_chucnang" t-value="bool(val_cn)"/>
+                                            <t t-set="val_tk" t-value="(muctieu.thietke or '').replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '').replace('&lt;br&gt;', '').replace('&lt;br/&gt;', '').replace('&amp;nbsp;', ' ').strip()"/>
+                                            <t t-set="has_thietke" t-value="bool(val_tk)"/>
+                                            <t t-set="kq_map" t-value="{k.ngay: k for k in muctieu.ketqua2muctieu_ids}"/>
+                                            <t t-set="total_days" t-value="int(o.songay or 30)"/>
+                                            <t t-set="has_kiemduyet" t-value="bool(muctieu.trangthai_kiemduyet and muctieu.trangthai_kiemduyet != '0')"/>
+                                            <t t-set="has_ghichu_kd" t-value="bool(muctieu.ghichu_kiemduyet and muctieu.ghichu_kiemduyet.strip())"/>
+                                            <t t-set="has_dinhhuong_kd" t-value="bool(muctieu.dinhhuong_kiemduyet and muctieu.dinhhuong_kiemduyet.strip())"/>
+                                            <t t-set="base_rate" t-value="muctieu.tyle_thu or 0"/>
+                                            <t t-set="base_box_cls" t-value="base_rate &gt;= 80 and 'baseline-high' or (base_rate &gt; 0 and 'baseline-mid' or 'baseline-zero')"/>
+                                            <t t-set="base_pill_cls" t-value="base_rate &gt;= 80 and 'pill-base-high' or (base_rate &gt; 0 and 'pill-base-mid' or 'pill-base-zero')"/>
 
-                                        <div class="goal-card-box">
-                                            <!-- 1. TIÊU ĐỀ MỤC TIÊU FULL DÒNG 1 & METADATA DÒNG 2 -->
-                                            <div class="goal-top-row">
-                                                <div class="goal-title-full">
-                                                    <span class="goal-index-badge">Mục tiêu <span t-out="muctieu_index + 1"/></span>
-                                                    <span class="goal-name-text" t-field="muctieu.name"/>
-                                                    <t t-if="muctieu.ghichu">
-                                                        <span class="goal-note-text">
-                                                            <i class="fa fa-commenting-o text-warning" style="margin-right: 4px;"/>
-                                                            <strong>Ghi chú:</strong> <span t-field="muctieu.ghichu"/>
-                                                        </span>
-                                                    </t>
-                                                </div>
-                                                <div class="goal-meta-bottom-right">
-                                                    <span class="meta-tag-lv"><i class="fa fa-folder-open-o" style="margin-right: 3px;"/><span t-field="lv.linhvuc_id.name"/></span>
-                                                    <span class="meta-tag-tuoi"><i class="fa fa-child" style="margin-right: 3px;"/><span t-field="lv.tuoi_id.name"/></span>
-                                                    <span class="meta-tag-ct"><i class="fa fa-bookmark-o" style="margin-right: 3px;"/><span t-field="lv.chuongtrinh_id.name"/></span>
-                                                </div>
-                                            </div>
-
-                                            <!-- 2. NỘI DUNG CHI TIẾT CHỈ HIỂN THỊ KHI CHỌN "KẾ HOẠCH ĐẦY ĐỦ (IN ĐỦ)" -->
-                                            <t t-if="view_mode == 'full'">
-                                                <t t-if="has_chucnang">
-                                                    <div class="section-block-box">
-                                                        <div class="section-header-title">
-                                                            <i class="fa fa-star text-success" style="margin-right: 5px;"/>I. Chức năng phát triển cốt lõi và Lập luận lâm sàng
-                                                        </div>
-                                                        <div class="text-paragraph"><span t-out="muctieu.chucnang"/></div>
-                                                    </div>
-                                                </t>
-
-                                                <t t-if="has_thietke">
-                                                    <div class="section-block-box">
-                                                        <div class="section-header-title">
-                                                            <i class="fa fa-magic text-warning" style="margin-right: 5px; color: #EA580C;"/>II. Thiết kế hoạt động cho giáo viên theo mô tả (ABC)
-                                                        </div>
-                                                        <div class="text-paragraph abc-content-wrapper">
-                                                            <span t-out="muctieu.thietke"/>
-                                                        </div>
-                                                    </div>
-                                                </t>
-                                            </t>
-
-                                            <!-- 3. NHẬT KÝ THEO DÕI HÀNG NGÀY & DỮ LIỆU BAN ĐẦU (DÙNG CHUNG CHO CẢ IN ĐỦ & IN GỌN) -->
-                                            <div class="tracking-diary-content">
-                                                <table class="tracking-header-table">
-                                                    <tr>
-                                                        <td class="tracking-header-label">
-                                                            <i class="fa fa-calendar-check-o text-primary" style="margin-right: 5px;"/>
-                                                            <span style="text-transform: uppercase;">
-                                                                <t t-if="view_mode == 'full'">III. Nhật ký theo dõi hàng ngày</t>
-                                                                <t t-else="">Nhật ký theo dõi hàng ngày</t>
+                                            <div class="goal-card-box">
+                                                <!-- 1. TIÊU ĐỀ MỤC TIÊU FULL DÒNG 1 & METADATA DÒNG 2 -->
+                                                <div class="goal-top-row">
+                                                    <div class="goal-title-full">
+                                                        <span class="goal-index-badge">Mục tiêu <span t-out="muctieu_index + 1"/></span>
+                                                        <span class="goal-name-text" t-field="muctieu.name"/>
+                                                        <t t-if="muctieu.ghichu">
+                                                            <span class="goal-note-text">
+                                                                <i class="fa fa-commenting-o text-warning" style="margin-right: 4px;"/>
+                                                                <strong>Ghi chú:</strong> <span t-field="muctieu.ghichu"/>
                                                             </span>
-                                                            <span style="font-weight: normal; color: #475569; font-size: 12.5px;">
-                                                                (Chuẩn thử: <strong style="color: #DC2626;"><span t-out="muctieu.solan_thu or 0"/></strong> lần/ngày)
-                                                            </span>
-                                                        </td>
-                                                        <td style="text-align: right; vertical-align: middle;">
-                                                            <div t-attf-class="baseline-highlight-box #{base_box_cls}">
-                                                                <i class="fa fa-crosshairs" style="margin-right: 4px;"/>
-                                                                <span class="baseline-title">Dữ liệu ban đầu:</span>
-                                                                <span><strong><span t-out="muctieu.solan_thu_dat or 0"/>/<span t-out="muctieu.solan_thu or 0"/></strong> lần, đạt tỷ lệ </span>
-                                                                <span t-attf-class="baseline-rate-pill #{base_pill_cls}"><span t-out="base_rate"/>%</span>
+                                                        </t>
+                                                    </div>
+                                                    <div class="goal-meta-bottom-right">
+                                                        <span class="meta-tag-lv"><i class="fa fa-folder-open-o" style="margin-right: 3px;"/><span t-field="lv.linhvuc_id.name"/></span>
+                                                        <span class="meta-tag-tuoi"><i class="fa fa-child" style="margin-right: 3px;"/><span t-field="lv.tuoi_id.name"/></span>
+                                                        <span class="meta-tag-ct"><i class="fa fa-bookmark-o" style="margin-right: 3px;"/><span t-field="lv.chuongtrinh_id.name"/></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 2. NỘI DUNG CHI TIẾT CHỈ HIỂN THỊ KHI CHỌN "KẾ HOẠCH ĐẦY ĐỦ (IN ĐỦ)" -->
+                                                <t t-if="view_mode == 'full'">
+                                                    <t t-if="has_chucnang">
+                                                        <div class="section-block-box">
+                                                            <div class="section-header-title">
+                                                                <i class="fa fa-star text-success" style="margin-right: 5px;"/>I. Chức năng phát triển cốt lõi và Lập luận lâm sàng
                                                             </div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                                            <div class="text-paragraph"><span t-out="muctieu.chucnang"/></div>
+                                                        </div>
+                                                    </t>
 
-                                                <div class="tracking-scroll-wrapper">
-                                                    <table class="tracking-days-table">
-                                                        <thead>
-                                                            <tr>
-                                                                <t t-foreach="range(total_days)" t-as="day_idx">
-                                                                    <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
-                                                                    <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
-                                                                    <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
-                                                                    <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
-                                                                    <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
-                                                                    <th t-attf-class="td-day-head #{is_rest and 'cell-rest' or ''}"><t t-out="cur_date.strftime('%d/%m')"/></th>
-                                                                </t>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <t t-foreach="range(total_days)" t-as="day_idx">
-                                                                    <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
-                                                                    <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
-                                                                    <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
-                                                                    <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
-                                                                    <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
-                                                                    <t t-set="has_score" t-value="bool(kq_rec and kq_rec.loai == '1' and kq_rec.trangthai != '0' and kq_rec.solan_thu_dat &gt;= 0)"/>
-                                                                    <t t-set="score_cls" t-value="has_score and (kq_rec.tyle_thu &gt;= 80 and 'score-pass' or (kq_rec.solan_thu_dat &gt; 0 and 'score-forming' or 'score-zero')) or ''"/>
-                                                                    <td t-attf-class="td-day-score #{is_rest and 'cell-rest' or score_cls}">
-                                                                        <t t-if="kq_rec">
-                                                                            <t t-if="kq_rec.loai == '-1'">N</t>
-                                                                            <t t-elif="kq_rec.loai == '0'"></t>
-                                                                            <t t-else="">
-                                                                                <t t-if="has_score"><t t-out="kq_rec.solan_thu_dat"/></t>
-                                                                                <t t-else=""><span style="color: #CBD5E1; font-weight: normal;">-</span></t>
+                                                    <t t-if="has_thietke">
+                                                        <div class="section-block-box">
+                                                            <div class="section-header-title">
+                                                                <i class="fa fa-magic text-warning" style="margin-right: 5px; color: #EA580C;"/>II. Thiết kế hoạt động cho giáo viên theo mô tả (ABC)
+                                                            </div>
+                                                            <div class="text-paragraph abc-content-wrapper">
+                                                                <span t-out="muctieu.thietke"/>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </t>
+
+                                                <!-- 3. NHẬT KÝ THEO DÕI HÀNG NGÀY & DỮ LIỆU BAN ĐẦU (DÙNG CHUNG CHO CẢ IN ĐỦ & IN GỌN) -->
+                                                <div class="tracking-diary-content">
+                                                    <table class="tracking-header-table">
+                                                        <tr>
+                                                            <td class="tracking-header-label">
+                                                                <i class="fa fa-calendar-check-o text-primary" style="margin-right: 5px;"/>
+                                                                <span style="text-transform: uppercase;">
+                                                                    <t t-if="view_mode == 'full'">III. Nhật ký theo dõi hàng ngày</t>
+                                                                    <t t-else="">Nhật ký theo dõi hàng ngày</t>
+                                                                </span>
+                                                                <span style="font-weight: normal; color: #475569; font-size: 12.5px;">
+                                                                    (Chuẩn thử: <strong style="color: #DC2626;"><span t-out="muctieu.solan_thu or 0"/></strong> lần/ngày)
+                                                                </span>
+                                                            </td>
+                                                            <td style="text-align: right; vertical-align: middle;">
+                                                                <div t-attf-class="baseline-highlight-box #{base_box_cls}">
+                                                                    <i class="fa fa-crosshairs" style="margin-right: 4px;"/>
+                                                                    <span class="baseline-title">Dữ liệu ban đầu:</span>
+                                                                    <span><strong><span t-out="muctieu.solan_thu_dat or 0"/>/<span t-out="muctieu.solan_thu or 0"/></strong> lần, đạt tỷ lệ </span>
+                                                                    <span t-attf-class="baseline-rate-pill #{base_pill_cls}"><span t-out="base_rate"/>%</span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <div class="tracking-scroll-wrapper">
+                                                        <table class="tracking-days-table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <t t-foreach="range(total_days)" t-as="day_idx">
+                                                                        <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
+                                                                        <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
+                                                                        <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
+                                                                        <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
+                                                                        <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
+                                                                        <th t-attf-class="td-day-head #{is_rest and 'cell-rest' or ''}"><t t-out="cur_date.strftime('%d/%m')"/></th>
+                                                                    </t>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <t t-foreach="range(total_days)" t-as="day_idx">
+                                                                        <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
+                                                                        <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
+                                                                        <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
+                                                                        <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
+                                                                        <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
+                                                                        <t t-set="has_score" t-value="bool(kq_rec and kq_rec.loai == '1' and kq_rec.trangthai != '0' and kq_rec.solan_thu_dat &gt;= 0)"/>
+                                                                        <t t-set="score_cls" t-value="has_score and (kq_rec.tyle_thu &gt;= 80 and 'score-pass' or (kq_rec.solan_thu_dat &gt; 0 and 'score-forming' or 'score-zero')) or ''"/>
+                                                                        <td t-attf-class="td-day-score #{is_rest and 'cell-rest' or score_cls}">
+                                                                            <t t-if="kq_rec">
+                                                                                <t t-if="kq_rec.loai == '-1'">N</t>
+                                                                                <t t-elif="kq_rec.loai == '0'"></t>
+                                                                                <t t-else="">
+                                                                                    <t t-if="has_score"><t t-out="kq_rec.solan_thu_dat"/></t>
+                                                                                    <t t-else=""><span style="color: #CBD5E1; font-weight: normal;">-</span></t>
+                                                                                </t>
                                                                             </t>
+                                                                            <t t-else="">
+                                                                                <t t-if="is_sunday">N</t>
+                                                                                <t t-elif="is_future"></t>
+                                                                                <t t-else=""><span style="color: #CBD5E1; font-weight: normal;">•</span></t>
+                                                                            </t>
+                                                                        </td>
+                                                                    </t>
+                                                                </tr>
+                                                                <tr>
+                                                                    <t t-foreach="range(total_days)" t-as="day_idx">
+                                                                        <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
+                                                                        <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
+                                                                        <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
+                                                                        <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
+                                                                        <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
+                                                                        <t t-set="has_score" t-value="bool(kq_rec and kq_rec.loai == '1' and kq_rec.trangthai != '0' and kq_rec.solan_thu_dat &gt;= 0)"/>
+                                                                        <t t-set="rate_cls" t-value="has_score and (kq_rec.tyle_thu &gt;= 80 and 'score-pass' or (kq_rec.solan_thu_dat &gt; 0 and 'score-forming' or 'score-zero')) or ''"/>
+                                                                        <td t-attf-class="td-day-rate #{is_rest and 'cell-rest' or rate_cls}">
+                                                                            <t t-if="kq_rec and kq_rec.loai == '1' and kq_rec.trangthai != '0'"><t t-out="kq_rec.tyle_thu"/>%</t>
+                                                                        </td>
+                                                                    </t>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <!-- 4. TỔNG KẾT ĐÁNH GIÁ 2 CỘT -->
+                                                    <table class="eval-split-table">
+                                                        <tr>
+                                                            <td class="eval-split-cell" t-att-style="has_kiemduyet and 'width: 50%;' or 'width: 100%;'">
+                                                                <div class="eval-card-box eval-gv-box">
+                                                                    <div class="eval-box-header">
+                                                                        <i class="fa fa-user-tie text-primary" style="margin-right: 4px;"/>
+                                                                        <strong>Kết quả <span t-out="o.songay"/> ngày can thiệp (Giáo viên):</strong>
+                                                                        <span t-attf-class="eval-pill #{muctieu.trangthai == '1' and 'pill-gv-dat' or 'pill-gv-chuadat'}">
+                                                                            <i t-attf-class="fa #{muctieu.trangthai == '1' and 'fa-check-circle' or 'fa-bolt'}" style="margin-right: 3px;"/>
+                                                                            <span t-field="muctieu.trangthai"/> (<span t-field="muctieu.tyle_ketqua"/>%)
+                                                                        </span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span class="eval-stat-inline"><i class="fa fa-check text-success" style="margin-right: 2px;"/>Đạt (≥80%): <span class="txt-stat-dat"><span t-field="muctieu.ketqua_dat"/> ngày</span></span>
+                                                                        <span class="eval-stat-inline"><i class="fa fa-adjust text-warning" style="margin-right: 2px;"/>Đang hình thành (&lt;80%): <span class="txt-stat-ht"><span t-field="muctieu.ketqua_hinhthanh"/> ngày</span></span>
+                                                                        <span class="eval-stat-inline" style="margin-right: 0;"><i class="fa fa-times text-danger" style="margin-right: 2px;"/>Chưa đạt (0%): <span class="txt-stat-cd"><span t-field="muctieu.ketqua_khongdat"/> ngày</span></span>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td t-if="has_kiemduyet" class="eval-split-cell" style="width: 50%;">
+                                                                <div t-attf-class="eval-card-box #{muctieu.trangthai_kiemduyet == '1' and 'eval-kd-dat' or (muctieu.trangthai_kiemduyet == '-1' and 'eval-kd-chuyen' or 'eval-kd-dung')}">
+                                                                    <div t-attf-class="eval-box-header #{(not has_ghichu_kd and not has_dinhhuong_kd) and 'no-border' or ''}">
+                                                                        <i class="fa fa-user-md" style="margin-right: 4px; color: #334155;"/>
+                                                                        <strong>Đánh giá quản lý chuyên môn:</strong>
+                                                                        <t t-if="muctieu.trangthai_kiemduyet == '1'">
+                                                                            <span class="eval-pill pill-kd-dat"><i class="fa fa-check-circle" style="margin-right: 3px;"/>ĐẠT (<span t-field="muctieu.tyle_kiemduyet"/>%)</span>
                                                                         </t>
-                                                                        <t t-else="">
-                                                                            <t t-if="is_sunday">N</t>
-                                                                            <t t-elif="is_future"></t>
-                                                                            <t t-else=""><span style="color: #CBD5E1; font-weight: normal;">•</span></t>
+                                                                        <t t-elif="muctieu.trangthai_kiemduyet == '-1'">
+                                                                            <span class="eval-pill pill-kd-chuyen"><i class="fa fa-arrow-circle-right" style="margin-right: 3px;"/>CHUYỂN THÁNG SAU (<span t-field="muctieu.tyle_kiemduyet"/>%)</span>
                                                                         </t>
-                                                                    </td>
-                                                                </t>
-                                                            </tr>
-                                                            <tr>
-                                                                <t t-foreach="range(total_days)" t-as="day_idx">
-                                                                    <t t-set="cur_date" t-value="o.tu_ngay + datetime.timedelta(days=day_idx)"/>
-                                                                    <t t-set="is_sunday" t-value="cur_date.weekday() == 6"/>
-                                                                    <t t-set="is_future" t-value="cur_date &gt; datetime.date.today()"/>
-                                                                    <t t-set="kq_rec" t-value="kq_map.get(cur_date)"/>
-                                                                    <t t-set="is_rest" t-value="is_sunday or is_future or (kq_rec and kq_rec.loai in ['0', '-1'])"/>
-                                                                    <t t-set="has_score" t-value="bool(kq_rec and kq_rec.loai == '1' and kq_rec.trangthai != '0' and kq_rec.solan_thu_dat &gt;= 0)"/>
-                                                                    <t t-set="rate_cls" t-value="has_score and (kq_rec.tyle_thu &gt;= 80 and 'score-pass' or (kq_rec.solan_thu_dat &gt; 0 and 'score-forming' or 'score-zero')) or ''"/>
-                                                                    <td t-attf-class="td-day-rate #{is_rest and 'cell-rest' or rate_cls}">
-                                                                        <t t-if="kq_rec and kq_rec.loai == '1' and kq_rec.trangthai != '0'"><t t-out="kq_rec.tyle_thu"/>%</t>
-                                                                    </td>
-                                                                </t>
-                                                            </tr>
-                                                        </tbody>
+                                                                        <t t-elif="muctieu.trangthai_kiemduyet == '-2'">
+                                                                            <span class="eval-pill pill-kd-dung"><i class="fa fa-ban" style="margin-right: 3px;"/>DỪNG CAN THIỆP (<span t-field="muctieu.tyle_kiemduyet"/>%)</span>
+                                                                        </t>
+                                                                    </div>
+                                                                    <div t-if="has_ghichu_kd" class="eval-kd-note">
+                                                                        <i class="fa fa-pencil-square-o" style="margin-right: 3px; color: #475569;"/>
+                                                                        <strong>Ghi chú kiểm duyệt:</strong> <span t-out="muctieu.ghichu_kiemduyet"/>
+                                                                    </div>
+                                                                    <div t-if="has_dinhhuong_kd" class="eval-kd-note">
+                                                                        <i class="fa fa-compass" style="margin-right: 3px; color: #475569;"/>
+                                                                        <strong>Ý kiến / Định hướng:</strong> <span t-out="muctieu.dinhhuong_kiemduyet"/>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
                                                     </table>
                                                 </div>
-
-                                                <!-- 4. TỔNG KẾT ĐÁNH GIÁ 2 CỘT -->
-                                                <table class="eval-split-table">
-                                                    <tr>
-                                                        <td class="eval-split-cell" t-att-style="has_kiemduyet and 'width: 50%;' or 'width: 100%;'">
-                                                            <div class="eval-card-box eval-gv-box">
-                                                                <div class="eval-box-header">
-                                                                    <i class="fa fa-user-tie text-primary" style="margin-right: 4px;"/>
-                                                                    <strong>Kết quả <span t-out="o.songay"/> ngày can thiệp (Giáo viên):</strong>
-                                                                    <span t-attf-class="eval-pill #{muctieu.trangthai == '1' and 'pill-gv-dat' or 'pill-gv-chuadat'}">
-                                                                        <i t-attf-class="fa #{muctieu.trangthai == '1' and 'fa-check-circle' or 'fa-bolt'}" style="margin-right: 3px;"/>
-                                                                        <span t-field="muctieu.trangthai"/> (<span t-field="muctieu.tyle_ketqua"/>%)
-                                                                    </span>
-                                                                </div>
-                                                                <div>
-                                                                    <span class="eval-stat-inline"><i class="fa fa-check text-success" style="margin-right: 2px;"/>Đạt (≥80%): <span class="txt-stat-dat"><span t-field="muctieu.ketqua_dat"/> ngày</span></span>
-                                                                    <span class="eval-stat-inline"><i class="fa fa-adjust text-warning" style="margin-right: 2px;"/>Đang hình thành (&lt;80%): <span class="txt-stat-ht"><span t-field="muctieu.ketqua_hinhthanh"/> ngày</span></span>
-                                                                    <span class="eval-stat-inline" style="margin-right: 0;"><i class="fa fa-times text-danger" style="margin-right: 2px;"/>Chưa đạt (0%): <span class="txt-stat-cd"><span t-field="muctieu.ketqua_khongdat"/> ngày</span></span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td t-if="has_kiemduyet" class="eval-split-cell" style="width: 50%;">
-                                                            <div t-attf-class="eval-card-box #{muctieu.trangthai_kiemduyet == '1' and 'eval-kd-dat' or (muctieu.trangthai_kiemduyet == '-1' and 'eval-kd-chuyen' or 'eval-kd-dung')}">
-                                                                <div t-attf-class="eval-box-header #{(not has_ghichu_kd and not has_dinhhuong_kd) and 'no-border' or ''}">
-                                                                    <i class="fa fa-user-md" style="margin-right: 4px; color: #334155;"/>
-                                                                    <strong>Đánh giá quản lý chuyên môn:</strong>
-                                                                    <t t-if="muctieu.trangthai_kiemduyet == '1'">
-                                                                        <span class="eval-pill pill-kd-dat"><i class="fa fa-check-circle" style="margin-right: 3px;"/>ĐẠT (<span t-field="muctieu.tyle_kiemduyet"/>%)</span>
-                                                                    </t>
-                                                                    <t t-elif="muctieu.trangthai_kiemduyet == '-1'">
-                                                                        <span class="eval-pill pill-kd-chuyen"><i class="fa fa-arrow-circle-right" style="margin-right: 3px;"/>CHUYỂN THÁNG SAU (<span t-field="muctieu.tyle_kiemduyet"/>%)</span>
-                                                                    </t>
-                                                                    <t t-elif="muctieu.trangthai_kiemduyet == '-2'">
-                                                                        <span class="eval-pill pill-kd-dung"><i class="fa fa-ban" style="margin-right: 3px;"/>DỪNG CAN THIỆP (<span t-field="muctieu.tyle_kiemduyet"/>%)</span>
-                                                                    </t>
-                                                                </div>
-                                                                <div t-if="has_ghichu_kd" class="eval-kd-note">
-                                                                    <i class="fa fa-pencil-square-o" style="margin-right: 3px; color: #475569;"/>
-                                                                    <strong>Ghi chú kiểm duyệt:</strong> <span t-out="muctieu.ghichu_kiemduyet"/>
-                                                                </div>
-                                                                <div t-if="has_dinhhuong_kd" class="eval-kd-note">
-                                                                    <i class="fa fa-compass" style="margin-right: 3px; color: #475569;"/>
-                                                                    <strong>Ý kiến / Định hướng:</strong> <span t-out="muctieu.dinhhuong_kiemduyet"/>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
                                             </div>
-                                        </div>
+                                        </t>
                                     </t>
                                 </t>
                             </div>
