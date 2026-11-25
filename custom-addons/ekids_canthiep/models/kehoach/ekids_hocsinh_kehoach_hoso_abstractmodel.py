@@ -87,8 +87,15 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
     # =========================================================================
     def _resolve_timeline_plans(self, KeHoachModel):
         """Lấy toàn bộ kế hoạch của trẻ sắp xếp theo dòng thời gian giảm dần"""
+        """Chỉ lấy các kế hoạch Đang can thiệp ('1') hoặc Đã kết thúc ('-1'), bỏ qua kế hoạch đang lập/chờ duyệt"""
         all_plans = KeHoachModel.search(
-            [('hocsinh_id', '=', self.id)],
+            [
+                ('hocsinh_id', '=', self.id),
+                ('trangthai', 'in', [
+                    kehoach_util.KEHOACH_DANG_CANTHIEP,  # '1'
+                    kehoach_util.KEHOACH_HET_HIEULUC,  # '-1'
+                ]),
+            ],
             order='tu_ngay desc, den_ngay desc, id desc'
         )
 
