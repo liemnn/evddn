@@ -390,9 +390,7 @@
                         <style>
                             .bg-light-smooth { background-color: #F8FAFC !important; }
 
-                            /* ======================================================= */
-                            /* STYLE THÔNG BÁO HỆ THỐNG ĐỘC LẬP - CỠ CHỮ >= 16PX       */
-                            /* ======================================================= */
+                            /* STYLE THÔNG BÁO HỆ THỐNG ĐỘC LẬP */
                             .system-notice-banner {
                                 background-color: #FFFDF5 !important;
                                 border: 2px solid #F59E0B !important;
@@ -401,7 +399,6 @@
                                 margin-bottom: 18px !important;
                                 box-shadow: 0 4px 14px rgba(245, 158, 11, 0.12) !important;
                             }
-
                             .notice-icon-box {
                                 background-color: #FEF3C7 !important;
                                 color: #D97706 !important;
@@ -414,31 +411,25 @@
                                 flex-shrink: 0 !important;
                                 border: 1px solid #FDE68A !important;
                             }
-
                             .notice-main-title {
                                 font-size: 18px !important;
                                 font-weight: 800 !important;
                                 color: #92400E !important;
                                 letter-spacing: -0.2px !important;
                             }
-
                             .notice-action-btn {
                                 font-size: 15.5px !important;
                                 border: 1.5px solid #D97706 !important;
                                 border-radius: 8px !important;
                                 background-color: #FDE68A !important;
                             }
-                            .notice-action-btn:hover {
-                                background-color: #FCD34D !important;
-                            }
-
+                            .notice-action-btn:hover { background-color: #FCD34D !important; }
                             .notice-body-text {
                                 font-size: 16.5px !important;
                                 color: #451A03 !important;
                                 line-height: 1.55 !important;
                                 margin-bottom: 10px !important;
                             }
-
                             .notice-red-highlight {
                                 background-color: #FEF2F2 !important;
                                 border: 1.5px dashed #EF4444 !important;
@@ -479,7 +470,6 @@
                                 align-items: center !important;
                                 gap: 4px !important;
                             }
-
                             .ws-index-circle {
                                 background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%) !important;
                                 color: #FFFFFF !important;
@@ -494,7 +484,6 @@
                                 box-shadow: 0 2px 4px rgba(2, 132, 199, 0.15) !important;
                                 flex-shrink: 0 !important;
                             }
-
                             .ws-field-box {
                                 width: 100% !important;
                                 border: 1px solid #E2E8F0 !important;
@@ -511,7 +500,6 @@
                                 border: none !important;
                                 background: transparent !important;
                             }
-
                             .field-student .ws-field-box { background-color: #EFF6FF !important; border-color: #BFDBFE !important; color: #1E40AF !important; }
                             .field-date .ws-field-box { background-color: #F0FDF4 !important; border-color: #BBF7D0 !important; color: #166534 !important; }
                             .field-doctor .ws-field-box { background-color: #FFFBEB !important; border-color: #FEF3C7 !important; color: #92400E !important; }
@@ -549,6 +537,47 @@
 
                             .o_premium_layout .o_form_label { font-weight: 700 !important; color: #475569 !important; font-size: 13px !important; }
                             .border-separator-md { border-left: 1px dashed #E2E8F0; }
+
+                            /* KHUNG CHỌN CHẾ ĐỘ KẾ HOẠCH CHUNG / RIÊNG */
+                            .plan-mode-bar {
+                                margin-top: 10px !important;
+                                padding: 10px 14px !important;
+                                border-radius: 8px !important;
+                                border: 1px dashed #CBD5E1 !important;
+                                background-color: #F8FAFC !important;
+                                display: flex !important;
+                                align-items: center !important;
+                                justify-content: space-between !important;
+                                flex-wrap: wrap !important;
+                                gap: 10px !important;
+                            }
+                            .plan-mode-bar.mode-shared {
+                                background-color: #F0FDF4 !important;
+                                border-color: #86EFAC !important;
+                            }
+                            .plan-mode-bar.mode-separate {
+                                background-color: #FFFBEB !important;
+                                border-color: #FCD34D !important;
+                            }
+                            .plan-mode-pill {
+                                display: inline-flex !important;
+                                align-items: center !important;
+                                gap: 5px !important;
+                                padding: 3px 10px !important;
+                                border-radius: 6px !important;
+                                font-size: 12px !important;
+                                font-weight: 800 !important;
+                            }
+                            .pill-mode-shared {
+                                background-color: #DCFCE7 !important;
+                                color: #15803D !important;
+                                border: 1px solid #86EFAC !important;
+                            }
+                            .pill-mode-separate {
+                                background-color: #FEF3C7 !important;
+                                color: #B45309 !important;
+                                border: 1px solid #FDE68A !important;
+                            }
 
                             /* THANH CÔNG CỤ CHỌN NHANH */
                             .quick-select-box {
@@ -596,9 +625,7 @@
 
                         <div class="w-100">
 
-                            <!-- ======================================================== -->
-                            <!-- KHỐI THÔNG BÁO HỆ THỐNG NỔI BẬT (CHỮ TO >= 16PX)       -->
-                            <!-- ======================================================== -->
+                            <!-- KHỐI THÔNG BÁO HỆ THỐNG NỔI BẬT -->
                             <div class="system-notice-banner" invisible="trangthai != '1'">
                                 <div class="d-flex align-items-start gap-3">
                                     <div class="notice-icon-box">
@@ -661,7 +688,7 @@
                                     <div class="ws-field-box">
                                         <field name="dm_gv_danhgia_id" readonly="is_readonly"
                                                domain="[('coso_id','=',coso_id)]"
-                                                context="{'default_coso_id':coso_id}"/>
+                                               context="{'default_coso_id':coso_id}"/>
                                     </div>
                                 </div>
                             </div>
@@ -678,8 +705,8 @@
                                             <field name="dm_roiloan_ids" readonly="is_readonly"
                                                    domain="[('coso_id','=',coso_id)]"
                                                    string="Các rối loạn của trẻ" widget="many2many_tags"
-                                                    context="{'default_coso_id':coso_id}"
-                                                    colspan="12" class="w-100"/>
+                                                   context="{'default_coso_id':coso_id}"
+                                                   colspan="12" class="w-100"/>
                                         </group>
                                     </div>
                                 </div>
@@ -690,8 +717,7 @@
                                             <field name="dm_mucdo_id" readonly="is_readonly"
                                                    domain="[('coso_id','=',coso_id)]"
                                                    string="Mức độ" colspan="12"
-                                                    context="{'default_coso_id':coso_id}"
-                                            />
+                                                   context="{'default_coso_id':coso_id}"/>
                                         </group>
                                     </div>
                                     <div class="col-md-4 pe-0 ps-0 ps-md-2 border-separator-md">
@@ -699,8 +725,7 @@
                                             <field name="dm_lieuluong_id" readonly="is_readonly"
                                                    domain="[('coso_id','=',coso_id)]"
                                                    string="Liều lượng can thiệp" colspan="12"
-                                                    context="{'default_coso_id':coso_id}"
-                                            />
+                                                   context="{'default_coso_id':coso_id}"/>
                                         </group>
                                     </div>
                                     <div class="col-md-4 ps-0 pe-0 pe-md-2">
@@ -725,8 +750,7 @@
                                                    domain="[('coso_id','=',coso_id)]"
                                                    nolabel="1"
                                                    colspan="12"
-                                                   context="{'default_coso_id':coso_id}"
-                                            />
+                                                   context="{'default_coso_id':coso_id}"/>
                                         </group>
                                     </div>
                                 </div>
@@ -758,12 +782,12 @@
                                     </div>
                                 </div>
 
-                                <!-- THANH CÔNG CỤ CHỌN NHANH CÂN ĐỐI CHUẨN GRID -->
+                                <!-- THANH CÔNG CỤ CHỌN NHANH -->
                                 <div class="quick-select-box" invisible="is_readonly">
                                     <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom" style="border-color: #DCFCE7 !important;">
                                         <i class="fa fa-bolt text-warning" style="font-size: 13px;"></i>
                                         <span class="fw-bold text-success" style="font-size: 0.82rem; letter-spacing: 0.2px;">
-                                            💡 Hướng dẫn:Chọn chương trình và lĩnh vực từ khung định hướng. Gạt bật [Cho phép lập kế hoạch] để áp dụng cho tháng này; khi tắt đi, lĩnh vực này sẽ tạm ẩn và không được sử dụng.
+                                            💡 Hướng dẫn: Chọn chương trình và lĩnh vực từ khung định hướng. Gạt bật [Cho phép lập kế hoạch] để áp dụng cho tháng này; khi tắt đi, lĩnh vực này sẽ tạm ẩn và không được sử dụng.
 
                                             <button name="action_xem_chuongtrinh_cothe_sudung"
                                                 type="object"
@@ -813,7 +837,7 @@
                                 <!-- BẢNG CHI TIẾT KHUNG CHƯƠNG TRÌNH & ĐỘ TUỔI -->
                                 <div class="o_table_responsive border rounded-3 overflow-hidden shadow-sm bg-white mt-1"
                                      style="border-color: #E2E8F0 !important;">
-                                    <field name="linhvuc_ids"  nolabel="1">
+                                    <field name="linhvuc_ids" nolabel="1">
                                         <list editable="bottom" edit="1" create="1" delete="1">
                                             <field name="sequence" widget="handle"/>
                                             <field name="index" width="50" string="STT"/>
@@ -828,7 +852,6 @@
                                                    options="{'no_open': True,'no_create': True}"/>
                                             <field name="tuoi_id"
                                                    string="Độ tuổi"
-
                                                    domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
                                                    options="{'no_open': True,'no_create': True}"
                                                    required="1"/>
@@ -860,12 +883,14 @@
                                 </div>
                             </div>
 
-                            <!-- KHỐI PHÂN CÔNG GIÁO VIÊN -->
+                            <!-- KHỐI PHÂN CÔNG GIÁO VIÊN & CẤU HÌNH CHUNG / RIÊNG KẾ HOẠCH -->
                             <div class="premium-zone-card zone-teachers">
                                 <div class="zone-header-title label-teachers-title">
                                     <i class="fa fa-users"></i>
                                     <span>Phân công giáo viên</span>
                                 </div>
+
+                                <!-- Hàng 1: Chọn Giáo viên can thiệp & Người phê duyệt -->
                                 <div class="row mx-0">
                                     <div class="col-md-7 ps-0 pe-0 pe-md-3">
                                         <group col="12" class="p-0 m-0">
@@ -887,6 +912,32 @@
                                                    domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
                                                    colspan="12"/>
                                         </group>
+                                    </div>
+                                </div>
+
+                                <!-- Hàng 2: Nút gạt Cùng chung kế hoạch (Chế độ phối hợp lập kế hoạch) -->
+                                <div class="plan-mode-bar mode-separate" invisible="is_chung_kehoach">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <field name="is_chung_kehoach" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+                                        <span class="plan-mode-pill pill-mode-separate">
+                                            <i class="fa fa-user"/> Đang tắt: Kế hoạch riêng cho môi giáo viên
+                                        </span>
+                                    </div>
+                                    <div class="text-muted" style="font-size: 12.5px;">
+                                        Các giáo viên được phân công sẽ lập và can thiệp theo <strong>kế hoạch riêng</strong> cho từng người.
+                                    </div>
+                                </div>
+
+                                <div class="plan-mode-bar mode-shared" invisible="not is_chung_kehoach">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <field name="is_chung_kehoach" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+
+                                        <span class="plan-mode-pill pill-mode-shared">
+                                            <i class="fa fa-users"/>Đang bật: Kế hoạch chung cho nhóm giáo viên
+                                        </span>
+                                    </div>
+                                    <div class="text-success" style="font-size: 12.5px; font-weight: 600;">
+                                        Các giáo viên được phân công sẽ cùng sử dụng và cập nhật trên <strong>một kế hoạch chung</strong>.
                                     </div>
                                 </div>
                             </div>
@@ -912,7 +963,7 @@
                                                domain="[('coso_id','=',coso_id)]"
                                                string="Lịch hẹn lần sau"
                                                context="{'default_coso_id':coso_id}"
-                                               colspan="12" />
+                                               colspan="12"/>
                                     </group>
                                 </div>
                             </div>
@@ -951,7 +1002,7 @@
                             invisible="is_xoa == False"
                             class="btn-outline-danger"/>
 
-                         <field name="trangthai" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': true}"/>
+                        <field name="trangthai" widget="statusbar" statusbar_visible="0,1,-1" options="{'clickable': true}"/>
                     </header>
 
                     <sheet class="p-3 bg-light-smooth">
@@ -995,24 +1046,6 @@
                                 font-weight: 800 !important;
                                 color: #0F172A !important;
                                 text-transform: uppercase !important;
-                            }
-                            .student-meta-chips {
-                                display: flex;
-                                align-items: center;
-                                gap: 12px;
-                                flex-wrap: wrap;
-                            }
-                            .meta-chip {
-                                display: inline-flex;
-                                align-items: center;
-                                gap: 5px;
-                                font-size: 0.82rem;
-                                color: #475569;
-                                background: #F1F5F9;
-                                padding: 3px 10px;
-                                border-radius: 6px;
-                                border: 1px solid #E2E8F0;
-                                font-weight: 600;
                             }
 
                             /* KHỐI PHÂN CÔNG GIÁO VIÊN */
@@ -1070,6 +1103,58 @@
                             .custom-field-container .o_field_widget {
                                 width: 100% !important;
                             }
+
+                            /* KHUNG CHẾ ĐỘ KẾ HOẠCH CHUNG / RIÊNG */
+                            .plan-mode-bar {
+                                margin-top: 12px !important;
+                                margin-bottom: 14px !important;
+                                padding: 11px 16px !important;
+                                border-radius: 10px !important;
+                                border: 1.5px dashed #CBD5E1 !important;
+                                background-color: #FFFFFF !important;
+                                display: flex !important;
+                                align-items: center !important;
+                                justify-content: space-between !important;
+                                flex-wrap: wrap !important;
+                                gap: 10px !important;
+                                box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
+                            }
+                            .plan-mode-bar.mode-shared {
+                                background-color: #F0FDF4 !important;
+                                border-color: #86EFAC !important;
+                            }
+                            .plan-mode-bar.mode-separate {
+                                background-color: #FFFBEB !important;
+                                border-color: #FCD34D !important;
+                            }
+                            .plan-mode-pill {
+                                display: inline-flex !important;
+                                align-items: center !important;
+                                gap: 6px !important;
+                                padding: 4px 11px !important;
+                                border-radius: 6px !important;
+                                font-size: 12.5px !important;
+                                font-weight: 800 !important;
+                            }
+                            .pill-mode-shared {
+                                background-color: #DCFCE7 !important;
+                                color: #15803D !important;
+                                border: 1px solid #86EFAC !important;
+                            }
+                            .pill-mode-separate {
+                                background-color: #FEF3C7 !important;
+                                color: #B45309 !important;
+                                border: 1px solid #FDE68A !important;
+                            }
+
+                            /* THANH TIÊU ĐỀ KẾ HOẠCH KHUNG 6 THÁNG */
+                            .quick-select-box {
+                                background: #F0FDF4 !important;
+                                border: 1px dashed #86EFAC !important;
+                                border-radius: 8px !important;
+                                padding: 10px 14px !important;
+                                margin-bottom: 10px !important;
+                            }
                         </style>
 
                         <!-- KHỐI 1: THÔNG TIN HỌC SINH (READONLY PROFILE) -->
@@ -1082,7 +1167,6 @@
                                     <div class="student-name-text">
                                         <field name="hocsinh_id" readonly="1" options="{'no_open': True}"/>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -1144,63 +1228,85 @@
 
                         </div>
 
-                        <!-- THANH CÔNG CỤ CHỌN NHANH CÂN ĐỐI CHUẨN GRID -->
+                        <!-- KHỐI 3: NÚT GẠT CÙNG CHUNG KẾ HOẠCH (ĐỨNG NGAY SAU PHÂN CÔNG) -->
+                        <div class="plan-mode-bar mode-separate" invisible="is_chung_kehoach">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <field name="is_chung_kehoach" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+                                <span class="plan-mode-pill pill-mode-separate">
+                                    <i class="fa fa-user"/> Đang tắt: Kế hoạch riêng cho mỗi giáo viên
+                                </span>
+                            </div>
+                            <div class="text-muted" style="font-size: 12.5px;">
+                                Các giáo viên được phân công sẽ lập và can thiệp theo <strong>kế hoạch riêng</strong> cho từng người.
+                            </div>
+                        </div>
+
+                        <div class="plan-mode-bar mode-shared" invisible="not is_chung_kehoach">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <field name="is_chung_kehoach" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+                                <span class="plan-mode-pill pill-mode-shared">
+                                    <i class="fa fa-users"/> Đang bật: Kế hoạch chung cho nhóm giáo viên
+                                </span>
+                            </div>
+                            <div class="text-success" style="font-size: 12.5px; font-weight: 600;">
+                                Các giáo viên được phân công sẽ cùng sử dụng và cập nhật trên <strong>một kế hoạch chung</strong>.
+                            </div>
+                        </div>
+
+                        <!-- KHỐI 4: KẾ HOẠCH KHUNG 6 THÁNG GIÁO VIÊN ĐÃ TẠO -->
                         <div class="quick-select-box" invisible="not linhvuc_ids">
-                            <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom" style="border-color: #DCFCE7 !important;">
+                            <div class="d-flex align-items-center gap-2">
                                 <i class="fa fa-bolt text-warning" style="font-size: 13px;"></i>
                                 <span class="fw-bold text-success" style="font-size: 0.82rem; letter-spacing: 0.2px;">
                                     💡 KẾ HOẠCH KHUNG 6 THÁNG GIÁO VIÊN ĐÃ TẠO
                                 </span>
                             </div>
-
-
                         </div>
 
                         <div class="o_table_responsive border rounded-3 overflow-hidden shadow-sm bg-white mt-1"
-                                     style="border-color: #E2E8F0 !important;" invisible="not linhvuc_ids">
-                                    <field name="linhvuc_ids">
-                                       <list editable="bottom" create="1" edit="1" delete="1" class="o_list_premium m-0 border-0">
-                                            <field name="sequence" widget="handle"/>
-                                            <field name="index" width="50" string="STT"/>
-                                            <field name="chuongtrinh_id"
-                                                   string="Chương trình"
+                             style="border-color: #E2E8F0 !important;" invisible="not linhvuc_ids">
+                            <field name="linhvuc_ids">
+                                <list editable="bottom" create="1" edit="1" delete="1" class="o_list_premium m-0 border-0">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="index" width="50" string="STT"/>
+                                    <field name="chuongtrinh_id"
+                                           string="Chương trình"
+                                           options="{'no_open': True, 'no_create': True}"/>
+                                    <field name="linhvuc_id"
+                                           string="Lĩnh vực"
+                                           domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
+                                           options="{'no_open': True, 'no_create': True}"/>
+                                    <field name="tuoi_id"
+                                           string="Độ tuổi"
+                                           domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
+                                           options="{'no_open': True, 'no_create': True}"
+                                           required="1"/>
 
-                                                   options="{'no_open': True, 'no_create': True}"/>
-                                            <field name="linhvuc_id"
-                                                   string="Lĩnh vực"
-                                                   domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
-                                                   options="{'no_open': True, 'no_create': True}"/>
-                                            <field name="tuoi_id"
-                                                   string="Độ tuổi"
-                                                   domain="[('chuongtrinh_id', '=', chuongtrinh_id)]"
-                                                   options="{'no_open': True, 'no_create': True}"
-                                                   required="1"/>
+                                    <field name="is_lapkehoach_thangnay"
+                                           widget="boolean_toggle"
+                                           string="Được lập kế hoạch"
+                                           decoration-success="is_lapkehoach_thangnay == True"
+                                           decoration-danger="is_lapkehoach_thangnay == False"/>
 
-                                            <field name="is_lapkehoach_thangnay"
-                                                   widget="boolean_toggle"
-                                                   string="Được lập kế hoạch"
-                                                   decoration-success="is_lapkehoach_thangnay == True"
-                                                   decoration-danger="is_lapkehoach_thangnay == False"/>
+                                    <button name="action_thietke_khung_muctieu"
+                                            type="object"
+                                            string="Thiết kế"
+                                            icon="fa-sitemap"
+                                            title="Thiết kế [Độ tuổi / Mục tiêu] cho lĩnh vực này"
+                                            class="btn btn-sm btn-outline-info fw-bold"
+                                            style="border-color: #6366F1; color: #4F46E5; background-color: #EEF2FF;"/>
 
-                                            <button name="action_thietke_khung_muctieu"
-                                                    type="object"
-                                                    string="Thiết kế"
-                                                    icon="fa-sitemap"
-                                                    title="Thiết kế [Độ tuổi / Mục tiêu] cho lĩnh vực này"
-                                                    class="btn btn-sm btn-outline-info fw-bold"
-                                                    style="border-color: #6366F1; color: #4F46E5; background-color: #EEF2FF;"/>
+                                    <field name="tong_muctieu" string="Tổng [Mục tiêu]" width="120"/>
 
-                                            <field name="tong_muctieu" string="Tổng [Mục tiêu]" width="120"/>
-
-                                            <button name="action_xem_danhsach_muctieu"
-                                                   type="object"
-                                                   string="Xem"
-                                                   icon="fa-bullseye"
-                                                   title="Xem danh sách [Mục tiêu] Trong kho Chương trình"
-                                                   class="btn-sm btn-outline-primary"/>
-                                        </list>
-                                    </field>
-                                </div>
+                                    <button name="action_xem_danhsach_muctieu"
+                                            type="object"
+                                            string="Xem"
+                                            icon="fa-bullseye"
+                                            title="Xem danh sách [Mục tiêu] Trong kho Chương trình"
+                                            class="btn-sm btn-outline-primary"/>
+                                </list>
+                            </field>
+                        </div>
 
                     </sheet>
                 </form>

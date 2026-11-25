@@ -131,26 +131,37 @@ def func_get_kehoach_hocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
     else:
         return None
 
-def func_get_kehoach_canthiep_hocsinh_trangthai_ngay(self, hocsinh, trangthais,ngay):
+def func_get_kehoach_canthiep_hocsinh_trangthai_ngay(self, hocsinh, trangthais, ngay):
     user = self.env.user
     is_admin = user.has_group('base.group_system')
-    giaovien =giaovien_util.func_get_giaovien_tu_user(self)
+    giaovien = giaovien_util.func_get_giaovien_tu_user(self)
+
     if giaovien:
-        domain =[ ('hocsinh_id', '=', hocsinh.id),
-                    ('trangthai', 'in', trangthais)]
+        domain = [
+            ('hocsinh_id', '=', hocsinh.id),
+            ('trangthai', 'in', trangthais),
+        ]
 
+        if not is_admin:
+            # TH1: Giáo viên trực tiếp là người lập kế hoạch
+            domain_th1 = [
+                ('gv_lapkehoach_id', '=', giaovien.id)
+            ]
 
-        if giaovien:
-            if is_admin == False:
-                domain_lap = [('gv_lapkehoach_id', '=', giaovien.id)]
-                #domain_kiemduyet = [('ketluan_id.gv_kiemduyet_id', '=', giaovien.id)]
-                #domain_gv = expression.OR([domain_lap, domain_kiemduyet])
-                domain = expression.AND([domain, domain_lap])
+            # TH2: Kế hoạch dùng chung và giáo viên nằm trong danh sách phân công của Kết luận
+            domain_th2 = [
+                ('ketluan_id.is_chung_kehoach', '=', True),
+                ('ketluan_id.gv_canthiep_ids', 'in', [giaovien.id]),
+            ]
 
+            domain_gv = expression.OR([domain_th1, domain_th2])
+            domain = expression.AND([domain, domain_gv])
 
-
-        kehoach = self.env['ekids.kehoach'].search(domain
-            , order="id desc", limit=1)
+        kehoach = self.env['ekids.kehoach'].search(
+            domain,
+            order="id desc",
+            limit=1
+        )
         return kehoach
     else:
         return None
@@ -180,13 +191,30 @@ def func_get_kehoach_can_kiemduyet_hocsinh_trangthai(self, hocsinh, trangthais):
 
 def func_count_kehoach_hocsinh_trangthai(self, hocsinh, trangthais):
     giaovien = giaovien_util.func_get_giaovien_tu_user(self)
-    if giaovien:
-        count = self.env['ekids.kehoach'].search_count([
-            ('hocsinh_id', '=', hocsinh.id),
-            ('trangthai', 'in', trangthais),
-            ('gv_lapkehoach_id', '=', giaovien.id),
-        ])
-        return count
+    if not giaovien:
+        return 0
+
+    domain_base = [
+        ('hocsinh_id', '=', hocsinh.id),
+        ('trangthai', 'in', trangthais),
+    ]
+
+    # TH1: Kế hoạch do chính giáo viên này lập (áp dụng cho cả kế hoạch riêng và chung)
+    domain_th1 = [
+        ('gv_lapkehoach_id', '=', giaovien.id)
+    ]
+
+    # TH2: Kế hoạch dùng chung (is_chung_kehoach == True) và giáo viên nằm trong danh sách phân công của Kết luận
+    # (Dù đồng nghiệp khác trong nhóm đã lập thì vẫn đếm để khóa không cho lập trùng)
+    domain_th2 = [
+        ('ketluan_id.is_chung_kehoach', '=', True),
+        ('ketluan_id.gv_canthiep_ids', 'in', [giaovien.id]),
+    ]
+
+    domain_gv = expression.OR([domain_th1, domain_th2])
+    domain = expression.AND([domain_base, domain_gv])
+
+    return self.env['ekids.kehoach'].search_count(domain)
 
 
 def func_get_ids_hocsinh_theo_vaitro(self):
@@ -250,19 +278,25 @@ def func_get_ids_hocsinh_theo_vaitro_duyet_kehoach(self):
     return None
 
 def func_get_ids_hocsinh_theo_vaitro_canthiep_kehoach(self):
-    giaovien =giaovien_util.func_get_giaovien_tu_user(self)
+    giaovien = giaovien_util.func_get_giaovien_tu_user(self)
     if giaovien:
-        #TH1:
-        # 1. Khai báo các điều kiện độc lập cho rõ ràng
-        domain = [('gv_lapkehoach_id', '=', giaovien.id)]
+        # TH1: Giáo viên trực tiếp là người lập kế hoạch
+        domain_th1 = [
+            ('gv_lapkehoach_id', '=', giaovien.id)
+        ]
 
-        # 3. Tìm kiếm
+        # TH2: Kế hoạch dùng chung và giáo viên nằm trong danh sách phân công của Kết luận
+        domain_th2 = [
+            ('ketluan_id.is_chung_kehoach', '=', True),
+            ('ketluan_id.gv_canthiep_ids', 'in', [giaovien.id]),
+        ]
+
+        # Ghép TH1 OR TH2 bằng expression.OR
+        domain = expression.OR([domain_th1, domain_th2])
+
         kehoachs = self.env['ekids.kehoach'].search(domain)
         if kehoachs:
-            hocsinh_ids = []
-            for kh in kehoachs:
-                hocsinh_ids.append(kh.hocsinh_id.id)
-            return hocsinh_ids
+            return kehoachs.mapped('hocsinh_id').ids
     return None
 
 

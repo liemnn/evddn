@@ -419,17 +419,31 @@ class KeHoach2MucTieu(models.Model):
     def _compute_is_canthiep_readonly(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
+        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
+        gv_ids = set(giaoviens.ids) if giaoviens else set()
+
         for record in self:
             is_canthiep_readonly = True
             if is_admin:
                 is_canthiep_readonly = False
             else:
                 kehoach = record.kehoach_id
-                if kehoach:
+                if kehoach and kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
+                    ketluan = kehoach.ketluan_id
                     gv_lap = kehoach.gv_lapkehoach_id
-                    if gv_lap.user_id.id == user.id:
-                        if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                            is_canthiep_readonly = False
+
+                    # TH1: Giáo viên trực tiếp là người lập kế hoạch
+                    la_gv_lap = bool(gv_lap and gv_lap.user_id.id == user.id)
+
+                    # TH2: Kế hoạch dùng chung và giáo viên nằm trong danh sách phân công của Kết luận
+                    la_gv_chung = bool(
+                        ketluan
+                        and ketluan.is_chung_kehoach
+                        and gv_ids.intersection(ketluan.gv_canthiep_ids.ids)
+                    )
+
+                    if la_gv_lap or la_gv_chung:
+                        is_canthiep_readonly = False
 
             record.is_canthiep_readonly = is_canthiep_readonly
 
@@ -438,6 +452,8 @@ class KeHoach2MucTieu(models.Model):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
         giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
+        gv_ids = set(giaoviens.ids) if giaoviens else set()
+
         for record in self:
             is_canthiep = False
             if is_admin:
@@ -445,12 +461,22 @@ class KeHoach2MucTieu(models.Model):
             else:
                 kehoach = record.kehoach_id
                 if kehoach:
-                    gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
+                    ketluan = kehoach.ketluan_id
+                    gv_kiemduyet = ketluan.gv_kiemduyet_id
                     gv_lap = kehoach.gv_lapkehoach_id
-                    if gv_kiemduyet.id in giaoviens.ids:
-                        #if record.trangthai == '1':
+
+                    # 1. Giáo viên kiểm duyệt chuyên môn
+                    if gv_kiemduyet and gv_kiemduyet.id in gv_ids:
                         is_canthiep = True
-                    elif gv_lap.user_id.id == user.id:
+                    # 2. TH1: Giáo viên trực tiếp là người lập kế hoạch
+                    elif gv_lap and gv_lap.user_id.id == user.id:
+                        is_canthiep = True
+                    # 3. TH2: Kế hoạch dùng chung và giáo viên nằm trong danh sách phân công của Kết luận
+                    elif (
+                            ketluan
+                            and ketluan.is_chung_kehoach
+                            and bool(gv_ids.intersection(ketluan.gv_canthiep_ids.ids))
+                    ):
                         is_canthiep = True
 
             record.is_canthiep = is_canthiep

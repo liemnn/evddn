@@ -25,10 +25,10 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
     _register = False
     _description = 'Kế hoạch can thiệp của học sinh'
 
-    @api.depends('kehoach_ids.tu_ngay', 'kehoach_ids.den_ngay', 'kehoach_ids.tyle_dat_canthiep')
+    @api.depends('kehoach_ids.tu_ngay', 'kehoach_ids.den_ngay', 'kehoach_ids.trangthai',
+                 'kehoach_ids.tyle_dat_canthiep')
     def _compute_kehoach_thang(self):
         today = fields.Date.today()
-        # 1. Tính toán trước mốc ngày 1 lần duy nhất ngoài vòng lặp
         d_thangnay_1 = today.replace(day=1)
         d_thangnay_15 = today.replace(day=15)
 
@@ -38,7 +38,17 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
         d_thangsau_1 = d_thangnay_1 + relativedelta(months=1)
         d_thangsau_15 = d_thangsau_1.replace(day=15)
 
-        # Hàm helper cục bộ tính tỷ lệ trung bình các kế hoạch giao thoa với tháng
+        # Chỉ lấy các kế hoạch giao thoa với khung 3 tháng cho toàn bộ danh sách học sinh (1 query duy nhất)
+        khs_3thang = self.env['ekids.kehoach'].search([
+            ('hocsinh_id', 'in', self.ids),
+            ('tu_ngay', '<=', d_thangsau_15),
+            ('den_ngay', '>=', d_thangtruoc_1),
+        ])
+
+        khs_by_hs = {}
+        for kh in khs_3thang:
+            khs_by_hs.setdefault(kh.hocsinh_id.id, []).append(kh)
+
         def _get_tyle_str(kehoach_list, d_start, d_mid):
             valid_khs = [
                 kh for kh in kehoach_list
@@ -47,18 +57,23 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
             if not valid_khs:
                 return "Không"
 
-            # Tính trung bình tỷ lệ can thiệp (tyle_dat_canthiep)
-            tong_tyle = sum(kh.tyle_dat_canthiep or 0 for kh in valid_khs)
-            avg_tyle = round(tong_tyle / len(valid_khs))
+            # Chỉ tính % khi kế hoạch ĐANG CAN THIỆP và ĐÃ ĐẾN NGÀY BẮT ĐẦU (today >= tu_ngay)
+            khs_dang_canthiep = [
+                kh for kh in valid_khs
+                if kh.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP and kh.tu_ngay <= today
+            ]
+            if not khs_dang_canthiep:
+                return "Có"
+
+            tong_tyle = sum(kh.tyle_dat_canthiep or 0 for kh in khs_dang_canthiep)
+            avg_tyle = round(tong_tyle / len(khs_dang_canthiep))
             return f"{avg_tyle}%"
 
         for hs in self:
-            kh_records = hs.kehoach_ids
-
+            kh_records = khs_by_hs.get(hs.id, [])
             hs.kehoach_thangtruoc = _get_tyle_str(kh_records, d_thangtruoc_1, d_thangtruoc_15)
             hs.kehoach_thangnay = _get_tyle_str(kh_records, d_thangnay_1, d_thangnay_15)
             hs.kehoach_thangsau = _get_tyle_str(kh_records, d_thangsau_1, d_thangsau_15)
-
 
     def _compute_ngay_conlai_kehoach(self):
         today = date.today()
@@ -123,7 +138,6 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
             latest_kh = hs.kehoach_ids[:1]
             hs.ten_kehoach = latest_kh.name if latest_kh else ""
 
-
     def _compute_tong_kehoach_taomoi(self):
         is_admin = self.env.user.has_group('base.group_system')
         giaovien = giaovien_util.func_get_giaovien_tu_user(self)
@@ -132,8 +146,23 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
         for hs in self:
             if is_admin:
                 hs.tong_kehoach_taomoi = len(hs.kehoach_ids)
+            elif not gv_id:
+                hs.tong_kehoach_taomoi = 0
             else:
-                hs.tong_kehoach_taomoi = sum(1 for kh in hs.kehoach_ids if kh.gv_lapkehoach_id.id == gv_id)
+                hs.tong_kehoach_taomoi = sum(
+                    1
+                    for kh in hs.kehoach_ids
+                    if (
+                        # TH1: Giáo viên trực tiếp là người lập kế hoạch
+                            kh.gv_lapkehoach_id.id == gv_id
+                            # TH2: Kế hoạch dùng chung và giáo viên nằm trong danh sách phân công của Kết luận
+                            or (
+                                    kh.ketluan_id.is_chung_kehoach
+                                    and gv_id in kh.ketluan_id.gv_canthiep_ids.ids
+                            )
+                    )
+                )
+
 
     def _compute_tong_kehoach_dang_canthiep(self):
         today = date.today()
@@ -150,8 +179,16 @@ class HocSinhKeHoachAbstractModel(models.AbstractModel):
                         tong += 1
                     elif context_type == "2" and kh.ketluan_id.gv_kiemduyet_id.id in gv_ids:
                         tong += 1
-                    elif context_type == "3" and kh.gv_lapkehoach_id.id in gv_ids:
-                        tong += 1
+                    elif context_type == "3":
+                        # TH1: Giáo viên trực tiếp là người lập kế hoạch
+                        la_gv_lap = kh.gv_lapkehoach_id.id in gv_ids
+                        # TH2: Kế hoạch dùng chung và giáo viên nằm trong danh sách phân công của Kết luận
+                        la_gv_chung = (
+                                kh.ketluan_id.is_chung_kehoach
+                                and bool(gv_ids.intersection(kh.ketluan_id.gv_canthiep_ids.ids))
+                        )
+                        if la_gv_lap or la_gv_chung:
+                            tong += 1
                     elif context_type not in ["2", "3"]:
                         tong += 1
             hs.tong_kehoach_dang_canthiep = tong

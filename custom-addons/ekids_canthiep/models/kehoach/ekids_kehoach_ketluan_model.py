@@ -98,6 +98,7 @@ class KetLuan(models.Model):
                                        , column1="ketluan_id"
                                        , column2="giaovien_id"
                                        , string="Phân công [Lập kế hoạch/Can thiệp]")
+    is_chung_kehoach = fields.Boolean(string="Cùng chung kế hoạch", default=False)
 
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
     is_phancong_lai = fields.Boolean(compute="_compute_is_phancong_lai")

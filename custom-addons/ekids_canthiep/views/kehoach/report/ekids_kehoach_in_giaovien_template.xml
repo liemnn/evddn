@@ -786,7 +786,7 @@
                                                         <i class="fa fa-crosshairs" style="margin-right: 4px;"/>
                                                         <span class="baseline-title">Dữ liệu ban đầu:</span>
                                                         <span>
-                                                            Đạt <strong><span t-out="muctieu.solan_thu_dat or 0"/>/<span t-out="muctieu.solan_thu or 0"/></strong> lần với tỷ lệ
+                                                            <strong><span t-out="muctieu.solan_thu_dat or 0"/>/<span t-out="muctieu.solan_thu or 0"/></strong> lần, đạt tỷ lệ
                                                         </span>
                                                         <span t-attf-class="baseline-rate-pill #{base_pill_cls}">
                                                             <span t-out="base_rate"/>%

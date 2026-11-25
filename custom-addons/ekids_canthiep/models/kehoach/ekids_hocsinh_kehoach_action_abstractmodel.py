@@ -392,7 +392,17 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
 
         # 3. Phân quyền theo Giáo viên (Nếu không phải Admin)
         if not is_admin:
-            gv_lap_domain = [('gv_lapkehoach_id', 'in', giaoviens.ids)]
+            # TH1: Giáo viên trực tiếp là người lập kế hoạch
+            gv_lap_rieng_domain = [('gv_lapkehoach_id', 'in', giaoviens.ids)]
+
+            # TH2: Kế hoạch dùng chung và giáo viên nằm trong danh sách phân công của Kết luận
+            gv_lap_chung_domain = [
+                ('ketluan_id.is_chung_kehoach', '=', True),
+                ('ketluan_id.gv_canthiep_ids', 'in', giaoviens.ids),
+            ]
+
+            # Nhóm quyền lập/can thiệp = TH1 OR TH2
+            gv_lap_domain = expression.OR([gv_lap_rieng_domain, gv_lap_chung_domain])
             gv_duyet_domain = [('ketluan_id.gv_kiemduyet_id', 'in', giaoviens.ids)]
 
             if context_type == "1":
@@ -401,6 +411,7 @@ class HocSinhKeHoachActionAbstractModel(models.AbstractModel):
                 domain.extend(gv_duyet_domain)
             elif context_type in ["5"]:  # Type 5 hoặc mặc định (Đang can thiệp)
                 domain = expression.AND([domain, expression.OR([gv_duyet_domain, gv_lap_domain])])
+
 
         # 4. Trả về Window Action
         url= {
