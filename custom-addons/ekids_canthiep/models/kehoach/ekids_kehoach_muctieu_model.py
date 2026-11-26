@@ -272,12 +272,12 @@ class KeHoach2MucTieu(models.Model):
 
     def _compute_tyle_ketqua(self):
         for record in self:
-            tyle = 0
-            if record.trangthai_kiemduyet =='0':
-                tyle = record.tyle_kiemduyet
+            tyle_ketqua = 0
+            if record.trangthai_kiemduyet !='0':
+                tyle_ketqua = record.tyle_kiemduyet
             else:
-                tyle = record.tyle_canthiep
-            record.tyle_ketqua = tyle
+                tyle_ketqua = record.tyle_canthiep
+            record.tyle_ketqua = tyle_ketqua
 
     @api.depends("solan_kiemduyet_dat")
     def _compute_tyle_kiemduyet(self):

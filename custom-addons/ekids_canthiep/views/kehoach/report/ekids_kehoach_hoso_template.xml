@@ -1182,7 +1182,7 @@
                                                                         <strong>Kết quả <span t-out="o.songay"/> ngày can thiệp (Giáo viên):</strong>
                                                                         <span t-attf-class="eval-pill #{muctieu.trangthai == '1' and 'pill-gv-dat' or 'pill-gv-chuadat'}">
                                                                             <i t-attf-class="fa #{muctieu.trangthai == '1' and 'fa-check-circle' or 'fa-bolt'}" style="margin-right: 3px;"/>
-                                                                            <span t-field="muctieu.trangthai"/> (<span t-field="muctieu.tyle_ketqua"/>%)
+                                                                            <span t-field="muctieu.trangthai"/> (<span t-field="muctieu.tyle_canthiep"/>%)
                                                                         </span>
                                                                     </div>
                                                                     <div>
