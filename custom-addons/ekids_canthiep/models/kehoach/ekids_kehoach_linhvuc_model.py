@@ -1,6 +1,14 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from odoo.osv import expression
+import logging
+
+_logger = logging.getLogger(__name__)
+
+try:
+    from odoo.addons.ekids_func import kehoach_util
+except ImportError as e:
+    _logger.warning("Không thể import ekids_func: %s", e)
 
 
 class KeHoach2LinhVuc(models.Model):
@@ -46,13 +54,10 @@ class KeHoach2LinhVuc(models.Model):
             if muctieus and tong_mt > 0:
                 for mt in muctieus:
                     tyle_thu += mt.tyle_thu
-                    if mt.trangthai_kiemduyet == "0":
+                    if (mt.trangthai_kiemduyet == "0"):
                         tyle_dat += mt.tyle_canthiep
                     else:
-                        if mt.tyle_kiemduyet >0:
-                            tyle_dat += mt.tyle_kiemduyet
-                        else:
-                            tyle_dat += mt.tyle_canthiep
+                        tyle_dat += mt.tyle_kiemduyet
 
                 tyle_thu = round(tyle_thu/tong_mt)
                 tyle_dat = round(tyle_dat / tong_mt)

@@ -86,15 +86,11 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
     # TIMELINE RESOLVER
     # =========================================================================
     def _resolve_timeline_plans(self, KeHoachModel):
-        """Lấy toàn bộ kế hoạch của trẻ sắp xếp theo dòng thời gian giảm dần"""
-        """Chỉ lấy các kế hoạch Đang can thiệp ('1') hoặc Đã kết thúc ('-1'), bỏ qua kế hoạch đang lập/chờ duyệt"""
+        """Lấy toàn bộ kế hoạch Đang can thiệp ('1') hoặc Đã hoàn thành ('-1') theo dòng thời gian"""
         all_plans = KeHoachModel.search(
             [
                 ('hocsinh_id', '=', self.id),
-                ('trangthai', 'in', [
-                    kehoach_util.KEHOACH_DANG_CANTHIEP,  # '1'
-                    kehoach_util.KEHOACH_HET_HIEULUC,  # '-1'
-                ]),
+                ('trangthai', 'in', ['1', '-1']),
             ],
             order='tu_ngay desc, den_ngay desc, id desc'
         )
@@ -112,18 +108,18 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
             st_code = str(p.trangthai or '0')
             is_done = (st_code == '-1')
 
-            # Đồng bộ tỷ lệ hoàn thành trên Timeline khớp 100% với KPI báo cáo bên dưới
+            # Tính tỷ lệ % đạt cho cả Đã hoàn thành lẫn Đang can thiệp (theo số mục tiêu đạt / tổng mục tiêu)
             if is_done:
-                tyle_dat = self._compute_plan_mastery_rate(p)
-                badge_text = f"Hoàn thành • Đạt {tyle_dat}%"
+                tyle_dat = self._compute_plan_mastery_rate(p, use_kiemduyet=True)
+                badge_text = f"Hoàn thành • {tyle_dat}%"
                 st_type = 'done'
             elif st_code == '1':
-                tyle_dat = round(p.tyle_dat_canthiep or 0)
-                badge_text = "Đang can thiệp"
+                tyle_dat = self._compute_plan_mastery_rate(p, use_kiemduyet=False)
+                badge_text = f"Đang can thiệp • {tyle_dat}%"
                 st_type = 'active'
             else:
                 tyle_dat = 0
-                badge_text = "Đang lập Kế hoạch"
+                badge_text = "Đang lập"
                 st_type = 'draft'
 
             ds_kehoach.append({
@@ -153,23 +149,41 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
 
         return ds_kehoach, selected_record
 
-    def _compute_plan_mastery_rate(self, kehoach):
-        """Tính tỷ lệ % mục tiêu đạt của một kế hoạch theo đúng tiêu chí của Báo cáo tổng kết"""
+    def _compute_plan_mastery_rate(self, kehoach, use_kiemduyet=True):
+        """Tính tỷ lệ % mục tiêu đạt của một kế hoạch theo công thức: Số mục tiêu đạt / Tổng mục tiêu"""
         if not kehoach:
             return 0
         muctieus = kehoach.kehoach_linhvuc_ids.kehoach_muctieu_ids
-        total_targets = len(muctieus)
-        if not total_targets:
-            return round(getattr(kehoach, 'tyle_dat_kiemduyet', 0) or getattr(kehoach, 'tyle_dat_canthiep', 0) or 0)
+        tong_mt = len(muctieus)
+        if tong_mt > 0:
+            dat_ct = 0
+            dat_kd = 0
 
-        count_dat = 0
-        for mt in muctieus:
-            tyle_sau = mt.tyle_kiemduyet if mt.tyle_kiemduyet > 0 else (getattr(mt, 'tyle_canthiep', 0) or mt.tyle_thu)
-            is_mastered = (tyle_sau >= 80) or (mt.trangthai_kiemduyet == '1') or (mt.trangthai == '1')
-            if is_mastered:
-                count_dat += 1
+            # Duyệt 1 vòng duy nhất trên RAM để đếm cả 2 chỉ số
+            for m in muctieus:
+                # 1. Đếm đạt can thiệp thực tế
+                is_dat_canthiep = (m.trangthai == '1')
+                if is_dat_canthiep:
+                    dat_ct += 1
 
-        return round((count_dat / total_targets) * 100)
+                # 2. Đếm đạt kiểm duyệt:
+                # Nếu đã kiểm duyệt (khác '0') -> lấy theo kết quả kiểm duyệt ('1')
+                # Nếu chưa kiểm duyệt ('0')     -> fallback lấy theo kết quả can thiệp
+
+                if m.trangthai_kiemduyet == '1':
+                    dat_kd += 1
+                elif m.trangthai_kiemduyet == '0':
+                    if (is_dat_canthiep
+                            and kehoach.trangthai == kehoach_util.KEHOACH_HET_HIEULUC):
+                        dat_kd += 1
+
+
+            tyle_dat_canthiep = round((dat_ct / tong_mt) * 100)
+            tyle_dat_kiemduyet = round((dat_kd / tong_mt) * 100)
+            if use_kiemduyet:
+                return tyle_dat_kiemduyet
+            else:
+                return tyle_dat_canthiep
 
     # =========================================================================
     # TAB 1 LOGIC: BÁO CÁO KẾT QUẢ KỲ ĐÃ ĐÓNG (trangthai == '-1')
@@ -243,7 +257,7 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         but_pha = f"{sorted_temp[0]['name']} ({sorted_temp[0]['tyle_dat']}%)" if sorted_temp else "Chưa có"
         diem_trung = f"{sorted_temp[-1]['name']} ({sorted_temp[-1]['tyle_dat']}%)" if sorted_temp else "Chưa có"
 
-        tong_dat = count_dat if total_targets else getattr(kehoach, 'tong_dat_kiemduyet', 0)
+        tong_dat = getattr(kehoach, 'tong_dat_kiemduyet', 0)
         rate_t1 = round((tong_dat / total_targets * 100)) if total_targets else getattr(kehoach, 'tyle_dat_kiemduyet', 0) or getattr(kehoach, 'tyle_dat_canthiep', 0)
 
         return {

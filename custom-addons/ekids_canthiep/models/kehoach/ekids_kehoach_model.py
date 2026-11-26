@@ -187,8 +187,9 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
 
                     if m.trangthai_kiemduyet == '1':
                         dat_kd += 1
-                    else:
-                        if is_dat_canthiep:
+                    elif m.trangthai_kiemduyet == '0':
+                        if (is_dat_canthiep
+                                and kh.trangthai == kehoach_util.KEHOACH_HET_HIEULUC):
                             dat_kd += 1
 
                 kh.tong_muctieu = tong_mt
