@@ -3,6 +3,7 @@ from odoo.exceptions import ValidationError
 from odoo.tools.translate import _  # <-- THÊM DÒNG NÀY
 from .ekids_read_group_abstractmodel import ReadGroupAbstractModel
 from datetime import datetime,date
+from dateutil.relativedelta import relativedelta
 class HocSinh(models.Model,ReadGroupAbstractModel):
     _name = "ekids.hocsinh"
     _description = "Đối tượng học sinh của cơ sở"
@@ -289,51 +290,51 @@ class HocSinh(models.Model,ReadGroupAbstractModel):
                 hs.thoigian_hoc = "Đã đánh giá nhưng không học"
                 continue
 
-            tong_ngay = 0
+            # Dùng relativedelta() trống để cộng dồn chính xác năm - tháng - ngày từ nhiều giai đoạn
+            tong_rd = relativedelta()
+            has_valid_period = False
 
             # 2. Tính thời gian từ quá trình học chính thức tại cơ sở
             if hs.ngay_nhaphoc:
-                # Nếu trạng thái là "Đã nghỉ" (3), ưu tiên lấy ngay_nghihoc. Nếu quên nhập thì lấy tạm hôm nay.
-                # Nếu trạng thái là "Đang theo học" (1), tính đến ngày hôm nay (today).
                 if hs.trangthai == "3":
                     end_date = hs.ngay_nghihoc if hs.ngay_nghihoc else today
                 else:
                     end_date = today
 
-                # Đảm bảo mốc kết thúc không nhỏ hơn ngày nhập học
                 if end_date >= hs.ngay_nhaphoc:
-                    delta_hientai = (end_date - hs.ngay_nhaphoc).days
-                    tong_ngay += max(0, delta_hientai)
+                    tong_rd += relativedelta(end_date, hs.ngay_nhaphoc)
+                    has_valid_period = True
 
             # 3. Cộng dồn thời gian từ lịch sử can thiệp trước đây (nếu có)
             if hs.lichsu_canthiep_ids:
                 for ls in hs.lichsu_canthiep_ids:
-                    if ls.tu_ngay:
+                    if ls.is_thoigian_hoc and ls.tu_ngay:
                         ls_end_date = ls.den_ngay if ls.den_ngay else today
                         if ls_end_date >= ls.tu_ngay:
-                            delta_ls = (ls_end_date - ls.tu_ngay).days
-                            tong_ngay += max(0, delta_ls)
+                            tong_rd += relativedelta(ls_end_date, ls.tu_ngay)
+                            has_valid_period = True
 
-            # 4. Quy đổi tổng số ngày tích lũy ra năm và tháng để hiển thị trực quan
-            if tong_ngay <= 0:
-                hs.thoigian_hoc = "Mới nhập học"
+            # Chuẩn hóa lại phần dư (ví dụ: 14 tháng -> 1 năm 2 tháng, 35 ngày -> 1 tháng 5 ngày)
+            if has_valid_period:
+                anchor = today - tong_rd
+                diff = relativedelta(today, anchor)
             else:
-                # Quy đổi tương đối theo tháng (1 tháng = 30 ngày)
-                tong_thang = tong_ngay // 30
+                diff = relativedelta()
 
-                if tong_thang <= 0:
-                    hs.thoigian_hoc = f"{tong_ngay} ngày"
-                else:
-                    nam = tong_thang // 12
-                    thang = tong_thang % 12
+            # 4. Hiển thị kết quả trực quan (giữ nguyên logic dưới 1 tháng)
+            if not has_valid_period or (diff.years <= 0 and diff.months <= 0 and diff.days <= 0):
+                hs.thoigian_hoc = "Mới nhập học"
+            elif diff.years == 0 and diff.months == 0:
+                # Dưới 1 tháng: hiển thị số ngày thực tế (hoặc "Dưới 1 tháng" nếu muốn)
+                hs.thoigian_hoc = f"{diff.days} ngày"
+            else:
+                parts = []
+                if diff.years > 0:
+                    parts.append(f"{diff.years} năm")
+                if diff.months > 0:
+                    parts.append(f"{diff.months} tháng")
 
-                    parts = []
-                    if nam > 0:
-                        parts.append(f"{nam} năm")
-                    if thang > 0:
-                        parts.append(f"{thang} tháng")
-
-                    hs.thoigian_hoc = " ".join(parts) if parts else "Dưới 1 tháng"
+                hs.thoigian_hoc = " ".join(parts) if parts else "Dưới 1 tháng"
 
     @api.model_create_multi
     def create(self, vals_list):

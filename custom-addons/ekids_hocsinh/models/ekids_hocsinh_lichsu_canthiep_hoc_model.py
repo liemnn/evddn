@@ -25,6 +25,8 @@ class HocSinhLichSuCanThiep(models.Model,ReadGroupAbstractModel):
     ]
         , string="Trạng thái", default="-1", required=True)
 
+    is_thoigian_hoc = fields.Boolean(string="Cộng vào thời gian học",default=False)
+
     @api.depends('tu_ngay', 'den_ngay', 'trangthai')
     def _compute_thoigian_hoc(self):
         today = fields.Date.today()
