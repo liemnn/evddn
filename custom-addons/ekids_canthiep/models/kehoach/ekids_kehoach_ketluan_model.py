@@ -91,7 +91,8 @@ class KetLuan(models.Model):
 
 
     gv_kiemduyet_id = fields.Many2one('ekids.giaovien'
-                                      , string="Giáo viên [Kiểm duyệt chuyên môn]", required=True)
+                                      , string="Giáo viên [Kiểm duyệt chuyên môn]"
+                                      , required=False)
 
     gv_canthiep_ids = fields.Many2many(comodel_name="ekids.giaovien"
                                        , relation="ekids_kehoach_giaovien2ketluan_rel"
@@ -127,7 +128,25 @@ class KetLuan(models.Model):
     chuongtrinh = fields.Char(string="Tên chương trình", compute="_compute_chuongtrinh")
 
     is_xoa = fields.Boolean(compute="_compute_is_xoa")
+    is_quytrinh_kiemduyet = fields.Boolean(string="Quản lý chuyên môn sẽ kiểm duyệt [Kế hoạch]",default=True)
+    is_danhgia_ketqua_canthiep = fields.Boolean(string="Quản lý chuyên môn sẽ Đánh giá lại kết quả [Can thệp] của [Giáo viên]",default=True)
 
+    # 2. Tự động reset dữ liệu trên giao diện khi tắt kiểm duyệt
+    @api.onchange('is_quytrinh_kiemduyet')
+    def _onchange_is_quytrinh_kiemduyet(self):
+        if not self.is_quytrinh_kiemduyet:
+            self.gv_kiemduyet_id = False
+            self.is_danhgia_ketqua_canthiep = False
+
+    # 3. Chốt chặn kiểm tra dữ liệu phía Server trước khi lưu
+    @api.constrains('is_quytrinh_kiemduyet', 'gv_kiemduyet_id')
+    def _check_quytrinh_kiemduyet(self):
+        for rec in self:
+            if rec.is_quytrinh_kiemduyet and not rec.gv_kiemduyet_id:
+                raise ValidationError(
+                    "Bạn đang bật chế độ [Quản lý chuyên môn sẽ kiểm duyệt Kế hoạch]. "
+                    "Vui lòng chọn Giáo viên kiểm duyệt chuyên môn!"
+                )
 
 
     @api.onchange('chon_chuongtrinh_id')

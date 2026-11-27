@@ -509,7 +509,7 @@
                                 background: #FFFFFF !important;
                                 border: 1px solid #E2E8F0 !important;
                                 border-radius: 10px !important;
-                                padding: 7px 12px !important;
+                                padding: 10px 14px !important;
                                 margin-bottom: 12px !important;
                                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
                             }
@@ -517,6 +517,7 @@
                             .zone-methods { border-left: 4px solid #6366F1 !important; }
                             .zone-curriculum { border-left: 4px solid #10B981 !important; }
                             .zone-teachers { border-left: 4px solid #F59E0B !important; }
+                            .zone-review-master { border-left: 4px solid #4F46E5 !important; }
                             .zone-guideline { border-left: 4px solid #64748B !important; }
 
                             .zone-header-title {
@@ -533,50 +534,84 @@
                             .label-methods-title { color: #4F46E5 !important; }
                             .label-curriculum-title { color: #059669 !important; }
                             .label-teachers-title { color: #D97706 !important; }
+                            .label-review-title { color: #4338CA !important; }
                             .label-guideline-title { color: #475569 !important; }
 
                             .o_premium_layout .o_form_label { font-weight: 700 !important; color: #475569 !important; font-size: 13px !important; }
                             .border-separator-md { border-left: 1px dashed #E2E8F0; }
 
-                            /* KHUNG CHỌN CHẾ ĐỘ KẾ HOẠCH CHUNG / RIÊNG */
-                            .plan-mode-bar {
-                                margin-top: 10px !important;
-                                padding: 10px 14px !important;
+                            /* KHUNG CHỌN GIÁO VIÊN CAN THIỆP */
+                            .teacher-tags-box {
+                                background: #F8FAFC;
+                                border: 1.5px solid #CBD5E1;
+                                border-radius: 8px;
+                                padding: 8px 12px;
+                            }
+                            .teacher-tags-box .o_form_label { display: none !important; }
+                            .teacher-tags-box .o_field_widget { width: 100% !important; }
+
+                            /* HỘP TRẠNG THÁI BẬT / TẮT THỐNG NHẤT MÀU SẮC (TẮT = XÁM, BẬT = XANH/TÍM) */
+                            .status-callout {
+                                margin-top: 10px;
+                                padding: 10px 14px;
+                                border-radius: 8px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                flex-wrap: wrap;
+                                gap: 10px;
+                                font-size: 13px;
+                                line-height: 1.4;
+                            }
+                            .callout-emerald {
+                                background-color: #ECFDF5 !important;
+                                border: 1.5px solid #6EE7B7 !important;
+                                color: #065F46 !important;
+                            }
+                            .callout-indigo {
+                                background-color: #EEF2FF !important;
+                                border: 1.5px solid #A5B4FC !important;
+                                color: #3730A3 !important;
+                            }
+                            .callout-slate {
+                                background-color: #F1F5F9 !important;
+                                border: 1.5px solid #CBD5E1 !important;
+                                color: #334155 !important;
+                            }
+
+                            .state-chip {
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 5px;
+                                padding: 3px 10px;
+                                border-radius: 999px;
+                                font-size: 11.5px;
+                                font-weight: 800;
+                                white-space: nowrap;
+                            }
+                            .chip-on-indigo { background: #4F46E5; color: #FFFFFF; }
+                            .chip-on-emerald { background: #059669; color: #FFFFFF; }
+                            .chip-off-slate { background: #64748B; color: #FFFFFF; }
+
+                            /* KHUNG CON BÊN TRONG KHI BẬT KIỂM DUYỆT */
+                            .reviewer-sub-panel {
+                                margin-top: 12px;
+                                padding: 14px 16px;
+                                background: linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 100%);
+                                border: 1.5px solid #C7D2FE;
+                                border-radius: 10px;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 12px;
+                            }
+                            .reviewer-input-wrap .o_form_label { display: none !important; }
+                            .reviewer-input-wrap .o_field_widget {
+                                width: 100% !important;
+                                background: #FFFFFF !important;
+                                border: 1.5px solid #A5B4FC !important;
                                 border-radius: 8px !important;
-                                border: 1px dashed #CBD5E1 !important;
-                                background-color: #F8FAFC !important;
-                                display: flex !important;
-                                align-items: center !important;
-                                justify-content: space-between !important;
-                                flex-wrap: wrap !important;
-                                gap: 10px !important;
-                            }
-                            .plan-mode-bar.mode-shared {
-                                background-color: #F0FDF4 !important;
-                                border-color: #86EFAC !important;
-                            }
-                            .plan-mode-bar.mode-separate {
-                                background-color: #FFFBEB !important;
-                                border-color: #FCD34D !important;
-                            }
-                            .plan-mode-pill {
-                                display: inline-flex !important;
-                                align-items: center !important;
-                                gap: 5px !important;
-                                padding: 3px 10px !important;
-                                border-radius: 6px !important;
-                                font-size: 12px !important;
-                                font-weight: 800 !important;
-                            }
-                            .pill-mode-shared {
-                                background-color: #DCFCE7 !important;
-                                color: #15803D !important;
-                                border: 1px solid #86EFAC !important;
-                            }
-                            .pill-mode-separate {
-                                background-color: #FEF3C7 !important;
-                                color: #B45309 !important;
-                                border: 1px solid #FDE68A !important;
+                                padding: 5px 10px !important;
+                                font-weight: 600 !important;
                             }
 
                             /* THANH CÔNG CỤ CHỌN NHANH */
@@ -883,61 +918,124 @@
                                 </div>
                             </div>
 
-                            <!-- KHỐI PHÂN CÔNG GIÁO VIÊN & CẤU HÌNH CHUNG / RIÊNG KẾ HOẠCH -->
+                            <!-- KHỐI PHÂN CÔNG GIÁO VIÊN LẬP KẾ HOẠCH & CAN THIỆP -->
                             <div class="premium-zone-card zone-teachers">
-                                <div class="zone-header-title label-teachers-title">
-                                    <i class="fa fa-users"></i>
-                                    <span>Phân công giáo viên</span>
+                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                                    <div class="zone-header-title label-teachers-title mb-0">
+                                        <i class="fa fa-users"></i>
+                                        <span>Phân công giáo viên lập kế hoạch &amp; can thiệp</span>
+                                    </div>
+                                    <span class="text-muted" style="font-size: 12px;">
+                                        Phụ trách soạn thảo mục tiêu, can thiệp hàng ngày và chấm điểm tiến trình
+                                    </span>
                                 </div>
 
-                                <!-- Hàng 1: Chọn Giáo viên can thiệp & Người phê duyệt -->
-                                <div class="row mx-0">
-                                    <div class="col-md-7 ps-0 pe-0 pe-md-3">
-                                        <group col="12" class="p-0 m-0">
-                                            <field name="gv_canthiep_ids"
-                                                   string="Giáo viên [Lập kế hoạch/Can thiệp]"
-                                                   widget="many2many_tags"
-                                                   readonly="is_readonly"
-                                                   options="{'no_open': True,'no_create': True}"
-                                                   domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
-                                                   colspan="12"/>
-                                        </group>
+                                <div class="teacher-tags-box">
+                                    <field name="gv_canthiep_ids"
+                                           widget="many2many_tags"
+
+                                           placeholder="Chọn một hoặc nhiều giáo viên trực tiếp can thiệp..."
+                                           options="{'no_open': True,'no_create': True}"
+                                           domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
+                                </div>
+
+                                <!-- Chế độ kế hoạch riêng (ĐANG TẮT -> MÀU XÁM) -->
+                                <div class="status-callout callout-slate" invisible="is_chung_kehoach">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <field name="is_chung_kehoach" widget="boolean_toggle"  nolabel="1"/>
+                                        <span class="state-chip chip-off-slate"><i class="fa fa-user me-1"/>KẾ HOẠCH RIÊNG</span>
+                                        <span><strong>Đang tắt:</strong> Mỗi giáo viên được phân công sẽ lập và theo dõi một bản kế hoạch độc lập.</span>
                                     </div>
-                                    <div class="col-md-5 pe-0 ps-0 ps-md-3 border-separator-md">
-                                        <group col="12" class="p-0 m-0">
+                                </div>
+
+                                <!-- Chế độ kế hoạch chung (ĐANG BẬT -> MÀU XANH) -->
+                                <div class="status-callout callout-emerald" invisible="not is_chung_kehoach">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <field name="is_chung_kehoach" widget="boolean_toggle"  nolabel="1"/>
+                                        <span class="state-chip chip-on-emerald"><i class="fa fa-users me-1"/>KẾ HOẠCH CHUNG</span>
+                                        <span><strong>Đang bật:</strong> Nhóm giáo viên được phân công cùng sử dụng và cập nhật trên <strong>một kế hoạch chung</strong>.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- KHỐI QUY TRÌNH KIỂM DUYỆT & ĐÁNH GIÁ CHUYÊN MÔN -->
+                            <div class="premium-zone-card zone-review-master">
+                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                                    <div class="zone-header-title label-review-title mb-0">
+                                        <i class="fa fa-shield"></i>
+                                        <span>Quy trình kiểm duyệt &amp; đánh giá chuyên môn</span>
+                                    </div>
+                                    <span class="text-muted" style="font-size: 12px;">
+                                        <i class="fa fa-info-circle text-primary me-1"/>Bật nếu yêu cầu Quản lý chuyên môn duyệt kế hoạch trước khi can thiệp
+                                    </span>
+                                </div>
+
+                                <!-- Công tắc chính: Có kiểm duyệt hay không (ĐANG TẮT -> MÀU XÁM) -->
+                                <div class="status-callout callout-slate" invisible="is_quytrinh_kiemduyet">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <field name="is_quytrinh_kiemduyet" widget="boolean_toggle"  nolabel="1"/>
+                                        <span class="state-chip chip-off-slate"><i class="fa fa-ban me-1"/>KHÔNG KIỂM DUYỆT</span>
+                                        <span>
+                                            <strong>Khi tắt:</strong> Không có quy trình kiểm duyệt kế hoạch. Giáo viên sẽ được lập kế hoạch và tiến hành can thiệp ngay
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Công tắc chính: Có kiểm duyệt hay không (ĐANG BẬT -> MÀU TÍM INDIGO) -->
+                                <div class="status-callout callout-indigo" invisible="not is_quytrinh_kiemduyet">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <field name="is_quytrinh_kiemduyet" widget="boolean_toggle" nolabel="1"/>
+                                        <span class="state-chip chip-on-indigo"><i class="fa fa-check-circle me-1"/>CÓ KIỂM DUYỆT</span>
+                                        <span>
+                                            <strong>Quản lý chuyên môn sẽ kiểm duyệt [Kế hoạch] trước khi giáo viên đưa vào can thiệp:</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- VÙNG CHI TIẾT KIỂM DUYỆT & ĐÁNH GIÁ: ẨN HOÀN TOÀN KHI TẮT KIỂM DUYỆT -->
+                                <div class="reviewer-sub-panel" invisible="not is_quytrinh_kiemduyet">
+                                    <!-- Chọn người kiểm duyệt -->
+                                    <div>
+                                        <div class="fw-bold mb-1" style="font-size: 13px; color: #312E81;">
+                                            <i class="fa fa-user-md me-1"/>1. Chọn Giáo viên / Quản lý kiểm duyệt chuyên môn <span class="text-danger">*</span>
+                                        </div>
+                                        <div class="reviewer-input-wrap">
                                             <field name="gv_kiemduyet_id"
-                                                   string="Phê duyệt [chuyên môn]"
-                                                   readonly="is_readonly"
+
+                                                   required="is_quytrinh_kiemduyet"
+                                                   placeholder="Chọn người chịu trách nhiệm kiểm duyệt..."
                                                    options="{'no_open': True,'no_create': True}"
-                                                   domain="[('coso_id','=',coso_id),('trangthai','=','1')]"
-                                                   colspan="12"/>
-                                        </group>
+                                                   domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!-- Hàng 2: Nút gạt Cùng chung kế hoạch (Chế độ phối hợp lập kế hoạch) -->
-                                <div class="plan-mode-bar mode-separate" invisible="is_chung_kehoach">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <field name="is_chung_kehoach" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
-                                        <span class="plan-mode-pill pill-mode-separate">
-                                            <i class="fa fa-user"/> Đang tắt: Kế hoạch riêng cho môi giáo viên
-                                        </span>
-                                    </div>
-                                    <div class="text-muted" style="font-size: 12.5px;">
-                                        Các giáo viên được phân công sẽ lập và can thiệp theo <strong>kế hoạch riêng</strong> cho từng người.
-                                    </div>
-                                </div>
+                                    <!-- Công tắc con: Thẩm định / Đánh giá lại kết quả cuối kỳ -->
+                                    <div class="pt-2" style="border-top: 1px dashed #C7D2FE;">
+                                        <div class="fw-bold mb-1" style="font-size: 13px; color: #312E81;">
+                                            <i class="fa fa-balance-scale me-1"/>2. Quyền thẩm định &amp; chốt kết quả cuối kỳ
+                                        </div>
 
-                                <div class="plan-mode-bar mode-shared" invisible="not is_chung_kehoach">
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <field name="is_chung_kehoach" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+                                        <!-- Khi BẬT đánh giá cuối kỳ -> MÀU TÍM INDIGO -->
+                                        <div class="status-callout callout-indigo mt-1" invisible="not is_danhgia_ketqua_canthiep">
+                                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                <field name="is_danhgia_ketqua_canthiep" widget="boolean_toggle" nolabel="1"/>
+                                                <span class="state-chip chip-on-indigo"><i class="fa fa-gavel me-1"/>QUẢN LÝ ĐÁNH GIÁ KẾT QUẢ CAN THIỆP</span>
+                                                <span>
+                                                    <strong>Đang bật:</strong> Quản lý chuyên môn sẽ phải thẩm định/đánh giá lại kết quả của giáo viên và chốt giá trị cuối cùng.
+                                                </span>
+                                            </div>
+                                        </div>
 
-                                        <span class="plan-mode-pill pill-mode-shared">
-                                            <i class="fa fa-users"/>Đang bật: Kế hoạch chung cho nhóm giáo viên
-                                        </span>
-                                    </div>
-                                    <div class="text-success" style="font-size: 12.5px; font-weight: 600;">
-                                        Các giáo viên được phân công sẽ cùng sử dụng và cập nhật trên <strong>một kế hoạch chung</strong>.
+                                        <!-- Khi TẮT đánh giá cuối kỳ -> MÀU XÁM SLATE -->
+                                        <div class="status-callout callout-slate mt-1" invisible="is_danhgia_ketqua_canthiep">
+                                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                <field name="is_danhgia_ketqua_canthiep" widget="boolean_toggle"  nolabel="1"/>
+                                                <span class="state-chip chip-off-slate"><i class="fa fa-flag-checkered me-1"/>KHÔNG CÓ ĐÁNH GIÁ KẾT QUẢ CAN THIỆP, GIÁO VIÊN TỰ KẾT THÚC</span>
+                                                <span>
+                                                    <strong>Đang tắt:</strong> Chỉ duyệt kế hoạch; kết quả can thiệp không được Quản lý chuyên môn đánh giá lại. Kết quả của giáo viên làm kết quả cuối cùng.
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -975,7 +1073,7 @@
         </record>
 
         <record id="ekids_canthiep.kehoach_phancong_form" model="ir.ui.view">
-            <field name="name">Phân công giáo viên lập kế hoạch - Premium UI</field>
+            <field name="name">Phân công giáo viên lập kế hoạch - Modern Workflow UI</field>
             <field name="model">ekids.kehoach_ketluan</field>
             <field name="arch" type="xml">
                 <form class="o_premium_layout">
@@ -1007,39 +1105,34 @@
 
                     <sheet class="p-3 bg-light-smooth">
                         <style>
-                            .bg-light-smooth { background-color: #F8FAFC !important; }
+                            .bg-light-smooth { background-color: #F1F5F9 !important; }
 
-                            /* CARD HỒ SƠ HỌC SINH (READONLY PROFILE) */
+                            /* 1. HEADER HỒ SƠ HỌC SINH */
                             .student-profile-header {
                                 background: #FFFFFF !important;
                                 border: 1px solid #E2E8F0 !important;
-                                border-radius: 10px !important;
+                                border-radius: 12px !important;
                                 padding: 12px 18px !important;
                                 margin-bottom: 14px !important;
-                                box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
+                                box-shadow: 0 2px 4px rgba(15, 23, 42, 0.03) !important;
                                 display: flex !important;
                                 align-items: center !important;
                                 justify-content: space-between !important;
                                 flex-wrap: wrap !important;
-                                gap: 14px !important;
+                                gap: 12px !important;
                             }
                             .student-avatar-badge {
                                 width: 44px;
                                 height: 44px;
-                                border-radius: 50%;
-                                background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+                                border-radius: 12px;
+                                background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
                                 color: #FFFFFF;
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
                                 font-size: 20px;
-                                box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+                                box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
                                 flex-shrink: 0;
-                            }
-                            .student-title-box {
-                                display: flex;
-                                flex-direction: column;
-                                gap: 2px;
                             }
                             .student-name-text .o_field_widget {
                                 font-size: 1.15rem !important;
@@ -1048,103 +1141,114 @@
                                 text-transform: uppercase !important;
                             }
 
-                            /* KHỐI PHÂN CÔNG GIÁO VIÊN */
-                            .teacher-assignment-grid {
-                                display: grid;
-                                grid-template-columns: 1.35fr 1fr;
-                                gap: 14px;
-                                width: 100%;
-                            }
-                            @media (max-width: 768px) {
-                                .teacher-assignment-grid { grid-template-columns: 1fr; }
-                            }
-
-                            .assignment-card {
+                            /* 2. KHỐI CARD CHUNG CHO TỪNG TẦNG NGHIỆP VỤ */
+                            .workflow-section-card {
                                 background: #FFFFFF !important;
                                 border: 1px solid #E2E8F0 !important;
-                                border-radius: 10px !important;
-                                padding: 14px 16px !important;
-                                box-shadow: 0 1px 3px rgba(0,0,0,0.02) !important;
-                                display: flex;
-                                flex-direction: column;
-                                gap: 10px;
+                                border-radius: 12px !important;
+                                padding: 16px 18px !important;
+                                margin-bottom: 14px !important;
+                                box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03) !important;
                             }
-                            .card-intervention { border-top: 4px solid #F59E0B !important; }
-                            .card-reviewer { border-top: 4px solid #6366F1 !important; }
+                            .section-intervention { border-left: 4px solid #F59E0B !important; }
+                            .section-review-master { border-left: 4px solid #4F46E5 !important; }
 
-                            .assignment-card-title {
-                                font-size: 0.88rem !important;
-                                font-weight: 800 !important;
-                                text-transform: uppercase !important;
-                                letter-spacing: 0.3px;
+                            .section-header-row {
                                 display: flex;
                                 align-items: center;
+                                justify-content: space-between;
+                                flex-wrap: wrap;
                                 gap: 8px;
+                                margin-bottom: 10px;
                             }
-                            .title-intervention { color: #D97706; }
-                            .title-reviewer { color: #4F46E5; }
-
-                            .role-description-sub {
-                                font-size: 0.78rem;
-                                color: #64748B;
-                                line-height: 1.35;
-                                margin-top: -4px;
+                            .section-title-badge {
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 8px;
+                                font-size: 0.92rem;
+                                font-weight: 800;
+                                text-transform: uppercase;
+                                letter-spacing: 0.3px;
+                            }
+                            .step-pill {
+                                padding: 2px 8px;
+                                border-radius: 6px;
+                                font-size: 11px;
+                                font-weight: 800;
                             }
 
-                            .custom-field-container {
+                            .teacher-tags-box {
                                 background: #F8FAFC;
-                                border: 1px solid #E2E8F0;
+                                border: 1.5px solid #CBD5E1;
                                 border-radius: 8px;
                                 padding: 8px 12px;
                             }
-                            .custom-field-container .o_form_label {
-                                display: none !important;
+                            .teacher-tags-box .o_form_label { display: none !important; }
+                            .teacher-tags-box .o_field_widget { width: 100% !important; }
+
+                            /* HỘP TRẠNG THÁI BẬT / TẮT */
+                            .status-callout {
+                                margin-top: 10px;
+                                padding: 10px 14px;
+                                border-radius: 8px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                flex-wrap: wrap;
+                                gap: 10px;
+                                font-size: 13px;
+                                line-height: 1.4;
                             }
-                            .custom-field-container .o_field_widget {
-                                width: 100% !important;
+                            .callout-emerald {
+                                background-color: #ECFDF5 !important;
+                                border: 1.5px solid #6EE7B7 !important;
+                                color: #065F46 !important;
+                            }
+                            .callout-indigo {
+                                background-color: #EEF2FF !important;
+                                border: 1.5px solid #A5B4FC !important;
+                                color: #3730A3 !important;
+                            }
+                            /* MÀU XÁM THỐNG NHẤT CHO TẤT CẢ TRẠNG THÁI ĐANG TẮT */
+                            .callout-slate {
+                                background-color: #F1F5F9 !important;
+                                border: 1.5px solid #CBD5E1 !important;
+                                color: #334155 !important;
                             }
 
-                            /* KHUNG CHẾ ĐỘ KẾ HOẠCH CHUNG / RIÊNG */
-                            .plan-mode-bar {
-                                margin-top: 12px !important;
-                                margin-bottom: 14px !important;
-                                padding: 11px 16px !important;
-                                border-radius: 10px !important;
-                                border: 1.5px dashed #CBD5E1 !important;
-                                background-color: #FFFFFF !important;
-                                display: flex !important;
-                                align-items: center !important;
-                                justify-content: space-between !important;
-                                flex-wrap: wrap !important;
-                                gap: 10px !important;
-                                box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
+                            .state-chip {
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 5px;
+                                padding: 3px 10px;
+                                border-radius: 999px;
+                                font-size: 11.5px;
+                                font-weight: 800;
+                                white-space: nowrap;
                             }
-                            .plan-mode-bar.mode-shared {
-                                background-color: #F0FDF4 !important;
-                                border-color: #86EFAC !important;
+                            .chip-on-indigo { background: #4F46E5; color: #FFFFFF; }
+                            .chip-on-emerald { background: #059669; color: #FFFFFF; }
+                            .chip-off-slate { background: #64748B; color: #FFFFFF; }
+
+                            /* KHUNG CON BÊN TRONG KHI BẬT KIỂM DUYỆT */
+                            .reviewer-sub-panel {
+                                margin-top: 12px;
+                                padding: 14px 16px;
+                                background: linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 100%);
+                                border: 1.5px solid #C7D2FE;
+                                border-radius: 10px;
+                                display: flex;
+                                flex-direction: column;
+                                gap: 12px;
                             }
-                            .plan-mode-bar.mode-separate {
-                                background-color: #FFFBEB !important;
-                                border-color: #FCD34D !important;
-                            }
-                            .plan-mode-pill {
-                                display: inline-flex !important;
-                                align-items: center !important;
-                                gap: 6px !important;
-                                padding: 4px 11px !important;
-                                border-radius: 6px !important;
-                                font-size: 12.5px !important;
-                                font-weight: 800 !important;
-                            }
-                            .pill-mode-shared {
-                                background-color: #DCFCE7 !important;
-                                color: #15803D !important;
-                                border: 1px solid #86EFAC !important;
-                            }
-                            .pill-mode-separate {
-                                background-color: #FEF3C7 !important;
-                                color: #B45309 !important;
-                                border: 1px solid #FDE68A !important;
+                            .reviewer-input-wrap .o_form_label { display: none !important; }
+                            .reviewer-input-wrap .o_field_widget {
+                                width: 100% !important;
+                                background: #FFFFFF !important;
+                                border: 1.5px solid #A5B4FC !important;
+                                border-radius: 8px !important;
+                                padding: 5px 10px !important;
+                                font-weight: 600 !important;
                             }
 
                             /* THANH TIÊU ĐỀ KẾ HOẠCH KHUNG 6 THÁNG */
@@ -1157,20 +1261,22 @@
                             }
                         </style>
 
-                        <!-- KHỐI 1: THÔNG TIN HỌC SINH (READONLY PROFILE) -->
+                        <!-- HEADER: HỒ SƠ HỌC SINH -->
                         <div class="student-profile-header">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="student-avatar-badge">
                                     <i class="fa fa-graduation-cap"></i>
                                 </div>
-                                <div class="student-title-box">
+                                <div>
+                                    <div class="text-muted fw-bold" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px;">
+                                        Hồ sơ phân công can thiệp
+                                    </div>
                                     <div class="student-name-text">
                                         <field name="hocsinh_id" readonly="1" options="{'no_open': True}"/>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Huy hiệu trạng thái quy trình -->
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge px-3 py-2 rounded-pill fw-bold"
                                       style="font-size: 12px; background-color: #DCFCE7; color: #15803D; border: 1px solid #86EFAC;">
@@ -1179,81 +1285,133 @@
                             </div>
                         </div>
 
-                        <!-- KHỐI 2: LƯỚI PHÂN CÔNG GIÁO VIÊN 2 BÊN -->
-                        <div class="teacher-assignment-grid">
-
-                            <!-- CỘT TRÁI: GIÁO VIÊN CAN THIỆP / LẬP KẾ HOẠCH -->
-                            <div class="assignment-card card-intervention">
-                                <div>
-                                    <div class="assignment-card-title title-intervention">
-                                        <i class="fa fa-user-plus fs-5"></i>
-                                        <span>Giáo viên Lập kế hoạch &amp; Can thiệp</span>
-                                    </div>
-                                    <div class="role-description-sub">
-                                        Giáo viên được chọn chịu trách nhiệm soạn thảo kế hoạch, theo dõi tiến trình và chấm điểm kết quả hàng ngày.
-                                    </div>
+                        <!-- TẦNG 1: GIÁO VIÊN LẬP KẾ HOẠCH & CAN THIỆP -->
+                        <div class="workflow-section-card section-intervention">
+                            <div class="section-header-row">
+                                <div class="section-title-badge" style="color: #B45309;">
+                                    <span class="step-pill" style="background: #FEF3C7; color: #B45309;">BƯỚC 1</span>
+                                    <i class="fa fa-user-plus"></i>
+                                    <span>Giáo viên Lập kế hoạch &amp; Can thiệp</span>
                                 </div>
-
-                                <div class="custom-field-container">
-                                    <field name="gv_canthiep_ids"
-                                           widget="many2many_tags"
-                                           required="1"
-                                           readonly="is_readonly"
-                                           placeholder="Chọn một hoặc nhiều giáo viên can thiệp..."
-                                           options="{'no_open': True, 'no_create': True}"
-                                           domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
-                                </div>
-                            </div>
-
-                            <!-- CỘT PHẢI: GIÁO VIÊN PHÊ DUYỆT CHUYÊN MÔN -->
-                            <div class="assignment-card card-reviewer">
-                                <div>
-                                    <div class="assignment-card-title title-reviewer">
-                                        <i class="fa fa-shield fs-5"></i>
-                                        <span>Phê duyệt Chuyên môn</span>
-                                    </div>
-                                    <div class="role-description-sub">
-                                        Cán bộ chuyên môn kiểm tra, xét duyệt kế hoạch trước khi đưa vào áp dụng chính thức cho học sinh.
-                                    </div>
-                                </div>
-
-                                <div class="custom-field-container">
-                                    <field name="gv_kiemduyet_id"
-                                           readonly="is_readonly"
-                                           placeholder="Chọn cán bộ duyệt kế hoạch..."
-                                           options="{'no_open': True, 'no_create': True}"
-                                           domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- KHỐI 3: NÚT GẠT CÙNG CHUNG KẾ HOẠCH (ĐỨNG NGAY SAU PHÂN CÔNG) -->
-                        <div class="plan-mode-bar mode-separate" invisible="is_chung_kehoach">
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <field name="is_chung_kehoach" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
-                                <span class="plan-mode-pill pill-mode-separate">
-                                    <i class="fa fa-user"/> Đang tắt: Kế hoạch riêng cho mỗi giáo viên
+                                <span class="text-muted" style="font-size: 12px;">
+                                    Phụ trách soạn thảo mục tiêu, can thiệp hàng ngày và chấm điểm tiến trình
                                 </span>
                             </div>
-                            <div class="text-muted" style="font-size: 12.5px;">
-                                Các giáo viên được phân công sẽ lập và can thiệp theo <strong>kế hoạch riêng</strong> cho từng người.
+
+                            <div class="teacher-tags-box">
+                                <field name="gv_canthiep_ids"
+                                       widget="many2many_tags"
+                                       required="1"
+                                       readonly="is_readonly"
+                                       placeholder="Chọn một hoặc nhiều giáo viên trực tiếp can thiệp..."
+                                       options="{'no_open': True, 'no_create': True}"
+                                       domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
+                            </div>
+
+                            <!-- Chế độ kế hoạch riêng (ĐANG TẮT -> MÀU XÁM) -->
+                            <div class="status-callout callout-slate" invisible="is_chung_kehoach">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <field name="is_chung_kehoach" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+                                    <span class="state-chip chip-off-slate"><i class="fa fa-user me-1"/>KẾ HOẠCH RIÊNG</span>
+                                    <span><strong>Đang tắt:</strong> Mỗi giáo viên được phân công sẽ lập và theo dõi một bản kế hoạch độc lập.</span>
+                                </div>
+                            </div>
+
+                            <!-- Chế độ kế hoạch chung (ĐANG BẬT -> MÀU XANH) -->
+                            <div class="status-callout callout-emerald" invisible="not is_chung_kehoach">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <field name="is_chung_kehoach" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+                                    <span class="state-chip chip-on-emerald"><i class="fa fa-users me-1"/>KẾ HOẠCH CHUNG</span>
+                                    <span><strong>Đang bật:</strong> Nhóm giáo viên được phân công cùng sử dụng và cập nhật trên <strong>một kế hoạch chung</strong>.</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="plan-mode-bar mode-shared" invisible="not is_chung_kehoach">
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <field name="is_chung_kehoach" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
-                                <span class="plan-mode-pill pill-mode-shared">
-                                    <i class="fa fa-users"/> Đang bật: Kế hoạch chung cho nhóm giáo viên
+                        <!-- TẦNG 2 & 3: QUY TRÌNH KIỂM DUYỆT & ĐÁNH GIÁ CHUYÊN MÔN -->
+                        <div class="workflow-section-card section-review-master">
+                            <!-- Ghi chú tổng quan phía trên -->
+                            <div class="section-header-row">
+                                <div class="section-title-badge" style="color: #4338CA;">
+                                    <span class="step-pill" style="background: #E0E7FF; color: #4338CA;">BƯỚC 2</span>
+                                    <i class="fa fa-shield"></i>
+                                    <span>Quy trình Kiểm duyệt &amp; Đánh giá Chuyên môn</span>
+                                </div>
+                                <span class="text-muted" style="font-size: 12px;">
+                                    <i class="fa fa-info-circle text-primary me-1"/>Bật nếu yêu cầu Quản lý chuyên môn duyệt kế hoạch trước khi can thiệp
                                 </span>
                             </div>
-                            <div class="text-success" style="font-size: 12.5px; font-weight: 600;">
-                                Các giáo viên được phân công sẽ cùng sử dụng và cập nhật trên <strong>một kế hoạch chung</strong>.
+
+                            <!-- Công tắc chính: Có kiểm duyệt hay không (ĐANG TẮT -> MÀU XÁM) -->
+                            <div class="status-callout callout-slate" invisible="is_quytrinh_kiemduyet">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <field name="is_quytrinh_kiemduyet" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+                                    <span class="state-chip chip-off-slate"><i class="fa fa-ban me-1"/>KHÔNG KIỂM DUYỆT</span>
+                                    <span>
+                                        <strong>Khi tắt:</strong> Không có quy trình kiểm duyệt kế hoạch. Giáo viên sẽ được lập kế hoạch và tiến hành can thiệp ngay
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Công tắc chính: Có kiểm duyệt hay không (ĐANG BẬT -> MÀU TÍM INDIGO) -->
+                            <div class="status-callout callout-indigo" invisible="not is_quytrinh_kiemduyet">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <field name="is_quytrinh_kiemduyet" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+                                    <span class="state-chip chip-on-indigo"><i class="fa fa-check-circle me-1"/>CÓ KIỂM DUYỆT</span>
+                                    <span>
+                                        <strong>Quản lý chuyên môn sẽ kiểm duyệt [Kế hoạch] trước khi giáo viên đưa vào can thiệp:</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- VÙNG CHI TIẾT KIỂM DUYỆT & ĐÁNH GIÁ: ẨN HOÀN TOÀN KHI TẮT KIỂM DUYỆT -->
+                            <div class="reviewer-sub-panel" invisible="not is_quytrinh_kiemduyet">
+                                <!-- Chọn người kiểm duyệt -->
+                                <div>
+                                    <div class="fw-bold mb-1" style="font-size: 13px; color: #312E81;">
+                                        <i class="fa fa-user-md me-1"/>1. Chọn Giáo viên / Quản lý kiểm duyệt chuyên môn <span class="text-danger">*</span>
+                                    </div>
+                                    <div class="reviewer-input-wrap">
+                                        <field name="gv_kiemduyet_id"
+                                               readonly="is_readonly"
+                                               required="is_quytrinh_kiemduyet"
+                                               placeholder="Chọn người chịu trách nhiệm kiểm duyệt..."
+                                               options="{'no_open': True, 'no_create': True}"
+                                               domain="[('coso_id','=',coso_id),('trangthai','=','1')]"/>
+                                    </div>
+                                </div>
+
+                                <!-- Công tắc con: Thẩm định / Đánh giá lại kết quả cuối kỳ -->
+                                <div class="pt-2" style="border-top: 1px dashed #C7D2FE;">
+                                    <div class="fw-bold mb-1" style="font-size: 13px; color: #312E81;">
+                                        <i class="fa fa-balance-scale me-1"/>2. Quyền thẩm định &amp; chốt kết quả cuối kỳ
+                                    </div>
+
+                                    <!-- Khi BẬT đánh giá cuối kỳ -> MÀU TÍM INDIGO -->
+                                    <div class="status-callout callout-indigo mt-1" invisible="not is_danhgia_ketqua_canthiep">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <field name="is_danhgia_ketqua_canthiep" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+                                            <span class="state-chip chip-on-indigo"><i class="fa fa-gavel me-1"/>QUẢN LÝ ĐÁNH GIÁ KẾT QUẢ CAN THIỆP</span>
+                                            <span>
+                                                <strong>Đang bật:</strong> Quản lý chuyên môn sẽ phải thẩm định/đánh giá lại kết quả của giáo viên và chốt giá trị cuối cùng.
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Khi TẮT đánh giá cuối kỳ -> MÀU XÁM SLATE -->
+                                    <div class="status-callout callout-slate mt-1" invisible="is_danhgia_ketqua_canthiep">
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <field name="is_danhgia_ketqua_canthiep" widget="boolean_toggle" readonly="is_readonly" nolabel="1"/>
+                                            <span class="state-chip chip-off-slate"><i class="fa fa-flag-checkered me-1"/>KHÔNG CÓ ĐÁNH GIÁ KẾT QUẢ CAN THIỆP, GIÁO VIÊN TỰ KẾT THÚC</span>
+                                            <span>
+                                                <strong>Đang tắt:</strong> Giáo viên được phân công can thiệp kết thúc kế hoạch và chốt giá trị cuối cùng
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- KHỐI 4: KẾ HOẠCH KHUNG 6 THÁNG GIÁO VIÊN ĐÃ TẠO -->
+                        <!-- TẦNG 4: KẾ HOẠCH KHUNG 6 THÁNG GIÁO VIÊN ĐÃ TẠO -->
                         <div class="quick-select-box" invisible="not linhvuc_ids">
                             <div class="d-flex align-items-center gap-2">
                                 <i class="fa fa-bolt text-warning" style="font-size: 13px;"></i>
@@ -1312,7 +1470,6 @@
                 </form>
             </field>
         </record>
-
         <record id="ekids_canthiep.kehoach_ketluan_kehoach_6thang_form" model="ir.ui.view">
             <field name="name">Phiếu Kết luận - Premium Compact UI</field>
             <field name="model">ekids.kehoach_ketluan</field>

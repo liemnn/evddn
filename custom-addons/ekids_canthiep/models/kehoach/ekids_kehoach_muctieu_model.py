@@ -484,24 +484,14 @@ class KeHoach2MucTieu(models.Model):
 
     @api.depends("kehoach_linhvuc_id.is_readonly")
     def _compute_is_kiemduyet(self):
-        user = self.env.user
-        is_admin = user.has_group('base.group_system')
-        giaoviens = giaovien_util.func_get_giaoviens_tu_user(self)
         for record in self:
+            kehoach = record.kehoach_id
             is_kiemduyet = False
-            if is_admin:
+            if kehoach.is_kiemduyet == True:
                 is_kiemduyet = True
             else:
-                kehoach = record.kehoach_id
-                if kehoach:
-                    gv_kiemduyet = kehoach.ketluan_id.gv_kiemduyet_id
-                    gv_lap = kehoach.gv_lapkehoach_id
-                    if gv_kiemduyet.id in giaoviens.ids:
-                        #if record.trangthai == "1":
-                         is_kiemduyet = True
-                    elif gv_lap.user_id.id == user.id:
-                        if record.trangthai_kiemduyet != "0":
-                            is_kiemduyet = True
+                if record.trangthai_kiemduyet != "0":
+                    is_kiemduyet = True
 
             record.is_kiemduyet = is_kiemduyet
 

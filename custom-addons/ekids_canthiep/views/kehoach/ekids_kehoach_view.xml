@@ -1026,16 +1026,26 @@
                      <field name="tyle_dat_kiemduyet" invisible="1"/>
                      <field name="is_nhanxet_gv" invisible="1"/>
                      <field name="is_canthiep_ketluan" invisible="1"/>
+                     <field name="is_chuyen_canthiep" invisible="1"/>
 
 
                      <!-- HEADER CONTROL -->
                      <header>
+
                          <button name="action_ketthuc_kehoach"
                                  string="Kết thúc"
                                  type="object"
                                  icon="fa-archive"
                                  class="btn-success"
                                  invisible="is_kiemduyet == False"/>
+
+                         <button name="action_pheduyet_dat"
+                                 string="Chuyển sang can thiệp"
+                                 type="object"
+                                 icon="fa-paper-plane"
+                                 class="btn-success fw-bold"
+                                 confirm="Bạn chắc chắn muốn chuyển Ké hoạch sang cho phép can thiệp chứ  ?"
+                                 invisible="not is_chuyen_canthiep"/>
 
                          <button name="action_gui_pheduyet"
                                  string="Gửi phê duyệt"

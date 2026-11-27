@@ -110,8 +110,10 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
     desc = fields.Html(string="Ý kiến phê duyệt")
 
     is_gui_pheduyet = fields.Boolean(compute="_compute_is_gui_pheduyet")
+    is_chuyen_canthiep = fields.Boolean(compute="_compute_is_chuyen_canthiep")
     is_pheduyet = fields.Boolean(compute="_compute_is_pheduyet")
     is_kiemduyet = fields.Boolean(compute="_compute_is_kiemduyet")
+
     is_readonly = fields.Boolean(compute="_compute_is_readonly")
     is_header_open = fields.Boolean(compute="_compute_is_header_open")
     is_show_wiget_canthiep = fields.Boolean(compute="_compute_is_show_wiget_canthiep")
@@ -358,16 +360,46 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
         for kehoach in self:
+            is_gui_pheduyet = False
             if (kehoach.trangthai== kehoach_util.KEHOACH_DANG_LAP or
                 kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
                 giaoviens =kehoach.ketluan_id.gv_canthiep_ids
                 user_ids = giaoviens.mapped('user_id').ids
-                if (is_admin or user.id in user_ids):
-                    kehoach.is_gui_pheduyet = True
+                ketluan = kehoach.ketluan_id
+                if (ketluan
+                        and ketluan.is_quytrinh_kiemduyet == False):
+                    is_gui_pheduyet = False
+                elif (is_admin or user.id in user_ids):
+                    is_gui_pheduyet = True
                 else:
-                    kehoach.is_gui_pheduyet = False
+                    is_gui_pheduyet = False
             else:
-                kehoach.is_gui_pheduyet= False
+                is_gui_pheduyet= False
+
+            kehoach.is_gui_pheduyet =is_gui_pheduyet
+
+    def _compute_is_chuyen_canthiep(self):
+        user = self.env.user
+        is_admin = user.has_group('base.group_system')
+        for kehoach in self:
+            is_chuyen_canthiep = False
+            if (kehoach.trangthai== kehoach_util.KEHOACH_DANG_LAP or
+                kehoach.trangthai_pheduyet == kehoach_util.PHEDUYET_CAN_DIEUCHINH):
+                giaoviens =kehoach.ketluan_id.gv_canthiep_ids
+                user_ids = giaoviens.mapped('user_id').ids
+                ketluan = kehoach.ketluan_id
+                if (ketluan
+                        and ketluan.is_quytrinh_kiemduyet == False
+                        and user.id in user_ids):
+                    is_chuyen_canthiep = True
+                elif is_admin:
+                    is_chuyen_canthiep = True
+                else:
+                    is_chuyen_canthiep = False
+            else:
+                is_chuyen_canthiep= False
+
+            kehoach.is_chuyen_canthiep =is_chuyen_canthiep
 
     def _compute_is_pheduyet(self):
         user = self.env.user
@@ -383,20 +415,30 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             else:
                 kehoach.is_pheduyet = False
 
+
+
     def _compute_is_kiemduyet(self):
         user = self.env.user
         is_admin = user.has_group('base.group_system')
         giaoviens=giaovien_util.func_get_giaoviens_tu_user(self)
         for kehoach in self:
+            ketluan = kehoach.ketluan_id
+            is_kiemduyet = False
             if kehoach.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
-                if (is_admin or  kehoach.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids):
-                    kehoach.is_kiemduyet = True
-                else:
-                    kehoach.is_kiemduyet = False
-            else:
-                kehoach.is_kiemduyet = False
+                if is_admin:
+                    is_kiemduyet = True
+                elif (ketluan
+                      and (ketluan.is_quytrinh_kiemduyet == False
+                           or ketluan.is_danhgia_ketqua_canthiep == False)):
+                      if kehoach.gv_lapkehoach_id.id in giaoviens.ids:
+                          is_kiemduyet = True
 
-
+                elif (ketluan
+                      and ketluan.is_quytrinh_kiemduyet == True
+                      and ketluan.is_danhgia_ketqua_canthiep == True):
+                     if kehoach.ketluan_id.gv_kiemduyet_id.id in giaoviens.ids:
+                         is_kiemduyet = True
+            kehoach.is_kiemduyet = is_kiemduyet
 
 
     def _compute_kehoach_linhvuc(self):
@@ -518,14 +560,19 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
                 }
                 rec.write(data)
 
+
+
     def action_pheduyet_dat(self):
         for rec in self:
-            if rec.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET:
+            if (rec.trangthai == kehoach_util.KEHOACH_DANG_PHEDUYET
+                    or rec.trangthai == kehoach_util.KEHOACH_DANG_LAP):
                 data={
                     'trangthai_pheduyet': kehoach_util.PHEDUYET_DA_DUYET,
                     'trangthai': kehoach_util.KEHOACH_DANG_CANTHIEP,
                 }
                 rec.write(data)
+
+
 
 
 
@@ -642,6 +689,7 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
             'target': 'new',
             'context': self.env.context,
         }
+
 
     def action_xacnhan_ketthuc_kehoach(self):
         if self.trangthai == kehoach_util.KEHOACH_DANG_CANTHIEP:
