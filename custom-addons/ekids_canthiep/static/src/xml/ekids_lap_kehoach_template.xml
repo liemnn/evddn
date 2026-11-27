@@ -1,12 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates xml:space="preserve">
     <t t-name="ekids_canthiep.LapKeHoachWidgetTemplate">
-        <div class="w-100 d-flex flex-column gap-2 mt-2 px-0 overflow-x-hidden">
+        <div class="w-100 d-flex flex-column gap-2 mt-1 px-0 overflow-x-hidden">
 
             <style>
                 .o_field_widget[name="kehoach_linhvuc_ids"] { width: 100% !important; max-width: 100% !important; display: block !important; }
                 .custom-folder-bar { background-color: #F8FAFC !important; border: 1px solid #E2E8F0 !important; border-radius: 12px !important; }
                 .badge-purple-light { background-color: #F3E8FF !important; color: #6B21A8 !important; border: 1px solid #E9D5FF !important; white-space: nowrap; flex-shrink: 0 !important; font-size: 11.5px !important; }
+
+                /* KHUNG THÊM LĨNH VỰC NỔI BẬT (CHỈ HIỆN KHI is_canthiep_ketluan == False) */
+                .add-domain-panel {
+                    background: linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 100%);
+                    border: 1.5px solid #93C5FD;
+                    border-left: 4px solid #1D4ED8;
+                    border-radius: 12px;
+                    padding: 12px 14px;
+                    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.08);
+                    margin-bottom: 6px;
+                }
+                .add-domain-step-label {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    font-size: 11.5px;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    color: #1E3A8A;
+                    margin-bottom: 5px;
+                    letter-spacing: 0.2px;
+                }
+                .step-num-badge {
+                    width: 17px;
+                    height: 17px;
+                    border-radius: 50%;
+                    background-color: #1D4ED8;
+                    color: #FFFFFF;
+                    font-size: 10.5px;
+                    font-weight: 800;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                }
+                .add-domain-select {
+                    height: 36px !important;
+                    font-size: 13px !important;
+                    font-weight: 600 !important;
+                    border-radius: 8px !important;
+                    border: 1.5px solid #CBD5E1 !important;
+                    color: #0F172A !important;
+                    background-color: #FFFFFF !important;
+                }
+                .add-domain-select:focus {
+                    border-color: #2563EB !important;
+                    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+                }
+                .add-domain-select:disabled {
+                    background-color: #F1F5F9 !important;
+                    color: #94A3B8 !important;
+                    font-weight: 500 !important;
+                    border-color: #E2E8F0 !important;
+                    cursor: not-allowed;
+                }
+
+                /* CỤM NÚT SẮP XẾP LÊN / XUỐNG RÕ NÉT */
+                .lv-move-group {
+                    display: inline-flex;
+                    align-items: center;
+                    background-color: #FFFFFF;
+                    border: 1.5px solid #CBD5E1;
+                    border-radius: 7px;
+                    overflow: hidden;
+                    height: 30px;
+                    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+                }
+                .btn-lv-move {
+                    border: none !important;
+                    background-color: #FFFFFF !important;
+                    color: #1E3A8A !important;
+                    width: 28px;
+                    height: 100%;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: all 0.15s ease;
+                    padding: 0;
+                }
+                .btn-lv-move:first-child {
+                    border-right: 1px solid #E2E8F0 !important;
+                }
+                .btn-lv-move:hover:not(:disabled) {
+                    background-color: #DBEAFE !important;
+                    color: #1D4ED8 !important;
+                }
+                .btn-lv-move:disabled {
+                    color: #CBD5E1 !important;
+                    background-color: #F8FAFC !important;
+                    cursor: not-allowed;
+                }
 
                 .muctieu-circle-index-grey {
                     width: 22px;
@@ -36,7 +128,7 @@
                 }
                 .folder-top-info-line { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; flex-wrap: wrap; }
                 .folder-title-text { font-size: 15px; font-weight: 700; color: #1E293B !important; }
-                .folder-bottom-actions-line { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+                .folder-bottom-actions-line { display: flex; align-items: center; gap: 6px; flex-shrink: 0; flex-wrap: wrap; }
 
                 .btn-folder-action {
                     font-size: 13px !important;
@@ -50,7 +142,7 @@
                     justify-content: center;
                 }
 
-                /* 🌟 KHỐI CARD MỤC TIÊU: CHIA RÕ 2 DÒNG ĐỘC LẬP TRÊN CẢ WEB  MOBILE */
+                /* KHỐI CARD MỤC TIÊU: CHIA RÕ 2 DÒNG ĐỘC LẬP TRÊN CẢ WEB  MOBILE */
                 .target-item-card {
                     width: 100%;
                     padding: 9px 14px;
@@ -60,7 +152,6 @@
                     gap: 6px;
                 }
 
-                /* DÒNG 1: STT VÀ TÊN MỤC TIÊU CHIẾM TRỌN 1 HÀNG */
                 .target-row-title {
                     display: flex;
                     align-items: flex-start;
@@ -75,7 +166,6 @@
                     word-break: break-word;
                 }
 
-                /* 🌟 DÒNG 2: TOÀN BỘ NÚT  BADGE GOM VÀO 1 HÀNG DẠT SÁT PHẢI */
                 .target-row-actions-right {
                     display: flex;
                     align-items: center;
@@ -121,6 +211,13 @@
                 }
 
                 @media (max-width: 768px) {
+                    .add-domain-panel {
+                        padding: 10px !important;
+                    }
+                    .add-domain-select {
+                        height: 38px !important;
+                        font-size: 13.5px !important;
+                    }
                     .folder-main-layout {
                         flex-direction: column !important;
                         align-items: flex-start !important;
@@ -135,6 +232,7 @@
                         align-items: center !important;
                         border-top: 1px dashed #E2E8F0;
                         padding-top: 8px;
+                        gap: 6px !important;
                     }
 
                     .target-item-card { padding: 8px 10px !important; }
@@ -146,6 +244,84 @@
                     }
                 }
             </style>
+
+            <!-- NÚT DỰ PHÒNG CHỈ HIỆN NẾU KHÔNG TÌM THẤY .ekids-summary-action-bar PHÍA TRÊN -->
+            <div t-if="canCustomLinhVuc and props.record.resId and !state.hasSummaryBarSlot" class="d-flex justify-content-end">
+                <button type="button"
+                        class="btn btn-sm fw-bold shadow-sm"
+                        t-attf-style="border-radius: 8px; font-size: 13px; padding: 6px 14px; #{state.showAddLinhVucBar ? 'background-color: #F1F5F9; color: #334155; border: 1.5px solid #CBD5E1;' : 'background-color: #2563EB; color: #FFFFFF; border: 1.5px solid #1D4ED8;'}"
+                        t-on-click="() => this.toggleAddLinhVucBar()">
+                    <i t-attf-class="fa #{state.showAddLinhVucBar ? 'fa-chevron-up' : 'fa-plus-circle'} me-1.5"/>
+                    <span t-esc="state.showAddLinhVucBar ? 'Đóng thêm lĩnh vực vào Kế hoạch' : 'Thêm lĩnh vực vào Kế hoạch'"/>
+                </button>
+            </div>
+
+            <!-- KHUNG LỰA CHỌN 3 BƯỚC NỔI BẬT (MỞ NGAY DƯỚI THANH SUMMARY BAR KHI BẤM NÚT) -->
+            <div t-if="canCustomLinhVuc and props.record.resId and state.showAddLinhVucBar" class="add-domain-panel">
+                <div class="row g-2.5 align-items-end">
+                    <!-- BƯỚC 1: CHƯƠNG TRÌNH -->
+                    <div class="col-12 col-md-3">
+                        <label class="add-domain-step-label">
+                            <span class="step-num-badge">1</span>
+                            <span>Chương trình</span>
+                        </label>
+                        <select class="form-select add-domain-select"
+                                t-on-change="(ev) => this.onChangeProgram(ev)">
+                            <option value="" t-att-selected="state.selectedCtId === ''">-- Chọn chương trình --</option>
+                            <t t-foreach="state.chuongtrinhs" t-as="ct" t-key="ct.id">
+                                <option t-att-value="ct.id" t-att-selected="('' + ct.id) === ('' + state.selectedCtId)" t-esc="ct.name"/>
+                            </t>
+                        </select>
+                    </div>
+
+                    <!-- BƯỚC 2: LĨNH VỰC (LỌC THEO CHƯƠNG TRÌNH) -->
+                    <div class="col-12 col-md-4">
+                        <label class="add-domain-step-label">
+                            <span class="step-num-badge">2</span>
+                            <span>Lĩnh vực</span>
+                        </label>
+                        <select class="form-select add-domain-select"
+                                t-att-disabled="!state.selectedCtId"
+                                t-on-change="(ev) => this.onChangeLinhVuc(ev)">
+                            <option value="" t-att-selected="state.selectedLvId === ''">
+                                <t t-esc="state.selectedCtId ? '-- Chọn lĩnh vực --' : '(Chọn chương trình trước)'"/>
+                            </option>
+                            <t t-foreach="filteredLinhVucs" t-as="lvItem" t-key="lvItem.id">
+                                <option t-att-value="lvItem.id" t-att-selected="('' + lvItem.id) === ('' + state.selectedLvId)" t-esc="lvItem.name"/>
+                            </t>
+                        </select>
+                    </div>
+
+                    <!-- BƯỚC 3: ĐỘ TUỔI (LỌC THEO CHƯƠNG TRÌNH / LĨNH VỰC) -->
+                    <div class="col-12 col-md-3">
+                        <label class="add-domain-step-label">
+                            <span class="step-num-badge">3</span>
+                            <span>Độ tuổi</span>
+                        </label>
+                        <select class="form-select add-domain-select"
+                                t-att-disabled="!state.selectedCtId"
+                                t-on-change="(ev) => this.onChangeTuoi(ev)">
+                            <option value="" t-att-selected="state.selectedTuoiId === ''">
+                                <t t-esc="state.selectedCtId ? '-- Chọn độ tuổi --' : '(Chọn chương trình trước)'"/>
+                            </option>
+                            <t t-foreach="filteredTuois" t-as="tItem" t-key="tItem.id">
+                                <option t-att-value="tItem.id" t-att-selected="('' + tItem.id) === ('' + state.selectedTuoiId)" t-esc="tItem.name"/>
+                            </t>
+                        </select>
+                    </div>
+
+                    <!-- NÚT XÁC NHẬN -->
+                    <div class="col-12 col-md-2">
+                        <button type="button"
+                                class="btn btn-primary w-100 fw-bold shadow-sm"
+                                style="background-color: #1D4ED8 !important; border-color: #1E3A8A !important; height: 36px; border-radius: 8px; font-size: 13px;"
+                                t-att-disabled="state.loadingAddLv"
+                                t-on-click.stop.prevent="() => this.onConfirmAddLinhVuc()">
+                            <i class="fa fa-check-circle me-1"/>Thêm vào Kế hoạch
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <t t-foreach="state.groupedData" t-as="lv" t-key="lv.kehoach_linhvuc_id">
                 <div class="w-100 custom-folder-bar overflow-hidden mb-2 shadow-sm">
@@ -160,7 +336,7 @@
                                 <t t-esc="lv.linhvuc"/>
                             </span>
 
-                            <div class="d-inline-flex gap-1 align-items-center">
+                            <div class="d-inline-flex gap-1 align-items-center flex-wrap">
                                 <span t-if="lv.tuoi" class="badge badge-purple-light rounded px-1.5 py-0.5 fw-bold">
                                     <t t-esc="lv.tuoi"/>
                                 </span>
@@ -170,12 +346,42 @@
                             </div>
                         </div>
 
+                        <!-- THỨ TỰ CỤM HÀNH ĐỘNG: SỐ MỤC TIÊU -> LÊN XUỐNG -> XÓA -> TỰ TẠO MỚI -> THÊM MỤC TIÊU -->
                         <div class="folder-bottom-actions-line" t-on-click.stop="">
-                            <span class="badge px-2 py-1 fw-bold flex-shrink-0"
+                            <!-- 1. Số mục tiêu -->
+                            <span class="badge px-2.5 py-1 fw-bold flex-shrink-0"
                                   style="font-size: 12px; background-color: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; border-radius: 12px;">
                                 <t t-esc="lv.tong_muctieu"/> mục tiêu
                             </span>
 
+                            <!-- 2. Nút Lên / Xuống rõ nét (chỉ hiện khi is_canthiep_ketluan == False) -->
+                            <div t-if="canCustomLinhVuc" class="lv-move-group" role="group">
+                                <button type="button"
+                                        class="btn-lv-move"
+                                        t-att-disabled="lv_index === 0"
+                                        title="Di chuyển lĩnh vực lên trên"
+                                        t-on-click="() => this.onMoveLinhVuc(lv.kehoach_linhvuc_id, 'up')">
+                                    <i class="fa fa-arrow-up" style="font-size: 12px;"></i>
+                                </button>
+                                <button type="button"
+                                        class="btn-lv-move"
+                                        t-att-disabled="lv_index === state.groupedData.length - 1"
+                                        title="Di chuyển lĩnh vực xuống dưới"
+                                        t-on-click="() => this.onMoveLinhVuc(lv.kehoach_linhvuc_id, 'down')">
+                                    <i class="fa fa-arrow-down" style="font-size: 12px;"></i>
+                                </button>
+                            </div>
+
+                            <!-- 3. Nút Xóa lĩnh vực (chỉ hiện khi is_canthiep_ketluan == False và lĩnh vực có 0 mục tiêu) -->
+                            <button t-if="canCustomLinhVuc and lv.tong_muctieu === 0"
+                                    type="button"
+                                    class="btn btn-outline-danger btn-folder-action"
+                                    title="Xóa lĩnh vực trống này khỏi Kế hoạch và Kết luận"
+                                    t-on-click="() => this.onDeleteLinhVuc(lv.kehoach_linhvuc_id, lv.linhvuc)">
+                                <i class="fa fa-trash-o me-1"></i>Xóa
+                            </button>
+
+                            <!-- 4. Các nút thao tác mục tiêu bên phải -->
                             <div class="d-flex align-items-center gap-1.5 ms-auto">
                                 <button t-if="!props.readonly"
                                         type="button" class="btn btn-light border btn-folder-action text-dark"
@@ -200,7 +406,7 @@
                             <t t-foreach="lv.muctieus" t-as="muctieu" t-key="muctieu.id">
                                 <div class="target-item-card">
 
-                                    <!-- 🌟 DÒNG 1: STT VÀ TÊN MỤC TIÊU CHIẾM TRỌN HÀNG TRÊN -->
+                                    <!-- DÒNG 1: STT VÀ TÊN MỤC TIÊU CHIẾM TRỌN HÀNG TRÊN -->
                                     <div class="target-row-title" t-on-click="() => this.toggleTargetDetail(muctieu.id)">
                                         <span class="muctieu-circle-index-grey">
                                             <t t-esc="muctieu_index+1"/>
@@ -210,7 +416,7 @@
                                         </span>
                                     </div>
 
-                                    <!-- 🌟 DÒNG 2: TOÀN BỘ CỤM NÚT & BADGE TRÊN 1 HÀNG NẰM SÁT LỀ PHẢI -->
+                                    <!-- DÒNG 2: TOÀN BỘ CỤM NÚT & BADGE TRÊN 1 HÀNG NẰM SÁT LỀ PHẢI -->
                                     <div class="target-row-actions-right" t-on-click.stop="">
 
                                         <!-- 1. Badge Tỷ lệ ban đầu -->
@@ -279,11 +485,10 @@
 
                                     </div>
 
-                                    <!-- VÙNG MỞ RỘNG CHI TIẾT NỘI DUNG (GIỮ NGUYÊN) -->
+                                    <!-- VÙNG MỞ RỘNG CHI TIẾT NỘI DUNG -->
                                     <div t-if="state.expandedTargets[muctieu.id]" class="w-100 p-2.5 rounded-2 border d-flex flex-column gap-2 mt-1"
                                          style="background-color: #F8FAFC; border-color: #E2E8F0;">
 
-                                        <!-- Khung Ghi chú nhanh -->
                                         <!-- Khung Ghi chú nhanh -->
                                         <div t-if="state.activeNotes[muctieu.id]" class="w-100 p-2.5 bg-white rounded-3 border shadow-sm note-container-box" t-att-data-box-target-id="muctieu.id">
                                             <div class="fw-bold text-dark mb-1" style="font-size: 13px;">

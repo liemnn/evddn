@@ -1025,6 +1025,7 @@
                      <field name="tyle_dat_canthiep" invisible="1"/>
                      <field name="tyle_dat_kiemduyet" invisible="1"/>
                      <field name="is_nhanxet_gv" invisible="1"/>
+                     <field name="is_canthiep_ketluan" invisible="1"/>
 
 
                      <!-- HEADER CONTROL -->
@@ -1281,27 +1282,23 @@
                                  white-space: nowrap !important;
                              }
 
-                             /* Nút Bổ sung Lĩnh vực Nổi bật */
                              .btn-highlight-linhvuc {
-                                 background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
-                                 color: #FFFFFF !important;
-                                 border: none !important;
-                                 border-radius: 6px !important;
-                                 padding: 6px 12px !important;
-                                 font-size: 12px !important;
-                                 font-weight: 700 !important;
-                                 display: inline-flex !important;
-                                 align-items: center !important;
-                                 gap: 5px !important;
-                                 box-shadow: 0 2px 6px rgba(37, 99, 235, 0.28) !important;
-                                 transition: all 0.2s ease-in-out !important;
-                                 white-space: nowrap !important;
-                             }
-                             .btn-highlight-linhvuc:hover {
-                                 transform: translateY(-1px) !important;
-                                 box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4) !important;
-                                 background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
-                             }
+                                background-color: #EFF6FF !important;
+                                color: #1D4ED8 !important;
+                                border: 1.5px solid #93C5FD !important;
+                                border-radius: 8px !important;
+                                font-weight: 700 !important;
+                                height: 34px !important;
+                                padding: 0 13px !important;
+                                box-shadow: none !important;
+                                transition: all 0.15s ease;
+                            }
+
+                            .btn-highlight-linhvuc:hover {
+                                background-color: #DBEAFE !important;
+                                border-color: #60A5FA !important;
+                                color: #1E40AF !important;
+                            }
 
                              /* MOBILE RESPONSIVE (768px) */
                              @media (max-width: 768px) {
@@ -1461,7 +1458,7 @@
                              <!-- Nhóm nút hành động bên phải -->
                              <div class="action-right-zone">
                                  <button name="action_lap_kehoach_6thang"
-                                         string="Lập [Kế hoạch] 6 tháng"
+                                         string="Lập [Kế hoạch] khung 6 tháng"
                                          type="object"
                                          icon="fa-puzzle-piece"
                                          class="btn-highlight-linhvuc"
