@@ -418,26 +418,6 @@
 
                                     <!-- DÒNG 2: TOÀN BỘ CỤM NÚT & BADGE TRÊN 1 HÀNG NẰM SÁT LỀ PHẢI -->
                                     <div class="target-row-actions-right" t-on-click.stop="">
-
-                                        <!-- 1. Badge Tỷ lệ ban đầu -->
-                                        <span class="badge badge-trial-action d-inline-flex align-items-center gap-1"
-                                              t-attf-style="#{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0;' : 'background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A;') : 'background-color: #F8FAFC; color: #64748B; border: 1px dashed #CBD5E1;'}"
-                                              title="Bấm để cập nhật [Mức độ ban đầu]"
-                                              t-on-click="() => this.openModalTyLeThu(muctieu.id)">
-                                            <i class="fa fa-crosshairs"></i>
-                                            <span class="fw-bold">Mức độ ban đầu: <t t-esc="muctieu.solan_thu_dat || 0"/>/<t t-esc="muctieu.solan_thu || 0"/></span>
-                                            <span class="badge px-1 py-0.2 rounded-pill fw-bold ms-0.5"
-                                                  t-attf-style="#{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #16A34A; color: white;' : 'background-color: #F59E0B; color: white;') : 'background-color: #94A3B8; color: white;'}">
-                                                <t t-esc="muctieu.tyle_thu || 0"/>%
-                                            </span>
-                                        </span>
-
-                                        <!-- 2. Nút Biên tập -->
-                                        <button class="btn btn-edit-target"
-                                                t-on-click="() => this.open_GV_BienTap_NoiDung_MucTieu(muctieu.id)">
-                                            <i class="fa fa-edit"></i> Biên tập
-                                        </button>
-
                                         <!-- 3. Badge trạng thái nguồn gốc -->
                                         <span t-if="muctieu.kehoach_muctieu_thangtruoc_id"
                                               class="badge px-2 py-0.5 d-inline-flex align-items-center gap-1"
@@ -462,6 +442,27 @@
                                               style="font-size: 12px; color: #16A34A; background-color: #F0FDF4; border: 1px solid #DCFCE7; border-radius: 4px; white-space: nowrap;">
                                             <i class="fa fa-star me-0.5"></i> Mới
                                         </span>
+
+                                        <!-- 1. Badge Tỷ lệ ban đầu -->
+                                        <span class="badge badge-trial-action d-inline-flex align-items-center gap-1"
+                                              t-attf-style="#{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #F0FDF4; color: #166534; border: 1px solid #BBF7D0;' : 'background-color: #FFFBEB; color: #92400E; border: 1px solid #FDE68A;') : 'background-color: #F8FAFC; color: #64748B; border: 1px dashed #CBD5E1;'}"
+                                              title="Bấm để cập nhật [Mức độ ban đầu]"
+                                              t-on-click="() => this.openModalTyLeThu(muctieu.id)">
+                                            <i class="fa fa-crosshairs"></i>
+                                            <span class="fw-bold">Mức độ ban đầu: <t t-esc="muctieu.solan_thu_dat || 0"/>/<t t-esc="muctieu.solan_thu || 0"/></span>
+                                            <span class="badge px-1 py-0.2 rounded-pill fw-bold ms-0.5"
+                                                  t-attf-style="#{muctieu.solan_thu > 0 ? (muctieu.tyle_thu >= 80 ? 'background-color: #16A34A; color: white;' : 'background-color: #F59E0B; color: white;') : 'background-color: #94A3B8; color: white;'}">
+                                                <t t-esc="muctieu.tyle_thu || 0"/>%
+                                            </span>
+                                        </span>
+
+                                        <!-- 2. Nút Biên tập -->
+                                        <button class="btn btn-edit-target"
+                                                t-on-click="() => this.open_GV_BienTap_NoiDung_MucTieu(muctieu.id)">
+                                            <i class="fa fa-edit"></i> Biên tập
+                                        </button>
+
+
 
                                         <!-- 4. Nút Ghi chú -->
                                         <button type="button" class="btn btn-link p-0 text-decoration-none shadow-none d-flex align-items-center gap-1"
