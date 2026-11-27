@@ -337,7 +337,8 @@ def func_kehoach_ketqua2muctieu(self, hocsinh, ngay):
         return "0"
 
     # 3. Kiểm tra ngày học & đăng ký học (Thoát sớm nếu không thỏa mãn)
-    if not hocsinh_util.func_is_hoc(self, hocsinh, d_ngay):
+    is_hoc = hocsinh_util.func_is_hocsinh_dihoc(hocsinh, d_ngay)
+    if is_hoc == False:
         return "-1"
 
     if not hocsinh_util.func_is_dangky_hoc(hocsinh, d_ngay):
@@ -347,6 +348,19 @@ def func_kehoach_ketqua2muctieu(self, hocsinh, ngay):
     hoc = hocsinh_util.func_get_dihoc_diemdanh(self, hocsinh, d_ngay)
     if not hoc:
         return "1"  # Mặc định coi như đi học nếu chưa ghi nhận điểm danh vắng
+
+    if hoc in ["-1","10","2","3","4"]:
+        return "-1"
+
+    #options = [("-1", "Nghỉ không phép"),
+              # ("0", "Học nửa buổi"),
+               #('1', "Đi học"),
+              # ('11', "Đi học - Có ca [Học bù /Tăng cường]"),
+              # ('10', "Không đăng ký học -Nghỉ"),
+               #('2', "Nghỉ lễ"),
+               #('3', "Nhà trường cho nghỉ"),
+               #('4', "Học sinh nghỉ có phép")]
+
 
     # Quy ước: Nửa buổi ('0') được tính là đi học ('1') để tránh trùng mã '0' (ngày tương lai)
     return "1" if str(hoc) == "0" else str(hoc)
