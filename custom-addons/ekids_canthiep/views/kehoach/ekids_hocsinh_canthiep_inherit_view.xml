@@ -9,6 +9,14 @@
 
                 <field name="sequence" width="25"/>
                 <field name="name" width="170"/>
+                <button name="%(ekids_canthiep.kehoach_hoso_template_action)d"
+                            string=""
+                            width="30"
+                            type="action"
+                            icon="fa-medkit"
+                            class="btn-outline-danger"
+                            title="Hồ sơ can thiệp của trẻ"
+                            />
                 <field name="gioitinh" width="70" string="Giới tính"/>
                 <field name="tuoi" optional="hide" string="Tuổi"/>
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>

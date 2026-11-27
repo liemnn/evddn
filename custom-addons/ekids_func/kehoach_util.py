@@ -341,9 +341,6 @@ def func_kehoach_ketqua2muctieu(self, hocsinh, ngay):
     if is_hoc == False:
         return "-1"
 
-    if not hocsinh_util.func_is_dangky_hoc(hocsinh, d_ngay):
-        return "-1"
-
     # 4. Lấy dữ liệu điểm danh thực tế
     hoc = hocsinh_util.func_get_dihoc_diemdanh(self, hocsinh, d_ngay)
     if not hoc:

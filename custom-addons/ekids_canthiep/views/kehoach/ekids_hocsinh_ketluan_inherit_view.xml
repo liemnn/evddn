@@ -33,7 +33,7 @@
                             title="Hồ sơ can thiệp của trẻ"
                             />
                 <field name="bietdanh" string="Biệt danh" optional="hide"/>
-                <field name="gioitinh"/>
+                <field name="gioitinh" width="70"/>
                 <field name="ngaysinh" optional="hide"/>
                 <field name="tuoi" optional="hide"/>
                 <field name="ngay_nhaphoc" string="Nhập học" width="100" optional="hide"/>
@@ -52,11 +52,15 @@
                    widget="many2many_tags"
                    readonly="1"
                    options="{'no_open': True}"/>
-                <field name="gv_kiemduyet_id"
-                        width="100"
-                       string="Kiểm duyệt"/>
+                <field name="is_quytrinh_kiemduyet" string="Có kiểm duyệt" widget="boolean_toggle" />
+                <field name="is_danhgia_ketqua_canthiep" string="Có Đánh giá" widget="boolean_toggle"/>
 
-                <field name="tong_ketluan" width="30" string="Tổng"/>
+                <field name="gv_kiemduyet_id"
+                       width="120"
+
+                       string="Chuyên môn"/>
+
+                <field name="tong_ketluan" width="30" string="Tổng kết luận"/>
 
 
 
