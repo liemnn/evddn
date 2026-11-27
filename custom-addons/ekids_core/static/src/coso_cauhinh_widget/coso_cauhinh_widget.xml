@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ekids_core.CoSoCauHinhWidget">
+        <div class="ek-cfg-wrapper">
+            <!-- KHỐI 1: CẤU HÌNH KẾ HOẠCH CAN THIỆP -->
+            <div class="ek-cfg-card mb-3">
+                <div class="ek-cfg-card-header">
+                    <div>
+                        <i class="fa fa-sliders text-primary me-2"/>
+                        <span>1. THAM SỐ KẾ HOẠCH CAN THIỆP (KEHOACH_CANTHIEP)</span>
+                    </div>
+                    <span class="badge bg-primary-subtle text-primary">Tự động lưu JSON</span>
+                </div>
+
+                <div class="ek-cfg-grid">
+                    <!-- Tham số 1 -->
+                    <div class="ek-cfg-item">
+                        <div class="ek-cfg-label-row">
+                            <span class="ek-cfg-label">Số lượng mục tiêu mở mặc định</span>
+                            <span class="ek-cfg-hint">
+                                <i class="fa fa-question-circle me-1"/>
+                                Số mục tiêu mở sẵn để GV chấm điểm ngay khi bắt đầu kế hoạch mới
+                            </span>
+                        </div>
+                        <div class="ek-cfg-input-group">
+                            <input type="number" min="1" class="form-control"
+                                   t-att-readonly="props.readonly"
+                                   t-att-value="state.data.KEHOACH_CANTHIEP.muctieu_soluong_mo"
+                                   t-on-change="(ev) => this.onKhInputChange('muctieu_soluong_mo', ev)"/>
+                            <span class="ek-cfg-unit">mục tiêu</span>
+                        </div>
+                    </div>
+
+                    <!-- Tham số 2 -->
+                    <div class="ek-cfg-item">
+                        <div class="ek-cfg-label-row">
+                            <span class="ek-cfg-label">Số ngày kế hoạch mặc định</span>
+                            <span class="ek-cfg-hint">
+                                <i class="fa fa-question-circle me-1"/>
+                                Thời lượng mặc định của 1 kỳ kế hoạch (VD: 30 ngày cho kế hoạch tháng)
+                            </span>
+                        </div>
+                        <div class="ek-cfg-input-group">
+                            <input type="number" min="1" class="form-control"
+                                   t-att-readonly="props.readonly"
+                                   t-att-value="state.data.KEHOACH_CANTHIEP.macdinh_songay_kehoach"
+                                   t-on-change="(ev) => this.onKhInputChange('macdinh_songay_kehoach', ev)"/>
+                            <span class="ek-cfg-unit">ngày</span>
+                        </div>
+                    </div>
+
+                    <!-- Tham số 3 -->
+                    <div class="ek-cfg-item">
+                        <div class="ek-cfg-label-row">
+                            <span class="ek-cfg-label">Số buổi đạt liên tiếp để hoàn thành</span>
+                            <span class="ek-cfg-hint">
+                                <i class="fa fa-question-circle me-1"/>
+                                Đạt liên tiếp đủ số buổi này hệ thống sẽ gợi ý hoàn thành và mở mục tiêu tiếp theo
+                            </span>
+                        </div>
+                        <div class="ek-cfg-input-group">
+                            <input type="number" min="1" class="form-control"
+                                   t-att-readonly="props.readonly"
+                                   t-att-value="state.data.KEHOACH_CANTHIEP.muctieu_soluong_dat_lientiep"
+                                   t-on-change="(ev) => this.onKhInputChange('muctieu_soluong_dat_lientiep', ev)"/>
+                            <span class="ek-cfg-unit">buổi</span>
+                        </div>
+                    </div>
+
+                    <!-- Tham số 4 -->
+                    <div class="ek-cfg-item">
+                        <div class="ek-cfg-label-row">
+                            <span class="ek-cfg-label">Số ngày cho phép tự động cập nhật</span>
+                            <span class="ek-cfg-hint">
+                                <i class="fa fa-question-circle me-1"/>
+                                Số ngày lùi về trước GV được phép chấm bổ sung kết quả (nhập 0 để không giới hạn)
+                            </span>
+                        </div>
+                        <div class="ek-cfg-input-group">
+                            <input type="number" min="0" class="form-control"
+                                   t-att-readonly="props.readonly"
+                                   t-att-value="state.data.KEHOACH_CANTHIEP.muctieu_soluong_ngay_tudong_capnhat"
+                                   t-on-change="(ev) => this.onKhInputChange('muctieu_soluong_ngay_tudong_capnhat', ev)"/>
+                            <span class="ek-cfg-unit">ngày</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Công tắc thiết kế ưu tiên (Hướng dẫn nằm ngay cạnh tên tham số) -->
+                <div class="ek-cfg-toggle-box mt-3">
+                    <div class="d-flex justify-content-between align-items-center gap-3">
+                        <div class="ek-cfg-label-row mb-0">
+                            <span class="fw-bold text-dark">Cho phép thiết kế mục tiêu ưu tiên</span>
+                            <span class="ek-cfg-hint">
+                                <i class="fa fa-question-circle me-1"/>
+                                Bật để GV đánh dấu thứ tự ưu tiên trọng tâm cho các mục tiêu quan trọng trong tháng
+                            </span>
+                        </div>
+                        <div class="form-check form-switch m-0 flex-shrink-0">
+                            <input class="form-check-input ek-switch-lg" type="checkbox" role="switch"
+                                   t-att-disabled="props.readonly"
+                                   t-att-checked="state.data.KEHOACH_CANTHIEP.muctieu_thietke_uutien === '1'"
+                                   t-on-change="(ev) => this.onKhToggleChange('muctieu_thietke_uutien', ev)"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KHỐI 2: CẤU HÌNH DANH MỤC LƯƠNG -->
+            <div class="ek-cfg-card mb-3">
+                <div class="ek-cfg-card-header">
+                    <div>
+                        <i class="fa fa-money text-success me-2"/>
+                        <span>2. THAM SỐ BẢNG LƯƠNG (LUONG)</span>
+                    </div>
+                </div>
+
+                <div class="ek-cfg-label-row mb-2">
+                    <span class="ek-cfg-label">Danh mục khoản lương mặc định (dm_luong)</span>
+                    <span class="ek-cfg-hint">
+                        <i class="fa fa-question-circle me-1"/>
+                        Các khoản thu nhập/phụ cấp tự động khởi tạo khi lập bảng lương hàng tháng cho giáo viên
+                    </span>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    <t t-foreach="state.data.LUONG.dm_luong_list" t-as="item" t-key="item_index">
+                        <span class="ek-luong-tag">
+                            <t t-esc="item"/>
+                            <button t-if="!props.readonly" type="button" class="btn-close btn-close-sm ms-2"
+                                    aria-label="Xóa" t-on-click="() => this.removeLuongItem(item_index)"/>
+                        </span>
+                    </t>
+                </div>
+
+                <div t-if="!props.readonly" class="input-group" style="max-width: 440px;">
+                    <input type="text" class="form-control form-control-sm"
+                           placeholder="Nhập tên khoản lương mới (VD: Phụ cấp ăn trưa)..."
+                           t-model="state.newLuongItem"
+                           t-on-keydown="onLuongKeydown"/>
+                    <button type="button" class="btn btn-sm btn-outline-primary fw-bold" t-on-click="addLuongItem">
+                        <i class="fa fa-plus me-1"/> Thêm khoản lương
+                    </button>
+                </div>
+            </div>
+
+            <!-- KHỐI 3: XEM TRƯỚC CHUỖI JSON (THU GỌN) -->
+            <div class="text-end">
+                <button type="button" class="btn btn-link btn-sm text-muted text-decoration-none"
+                        t-on-click="() => state.showRawJson = !state.showRawJson">
+                    <i class="fa fa-code me-1"/>
+                    <t t-esc="state.showRawJson ? 'Ẩn dữ liệu JSON gốc' : 'Xem dữ liệu JSON lưu trữ'"/>
+                </button>
+            </div>
+            <pre t-if="state.showRawJson" class="bg-dark text-light p-3 rounded small mt-1 mb-0"><t t-esc="rawJsonPreview"/></pre>
+        </div>
+    </t>
+</templates>

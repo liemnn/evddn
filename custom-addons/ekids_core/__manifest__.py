@@ -45,6 +45,10 @@ Long description of module's purpose
         'web.assets_backend': [
             'ekids_core/static/src/css/ekids_style.css',
 
+            'ekids_core/static/src/coso_cauhinh_widget/coso_cauhinh_widget.scss',
+            'ekids_core/static/src/coso_cauhinh_widget/coso_cauhinh_widget.js',
+            'ekids_core/static/src/coso_cauhinh_widget/coso_cauhinh_widget.xml',
+
         ],
     },
 }

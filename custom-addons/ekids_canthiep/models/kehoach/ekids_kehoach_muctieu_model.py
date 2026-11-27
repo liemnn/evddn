@@ -8,6 +8,7 @@ _logger = logging.getLogger(__name__)
 try:
     from odoo.addons.ekids_func import string_util
     from odoo.addons.ekids_func import kehoach_util
+    from odoo.addons.ekids_func import hocsinh_util
     from odoo.addons.ekids_func import coso_util
     from odoo.addons.ekids_func import ngay_util
     from odoo.addons.ekids_func import giaovien_util
@@ -1004,7 +1005,12 @@ class KeHoach2MucTieu(models.Model):
         new_records_vals = []
 
         # 4. Duyệt đúng 3 ngày tiếp theo sau ngày gần nhất
-        for i in range(1, 4):
+        muctieu_soluong_ngay_tudong_capnhat = int(
+            coso_util.func_cauhinh_canthiep(self, coso, "muctieu_soluong_ngay_tudong_capnhat", "3") or 5
+        )
+        muctieu_soluong_ngay_tudong_capnhat +=1
+
+        for i in range(1, muctieu_soluong_ngay_tudong_capnhat):
             target_date = last_ngay + timedelta(days=i)
 
             # Không vượt quá hôm nay và không vượt quá ngày kết thúc kế hoạch
@@ -1014,6 +1020,11 @@ class KeHoach2MucTieu(models.Model):
             # Bỏ qua ngày Chủ Nhật (weekday == 6)
             if target_date.weekday() == 6:
                 continue
+            else:
+                hocsinh = self.kehoach_id.hocsinh_id
+                is_hoc = hocsinh_util. func_is_hocsinh_dihoc(hocsinh,target_date)
+                if is_hoc == False:
+                    continue
 
             if target_date in existing_map:
                 kq_exist = existing_map[target_date]
