@@ -57,8 +57,10 @@
                    widget="many2many_tags"
                    readonly="1"
                    options="{'no_open': True}"/>
+                <field name="is_quytrinh_kiemduyet" string="Có kiểm duyệt" widget="boolean_toggle" />
+                <field name="is_danhgia_ketqua_canthiep" string="Có Đánh giá" widget="boolean_toggle"/>
                 <field name="gv_kiemduyet_id"
-                       string="Kiểm duyệt" width="120"/>
+                       string="Quản lý chuyên môn" width="120"/>
 
 
 
