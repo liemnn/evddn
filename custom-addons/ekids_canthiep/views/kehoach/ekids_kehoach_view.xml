@@ -1387,7 +1387,8 @@
                                                <span class="flat-gv-badge c-canthiep-orange">
                                                    <i class="fa fa-user-md"></i>
                                                    <span class="text-secondary fw-normal">Giáo viên:</span>
-                                                   <field name="gv_lapkehoach_id" readonly="1" options="{'no_open': True}"/>
+                                                   <field name="gv_canthiep_ids"  widget="many2many_tags"
+                                                          readonly="1" options="{'no_open': True}"/>
                                                </span>
                                                <span class="flat-gv-divider">|</span>
                                                <span class="flat-gv-badge c-chuyenmon-teal">

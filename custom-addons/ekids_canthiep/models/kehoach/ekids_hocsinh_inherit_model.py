@@ -122,7 +122,7 @@ class HocSinhInherit(models.Model
         compute='_compute_giaovien_tu_ketluan',
 
     )
-
+    is_chung_kehoach = fields.Boolean(compute="_compute_quytrinh")
     is_quytrinh_kiemduyet = fields.Boolean(compute="_compute_quytrinh")
     is_danhgia_ketqua_canthiep = fields.Boolean(compute="_compute_quytrinh")
 
@@ -130,9 +130,11 @@ class HocSinhInherit(models.Model
         for hs in self:
             ketluan = kehoach_util.func_get_ketluan_hocsinh(self, hs)
             if ketluan:
+                hs.is_chung_kehoach = ketluan.is_chung_kehoach
                 hs.is_quytrinh_kiemduyet = ketluan.is_quytrinh_kiemduyet
                 hs.is_danhgia_ketqua_canthiep = ketluan.is_danhgia_ketqua_canthiep
             else:
+                hs.is_chung_kehoach = False
                 hs.is_quytrinh_kiemduyet = True
                 hs.is_danhgia_ketqua_canthiep = True
 

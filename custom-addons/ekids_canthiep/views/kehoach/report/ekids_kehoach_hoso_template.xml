@@ -777,13 +777,13 @@
                                 <div class="hs-staff-box">
                                     <div style="font-size: 12px;">
                                         <i class="fa fa-user text-primary me-1"/>
-                                        <span class="hs-meta-label">Giáo viên 1:1: </span>
+                                        <span class="hs-meta-label">Giáo viên: </span>
                                         <span class="hs-meta-val" style="color: #1D4ED8;"><span t-out="data.get('plan_giaovien', 'Chưa phân công')"/></span>
                                     </div>
                                     <div style="font-size: 12px;">
                                         <i class="fa fa-user-md text-success me-1"/>
                                         <span class="hs-meta-label">Chuyên môn: </span>
-                                        <span class="hs-meta-val"><span t-out="data.get('plan_quanly', 'Ngô Thị Ngọc Hoàn')"/></span>
+                                        <span class="hs-meta-val"><span t-out="data.get('plan_quanly', 'Nhà trường')"/></span>
                                     </div>
                                 </div>
                             </div>

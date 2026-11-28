@@ -57,8 +57,14 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         profile_data = self._build_hocsinh_profile()
 
         # 6. Thông tin giáo viên & chuyên môn của kỳ đang chọn
-        gv_name = selected_plan.gv_lapkehoach_id.name if selected_plan and selected_plan.gv_lapkehoach_id else 'Chưa phân công'
-        ql_name = selected_plan.gv_kiemduyet_id.name if selected_plan and selected_plan.gv_kiemduyet_id else 'Ngô Thị Ngọc Hoàn'
+        gv_names = (
+            selected_plan.gv_canthiep_ids.mapped('name')
+            if selected_plan and selected_plan.gv_canthiep_ids
+            else []
+        )
+        gv_name = ", ".join(gv_names) if gv_names else ""
+
+        ql_name = selected_plan.gv_kiemduyet_id.name if selected_plan and selected_plan.gv_kiemduyet_id else 'Nhà trường'
 
         return {
             'has_any_plan': bool(selected_plan),

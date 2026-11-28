@@ -52,15 +52,17 @@
                    widget="many2many_tags"
                    readonly="1"
                    options="{'no_open': True}"/>
-                <field name="is_quytrinh_kiemduyet" string="Có kiểm duyệt" widget="boolean_toggle" />
-                <field name="is_danhgia_ketqua_canthiep" string="Có Đánh giá" widget="boolean_toggle"/>
+
+                <field name="is_chung_kehoach" string="KH Chung" widget="boolean_toggle" width="70" optional="hide"/>
+                <field name="is_quytrinh_kiemduyet" string="Kiểm duyệt" widget="boolean_toggle" width="70"  />
+                <field name="is_danhgia_ketqua_canthiep" string="Đánh giá KQ" widget="boolean_toggle" width="70" optional="hide"/>
 
                 <field name="gv_kiemduyet_id"
-                       width="120"
+                       width="100"
 
-                       string="Quản lý chuyên môn"/>
+                       string="Chuyên môn"/>
 
-                <field name="tong_ketluan" width="30" string="Kết luận"/>
+                <field name="tong_ketluan" width="30" string="Tổng Kết luận"/>
 
 
 
@@ -114,7 +116,7 @@
                         invisible="is_tao_ketluan == False"
                         title="Xem và chọn copy nội dung từ [Kết luận] của Học sinh khác"/>
 
-                <field name="tong_kehoach" string="Tổng kế hoạch" width="55" class="text-center fw-bold"/>
+                <field name="tong_kehoach" string="Tổng Kế hoạch" width="55" class="text-center fw-bold"/>
 
                 <button name="action_xem_danhsach_kehoach"
                         string=""

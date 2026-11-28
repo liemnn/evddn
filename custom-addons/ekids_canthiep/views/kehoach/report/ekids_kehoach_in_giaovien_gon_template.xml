@@ -583,7 +583,7 @@
 
                         <table class="profile-grid-table">
                             <tr>
-                                <td class="col-lbl-left"><i class="fa fa-child text-primary" style="margin-right: 4px;"/>Họ và tên HS:</td>
+                                <td class="col-lbl-left"><i class="fa fa-child text-primary" style="margin-right: 4px;"/>Học sinh:</td>
                                 <td class="col-val-left text-bold" style="color: #1E3A8A !important;"><span t-field="o.hocsinh_id.name"/></td>
                                 <td colspan="2" class="tbl-header-navy">
                                     <i class="fa fa-sitemap" style="margin-right: 5px;"/>LĨNH VỰC VÀ ĐỘ TUỔI CAN THIỆP
@@ -612,7 +612,7 @@
                                         <td class="col-val-left"><span t-field="o.hocsinh_id.ngaysinh" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/></td>
                                     </t>
                                     <t t-if="idx == 2">
-                                        <td class="col-lbl-left">Liều lượng CT:</td>
+                                        <td class="col-lbl-left">Liều lượng can thiệp:</td>
                                         <td class="col-val-left"><span t-field="o.ketluan_id.dm_lieuluong_id"/></td>
                                     </t>
                                     <t t-if="idx == 3">
@@ -626,8 +626,8 @@
                                         <td class="col-val-left"><span t-field="o.ketluan_id.dm_mucdo_id"/></td>
                                     </t>
                                     <t t-if="idx == 6">
-                                        <td class="col-lbl-left">Hình thức CT:</td>
-                                        <td class="col-val-left">Bán trú / Cá nhân 1/1</td>
+                                        <td class="col-lbl-left">Hình thức can thiệp:</td>
+                                        <td class="col-val-left"><span t-field="o.ketluan_id.hinhthuc"/></td>
                                     </t>
                                     <t t-if="idx &gt; 6">
                                         <td class="col-lbl-left" style="background:#FFFFFF !important;"></td>
@@ -657,8 +657,8 @@
                             <tr>
                                 <td class="col-lbl-left"><i class="fa fa-user-md text-info" style="margin-right: 4px;"/>Chuyên môn:</td>
                                 <td class="col-val-left"><span t-field="o.gv_kiemduyet_id.name"/></td>
-                                <td class="col-lbl-left" style="text-align:right;"><i class="fa fa-graduation-cap text-primary" style="margin-right: 4px;"/>Giáo viên dạy:</td>
-                                <td class="text-bold"><span t-field="o.gv_lapkehoach_id.name"/></td>
+                                <td class="col-lbl-left" style="text-align:right;"><i class="fa fa-graduation-cap text-primary" style="margin-right: 4px;"/>Giáo viên:</td>
+                                <td class="text-bold"><span t-field="o.gv_canthiep_ids"/></td>
                             </tr>
                             <tr>
                                 <td class="col-lbl-left"><i class="fa fa-heart text-danger" style="margin-right: 4px;"/>Tâm lý - Hành vi:</td>

@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from datetime import  timedelta,date
+from odoo import Command
 import uuid
 
 from odoo.exceptions import UserError, AccessError
@@ -344,16 +345,23 @@ class KeHoach(models.Model,KeHoachCopyAbstractModel):
         for record in self:
             record.gv_kiemduyet_id = record.ketluan_id.gv_kiemduyet_id
 
-    @api.depends('ketluan_id', 'ketluan_id.gv_canthiep_ids')
+    @api.depends(
+        'ketluan_id',
+        'ketluan_id.is_chung_kehoach',
+        'ketluan_id.gv_canthiep_ids',
+        'gv_lapkehoach_id',
+    )
     def _compute_gv_canthiep_ids(self):
         for rec in self:
-            # Nếu có kết luận con và kết luận đó đã chọn giáo viên can thiệp
-            if rec.ketluan_id and rec.ketluan_id.gv_canthiep_ids:
-                # Gán thẳng recordset Many2many từ kết luận sang kế hoạch
-                rec.gv_canthiep_ids = rec.ketluan_id.gv_canthiep_ids
+            ketluan = rec.ketluan_id
+            if ketluan and ketluan.is_chung_kehoach:
+                rec.gv_canthiep_ids = ketluan.gv_canthiep_ids
+            elif rec.gv_lapkehoach_id:
+                rec.gv_canthiep_ids = [Command.set(rec.gv_lapkehoach_id.ids)]
             else:
-                # Nếu không có, gán tập hợp rỗng bằng cách lệnh [(5, 0, 0)] hoặc lệnh clear của Odoo
-                rec.gv_canthiep_ids = [(5, 0, 0)]
+                rec.gv_canthiep_ids = [Command.clear()]
+
+
 
 
     def _compute_is_gui_pheduyet(self):
