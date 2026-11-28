@@ -154,7 +154,11 @@ class HocSinhInherit(models.Model
     def _compute_urls(self):
         base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
         for rec in self:
-            token = rec.access_token or str(uuid.uuid4())
+            token = rec.access_token
+            if not token:
+                token =str(uuid.uuid4())
+                rec.access_token = token
+
             rec.share_url = f"{base_url}/hocsinh/hosocanthiep/{token}"
 
 

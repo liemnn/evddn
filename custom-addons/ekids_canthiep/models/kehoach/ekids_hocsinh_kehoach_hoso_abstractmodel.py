@@ -10,6 +10,7 @@ _logger = logging.getLogger(__name__)
 
 try:
     from odoo.addons.ekids_func import kehoach_util
+    from odoo.addons.ekids_func import string_util
 except ImportError as e:
     _logger.warning("Không thể import ekids_func: %s", e)
 
@@ -284,7 +285,9 @@ class HocSinhKeHoachHoSoAbstractModel(models.AbstractModel):
         tyle_sau = mt.tyle_kiemduyet if mt.tyle_kiemduyet > 0 else (getattr(mt, 'tyle_canthiep', 0) or mt.tyle_thu)
         is_mastered = (tyle_sau >= 80) or (mt.trangthai_kiemduyet == '1') or (mt.trangthai == '1')
         muc_do_label = "Củng cố" if is_mastered else "Duy trì"
-        dinh_huong = mt.dinhhuong_kiemduyet or ('Khái quát hóa tại gia đình' if is_mastered else 'Tiếp tục duy trì sang tháng sau')
+        dinh_huong = mt.ghichu_kiemduyet
+        if string_util._is_html_empty(dinh_huong) == True:
+            dinh_huong = mt.dinhhuong_kiemduyet
         ten_mt = mt.name or mt.muctieu_them or ''
 
         return {
